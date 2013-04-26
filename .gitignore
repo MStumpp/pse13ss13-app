@@ -1,0 +1,6 @@
+# Ignore OS config files
+*.directory
+*desktop.ini
+*Desktop.ini
+*Thumbs.db
+*thumbs.db
