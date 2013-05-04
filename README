@@ -8,8 +8,8 @@ PURPOSE
 RULES
     - Use UTF-8 as charset and <lf> as line ending.
     - Remove trailing whitespaces or empty lines at the end of file.
-    - Use only ASCII characters for file and directory names. Do not use
-      umlauts!
+        - See Eclipse-Plugin "AnyEdit", which does that work for you everytime you save (http://andrei.gmxhome.de/eclipse/)
+    - Use only ASCII characters for file and directory names. Do not use umlauts!
     - Do not exceed a maximum file size of 10 MiB.
 
 
@@ -17,4 +17,4 @@ BEST PRACTICE
     - Use only English for commit messages.
     - Use 4 spaces for indentation instead of tab.
     - Do not use the master branch for personal development. Use a branch
-      named <user>-master or <user>-<issue name> instead.
+      named <user>-master or <user>-<issue name> instead (ongoing Discussion in Issue #1).
