@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options_navigation_audio_output_typ_entries">
+        <item>Text zu Sprache</item>
+        <item>Stereo Töne</item>
+    </string-array>
+</resources>
