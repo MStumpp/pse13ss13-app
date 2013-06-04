@@ -4,8 +4,6 @@
     <string name="options_navigation_audio_output">audio output</string>
     <string name="options_navigation_audio_output_all">sound</string>
     <string name="options_navigation_audio_output_typ">sound typ</string>
-    <string name="options_navigation_audio_output_typ_default_value">1</string>
-    <string name="options_navigation_audio_output_typ_cur">text to speech</string>
     <string name="options_navigation_text_output">text output</string>
     <string name="options_navigation_text_output_time_to_destination">time to destination</string>
     <string name="options_navigation_text_output_time_left">time left</string>
