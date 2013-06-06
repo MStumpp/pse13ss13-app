@@ -1,11 +1,21 @@
-package gui.options;
+package pse.walkaround.gui.options;
 
+//  Importiere die Resourcen
+import pse.walkaround.*;
+
+//Nötige Imports
+import android.os.Bundle;
 import android.app.Activity;
+
+//Fragment Import
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.os.Bundle;
+
+//Preferences Import
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+
+// Log Ausgabe
 import android.util.Log;
 
 /**

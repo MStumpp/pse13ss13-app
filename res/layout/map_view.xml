@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="fill_parent"
+            android:layout_height="318dp"
+            android:src="@drawable/test" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/overlay"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:background="#FF2200"
+        android:clickable="true"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true" >
+        
+        <EditText android:id="@+id/edittext"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="50dp" />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/navi"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+    </GridLayout>
+
+</RelativeLayout>
