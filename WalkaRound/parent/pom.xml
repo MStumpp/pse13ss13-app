@@ -23,50 +23,21 @@
 	<repositories>
 		<repository>
 			<id>walkaround-repo</id>
-			<name>WalkaRound Release Repository</name>
-			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/release</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>walkaround-snapshots</id>
-			<name>WalkaRound Snapshot Repository</name>
-			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/snapshot</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
+			<name>WalkaRound Repository</name>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
 
-	<!-- Version control -->
-	<!-- <scm>
-	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</connection>
-	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git</url>
-	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</developerConnection>
-	</scm>-->
-
 	<distributionManagement>
 		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>release-repo</id>
-			<name>GitHub ${project.artifactId} Release Repository</name>
-			<url>https://raw.github.com/MStumpp/pse13ss13-app/${project.artifactId}/mvn/release</url>
+			<id>github-repo</id>
+			<name>GitHub ${project.artifactId} Repository</name>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/${project.artifactId}/mvn</url>
 			<layout>default</layout>
 		</repository>
-		<snapshotRepository>
-			<uniqueVersion>true</uniqueVersion>
-			<id>snapshot-repo</id>
-			<name>GitHub ${project.artifactId} Snapshot Repository</name>
-			<url>https://raw.github.com/MStumpp/pse13ss13-app/${project.artifactId}/mvn/snapshots</url>
-			<layout>default</layout>
-		</snapshotRepository>
 	</distributionManagement>
 
 	<!-- Default build configuration -->
