@@ -11,7 +11,7 @@
   <modules>
   	<module>client-model-sensorinformation</module>
   	<module>client-model-util</module>
-  	<module>client-model-tiles</module>
+  	<module>client-model-tile</module>
   	<module>client-model-route</module>
   	<module>client-model-navigation</module>
   	<module>client-model-navigationoutput</module>
