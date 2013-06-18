@@ -70,7 +70,7 @@
 				<artifactId>site-maven-plugin</artifactId>
 				<version>0.8</version>
 				<configuration>
-					<message>Maven artifacts for ${project.version}</message> <!-- git commit message -->
+					<message>[Maven] Deployed ${project.artifactId} (Version ${project.version}).</message> <!-- git commit message -->
 					<noJekyll>false</noJekyll> <!-- disable webpage processing -->
 					<outputDirectory>${project.build.directory}/pse13ss13-app/mvn/snapshots</outputDirectory> <!-- matches distribution management repository url above -->
 					<branch>refs/heads/mvn</branch> <!-- remote branch name -->
