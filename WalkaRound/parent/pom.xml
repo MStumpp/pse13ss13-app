@@ -7,7 +7,7 @@
 
 	<!-- Project properties -->
 	<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>Parent-POM</name>
 	<artifactId>parent</artifactId>
 	<url>https://github.com/MStumpp/pse13ss13-app</url>
