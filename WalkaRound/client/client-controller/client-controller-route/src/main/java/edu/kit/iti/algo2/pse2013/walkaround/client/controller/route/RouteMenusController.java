@@ -5,7 +5,7 @@ public class RouteMenusController {
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 	
-	private static boolean routeMCexists;
+	private static boolean intanceExists;
 	private static RouteMenusController routeMC;
 	
 	private static RouteMenusController RouteMenusController() {
@@ -14,7 +14,7 @@ public class RouteMenusController {
 	}
 	
 	public static RouteMenusController getInstance() {
-		if (!routeMCexists) {
+		if (!intanceExists) {
 			routeMC = RouteMenusController();	
 		}
 		return routeMC;
