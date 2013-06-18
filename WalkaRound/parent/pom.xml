@@ -46,9 +46,9 @@
 
 	<!-- Version control -->
 	<scm>
-	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</connection>
-	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git</url>
-	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</developerConnection>
+	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</connection>
+	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</url>
+	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</developerConnection>
 	</scm>
 
 	<distributionManagement>
