@@ -14,22 +14,24 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.MapView"
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
-        
         <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptioView"
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
     </application>
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:label="Tests for WalkAround"
+        android:targetPackage="edu.kit.iti.algo2.pse2013.walkaround.client.view.test" />
 
 </manifest>

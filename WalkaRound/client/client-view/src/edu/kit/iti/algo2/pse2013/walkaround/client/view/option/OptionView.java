@@ -1,22 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.option;
 
 //  Importiere die Resourcen
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-
-//Nötige Imports
-import android.os.Bundle;
 import android.app.Activity;
-
-//Fragment Import
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-
-//Preferences Import
+import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-
-// Log Ausgabe
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+//Nötige Imports
+//Fragment Import
+//Preferences Import
+// Log Ausgabe
 
 /**
  * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs kümmert.
@@ -64,6 +60,7 @@ public class OptionView extends Activity {
 	 * 
 	 */
 	public static class OptionFragment extends PreferenceFragment {
+		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			Log.d("Options",
