@@ -18,12 +18,55 @@
 		</mailingList>
 	</mailingLists>
 
+	<!-- GitHub-Repositories -->
+	<repositories>
+		<repository>
+			<id>walkaround-repo</id>
+			<name>WalkaRound Release Repository</name>
+			<url>https://github.com/MStumpp/pse13ss13-app/mvn/release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>walkaround-snapshots</id>
+			<name>WalkaRound Snapshot Repository</name>
+			<url>https://github.com/MStumpp/pse13ss13-app/mvn/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<!-- Version control -->
- <scm>
-	<connection>scm:git:git@github.com:tobrien/git-demo.git</connection>
-	<url>scm:git:git@github.com:tobrien/git-demo.git</url>
-	<developerConnection>scm:git:git@github.com:tobrien/git-demo.git</developerConnection>
-  </scm>
+	<scm>
+	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</connection>
+	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git</url>
+	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</developerConnection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>release-repo</id>
+			<name>Release Repository</name>
+			<url>ssh://git@github.com:MStumpp/pse13ss13-app/mvn/release</url>
+			<layout>default</layout>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>snapshot-repo</id>
+			<name>Snapshot Repository</name>
+			<url>ssh://git@github.com:MStumpp/pse13ss13-app/mvn/snapshot</url>
+			<layout>legacy</layout>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<!-- Default build configuration -->
 	<build>
