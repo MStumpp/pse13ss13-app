@@ -23,7 +23,7 @@
 		<repository>
 			<id>walkaround-repo</id>
 			<name>WalkaRound Release Repository</name>
-			<url>https://github.com/MStumpp/pse13ss13-app/mvn/release</url>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/release</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -34,7 +34,7 @@
 		<repository>
 			<id>walkaround-snapshots</id>
 			<name>WalkaRound Snapshot Repository</name>
-			<url>https://github.com/MStumpp/pse13ss13-app/mvn/snapshot</url>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -46,9 +46,9 @@
 
 	<!-- Version control -->
 	<scm>
-	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</connection>
-	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</url>
-	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</developerConnection>
+	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</connection>
+	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git</url>
+	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</developerConnection>
 	</scm>
 
 	<distributionManagement>
