@@ -7,7 +7,7 @@
 
 	<!-- Project properties -->
 	<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Parent-POM</name>
 	<artifactId>parent</artifactId>
 	<url>https://github.com/MStumpp/pse13ss13-app</url>
@@ -46,9 +46,9 @@
 
 	<!-- Version control -->
 	<scm>
-	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</connection>
-	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git</url>
-	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</developerConnection>
+	<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</connection>
+	<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</url>
+	<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git/WalkaRound/parent</developerConnection>
 	</scm>
 
 	<distributionManagement>
@@ -56,15 +56,15 @@
 			<uniqueVersion>false</uniqueVersion>
 			<id>release-repo</id>
 			<name>Release Repository</name>
-			<url>ssh://git@github.com:MStumpp/pse13ss13-app/mvn/release</url>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/release</url>
 			<layout>default</layout>
 		</repository>
 		<snapshotRepository>
 			<uniqueVersion>true</uniqueVersion>
 			<id>snapshot-repo</id>
 			<name>Snapshot Repository</name>
-			<url>ssh://git@github.com:MStumpp/pse13ss13-app/mvn/snapshot</url>
-			<layout>legacy</layout>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/snapshots</url>
+			<layout>default</layout>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -80,27 +80,7 @@
 					<compilerVersion>1.7</compilerVersion>
 				</configuration>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>-->
+
 		</plugins>
 	</build>
 
