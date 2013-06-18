@@ -6,21 +6,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 
@@ -41,9 +31,7 @@ public class MapView extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		RelativeLayout rl = (RelativeLayout) this.findViewById(R.id.mapview_main);
-
-		//Log.d("MAP_VIEW", "Relative Layout Größe: " + rl.getLayoutParams().width + " * " + rl.getLayoutParams().height);
+		//RelativeLayout rl = (RelativeLayout) this.findViewById(R.id.mapview_main);
 		
 		Log.d("MAP_VIEW", "Rufe Display ab.");
 		Display display = getWindowManager().getDefaultDisplay();
@@ -56,6 +44,10 @@ public class MapView extends Activity {
 		map = (ImageView) this.findViewById(R.id.mapview_map);
 		//map.setImageBitmap(this.getDefaultFogScreen());
 
+		Log.d("MAP_VIEW", "RouteOverlay wird erstellt.");
+		routeOverlay = (ImageView) this.findViewById(R.id.mapview_overlay);
+		
+		
 		Log.d("MAP_VIEW", "User wird erstellt.");
 		user = (ImageView) this.findViewById(R.id.mapview_user);
 		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));
@@ -89,7 +81,7 @@ public class MapView extends Activity {
 		ObjectAnimator transY = ObjectAnimator.ofFloat(user, "y", coor.getY() - USER_Y_DELTA);
 		ObjectAnimator rotate = ObjectAnimator.ofFloat(user, "rotation", degree);
 		
-		// duration verbessern!
+		// duration relativieren!
 		transX.setDuration(1000);
 		transY.setDuration(1500);
 		rotate.setDuration(1000);
@@ -157,13 +149,13 @@ public class MapView extends Activity {
 	}
 	
 	
-	/**
+	/*
 	 * Erstellt ein Muster aus einer Bitmap
 	 * 
 	 * Nicht mehr notwendig - möglicherweise für Mapmodel interressant
 	 * 
 	 * @return
-	 */
+	 *
 	private Bitmap getDefaultFogScreen() {
 
 		Log.d("MAP_VIEW", "Rufe Display ab.");
@@ -199,29 +191,5 @@ public class MapView extends Activity {
 		return Bitmap.createScaledBitmap(result, size.x, size.y, false);
 
 	}
-	
-	private class RotationListener implements AnimationListener{
-
-		float degree;
-		
-		public RotationListener(float degree){
-			this.degree = degree;
-		}
-		
-	    @Override
-	    public void onAnimationEnd(Animation animation) {
-	        user.clearAnimation();
-	       
-			Log.d("MAP_VIEW", "Drehe den User um " + degree + " Grad");
-			user.setRotation(degree);
-	    }
-
-	    @Override
-	    public void onAnimationRepeat(Animation animation) {
-	    }
-
-	    @Override
-	    public void onAnimationStart(Animation animation) {
-	    }
-	}
+	*/
 }

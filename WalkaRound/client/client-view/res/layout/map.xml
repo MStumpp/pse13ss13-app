@@ -21,4 +21,14 @@
         android:src="@drawable/user_arrow_30x38"
         android:scaleType="centerInside" />
 
+    <ImageView
+        android:id="@+id/mapview_overlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/fog" />
+
 </RelativeLayout>
