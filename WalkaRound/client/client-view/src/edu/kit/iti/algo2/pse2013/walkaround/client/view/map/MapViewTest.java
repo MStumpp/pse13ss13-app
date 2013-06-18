@@ -14,5 +14,5 @@ public class MapViewTest {
 	    @Ignore
 	    public void thisIsIgnored() {
 	    }
-	
+
 }

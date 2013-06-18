@@ -19,10 +19,11 @@
 	</mailingLists>
 
 	<!-- Version control -->
-	<scm>
-		<connection>scm:git:file://{$project.basedir}</connection>
-		<url>scm:git:file://{$project.basedir}</url>
-	</scm>
+ <scm>
+	<connection>scm:git:git@github.com:tobrien/git-demo.git</connection>
+	<url>scm:git:git@github.com:tobrien/git-demo.git</url>
+	<developerConnection>scm:git:git@github.com:tobrien/git-demo.git</developerConnection>
+  </scm>
 
 	<!-- Default build configuration -->
 	<build>
