@@ -1,4 +1,4 @@
-package walkaround.datastructures;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 import java.io.File;
 import java.util.ArrayList;
