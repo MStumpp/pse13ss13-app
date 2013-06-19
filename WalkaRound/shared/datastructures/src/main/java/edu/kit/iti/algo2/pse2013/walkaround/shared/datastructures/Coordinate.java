@@ -8,7 +8,7 @@ public class Coordinate {
 			throw new IllegalArgumentException("Latitude has to be between -90 and 90");
 		}
 		if (Math.abs(lon) > 180) {
-			throw new IllegalArgumentException("Latitude has to be between -180 and 180");
+			throw new IllegalArgumentException("Longtitude has to be between -180 and 180");
 		}
 		this.lat = lat;
 		this.lon = lon;

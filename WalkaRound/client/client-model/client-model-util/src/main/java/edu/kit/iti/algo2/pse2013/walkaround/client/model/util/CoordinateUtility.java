@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
+
 public class CoordinateUtility {
 	/**
 	 * The average earth radius according to WGS84
