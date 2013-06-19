@@ -1,5 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
 /**
  * Diese Klasse repräsentiert ein Punkt auf dem Display des Android-Smartphones.
  *
@@ -21,6 +24,7 @@ public class DisplayCoordinate {
 	 * @param y y-Koordinate (von links nach rechts, in dip)
 	 */
 	public DisplayCoordinate(float x, float y) {
+		TileUtility.getXYTileIndex(new Coordinate(1, 1), 5);
 		setX(x);
 		setY(y);
 	}

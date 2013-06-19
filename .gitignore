@@ -5,3 +5,8 @@ Desktop.ini
 Thumbs.db
 thumbs.db
 .metadata
+*~
+#LaTeX-Files
+*.tex.backup
+*.aux
+*.log
