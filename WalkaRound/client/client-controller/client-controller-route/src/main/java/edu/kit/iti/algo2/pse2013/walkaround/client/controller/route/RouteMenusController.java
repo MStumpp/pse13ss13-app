@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.route;
 
 import java.util.LinkedList;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+
 public class RouteMenusController {
 
 	private LinkedList<RouteListener> routeListeners;
