@@ -4,4 +4,14 @@ desktop.ini
 Desktop.ini
 Thumbs.db
 thumbs.db
+*~
+# Eclipse files
 .metadata
+.project
+.classpath
+.settings
+#LaTeX-Files
+*.tex.backup
+*.aux
+*.log
+*.toc

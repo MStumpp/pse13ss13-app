@@ -9,13 +9,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</parent>
 	<artifactId>client</artifactId>
 	<name>Client für WalkaRound-App</name>
-	<dependencies>
-		<dependency>
-			<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-			<artifactId>shared-datastructures</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 	<packaging>pom</packaging>
 	<modules>
 		<module>client-model</module>
