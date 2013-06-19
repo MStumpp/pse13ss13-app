@@ -7,4 +7,11 @@
   </parent>
   <artifactId>client-model-data</artifactId>
   <name>Favoriten- und POI-Manager im Client-Model</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>shared-datastructures</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
