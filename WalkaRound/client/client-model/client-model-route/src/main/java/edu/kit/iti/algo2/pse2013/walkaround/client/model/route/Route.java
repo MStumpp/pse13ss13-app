@@ -26,8 +26,11 @@ public class Route implements RouteInfo {
 	 * 
 	 */
 	public boolean setActiveWaypoint(Waypoint newActiveWP) {
-// TODO: Prüfe ob Wegpunkt in Route:
-		this.activeWaypoint = newActiveWP;
+		if(this.containsWaypoint(newActiveWP)) {
+			this.activeWaypoint = newActiveWP;
+			return true;
+		}
+		return false;
 	}
 	
 	/*
