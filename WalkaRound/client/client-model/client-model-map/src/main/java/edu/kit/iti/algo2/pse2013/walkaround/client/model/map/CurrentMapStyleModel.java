@@ -9,7 +9,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 public class CurrentMapStyleModel {
 
 	private final MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPNIK;
-	private CurrentMapStyleModel currentMapModel;
+	private static CurrentMapStyleModel currentMapModel;
 	private MapStyle style;
 	
 	private CurrentMapStyleModel(MapStyle style) {
@@ -23,10 +23,10 @@ public class CurrentMapStyleModel {
 	 * @return CurrentMapStyleModel Objekt
 	 */
 	public CurrentMapStyleModel getInstance() {
-		if(this.currentMapModel == null){
+		if(currentMapModel == null){
 			return getInstance(this.defaultMapStyle);
 		}
-		return this.currentMapModel;
+		return currentMapModel;
 	}
 	
 	/**
@@ -36,10 +36,10 @@ public class CurrentMapStyleModel {
 	 * @return CurrentMapStyleModel Objekt
 	 */
 	public CurrentMapStyleModel getInstance(MapStyle style) {
-		if(this.currentMapModel == null){
-			this.currentMapModel = new CurrentMapStyleModel(style);
+		if(currentMapModel == null){
+			currentMapModel = new CurrentMapStyleModel(style);
 		}
-		return this.currentMapModel;
+		return currentMapModel;
 	}
 	
 	/**
