@@ -40,7 +40,6 @@ public class MapView extends Activity {
 
 		Log.d("MAP_VIEW", "Rufe Display ab.");
 
-		
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -64,12 +63,12 @@ public class MapView extends Activity {
 		user.setOnTouchListener(new UserTouchEventListener());
 
 		Log.d("MAP_VIEW", "User wird in die Mitte gestellt.");
-		
+
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
 
-		this.setUserPositionOverlayImage(new DisplayCoordinate(
-				200 / 2, 1000), 25);
+		this.setUserPositionOverlayImage(new DisplayCoordinate(200 / 2, 1000),
+				25);
 
 	}
 
@@ -82,7 +81,7 @@ public class MapView extends Activity {
 	}
 
 	long startDelay = 0;
-	
+
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
 	 * 
@@ -93,8 +92,7 @@ public class MapView extends Activity {
 	 * @return
 	 */
 	public void setUserPositionOverlayImage(DisplayCoordinate coor, float degree) {
-		
-		
+
 		AnimatorSet set = new AnimatorSet();
 
 		Log.d("MAP_THREAD", "Thread Animator Set UP");
@@ -115,10 +113,10 @@ public class MapView extends Activity {
 		set.play(transY).with(rotate);
 		set.play(transX).with(rotate);
 
-		set.addListener(new UserAnimationListener(coor, degree, set));
-		
-		startDelay += 1000;
+		set.addListener(new UserAnimationListener(coor, degree));
+
 		set.setStartDelay(startDelay);
+		startDelay += 1000;
 		set.start();
 
 	}
@@ -127,13 +125,10 @@ public class MapView extends Activity {
 
 		private float degree;
 		private DisplayCoordinate coor;
-		private AnimatorSet set;
 
-		public UserAnimationListener(DisplayCoordinate coor, float degree,
-				AnimatorSet set) {
+		public UserAnimationListener(DisplayCoordinate coor, float degree) {
 			this.degree = degree;
 			this.coor = coor;
-			this.set = set;
 		}
 
 		@Override
