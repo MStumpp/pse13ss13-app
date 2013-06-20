@@ -47,7 +47,7 @@ public class RouteProcessing {
      *
      * @param coordinate1 One end of the route to be computed.
      * @param coordinate2 One end of the route to be computed.
-     * @return Route.
+     * @return RouteInfo.
      */
     public RouteInfo computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
         List<Coordinate> coordinates = new LinkedList<Coordinate>();
@@ -66,7 +66,7 @@ public class RouteProcessing {
      * @param coordinate The starting Coordinate of the roundtrip to be computed.
      * @param profile The id of the Profile of the roundtrip to be computed.
      * @param length The length of the roundtrip to be computed.
-     * @return Route.
+     * @return RouteInfo.
      */
     public RouteInfo computeRoundtrip(Coordinate coordinate, int profile, int length) {
         throw new RuntimeException("to be implemented");
@@ -78,7 +78,7 @@ public class RouteProcessing {
      * The actual computation is done by an endpoint.
      *
      * @param routeInfo The Route to be optimized.
-     * @return Route.
+     * @return RouteInfo.
      */
     public RouteInfo computeOptimizedRoute(RouteInfo routeInfo) {
         throw new RuntimeException("to be implemented");

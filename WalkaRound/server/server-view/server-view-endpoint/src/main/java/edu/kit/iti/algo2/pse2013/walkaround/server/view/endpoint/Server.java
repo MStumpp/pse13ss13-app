@@ -29,6 +29,7 @@ public class Server {
      */
     @POST
     @Path("computeShortestPath")
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
         return ShortestPathProcessor.getInstance(null).computeShortestPath(coordinate1, coordinate2);
@@ -46,6 +47,7 @@ public class Server {
      */
     @POST
     @Path("computeRoundtrip/profile/{profile}/length/{length}")
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public RouteInfoTransfer computeRoundtrip(Coordinate coordinate, @PathParam("profile") String profile, @PathParam("length") String length) {
         int profileAsInt = Integer.parseInt(profile);
