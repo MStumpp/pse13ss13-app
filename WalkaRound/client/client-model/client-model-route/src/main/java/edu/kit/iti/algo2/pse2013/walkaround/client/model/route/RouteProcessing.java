@@ -74,10 +74,10 @@ public class RouteProcessing {
 
 
     /**
-     * Delegation method for computing an optimized route based on a given route.
+     * Delegation method for computing an optimized Route based on a given Route.
      * The actual computation is done by an endpoint.
      *
-     * @param routeInfo The route to be optimized.
+     * @param routeInfo The Route to be optimized.
      * @return Route.
      */
     public RouteInfo computeOptimizedRoute(RouteInfo routeInfo) {
