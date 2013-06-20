@@ -5,15 +5,12 @@
         <artifactId>server</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <artifactId>server-model</artifactId>
-    <name>Server-Model (Prozessoren für Routenberechnung)</name>
+    <packaging>jar</packaging>
+    <name>server-model</name>
 
     <dependencies>
-        <dependency>
-            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>server-graph</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
             <artifactId>shared-datastructures</artifactId>
@@ -21,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>client-model-route</artifactId>
+            <artifactId>server-graph</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -5,18 +5,15 @@
         <artifactId>server-view</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <artifactId>server-view-endpoint</artifactId>
-    <name>Endpoint für den Server</name>
+    <packaging>jar</packaging>
+    <name>server-view-endpoint</name>
 
     <dependencies>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
             <artifactId>shared-datastructures</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>client-model-route</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
