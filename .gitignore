@@ -12,6 +12,7 @@ thumbs.db
 .settings
 # Idea files
 .idea
+*.iml
 #LaTeX-Files
 *.tex.backup
 *.aux
