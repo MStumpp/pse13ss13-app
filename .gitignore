@@ -11,8 +11,11 @@ thumbs.db
 .classpath
 .settings
 # Idea files
+.idea
 #LaTeX-Files
 *.tex.backup
 *.aux
 *.log
 *.toc
+
+*.iml
