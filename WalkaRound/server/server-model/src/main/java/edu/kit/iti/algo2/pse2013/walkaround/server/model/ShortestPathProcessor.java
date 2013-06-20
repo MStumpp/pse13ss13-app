@@ -20,12 +20,20 @@ import java.util.List;
  */
 public class ShortestPathProcessor {
 
+    /**
+     * ShortestPathProcessor instance.
+     */
     private static ShortestPathProcessor instance;
 
-    private Graph graph;
 
     /**
-     * Creates a fresh instance of ShortestPathProcessor.
+     * Graph instance.
+     */
+    private Graph graph;
+
+
+    /**
+     * Creates an instance of ShortestPathProcessor.
      *
      * @param graph Graph used for shortest path computation.
      * @return ShortestPathProcessor.
