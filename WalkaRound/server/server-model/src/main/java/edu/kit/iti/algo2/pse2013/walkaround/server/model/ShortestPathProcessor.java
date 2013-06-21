@@ -34,7 +34,6 @@ public class ShortestPathProcessor {
      * Creates an instance of ShortestPathProcessor.
      *
      * @param graph Graph used for shortest path computation.
-     * @return ShortestPathProcessor.
      */
     private ShortestPathProcessor(Graph graph) {
         this.graph = graph;

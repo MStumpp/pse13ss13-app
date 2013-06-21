@@ -31,7 +31,6 @@ public class OptimizeRouteProcessor {
      * Creates an instance of OptimizeRouteProcessor.
      *
      * @param shortestPathProcessor ShortestPathProcessor used for route optimization.
-     * @return OptimizeRouteProcessor.
      */
     private OptimizeRouteProcessor(ShortestPathProcessor shortestPathProcessor) {
         this.shortestPathProcessor = shortestPathProcessor;
