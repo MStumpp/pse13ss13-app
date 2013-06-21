@@ -11,21 +11,21 @@ public class OSMDataPreprocessor {
 	private File locationDestination;
 	private File osmSource;
 
-	public void OSMDataPreprocessor(File osmSource, File locationDestination, File graphDestination) throws IOException {
-		if (!osmSource.exists()) {
-			throw new FileNotFoundException(String.format("The OSM-Data-File was not found at '%s'!", osmSource.getAbsolutePath()));
-		}
-		if (!locationDestination.exists()) {
-			locationDestination.mkdirs();
-			locationDestination.createNewFile();
-		}
-		if (!graphDestination.exists()) {
-			graphDestination.mkdirs();
-			graphDestination.createNewFile();
-		}
+	public OSMDataPreprocessor(File osmSource, File locationDestination, File graphDestination) throws IOException {
 		this.graphDestination = graphDestination;
 		this.locationDestination = locationDestination;
 		this.osmSource = osmSource;
+		if (!this.osmSource.exists()) {
+			throw new FileNotFoundException(String.format("The OSM-Data-File was not found at '%s'!", osmSource.getAbsolutePath()));
+		}
+		if (!this.locationDestination.exists()) {
+			this.locationDestination.mkdirs();
+			this.locationDestination.createNewFile();
+		}
+		if (!this.graphDestination.exists()) {
+			this.graphDestination.mkdirs();
+			this.graphDestination.createNewFile();
+		}
 	}
 	public void parse() throws FileNotFoundException, IOException {
 		GraphDataIO graphData = new GraphDataIO();
