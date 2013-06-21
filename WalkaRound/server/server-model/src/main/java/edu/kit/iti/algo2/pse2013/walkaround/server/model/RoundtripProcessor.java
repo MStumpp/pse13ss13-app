@@ -34,7 +34,6 @@ public class RoundtripProcessor {
      * Creates an instance of RoundtripProcessor.
      *
      * @param graph Graph used for shortest path computation.
-     * @return RoundtripProcessor.
      */
     private RoundtripProcessor(Graph graph) {
         this.graph = graph;
