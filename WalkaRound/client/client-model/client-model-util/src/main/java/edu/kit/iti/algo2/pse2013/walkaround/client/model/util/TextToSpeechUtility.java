@@ -1,18 +1,24 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
+import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 
 public final class TextToSpeechUtility {
 
 	private static TextToSpeechUtility ttsu;
+	private TextToSpeech tts;
 
-	private TextToSpeechUtility() {
-
+	private TextToSpeechUtility(Context con, OnInitListener oil) {
+		tts = new TextToSpeech(con, oil);
+	}
+	public TextToSpeech getTextToSpeech() {
+		return tts;
 	}
 
-	public static TextToSpeechUtility getInstance() {
+	public static TextToSpeechUtility getInstance(Context con, OnInitListener oil) {
 		if (ttsu == null) {
-			ttsu = new TextToSpeechUtility();
+			ttsu = new TextToSpeechUtility(con, oil);
 		}
 		return ttsu;
 	}
