@@ -2,21 +2,16 @@
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<relativePath>../parent/pom.xml</relativePath>
 		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+
 	<artifactId>server</artifactId>
-	<name>Server für WalkaRound-App</name>
-	<dependencies>
-		<dependency>
-			<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-			<artifactId>shared-datastructures</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
+	<name>server</name>
+
 	<modules>
 		<module>server-graph</module>
 		<module>server-model</module>
