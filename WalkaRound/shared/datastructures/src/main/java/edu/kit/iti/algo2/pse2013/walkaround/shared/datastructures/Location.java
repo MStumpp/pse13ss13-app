@@ -9,19 +9,19 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 public class Location extends Coordinate {
 
     /**
-     * id of this Location.
+     * id of Location.
      */
     private final int id;
 
 
     /**
-     * name of this Location.
+     * name of Location.
      */
     private final String name;
 
 
     /**
-     * address of this Location.
+     * address of Location.
      */
     private final Address address;
 
@@ -41,10 +41,10 @@ public class Location extends Coordinate {
     /**
      * Creates an instance of Location.
      *
-     * @param lon Longitude of the Location.
-     * @param lat Latitude of the Location.
-     * @param id ID of the Location.
-     * @param name Name of the Location.
+     * @param lon Longitude of Location.
+     * @param lat Latitude of Location.
+     * @param id ID of Location.
+     * @param name Name of Location.
      */
     public Location(double lon, double lat, int id, String name) {
         this(lon, lat, id, name, null);
@@ -54,11 +54,11 @@ public class Location extends Coordinate {
     /**
      * Creates an instance of Location.
      *
-     * @param lon Longitude of the Location.
-     * @param lat Latitude of the Location.
-     * @param id ID of the Location.
-     * @param name Name of the Location.
-     * @param address Address of the Location.
+     * @param lon Longitude of Location.
+     * @param lat Latitude of Location.
+     * @param id ID of Location.
+     * @param name Name of Location.
+     * @param address Address of Location.
      */
     public Location(double lon, double lat, int id, String name, Address address) {
         super(lon, lat);
@@ -68,8 +68,6 @@ public class Location extends Coordinate {
         if (name.isEmpty())
             throw new IllegalArgumentException("name must not be empty");
         this.name = name;
-        if (address == null)
-            throw new IllegalArgumentException("address must be provided");
         this.address = address;
         isMoveable = false;
         isFavorite = false;
@@ -77,7 +75,7 @@ public class Location extends Coordinate {
 
 
     /**
-     * Returns the ID of this Location.
+     * Returns the ID of Location.
      *
      * @return int.
      */
@@ -87,7 +85,7 @@ public class Location extends Coordinate {
 
 
     /**
-     * Returns the name of this Location.
+     * Returns the name of Location.
      *
      * @return String.
      */
@@ -97,7 +95,7 @@ public class Location extends Coordinate {
 
 
     /**
-     * Returns the Address of this Location.
+     * Returns the Address of Location.
      *
      * @return Address.
      */
@@ -107,9 +105,9 @@ public class Location extends Coordinate {
 
 
     /**
-     * Returns whether this Location is moveable.
+     * Returns whether Location is moveable.
      *
-     * @return true if this Location is moveable, false otherwise.
+     * @return true if Location is moveable, false otherwise.
      */
     public boolean isMoveable() {
         return isMoveable;
@@ -117,9 +115,9 @@ public class Location extends Coordinate {
 
 
     /**
-     * Returns whether this Location is a favorite.
+     * Returns whether Location is a favorite.
      *
-     * @return true if this Location is a favorite, false otherwise.
+     * @return true if Location is a favorite, false otherwise.
      */
     public boolean isFavorite() {
         return isFavorite;
