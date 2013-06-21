@@ -13,17 +13,27 @@
     <dependencies>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>shared-datastructures</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>preprocessor</artifactId>
+            <artifactId>preprocessor-model-osm</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>server</artifactId>
+            <artifactId>server-model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+            <artifactId>server-graph</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+            <artifactId>server-view-endpoint</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Jetty -->

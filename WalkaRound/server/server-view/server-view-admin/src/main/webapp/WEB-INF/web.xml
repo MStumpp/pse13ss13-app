@@ -26,5 +26,4 @@
         <servlet-name>jersey-services</servlet-name>
         <url-pattern>/walkaround/*</url-pattern>
     </servlet-mapping>
-
 </web-app>

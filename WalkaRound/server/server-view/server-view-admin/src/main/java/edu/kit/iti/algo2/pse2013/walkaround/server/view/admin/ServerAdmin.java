@@ -1,7 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+
+import java.io.File;
 
 /**
  * This class launches the web application in an embedded Jetty container.
@@ -42,6 +45,7 @@ public class ServerAdmin {
 
         // some initialization
         // get Graph instance
+        GraphDataIO graphDataIO = GraphDataIO.load(new File("./README.md"));
 
         server.start();
         server.join();
