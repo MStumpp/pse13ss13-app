@@ -46,7 +46,7 @@ public class Coordinate {
 	 * @param crossInfo CrossingInformation for this Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
-	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
+	public Coordinate(double lon, double lat, CrossingInformation crossInfo) {
 		if (Math.abs(lon) > 180.d)
 			throw new IllegalArgumentException("longitude has to be between -180 and 180");
 		if (Math.abs(lat) > 90.d)
