@@ -11,9 +11,9 @@ public class POI extends Location {
 
 	private ArrayList<Integer> poiCategories;
 
-	public POI(double longitude, double latitude, String name, int id,
+	public POI(double longtitude, double latitude, String name, int id,
 			Address address, String textInfo, String url) {
-		super(latitude, latitude, url, id, address);
+		super(longtitude, latitude, id, url, address);
 		this.textInfo = textInfo;
 		this.url = url;
 		poiCategories = new ArrayList<Integer>();

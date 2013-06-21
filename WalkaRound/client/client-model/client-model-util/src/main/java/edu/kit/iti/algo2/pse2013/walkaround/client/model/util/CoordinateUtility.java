@@ -1,8 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
+import android.util.Log;
 import android.view.Display;
+import android.app.Activity;
 import android.graphics.Point;
 
 public final class CoordinateUtility {
