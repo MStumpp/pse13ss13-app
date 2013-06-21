@@ -14,9 +14,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
-//import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
+//import android.widget.RelativeLayout;
 
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 
@@ -63,9 +63,12 @@ public class MapView extends Activity {
 		user.setOnTouchListener(new UserTouchEventListener());
 
 		Log.d("MAP_VIEW", "User wird in die Mitte gestellt.");
-		
+
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
+
+		this.setUserPositionOverlayImage(new DisplayCoordinate(200 / 2, 1000),
+				25);
 
 	}
 
@@ -77,6 +80,8 @@ public class MapView extends Activity {
 		this.routeOverlay.setImageBitmap(b);
 	}
 
+	long startDelay = 0;
+
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
 	 * 
@@ -87,7 +92,7 @@ public class MapView extends Activity {
 	 * @return
 	 */
 	public void setUserPositionOverlayImage(DisplayCoordinate coor, float degree) {
-		
+
 		AnimatorSet set = new AnimatorSet();
 
 		Log.d("MAP_THREAD", "Thread Animator Set UP");
@@ -108,8 +113,10 @@ public class MapView extends Activity {
 		set.play(transY).with(rotate);
 		set.play(transX).with(rotate);
 
-		set.addListener(new UserAnimationListener(coor, degree, set));
-		
+		set.addListener(new UserAnimationListener(coor, degree));
+
+		set.setStartDelay(startDelay);
+		startDelay += 1000;
 		set.start();
 
 	}
@@ -118,24 +125,21 @@ public class MapView extends Activity {
 
 		private float degree;
 		private DisplayCoordinate coor;
-		private AnimatorSet set;
 
-		public UserAnimationListener(DisplayCoordinate coor, float degree,
-				AnimatorSet set) {
+		public UserAnimationListener(DisplayCoordinate coor, float degree) {
 			this.degree = degree;
 			this.coor = coor;
-			this.set = set;
 		}
 
 		@Override
 		public void onAnimationCancel(Animator animation) {
 			Log.d("MAP_ANIMATION", "Animation Cancel");
-
 		}
 
 		@Override
 		public void onAnimationEnd(Animator animation) {
 			user.clearAnimation();
+			startDelay -= 1000;
 
 			Log.d("MAP_ANIMATION", "Setze User an die richtige Position. x: "
 					+ (coor.getX() - USER_X_DELTA) + " y: "

@@ -3,6 +3,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.route;
 import java.util.LinkedList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class RouteMenusController {
 
@@ -14,12 +19,12 @@ public class RouteMenusController {
 
 	private RouteMenusController() {
 		this.routeListeners = new LinkedList<>();
-		this.currentRoute = new Route(LinkedList<Coordinate>));
+		this.currentRoute = new Route(new LinkedList<Coordinate>());
 	}
 
 	public static RouteMenusController getInstance() {
 		if (!intanceExists) {
-			routeMC = RouteMenusController();
+			routeMC = new RouteMenusController();
 		}
 		return routeMC;
 	}
@@ -37,8 +42,8 @@ public class RouteMenusController {
 	}
 
 
-	public void setActiveWaypoint(Waypoint) {
-		this.currentRoute.setActiveWaypoint(Waypoint);
+	public void setActiveWaypoint(Waypoint wp) {
+		this.currentRoute.setActiveWaypoint(wp);
 	}
 
 	public void resetAvticeWaypoint() {
@@ -54,11 +59,11 @@ public class RouteMenusController {
 	}
 
 	public void addRoundtrip(Profile p, int i) {
-		this.currentRoute.addRoundtripAtActiveWaypoint(p, i);
+		this.currentRoute.addRoundtripAtActiveWaypoint(p.getID(), i);
 	}
 
 	public void addRoute(RouteInfo ri) {
-		this.currentRoute.addRoute(ri));
+		this.currentRoute.addRoute(ri);
 	}
 
 	public void moveActiveWaypoint(Coordinate c) {
