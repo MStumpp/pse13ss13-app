@@ -23,7 +23,7 @@ public class Location extends Coordinate {
     /**
      * address of this Location.
      */
-	private final Address address;
+    private final Address address;
 
 
     /**
@@ -91,9 +91,9 @@ public class Location extends Coordinate {
      *
      * @return String.
      */
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
 
     /**
@@ -101,9 +101,9 @@ public class Location extends Coordinate {
      *
      * @return Address.
      */
-	public Address getAddress() {
-		return address;
-	}
+    public Address getAddress() {
+        return address;
+    }
 
 
     /**
@@ -111,9 +111,9 @@ public class Location extends Coordinate {
      *
      * @return true if this Location is moveable, false otherwise.
      */
-	public boolean isMoveable() {
-		return isMoveable;
-	}
+    public boolean isMoveable() {
+        return isMoveable;
+    }
 
 
     /**
@@ -121,8 +121,8 @@ public class Location extends Coordinate {
      *
      * @return true if this Location is a favorite, false otherwise.
      */
-	public boolean isFavorite() {
-		return isFavorite;
-	}
+    public boolean isFavorite() {
+        return isFavorite;
+    }
 
 }
