@@ -9,9 +9,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 
 public class GraphDataIO {
 	private Vector<Edge> edges = new Vector<>(); 
@@ -40,7 +41,9 @@ public class GraphDataIO {
 	public static GraphDataIO load(File source) throws FileNotFoundException, IOException, ClassNotFoundException {
 		//TODO: Replace the simple java-serialization by a better one
 		ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(source)));
-		return (GraphDataIO) ois.readObject();
+		GraphDataIO graph = (GraphDataIO) ois.readObject();
+		ois.close();
+		return graph;
 	}
 	public void addEdge(Edge e) {
 		this.edges.add(e);
