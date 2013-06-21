@@ -47,9 +47,9 @@ public class Coordinate {
      * @throws IllegalArgumentException If longitude or latitude is not within some common range.
      */
     public Coordinate(double lon, double lat, CrossingInformation crossInfo) {
-        if (Math.abs(lon) > 180)
+        if (Math.abs(lon) > 180.d)
             throw new IllegalArgumentException("longitude has to be between -180 and 180");
-        if (Math.abs(lat) > 90)
+        if (Math.abs(lat) > 90.d)
             throw new IllegalArgumentException("latitude has to be between -90 and 90");
         this.lon = lon;
         this.lat = lat;
