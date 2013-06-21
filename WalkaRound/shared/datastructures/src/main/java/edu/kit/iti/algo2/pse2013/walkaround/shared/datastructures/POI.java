@@ -14,19 +14,19 @@ public class POI extends Location {
     /**
      * text info of POI.
      */
-	private String textInfo;
+    private String textInfo;
 
 
     /**
      * url of image of POI.
      */
-	private String url;
+    private String url;
 
 
     /**
      * poi categories of POI.
      */
-	private int[] poiCategories;
+    private int[] poiCategories;
 
 
     /**
@@ -40,9 +40,9 @@ public class POI extends Location {
      * @param url URL of an image of POI.
      * @param poiCategories Categories of POI.
      */
-	public POI(double lon, double lat, int id, String name, String textInfo, String url, int[] poiCategories) {
+    public POI(double lon, double lat, int id, String name, String textInfo, String url, int[] poiCategories) {
         this(lon, lat, id, name, textInfo, url, poiCategories, null);
-	}
+    }
 
 
     /**
@@ -70,9 +70,9 @@ public class POI extends Location {
      *
      * @return String.
      */
-	public String getTextInfo() {
-		return textInfo;
-	}
+    public String getTextInfo() {
+	    return textInfo;
+    }
 
 
     /**
@@ -81,9 +81,9 @@ public class POI extends Location {
      * @return BufferedImage.
      */
     // TODO: implement image loading
-	public BufferedImage getImage() {
-		return null;
-	}
+    public BufferedImage getImage() {
+        return null;
+    }
 
 
     /**
@@ -91,8 +91,8 @@ public class POI extends Location {
      *
      * @return int[].
      */
-	public int[] getPoiCategories() {
-		return poiCategories;
-	}
+    public int[] getPoiCategories() {
+        return poiCategories;
+    }
 
 }
