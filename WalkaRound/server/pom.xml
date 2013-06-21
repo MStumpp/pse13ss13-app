@@ -16,5 +16,5 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>server-graph</module>
 		<module>server-model</module>
 		<module>server-view</module>
-	</modules>
+    </modules>
 </project>
