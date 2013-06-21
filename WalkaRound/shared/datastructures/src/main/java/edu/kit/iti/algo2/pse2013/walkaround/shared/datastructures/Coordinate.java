@@ -6,7 +6,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Coordinate {
+public class Coordinate {
 
     /**
      * longitude of this Coordinate.
