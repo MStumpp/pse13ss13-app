@@ -4,8 +4,8 @@
 		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../parent/pom.xml</relativePath>
-	</parent>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
 
     <artifactId>shared</artifactId>
     <packaging>pom</packaging>
