@@ -17,7 +17,7 @@ public class Coordinate {
     /**
      * latitude of this Coordinate.
      */
-	private final double lat;
+    private final double lat;
 
 
     /**
@@ -33,9 +33,9 @@ public class Coordinate {
      * @param lat Latitude of the Coordinate.
      * @throws IllegalArgumentException If longitude or latitude is not within some common range.
      */
-	public Coordinate(double lon, double lat) {
+    public Coordinate(double lon, double lat) {
         this(lon, lat, null);
-	}
+    }
 
 
     /**
@@ -72,9 +72,9 @@ public class Coordinate {
      *
      * @return double.
      */
-	public double getLatitude() {
-		return lat;
-	}
+    public double getLatitude() {
+        return lat;
+    }
 
 
     /**

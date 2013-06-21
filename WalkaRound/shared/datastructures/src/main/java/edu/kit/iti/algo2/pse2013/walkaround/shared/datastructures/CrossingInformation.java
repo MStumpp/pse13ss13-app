@@ -11,7 +11,7 @@ public final class CrossingInformation {
     /**
      * list of crossroad angles.
      */
-	private final float[] crossroadAngles;
+    private final float[] crossroadAngles;
 
 
     /**
@@ -19,10 +19,10 @@ public final class CrossingInformation {
      *
      * @param crossroadAngles An array of crossroad angles.
      */
-	public CrossingInformation(float[] crossroadAngles) {
+    public CrossingInformation(float[] crossroadAngles) {
         if (crossroadAngles.length == 0)
             throw new IllegalArgumentException("number of crossing angles must be at least one");
-		this.crossroadAngles = crossroadAngles;
+        this.crossroadAngles = crossroadAngles;
 	}
 
 
@@ -41,11 +41,11 @@ public final class CrossingInformation {
      *
      * @return float.
      */
-	public float getCrossroadAngle(int index) {
+    public float getCrossroadAngle(int index) {
         if (index < 0 || index > crossroadAngles.length-1)
             throw new IllegalArgumentException("index must be equal or greater " +
                     "than zero but not greater than " + (crossroadAngles.length-1));
-		return crossroadAngles[index];
+        return crossroadAngles[index];
 	}
 
 
@@ -54,8 +54,8 @@ public final class CrossingInformation {
      *
      * @return int.
      */
-	public int getNumCrossroads() {
-		return crossroadAngles.length;
-	}
+    public int getNumCrossroads() {
+        return crossroadAngles.length;
+    }
 
 }
