@@ -11,13 +11,13 @@ public class Waypoint extends Location {
     /**
      * profile id.
      */
-	private int profile;
+    private int profile;
 
 
     /**
      * POI a Waypoint is related with.
      */
-	private POI poi;
+    private POI poi;
 
 
     /**
@@ -28,10 +28,9 @@ public class Waypoint extends Location {
      * @param id ID of Waypoint.
      * @param name Name of Waypoint.
      */
-	public Waypoint(double lon, double lat, int id, String name) {
-		this(lon, lat, id, name, null);
-
-	}
+    public Waypoint(double lon, double lat, int id, String name) {
+        this(lon, lat, id, name, null);
+    }
 
     /**
      * Creates an instance of Waypoint.
@@ -64,9 +63,9 @@ public class Waypoint extends Location {
      *
      * @return int.
      */
-	public int getProfile() {
-		return profile;
-	}
+    public int getProfile() {
+        return profile;
+    }
 
 
     /**
@@ -84,9 +83,9 @@ public class Waypoint extends Location {
      *
      * @return POI.
      */
-	public POI getPoi() {
-		return poi;
-	}
+    public POI getPoi() {
+        return poi;
+    }
 
 
     /**

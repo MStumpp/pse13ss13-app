@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
  * @author Matthias Stumpp
  * @version 1.0
  */
-@Path("/server")
+@Path("/processor")
 public class Server {
 
     /**
