@@ -61,15 +61,15 @@ public final class Edge {
      *
      * @param coordinate1 Coordinate 1 of the Edge.
      * @param coordinate2 Coordinate 2 of the Edge.
-     * @throws IllegalArgumentException If longitude or latitude is not within some common range.
+     * @throws IllegalArgumentException If coordinate 1 or coordinate 2 is null.
      */
     public Edge(Coordinate coordinate1, Coordinate coordinate2) {
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate 1 and coordinate 2 must not be null");
-        this.lon1 = coordinate1.getLongtitude();
-        this.lat1 = coordinate1.getLatitude();
-        this.lon2 = coordinate2.getLongtitude();
-        this.lat2 = coordinate2.getLatitude();
+        lon1 = coordinate1.getLongtitude();
+        lat1 = coordinate1.getLatitude();
+        lon2 = coordinate2.getLongtitude();
+        lat2 = coordinate2.getLatitude();
     }
 
 
