@@ -5,8 +5,10 @@
         <artifactId>client-model</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <artifactId>client-model-route</artifactId>
-    <name>Route (im Client-Model)</name>
+    <packaging>jar</packaging>
+    <name>client-model-route</name>
 
     <dependencies>
         <dependency>
