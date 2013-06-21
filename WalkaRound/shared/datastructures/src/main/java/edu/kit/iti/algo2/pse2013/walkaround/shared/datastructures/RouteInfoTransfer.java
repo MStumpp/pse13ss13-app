@@ -21,7 +21,6 @@ public final class RouteInfoTransfer {
      * Creates an instance of RouteInfoTransfer.
      *
      * @param coordinates List of coordinates representing this route.
-     * @return RouteInfoTransfer.
      */
     public RouteInfoTransfer(List<Coordinate> coordinates) {
         if (coordinates == null || coordinates.size() < 2)

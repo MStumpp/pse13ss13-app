@@ -22,8 +22,6 @@ public class RouteProcessing {
 
     /**
      * Creates a fresh instance of RouteProcessing.
-     *
-     * @return RouteProcessing.
      */
     private RouteProcessing() {
     }
