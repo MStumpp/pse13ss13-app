@@ -1,25 +1,23 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
 
 public class POIMenuController {
-
-	private static boolean intanceExists;
 	private static POIMenuController instance;
 
 	private POIMenuController() {
-
+		// TODO: Implement
 	}
 
-	public POIMenuController getInstance() {
-		if (!intanceExists) {
-			this.instance = new POIMenuController();
+	public static POIMenuController getInstance() {
+		if (instance == null) {
+			instance = new POIMenuController();
 		}
-		return this.instance;
+		return instance;
 	}
 
 
 	public int[] requestAllActiveCategories() {
 		return null;
-		// leite an eine Instanz des POI Managers weiter
+		// TODO: leite an eine Instanz des POI Managers weiter
 	}
 
 	public void addActiveCategory(int catIndex) {

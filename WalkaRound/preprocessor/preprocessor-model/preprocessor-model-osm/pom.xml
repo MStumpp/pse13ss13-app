@@ -7,4 +7,11 @@
   </parent>
   <artifactId>preprocessor-model-osm</artifactId>
   <name>OSM-Präprozessor</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>server-graph</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
