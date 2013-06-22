@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class Route implements RouteInfo {
 
@@ -46,7 +47,7 @@ public class Route implements RouteInfo {
 	 * Moves the coordinate represented by the active waypoint to the given waypoint-position within the route.
 	 */
 	public void moveActiveWaypointInOrder(int newPos) {
-		Coordinate tempCoord = new Coordinate (this.activeWaypoint.getLongitude, this.activeWaypoint.getLatitude);
+		Coordinate tempCoord = new Coordinate (this.activeWaypoint.getLongtitude(), this.activeWaypoint.getLatitude());
 // TODO: lösche die 0-2 Teilstücke, erstelle einen neuen WP an der entsprechenden WP Coord
 
 	}
@@ -54,7 +55,7 @@ public class Route implements RouteInfo {
 	/*
 	 * Adds a new waypoint at the given position.
 	 */
-	public void addWaypoint(Coordinate) {
+	public void addWaypoint(Coordinate c) {
 		// schicke Berechnung über Shortest Path (this.getEnd() und Coordinate) an Server
 		// Füge Ergebnis der Route hinzu.
 
@@ -101,9 +102,9 @@ public class Route implements RouteInfo {
 	public void revertRoute() {
 		LinkedList<Coordinate> revertedRoute = new LinkedList<Coordinate>();
 		// durchlaufe Liste der Coords, kehre sie 1:1 um
-		Iterator<Coordinate> routeCoordsDecIter = this.routeCoordinates.decendingIterator();
+		Iterator<Coordinate> routeCoordsDecIter = this.routeCoordinates.descendingIterator();
 
-		while (routeCoordsDecIter.hasnext()) {
+		while (routeCoordsDecIter.hasNext()) {
 			revertedRoute.add(routeCoordsDecIter.next());
 		}
 
@@ -135,7 +136,7 @@ public class Route implements RouteInfo {
 	public Route clone() {
 		LinkedList<Coordinate> cloneCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
-			cloneCoords.add(coord.clone());
+			//cloneCoords.add(coord.clone());
 		}
 		return new Route(cloneCoords);
 	}
@@ -149,12 +150,12 @@ public class Route implements RouteInfo {
 
 	@Override
 	public Waypoint getStart() {
-		return this.routeCoordinates.getFirst();
+		return (Waypoint) this.routeCoordinates.getFirst();
 	}
 
 	@Override
 	public Waypoint getEnd() {
-		return this.routeCoordinates.getLast();
+		return (Waypoint) this.routeCoordinates.getLast();
 	}
 
 	@Override
@@ -165,26 +166,23 @@ public class Route implements RouteInfo {
 
 	@Override
 	public LinkedList<Route> getRoutes() {
-		LinkedList<Route> routes = new LinkedList<Route>;
-		Iterator<Coordinate> coordIter = this.routeCoordinates.Iterator();
+		LinkedList<Route> routes = new LinkedList<>();
+		Iterator<Coordinate> coordIter = this.routeCoordinates.iterator();
 
 		int waypointsCounted = 0;
 
 		LinkedList<Coordinate> routePiece = new LinkedList<Coordinate>();
 
-		while(coordIter.hasnext()) {
+		while(coordIter.hasNext()) {
 			Coordinate coordTemp = coordIter.next();
 			routePiece.add(coordTemp);
 
 			//TODO: Automat überlegen:
-			if (coordTemp.isInstanceOf(Waypoint)) {
+			if (coordTemp instanceof Waypoint) { //TODO: Kann man instanceof vermeiden?
 				waypointsCounted++;
 			}
-
-
-
-
 		}
+		return routes;
 
 		// durchlaufe routeCoordinates
 		// stückle an WPs in einzelne Routen auf
@@ -195,10 +193,11 @@ public class Route implements RouteInfo {
 	public LinkedList<Waypoint> getWaypoints() {
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
 		for (Coordinate cor : this.routeCoordinates) {
-			if (cor.isInstanceOf(Waypoint)) {
-				waypoints.add(Waypoint(cor));
+			if (cor instanceof Waypoint) { //TODO: Kann man instanceof vermeiden?
+				waypoints.add((Waypoint)cor);
 			}
 		}
+		return waypoints;
 	}
 
 	public boolean containsWaypoint(Coordinate coord) {
@@ -212,6 +211,7 @@ public class Route implements RouteInfo {
 
 	@Override
 	public boolean isFavorite() {
+		return false;
 		// Zugriff auf Favs über getInstance();
 	}
 

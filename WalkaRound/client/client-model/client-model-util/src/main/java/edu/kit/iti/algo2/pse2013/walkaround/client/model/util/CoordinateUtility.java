@@ -1,13 +1,44 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
+import android.util.Log;
+import android.view.Display;
+import android.app.Activity;
+import android.graphics.Point;
 
-public class CoordinateUtility {
+public final class CoordinateUtility {
+
 	/**
 	 * The average earth radius according to WGS84
 	 */
 	private static double EARTH_RADIUS = 6371.000785;
+
+	private CoordinateUtility() {
+
+	}
+
+	public static DisplayCoordinate coordinateToDisplayCoordinate(
+			Coordinate coord, Coordinate anchor) {
+		return null;
+	}
+
+	public static Coordinate displayCoordinateToCoordinate(
+			DisplayCoordinate dispCoord, Coordinate anchor) {
+		return null;
+	}
+
+	// parameter war im entwurf noch nicht drin!
+	public static Point getDisplay(Activity activity) {
+		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size;
+
+	}
+
 	/**
 	 * Calculates the distance between two coordinates
 	 * @param c1 the first coordinate

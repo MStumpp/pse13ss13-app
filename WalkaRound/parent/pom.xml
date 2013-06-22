@@ -9,9 +9,10 @@
 	<!-- Project properties -->
 	<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Parent-POM</name>
+	<name>parent</name>
 	<artifactId>parent</artifactId>
 	<url>https://github.com/MStumpp/pse13ss13-app</url>
+
 	<mailingLists>
 		<mailingList>
 			<name>Mailingliste PSE 2013 am Lehrstuhl Algorithmik II (Sanders)</name>
@@ -113,6 +114,11 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<version>4.1.1.4</version>
 		</dependency>
 	</dependencies>
 </project>

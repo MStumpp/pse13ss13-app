@@ -19,4 +19,9 @@ public class TileUtility {
 				(int)Math.floor((1 - Math.log(Math.tan(Math.toRadians(c.getLatitude())) + 1 / Math.cos(Math.toRadians(c.getLatitude()))) / Math.PI) / 2 * (1<<levelOfDetail))
 		};
 	}
+
+	public static Coordinate getUpperLeftCoordinate(int x, int y,
+		int levelOfDetail) {
+	return null;
+	}
 }

@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
 import java.util.LinkedList;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+
 public interface RouteInfo {
 	
 	public String getname();

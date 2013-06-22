@@ -7,4 +7,11 @@
   </parent>
   <artifactId>client-controller-route</artifactId>
   <name>Route-Controller auf Client</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>client-model-route</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
