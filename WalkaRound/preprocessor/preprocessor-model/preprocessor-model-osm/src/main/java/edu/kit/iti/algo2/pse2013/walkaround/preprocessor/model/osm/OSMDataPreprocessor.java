@@ -15,6 +15,13 @@ public class OSMDataPreprocessor {
 	private File locationDestination;
 	private File osmSource;
 
+	/**
+	 *
+	 * @param osmSource
+	 * @param locationDestination
+	 * @param graphDestination
+	 * @throws IOException
+	 */
 	public OSMDataPreprocessor(File osmSource, File locationDestination, File graphDestination) throws IOException {
 		this.graphDestination = graphDestination;
 		this.locationDestination = locationDestination;
@@ -31,6 +38,11 @@ public class OSMDataPreprocessor {
 			this.graphDestination.createNewFile();
 		}
 	}
+	/**
+	 *
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void parse() throws FileNotFoundException, IOException {
 		GraphDataIO graphData = new GraphDataIO();
 		LocationDataIO locationData = new LocationDataIO();
@@ -43,6 +55,13 @@ public class OSMDataPreprocessor {
 		GraphDataIO.save(graphData, graphDestination);
 		LocationDataIO.save(locationData, locationDestination);
 	}
+	/**
+	 *
+	 * @param c1
+	 * @param c2
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void parseRectangle(Coordinate c1, Coordinate c2) throws FileNotFoundException, IOException {
 		GraphDataIO graphData = new GraphDataIO();
 		GraphDataIO.save(graphData, graphDestination);

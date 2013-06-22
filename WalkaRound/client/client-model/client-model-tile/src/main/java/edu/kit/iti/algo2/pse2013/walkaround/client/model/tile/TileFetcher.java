@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
