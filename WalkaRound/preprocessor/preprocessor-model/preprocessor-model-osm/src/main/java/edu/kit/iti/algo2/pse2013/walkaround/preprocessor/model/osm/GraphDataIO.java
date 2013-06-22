@@ -15,15 +15,15 @@ import java.util.Vector;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 
 public class GraphDataIO {
-	private Vector<Edge> edges = new Vector<>(); 
+	private Vector<Edge> edges = new Vector<>();
 	/**
-	 * Saves the GraphDataIO-object, which is given as parameter, as the {@code destination}-file. 
-	 * @param destination
+	 * Saves the GraphDataIO-object, which is given as parameter, as the {@code destination}-file.
 	 * @param objectToSave
+	 * @param destination
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static void save(File destination, GraphDataIO objectToSave) throws FileNotFoundException, IOException {
+	public static void save(GraphDataIO objectToSave, File destination) throws FileNotFoundException, IOException {
 		//TODO: Replace the simple java-serialization by a better one
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
 		oos.writeObject(objectToSave);
@@ -36,7 +36,7 @@ public class GraphDataIO {
 	 * @param objectToSave
 	 * @throws FileNotFoundException
 	 * @throws IOException
-	 * @throws ClassNotFoundException 
+	 * @throws ClassNotFoundException
 	 */
 	public static GraphDataIO load(File source) throws FileNotFoundException, IOException, ClassNotFoundException {
 		//TODO: Replace the simple java-serialization by a better one
