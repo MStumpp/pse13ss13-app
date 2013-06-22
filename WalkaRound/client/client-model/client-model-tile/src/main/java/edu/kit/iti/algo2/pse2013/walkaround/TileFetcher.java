@@ -1,18 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.IllegalFormatException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
