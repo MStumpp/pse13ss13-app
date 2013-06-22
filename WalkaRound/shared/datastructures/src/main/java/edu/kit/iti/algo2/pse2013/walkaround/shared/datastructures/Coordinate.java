@@ -29,24 +29,24 @@ public class Coordinate {
 	/**
 	 * Creates an instance of Coordinate.
 	 *
-	 * @param lon Longitude of the Coordinate.
-	 * @param lat Latitude of the Coordinate.
+	 * @param lon Laitude of the Coordinate.
+	 * @param lon Longtitude of the Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
-	public Coordinate(double lon, double lat) {
-		this(lon, lat, null);
+	public Coordinate(double lat, double lon) {
+		this(lat, lon, null);
 	}
 
 
 	/**
 	 * Creates an instance of Coordinate.
 	 *
-	 * @param lon Longitude of the Coordinate.
 	 * @param lat Latitude of the Coordinate.
+	 * @param lon Longitude of the Coordinate.
 	 * @param crossInfo CrossingInformation for this Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
-	public Coordinate(double lon, double lat, CrossingInformation crossInfo) {
+	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
 		if (Math.abs(lon) > 180.d)
 			throw new IllegalArgumentException("longitude has to be between -180 and 180");
 		if (Math.abs(lat) > 90.d)
