@@ -1,10 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,14 +14,14 @@ public class POI extends Location {
 
 	private String url;
 
-	private ArrayList<Integer> poiCategories;
+	private int[] poiCategories;
 
 	public POI(double longitude, double latitude, String name, int id,
-			Address address, String textInfo, String url) {
+			Address address, String textInfo, String url, int[] poiCategories) {
 		super(latitude, latitude, url, id, address);
 		this.textInfo = textInfo;
 		this.url = url;
-		poiCategories = new ArrayList<Integer>();
+		this.poiCategories = poiCategories;
 	}
 
 	public String getTextInfo() {
@@ -30,7 +29,7 @@ public class POI extends Location {
 	}
 
 	// Return ist nun eine bitmap und kein bufferedImage mehr!
-	public Bitmap getImage() {
+	public Bitmap getImage() throws IOException {
 		URL url = new URL(this.url);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.connect();
@@ -39,7 +38,7 @@ public class POI extends Location {
 		return bitmap;
 	}
 
-	public ArrayList<Integer> getPoiCategories() {
+	public int[] getPoiCategories() {
 		return poiCategories;
 	}
 

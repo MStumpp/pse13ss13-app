@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Area {
 
-	private ArrayList<Integer> areaCategories;
+	private int[] areaCategories;
 
 	private ArrayList<Coordinate> areaCoordinates;
 
-	public Area() {
-		areaCategories = new ArrayList<Integer>();
-		areaCoordinates = new ArrayList<Coordinate>();
+	public Area(int[] areaCategories, ArrayList<Coordinate> areaCoordinates) {
+		this.areaCategories = areaCategories;
+		this.areaCoordinates = new ArrayList<Coordinate>(areaCoordinates);
 	}
 
-	public ArrayList<Integer> getAreaCategories() {
+	public int[] getAreaCategories() {
 		return areaCategories;
 	}
 

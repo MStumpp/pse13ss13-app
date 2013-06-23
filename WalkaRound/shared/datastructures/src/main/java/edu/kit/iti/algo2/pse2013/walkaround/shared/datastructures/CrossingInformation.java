@@ -1,20 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import java.util.ArrayList;
-
 public class CrossingInformation {
 
-	private ArrayList<Float> crossroadAngles;
+	private float[] crossroadAngles;
 
-	public CrossingInformation() {
-		crossroadAngles = new ArrayList<Float>();
+	public CrossingInformation(float[] crossroadAngles) {
+		this.crossroadAngles = crossroadAngles;
 	}
 
 	public float getCrossroadAngle(int index) {
-		return crossroadAngles.get(index);
+		return crossroadAngles[index];
 	}
 
 	public int getNumCrossroads() {
-		return crossroadAngles.size();
+		return crossroadAngles.length;
 	}
 }

@@ -29,9 +29,13 @@ public class Location extends Coordinate {
 	}
 
 	public boolean isMoveable() {
-		return false;
+		if (this instanceof POI) {
+			return false;
+		}
+		return true;
 	}
 
+	// ist diese methode sinnvoll!?
 	public boolean isFavorite() {
 		return false;
 	}
