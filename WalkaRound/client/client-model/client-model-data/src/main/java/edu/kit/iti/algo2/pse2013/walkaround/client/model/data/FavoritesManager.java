@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
 import java.util.ArrayList;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 public class FavoritesManager {
