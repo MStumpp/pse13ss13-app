@@ -2,15 +2,15 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 public class Profile {
 
-	public static final Profile PROFILE_JOGGING = new Profile(1);
+	public static Profile PROFILE_JOGGING;
 
-	public static final Profile PROFILE_SIGHTSEEING = new Profile(2);;
+	public static Profile PROFILE_SIGHTSEEING;
 
-	public static final Profile PROFILE_SHOPPING = new Profile(3);;
+	public static Profile PROFILE_SHOPPING;
 
-	public static final Profile PROFILE_CLUBBING = new Profile(4);;
+	public static Profile PROFILE_CLUBBING;
 
-	public static final Profile PROFILE_RENAMEME = new Profile(5);;
+	public static Profile PROFILE_RENAMEME;
 
 	private int id;
 

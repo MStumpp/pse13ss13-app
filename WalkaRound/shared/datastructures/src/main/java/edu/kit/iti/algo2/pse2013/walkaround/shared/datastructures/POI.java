@@ -29,6 +29,11 @@ public class POI extends Location {
 	}
 
 	// Return ist nun eine bitmap und kein bufferedImage mehr!
+	/**
+	 * xxx
+	 * @return
+	 * @throws IOException
+	 */
 	public Bitmap getImage() throws IOException {
 		URL url = new URL(this.url);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
