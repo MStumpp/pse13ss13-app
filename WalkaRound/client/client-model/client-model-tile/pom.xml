@@ -6,5 +6,11 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>client-model-tile</artifactId>
-  <name>Tile-Komponente (im Client-Model)</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>client-model-util</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
