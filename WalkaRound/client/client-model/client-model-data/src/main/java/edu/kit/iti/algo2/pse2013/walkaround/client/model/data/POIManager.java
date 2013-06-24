@@ -15,11 +15,11 @@ public class POIManager {
 
 	private LocationDataIO locationDataIO;
 
-	private ArrayList<Integer> activeCategories;
+	private int[] activeCategories;
 
 	private POIManager(LocationDataIO locationDataIO) {
 		this.locationDataIO = locationDataIO;
-		activeCategories = new ArrayList<Integer>();
+		activeCategories = new int[20];
 	}
 
 	public static POIManager getInstance(LocationDataIO locationDataIO) {
@@ -29,7 +29,7 @@ public class POIManager {
 		return instance;
 	}
 
-	public ArrayList<Integer> getActiveCategories() {
+	public int[] getActiveCategories() {
 		return activeCategories;
 	}
 
@@ -55,7 +55,9 @@ public class POIManager {
 
 	// changed boolean return to void
 	public void addActivePOICategory(int id) {
-		activeCategories.add(id);
+		for (int i = 0; i < activeCategories.length; i++) {
+			if(activeCategories[i] )
+		}
 	}
 
 	// changed boolean return to void
@@ -63,5 +65,32 @@ public class POIManager {
 		if (activeCategories.contains(id)) {
 			activeCategories.remove(id);
 		}
+	}
+
+	public static int computeLevenstheinDistance(String first, String second) {
+		int matrix[][] = new int[first.length() + 1][second.length() + 1];
+		for (int i = 0; i < first.length() + 1; i++) {
+			matrix[i][0] = i;
+		}
+		for (int i = 0; i < second.length() + 1; i++) {
+			matrix[0][i] = i;
+		}
+		for (int a = 1; a < first.length() + 1; a++) {
+			for (int b = 1; b < second.length() + 1; b++) {
+				int right = 0;
+				if (first.charAt(a - 1) != second.charAt(b - 1)) {
+					right = 1;
+				}
+				int min = matrix[a - 1][b] + 1;
+				if (matrix[a][b - 1] + 1 < min) {
+					min = matrix[a][b - 1] + 1;
+				}
+				if (matrix[a - 1][b - 1] + right < min) {
+					min = matrix[a - 1][b - 1] + right;
+				}
+				matrix[a][b] = min;
+			}
+		}
+		return matrix[first.length()][second.length()];
 	}
 }

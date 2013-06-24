@@ -14,7 +14,8 @@ public class FavoritesManager {
 	private ArrayList<Location> savedLocations;
 
 	private FavoritesManager() {
-
+		savedRoutes = new ArrayList<RouteInfo>();
+		savedLocations = new ArrayList<Location>();
 	}
 
 	public static FavoritesManager getInstance() {
@@ -25,48 +26,50 @@ public class FavoritesManager {
 	}
 
 	public ArrayList<RouteInfo> getFavoriteRoutes() {
-		return null;
+		return savedRoutes;
 	}
 
 	public ArrayList<Location> getFavoriteLocations() {
-		return null;
+		return savedLocations;
 	}
 
-	public RouteInfo getFavoriteRoute(int id) {
-		return null;
+	public RouteInfo getFavoriteRoute(int index) {
+		return savedRoutes.get(index);
 	}
 
 	public Location getFavoriteLocation(int index) {
-		return null;
+		return savedLocations.get(index);
 	}
 
 	// changed boolean return to void
 	public void deleteRoute(int index) {
-
+		savedRoutes.remove(index);
 	}
 
 	// changed boolean return to void
 	public void deleteLocation(int index) {
-
+		savedLocations.remove(index);
 	}
 
 	// changed boolean return to void
 	public void addRouteToFavorites(RouteInfo routeToSave, String name) {
-
+		if (!routeToSave.isFavorite()) {
+			savedRoutes.add(routeToSave);
+		}
 	}
 
 	// changed boolean return to void
 	public void addLocationToFavorites(Location locationToSave, String name) {
-
+		if (!locationToSave.isFavorite()) {
+			savedLocations.add(locationToSave);
+		}
 	}
 
-	// changed boolean return to void
-	public void containsRoute(RouteInfo routeInfo) {
-
+	public boolean containsRoute(RouteInfo routeInfo) {
+		return savedRoutes.contains(routeInfo);
 	}
 
-	// changed boolean return to void
-	public void containsLocation(Location location) {
-
+	public boolean containsLocation(Location location) {
+		return savedLocations.contains(location);
 	}
 }
