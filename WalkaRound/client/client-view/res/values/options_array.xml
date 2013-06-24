@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options_navigation_audio_output_typ_entries">
+        <item>text to speech</item>
+        <item>surround sound</item>
+    </string-array>
+    <string-array name="options_navigation_audio_output_typ_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>
