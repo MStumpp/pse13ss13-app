@@ -66,7 +66,7 @@ public class TileFetcher {
 			public void run() {
 				for (int x = minX; x <= maxX; x++) {
 					for (int y = minY; y <= maxY; y++) {
-						Log.d("TileFetcher", String.format("Request tile (%s/%s/%s)"));
+						Log.d("TileFetcher", String.format("Request tile (%s/%s/%s.png)", levelOfDetail, x, y));
 						try {
 							requestTile(x, y, levelOfDetail);
 						} catch (MalformedURLException mue) {
@@ -95,6 +95,7 @@ public class TileFetcher {
 	private void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
 		final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
 		Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
+		Log.d(this.getClass().getSimpleName(), String.format("Send to TileListener: %s (%s/%s/%s)", result, x, y, levelOfDetail));
 		listener.receiveTile(result, x, y, levelOfDetail);
 	}
 }
