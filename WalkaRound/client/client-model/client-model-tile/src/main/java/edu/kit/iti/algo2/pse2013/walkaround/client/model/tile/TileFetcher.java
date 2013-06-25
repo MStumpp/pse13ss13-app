@@ -44,8 +44,7 @@ public class TileFetcher {
 	 *            the zoom level of all the downloaded tiles
 	 * @param source
 	 */
-	public boolean requestTiles(final int levelOfDetail, Coordinate c1,
-			Coordinate c2) {
+	public boolean requestTiles(final int levelOfDetail, Coordinate c1, Coordinate c2) {
 		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() < levelOfDetail
 				|| CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() > levelOfDetail) {
 			return false;
@@ -84,7 +83,7 @@ public class TileFetcher {
 	 * 		if the method tried to fetch the tile from the server with a broken URL
 	 * @throws IOException	if an error occured while reading
 	 */
-	public void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
+	private void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
 		final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
 		Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
 		listener.receiveTile(result, x, y, levelOfDetail);

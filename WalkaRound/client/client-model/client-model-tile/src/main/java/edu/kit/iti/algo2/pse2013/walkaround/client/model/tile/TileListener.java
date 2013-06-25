@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
 
-import java.awt.image.BufferedImage;
-
 import android.graphics.Bitmap;
 
 public interface TileListener {
