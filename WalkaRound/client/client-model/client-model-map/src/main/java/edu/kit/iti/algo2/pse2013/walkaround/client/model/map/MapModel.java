@@ -2,6 +2,13 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
 import java.util.LinkedList;
 
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.util.Log;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
@@ -10,49 +17,65 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
  * @author Ludwig Biermann
  *
  */
-public class MapModel {
-	
+public class MapModel implements TileListener {
+
+	private static String MAP_MODEL = "MAP_MODEL";
 	private static MapModel mapModel;
+	
+	private float currentLevelOfDetail; 
+	private MapController mapController;
 	private Coordinate upperLeft;
-	private static Coordinate defaultCoordinate = new Coordinate(49.0047200, 8.3858300);
+	private Coordinate bottomRight;
+	private Point size;
+	private TileFetcher tileFetcher;
+
+	private Bitmap map;
 	
 	/**
 	 * 
+	 * @param c
+	 * @return
 	 */
-	private MapModel(){
-		this(defaultCoordinate);
+	public static MapModel initialize(Coordinate c,MapController mapController, Point size) {
+		if(mapModel == null){
+			mapModel = new MapModel(c, mapController, size);
+		}
+		return mapModel;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static MapModel getInstance(){
+		if(mapModel != null){
+			Log.d(MAP_MODEL, "bitte initialisieren Sie zuerst MapView");
+			return null;
+		}
+		return mapModel;
+	}
+	
+	/**
+	 * 
+	 * @param c
+	 */
+	private MapModel(Coordinate c, MapController mapController, Point size){
+		Log.d(MAP_MODEL, "Map Model wird initialisiert");
+		this.upperLeft = c;
+		this.size = size;
+		this.mapController = mapController;
+		this.tileFetcher = new TileFetcher();
+		this.tileFetcher.setTileListener(this);
+		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.currentLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail();
+		this.computeBottomRight();
 	}
 
 	/**
 	 * 
-	 * @param c
 	 */
-	private MapModel(Coordinate c){
-		this.upperLeft = c;
-	}
-	
-	/**
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public MapModel getInstance(Coordinate c){
-		if(mapModel != null){
-			mapModel = new MapModel(c);
-		}
-		return mapModel;
-		
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public MapModel getInstance(){
-		if(mapModel != null){
-			mapModel = new MapModel();
-		}
-		return mapModel;
+	private void computeBottomRight() {
+		this.bottomRight = this.upperLeft;
 	}
 	
 	/**
@@ -61,13 +84,14 @@ public class MapModel {
 	 */
 	public void shift(Coordinate c) {
 		this.upperLeft = new Coordinate(c.getLatitude(),c.getLongtitude());
+		this.tileFetcher.requestTiles((int)this.getCurrentLevelOfDetail(), upperLeft, bottomRight);
 	}
 	
 	/**
 	 * 
 	 */
 	public void generateMapOverlayImage() {
-		
+		this.mapController.onMapOverlayImageChange(map);
 	}
 	
 	/**
@@ -81,7 +105,7 @@ public class MapModel {
 	 * 
 	 */
 	public void setNewStyle() {
-		
+		this.tileFetcher.requestTiles((int)this.currentLevelOfDetail, this.upperLeft, this.bottomRight);
 	}
 	
 	/**
@@ -89,8 +113,9 @@ public class MapModel {
 	 * @param lod
 	 * @param c
 	 */
-	public void zoom(float lod, Coordinate c) {
-		
+	public void zoom(float levelOfDetail, Coordinate c) {
+		this.currentLevelOfDetail = levelOfDetail;
+		this.tileFetcher.requestTiles((int)this.currentLevelOfDetail, this.upperLeft, this.bottomRight);
 	}
 	
 	/**
@@ -105,19 +130,20 @@ public class MapModel {
 	}
 	
 	/**
+	 * Gibt den aktuellen Level Of Detail zurück
 	 * 
-	 * @return
+	 * @return aktuellen Level ofDetail
 	 */
-	public int getCurrentLevelOfDetail() {
-		return 0;
+	public float getCurrentLevelOfDetail() {
+		return this.currentLevelOfDetail;
 	}
 	
 	/**
 	 * 
 	 * @param lod
 	 */
-	public void setCurrentLevelOfDetail(int lod) {
-		
+	public void setCurrentLevelOfDetail(float levelOfDetail) {
+		this.currentLevelOfDetail = levelOfDetail;
 	}
 	
 	/**
@@ -134,5 +160,11 @@ public class MapModel {
 	 */
 	public Location getNearbyLocation(Coordinate c) {
 		return null;
+	}
+
+	@Override
+	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
+		// TODO Auto-generated method stub
+		
 	}
 }
