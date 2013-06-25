@@ -42,4 +42,37 @@ public final class Graph {
         return instance;
     }
 
+
+    /**
+     * Returns the Edge with the given id.
+     *
+     * @param id The id of the Edge to be returned.
+     * @return Edge the Edge with the given id.
+     */
+    public Edge getEdgeByID(int id) {
+        return new Edge(0.d, 0.d, 0.d, 0.d);
+    }
+
+
+    /**
+     * Returns the Vertex with the given id.
+     *
+     * @param id The id of the Vertex to be returned.
+     * @return Vertex the Vertex with the given id.
+     */
+    public Vertex getVertexByID(int id) {
+        return new Vertex(1);
+    }
+
+
+    /**
+     * Flags each Vertex contained in the Graph with the key/value.
+     *
+     * @param key Key for object.
+     * @param value Object.
+     */
+    public void forEachVertexSetKey(String key, Object value) {
+
+    }
+
 }
