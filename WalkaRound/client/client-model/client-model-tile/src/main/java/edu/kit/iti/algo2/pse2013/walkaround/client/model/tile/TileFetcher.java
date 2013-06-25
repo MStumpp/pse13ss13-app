@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -86,7 +86,7 @@ public class TileFetcher {
 	 */
 	public void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
 		final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
-		BufferedInputStream bis = new BufferedInputStream(new URL(urlString).openStream());
-		listener.receiveTile(ImageIO.read(bis), x, y, levelOfDetail);
+		Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
+		listener.receiveTile(result, x, y, levelOfDetail);
 	}
 }
