@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.CurrentMapStyleModel;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -44,12 +44,14 @@ public class TileFetcher {
 	 *            the zoom level of all the downloaded tiles
 	 * @param source
 	 */
-	public boolean requestTiles(final int levelOfDetail, Coordinate c1,
-			Coordinate c2) {
+	public boolean requestTiles(final int levelOfDetail, Coordinate c1, Coordinate c2) {
+		Log.d(this.getClass().getSimpleName(), "Check for valid LoD (between max and min).");
 		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() < levelOfDetail
 				|| CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() > levelOfDetail) {
 			return false;
 		}
+		Log.d(this.getClass().getSimpleName(), "LoD valid!");
+		Log.d(this.getClass().getSimpleName(), "Convert GeoCoordinates into Tile-Indices.");
 		final int[] c1XY = TileUtility.getXYTileIndex(c1, levelOfDetail);
 		final int[] c2XY = TileUtility.getXYTileIndex(c2, levelOfDetail);
 
@@ -57,19 +59,26 @@ public class TileFetcher {
 		final int maxX = Math.max(c1XY[0], c2XY[0]);
 		final int minY = Math.min(c1XY[1], c2XY[1]);
 		final int maxY = Math.max(c1XY[1], c2XY[1]);
+		Log.d(this.getClass().getSimpleName(), String.format("x von %s bis %s und y von %s bis %s.", minX, maxX, minY, maxY));
 
-		// TODO: Make asynchronous from here on
-		for (int x = minX; x <= maxX; x++) {
-			for (int y = minY; y <= maxY; y++) {
-				try { // TODO: Find good solution for exception-handling
-					requestTile(x, y, levelOfDetail);
-				} catch (MalformedURLException mue) {
-					mue.printStackTrace();
-				} catch (IOException mue) {
-					mue.printStackTrace();
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (int x = minX; x <= maxX; x++) {
+					for (int y = minY; y <= maxY; y++) {
+						Log.d("TileFetcher", String.format("Request tile (%s/%s/%s.png)", levelOfDetail, x, y));
+						try {
+							requestTile(x, y, levelOfDetail);
+						} catch (MalformedURLException mue) {
+							Log.d("TileFetcher", "Malformed URL");
+						} catch (IOException mue) {
+							Log.d("TileFetcher", "IOException");
+						}
+					}
 				}
 			}
-		}
+		});
+		t.start();
 		return true;
 	}
 
@@ -84,9 +93,10 @@ public class TileFetcher {
 	 * 		if the method tried to fetch the tile from the server with a broken URL
 	 * @throws IOException	if an error occured while reading
 	 */
-	public void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
+	private void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
 		final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
-		BufferedInputStream bis = new BufferedInputStream(new URL(urlString).openStream());
-		listener.receiveTile(ImageIO.read(bis), x, y, levelOfDetail);
+		Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
+		Log.d(this.getClass().getSimpleName(), String.format("Send to TileListener: %s (%s/%s/%s)", result, x, y, levelOfDetail));
+		listener.receiveTile(result, x, y, levelOfDetail);
 	}
 }

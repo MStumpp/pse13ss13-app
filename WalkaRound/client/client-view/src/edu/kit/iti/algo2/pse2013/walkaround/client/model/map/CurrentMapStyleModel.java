@@ -8,7 +8,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
  */
 public class CurrentMapStyleModel {
 
-	private final MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPNIK;
+	private final static MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPNIK;
 	private static CurrentMapStyleModel currentMapModel;
 	private MapStyle style;
 	
@@ -22,9 +22,9 @@ public class CurrentMapStyleModel {
 	 * 
 	 * @return CurrentMapStyleModel Objekt
 	 */
-	public CurrentMapStyleModel getInstance() {
+	public static CurrentMapStyleModel getInstance() {
 		if(currentMapModel == null){
-			return getInstance(this.defaultMapStyle);
+			return getInstance(defaultMapStyle);
 		}
 		return currentMapModel;
 	}
@@ -35,7 +35,7 @@ public class CurrentMapStyleModel {
 	 * @param style der bei der initialisierung zu verwendener Kartenstil
 	 * @return CurrentMapStyleModel Objekt
 	 */
-	public CurrentMapStyleModel getInstance(MapStyle style) {
+	public static CurrentMapStyleModel getInstance(MapStyle style) {
 		if(currentMapModel == null){
 			currentMapModel = new CurrentMapStyleModel(style);
 		}
