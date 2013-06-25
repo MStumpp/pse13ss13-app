@@ -1,9 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 
-public class OSMRelation extends OSMElement {
+import java.util.HashMap;
 
+public class OSMRelation extends OSMElement {
+	private HashMap<OSMElement, String> members = new HashMap<>();
 	public OSMRelation(long id) {
 		super(id);
 	}
-
+	public void addMember(OSMElement ele, String role) {
+		members.put(ele, role);
+	}
 }

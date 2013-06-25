@@ -8,7 +8,7 @@ public class OSMNode extends OSMElement {
 	private double lat;
 	private double lon;
 
-	public OSMNode(long id, double lat, double lon) {
+	public OSMNode(final long id, final double lat, final double lon) {
 		super(id);
 		this.lat = lat;
 		this.lon = lon;
@@ -20,6 +20,6 @@ public class OSMNode extends OSMElement {
 		return lon;
 	}
 	public Vertex convertToVertex() {
-		return new Vertex(id);
+		return new Vertex(id, lat, lon);
 	}
 }

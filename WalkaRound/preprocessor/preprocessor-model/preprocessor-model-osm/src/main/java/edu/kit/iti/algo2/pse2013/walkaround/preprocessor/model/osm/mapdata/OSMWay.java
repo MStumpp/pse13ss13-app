@@ -7,20 +7,22 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 
 
 public class OSMWay extends OSMElement {
-	private ArrayList<OSMNode> nodes;
+	private ArrayList<OSMNode> nodes = new ArrayList<>();
 
-	public OSMWay(long id) {
+	public OSMWay(final long id) {
 		super(id);
-		nodes = new ArrayList<>();
 	}
 
-	public void addNode(OSMNode node) {
-		nodes.add(node);
+	public void addNode(final OSMNode osmNode) {
+		nodes.add(osmNode);
 	}
 	public List<Edge> getEdges() {
+		if (!getTags().containsKey("highway")) {
+			return new ArrayList<Edge>(); //TODO: Durch richtige Selektion ersetzen
+		}
 		ArrayList<Edge> edges = new ArrayList<>();
 		for (int i = 0; i < nodes.size() - 1; i++) {
-
+			edges.add(new Edge(id, nodes.get(i).convertToVertex(), nodes.get(i+1).convertToVertex()));
 		}
 		return edges;
 	}
