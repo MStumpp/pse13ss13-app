@@ -11,23 +11,24 @@ public class MapStyle {
 	/**
 	 *  Mapnik Kartenstil.
 	 */
-	public static MapStyle MAPSTYLE_MAPNIK = new MapStyle(0,0,"Mapnik", "");
+	public static MapStyle MAPSTYLE_MAPNIK = new MapStyle(0,18,"Mapnik", "http://tile.osm.org/%3$s/%1$s/%2$s.png", 16);
 	
 	/**
 	 *  Wanderkarten Kartenstil
 	 */
-	public static MapStyle MAPSTYLE_WANDERKARTE = new MapStyle(0,0,"Wanderkartek", "");
+	public static MapStyle MAPSTYLE_WANDERKARTE = new MapStyle(0,18,"Wanderkarte", "http://www.wanderreitkarte.de/topo/%3$s/%1$s/%2$s.png", 16);
 	
 	/**
 	 *  Mapquest KArtenstil.
 	 */
-	public static MapStyle MAPSTYLE_MAPQUEST = new MapStyle(0,0,"MapQuest", "");
+	public static MapStyle MAPSTYLE_MAPQUEST = new MapStyle(0,19,"MapQuest", "http://otile1.mqcdn.com/tiles/1.0.0/map/%3$s/%1$s/%2$s.jpg", 16);
 	
 	
 	private int minLevelOfDetail;
 	private int maxLevelOfDetail;
 	private String name;
 	private String tileURL;
+	private int defaultLevelOfDetail;
 	
 	/**
 	 * Konstruiert einen neuen KartenStil.
@@ -37,9 +38,10 @@ public class MapStyle {
 	 * @param name Name des Kartenstils
 	 * @param tileURL Url der Tiles
 	 */
-	private MapStyle(int minLevelOfDetail, int maxLevelOfDetail, String name, String tileURL){
+	private MapStyle(int minLevelOfDetail, int maxLevelOfDetail, String name, String tileURL, int defaultLevelOfDetail){
 		this.minLevelOfDetail = minLevelOfDetail;
 		this.maxLevelOfDetail = maxLevelOfDetail;
+		this.defaultLevelOfDetail = defaultLevelOfDetail;
 		this.name = name;
 		this.tileURL = tileURL;
 	}
@@ -78,5 +80,14 @@ public class MapStyle {
 	 */
 	public String getTileURL() {
 		return tileURL;
+	}
+	
+	/**
+	 * Gibt den Standart Level of Detail zurück
+	 * 
+	 * @return Standart Level of Detail
+	 */
+	public int getDefaultLevelOfDetail(){
+		return this.defaultLevelOfDetail;
 	}
 }

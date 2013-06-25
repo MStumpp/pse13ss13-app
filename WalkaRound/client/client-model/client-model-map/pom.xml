@@ -13,5 +13,15 @@
   		<artifactId>shared-datastructures</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>client-model-tile</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>client-controller-map</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

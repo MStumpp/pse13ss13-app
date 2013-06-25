@@ -8,5 +8,4 @@
 
     <artifactId>shared-datastructures</artifactId>
     <packaging>jar</packaging>
-    <name>shared-datastructures</name>
 </project>
