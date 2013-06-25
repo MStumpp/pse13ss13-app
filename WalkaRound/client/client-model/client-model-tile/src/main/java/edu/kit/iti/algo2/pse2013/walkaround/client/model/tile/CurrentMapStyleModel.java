@@ -1,4 +1,5 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
+
 
 /**
  * Diese Klasse hält den derzeitigen MapStyle vor
