@@ -30,16 +30,15 @@ public class OSMDataPreprocessor {
 			throw new FileNotFoundException(String.format("The OSM-Data-File was not found at '%s'!", osmSource.getAbsolutePath()));
 		}
 		if (!this.locationDestination.exists()) {
-			this.locationDestination.mkdirs();
+			this.locationDestination.getParentFile().mkdirs();
 			this.locationDestination.createNewFile();
 		}
 		if (!this.graphDestination.exists()) {
-			this.graphDestination.mkdirs();
+			this.graphDestination.getParentFile().mkdirs();
 			this.graphDestination.createNewFile();
 		}
 	}
 	/**
-	 *
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
@@ -65,5 +64,10 @@ public class OSMDataPreprocessor {
 	public void parseRectangle(Coordinate c1, Coordinate c2) throws FileNotFoundException, IOException {
 		GraphDataIO graphData = new GraphDataIO();
 		GraphDataIO.save(graphData, graphDestination);
+	}
+
+	public static void main(String[] args) throws IOException {
+		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-06-22-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
+		prep.parse();
 	}
 }
