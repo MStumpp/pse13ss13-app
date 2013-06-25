@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
+import java.util.LinkedList;
+
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -9,104 +11,307 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 //import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 
 public class MapView extends Activity {
 
+	private static final String TAG_MAPVIEW = "MAP_VIEW";
+
+	/**
+	 * Fling defaults
+	 */
+	private static final int USER_X_DELTA = 15;
+	private static final int USER_Y_DELTA = 19;
+
+	/**
+	 * Default Pictures
+	 */
+	public static final int USER_ARROW_IMAGE = R.drawable.user_arrow_30x38;
+	public static final int DEFAULT_PATTERN = R.drawable.fog;
+
+	public static final int DEFAULT_FLAG = R.drawable.flag;
+	public static final int DEFAULT_FLAG_ACTIVE = R.drawable.flag_activ;
+	public static final int DEFAULT_FLAG_TARGET = R.drawable.flag_target;
+	public static final int DEFAULT_FLAG_TARGET_ACTIVE = R.drawable.flag_target_activ;
+
+	public static final int DEFAULT_WAYPOINT = R.drawable.waypoint;
+	public static final int DEFAULT_WAYPOINT_ACTIVE = R.drawable.waypoint_activ;
+
+	public static final int DEFAULT_POI = R.drawable.poi;
+	//public static final int DEFAULT_POI_ACTIVE = R.drawable.poi_active;
+
+	/**
+	 * Default Drawables
+	 */
+
+	private Drawable flag;
+	private Drawable flagActive;
+	private Drawable flagTarget;
+	private Drawable flagTargetActive;
+	private Drawable waypoint;
+	private Drawable waypointActive;
+	private Drawable poi;
+	//private Drawable poiActive;
+
+	/**
+	 * Views
+	 */
 	private ImageView map;
 	private ImageView routeOverlay;
 	private ImageView user;
 
-	public static final int USER_ARROW_IMAGE = R.drawable.user_arrow_30x38;
-	private static final int USER_X_DELTA = 15;
-	private static final int USER_Y_DELTA = 19;
-	public static final int DEFAULT_PATTERN = R.drawable.fog;
+	/**
+	 * Controller
+	 */
+	MapController mc;
+
+	/**
+	 * Animation
+	 */
+	long startDelay = 0;
+
+	/**
+	 * Routen
+	 */
+	ImageView currentActive;
+	RelativeLayout routeList;
+	RelativeLayout poiList;
+	int sizeOfPoints;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		MapController mc = MapController.initialize(this);
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
+		mc = MapController.initialize(this);
 
-		// RelativeLayout rl = (RelativeLayout)
-		// this.findViewById(R.id.mapview_main);
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Initialisiere Layout.");
+		this.setContentView(R.layout.map);
 
-		Log.d("MAP_VIEW", "Rufe Display ab.");
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Initialisiere Drawables.");
+		flag = this.getResources().getDrawable(DEFAULT_FLAG);
+		flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);
+		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);
+		flagTargetActive = this.getResources().getDrawable(
+				DEFAULT_FLAG_TARGET_ACTIVE);
+		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);
+		waypointActive = this.getResources().getDrawable(
+				DEFAULT_WAYPOINT_ACTIVE);
+		poi = this.getResources().getDrawable(DEFAULT_POI);
+		//poiActive = this.getResources().getDrawable(DEFAULT_POI_ACTIVE);
+
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
 
 		Display display = this.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 
-		this.setContentView(R.layout.map);
-
-		Log.d("MAP_VIEW", "Karte wird erstellt.");
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Initialisere Route und POI Ovetrlay.");
+		routeList = (RelativeLayout) this.findViewById(R.id.routeList);
+		poiList = (RelativeLayout) this.findViewById(R.id.poiList);
+		sizeOfPoints = (int) (size.y/10);
+		
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Karte wird erstellt.");
 		map = (ImageView) this.findViewById(R.id.mapview_map);
 		map.setOnTouchListener(new MapTouchEventListener());
 		// map.setImageBitmap(this.getDefaultFogScreen());
 
-		Log.d("MAP_VIEW", "RouteOverlay wird erstellt.");
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
 		routeOverlay = (ImageView) this.findViewById(R.id.mapview_overlay);
 		routeOverlay.setOnTouchListener(new RouteOverlayTouchEventListener());
 
-		Log.d("MAP_VIEW", "User wird erstellt.");
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "User wird erstellt.");
 		user = (ImageView) this.findViewById(R.id.mapview_user);
 		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));
 		user.getLayoutParams().width = USER_X_DELTA * 4;
 		user.getLayoutParams().height = USER_Y_DELTA * 4;
 		user.setOnTouchListener(new UserTouchEventListener());
 
-		Log.d("MAP_VIEW", "User wird in die Mitte gestellt.");
-
-		this.setUserPositionOverlayImage(new DisplayCoordinate(
-				(float) size.x / 2, (float) size.y / 2), 180);
-
-		// this.setUserPositionOverlayImage(new DisplayCoordinate(200 / 2,
-		// 1000), 25);
-		
-		
-		Log.d("MAP_VIEW", "Fragmente werden eingebaut");
-
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		
-		Log.d("MAP_VIEW", "Fragment PullUpMenü wird eingebaut");
-		// PullUpView pullUp = this.getFragmentManager().findFragmentById(id);
 
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Fragment PullUpMenü wird eingebaut");
 		Fragment pullUp = new PullUpView();
 		ft.add(R.id.pullUpMain, pullUp).commit();
-		
-		
-		Log.d("MAP_VIEW", "Fragment headUp wird eingebaut");
 
-		
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Fragment headUp wird eingebaut");
 		Fragment headUp = new HeadUpView();
 		ft.add(R.id.headupmain, headUp);
+
+		// -----------------------TEST---------------------
+		Log.d(TAG_MAPVIEW, "User wird in die Mitte gestellt.");
+		this.setUserPositionOverlayImage(new DisplayCoordinate(
+				(float) size.x / 2, (float) size.y / 2), 180);
+		
+
+		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefügt");
+		DisplayWaypoint[] list = new DisplayWaypoint[3];
+		list[0] = new DisplayWaypoint(50,150,1);
+		list[1] = new DisplayWaypoint(250,200,2);
+		list[2] = new DisplayWaypoint(500,300,3);
+		
+		updateDisplayCoordinate(list);
+
+		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefügt");
+		DisplayPOI[] list2 = new DisplayPOI[3];
+		list2[0] = new DisplayPOI(250,350,4);
+		list2[1] = new DisplayPOI(450,400,5);
+		list2[2] = new DisplayPOI(700,500,6);
+		
+		updateDisplayCoordinate(list2);
+		
+
+		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
+		this.setActive(3);
 	}
 
+	/**
+	 * Updatet die Karte
+	 * 
+	 * @param b
+	 */
 	public void updateMapImage(Bitmap b) {
 		this.map.setImageBitmap(b);
 	}
 
+	/**
+	 * Updatet das Routen Overlay
+	 * 
+	 * @param b
+	 */
 	public void updateRouteOverlayImage(Bitmap b) {
 		this.routeOverlay.setImageBitmap(b);
 	}
 
-	long startDelay = 0;
+	/**
+	 * 
+	 * 
+	 * @param dw
+	 */
+	public void updateDisplayCoordinate(DisplayWaypoint[] dw) {
+
+		routeList.removeAllViews();
+		currentActive = null;
+
+		for (DisplayWaypoint value : dw) {
+			ImageView iv = new ImageView(this);
+			iv.setImageDrawable(waypoint);
+			iv.setY(value.getY());
+			iv.setX(value.getX());
+			iv.setTag(value.getId());
+			iv.setVisibility(View.VISIBLE);
+			iv.setLayoutParams(new LayoutParams(sizeOfPoints,sizeOfPoints));
+			//iv.getLayoutParams().width = sizeOfPoints;
+			//iv.getLayoutParams().height = sizeOfPoints;
+			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+			routeList.addView(iv);
+		}
+
+		if (routeList.getChildCount() > 0) {
+			ImageView iv = (ImageView) routeList.getChildAt(0);
+			iv.setImageDrawable(flag);
+
+			iv = (ImageView) routeList
+					.getChildAt((routeList.getChildCount() - 1));
+			iv.setImageDrawable(flagTarget);
+		}
+	}
+
+	/**
+	 * 
+	 * @param dp
+	 */
+	public void updateDisplayCoordinate(DisplayPOI[] dp) {
+		poiList.removeAllViews();
+		currentActive = null;
+
+		for (DisplayPOI value : dp) {
+			ImageView iv = new ImageView(this);
+			iv.setImageDrawable(poi);
+			iv.setY(value.getY());
+			iv.setX(value.getX());
+			iv.setTag(value.getId());
+			iv.setLayoutParams(new LayoutParams(sizeOfPoints,sizeOfPoints));
+			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+			poiList.addView(iv);
+		}
+	}
+
+	/**
+	 * Setzt einen neuen Punkt aktive
+	 * 
+	 * @param id
+	 */
+	public void setActive(int id) {
+		// TODO is equal von Location prüfen
+
+		if (currentActive != null) {
+			if (currentActive.getDrawable().equals(flagActive)) {
+				currentActive.setImageDrawable(flag);
+				return;
+			}
+			if (currentActive.getDrawable().equals(flagTargetActive)) {
+				currentActive.setImageDrawable(flagTarget);
+				return;
+			}
+			if (currentActive.getDrawable().equals(waypointActive)) {
+				currentActive.setImageDrawable(waypoint);
+				return;
+			}
+		}
+
+		for (int a = 0; a < routeList.getChildCount(); a++) {
+			if (routeList.getChildAt(a).getTag().equals(id)) {
+				currentActive = (ImageView) routeList.getChildAt(a);
+				if (currentActive.getDrawable().equals(flag)) {
+					currentActive.setImageDrawable(flagActive);
+					return;
+				}
+				if (currentActive.getDrawable().equals(flagTarget)) {
+					currentActive.setImageDrawable(flagTargetActive);
+					return;
+				}
+				if (currentActive.getDrawable().equals(waypoint)) {
+					currentActive.setImageDrawable(waypointActive);
+					return;
+					
+				}
+			}
+		}
+	}
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
@@ -146,6 +351,8 @@ public class MapView extends Activity {
 		set.start();
 
 	}
+
+	// ----------------Animation Listener ---------------------
 
 	private class UserAnimationListener implements AnimatorListener {
 
@@ -195,6 +402,13 @@ public class MapView extends Activity {
 
 	}
 
+	// ----------------Touch Listener ---------------------
+
+	/**
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
 		@Override
@@ -209,6 +423,11 @@ public class MapView extends Activity {
 
 	}
 
+	/**
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
 		@Override
@@ -221,6 +440,11 @@ public class MapView extends Activity {
 
 	}
 
+	/**
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
 		@Override
@@ -232,6 +456,18 @@ public class MapView extends Activity {
 		}
 
 	}
+
+	private class WaypointTouchlistener implements OnTouchListener{
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			Log.d("MAP_TOUCH", "UserTouch auf View ID:");
+			// TODO Auto-generated method stub
+			//
+			return false;
+		}
+	}
+	
 	/*
 	 * Erstellt ein Muster aus einer Bitmap
 	 * 

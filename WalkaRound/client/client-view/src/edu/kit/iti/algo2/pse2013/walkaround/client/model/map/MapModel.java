@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
@@ -19,7 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
  */
 public class MapModel implements TileListener {
 
-	private static String MAP_MODEL = "MAP_MODEL";
+	private static String TAG_MAP_MODEL = "MAP_MODEL";
 	private static MapModel mapModel;
 	
 	private float currentLevelOfDetail; 
@@ -30,6 +31,9 @@ public class MapModel implements TileListener {
 	private TileFetcher tileFetcher;
 
 	private Bitmap map;
+	
+	// Test Bitmaps
+	private Bitmap eins = null;
 	
 	/**
 	 * 
@@ -49,7 +53,7 @@ public class MapModel implements TileListener {
 	 */
 	public static MapModel getInstance(){
 		if(mapModel != null){
-			Log.d(MAP_MODEL, "bitte initialisieren Sie zuerst MapView");
+			Log.d(TAG_MAP_MODEL, "bitte initialisieren Sie zuerst MapView");
 			return null;
 		}
 		return mapModel;
@@ -60,7 +64,7 @@ public class MapModel implements TileListener {
 	 * @param c
 	 */
 	private MapModel(Coordinate c, MapController mapController, Point size){
-		Log.d(MAP_MODEL, "Map Model wird initialisiert");
+		Log.d(TAG_MAP_MODEL, "Map Model wird initialisiert");
 		this.upperLeft = c;
 		this.size = size;
 		this.mapController = mapController;
@@ -69,6 +73,8 @@ public class MapModel implements TileListener {
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 		this.currentLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail();
 		this.computeBottomRight();
+		//Log.d(TAG_MAP_MODEL, "Tile werden angeforder: " + this.tileFetcher.requestTiles(Math.round(currentLevelOfDetail), c, c));
+		Log.d(TAG_MAP_MODEL, "Map Model wurde initialisiert");
 	}
 
 	/**
@@ -164,7 +170,6 @@ public class MapModel implements TileListener {
 
 	@Override
 	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-		// TODO Auto-generated method stub
-		
+		Log.d(TAG_MAP_MODEL, "Receive Tile");
 	}
 }
