@@ -25,6 +25,18 @@
         android:layout_alignParentTop="true"
         android:contentDescription="TODO" />
 
+    <RelativeLayout
+        android:id="@+id/routeList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/poiList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/mapview_user"
         android:layout_width="wrap_content"
