@@ -44,7 +44,7 @@ public class TileFetcher {
 	 *            the zoom level of all the downloaded tiles
 	 * @param source
 	 */
-	public boolean requestTiles(final int levelOfDetail, Coordinate c1, Coordinate c2) {
+	public boolean requestTiles(final int levelOfDetail, Coordinate topLeft, final int numXTiles, final int numYTiles) {
 		Log.d(this.getClass().getSimpleName(), "Check for valid LoD (between max and min).");
 		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() < levelOfDetail
 				|| CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() > levelOfDetail) {
@@ -52,23 +52,18 @@ public class TileFetcher {
 		}
 		Log.d(this.getClass().getSimpleName(), "LoD valid!");
 		Log.d(this.getClass().getSimpleName(), "Convert GeoCoordinates into Tile-Indices.");
-		final int[] c1XY = TileUtility.getXYTileIndex(c1, levelOfDetail);
-		final int[] c2XY = TileUtility.getXYTileIndex(c2, levelOfDetail);
+		final int[] xy = TileUtility.getXYTileIndex(topLeft, levelOfDetail);
 
-		final int minX = Math.min(c1XY[0], c2XY[0]);
-		final int maxX = Math.max(c1XY[0], c2XY[0]);
-		final int minY = Math.min(c1XY[1], c2XY[1]);
-		final int maxY = Math.max(c1XY[1], c2XY[1]);
-		Log.d(this.getClass().getSimpleName(), String.format("x von %s bis %s und y von %s bis %s.", minX, maxX, minY, maxY));
+		Log.d(this.getClass().getSimpleName(), String.format("x von %s bis %s und y von %s bis %s.", xy[0], xy[0] + numXTiles - 1, xy[1], xy[1] + numYTiles - 1));
 
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				for (int x = minX; x <= maxX; x++) {
-					for (int y = minY; y <= maxY; y++) {
+				for (int x = xy[0]; x <= xy[0] + numXTiles - 1; x++) {
+					for (int y = xy[1]; y <= xy[1] + numYTiles - 1; y++) {
 						Log.d("TileFetcher", String.format("Request tile (%s/%s/%s.png)", levelOfDetail, x, y));
 						try {
-							requestTile(x, y, levelOfDetail);
+							requestTile(x % (int)Math.pow(2, levelOfDetail), y % (int)Math.pow(2, levelOfDetail), levelOfDetail);
 						} catch (MalformedURLException mue) {
 							Log.d("TileFetcher", "Malformed URL");
 						} catch (IOException mue) {
@@ -96,7 +91,7 @@ public class TileFetcher {
 	private void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
 		final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
 		Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
-		Log.d(this.getClass().getSimpleName(), String.format("Send to TileListener: %s (%s/%s/%s)", result, x, y, levelOfDetail));
+		Log.d(this.getClass().getSimpleName(), String.format("Send to TileListener: %s (%s/%s/%s.png)", result, levelOfDetail, x, y));
 		listener.receiveTile(result, x, y, levelOfDetail);
 	}
 }
