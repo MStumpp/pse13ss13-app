@@ -7,11 +7,18 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
  * @version 1.0
  */
 public class Vertex {
-	private long ID;
-	public Vertex(long l) {
-		this.ID = l;
+
+    /**
+     * Vertex id.
+     */
+	private long id;
+
+	public Vertex(int id) {
+		this.id = id;
 	}
-	public long getID() {
-		return ID;
+
+	public int getID() {
+		return id;
 	}
+
 }
