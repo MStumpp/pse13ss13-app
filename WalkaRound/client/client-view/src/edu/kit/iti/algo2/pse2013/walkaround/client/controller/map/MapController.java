@@ -1,13 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
  * 
@@ -20,7 +20,7 @@ public class MapController {
 	private static MapController mapController;
 	public static Coordinate defaultCoordinate = new Coordinate(49.0047200, 8.3858300);
 	
-	private MapView mapView;
+	public MapView mapView;
 	private MapModel mapModel;
 
 	/**
@@ -66,6 +66,7 @@ public class MapController {
 
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
+		
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
@@ -85,19 +86,19 @@ public class MapController {
 	}
 
 	public void onShift(DisplayCoordinate dc) {
-		mapModel.generateMapOverlayImage();
+		
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
 
 	}
 
-	public void onZoom(float z, DisplayCoordinate dc) {
-
+	public void onZoom(float delta, DisplayCoordinate dc) {
+		this.mapModel.zoom(delta, dc);
 	}
 
-	public void onZoom(float z) {
-
+	public void onZoom(float delta) {
+		this.mapModel.zoom(delta);
 	}
 
 	public void onLockUserPosition() {
@@ -105,7 +106,7 @@ public class MapController {
 	}
 
 	/**
-	 * Gibt den aktuellen Level Of Detail zurück
+	 * Gibt den aktuellen Level Of Detail zurï¿½ck
 	 * 
 	 * @return aktuellen Level ofDetail
 	 */

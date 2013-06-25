@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
 
 /**
  * Diese Klasse reprÃ¤sentiert einen Kartenstil von Open Street Map.
@@ -83,7 +83,7 @@ public class MapStyle {
 	}
 	
 	/**
-	 * Gibt den Standart Level of Detail zurück
+	 * Gibt den Standart Level of Detail zurï¿½ck
 	 * 
 	 * @return Standart Level of Detail
 	 */

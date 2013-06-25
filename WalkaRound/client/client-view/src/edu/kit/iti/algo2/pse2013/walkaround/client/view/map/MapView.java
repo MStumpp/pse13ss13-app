@@ -24,13 +24,13 @@ import android.widget.RelativeLayout;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 //import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
@@ -60,7 +60,7 @@ public class MapView extends Activity {
 	public static final int DEFAULT_WAYPOINT_ACTIVE = R.drawable.waypoint_activ;
 
 	public static final int DEFAULT_POI = R.drawable.poi;
-	//public static final int DEFAULT_POI_ACTIVE = R.drawable.poi_active;
+	// public static final int DEFAULT_POI_ACTIVE = R.drawable.poi_active;
 
 	/**
 	 * Default Drawables
@@ -73,7 +73,7 @@ public class MapView extends Activity {
 	private Drawable waypoint;
 	private Drawable waypointActive;
 	private Drawable poi;
-	//private Drawable poiActive;
+	// private Drawable poiActive;
 
 	/**
 	 * Views
@@ -105,10 +105,6 @@ public class MapView extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// ---------------------------------------------
-		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
-		mc = MapController.initialize(this);
-
-		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere Layout.");
 		this.setContentView(R.layout.map);
 
@@ -123,7 +119,7 @@ public class MapView extends Activity {
 		waypointActive = this.getResources().getDrawable(
 				DEFAULT_WAYPOINT_ACTIVE);
 		poi = this.getResources().getDrawable(DEFAULT_POI);
-		//poiActive = this.getResources().getDrawable(DEFAULT_POI_ACTIVE);
+		// poiActive = this.getResources().getDrawable(DEFAULT_POI_ACTIVE);
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
@@ -131,18 +127,25 @@ public class MapView extends Activity {
 		Display display = this.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
+		Log.d(TAG_MAPVIEW, "DisplayMaße: " + size.x + " * " + size.y);
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisere Route und POI Ovetrlay.");
 		routeList = (RelativeLayout) this.findViewById(R.id.routeList);
 		poiList = (RelativeLayout) this.findViewById(R.id.poiList);
-		sizeOfPoints = (int) (size.y/10);
-		
+		sizeOfPoints = (int) (size.y / 10);
+
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Karte wird erstellt.");
 		map = (ImageView) this.findViewById(R.id.mapview_map);
+		map.setMinimumWidth(size.x);
+		map.setMinimumHeight(size.y);
 		map.setOnTouchListener(new MapTouchEventListener());
 		// map.setImageBitmap(this.getDefaultFogScreen());
+
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
+		mc = MapController.initialize(this);
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
@@ -175,27 +178,26 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "User wird in die Mitte gestellt.");
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
-		
 
 		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefügt");
 		DisplayWaypoint[] list = new DisplayWaypoint[3];
-		list[0] = new DisplayWaypoint(50,150,1);
-		list[1] = new DisplayWaypoint(250,200,2);
-		list[2] = new DisplayWaypoint(500,300,3);
-		
+		list[0] = new DisplayWaypoint(50, 150, 1);
+		list[1] = new DisplayWaypoint(250, 200, 2);
+		list[2] = new DisplayWaypoint(500, 300, 3);
+
 		updateDisplayCoordinate(list);
 
 		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefügt");
 		DisplayPOI[] list2 = new DisplayPOI[3];
-		list2[0] = new DisplayPOI(250,350,4);
-		list2[1] = new DisplayPOI(450,400,5);
-		list2[2] = new DisplayPOI(700,500,6);
-		
+		list2[0] = new DisplayPOI(250, 350, 4);
+		list2[1] = new DisplayPOI(450, 400, 5);
+		list2[2] = new DisplayPOI(700, 500, 6);
+
 		updateDisplayCoordinate(list2);
-		
 
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
+
 	}
 
 	/**
@@ -203,8 +205,14 @@ public class MapView extends Activity {
 	 * 
 	 * @param b
 	 */
-	public void updateMapImage(Bitmap b) {
-		this.map.setImageBitmap(b);
+	public void updateMapImage(final Bitmap b) {
+
+	    runOnUiThread(new Runnable() {
+	    	public void run(){
+	    		map.setImageBitmap(b);
+	    		map.setVisibility(View.VISIBLE);
+	    	}
+	    });
 	}
 
 	/**
@@ -233,9 +241,9 @@ public class MapView extends Activity {
 			iv.setX(value.getX());
 			iv.setTag(value.getId());
 			iv.setVisibility(View.VISIBLE);
-			iv.setLayoutParams(new LayoutParams(sizeOfPoints,sizeOfPoints));
-			//iv.getLayoutParams().width = sizeOfPoints;
-			//iv.getLayoutParams().height = sizeOfPoints;
+			iv.setLayoutParams(new LayoutParams(sizeOfPoints, sizeOfPoints));
+			// iv.getLayoutParams().width = sizeOfPoints;
+			// iv.getLayoutParams().height = sizeOfPoints;
 			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			routeList.addView(iv);
 		}
@@ -264,7 +272,7 @@ public class MapView extends Activity {
 			iv.setY(value.getY());
 			iv.setX(value.getX());
 			iv.setTag(value.getId());
-			iv.setLayoutParams(new LayoutParams(sizeOfPoints,sizeOfPoints));
+			iv.setLayoutParams(new LayoutParams(sizeOfPoints, sizeOfPoints));
 			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			poiList.addView(iv);
 		}
@@ -307,7 +315,7 @@ public class MapView extends Activity {
 				if (currentActive.getDrawable().equals(waypoint)) {
 					currentActive.setImageDrawable(waypointActive);
 					return;
-					
+
 				}
 			}
 		}
@@ -457,7 +465,7 @@ public class MapView extends Activity {
 
 	}
 
-	private class WaypointTouchlistener implements OnTouchListener{
+	private class WaypointTouchlistener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -467,7 +475,7 @@ public class MapView extends Activity {
 			return false;
 		}
 	}
-	
+
 	/*
 	 * Erstellt ein Muster aus einer Bitmap
 	 * 
