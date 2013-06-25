@@ -5,7 +5,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 
 /**
- * Diese klasse bündelt und kontrolliert die Aus/Eingabe des HeadUpView
+ * Diese klassebehandelt und kontrolliert die Aus/Eingabe des HeadUpView
  * Elementes
  * 
  * @author Ludwig Biermann
@@ -30,7 +30,7 @@ public class HeadUpController {
 	 * initialisiert den HeadUpController
 	 * 
 	 * @param headUpView
-	 *            die nötige Referenz zum HeadUpView
+	 *            die nï¿½tige Referenz zum HeadUpView
 	 */
 	private HeadUpController(HeadUpView headUpView) {
 		this.headUpView = headUpView;
@@ -42,7 +42,7 @@ public class HeadUpController {
 	 * initialisiert einmal den HeadUpController
 	 * 
 	 * @param headUpView
-	 *            die nötige Instanz des HeadUpViews
+	 *            die noetige Instanz des HeadUpViews
 	 * @return eine Instanz des headUpControllers
 	 */
 	public static HeadUpController initializes(HeadUpView headUpView) {
@@ -53,7 +53,7 @@ public class HeadUpController {
 	}
 
 	/**
-	 * gibt eine Instanz des HeadUpControllers zurück
+	 * gibt eine Instanz des HeadUpControllers zurï¿½ck
 	 * 
 	 * @return HeadUpController oder null fall initializes nicht aufgerufen
 	 *         wurde
@@ -71,7 +71,7 @@ public class HeadUpController {
 	}
 
 	/**
-	 * vergrößert die Karte um 1 Level
+	 * vergrï¿½ï¿½ert die Karte um 1 Level
 	 */
 	public void zoomInOneLevel() {
 		mapController.onZoom((mapController.getCurrentLevelOfDetail() + 1.0F));

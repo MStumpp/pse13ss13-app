@@ -1,13 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
  * 
@@ -105,7 +105,7 @@ public class MapController {
 	}
 
 	/**
-	 * Gibt den aktuellen Level Of Detail zurück
+	 * Gibt den aktuellen Level Of Detail zurï¿½ck
 	 * 
 	 * @return aktuellen Level ofDetail
 	 */
