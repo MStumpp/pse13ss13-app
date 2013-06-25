@@ -10,21 +10,21 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapController {
 
 	private static String MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
 	public static Coordinate defaultCoordinate = new Coordinate(49.0047200, 8.3858300);
-	
+
 	private MapView mapView;
 	private MapModel mapModel;
 
 	/**
-	 * 
+	 *
 	 * @param mapView
 	 * @return
 	 */
@@ -36,7 +36,7 @@ public class MapController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static MapController getInstance() {
@@ -47,9 +47,9 @@ public class MapController {
 		}
 		return mapController;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param mv
 	 */
 	private MapController(MapView mv) {
@@ -106,7 +106,7 @@ public class MapController {
 
 	/**
 	 * Gibt den aktuellen Level Of Detail zur�ck
-	 * 
+	 *
 	 * @return aktuellen Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
