@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 /**
  * Diese Klasse repräsentiert ein Punkt auf dem Display des Android-Smartphones.
