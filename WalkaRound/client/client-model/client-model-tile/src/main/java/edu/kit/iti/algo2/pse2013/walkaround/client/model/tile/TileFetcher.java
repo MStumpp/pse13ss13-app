@@ -78,6 +78,7 @@ public class TileFetcher {
 				}
 			}
 		});
+		t.start();
 		return true;
 	}
 
