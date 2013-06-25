@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:layout_alignParentTop="true"
-            android:background="@drawable/menutrans" >
+            android:background="#A0D0D0D0" >
 
             <ImageView
                 android:id="@+id/roundtripMenuButton"
@@ -65,7 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/staticMenu" >
+            android:layout_below="@+id/staticMenu"
+            android:background="#000000" >
 
             <ImageView
                 android:id="@+id/pullupOpenClose"
@@ -84,7 +85,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/relativeLayout2" >
+            android:layout_below="@+id/relativeLayout2"
+            android:background="#000000" >
+
         </RelativeLayout>
     </RelativeLayout>
 

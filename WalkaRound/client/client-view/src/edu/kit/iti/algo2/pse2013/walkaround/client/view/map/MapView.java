@@ -5,6 +5,8 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -14,9 +16,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 //import android.widget.RelativeLayout;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 
@@ -35,12 +42,14 @@ public class MapView extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		MapController mc = MapController.initialize(this);
+
 		// RelativeLayout rl = (RelativeLayout)
 		// this.findViewById(R.id.mapview_main);
 
 		Log.d("MAP_VIEW", "Rufe Display ab.");
 
-		Display display = getWindowManager().getDefaultDisplay();
+		Display display = this.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 
@@ -67,9 +76,26 @@ public class MapView extends Activity {
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
 
-		this.setUserPositionOverlayImage(new DisplayCoordinate(200 / 2, 1000),
-				25);
+		// this.setUserPositionOverlayImage(new DisplayCoordinate(200 / 2,
+		// 1000), 25);
+		
+		
+		Log.d("MAP_VIEW", "Fragmente werden eingebaut");
 
+		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+		
+		Log.d("MAP_VIEW", "Fragment PullUpMenü wird eingebaut");
+		// PullUpView pullUp = this.getFragmentManager().findFragmentById(id);
+
+		Fragment pullUp = new PullUpView();
+		ft.add(R.id.pullUpMain, pullUp).commit();
+		
+		
+		Log.d("MAP_VIEW", "Fragment headUp wird eingebaut");
+
+		
+		Fragment headUp = new HeadUpView();
+		ft.add(R.id.headupmain, headUp);
 	}
 
 	public void updateMapImage(Bitmap b) {

@@ -12,7 +12,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/mapview_overlay"
@@ -22,13 +23,32 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-         />
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/mapview_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/user_arrow_30x38"
-        android:scaleType="center"/>
+        android:contentDescription="TODO"
+        android:scaleType="center"
+        android:src="@drawable/user_arrow_30x38" />
+
+    <RelativeLayout
+        android:id="@+id/headup_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        >
+
+        <include
+            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+            layout="@layout/headup" />
+
+    </RelativeLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/pullup" />
 
 </RelativeLayout>
