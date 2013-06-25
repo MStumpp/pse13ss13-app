@@ -4,9 +4,7 @@ import java.util.LinkedList;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
-
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
@@ -14,7 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
- * 
+ *
  * @author Ludwig Biermann
  *
  */
@@ -22,8 +20,8 @@ public class MapModel implements TileListener {
 
 	private static String TAG_MAP_MODEL = "MAP_MODEL";
 	private static MapModel mapModel;
-	
-	private float currentLevelOfDetail; 
+
+	private float currentLevelOfDetail;
 	private MapController mapController;
 	private Coordinate upperLeft;
 	private Coordinate bottomRight;
@@ -31,12 +29,12 @@ public class MapModel implements TileListener {
 	private TileFetcher tileFetcher;
 
 	private Bitmap map;
-	
+
 	// Test Bitmaps
 	private Bitmap eins = null;
-	
+
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -46,9 +44,9 @@ public class MapModel implements TileListener {
 		}
 		return mapModel;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static MapModel getInstance(){
@@ -58,9 +56,9 @@ public class MapModel implements TileListener {
 		}
 		return mapModel;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param c
 	 */
 	private MapModel(Coordinate c, MapController mapController, Point size){
@@ -78,44 +76,44 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void computeBottomRight() {
 		this.bottomRight = this.upperLeft;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param c
 	 */
 	public void shift(Coordinate c) {
 		this.upperLeft = new Coordinate(c.getLatitude(),c.getLongtitude());
 		this.tileFetcher.requestTiles((int)this.getCurrentLevelOfDetail(), upperLeft, bottomRight);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void generateMapOverlayImage() {
 		this.mapController.onMapOverlayImageChange(map);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void generateRouteOverlayImage() {
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void setNewStyle() {
 		this.tileFetcher.requestTiles((int)this.currentLevelOfDetail, this.upperLeft, this.bottomRight);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param lod
 	 * @param c
 	 */
@@ -123,9 +121,9 @@ public class MapModel implements TileListener {
 		this.currentLevelOfDetail = levelOfDetail;
 		this.tileFetcher.requestTiles((int)this.currentLevelOfDetail, this.upperLeft, this.bottomRight);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param dc
 	 * @param category
 	 * @param profile
@@ -134,33 +132,33 @@ public class MapModel implements TileListener {
 	public LinkedList<DisplayCoordinate> getPOIofDisplay(DisplayCoordinate dc, int[] category , int profile) {
 		return null;
 	}
-	
+
 	/**
-	 * Gibt den aktuellen Level Of Detail zurück
-	 * 
+	 * Gibt den aktuellen Level Of Detail zurÃ¼ck
+	 *
 	 * @return aktuellen Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
 		return this.currentLevelOfDetail;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param lod
 	 */
 	public void setCurrentLevelOfDetail(float levelOfDetail) {
 		this.currentLevelOfDetail = levelOfDetail;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void onChangeOfActivePOICategories() {
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
