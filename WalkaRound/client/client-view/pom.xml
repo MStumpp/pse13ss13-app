@@ -6,17 +6,4 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>client-view</artifactId>
-  <build>
-  	<plugins>
-  		<plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.0</version>
-        <configuration>
-          <source>6.0</source>
-          <target>6.0</target>
-          <compilerVersion>6.0</compilerVersion>
-        </configuration>
-        </plugin>
-  	</plugins>
-  </build>
 </project>

@@ -19,16 +19,6 @@ public final class CoordinateUtility {
 
 	}
 
-	public static DisplayCoordinate coordinateToDisplayCoordinate(
-			Coordinate coord, Coordinate anchor) {
-		return null;
-	}
-
-	public static Coordinate displayCoordinateToCoordinate(
-			DisplayCoordinate dispCoord, Coordinate anchor) {
-		return null;
-	}
-
 	// parameter war im entwurf noch nicht drin!
 	public static Point getDisplay(Activity activity) {
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
@@ -53,5 +43,14 @@ public final class CoordinateUtility {
 		double lat2 = Math.toRadians(c2.getLatitude());
 		double zeta = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1));
 		return zeta*EARTH_RADIUS;
+	}
+	/**
+	 * Converts a given length in display-pixels into the corresponding geographical degrees.
+	 * @param pixels the given length in pixels
+	 * @param levelOfDetail the current level of detail
+	 * @return the given length in degrees
+	 */
+	public static float convertPixelsToDegrees(float pixels, float levelOfDetail) {
+		return (float) (45 * pixels / Math.pow(2, levelOfDetail + 6));
 	}
 }
