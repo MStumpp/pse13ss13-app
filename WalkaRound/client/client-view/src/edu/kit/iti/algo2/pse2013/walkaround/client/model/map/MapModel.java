@@ -187,6 +187,7 @@ public class MapModel implements TileListener {
 		int numTilesY = (int) Math.ceil(size.y / getCurrentTileWidth());
 		this.tileFetcher.requestTiles(Math.round(this.getCurrentLevelOfDetail()), getUpperLeft(), numTilesX, numTilesY);
 	}
+
 	/**
 	 *
 	 */
@@ -238,13 +239,6 @@ public class MapModel implements TileListener {
 								Math.round(currentLevelOfDetail), upperLeft,
 								xAmount, yAmount) + " x " + xAmount + " y " + yAmount);
 	}
-
-	/**
-	 *
-	 */
-	public void generateMapOverlayImage() {
-		this.mapController.onMapOverlayImageChange(map);
-	}
 	public void generateRouteOverlayImage() {
 
 	}
@@ -280,9 +274,9 @@ public class MapModel implements TileListener {
 	 * @param c
 	 */
 	public boolean zoom(float delta, Coordinate c) {
-		
+
 		//TODO
-		
+
 		Log.d(TAG_MAP_MODEL, "ZOOM um " +delta);
 		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle();
