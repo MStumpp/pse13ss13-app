@@ -6,7 +6,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>client-model</artifactId>
-  <name>Das Model auf dem Client der WalkaRound-App</name>
   <packaging>pom</packaging>
   <modules>
   	<module>client-model-sensorinformation</module>
@@ -15,7 +14,6 @@
   	<module>client-model-route</module>
   	<module>client-model-navigation</module>
   	<module>client-model-navigationoutput</module>
-  	<module>client-model-map</module>
   	<module>client-model-data</module>
   	<module>client-model-preferences</module>
   </modules>

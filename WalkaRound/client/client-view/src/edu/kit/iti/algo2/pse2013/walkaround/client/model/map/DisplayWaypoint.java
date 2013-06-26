@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
@@ -28,7 +29,7 @@ public class DisplayWaypoint extends DisplayCoordinate {
 	}
 	
 	/**
-	 * Gibt den Wegpunkt zurück
+	 * Gibt den Wegpunkt zurï¿½ck
 	 * 
 	 * @return Wegpunkt
 	 */

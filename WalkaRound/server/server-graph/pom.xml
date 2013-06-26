@@ -7,8 +7,6 @@
     </parent>
 
     <artifactId>server-graph</artifactId>
-    <packaging>jar</packaging>
-    <name>server-graph</name>
 
     <dependencies>
         <dependency>
@@ -18,7 +16,7 @@
         </dependency>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>preprocessor-model-osm</artifactId>
+            <artifactId>client-model-util</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

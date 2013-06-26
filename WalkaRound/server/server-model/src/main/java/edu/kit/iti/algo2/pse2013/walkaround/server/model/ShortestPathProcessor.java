@@ -92,6 +92,7 @@ public class ShortestPathProcessor {
                     edge.getTarget().setParent(current);
                     if (queue.contains(edge.getTarget())) {
                         queue.remove(edge.getTarget());
+                    }
                     queue.add(edge.getTarget());
                 }
             }

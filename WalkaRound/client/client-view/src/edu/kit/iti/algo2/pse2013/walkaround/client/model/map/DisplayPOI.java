@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
@@ -28,7 +29,7 @@ public class DisplayPOI extends DisplayCoordinate {
 	}
 	
 	/**
-	 * gibt den POI zurück
+	 * gibt den POI zurï¿½ck
 	 * 
 	 * @return POI
 	 */

@@ -15,13 +15,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.headup.HeadUpController;
 
 /**
- * Diese Klasse ist für die Anzeige der sogenannten HeadUp Elemente zuständig.
- * 
- * Darunter fallen: Option Button Vergrößern/ Verkleinern Button Play Button
+ * Diese Klasse ist fÃ¼r die Anzeige der sogenannten HeadUp Elemente zustÃ¤ndig.
+ *
+ * Darunter fallen: Option Button VergrÃ¶ÃŸern/ Verkleinern Button Play Button
  * PlayerLock Button statische Navigationsanzeige
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class HeadUpView extends Fragment {
 
@@ -36,7 +36,7 @@ public class HeadUpView extends Fragment {
 
 	private final static boolean defaultLockPosition = true;
 
-	// Mögliche Piktogramme
+	// MÃ¶gliche Piktogramme
 	public final static int ARROW_RIGHT = R.drawable.pikto_rechts_100x100;
 
 	HeadUpController headUpController;
@@ -46,7 +46,7 @@ public class HeadUpView extends Fragment {
 	private Drawable unlock;
 	private boolean lockPosition;
 
-	// Steuer Elemente
+	// Steuerelemente
 
 	private ImageView plus;
 	private ImageView minus;
@@ -80,7 +80,7 @@ public class HeadUpView extends Fragment {
 
 		float height = (size.y - size.y / 10) - 50;
 
-		Log.d(HEADUP, "Höhe des head Up " + height);
+		Log.d(HEADUP, "Hï¿½he des head Up " + height);
 		this.getActivity().findViewById(R.id.headup_container)
 				.getLayoutParams().height = (int) height;
 
@@ -113,7 +113,7 @@ public class HeadUpView extends Fragment {
 		// -----------------------------------------------
 		pikto = (ImageView) this.getActivity().findViewById(R.id.headup_pikto);
 
-		Log.d(HEADUP, "View werden von der größe angepasst");
+		Log.d(HEADUP, "View werden von der grï¿½ï¿½e angepasst");
 
 		plus.getLayoutParams().width = size.x / 5;
 		plus.getLayoutParams().height = size.x / 10;
@@ -140,7 +140,7 @@ public class HeadUpView extends Fragment {
 		timeToGo.getLayoutParams().width = size.x / 5;
 
 		// -----------------------------------------------
-		Log.d(HEADUP, "Listener werden hinzugefügt");
+		Log.d(HEADUP, "Listener werden hinzugefï¿½gt");
 
 		plus.setOnTouchListener(new ZoomPlusListener());
 		minus.setOnTouchListener(new ZoomMinusListener());
@@ -204,8 +204,8 @@ public class HeadUpView extends Fragment {
 	}
 
 	/**
-	 * Ändert das Piktogramm anhand einer ID
-	 * 
+	 * ï¿½ndert das Piktogramm anhand einer ID
+	 *
 	 * @param id
 	 *            des Piktogramms
 	 */
@@ -216,7 +216,7 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Updatet den Navigationstext.
-	 * 
+	 *
 	 * @param text
 	 *            neuer Text
 	 */
@@ -227,7 +227,7 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Updatet die Geschwindigkeit. Eingabe in m/s
-	 * 
+	 *
 	 * @param speed
 	 *            neue Geschwindigkeit
 	 */
@@ -238,7 +238,7 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Updatet den noch zulaufenden Weg. Eingabe in m
-	 * 
+	 *
 	 * @param waytogo
 	 *            noch zulaufenenden Weg.
 	 */
@@ -249,7 +249,7 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Updatet die gelaufenden Weg Eingabe in m
-	 * 
+	 *
 	 * @param wayPassed
 	 *            gelaufender Weg
 	 */
@@ -261,7 +261,7 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Updatet die noch zu laufende Zeit Eingabe in s
-	 * 
+	 *
 	 * @param timeToGo
 	 *            noch zu laufende zeit
 	 */
@@ -272,7 +272,7 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * updatet die vergangene Zeit. Eingabe in s
-	 * 
+	 *
 	 * @param timePassed
 	 *            vergangene Zeit
 	 */
@@ -284,7 +284,7 @@ public class HeadUpView extends Fragment {
 	/**
 	 * wechselt zwischen den Ansichts Modi. true Karte ist auf User
 	 * zentriert(default) false Karte ist frei beweglich
-	 * 
+	 *
 	 * @param Modi
 	 */
 	public void switchUserPositionLock(boolean b) {
@@ -297,9 +297,9 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Ein Listener der auf eine Optionen Eingabe wartet.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class OptionListener implements OnTouchListener {
 
@@ -314,17 +314,17 @@ public class HeadUpView extends Fragment {
 	}
 
 	/**
-	 * Ein Listener der auf eine Vergrößern Eingabe wartet.
-	 * 
+	 * Ein Listener der auf eine Vergrï¿½ï¿½ern Eingabe wartet.
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class ZoomPlusListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(plus)) {
-				Log.d(HEADUP_TOUCH, "Plus wird gedrückt");
+				Log.d(HEADUP_TOUCH, "Plus wird gedrï¿½ckt");
 				headUpController.zoomInOneLevel();
 			}
 			return false;
@@ -334,16 +334,16 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Ein Listener der auf eine Verkleinern Eingabe wartet.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class ZoomMinusListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(minus)) {
-				Log.d(HEADUP_TOUCH, "Minus wird gedrückt");
+				Log.d(HEADUP_TOUCH, "Minus wird gedrï¿½ckt");
 				headUpController.zoomOutOneLevel();
 			}
 			return false;
@@ -353,9 +353,9 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Ein Listener der die Navigation einblendet oder ausblendet
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class NavigationControllListener implements OnTouchListener {
 
@@ -373,16 +373,16 @@ public class HeadUpView extends Fragment {
 
 	/**
 	 * Ein listener der auf eine UserLockEingabe wartet.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserLockListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(userLock)) {
-				Log.d(HEADUP_TOUCH, "UserLock wird ausgeführt");
+				Log.d(HEADUP_TOUCH, "UserLock wird ausgefï¿½hrt");
 				headUpController.switchUserPositionLock(true);
 			}
 			return false;

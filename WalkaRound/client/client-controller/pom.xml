@@ -6,10 +6,8 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>client-controller</artifactId>
-  <name>Controller für Client</name>
   <packaging>pom</packaging>
   <modules>
-  	<module>client-controller-map</module>
   	<module>client-controller-headup</module>
   	<module>client-controller-overlay</module>
   	<module>client-controller-route</module>

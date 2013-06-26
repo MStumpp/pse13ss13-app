@@ -13,7 +13,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="TODO" />
+        android:background="#FFFFFF"
+        android:contentDescription="TODO"
+        android:scaleType="center" />
 
     <ImageView
         android:id="@+id/mapview_overlay"

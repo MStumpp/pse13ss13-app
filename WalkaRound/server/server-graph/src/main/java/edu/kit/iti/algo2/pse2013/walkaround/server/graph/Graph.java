@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 
 /**
  * This class represents a graph consisting of edges and vertices.
@@ -21,27 +20,8 @@ public final class Graph {
      *
      * @param graphDataIO GraphDataIO with edges used to initialize this Graph.
      */
-    private Graph(GraphDataIO graphDataIO) {
-        // initialize this graph with list of edges
-        graphDataIO.getEdges();
+    public Graph() {
     }
-
-
-    /**
-     * Instantiates and/or returns a singleton instance of Graph.
-     *
-     * @param graphDataIO GraphDataIO with edges used to initialize this Graph.
-     * @return Graph.
-     */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
-    public Graph getInstance(GraphDataIO graphDataIO) {
-        if (graphDataIO == null)
-            throw new IllegalArgumentException("GraphDataIO must not be null");
-        if (instance == null)
-            instance = new Graph(graphDataIO);
-        return instance;
-    }
-
 
     /**
      * Returns the Edge with the given id.
@@ -50,7 +30,7 @@ public final class Graph {
      * @return Edge the Edge with the given id.
      */
     public Edge getEdgeByID(int id) {
-        return new Edge(0.d, 0.d, 0.d, 0.d);
+        return new Edge(1, new Vertex(1, 1, 1), new Vertex(42, 42, 42));
     }
 
 
@@ -61,7 +41,7 @@ public final class Graph {
      * @return Vertex the Vertex with the given id.
      */
     public Vertex getVertexByID(int id) {
-        return new Vertex(1);
+        return new Vertex(1, 1, 1);
     }
 
 

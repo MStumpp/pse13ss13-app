@@ -19,12 +19,12 @@ import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 /**
- * 
- * Diese Klasse implementiert ein sogenanntes PullUp Menü. Dieses Menü ist speziell für Walkaround entwickelt worden und 
- * bietet ein statisches menü zum wechseln der Nutzerinteraktionsmöglichkeiten. Sowie speziellen animationen um das
- * Menü so Nutzer freundlich wie Möglich zu machen.
- * 
- * 
+ *
+ * Diese Klasse implementiert ein sogenanntes PullUp MenÃ¼. Dieses MenÃ¼ ist speziell fÃ¼r Walkaround entwickelt worden und
+ * bietet ein statisches MenÃ¼ zum wechseln der NutzerinteraktionsmÃ¶glichkeiten. Sowie speziellen animationen um das
+ * MenÃ¼ so Nutzer freundlich wie MÃ¶glich zu machen.
+ *
+ *
  * @author Ludwig Biermann
  *
  */
@@ -44,7 +44,7 @@ public class PullUpView extends Fragment {
 	public static final int CONTENT_ROUNDTRIP = 2;
 	public static final int CONTENT_POI = 3;
 	public static final int CONTENT_SEARCH = 4;
-	
+
 	private RelativeLayout main;
 
 	private RelativeLayout menu;
@@ -104,14 +104,14 @@ public class PullUpView extends Fragment {
 		Log.d(TAG_PULLUP, "Max = " + maxHeight);
 		Log.d(TAG_PULLUP, "Min = " + minHeight);
 
-		Log.d(TAG_PULLUP, "Einstellen der Größenverhältnisse");
+		Log.d(TAG_PULLUP, "Einstellen der GrÃ¶ÃŸenverhÃ¤ltnisse");
 
-		// Menü
+		// MenÃ¼
 		// menu.setLayoutParams(new LayoutParams(size.x, size.y));
 		menu.getLayoutParams().width = size.x;
 		menu.getLayoutParams().height = size.y / 10;
 		Log.d(TAG_PULLUP,
-				"Das static Menü hat die Breite: "
+				"Das static MenÃ¼ hat die Breite: "
 						+ menu.getLayoutParams().width);
 
 		routing.setX(size.x / 5 * 0);
@@ -134,7 +134,7 @@ public class PullUpView extends Fragment {
 
 		// main
 		// main.getLayoutParams().height = size.y;
-		Log.d(TAG_PULLUP, "Die Höhe von main ist: "
+		Log.d(TAG_PULLUP, "Die HÃ¶he von main ist: "
 				+ main.getLayoutParams().height);
 
 		// Pull Up Controll Button
@@ -161,7 +161,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 *  Setzt die Höhe des Menüs auf FullSize
+	 *  Setzt die HÃ¶he des MenÃ¼s auf FullSize
 	 */
 	private void setFullSizeHeight() {
 		this.setHeight(main.getY() * -1, 1000);
@@ -169,7 +169,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 *   Setzt die Höhe des Menüs auf HalfSize
+	 *   Setzt die HÃ¶he des MenÃ¼s auf HalfSize
 	 */
 	private void setHalfSizeHeight() {
 		this.setHeight(halfHeight - main.getY(), 1000);
@@ -177,7 +177,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 *   Setzt die Höhe des Menüs auf Minimal
+	 *   Setzt die HÃ¶he des MenÃ¼s auf Minimal
 	 */
 	private void setNullSizeHeight() {
 		this.setHeight(maxHeight - main.getY(), 1000);
@@ -185,9 +185,9 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 *  Ändert die Höhe des Menüs um ein Delta
-	 *   
-	 * @param delta Differenz zur neuen Höhe
+	 *  Ã¤ndert die HÃ¶he des MenÃ¼s um ein Delta
+	 *
+	 * @param delta Differenz zur neuen HÃ¶he
 	 */
 	private void setHeight(float delta) {
 		setHeight(delta, 1);
@@ -195,9 +195,9 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Ändert die Höhe des Menüs um ein Delta in einer bestimmten Zeit
-	 * 
-	 * @param delta  Differenz zur neuen Höhe
+	 * Ã¤ndert die HÃ¶he des MenÃ¼s um ein Delta in einer bestimmten Zeit
+	 *
+	 * @param delta  Differenz zur neuen HÃ¶he
 	 * @param duration dauer der Animation
 	 */
 	private void setHeight(float delta, long duration) {
@@ -211,47 +211,47 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Gibt die derzeitige Höhe zurück
-	 * 
-	 * @return Höhe des PullUpMenüs
+	 * Gibt die derzeitige HÃ¶he zurÃ¼ck
+	 *
+	 * @return HÃ¶he des PullUpMenÃ¼s
 	 */
 	public float getHeight() {
 		return main.getY();
 	}
 
 	/**
-	 * Ändert den Content des Menüs
-	 * 
+	 * Ã¤ndert den Content des MenÃ¼s
+	 *
 	 * @param id des Contents
 	 */
 	public void changeView(int id) {
-		Log.d(TAG_PULLUP, "Content wird geändert");
-		
-		switch(id){ 
-        case PullUpView.CONTENT_ROUTING: 
+		Log.d(TAG_PULLUP, "Content wird geÃ¤ndert");
+
+		switch(id){
+        case PullUpView.CONTENT_ROUTING:
 			Log.d(TAG_PULLUP, "routing wird gestartet");
-            break; 
-        case PullUpView.CONTENT_FAVORITE: 
+            break;
+        case PullUpView.CONTENT_FAVORITE:
 			Log.d(TAG_PULLUP, "favorite wird gestartet");
-            break; 
+            break;
         case PullUpView.CONTENT_ROUNDTRIP:
-			Log.d(TAG_PULLUP, "roundtrip wird gestartet"); 
-            break; 
-        case PullUpView.CONTENT_POI: 
+			Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+            break;
+        case PullUpView.CONTENT_POI:
 			Log.d(TAG_PULLUP, "poi wird gestartet");
-            break; 
-        case PullUpView.CONTENT_SEARCH: 
+            break;
+        case PullUpView.CONTENT_SEARCH:
 			Log.d(TAG_PULLUP, "search wird gestartet");
-            break; 
-        default: 
-        	
-        } 
+            break;
+        default:
+
+        }
 
 	}
 
 	/**
-	 * Listener zur Änderung des Content des Menüs.
-	 * 
+	 * Listener zur Ã¤nderung des Content des MenÃ¼s.
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -269,8 +269,8 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur Änderung des Content des Menüs.
-	 * 
+	 * Listener zur Ã¤nderung des Content des MenÃ¼s.
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -280,7 +280,7 @@ public class PullUpView extends Fragment {
 			if(!v.equals(favorite)) {
 				return false;
 			}
-			
+
 			Log.d(TAG_PULLUP, "Favorite wurde aufgerufen");
 			changeView(PullUpView.CONTENT_FAVORITE);
 			setFullSizeHeight();
@@ -289,8 +289,8 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur Änderung des Content des Menüs.
-	 * 
+	 * Listener zur Ã¤nderung des Content des MenÃ¼s.
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -301,7 +301,7 @@ public class PullUpView extends Fragment {
 			if(!v.equals(roundtrip)) {
 				return false;
 			}
-			
+
 			Log.d(TAG_PULLUP, "roundtrip wurde aufgerufen");
 			changeView(PullUpView.CONTENT_ROUNDTRIP);
 			setFullSizeHeight();
@@ -310,8 +310,8 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur Änderung des Content des Menüs.
-	 * 
+	 * Listener zur Ã¤nderung des Content des MenÃ¼s.
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -322,7 +322,7 @@ public class PullUpView extends Fragment {
 			if(!v.equals(poi)) {
 				return false;
 			}
-			
+
 			Log.d(TAG_PULLUP, "poi wurde aufgerufen");
 			changeView(PullUpView.CONTENT_POI);
 			setHalfSizeHeight();
@@ -331,8 +331,8 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur Änderung des Content des Menüs.
-	 * 
+	 * Listener zur Ã¤nderung des Content des MenÃ¼s.
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -343,7 +343,7 @@ public class PullUpView extends Fragment {
 			if(!v.equals(search)) {
 				return false;
 			}
-			
+
 			Log.d(TAG_PULLUP, "search wurde aufgerufen");
 			changeView(PullUpView.CONTENT_SEARCH);
 			setHalfSizeHeight();
@@ -412,14 +412,14 @@ public class PullUpView extends Fragment {
 			main.clearAnimation();
 			// Log.d(TAG_PULLUP, " " + duration);
 			// if (duration == 0) {
-			
+
 			if (main.getY() != halfHeight && main.getY() <= maxBorderHeight
 					&& main.getY() >= minBorderHeight) {
 				float delta = (main.getY() - halfHeight) * -1;
 				Log.d(TAG_PULLUP, "Korregieren auf halfSize");
 				setHeight(delta, 1000);
 			}
-			
+
 			if (main.getY() > maxBorderHeight && main.getY() != maxHeight) {
 
 				float delta = (main.getY() - maxHeight) * -1;
@@ -466,15 +466,15 @@ public class PullUpView extends Fragment {
 			/*
 			 * try { if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
 			 * return false;
-			 * 
+			 *
 			 * if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MIN_DISTANCE) { if
 			 * (e1.getY() > e2.getY()) { setNullSizeHeight();
-			 * 
+			 *
 			 * } else { setFullSizeHeight(); } } } catch (Exception e) {
-			 * 
+			 *
 			 * }
-			 * 
-			 * 
+			 *
+			 *
 			 * if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) return
 			 * false; // right to left swipe if (e1.getX() - e2.getX() >
 			 * SWIPE_MIN_DISTANCE && Math.abs(velocityX) >
@@ -490,22 +490,22 @@ public class PullUpView extends Fragment {
 	}
 
 	/*
-	 * 
+	 *
 	 * @Override public boolean onTouch(View view, MotionEvent motionEvent) { if
 	 * (motionEvent.getAction() == MotionEvent.ACTION_DOWN) { ClipData data =
 	 * ClipData.newPlainText("", ""); DragShadowBuilder shadowBuilder = new
 	 * View.DragShadowBuilder(main); main.startDrag(data, shadowBuilder, view,
 	 * 0); main.setVisibility(View.INVISIBLE); return true; } else { return
 	 * false; } }
-	 * 
+	 *
 	 * }
-	 * 
+	 *
 	 * private class DragListener implements OnDragListener {
-	 * 
+	 *
 	 * @Override public boolean onDrag(View v, DragEvent event) {
-	 * Log.d(TAG_PULLUP, "drag event"); 
+	 * Log.d(TAG_PULLUP, "drag event");
 	 * int action = event.getAction();
-	 * 
+	 *
 	 * return true; } }
 	 */
 }
