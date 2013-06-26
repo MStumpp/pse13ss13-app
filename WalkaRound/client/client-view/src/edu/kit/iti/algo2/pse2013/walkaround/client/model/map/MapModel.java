@@ -98,8 +98,8 @@ public class MapModel implements TileListener {
 				.getCurrentMapStyle().getDefaultLevelOfDetail();
 
 		Log.d(TAG_MAP_MODEL, "Anzahl der Tiles werden ausgerechnet.");
-		int xAmount = (int) Math.ceil(size.x / 256);
-		int yAmount = (int) Math.ceil(size.y / 256);
+		xAmount = (int) Math.ceil(size.x / 256);
+		yAmount = (int) Math.ceil(size.y / 256);
 
 		// TODO hier stimmit etwas nicht
 		xAmount++;
@@ -130,12 +130,7 @@ public class MapModel implements TileListener {
 		}
 
 		this.generateMapOverlayImage();
-		Log.d(TAG_MAP_MODEL,
-				"Tile werden angefordert: "
-						+ this.tileFetcher.requestTiles(
-								Math.round(currentLevelOfDetail), upperLeft,
-								xAmount, yAmount));
-		this.fetchTiles();
+		
 		Log.d(TAG_MAP_MODEL, "Map Model wurde initialisiert ");
 	}
 
@@ -177,8 +172,9 @@ public class MapModel implements TileListener {
 	 * 
 	 * @param c
 	 */
-	public void shift(Coordinate c) {
-		this.upperLeft = new Coordinate(c.getLatitude(), c.getLongtitude());
+	public void shift(DisplayCoordinate delta) {
+		//TODO
+		//this.upperLeft = new Coordinate(c.getLatitude(), c.getLongtitude());
 		// this.tileFetcher.requestTiles((int) this.getCurrentLevelOfDetail(),
 		// upperLeft, lowerRight);
 	}
@@ -197,6 +193,7 @@ public class MapModel implements TileListener {
 			final int size = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
 			this.map = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x achse ");
@@ -204,6 +201,7 @@ public class MapModel implements TileListener {
 					* DEFAULT_TILE_SIZE;
 			this.map = Bitmap.createBitmap(sizeX, size.y,
 					Bitmap.Config.ARGB_8888);
+			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner achse ");
@@ -211,11 +209,13 @@ public class MapModel implements TileListener {
 					* DEFAULT_TILE_SIZE;
 			this.map = Bitmap.createBitmap(size.x, sizeY,
 					Bitmap.Config.ARGB_8888);
+			this.fetchTiles();
 			return;
 		}
 
 		Log.d(TAG_MAP_MODEL, "generiere Bitmap größer Display ");
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.fetchTiles();
 
 		// this.mapController.onMapOverlayImageChange(map);
 	}
@@ -225,7 +225,7 @@ public class MapModel implements TileListener {
 				"Tile werden angefordert: "
 						+ this.tileFetcher.requestTiles(
 								Math.round(currentLevelOfDetail), upperLeft,
-								xAmount, yAmount));
+								xAmount, yAmount) + " x " + xAmount + " y " + yAmount);
 	}
 
 	/**
@@ -267,6 +267,9 @@ public class MapModel implements TileListener {
 	 * @param c
 	 */
 	public boolean zoom(float delta, Coordinate c) {
+		
+		//TODO
+		
 		Log.d(TAG_MAP_MODEL, "ZOOM um " +delta);
 		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle();
@@ -286,12 +289,13 @@ public class MapModel implements TileListener {
 						this.currentLevelOfDetail));
 
 		this.generateMapOverlayImage();
-		this.fetchTiles();
-		Log.d(TAG_MAP_MODEL,
+		
+		/*Log.d(TAG_MAP_MODEL,
 				"Tile werden angefordert: "
 						+ this.tileFetcher.requestTiles(
 								Math.round(currentLevelOfDetail), upperLeft,
-								xAmount, yAmount));
+								xAmount, yAmount) + " x " + xAmount + " y " + yAmount);
+		*/
 		
 		return true;
 	}
@@ -343,7 +347,7 @@ public class MapModel implements TileListener {
 
 	@Override
 	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-		Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null));
+		Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
 
 		if (tile != null && levelOfDetail == currentLevelOfDetail) {
 
@@ -352,6 +356,7 @@ public class MapModel implements TileListener {
 
 			x -= xy[0];
 			y -= xy[1];
+			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + x + " y " + y);
 
 			Canvas canvas = new Canvas(map);
 
