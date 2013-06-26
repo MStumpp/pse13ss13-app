@@ -117,4 +117,16 @@ public final class Edge {
         return lon2;
     }
 
+
+	public int getLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public Vertex getTarget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

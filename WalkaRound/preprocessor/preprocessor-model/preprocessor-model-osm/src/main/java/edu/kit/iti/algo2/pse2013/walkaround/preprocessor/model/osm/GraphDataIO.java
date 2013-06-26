@@ -12,7 +12,10 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Vector;
 
+import android.util.Log;
+
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
 
 public class GraphDataIO {
 	private Vector<Edge> edges = new Vector<>();
@@ -50,5 +53,9 @@ public class GraphDataIO {
 	}
 	public List<Edge> getEdges() {
 		return this.edges;
+	}
+	public Graph getGraph() {
+		Log.d(this.getClass().getSimpleName(), "getGraph()-Stub!");
+		return null;
 	}
 }
