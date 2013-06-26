@@ -3,12 +3,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 import java.util.LinkedList;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
@@ -21,9 +18,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapModel implements TileListener {
 
@@ -51,7 +48,7 @@ public class MapModel implements TileListener {
 	// DEFAULT_PATTERN);
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -64,7 +61,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static MapModel getInstance() {
@@ -77,11 +74,11 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 */
 	private MapModel(Coordinate c, MapController mapController, Point size) {
-		Log.d(TAG_MAP_MODEL, "DisplayMaße: " + size.x + " * " + size.y);
+		Log.d(TAG_MAP_MODEL, "DisplayMaï¿½e: " + size.x + " * " + size.y);
 		Log.d(TAG_MAP_MODEL, "Map Model wird initialisiert");
 
 		Log.d(TAG_MAP_MODEL, "Referenzen werden gesetzt");
@@ -142,7 +139,7 @@ public class MapModel implements TileListener {
 	/**
 	 * berechnet die Koordinate anhand einer DisplayKoordinate relativ zu oberen
 	 * Ecke
-	 * 
+	 *
 	 * @param dc
 	 *            die zu konvertierende DisplayCoordinate
 	 * @return geographische Koordiante
@@ -169,12 +166,12 @@ public class MapModel implements TileListener {
 	 * Coordinate(this.upperLeft,
 	 * CoordinateUtility.convertPixelsToDegrees(size.x, currentLevelOfDetail),
 	 * CoordinateUtility.convertPixelsToDegrees(size.y, currentLevelOfDetail));
-	 * 
+	 *
 	 * }
 	 */
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 */
 	public void shift(Coordinate c) {
@@ -214,7 +211,7 @@ public class MapModel implements TileListener {
 			return;
 		}
 
-		Log.d(TAG_MAP_MODEL, "generiere Bitmap größer Display ");
+		Log.d(TAG_MAP_MODEL, "generiere Bitmap grï¿½ï¿½er Display ");
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 
 		// this.mapController.onMapOverlayImageChange(map);
@@ -244,7 +241,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param delta
 	 * @param c
 	 */
@@ -253,7 +250,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param delta
 	 */
 	public boolean zoom(float delta) {
@@ -262,7 +259,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param lod
 	 * @param c
 	 */
@@ -278,7 +275,7 @@ public class MapModel implements TileListener {
 		}
 
 		this.currentLevelOfDetail = nextLevelOfDetail;
-		
+
 		this.upperLeft = new Coordinate(c,
 				CoordinateUtility.convertDegreesToPixel(c.getLatitude(),
 						this.currentLevelOfDetail),
@@ -292,12 +289,12 @@ public class MapModel implements TileListener {
 						+ this.tileFetcher.requestTiles(
 								Math.round(currentLevelOfDetail), upperLeft,
 								xAmount, yAmount));
-		
+
 		return true;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dc
 	 * @param category
 	 * @param profile
@@ -310,7 +307,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Gibt den aktuellen Level Of Detail zurÃ¼ck
-	 * 
+	 *
 	 * @return aktuellen Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -318,7 +315,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param lod
 	 */
 	public void setCurrentLevelOfDetail(float levelOfDetail) {
@@ -333,7 +330,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -355,7 +352,7 @@ public class MapModel implements TileListener {
 
 			Canvas canvas = new Canvas(map);
 
-			// Malt leider nicht die Ränder aus
+			// Malt leider nicht die Rï¿½nder aus
 			canvas.drawBitmap(tile, (x * tile.getWidth()),
 					(y * tile.getWidth()), null);
 
@@ -363,7 +360,7 @@ public class MapModel implements TileListener {
 			 * int left = x * tile.getWidth(); int right = left +
 			 * tile.getWidth(); int top = y * tile.getHeight(); int bottom = top
 			 * + tile.getHeight();
-			 * 
+			 *
 			 * // canvas.drawBitmap(tile, new
 			 * Rect(0,0,tile.getWidth(),tile.getWidth()), new Rect(left, top
 			 * ,right, bottom), null);
