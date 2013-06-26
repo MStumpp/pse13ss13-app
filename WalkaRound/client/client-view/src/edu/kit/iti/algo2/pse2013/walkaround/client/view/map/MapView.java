@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
-import java.util.LinkedList;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -21,17 +19,14 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
-//import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+//import android.widget.RelativeLayout;
 
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 
@@ -127,7 +122,7 @@ public class MapView extends Activity {
 		Display display = this.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		Log.d(TAG_MAPVIEW, "DisplayMaße: " + size.x + " * " + size.y);
+		Log.d(TAG_MAPVIEW, "DisplayMaï¿½e: " + size.x + " * " + size.y);
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisere Route und POI Ovetrlay.");
@@ -165,7 +160,7 @@ public class MapView extends Activity {
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 
 		// ---------------------------------------------
-		Log.d(TAG_MAPVIEW, "Fragment PullUpMenü wird eingebaut");
+		Log.d(TAG_MAPVIEW, "Fragment PullUpMenï¿½ wird eingebaut");
 		Fragment pullUp = new PullUpView();
 		ft.add(R.id.pullUpMain, pullUp).commit();
 
@@ -179,7 +174,7 @@ public class MapView extends Activity {
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
 
-		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefügt");
+		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefï¿½gt");
 		DisplayWaypoint[] list = new DisplayWaypoint[3];
 		list[0] = new DisplayWaypoint(50, 150, 1);
 		list[1] = new DisplayWaypoint(250, 200, 2);
@@ -187,7 +182,7 @@ public class MapView extends Activity {
 
 		updateDisplayCoordinate(list);
 
-		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefügt");
+		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugefï¿½gt");
 		DisplayPOI[] list2 = new DisplayPOI[3];
 		list2[0] = new DisplayPOI(250, 350, 4);
 		list2[1] = new DisplayPOI(450, 400, 5);
@@ -202,7 +197,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet die Karte
-	 * 
+	 *
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
@@ -217,7 +212,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet das Routen Overlay
-	 * 
+	 *
 	 * @param b
 	 */
 	public void updateRouteOverlayImage(Bitmap b) {
@@ -225,8 +220,8 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param dw
 	 */
 	public void updateDisplayCoordinate(DisplayWaypoint[] dw) {
@@ -259,7 +254,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dp
 	 */
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
@@ -280,11 +275,11 @@ public class MapView extends Activity {
 
 	/**
 	 * Setzt einen neuen Punkt aktive
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setActive(int id) {
-		// TODO is equal von Location prüfen
+		// TODO is equal von Location prï¿½fen
 
 		if (currentActive != null) {
 			if (currentActive.getDrawable().equals(flagActive)) {
@@ -323,7 +318,7 @@ public class MapView extends Activity {
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
-	 * 
+	 *
 	 * @param coor
 	 *            Zielkoordinate
 	 * @param degree
@@ -413,9 +408,9 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -432,9 +427,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
@@ -449,9 +444,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
@@ -478,41 +473,41 @@ public class MapView extends Activity {
 
 	/*
 	 * Erstellt ein Muster aus einer Bitmap
-	 * 
-	 * Nicht mehr notwendig - möglicherweise für Mapmodel interressant
-	 * 
+	 *
+	 * Nicht mehr notwendig - mï¿½glicherweise fï¿½r Mapmodel interressant
+	 *
 	 * @return
-	 * 
+	 *
 	 * private Bitmap getDefaultFogScreen() {
-	 * 
+	 *
 	 * Log.d("MAP_VIEW", "Rufe Display ab."); Display display =
 	 * getWindowManager().getDefaultDisplay(); Point size = new Point();
 	 * display.getSize(size);
-	 * 
+	 *
 	 * Log.d("MAP_VIEW", "Display wurde abgerufen. Breite: " + size.x +
-	 * " Höhe: " + size.y);
-	 * 
+	 * " Hï¿½he: " + size.y);
+	 *
 	 * Bitmap fog = BitmapFactory.decodeResource(getResources(),
 	 * DEFAULT_PATTERN);
-	 * 
+	 *
 	 * int fogWidth = fog.getWidth();
-	 * 
+	 *
 	 * int width = ((int) Math.ceil((double) size.x) / fogWidth) * fogWidth; int
 	 * height = ((int) Math.ceil((double) size.y) / fogWidth) * fogWidth;
-	 * 
-	 * Log.d("MAP_VIEW", "Höhen wurden erstellt:" + width + " * " + height +
+	 *
+	 * Log.d("MAP_VIEW", "Hï¿½hen wurden erstellt:" + width + " * " + height +
 	 * " wurde abgerufen.");
-	 * 
+	 *
 	 * Bitmap result = Bitmap.createBitmap(width, height,
 	 * Bitmap.Config.ARGB_8888);
-	 * 
+	 *
 	 * Canvas canvas = new Canvas(result); for (int x = width / fogWidth; x >=
 	 * 0; x--) { for (int y = height / fogWidth; y >= 0; y--) {
 	 * canvas.drawBitmap(fog, (x * fogWidth), (y * fogWidth), null); } }
 	 * Log.d("MAP_VIEW", "Fog wurde erstellt.");
-	 * 
+	 *
 	 * return Bitmap.createScaledBitmap(result, size.x, size.y, false);
-	 * 
+	 *
 	 * }
 	 */
 }

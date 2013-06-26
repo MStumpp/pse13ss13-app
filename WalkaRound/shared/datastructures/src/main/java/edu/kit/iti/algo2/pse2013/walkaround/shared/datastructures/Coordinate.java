@@ -15,7 +15,7 @@ public class Coordinate {
 
 
 	/**
-	 * longitude of this Coordinate.
+	 * longtitude of this Coordinate.
 	 */
 	private double lon;
 
@@ -45,15 +45,11 @@ public class Coordinate {
 	 * Creates an instance of Coordinate.
 	 *
 	 * @param lat Latitude of the Coordinate.
-	 * @param lon Longitude of the Coordinate.
+	 * @param lon Longtitude of the Coordinate.
 	 * @param crossInfo CrossingInformation for this Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
 	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
-		if (Math.abs(lat) > 90.d)
-			throw new IllegalArgumentException("latitude has to be between -90 and 90");
-		if (Math.abs(lon) > 180.d)
-			throw new IllegalArgumentException("longitude has to be between -180 and 180");
 		setLatitude(lat);
 		setLongtitude(lon);
 		this.crossInfo = crossInfo;
@@ -87,7 +83,7 @@ public class Coordinate {
 	}
 
 	/**
-	 * Returns longitude of this Coordinate.
+	 * Sets longtitude for this coordinate
 	 *
 	 * @return double.
 	 */
