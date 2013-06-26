@@ -1,12 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-
-import android.util.Log;
-import android.view.Display;
 import android.app.Activity;
 import android.graphics.Point;
+import android.util.Log;
+import android.view.Display;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public final class CoordinateUtility {
 
@@ -31,11 +29,9 @@ public final class CoordinateUtility {
 
 	/**
 	 * Calculates the distance between two coordinates
-	 * 
-	 * @param c1
-	 *            the first coordinate
-	 * @param c2
-	 *            the the second coordinate
+	 *
+	 * @param c1 the first coordinate
+	 * @param c2 the the second coordinate
 	 * @return the distance between the two coordinates in kilometers
 	 * @see {@link https://de.wikipedia.org/wiki/Orthodrome#Strecke}
 	 */
@@ -53,11 +49,9 @@ public final class CoordinateUtility {
 	/**
 	 * Converts a given length in display-pixels into the corresponding
 	 * geographical degrees.
-	 * 
-	 * @param pixels
-	 *            the given length in pixels
-	 * @param levelOfDetail
-	 *            the current level of detail
+	 *
+	 * @param pixels the given length in pixels
+	 * @param levelOfDetail the current level of detail
 	 * @return the given length in degrees
 	 */
 	public static float convertPixelsToDegrees(float pixels, float levelOfDetail) {
@@ -67,14 +61,12 @@ public final class CoordinateUtility {
 	/**
 	 * Converts a given corresponding geographical degrees into a length in
 	 * display-pixel
-	 * 
-	 * @param degree
-	 *            the given geographical degrees
-	 * @param levelOfDetail
-	 *            the current level of detail
+	 *
+	 * @param degree the given geographical degrees
+	 * @param levelOfDetail the current level of detail
 	 * @return the given length in degrees
 	 */
-	public static float convertDegreesToPixel(double degree, float levelOfDetail) {
+	public static float convertDegreesToPixels(float degree, float levelOfDetail) {
 		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45);
 	}
 }
