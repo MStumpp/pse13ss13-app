@@ -105,9 +105,9 @@ public class MapController {
 	}
 
 	/**
-	 * Gibt den aktuellen Level Of Detail zur�ck
+	 * Gibt das aktuelle Level Of Detail zurück
 	 *
-	 * @return aktuellen Level ofDetail
+	 * @return aktuelles Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
 		return this.mapModel.getCurrentLevelOfDetail();
