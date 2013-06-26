@@ -20,7 +20,7 @@ public class MapController {
 	private static MapController mapController;
 	public static Coordinate defaultCoordinate = new Coordinate(49.0047200, 8.3858300);
 
-	public MapView mapView;
+	private MapView mapView;
 	private MapModel mapModel;
 
 	/**
@@ -66,7 +66,6 @@ public class MapController {
 
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
-
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
@@ -86,19 +85,19 @@ public class MapController {
 	}
 
 	public void onShift(DisplayCoordinate dc) {
-
+		mapModel.generateMapOverlayImage();
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
 
 	}
 
-	public void onZoom(float delta, DisplayCoordinate dc) {
-		this.mapModel.zoom(delta, dc);
+	public void onZoom(float z, DisplayCoordinate dc) {
+
 	}
 
-	public void onZoom(float delta) {
-		this.mapModel.zoom(delta);
+	public void onZoom(float z) {
+
 	}
 
 	public void onLockUserPosition() {
@@ -106,9 +105,9 @@ public class MapController {
 	}
 
 	/**
-	 * Gibt den aktuellen Level Of Detail zur�ck
+	 * Gibt das aktuelle Level Of Detail zurück
 	 *
-	 * @return aktuellen Level ofDetail
+	 * @return aktuelles Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
 		return this.mapModel.getCurrentLevelOfDetail();

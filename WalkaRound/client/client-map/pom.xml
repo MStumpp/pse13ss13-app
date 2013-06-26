@@ -6,7 +6,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>client-map</artifactId>
-  <name>Karten-Model im Client</name>
+
   <dependencies>
   	<dependency>
   		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>

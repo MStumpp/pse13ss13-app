@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -35,14 +36,13 @@ public class CoordinateTest {
 		new Coordinate(0, -180.0000000000001);
 	}
 	@Test
-	(expected = IllegalArgumentException.class)
 	public void testLatOverflow() {
-		new Coordinate(90.00000000000001, 0);
+		assertEquals(new Coordinate(90.00000000000001, 0).getLatitude(), -89.99999999999999, 1e-13);
 	}
 	@Test
-	(expected = IllegalArgumentException.class)
 	public void testLatUnderflow() {
-		new Coordinate(-90.00000000000001, 0);
+		System.err.println(-1 % 180);
+		assertEquals(new Coordinate(-90.00000000000001, 0).getLatitude(), 89.99999999999999, 1);
 	}
 	@Test
 	public void testLonPersistence() {

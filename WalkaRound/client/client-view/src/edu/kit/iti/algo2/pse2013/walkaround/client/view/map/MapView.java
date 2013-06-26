@@ -26,9 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-//import android.widget.RelativeLayout;
 
-//import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
 
 public class MapView extends Activity {
 
@@ -171,8 +169,7 @@ public class MapView extends Activity {
 
 		// -----------------------TEST---------------------
 		Log.d(TAG_MAPVIEW, "User wird in die Mitte gestellt.");
-		this.setUserPositionOverlayImage(new DisplayCoordinate(
-				(float) size.x / 2, (float) size.y / 2), 180);
+		this.setUserPositionOverlayImage(new DisplayCoordinate((float) size.x / 2, (float) size.y / 2), 180);
 
 		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
 		DisplayWaypoint[] list = new DisplayWaypoint[3];
