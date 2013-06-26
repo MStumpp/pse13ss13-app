@@ -14,8 +14,8 @@ public class CoordinateUtilityTest {
 	@Test
 	public void testPixelDegreeConversionIntegerLevelsOfDetail() {
 		for (int i = 0; i <= 18; i++) {
-			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i), INTEGER_DELTA);
-			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i), INTEGER_DELTA);
+			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
+			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
 		}
 	}
 	/**
@@ -25,8 +25,8 @@ public class CoordinateUtilityTest {
 	@Test
 	public void testDegreePixelConversionIntegerLevelsOfDetail() {
 		for (int i = 0; i <= 18; i++) {
-			assertEquals(256 , CoordinateUtility.convertDegreesToPixels((float) (180 / Math.pow(2, i)), i), INTEGER_DELTA);
-			assertEquals(1 , CoordinateUtility.convertDegreesToPixels((float) (180 / (Math.pow(2, i) * 256)), i), INTEGER_DELTA);
+			assertEquals(256 , CoordinateUtility.convertDegreesToPixels((float) (180 / Math.pow(2, i)), i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
+			assertEquals(1 , CoordinateUtility.convertDegreesToPixels((float) (180 / (Math.pow(2, i) * 256)), i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
 		}
 	}
 	/**
@@ -36,8 +36,8 @@ public class CoordinateUtilityTest {
 	@Test
 	public void testPixelDegreeConversionFractionLevelsOfDetail() {
 		for (float i = 0; i <= 18; i+= Math.PI / 3.5) {
-			assertEquals(256 , CoordinateUtility.convertDegreesToPixels((float) (180 / Math.pow(2, i)), i), FRACTION_DELTA);
-			assertEquals(1 , CoordinateUtility.convertDegreesToPixels((float) (180 / (Math.pow(2, i) * 256)), i), FRACTION_DELTA);
+			assertEquals(256 , CoordinateUtility.convertDegreesToPixels((float) (180 / Math.pow(2, i)), i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);
+			assertEquals(1 , CoordinateUtility.convertDegreesToPixels((float) (180 / (Math.pow(2, i) * 256)), i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);
 		}
 	}
 	/**
@@ -47,8 +47,8 @@ public class CoordinateUtilityTest {
 	@Test
 	public void testDegreePixelConversionFractionLevelsOfDetail() {
 		for (float i = 0; i <= 18; i+= Math.PI / 3.5) {
-			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i), FRACTION_DELTA);
-			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i), FRACTION_DELTA);
+			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);
+			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);
 		}
 	}
 }

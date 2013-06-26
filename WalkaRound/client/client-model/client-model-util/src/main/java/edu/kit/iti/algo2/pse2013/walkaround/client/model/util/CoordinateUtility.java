@@ -7,6 +7,14 @@ import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public final class CoordinateUtility {
+	/**
+	 * Used when pixels are converted to degrees horizontally or vice versa
+	 */
+	public static boolean DIRECTION_HORIZONTAL = true;
+	/**
+	 * Used when pixels are converted to degrees vertically or vice versa
+	 */
+	public static boolean DIRECTION_VERTICAL = false;
 
 	/**
 	 * The average earth radius according to WGS84
@@ -52,10 +60,11 @@ public final class CoordinateUtility {
 	 *
 	 * @param pixels the given length in pixels
 	 * @param levelOfDetail the current level of detail
+	 * @param one of the constants {@link CoordinateUtility#HORIZONTAL} or {@link CoordinateUtility#VERTICAL}
 	 * @return the given length in degrees
 	 */
-	public static float convertPixelsToDegrees(float pixels, float levelOfDetail) {
-		return (float) (45 * pixels / Math.pow(2, levelOfDetail + 6));
+	public static float convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
+		return (float) (45 * pixels / Math.pow(2, levelOfDetail + 6)) * (isHorizontal ? 2 : 1);
 	}
 
 	/**
@@ -66,7 +75,7 @@ public final class CoordinateUtility {
 	 * @param levelOfDetail the current level of detail
 	 * @return the given length in degrees
 	 */
-	public static float convertDegreesToPixels(float degree, float levelOfDetail) {
-		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45);
+	public static float convertDegreesToPixels(float degree, float levelOfDetail, boolean isHorizontal) {
+		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
 	}
 }
