@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
+import java.util.List;
 import java.io.Serializable;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -21,7 +22,29 @@ public class Vertex extends Coordinate implements Serializable {
 		super(lat, lon);
 		this.ID = ID;
 	}
+
 	public long getID() {
 		return ID;
 	}
+
+	public List<Edge> getOutgoingEdges() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getDist() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setParent(Vertex current) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setDist(double distance) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -17,8 +18,16 @@
             android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
+            
+            <fragment
+                android:id="@+id/Fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.pullUpView" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

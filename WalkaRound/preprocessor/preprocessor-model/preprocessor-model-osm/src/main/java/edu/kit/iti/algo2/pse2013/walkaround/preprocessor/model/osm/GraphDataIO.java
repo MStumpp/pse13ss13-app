@@ -15,7 +15,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
+import android.util.Log;
+
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
 
 public class GraphDataIO implements Serializable {
 	/**
@@ -62,5 +65,9 @@ public class GraphDataIO implements Serializable {
 	}
 	public List<Edge> getEdges() {
 		return this.edges;
+	}
+	public Graph getGraph() {
+		Log.d(this.getClass().getSimpleName(), "getGraph()-Stub!");
+		return null;
 	}
 }
