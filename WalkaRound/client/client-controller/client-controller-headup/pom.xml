@@ -6,7 +6,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>client-controller-headup</artifactId>
-  <name>Headup-Controller auf Client (für ZoomButtons und Navi-Anweisungen)</name>
   <dependencies>
   	<dependency>
   		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
