@@ -9,24 +9,24 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-//Nötige Imports
+//NÃ¶tige Imports
 //Fragment Import
 //Preferences Import
 // Log Ausgabe
 
 /**
- * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs kümmert.
- * 
+ * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen MenÃ¼s kÃ¼mmert.
+ *
  * Diese Klasse nutzt folgende xml Files:
- * #layout.options_view - Das Grundlayout des Optionen Menüs.
- * 
- * Die hier gespeicherten und veränderten Informationen kann man mithilfe dieses Befehls abrufen:
- * 
+ * #layout.options_view - Das Grundlayout des Optionen MenÃ¼s.
+ *
+ * Die hier gespeicherten und verÃ¤nderten Informationen kann man mithilfe dieses Befehls abrufen:
+ *
  * import android.preference.PreferenceManager;
  * SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class OptionView extends Activity {
 
@@ -46,26 +46,26 @@ public class OptionView extends Activity {
 	}
 
 	/**
-	 * Ein Fragment der grapischen Oberfläche, dass das sich um die Anzeige des
-	 * Menüs kümmert.
-	 * 
-	 * Dieses Fragment beöntigt folgende xml Files:
-	 * #xml.optionen - Das xml File aus dem automatisch die Grapische Oberfäche entsteht. 
-	 * #string.options_array - Sprachdatei für Listen
+	 * Ein Fragment der grapischen OberflÃ¤che, dass das sich um die Anzeige des
+	 * MenÃ¼s kÃ¼mmert.
+	 *
+	 * Dieses Fragment beÃ¶ntigt folgende xml Files:
+	 * #xml.optionen - Das xml File aus dem automatisch die Grapische OberfÃ¤che entsteht.
+	 * #string.options_array - Sprachdatei fÃ¼r Listen
 	 * #string.options - Sprachdatei
-	 * 
+	 *
 	 * Info: Unter values-de werden die deutschsprachigen Dateien gespeichert.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	public static class OptionFragment extends PreferenceFragment {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			Log.d("Options",
-					"Optionen.xml wird als default Preference Manager ausgeführt.");
-			
+					"Optionen.xml wird als default Preference Manager ausgefï¿½hrt.");
+
 			PreferenceManager.setDefaultValues(getActivity(), R.xml.options,
 					false);
 			Log.d("Options", "Optionen werden gestartet.");

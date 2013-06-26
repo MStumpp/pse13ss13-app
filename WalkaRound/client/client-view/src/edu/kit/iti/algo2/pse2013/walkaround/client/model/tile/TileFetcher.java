@@ -7,11 +7,17 @@ import java.net.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.CurrentMapStyleModel;
+import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
+/**
+ * Testfälle kommen in {@code client-view}, da hier Android-Klassen verwendet werden.
+ * @author Florian Sch&auml;fer
+ */
 public class TileFetcher {
+	private static final String TAG = TileFetcher.class.getSimpleName();
+
 	private TileListener listener;
 
 	public void setTileListener(TileListener listener) {
@@ -19,74 +25,88 @@ public class TileFetcher {
 	}
 
 	/**
-	 * Downloads all tiles that are located inside the rectangle which has the
-	 * following two points as corners:
+	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
 	 * <ul>
-	 * <li>The geospatial coordinate {@code c1}</li>
-	 * <li>The geospatial coordinate {@code c2}<</li>
+	 * <li>A geospatial coordinate {@code topLeft} from inside the upper- and leftmost tile in the requested rectangle</li>
+	 * <li>{@code numTilesX} columns of tiles</li>
+	 * <li>{@code numTilesY} rows of tiles</li>
 	 * </ul>
-	 * The lower longtitude marks the western edge, the higher one the eastern
-	 * edge. The lower latitude marks the southern edge, the higher one the
-	 * northern edge. <br>
-	 * As a consequence, no rectangle can have the 180th longtitude running
-	 * straight through itself. Also the northpole and southpole can only be at
-	 * the northern or southern edge, never in between.
 	 *
-	 * @param lat1
-	 *            the latitude of point 1
-	 * @param lon1
-	 *            the longtitude of point 1
-	 * @param lat2
-	 *            the latitude of point 2
-	 * @param lon2
-	 *            the longtitude of point 2
-	 * @param zoom
-	 *            the zoom level of all the downloaded tiles
-	 * @param source
+	 * @param levelOfDetail the level of detail for all the downloaded tiles
+	 * @param topLeft a coordinate, which lies inside the tile which markks the upper left corner of the requested rectangle
+	 * @param numTilesX the number of tile-columns in the requested rectangle
+	 * @param numTilesY the number of tile-rows in the requested rectangle
 	 */
-	public boolean requestTiles(final int levelOfDetail, Coordinate c1,
-			Coordinate c2) {
-		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() < levelOfDetail
-				|| CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() > levelOfDetail) {
+	public boolean requestTiles(final int levelOfDetail, final Coordinate topLeft, final int numTilesX, final int numTilesY) {
+		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongtitude(), numTilesX, numTilesY));
+
+		int minLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
+		int maxLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();
+
+		Log.d(TAG, String.format("Check for valid LoD (between %d and %d).", minLevelOfDetail, maxLevelOfDetail));
+		if (maxLevelOfDetail < levelOfDetail || minLevelOfDetail > levelOfDetail) {
+			Log.d(TAG, "LoD invalid! => Exiting => not sending back any tiles.");
 			return false;
 		}
-		final int[] c1XY = TileUtility.getXYTileIndex(c1, levelOfDetail);
-		final int[] c2XY = TileUtility.getXYTileIndex(c2, levelOfDetail);
+		Log.d(TAG, "LoD valid!");
 
-		final int minX = Math.min(c1XY[0], c2XY[0]);
-		final int maxX = Math.max(c1XY[0], c2XY[0]);
-		final int minY = Math.min(c1XY[1], c2XY[1]);
-		final int maxY = Math.max(c1XY[1], c2XY[1]);
+		Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
+		final int[] startTileIndex = TileUtility.getXYTileIndex(topLeft, levelOfDetail);
 
-		// TODO: Make asynchronous from here on
-		for (int x = minX; x <= maxX; x++) {
-			for (int y = minY; y <= maxY; y++) {
-				try { // TODO: Find good solution for exception-handling
-					requestTile(x, y, levelOfDetail);
-				} catch (MalformedURLException mue) {
-					mue.printStackTrace();
-				} catch (IOException mue) {
-					mue.printStackTrace();
-				}
+		Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
+		int tileGridWith = (int) Math.pow(2, levelOfDetail);
+		for (int x = 0; x < numTilesX; x++) {
+			for (int y = 0; y < numTilesY; y++) {
+				Thread t = new Thread(new SingleTileFetcher((startTileIndex[0] + x) % tileGridWith, (startTileIndex[1] + y) % tileGridWith, levelOfDetail));
+				t.start();
 			}
 		}
+
 		return true;
 	}
 
-	/**
-	 * Downloads the tile specified by the given parameters
-	 *
-	 * @param source the source, where the tiles come from
-	 * @param x the column index of the tile
-	 * @param y	the row index of the tile
-	 * @param zoom	the zoom level of the tile
-	 * @throws MalformedURLException
-	 * 		if the method tried to fetch the tile from the server with a broken URL
-	 * @throws IOException	if an error occured while reading
-	 */
-	public void requestTile(final int x, final int y, final int levelOfDetail) throws MalformedURLException, IOException {
-		final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
-		Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
-		listener.receiveTile(result, x, y, levelOfDetail);
+	private class SingleTileFetcher implements Runnable {
+
+		private int x;
+		private int y;
+		private int levelOfDetail;
+
+		/**
+		 * Initializes the Fetcher, which downloads a single tile and sends it to the tilelistener of the surrounding class.
+		 *
+		 * @param x the column index of the tile
+		 * @param y	the row index of the tile
+		 * @param levelOfDetail	the level of detail of the tile (aka zoomlevel)
+		 * @throws MalformedURLException if the fetcher tried to fetch the tile from the server with a broken URL
+		 * @throws IOException if an error occured while reading
+		 */
+		public SingleTileFetcher(int x, int y, int levelOfDetail) {
+			this.x = x;
+			this.y = y;
+			this.levelOfDetail = levelOfDetail;
+		}
+
+		@Override
+		public void run() {
+			final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
+			try {
+				if (x % 2 == 1) {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				Bitmap result = BitmapFactory.decodeStream(new BufferedInputStream(new URL(urlString).openStream()));
+				Log.d(TAG, String.format("Send to TileListener: %s (%s/%s/%s.png)", result, levelOfDetail, x, y));
+				listener.receiveTile(result, x, y, levelOfDetail);
+			} catch (MalformedURLException e) {
+				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, urlString));
+			} catch (IOException e) {
+				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, urlString));
+			}
+		}
 	}
+
 }

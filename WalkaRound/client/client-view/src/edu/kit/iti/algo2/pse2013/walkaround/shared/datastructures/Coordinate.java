@@ -9,15 +9,15 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 public class Coordinate {
 
 	/**
-	 * longitude of this Coordinate.
+	 * latitude of this Coordinate.
 	 */
-	private final double lon;
+	private double lat;
 
 
 	/**
-	 * latitude of this Coordinate.
+	 * longitude of this Coordinate.
 	 */
-	private final double lat;
+	private double lon;
 
 
 	/**
@@ -29,43 +29,38 @@ public class Coordinate {
 	/**
 	 * Creates an instance of Coordinate.
 	 *
-	 * @param lon Longitude of the Coordinate.
 	 * @param lat Latitude of the Coordinate.
+	 * @param lon Longitude of the Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
-	public Coordinate(double lon, double lat) {
-		this(lon, lat, null);
+	public Coordinate(double lat, double lon) {
+		this(lat, lon, null);
+	}
+	public Coordinate(Coordinate reference, double latDelta, double lonDelta) {
+		this(reference.getLatitude() + latDelta, reference.getLongtitude() + lonDelta);
 	}
 
 
 	/**
 	 * Creates an instance of Coordinate.
 	 *
-	 * @param lon Longitude of the Coordinate.
 	 * @param lat Latitude of the Coordinate.
+	 * @param lon Longitude of the Coordinate.
 	 * @param crossInfo CrossingInformation for this Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
-	public Coordinate(double lon, double lat, CrossingInformation crossInfo) {
-		if (Math.abs(lon) > 180.d)
-			throw new IllegalArgumentException("longitude has to be between -180 and 180");
+	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
+		/* TODO Flo meinte das wäre sinnlos .... 
 		if (Math.abs(lat) > 90.d)
 			throw new IllegalArgumentException("latitude has to be between -90 and 90");
-		this.lon = lon;
-		this.lat = lat;
+		if (Math.abs(lon) > 180.d)
+			throw new IllegalArgumentException("longitude has to be between -180 and 180");
+		*/
+		setLatitude(lat);
+		setLongtitude(lon);
+		
 		this.crossInfo = crossInfo;
 	}
-
-
-	/**
-	 * Returns longitude of this Coordinate.
-	 *
-	 * @return double.
-	 */
-	public double getLongtitude() {
-		return lon;
-	}
-
 
 	/**
 	 * Returns latitude of this Coordinate.
@@ -76,6 +71,32 @@ public class Coordinate {
 		return lat;
 	}
 
+	/**
+	 * Returns longitude of this Coordinate.
+	 *
+	 * @return double.
+	 */
+	public double getLongtitude() {
+		return lon;
+	}
+
+	/**
+	 * Returns latitude of this Coordinate.
+	 *
+	 * @return double.
+	 */
+	public void setLatitude(double lat) {
+		this.lat = (lat + 90) % 180 - 90;
+	}
+
+	/**
+	 * Returns longitude of this Coordinate.
+	 *
+	 * @return double.
+	 */
+	public void setLongtitude(double lon) {
+		this.lon = (lon + 180) % 360 - 180;
+	}
 
 	/**
 	 * Returns CrossingInformation for this Coordinate.
@@ -85,5 +106,4 @@ public class Coordinate {
 	public CrossingInformation getCrossingInformation() {
 		return crossInfo;
 	}
-
 }
