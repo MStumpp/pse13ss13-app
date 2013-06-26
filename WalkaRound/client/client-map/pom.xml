@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-    <artifactId>client-model</artifactId>
+    <artifactId>client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>client-model-map</artifactId>
+  <artifactId>client-map</artifactId>
   <name>Karten-Model im Client</name>
   <dependencies>
   	<dependency>
@@ -16,6 +16,11 @@
   	<dependency>
   		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
   		<artifactId>client-model-tile</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+  		<artifactId>client-view</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>

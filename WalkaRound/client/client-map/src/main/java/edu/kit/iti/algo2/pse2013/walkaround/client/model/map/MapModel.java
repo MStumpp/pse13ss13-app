@@ -9,6 +9,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -89,8 +90,18 @@ public class MapModel implements TileListener {
 	 * @param c
 	 */
 	public void shift(Coordinate c) {
-		this.upperLeft = new Coordinate(c.getLatitude(),c.getLongtitude());
-		this.tileFetcher.requestTiles((int)this.getCurrentLevelOfDetail(), upperLeft, bottomRight);
+		refetchTiles();
+	}
+
+	public void refetchTiles() {
+		this.upperLeft = getUpperLeft();
+		int numTilesX = (int) Math.ceil(size.x / getCurrentTileWidth());
+		int numTilesY = (int) Math.ceil(size.y / getCurrentTileWidth());
+		this.tileFetcher.requestTiles(Math.round(this.getCurrentLevelOfDetail()), getUpperLeft(), numTilesX, numTilesY);
+	}
+
+	private Coordinate getUpperLeft() {
+		return upperLeft;
 	}
 
 	/**
@@ -111,7 +122,7 @@ public class MapModel implements TileListener {
 	 *
 	 */
 	public void setNewStyle() {
-		this.tileFetcher.requestTiles((int)this.currentLevelOfDetail, this.upperLeft, this.bottomRight);
+		refetchTiles();
 	}
 
 	/**
@@ -121,7 +132,7 @@ public class MapModel implements TileListener {
 	 */
 	public void zoom(float levelOfDetail, Coordinate c) {
 		this.currentLevelOfDetail = levelOfDetail;
-		this.tileFetcher.requestTiles((int)this.currentLevelOfDetail, this.upperLeft, this.bottomRight);
+		refetchTiles();
 	}
 
 	/**
@@ -166,6 +177,13 @@ public class MapModel implements TileListener {
 	 */
 	public Location getNearbyLocation(Coordinate c) {
 		return null;
+	}
+
+	/**
+	 * @return the current tile-width for the current level of detail
+	 */
+	public float getCurrentTileWidth() {
+		return (float) (256*Math.pow(2, getCurrentLevelOfDetail()) / Math.pow(2, Math.round(getCurrentLevelOfDetail())));
 	}
 
 	@Override
