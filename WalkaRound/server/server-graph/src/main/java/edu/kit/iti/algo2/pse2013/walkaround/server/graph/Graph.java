@@ -30,7 +30,7 @@ public final class Graph {
      * @return Edge the Edge with the given id.
      */
     public Edge getEdgeByID(int id) {
-        return new Edge(0.d, 0.d, 0.d, 0.d);
+        return new Edge(1, new Vertex(1, 1, 1), new Vertex(42, 42, 42));
     }
 
 
@@ -41,7 +41,7 @@ public final class Graph {
      * @return Vertex the Vertex with the given id.
      */
     public Vertex getVertexByID(int id) {
-        return new Vertex(1);
+        return new Vertex(1, 1, 1);
     }
 
 

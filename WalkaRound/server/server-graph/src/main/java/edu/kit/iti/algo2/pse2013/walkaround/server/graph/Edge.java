@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 /**
  * This class represents an egde contained in a graph. An edge has two coordinates,
  * each represented by longitude and latitude values.
@@ -10,10 +11,15 @@ import java.util.ArrayList;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Edge {
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+/**
+ * This class represents an egde contained in a graph. An edge has two coordinates,
+ * each represented by longitude and latitude values.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
 
-public class Edge implements Serializable {
+public final class Edge implements Serializable {
 	/**
 	 * Temporary Serial version ID as long as Java serialization is used
 	 */
