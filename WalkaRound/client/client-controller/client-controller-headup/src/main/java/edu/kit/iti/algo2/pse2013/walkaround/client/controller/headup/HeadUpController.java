@@ -7,9 +7,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 /**
  * Diese klassebehandelt und kontrolliert die Aus/Eingabe des HeadUpView
  * Elementes
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class HeadUpController {
 
@@ -28,9 +28,9 @@ public class HeadUpController {
 
 	/**
 	 * initialisiert den HeadUpController
-	 * 
+	 *
 	 * @param headUpView
-	 *            die n�tige Referenz zum HeadUpView
+	 *            die nötige Referenz zum HeadUpView
 	 */
 	private HeadUpController(HeadUpView headUpView) {
 		this.headUpView = headUpView;
@@ -40,7 +40,7 @@ public class HeadUpController {
 
 	/**
 	 * initialisiert einmal den HeadUpController
-	 * 
+	 *
 	 * @param headUpView
 	 *            die noetige Instanz des HeadUpViews
 	 * @return eine Instanz des headUpControllers
@@ -54,7 +54,7 @@ public class HeadUpController {
 
 	/**
 	 * gibt eine Instanz des HeadUpControllers zur�ck
-	 * 
+	 *
 	 * @return HeadUpController oder null fall initializes nicht aufgerufen
 	 *         wurde
 	 */
@@ -103,7 +103,7 @@ public class HeadUpController {
 
 	/**
 	 * Updatet das Piktogramm anhand einer Id.
-	 * 
+	 *
 	 * @param piktogramm
 	 *            id des Piktogramm.
 	 */
@@ -113,7 +113,7 @@ public class HeadUpController {
 
 	/**
 	 * Updatet den Navigationstext.
-	 * 
+	 *
 	 * @param text
 	 *            neuer Text
 	 */
@@ -123,7 +123,7 @@ public class HeadUpController {
 
 	/**
 	 * Updatet die Geschwindigkeit. Eingabe in m/s
-	 * 
+	 *
 	 * @param speed
 	 *            neue Geschwindigkeit
 	 */
@@ -133,7 +133,7 @@ public class HeadUpController {
 
 	/**
 	 * Updatet den noch zulaufenden Weg. Eingabe in m
-	 * 
+	 *
 	 * @param waytogo
 	 *            noch zulaufenenden Weg.
 	 */
@@ -143,7 +143,7 @@ public class HeadUpController {
 
 	/**
 	 * Updatet die gelaufenden Weg Eingabe in m
-	 * 
+	 *
 	 * @param wayPassed
 	 *            gelaufender Weg
 	 */
@@ -154,7 +154,7 @@ public class HeadUpController {
 
 	/**
 	 * Updatet die noch zu laufende Zeit Eingabe in s
-	 * 
+	 *
 	 * @param timeToGo
 	 *            noch zu laufende zeit
 	 */
@@ -164,7 +164,7 @@ public class HeadUpController {
 
 	/**
 	 * updatet die vergangene Zeit. Eingabe in s
-	 * 
+	 *
 	 * @param timePassed
 	 *            vergangene Zeit
 	 */
@@ -176,7 +176,7 @@ public class HeadUpController {
 	/**
 	 * wechselt zwischen den Ansichts Modi. true Karte ist auf User
 	 * zentriert(default) false Karte ist frei beweglich
-	 * 
+	 *
 	 * @param b
 	 *            der Modi
 	 */
