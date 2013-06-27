@@ -95,12 +95,24 @@ public class MapController {
 
 	}
 
-	public void onZoom(float z, DisplayCoordinate dc) {
-
+	/**
+	 * Zoom by a delta to a DisplayCoordinate
+	 * 
+	 * @param delta to the new ZoomLevel
+	 * @param dc the DisplayCoordinate 
+	 */
+	public void onZoom(float delta, DisplayCoordinate dc) {
+		this.mapModel.zoom(delta, dc);
 	}
 
-	public void onZoom(float z) {
-
+	/**
+	 * Zoom by a delta
+	 * 
+	 * @param delta to the new ZoomLevel
+	 */
+	public void onZoom(float delta) {
+		Log.d(MAP_CONTROLLER, "Gibt ZoomDelta " + delta + " zu MapModel weiter");
+		this.mapModel.zoom(delta);
 	}
 
 	public void onLockUserPosition() {

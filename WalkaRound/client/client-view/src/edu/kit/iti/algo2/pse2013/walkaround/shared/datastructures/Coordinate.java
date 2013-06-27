@@ -106,4 +106,9 @@ public class Coordinate {
 	public CrossingInformation getCrossingInformation() {
 		return crossInfo;
 	}
+
+	@Override
+	public String toString() {
+		return "Coordinate Latidude: " + this.lat + " Longitude " + this.lon;
+	}
 }

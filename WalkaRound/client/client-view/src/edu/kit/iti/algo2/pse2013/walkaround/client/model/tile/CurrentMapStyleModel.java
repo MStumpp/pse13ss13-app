@@ -9,7 +9,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
  */
 public class CurrentMapStyleModel {
 
-	private final static MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPQUEST;
+	private final static MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPNIK;
 	private static CurrentMapStyleModel currentMapModel;
 	private MapStyle style;
 

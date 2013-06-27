@@ -129,12 +129,12 @@ public class MapModel implements TileListener {
 		}
 
 		this.generateMapOverlayImage();
-		Log.d(TAG_MAP_MODEL,
+		/*Log.d(TAG_MAP_MODEL,
 				"Tile werden angefordert: "
 						+ this.tileFetcher.requestTiles(
 								Math.round(currentLevelOfDetail), upperLeft,
 								xAmount, yAmount));
-		this.fetchTiles();
+		this.fetchTiles();*/
 		Log.d(TAG_MAP_MODEL, "Map Model wurde initialisiert ");
 	}
 
@@ -195,6 +195,7 @@ public class MapModel implements TileListener {
 
 		Log.d(TAG_MAP_MODEL, "LOD " + currentLevelOfDetail + " x "
 				+ xZoomBorder + " y " + yZoomBorder);
+		Log.d(TAG_MAP_MODEL, "MapStyle: " + CurrentMapStyleModel.getInstance().getCurrentMapStyle().getName());
 
 		if (this.currentLevelOfDetail < this.xZoomBorder
 				&& this.currentLevelOfDetail < this.yZoomBorder) {
@@ -222,7 +223,7 @@ public class MapModel implements TileListener {
 			return;
 		}
 
-		Log.d(TAG_MAP_MODEL, "generiere Bitmap grÃ¶ÃŸer Display ");
+		Log.d(TAG_MAP_MODEL, "create Bitmap greater than Display ");
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 		this.fetchTiles();
 
@@ -256,6 +257,7 @@ public class MapModel implements TileListener {
 	 * @param c
 	 */
 	public boolean zoom(float delta, DisplayCoordinate c) {
+		Log.d(TAG_MAP_MODEL, "ZOOM um " +delta + " auf " + c.toString());
 		return this.zoom(delta, this.computeCoordinateByDisplayCoordinate(c));
 	}
 
@@ -265,44 +267,50 @@ public class MapModel implements TileListener {
 	 */
 	public boolean zoom(float delta) {
 		this.computeMid();
+		//Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + mid.toString());
 		return this.zoom(delta, mid);
 	}
 
 	/**
 	 *
-	 * @param lod
+	 * @param delta
 	 * @param c
 	 */
 	public boolean zoom(float delta, Coordinate c) {
-
+		
+		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + mid.toString());
+		
 		//TODO
-
-		Log.d(TAG_MAP_MODEL, "ZOOM um " +delta);
+		
 		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle();
 		final float nextLevelOfDetail = this.currentLevelOfDetail + delta;
-
+		
+		Log.d(TAG_MAP_MODEL, "ZOOM von " + this.currentLevelOfDetail + " auf " + nextLevelOfDetail + " wird geprüft");
 		if (nextLevelOfDetail > mapStyle.getMaxLevelOfDetail()
 				|| nextLevelOfDetail < mapStyle.getMinLevelOfDetail()) {
+			Log.d(TAG_MAP_MODEL, "ZOOM wird abgebrochen");
 			return false;
 		}
 
+		Log.d(TAG_MAP_MODEL, "ZOOM auf " + nextLevelOfDetail + " wird ausgeführt");
 		this.currentLevelOfDetail = nextLevelOfDetail;
 
-		this.upperLeft = new Coordinate(c,
-				CoordinateUtility.convertDegreesToPixel(c.getLatitude(),
-						this.currentLevelOfDetail),
-				CoordinateUtility.convertDegreesToPixel(c.getLongtitude(),
-						this.currentLevelOfDetail));
+		final double deltaL = c.getLatitude() - this.upperLeft.getLatitude();
+		final double deltaLong = c.getLongtitude() - this.upperLeft.getLongtitude();
+		
+		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaL + " " + deltaLong);
+		
+		float deltaLatitude = CoordinateUtility.convertDegreesToPixel(deltaL, nextLevelOfDetail);
+		float deltaLongitude = CoordinateUtility.convertDegreesToPixel(deltaLong, nextLevelOfDetail);
+		deltaLatitude = CoordinateUtility.convertPixelsToDegrees(-deltaLatitude, nextLevelOfDetail);
+		deltaLongitude = CoordinateUtility.convertPixelsToDegrees(-deltaLongitude, nextLevelOfDetail);
 
+		Log.d(TAG_MAP_MODEL, "UpperLeft war: " + this.upperLeft);
+		this.upperLeft = new Coordinate(c,-deltaLatitude,-deltaLongitude);
+		Log.d(TAG_MAP_MODEL, "Neuer upperLeft ist: " + this.upperLeft);
+		
 		this.generateMapOverlayImage();
-		this.fetchTiles();
-		Log.d(TAG_MAP_MODEL,
-				"Tile werden angefordert: "
-						+ this.tileFetcher.requestTiles(
-								Math.round(currentLevelOfDetail), upperLeft,
-								xAmount, yAmount));
-
 		return true;
 	}
 
@@ -359,7 +367,7 @@ public class MapModel implements TileListener {
 
 	@Override
 	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-		Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
+		//Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
 
 		if (tile != null && levelOfDetail == currentLevelOfDetail) {
 

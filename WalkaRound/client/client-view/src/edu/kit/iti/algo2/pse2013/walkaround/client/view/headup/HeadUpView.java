@@ -72,6 +72,7 @@ public class HeadUpView extends Fragment {
 		// -----------------------------------------------
 		Log.d(HEADUP, "Es wird mit dem headUpController verbunden");
 		headUpController = HeadUpController.initializes(this);
+		Log.d(HEADUP, "Controller wurde initialisiert: " + (headUpController != null));
 
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -113,7 +114,7 @@ public class HeadUpView extends Fragment {
 		// -----------------------------------------------
 		pikto = (ImageView) this.getActivity().findViewById(R.id.headup_pikto);
 
-		Log.d(HEADUP, "View werden von der gr��e angepasst");
+		Log.d(HEADUP, "View wird angepasst");
 
 		plus.getLayoutParams().width = size.x / 5;
 		plus.getLayoutParams().height = size.x / 10;
@@ -324,7 +325,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(plus)) {
-				Log.d(HEADUP_TOUCH, "Plus wird gedr�ckt");
+				Log.d(HEADUP_TOUCH, "plus i pressed");
 				headUpController.zoomInOneLevel();
 			}
 			return false;
@@ -343,7 +344,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(minus)) {
-				Log.d(HEADUP_TOUCH, "Minus wird gedr�ckt");
+				Log.d(HEADUP_TOUCH, "Minus is pressed");
 				headUpController.zoomOutOneLevel();
 			}
 			return false;
