@@ -14,9 +14,9 @@ public interface RouteInfo {
 	
 	public Waypoint getActiveWaypoint();
 	
-	public LinkedList<Route> getRoutes();
-	
 	public LinkedList<Waypoint> getWaypoints();
+	
+	public LinkedList<Coordinates> getCoordinates();
 	
 	public boolean containsWaypoint(Waypoint wp);
 	

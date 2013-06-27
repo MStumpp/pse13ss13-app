@@ -5,6 +5,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -18,9 +19,9 @@ public class ShortestPathProcessorTest {
     @Test
     public void testPriorityQueueOrderPreservation() {
         Vertex v1 = new Vertex(1.d, 2.d);
-        v1.setCurrentLength(10.0);
+        v1.setCurrentLength(10.d);
         Vertex v2 = new Vertex(1.d, 2.d);
-        v2.setCurrentLength(11.0);
+        v2.setCurrentLength(11.d);
 
         // set up the queue with the source vertex
         PriorityQueue<Vertex> queue = new PriorityQueue<>(10, new Comparator<Vertex>() {
@@ -36,9 +37,12 @@ public class ShortestPathProcessorTest {
         });
         queue.add(v1);
         queue.add(v2);
-
         System.out.println(v1.toString());
         System.out.println(v2.toString());
+
+        System.out.println(queue.peek().toString());
+        v1.setCurrentLength(12.d);
+        System.out.println(queue.peek().toString());
     }
 
 }
