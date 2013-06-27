@@ -2,15 +2,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-/**
- * This class represents an egde contained in a graph. An edge has two coordinates,
- * each represented by longitude and latitude values.
- *
- * @author Matthias Stumpp
- * @version 1.0
- */
+
 /**
  * This class represents an egde contained in a graph. An edge has two coordinates,
  * each represented by longitude and latitude values.
@@ -20,36 +14,149 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
  */
 
 public final class Edge implements Serializable {
+
 	/**
 	 * Temporary Serial version ID as long as Java serialization is used
 	 */
 	private static final long serialVersionUID = 3182638429343198592L;
 
-	private long id;
-	private ArrayList<Vertex> vertices = new ArrayList<>();
 
-	public Edge(long id, Vertex a, Vertex b) {
-		this.id = id;
-		vertices.add(a);
-		vertices.add(b);
+    /**
+     * Internally used ID of Edge.
+     */
+    private int id;
+
+
+    /**
+     * Tail of this Edge.
+     */
+    private final Vertex tail;
+
+
+    /**
+     * Head of this Edge.
+     */
+    private final Vertex head;
+
+
+    /**
+     * OSM ID of that Edge.
+     */
+    private transient long osmID;
+
+
+    /**
+     * ID counter for internal id.
+     */
+    private static int idCounter = 0;
+
+
+    /**
+     * Distance betwen tail and head in meters.
+     */
+    private transient double length;
+
+
+    /**
+     * Creates an instance of Edge.
+     *
+     * @param tail Tail of Edge.
+     * @param head Head of Edge.
+     */
+    public Edge(Vertex tail, Vertex head) {
+        this(tail, head, -1);
+    }
+
+
+    /**
+     * Creates an instance of Edge.
+     *
+     * @param tail Tail of Edge.
+     * @param head Head of Edge.
+     * @param osmID Corresponding OSM ID of this Edge.
+     * @throws IllegalArgumentException If tail or head are null.
+     */
+	public Edge(Vertex tail, Vertex head, long osmID) {
+        if (tail == null || head == null)
+            throw new IllegalArgumentException("tail and head must not be null");
+		this.tail = tail;
+        this.head = head;
+        this.osmID = osmID;
+        id = idCounter;
+        idCounter++;
+        length = computeLength();
 	}
 
-	public long getId() {
+
+    /**
+     * Returns id of this Edge.
+     *
+     * @return int.
+     */
+	public int getID() {
 		return id;
 	}
 
-	public double getLength() {
-		return CoordinateUtility.calculateDifferenceInMeters(vertices.get(0), vertices.get(1));
+
+    /**
+     * Returns tail of this Edge.
+     *
+     * @return Vertex.
+     */
+    public Vertex getTail() {
+        return tail;
+    }
+
+
+    /**
+     * Returns head of this Edge.
+     *
+     * @return Vertex.
+     */
+    public Vertex getHead() {
+        return head;
+    }
+
+
+    /**
+     * Returns tail and head as list.
+     *
+     * @return List<Vertex>.
+     */
+	public List<Vertex> getVertices() {
+        List<Vertex> result = new ArrayList<>();
+        result.add(tail);
+        result.add(head);
+		return result;
 	}
 
-	public ArrayList<Vertex> getVertices() {
-		return vertices;
-	}
+
+    /**
+     * Returns distance between tail and head.
+     *
+     * @return double.
+     */
+    public double getLength() {
+        return length;
+    }
 
 
-	public Vertex getTarget() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * Returns distance between tail and head in meters using Haversine formula.
+     * Source: http://stackoverflow.com/questions/120283/working-with-latitude-longitude-values-in-java
+     *
+     * @return double.
+     */
+    private double computeLength() {
+        double earthRadius = 6371009;
+        double dLat = Math.toRadians(head.getLatitude() - tail.getLatitude());
+        double dLng = Math.toRadians(head.getLongtitude() - tail.getLongtitude());
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(tail.getLatitude())) * Math.cos(Math.toRadians(head.getLatitude()));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadius * c;
+    }
 
 }

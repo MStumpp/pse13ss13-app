@@ -2,12 +2,13 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 
+import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -71,39 +72,71 @@ public class ShortestPathProcessor {
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate1 and coordinate2 must be provided");
 
-        // for all nodes set dist to infinite and parent to null
-        graph.forEachVertexSetKey("d", Double.POSITIVE_INFINITY);
-        graph.forEachVertexSetKey("p", null);
+        //int startVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate1);
+        //int endVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate2);
 
-        int startVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate1);
-        int endVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate2);
+        graph.resetGraph();
 
-        PriorityQueue<Vertex> queue = new PriorityQueue<>();
-        queue.add(graph.getVertexByID(startVertexId));
+        int sourceVertexId = 0;
+        int targetVertexId = 1000;
 
+        // get source and target Vertex objects
+        Vertex sourceVertex = null, targetVertex = null;
+        try {
+            sourceVertex = graph.getVertexByID(sourceVertexId);
+            targetVertex = graph.getVertexByID(targetVertexId);
+        } catch (NoVertexForIDExistsException e) {
+            e.printStackTrace();
+        }
+
+        if (sourceVertex == null || targetVertex == null)
+            return null;
+
+        // set up the queue with the source vertex
+        PriorityQueue<Vertex> queue = new PriorityQueue<>(10, new Comparator<Vertex>() {
+            @Override
+            public int compare(Vertex v1, Vertex v2) {
+                if (v1.getCurrentLength() >  v2.getCurrentLength()){
+                    return 1;
+                } else if (v1.getCurrentLength() < v2.getCurrentLength()){
+                    return -1;
+                } else
+                    return 0;
+            }
+        });
+        queue.add(sourceVertex);
+
+        // update parent and currentLengths
         Vertex current;
         double distance;
         while (!queue.isEmpty()) {
             current = queue.poll();
             for (Edge edge : current.getOutgoingEdges()) {
-                distance = current.getDist() + edge.getLength();
-                if (distance < edge.getTarget().getDist()) {
-                    edge.getTarget().setDist(distance);
-                    edge.getTarget().setParent(current);
-                    if (queue.contains(edge.getTarget())) {
-                        queue.remove(edge.getTarget());
-                    }
-                    queue.add(edge.getTarget());
+                distance = current.getCurrentLength() + edge.getLength();
+                if (distance < edge.getHead().getCurrentLength()) {
+                    edge.getHead().setCurrentLength(distance);
+                    edge.getHead().setParent(current);
+                    if (!queue.contains(edge.getHead()))
+                        queue.add(edge.getHead());
                 }
             }
+            if (current.equals(targetVertex))
+                break;
         }
 
-        List<Coordinate> coordinates = new LinkedList<Coordinate>();
-        coordinates.add(new Coordinate(12.12, 12.12));
-        coordinates.add(new Coordinate(13.13, 13.13));
-        coordinates.add(new Coordinate(14.14, 14.14));
-        // TODO: change constructor of route from LinkedList to List, then remove the cast
-        return new RouteInfoTransfer((LinkedList<Coordinate>) coordinates);
+        // get the list of coordinates
+        LinkedList<Coordinate> result = new LinkedList<>();
+        result.add(targetVertex);
+        Vertex currentParent = targetVertex.getParent();
+        while (!currentParent.equals(sourceVertex)) {
+            result.addFirst(currentParent);
+            currentParent = currentParent.getParent();
+        }
+        result.addFirst(currentParent);
+
+        // set up route transfer and return
+        RouteInfoTransfer route = new RouteInfoTransfer(result);
+        return route;
     }
 
 }
