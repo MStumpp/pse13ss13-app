@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
@@ -76,6 +77,9 @@ public class Vertex extends Coordinate implements Serializable {
     public Vertex(double lat, double lon, long osmID) {
 		super(lat, lon);
 		this.osmID = osmID;
+        outgoingEdges = new ArrayList<>();
+        parent = null;
+        currentLength = Double.POSITIVE_INFINITY;
 	}
 
 
@@ -150,6 +154,17 @@ public class Vertex extends Coordinate implements Serializable {
      */
     public void setCurrentLength(double currentLength) {
         this.currentLength = currentLength;
+    }
+
+
+    /**
+     * Returns a String representation of Vertex.
+     */
+    @Override
+    public String toString() {
+        return "Vertex - id: " + id + " - lat: " +
+                getLatitude() + " - lon: " + getLongtitude() + " - current length: " +
+                getCurrentLength() + " - parent: " + getParent().getID();
     }
 
 }

@@ -33,6 +33,8 @@ public final class Graph {
         for (Edge edge : edges) {
             if (vertices[edge.getTail().getID()] == null)
                 vertices[edge.getTail().getID()] = edge.getTail();
+            if (vertices[edge.getHead().getID()] == null)
+                vertices[edge.getHead().getID()] = edge.getHead();
             edge.getTail().addOutgoingEdge(edge);
         }
     }
@@ -43,11 +45,14 @@ public final class Graph {
      *
      * @param edges List of Edges to build a Graph.
      * @return Graph.
+     * @throws EmptyListOfEdgesException if list of edges is empty.
      */
     // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
-    public static Graph getInstance(List<Edge> edges) {
-        if (edges == null || edges.size() == 0)
-            throw new IllegalArgumentException("list of edges must not be null and at least of size 1");
+    public static Graph getInstance(List<Edge> edges) throws EmptyListOfEdgesException {
+        if (edges == null)
+            throw new IllegalArgumentException("list of edges must not be null");
+        if (edges.size() == 0)
+            throw new EmptyListOfEdgesException("list of edges must be at least of size 1");
         if (instance == null)
             instance = new Graph(edges);
         return instance;
@@ -61,6 +66,8 @@ public final class Graph {
      * @return Edge the Edge with the given id.
      */
     public Edge getEdgeByID(int id) {
+        if (id < 0)
+            throw new IllegalArgumentException("id must not be smaller then 0");
         return null;
     }
 
@@ -70,10 +77,13 @@ public final class Graph {
      *
      * @param id The id of the Vertex to be returned.
      * @return Vertex the Vertex with the given id.
+     * @throws NoVertexForIDExistsException if no Vertex for given ID exists.
      */
-    public Vertex getVertexByID(int id) {
-        if (id < 0 || id > Vertex.getIDCount()-1)
-            throw new IllegalArgumentException("id must not be smaller then 0 and not greater than " + (Vertex.getIDCount()-1));
+    public Vertex getVertexByID(int id) throws NoVertexForIDExistsException {
+        if (id < 0)
+            throw new IllegalArgumentException("id must not be smaller then 0");
+        if (id > Vertex.getIDCount()-1)
+            throw new NoVertexForIDExistsException("id must not be greater than " + (Vertex.getIDCount()-1));
         return vertices[id];
     }
 
