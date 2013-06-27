@@ -37,12 +37,12 @@ public class ShortestPathProcessorTest {
         });
         queue.add(v1);
         queue.add(v2);
-        System.out.println(v1.getID());
-        System.out.println(v2.getID());
+        System.out.println(v1.toString());
+        System.out.println(v2.toString());
 
         System.out.println(queue.peek().toString());
         v1.setCurrentLength(12.d);
-        System.out.println(queue.peek().getID());
+        System.out.println(queue.peek().toString());
     }
 
 }
