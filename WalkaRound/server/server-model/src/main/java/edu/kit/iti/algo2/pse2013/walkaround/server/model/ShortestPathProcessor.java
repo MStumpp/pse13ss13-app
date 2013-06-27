@@ -71,32 +71,28 @@ public class ShortestPathProcessor {
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate1 and coordinate2 must be provided");
 
-        // for all nodes set dist to infinite and parent to null
-        graph.forEachVertexSetKey("d", Double.POSITIVE_INFINITY);
-        graph.forEachVertexSetKey("p", null);
-
         int startVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate1);
         int endVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate2);
 
         PriorityQueue<Vertex> queue = new PriorityQueue<>();
         queue.add(graph.getVertexByID(startVertexId));
 
-        Vertex current;
-        double distance;
-        while (!queue.isEmpty()) {
-            current = queue.poll();
-            for (Edge edge : current.getOutgoingEdges()) {
-                distance = current.getDist() + edge.getLength();
-                if (distance < edge.getTarget().getDist()) {
-                    edge.getTarget().setDist(distance);
-                    edge.getTarget().setParent(current);
-                    if (queue.contains(edge.getTarget())) {
-                        queue.remove(edge.getTarget());
-                    }
-                    queue.add(edge.getTarget());
-                }
-            }
-        }
+//        Vertex current;
+//        double distance;
+//        while (!queue.isEmpty()) {
+//            current = queue.poll();
+//            for (Edge edge : current.getOutgoingEdges()) {
+//                distance = current.getDist() + edge.getLength();
+//                if (distance < edge.getTarget().getDist()) {
+//                    edge.getTarget().setDist(distance);
+//                    edge.getTarget().setParent(current);
+//                    if (queue.contains(edge.getTarget())) {
+//                        queue.remove(edge.getTarget());
+//                    }
+//                    queue.add(edge.getTarget());
+//                }
+//            }
+//        }
 
         List<Coordinate> coordinates = new LinkedList<Coordinate>();
         coordinates.add(new Coordinate(12.12, 12.12));
