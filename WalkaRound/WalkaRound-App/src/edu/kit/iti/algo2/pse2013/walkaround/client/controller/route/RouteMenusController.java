@@ -18,7 +18,7 @@ public class RouteMenusController {
 	private static RouteMenusController routeMC;
 
 	private RouteMenusController() {
-		this.routeListeners = new LinkedList<>();
+		this.routeListeners = new LinkedList<RouteListener>();
 		this.currentRoute = new Route(new LinkedList<Coordinate>());
 	}
 
@@ -90,8 +90,8 @@ public class RouteMenusController {
 		this.currentRoute = r;
 	}
 
-	public boolean containsWaypoint(Coordinate c) {
-		return this.currentRoute.containsWaypoint(c);
+	public boolean containsWaypoint(Waypoint w) {
+		return this.currentRoute.containsWaypoint(w);
 	}
 
 	public void addRouteToFavorites(RouteInfo ri, String name) {

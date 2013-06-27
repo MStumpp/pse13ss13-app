@@ -181,7 +181,7 @@ public class Route implements RouteInfo {
 	public Route clone() {
 		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
-			clonedCoords.add(coord.clone());
+			//clonedCoords.add(coord.clone()); // TODO: Entweder clone() implementieren, oder diese Zeile entfernen
 		}
 		return new Route(clonedCoords);
 	}

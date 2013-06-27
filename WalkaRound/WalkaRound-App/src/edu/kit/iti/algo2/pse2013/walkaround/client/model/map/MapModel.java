@@ -34,8 +34,9 @@ public class MapModel implements TileListener {
 	private float currentLevelOfDetail;
 	private MapController mapController;
 	private Coordinate upperLeft;
-	// private Coordinate lowerRight;
 	private Coordinate mid;
+	private Coordinate bottomRight;
+
 	private Point size;
 	private TileFetcher tileFetcher;
 
@@ -111,7 +112,7 @@ public class MapModel implements TileListener {
 
 		Log.d(TAG_MAP_MODEL, "ZoomLevel werden analysiert ");
 		final MapStyle mapStyle = CurrentMapStyleModel.getInstance().getCurrentMapStyle();
-		
+
 		boolean run = true;
 
 		for (int a = mapStyle.getMinLevelOfDetail(); a <= mapStyle.getMaxLevelOfDetail() && run; a++) {
@@ -146,21 +147,23 @@ public class MapModel implements TileListener {
 	private Coordinate computeCoordinateByDisplayCoordinate(DisplayCoordinate dc) {
 
 		return new Coordinate(this.upperLeft,
-				CoordinateUtility.convertPixelsToDegrees(dc.getX(),
-						currentLevelOfDetail),
-				CoordinateUtility.convertPixelsToDegrees(dc.getY(),
-						currentLevelOfDetail));
+			CoordinateUtility.convertPixelsToDegrees(dc.getY(), currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
+			CoordinateUtility.convertPixelsToDegrees(dc.getX(), currentLevelOfDetail, CoordinateUtility.DIRECTION_X)
+		);
 	}
 	private void computeBottomRight() {
-		this.bottomRight = this.upperLeft;
+		this.bottomRight = new Coordinate(
+			upperLeft,
+			CoordinateUtility.convertPixelsToDegrees(size.y, currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
+			CoordinateUtility.convertPixelsToDegrees(size.x, currentLevelOfDetail, CoordinateUtility.DIRECTION_X)
+		);
 	}
 
 	/**
 	 * berechnet die Mitte und den unteren RechtenRand
 	 */
 	private void computeMid() {
-		this.mid = computeCoordinateByDisplayCoordinate(new DisplayCoordinate(
-				size.x / 2, size.y / 2));
+		this.mid = computeCoordinateByDisplayCoordinate(new DisplayCoordinate(size.x / 2, size.y / 2));
 	}
 
 	/*
@@ -233,15 +236,10 @@ public class MapModel implements TileListener {
 	private Coordinate getUpperLeft() {
 		return upperLeft;
 	}
-	private void fetchTiles() {
-		Log.d(TAG_MAP_MODEL,
-				"Tile werden angefordert: "
-						+ this.tileFetcher.requestTiles(
-								Math.round(currentLevelOfDetail), upperLeft,
-								xAmount, yAmount) + " x " + xAmount + " y " + yAmount);
-	}
-	public void generateRouteOverlayImage() {
-
+	private boolean fetchTiles() {
+		final boolean result = tileFetcher.requestTiles(Math.round(currentLevelOfDetail), upperLeft, xAmount, yAmount);
+		Log.d(TAG_MAP_MODEL, "Tiles werden angefordert: " + result + " x " + xAmount + " y " + yAmount);
+		return result;
 	}
 
 	/**
@@ -249,13 +247,6 @@ public class MapModel implements TileListener {
 	 */
 	public void setNewStyle() {
 		refetchTiles();
-	}
-
-	/**
-	 *
-	 */
-	public void generateMapOverlayImage() {
-		this.mapController.onMapOverlayImageChange(map);
 	}
 
 	/**
@@ -291,15 +282,15 @@ public class MapModel implements TileListener {
 	 * @param c
 	 */
 	public boolean zoom(float delta, Coordinate c) {
-		
+
 		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + mid.toString());
-		
+
 		//TODO
-		
+
 		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle();
 		final float nextLevelOfDetail = this.currentLevelOfDetail + delta;
-		
+
 		Log.d(TAG_MAP_MODEL, "ZOOM von " + this.currentLevelOfDetail + " auf " + nextLevelOfDetail + " wird geprüft");
 		if (nextLevelOfDetail > mapStyle.getMaxLevelOfDetail()
 				|| nextLevelOfDetail < mapStyle.getMinLevelOfDetail()) {
@@ -312,20 +303,20 @@ public class MapModel implements TileListener {
 
 		final double deltaX = c.getLatitude() - this.upperLeft.getLatitude();
 		final double deltaY = c.getLongtitude() - this.upperLeft.getLongtitude();
-		
+
 		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaX + " " + deltaY);
-		
+
 		/*
 		float deltaLatitude = CoordinateUtility.convertDegreesToPixel(deltaX, nextLevelOfDetail);
 		float deltaLongitude = CoordinateUtility.convertDegreesToPixel(deltaY, nextLevelOfDetail);
 		deltaLatitude = CoordinateUtility.convertPixelsToDegrees(-deltaLatitude, nextLevelOfDetail);
 		deltaLongitude = CoordinateUtility.convertPixelsToDegrees(-deltaLongitude, nextLevelOfDetail);
 		*/
-		
+
 		Log.d(TAG_MAP_MODEL, "UpperLeft war: " + this.upperLeft);
 		this.upperLeft = new Coordinate(c,-deltaY,-deltaY);
 		Log.d(TAG_MAP_MODEL, "Neuer upperLeft ist: " + this.upperLeft);
-		
+
 		this.generateMapOverlayImage();
 		refetchTiles();
 		return true;

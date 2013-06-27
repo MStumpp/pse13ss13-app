@@ -1,12 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-
-import android.util.Log;
-import android.view.Display;
 import android.app.Activity;
 import android.graphics.Point;
+import android.util.Log;
+import android.view.Display;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public final class CoordinateUtility {
 	/**
@@ -17,6 +15,22 @@ public final class CoordinateUtility {
 	 * Used when pixels are converted to degrees vertically or vice versa
 	 */
 	public static boolean DIRECTION_VERTICAL = false;
+	/**
+	 * Alias for {@link this#DIRECTION_VERTICAL}.
+	 */
+	public static boolean DIRECTION_LATITUDE = DIRECTION_VERTICAL;
+	/**
+	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
+	 */
+	public static boolean DIRECTION_LONGTITUDE = DIRECTION_HORIZONTAL;
+	/**
+	 * Alias for {@link this#DIRECTION_VERTICAL}.
+	 */
+	public static boolean DIRECTION_Y = DIRECTION_VERTICAL;
+	/**
+	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
+	 */
+	public static boolean DIRECTION_X = DIRECTION_HORIZONTAL;
 
 	/**
 	 * The average earth radius according to WGS84

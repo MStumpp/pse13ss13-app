@@ -52,6 +52,7 @@ public class Coordinate {
 	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
 		setLatitude(lat);
 		setLongtitude(lon);
+		
 		this.crossInfo = crossInfo;
 	}
 
@@ -83,7 +84,7 @@ public class Coordinate {
 	}
 
 	/**
-	 * Sets longtitude for this coordinate
+	 * Returns longtitude of this Coordinate.
 	 *
 	 * @return double.
 	 */
@@ -98,5 +99,10 @@ public class Coordinate {
 	 */
 	public CrossingInformation getCrossingInformation() {
 		return crossInfo;
+	}
+
+	@Override
+	public String toString() {
+		return "Coordinate Latidude: " + this.lat + " Longitude " + this.lon;
 	}
 }
