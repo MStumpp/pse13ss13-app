@@ -65,6 +65,7 @@ public class ShortestPathProcessor {
                     return 0;
             }
         });
+        runCounter = 0;
     }
 
 
