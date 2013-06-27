@@ -52,7 +52,7 @@ public class Coordinate {
 	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
 		setLatitude(lat);
 		setLongtitude(lon);
-		
+
 		this.crossInfo = crossInfo;
 	}
 
@@ -80,7 +80,13 @@ public class Coordinate {
 	 * @return double.
 	 */
 	public void setLatitude(double lat) {
-		this.lat = (lat + 90) % 180 - 90;
+		if (lat > 90) {
+			this.lat = -90 + lat % 90;
+		} else if (lat < -90) {
+			this.lat = 90 + lat % 90;
+		} else {
+			this.lat = lat;
+		}
 	}
 
 	/**
@@ -89,7 +95,13 @@ public class Coordinate {
 	 * @return double.
 	 */
 	public void setLongtitude(double lon) {
-		this.lon = (lon + 180) % 360 - 180;
+		if (lon > 180) {
+			this.lon = -180 + lon % 180;
+		} else if (lon < -180) {
+			this.lon = 180 + lon % 180;
+		} else {
+			this.lon = lon;
+		}
 	}
 
 	/**

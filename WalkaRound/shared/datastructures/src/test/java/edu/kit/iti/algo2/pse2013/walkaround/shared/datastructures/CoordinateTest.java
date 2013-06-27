@@ -6,6 +6,16 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class CoordinateTest {
+	/**
+	 * Erst eine Überschreitung der Höchstwerte (90° Breite bzw. 180° Länge) in dieser Größenordnung
+	 * wird von {@link Coordinate} als Overflow bewertet und entsprechend behandelt.
+	 */
+	private final static double OVERFLOW = 1e-13;
+	/**
+	 * Das delta, um das der Erwartungswert und der tatsächliche Wert bei der Overflow-Prüfung differieren dürfen.
+	 */
+	private final static double OVERFLOW_PRECISION = 1e-323;
+
 	@Test
 	public void testValidLonValues() {
 		new Coordinate(0, -180);
@@ -26,24 +36,20 @@ public class CoordinateTest {
 		new Coordinate(45, 0);
 	}
 	@Test
-	(expected = IllegalArgumentException.class)
 	public void testLonOverflow() {
-		new Coordinate(0, 180.0000000000001);
+		assertEquals(-180 + OVERFLOW, new Coordinate(0, 180 + OVERFLOW).getLongtitude(), OVERFLOW_PRECISION);
 	}
 	@Test
-	(expected = IllegalArgumentException.class)
 	public void testLonUnderflow() {
-		new Coordinate(0, -180.0000000000001);
+		assertEquals(180 - OVERFLOW, new Coordinate(0, -180 - OVERFLOW).getLongtitude(), OVERFLOW_PRECISION);
 	}
 	@Test
 	public void testLatOverflow() {
-		assertEquals(new Coordinate(90.00000000000001, 0).getLatitude(), -89.99999999999999, 1e-13);
+		assertEquals(-90 + OVERFLOW, new Coordinate(90 + OVERFLOW, 0).getLatitude(), OVERFLOW_PRECISION);
 	}
 	@Test
 	public void testLatUnderflow() {
-		System.err.println(-1 % 180);
-		System.err.println(-181 % 180);
-		assertEquals(new Coordinate(-90.00000000000001, 0).getLatitude(), 89.99999999999999, 1);
+		assertEquals(90 - OVERFLOW, new Coordinate(-90 - OVERFLOW, 0).getLatitude(), OVERFLOW_PRECISION);
 	}
 	@Test
 	public void testLonPersistence() {
