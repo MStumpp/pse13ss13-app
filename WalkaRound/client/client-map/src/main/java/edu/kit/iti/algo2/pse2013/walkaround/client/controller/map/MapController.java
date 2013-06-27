@@ -18,7 +18,10 @@ public class MapController {
 
 	private static String MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
-	public static Coordinate defaultCoordinate = new Coordinate(49.0047200, 8.3858300);
+
+	//public static Coordinate defaultCoordinate = new Coordinate(49.00471, 8.3858300); // Brauerstraße
+	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
+	//public static Coordinate defaultCoordinate = new Coordinate(49.01, 8.40333); // Marktplatz
 
 	private MapView mapView;
 	private MapModel mapModel;

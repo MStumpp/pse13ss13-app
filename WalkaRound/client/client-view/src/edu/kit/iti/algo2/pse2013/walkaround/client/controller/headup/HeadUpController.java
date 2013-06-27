@@ -13,6 +13,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
  */
 public class HeadUpController {
 
+	public static String TAG_HEADUP_CONTROLLER = "HEADUP_CONTROLLER";
+	
 	/**
 	 * Die Instanz des headUpController
 	 */
@@ -53,7 +55,7 @@ public class HeadUpController {
 	}
 
 	/**
-	 * gibt eine Instanz des HeadUpControllers zur�ck
+	 * gives back the instance of the headUpController
 	 *
 	 * @return HeadUpController oder null fall initializes nicht aufgerufen
 	 *         wurde
@@ -71,17 +73,19 @@ public class HeadUpController {
 	}
 
 	/**
-	 * vergr��ert die Karte um 1 Level
+	 * zoom in by one levek
 	 */
 	public void zoomInOneLevel() {
-		mapController.onZoom((mapController.getCurrentLevelOfDetail() + 1.0F));
+		Log.d(TAG_HEADUP_CONTROLLER, "zomm in wird weitergegeben");
+		mapController.onZoom(+1.0F);
 	}
 
 	/**
-	 * verkleinert die Karte um 1 Level
+	 * zoom out by one Level
 	 */
 	public void zoomOutOneLevel() {
-		mapController.onZoom((mapController.getCurrentLevelOfDetail() - 1.0F));
+		Log.d(TAG_HEADUP_CONTROLLER, "zomm out wird weitergegeben");
+		mapController.onZoom(-1.0F);
 	}
 
 	/**

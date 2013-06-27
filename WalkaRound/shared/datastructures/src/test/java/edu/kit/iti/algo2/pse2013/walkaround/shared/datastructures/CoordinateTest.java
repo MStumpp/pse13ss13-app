@@ -42,6 +42,7 @@ public class CoordinateTest {
 	@Test
 	public void testLatUnderflow() {
 		System.err.println(-1 % 180);
+		System.err.println(-181 % 180);
 		assertEquals(new Coordinate(-90.00000000000001, 0).getLatitude(), 89.99999999999999, 1);
 	}
 	@Test
