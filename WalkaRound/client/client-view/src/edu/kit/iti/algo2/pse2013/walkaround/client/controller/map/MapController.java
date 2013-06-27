@@ -18,7 +18,10 @@ public class MapController {
 
 	private static String MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
-	public static Coordinate defaultCoordinate = new Coordinate(49.0047200, 8.3858300);
+
+	//public static Coordinate defaultCoordinate = new Coordinate(49.00471, 8.3858300); // Brauerstraße
+	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
+	//public static Coordinate defaultCoordinate = new Coordinate(49.01, 8.40333); // Marktplatz
 
 	private MapView mapView;
 	private MapModel mapModel;
@@ -92,12 +95,24 @@ public class MapController {
 
 	}
 
-	public void onZoom(float z, DisplayCoordinate dc) {
-
+	/**
+	 * Zoom by a delta to a DisplayCoordinate
+	 * 
+	 * @param delta to the new ZoomLevel
+	 * @param dc the DisplayCoordinate 
+	 */
+	public void onZoom(float delta, DisplayCoordinate dc) {
+		this.mapModel.zoom(delta, dc);
 	}
 
-	public void onZoom(float z) {
-
+	/**
+	 * Zoom by a delta
+	 * 
+	 * @param delta to the new ZoomLevel
+	 */
+	public void onZoom(float delta) {
+		Log.d(MAP_CONTROLLER, "Gibt ZoomDelta " + delta + " zu MapModel weiter");
+		this.mapModel.zoom(delta);
 	}
 
 	public void onLockUserPosition() {
