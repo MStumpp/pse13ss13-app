@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
-
 import java.util.List;
 
 /**
@@ -85,18 +84,6 @@ public final class Graph {
         if (id > Vertex.getIDCount()-1)
             throw new NoVertexForIDExistsException("id must not be greater than " + (Vertex.getIDCount()-1));
         return vertices[id];
-    }
-
-
-    /**
-     * Resets parent and currentLength of each Vertex in Graph.
-     */
-    // TODO: muss anders gelöst werden, evt. statische Attribute von dynamischen trennen
-    public void resetGraph() {
-        for (Vertex vertex : vertices) {
-            vertex.setCurrentLength(Double.POSITIVE_INFINITY);
-            vertex.setParent(null);
-        }
     }
 
 }

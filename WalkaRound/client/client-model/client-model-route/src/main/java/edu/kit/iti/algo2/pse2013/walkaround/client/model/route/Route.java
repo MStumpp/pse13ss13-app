@@ -3,9 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
-
 public class Route implements RouteInfo {
 
 	private String name;
@@ -13,6 +10,7 @@ public class Route implements RouteInfo {
 	private LinkedList<Coordinate> routeCoordinates;
 	private RouteProcessing routeProcessor;
 
+	
 	/*
 	 *
 	 */
@@ -20,11 +18,10 @@ public class Route implements RouteInfo {
 		this.routeCoordinates = coordsOfNewRoute;
 		this.activeWaypoint = null;
 		this.name = "";
-		//TODO:
 		this.routeProcessor = RouteProcessing.getInstance();
-
 	}
 
+	
 	/*
 	 *
 	 */
@@ -36,6 +33,7 @@ public class Route implements RouteInfo {
 		return false;
 	}
 
+	
 	/*
 	 *
 	 */
@@ -43,44 +41,60 @@ public class Route implements RouteInfo {
 		this.activeWaypoint = null;
 	}
 
+	
 	/*
 	 * Moves the coordinate represented by the active waypoint to the given waypoint-position within the route.
 	 */
 	public void moveActiveWaypointInOrder(int newPos) {
+		// TODO:
 		Coordinate tempCoord = new Coordinate (this.activeWaypoint.getLongtitude(), this.activeWaypoint.getLatitude());
-// TODO: lösche die 0-2 Teilstücke, erstelle einen neuen WP an der entsprechenden WP Coord
-
+		// TODO: lösche die 0-2 Teilstücke, erstelle einen neuen WP an der entsprechenden WP Coord
+		
+		
 	}
 
+	
 	/*
 	 * Adds a new waypoint at the given position.
 	 */
 	public void addWaypoint(Coordinate c) {
-		// schicke Berechnung über Shortest Path (this.getEnd() und Coordinate) an Server
-		// Füge Ergebnis der Route hinzu.
-
-		// Setze neue WP auf aktiv.
+		RouteInfo routeExtension = this.routeProcessor.computeShortestPath(c, this.getEnd());
+		this.addRoute(routeExtension);
+		this.setActiveWaypoint(this.getEnd());
 	}
-
+	
+	
+	/*
+	 * 
+	 */
 	public void addRoundtripAtActiveWaypoint(int profile, int length) {
-		// Starte Berechnung mit Processor
-		// Füge Ergebnisroute hinzu.
-
+		RouteInfo newRoundtrip = this.routeProcessor.computeRoundtrip(this.getActiveWaypoint(), profile, length);
+		this.addRoute(newRoundtrip);
 	}
-
+	
+	
 	/*
 	 * Adds the given RouteInfo to the end of the route.
 	 */
-	public void addRoute(RouteInfo ri) {
-		// prüfe ob übergebene Route an aktueller Route endet.
-		// wenn ja, füge Route direkt an.
-		// wenn nein, berechne Zwischenstück über Server, füge dann Route an. (oder umgekehrt)
+	public void addRoute(RouteInfo newRoute) {
+		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
+		
+		if (!this.getEnd().equals(newRouteCoordsIter)) {
+			this.addRoute(this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart()));
+		}
+		
+		newRouteCoordsIter.next();
+		while (newRouteCoordsIter.hasNext()) {
+			this.routeCoordinates.addLast(newRouteCoordsIter.next());	
+		}
 	}
-
+	
+	
 	/*
 	 * Moves the active waypoint to the position of the given coordinate.
 	 */
 	public void moveActiveWaypoint(Coordinate coord) {
+		// TODO:
 		if (this.activeWaypoint != null) {
 			// Suche WPs vor und nach aktivem WP heraus.
 			Waypoint beforeActive;
@@ -90,20 +104,48 @@ public class Route implements RouteInfo {
 		}
 	}
 
+	
 	public void deleteActiveWaypoint() {
+		// Entferne alle am aktiven WP anh�ngenden Strecken
+		// Wenn 
+		
+		// TODO:
+		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
+		
+		boolean startIsActiveWaypoint = this.getActiveWaypoint().equals(this.getActiveWaypoint());
+		boolean endIsActiveWaypoint = this.getEnd().equals(this.getActiveWaypoint());
+		
+		if (startIsActiveWaypoint && endIsActiveWaypoint) {
+			this.resetRoute();
+		}
+		
+		if (startIsActiveWaypoint && !endIsActiveWaypoint) {
+			
+		}
+		
+		if (!startIsActiveWaypoint && endIsActiveWaypoint) {
+			
+		}
+		
+		if (!startIsActiveWaypoint && !endIsActiveWaypoint) {
+			
+		}
+		
+		
 		// Prüft before / after ActiveWP, entfernt Coords zwischen actWP und bef/aft,
 		// wenn bef und aft ungleich null, schicke ShortestPath(bef,aft) an Server
 		this.resetActiveWaypoint();
 	}
 
+	
 	/*
 	 * Reverts all Coordinates in the route.
 	 */
 	public void revertRoute() {
 		LinkedList<Coordinate> revertedRoute = new LinkedList<Coordinate>();
-		// durchlaufe Liste der Coords, kehre sie 1:1 um
+		
 		Iterator<Coordinate> routeCoordsDecIter = this.routeCoordinates.descendingIterator();
-
+		
 		while (routeCoordsDecIter.hasNext()) {
 			revertedRoute.add(routeCoordsDecIter.next());
 		}
@@ -124,19 +166,19 @@ public class Route implements RouteInfo {
 	 *
 	 */
 	public void optimizeRoute() {
-		// Sende ganze Route an Server über this.routeProcessor.
-		// Setze ganze Route auf Server Ergebnis.
-
+		Route optimizedRoute = this.routeProcessor.computeOptimizedRoute(this.clone());
+		this.routeCoordinates = optimizedRoute.getCoordinates();
 	}
+	
 
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */
 	public Route clone() {
-		LinkedList<Coordinate> cloneCoords = new LinkedList<Coordinate>();
+		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
-			//cloneCoords.add(coord.clone());
+			clonedCoords.add(coord.clone());
 		}
 		return new Route(cloneCoords);
 	}
@@ -148,47 +190,25 @@ public class Route implements RouteInfo {
 		return this.name;
 	}
 
+	
 	@Override
 	public Waypoint getStart() {
 		return (Waypoint) this.routeCoordinates.getFirst();
 	}
 
+	
 	@Override
 	public Waypoint getEnd() {
 		return (Waypoint) this.routeCoordinates.getLast();
 	}
+	
 
 	@Override
 	public Waypoint getActiveWaypoint() {
 		return this.activeWaypoint;
 	}
 
-
-	@Override
-	public LinkedList<Route> getRoutes() {
-		LinkedList<Route> routes = new LinkedList<>();
-		Iterator<Coordinate> coordIter = this.routeCoordinates.iterator();
-
-		int waypointsCounted = 0;
-
-		LinkedList<Coordinate> routePiece = new LinkedList<Coordinate>();
-
-		while(coordIter.hasNext()) {
-			Coordinate coordTemp = coordIter.next();
-			routePiece.add(coordTemp);
-
-			//TODO: Automat überlegen:
-			if (coordTemp instanceof Waypoint) { //TODO: Kann man instanceof vermeiden?
-				waypointsCounted++;
-			}
-		}
-		return routes;
-
-		// durchlaufe routeCoordinates
-		// stückle an WPs in einzelne Routen auf
-
-	}
-
+	
 	@Override
 	public LinkedList<Waypoint> getWaypoints() {
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
@@ -200,37 +220,74 @@ public class Route implements RouteInfo {
 		return waypoints;
 	}
 
-	public boolean containsWaypoint(Coordinate coord) {
-		if (this.routeCoordinates.contains((Waypoint) coord)) {
+
+	@Override
+	public boolean isFavorite() {		
+		return false;
+		// TODO: Zugriff auf Favs über getInstance();
+	}
+
+	
+	@Override
+	public boolean containsWaypoint(Waypoint wp) {
+		if (this.getWaypoints().contains(wp)) {
 			return true;
 		}
 		return false;
 	}
 
-
-
+	
 	@Override
-	public boolean isFavorite() {
-		return false;
-		// Zugriff auf Favs über getInstance();
+	public LinkedList<Coordinate> getCoordinates() {
+		return this.routeCoordinates;
 	}
-
-	@Override
-	public boolean containsWaypoint(Waypoint wp) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	
+	private Waypoint getWaypointPastActiveWaypoint() {
+		if (this.activeWaypoint.equals(this.getEnd())) {
+			return null;
+		} else {
+			Iterator<Coordinate> coordsIter = this.routeCoordinates.iterator();
+			while (!coordsIter.equals(this.activeWaypoint)) {
+				coordsIter.next();
+			}
+			while (!coordsIter.isInstanceOf(Waypoint) && !coordsIter.equals(this.activeWaypoint)) {
+				coordsIter.next();
+			}
+			return coordsIter;
+		}
 	}
+	
+	
+	private Waypoint getWaypointBeforeActiveWaypoint() {
+		if (this.activeWaypoint.equals(this.getStart())) {
+			return null;
+		} else {
+			Iterator<Coordinate> coordsIterDesc = this.routeCoordinates.descendingIterator();
+			while (!coordsIterDesc.equals(this.activeWaypoint)) {
+				coordsIterDesc.next();
+			}
+			while (!coordsIterDesc.isInstanceOf(Waypoint) && !coordsIterDesc.equals(this.activeWaypoint)) {
+				coordsIterDesc.next();
+			}
+			return coordsIterDesc;
+		}
+	}
+	
+	
+	
+	private void testMethod() {
+		LinkedList<Integer> ints = new LinkedList<Integer>();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
-
-
-	/*
-	 * RouteProcessing Methoden sind:
-	 * computeOptimizedRoute(RouteInfo):RouteInfo
-computeShortestPath(Coordinate, Coordinate):RouteInfo
-computeRoundtrip(Coordinate, int profile, int length):RouteInfo
-	 *
-	 *
-	 *
-	 */
 
 }

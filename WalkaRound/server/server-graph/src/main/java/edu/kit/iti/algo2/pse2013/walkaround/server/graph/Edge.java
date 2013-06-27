@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class represents an egde contained in a graph. An edge has two coordinates,
  * each represented by longitude and latitude values.
@@ -12,13 +11,12 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-
 public final class Edge implements Serializable {
 
-	/**
-	 * Temporary Serial version ID as long as Java serialization is used
-	 */
-	private static final long serialVersionUID = 3182638429343198592L;
+    /**
+     * Temporary Serial version ID as long as Java serialization is used
+     */
+    private static final long serialVersionUID = 3182638429343198592L;
 
 
     /**
@@ -76,14 +74,14 @@ public final class Edge implements Serializable {
      * @param osmID Corresponding OSM ID of this Edge.
      * @throws IllegalArgumentException If tail or head are null.
      */
-	public Edge(Vertex tail, Vertex head, long osmID) {
+    public Edge(Vertex tail, Vertex head, long osmID) {
         if (tail == null || head == null)
             throw new IllegalArgumentException("tail and head must not be null");
-		this.tail = tail;
+        this.tail = tail;
         this.head = head;
         this.osmID = osmID;
         id = idCounter;
-        idCounter++;
+        idCounter += 1;
         length = computeLength();
 	}
 
@@ -93,9 +91,9 @@ public final class Edge implements Serializable {
      *
      * @return int.
      */
-	public int getID() {
-		return id;
-	}
+    public int getID() {
+        return id;
+    }
 
 
     /**
@@ -123,12 +121,12 @@ public final class Edge implements Serializable {
      *
      * @return List<Vertex>.
      */
-	public List<Vertex> getVertices() {
+    public List<Vertex> getVertices() {
         List<Vertex> result = new ArrayList<>();
         result.add(tail);
         result.add(head);
-		return result;
-	}
+        return result;
+    }
 
 
     /**
@@ -138,6 +136,25 @@ public final class Edge implements Serializable {
      */
     public double getLength() {
         return length;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Edge edge = (Edge) o;
+
+        if (id != edge.id) return false;
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
 
