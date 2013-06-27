@@ -27,7 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
  */
 public class MapModel implements TileListener {
 
-	private static String TAG_MAP_MODEL = "MAP_MODEL";
+	private static String TAG_MAP_MODEL = MapModel.class.getSimpleName();
 	private static MapModel mapModel;
 	private final static int DEFAULT_TILE_SIZE = 256;
 
@@ -100,7 +100,7 @@ public class MapModel implements TileListener {
 		xAmount = (int) Math.ceil(size.x / 256);
 		yAmount = (int) Math.ceil(size.y / 256);
 
-		// TODO hier stimmit etwas nicht
+		// Ausgleich zum Delta
 		xAmount++;
 		yAmount++;
 		Log.d(TAG_MAP_MODEL, "Amount x " + xAmount + " y " + yAmount);
@@ -296,18 +296,20 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "ZOOM auf " + nextLevelOfDetail + " wird ausgeführt");
 		this.currentLevelOfDetail = nextLevelOfDetail;
 
-		final double deltaL = c.getLatitude() - this.upperLeft.getLatitude();
-		final double deltaLong = c.getLongtitude() - this.upperLeft.getLongtitude();
+		final double deltaX = c.getLatitude() - this.upperLeft.getLatitude();
+		final double deltaY = c.getLongtitude() - this.upperLeft.getLongtitude();
 		
-		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaL + " " + deltaLong);
+		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaX + " " + deltaY);
 		
-		float deltaLatitude = CoordinateUtility.convertDegreesToPixel(deltaL, nextLevelOfDetail);
-		float deltaLongitude = CoordinateUtility.convertDegreesToPixel(deltaLong, nextLevelOfDetail);
+		/*
+		float deltaLatitude = CoordinateUtility.convertDegreesToPixel(deltaX, nextLevelOfDetail);
+		float deltaLongitude = CoordinateUtility.convertDegreesToPixel(deltaY, nextLevelOfDetail);
 		deltaLatitude = CoordinateUtility.convertPixelsToDegrees(-deltaLatitude, nextLevelOfDetail);
 		deltaLongitude = CoordinateUtility.convertPixelsToDegrees(-deltaLongitude, nextLevelOfDetail);
-
+		*/
+		
 		Log.d(TAG_MAP_MODEL, "UpperLeft war: " + this.upperLeft);
-		this.upperLeft = new Coordinate(c,-deltaLatitude,-deltaLongitude);
+		this.upperLeft = new Coordinate(c,-deltaY,-deltaY);
 		Log.d(TAG_MAP_MODEL, "Neuer upperLeft ist: " + this.upperLeft);
 		
 		this.generateMapOverlayImage();
