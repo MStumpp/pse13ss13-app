@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +26,8 @@ public final class RouteInfoTransfer {
     public RouteInfoTransfer(List<Coordinate> coordinates) {
         if (coordinates == null || coordinates.size() < 2)
             throw new IllegalArgumentException("list of coordinates must be provided and at least two elements long");
-        this.coordinates = new LinkedList<Coordinate>(coordinates);
+        this.coordinates = new ArrayList<Coordinate>();
+        this.coordinates.addAll(coordinates);
     }
 
 

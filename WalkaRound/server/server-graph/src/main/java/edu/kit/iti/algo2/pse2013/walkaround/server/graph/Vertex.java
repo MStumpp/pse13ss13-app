@@ -98,7 +98,7 @@ public class Vertex extends Coordinate implements Serializable {
      * @return int.
      */
     public int getID() {
-        return this.id;
+        return id;
     }
 
 

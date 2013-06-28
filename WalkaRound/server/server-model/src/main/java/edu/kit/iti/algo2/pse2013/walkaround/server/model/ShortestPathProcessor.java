@@ -65,6 +65,7 @@ public class ShortestPathProcessor {
                     return 0;
             }
         });
+        runCounter = 0;
     }
 
 
@@ -91,16 +92,18 @@ public class ShortestPathProcessor {
      * @param coordinate1 One end of the route to be computed.
      * @param coordinate2 One end of the route to be computed.
      * @return RouteInfoTransfer.
+     * @throw NoShortestPathExistsException If no shortest path between given Coordinates exists
      */
-    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
+    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2)
+            throws NoShortestPathExistsException {
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate1 and coordinate2 must be provided");
 
         //int startVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate1);
         //int endVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate2);
 
-        int sourceVertexId = 0;
-        int targetVertexId = 1000;
+        int sourceVertexId = 2295;
+        int targetVertexId = 2441;
 
         // get source and target Vertex objects
         Vertex sourceVertex = null, targetVertex = null;
@@ -110,6 +113,9 @@ public class ShortestPathProcessor {
         } catch (NoVertexForIDExistsException e) {
             e.printStackTrace();
         }
+
+        System.out.println(sourceVertex);
+        System.out.println(targetVertex);
 
         if (sourceVertex == null || targetVertex == null)
             return null;
@@ -125,9 +131,11 @@ public class ShortestPathProcessor {
         double distance;
         while (!queue.isEmpty()) {
             current = queue.poll();
+
             // stop criteria
             if (current.equals(targetVertex))
                 break;
+
             for (Edge edge : current.getOutgoingEdges()) {
                 currentHead = edge.getHead();
                 distance = current.getCurrentLength() + edge.getLength();
@@ -139,7 +147,7 @@ public class ShortestPathProcessor {
                     queue.add(currentHead);
                     currentHead.setRun(runCounter);
 
-                // edhe head already in queue, eventually decrease key
+                // edge head already in queue, eventually decrease key
                 } else if (distance < currentHead.getCurrentLength()) {
                     currentHead.setCurrentLength(distance);
                     currentHead.setParent(current);
@@ -156,11 +164,19 @@ public class ShortestPathProcessor {
         LinkedList<Coordinate> result = new LinkedList<>();
         result.add(targetVertex);
         Vertex currentParent = targetVertex.getParent();
-        while (!currentParent.equals(sourceVertex)) {
+        while (currentParent != null && !currentParent.equals(sourceVertex)) {
             result.addFirst(currentParent);
             currentParent = currentParent.getParent();
         }
-        result.addFirst(currentParent);
+        if (currentParent != null)
+            result.addFirst(currentParent);
+
+        // throw exception if not shortest path exists
+        if (result.size() == 1)
+            throw new NoShortestPathExistsException("no shortest path exists "
+                    + "between source vertex with id: "
+                    + sourceVertex.getID() + " and target vertex with id: "
+                    + targetVertex.getID());
 
         // set up route transfer and return
         RouteInfoTransfer route = new RouteInfoTransfer(result);
