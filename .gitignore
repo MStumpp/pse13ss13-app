@@ -18,3 +18,7 @@ thumbs.db
 *.aux
 *.log
 *.toc
+
+_edges.txt
+_geometry.txt
+_nodes.txt

@@ -83,7 +83,7 @@ public final class Edge implements Serializable {
         id = idCounter;
         idCounter += 1;
         length = computeLength();
-	}
+    }
 
 
     /**
