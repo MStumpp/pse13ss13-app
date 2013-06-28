@@ -115,6 +115,6 @@ public class Coordinate {
 
 	@Override
 	public String toString() {
-		return "Coordinate Latidude: " + this.lat + " Longitude " + this.lon;
+		return String.format("Coordinate Lat: %.8f Lon: %.8f", this.lat, this.lon);
 	}
 }
