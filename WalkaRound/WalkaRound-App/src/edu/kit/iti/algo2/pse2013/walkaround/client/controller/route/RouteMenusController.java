@@ -33,6 +33,7 @@ public class RouteMenusController {
 		if (!this.routeListeners.contains(newRL)) {
 			this.routeListeners.add(newRL);
 		}
+		this.notifyAllRouteListeners();
 	}
 
 	private void notifyAllRouteListeners() {
@@ -44,50 +45,62 @@ public class RouteMenusController {
 
 	public void setActiveWaypoint(Waypoint wp) {
 		this.currentRoute.setActiveWaypoint(wp);
+		this.notifyAllRouteListeners();
 	}
 
 	public void resetAvticeWaypoint() {
 		this.currentRoute.resetActiveWaypoint();
+		this.notifyAllRouteListeners();
 	}
 
 	public void moveActiveWaypointInOrder(int i) {
 		this.currentRoute.moveActiveWaypointInOrder(i);
+		this.notifyAllRouteListeners();
 	}
 
 	public void addWaypoint(Coordinate c) {
 		this.currentRoute.addWaypoint(c);
+		this.notifyAllRouteListeners();
 	}
 
 	public void addRoundtrip(Profile p, int i) {
 		this.currentRoute.addRoundtripAtActiveWaypoint(p.getID(), i);
+		this.notifyAllRouteListeners();
 	}
 
 	public void addRoute(RouteInfo ri) {
 		this.currentRoute.addRoute(ri);
+		this.notifyAllRouteListeners();
 	}
 
 	public void moveActiveWaypoint(Coordinate c) {
 		this.currentRoute.moveActiveWaypoint(c);
+		this.notifyAllRouteListeners();
 	}
 
 	public void deleteActiveWaypoint() {
 		this.currentRoute.deleteActiveWaypoint();
+		this.notifyAllRouteListeners();
 	}
 
 	public void revertRoute() {
 		this.currentRoute.revertRoute();
+		this.notifyAllRouteListeners();
 	}
 
 	public void resetRoute() {
 		this.currentRoute.resetRoute();
+		this.notifyAllRouteListeners();
 	}
 
 	public void optimizeRoute() {
 		this.currentRoute.optimizeRoute();
+		this.notifyAllRouteListeners();
 	}
 
 	public void replaceFullRoute(Route r) {
 		this.currentRoute = r;
+		this.notifyAllRouteListeners();
 	}
 
 	public boolean containsWaypoint(Waypoint w) {
