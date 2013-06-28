@@ -1,11 +1,15 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Matthias
- * Date: 28.06.13
- * Time: 13:57
- * To change this template use File | Settings | File Templates.
+ * NoShortestPathExistsException.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
  */
-public class NoShortestPathExistsException {
+public class NoShortestPathExistsException extends Exception {
+
+    public NoShortestPathExistsException(String message) {
+        super(message);
+    }
+
 }
