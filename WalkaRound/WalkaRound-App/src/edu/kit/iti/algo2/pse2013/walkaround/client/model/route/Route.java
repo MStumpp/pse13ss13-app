@@ -52,7 +52,7 @@ public class Route implements RouteInfo {
 		// TODO:
 		Coordinate tempCoord = new Coordinate (this.activeWaypoint.getLongtitude(), this.activeWaypoint.getLatitude());
 		// TODO: lösche die 0-2 Teilstücke, erstelle einen neuen WP an der entsprechenden WP Coord
-
+		
 
 	}
 
@@ -99,9 +99,11 @@ public class Route implements RouteInfo {
 	public void moveActiveWaypoint(Coordinate coord) {
 		// TODO:
 		if (this.activeWaypoint != null) {
-			// Suche WPs vor und nach aktivem WP heraus.
-			Waypoint beforeActive;
-			Waypoint afterActive;
+			Waypoint beforeActive = (Waypoint) this.getWaypointBeforeActiveWaypoint();
+			Waypoint afterActive = (Waypoint) this.getWaypointPastActiveWaypoint();
+			
+			
+			
 			// Prüfe bei beiden ob null, wenn nicht, schicke Weg an Server zur Neu-Berechnung.
 			// Entferne außerdem die alten Routen.
 		}
@@ -216,7 +218,7 @@ public class Route implements RouteInfo {
 	public LinkedList<Waypoint> getWaypoints() {
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
 		for (Coordinate cor : this.routeCoordinates) {
-			if (cor instanceof Waypoint) { //TODO: Kann man instanceof vermeiden?
+			if (cor instanceof Waypoint) {
 				waypoints.add((Waypoint)cor);
 			}
 		}
@@ -245,39 +247,29 @@ public class Route implements RouteInfo {
 		return this.routeCoordinates;
 	}
 
-
-	private Coordinate getWaypointPastActiveWaypoint() {
+	
+	/*
+	 * 
+	 */
+	private Waypoint getWaypointPastActiveWaypoint() {
 		if (this.activeWaypoint.equals(this.getEnd())) {
 			return null;
 		} else {
-			Iterator<Coordinate> coordsIter = this.routeCoordinates.iterator();
-			while (!coordsIter.equals(this.activeWaypoint)) {
-				coordsIter.next();
-			}
-			//while (!(coordsIter instanceof Waypoint) && !coordsIter.equals(this.activeWaypoint)) {
-				//coordsIter.next();
-			//}
-			if (coordsIter.hasNext()) {
-				return coordsIter.next();
-			} else {
-				return null;
-			}
+			LinkedList<Waypoint> waypoints = this.getWaypoints();
+			return (waypoints.get(waypoints.indexOf(this.activeWaypoint) + 1));
 		}
 	}
 
-
-	private Coordinate getWaypointBeforeActiveWaypoint() {
+	
+	/*
+	 * 
+	 */
+	private Waypoint getWaypointBeforeActiveWaypoint() {
 		if (this.activeWaypoint.equals(this.getStart())) {
 			return null;
 		} else {
-			Iterator<Coordinate> coordsIterDesc = this.routeCoordinates.descendingIterator();
-			while (!coordsIterDesc.equals(this.activeWaypoint)) {
-				coordsIterDesc.next();
-			}
-			while (!(coordsIterDesc instanceof Waypoint) && !coordsIterDesc.equals(this.activeWaypoint)) {
-				coordsIterDesc.next();
-			}
-			return coordsIterDesc.next();
+			LinkedList<Waypoint> waypoints = this.getWaypoints();
+			return (waypoints.get(waypoints.indexOf(this.activeWaypoint) - 1));
 		}
 	}
 
