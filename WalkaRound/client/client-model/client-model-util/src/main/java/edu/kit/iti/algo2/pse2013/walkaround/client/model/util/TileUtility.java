@@ -3,12 +3,23 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
+ * This class provides methods which are needed by the map model and the tile
+ * fetcher.
+ * 
  * @author the team from OpenStreetMap-Wiki
  * @see <a
  *      href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Java">Slippy
  *      Map tilenames</a>
  */
-public class TileUtility {
+public final class TileUtility {
+
+	/**
+	 * This class is an utility class which is not instantiated.
+	 */
+	private TileUtility() {
+
+	}
+
 	/**
 	 * Calculates the x- and y-Part of the tile URL for a given Coordinate
 	 * anywhere on that tile
@@ -32,6 +43,13 @@ public class TileUtility {
 						/ 2 * (1 << levelOfDetail)) };
 	}
 
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param levelOfDetail
+	 * @return
+	 */
 	public static Coordinate getUpperLeftCoordinate(int x, int y,
 			int levelOfDetail) {
 		return null;

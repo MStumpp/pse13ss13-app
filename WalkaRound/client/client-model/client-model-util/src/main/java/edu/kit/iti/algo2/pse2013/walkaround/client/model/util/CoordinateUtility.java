@@ -1,6 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 import android.util.Log;
@@ -8,6 +8,12 @@ import android.view.Display;
 import android.app.Activity;
 import android.graphics.Point;
 
+/**
+ * This class offers different kind of computations with coordinates.
+ * 
+ * @author Thomas Kadow
+ * @version 1.0
+ */
 public final class CoordinateUtility {
 
 	/**
@@ -15,28 +21,53 @@ public final class CoordinateUtility {
 	 */
 	private static double EARTH_RADIUS = 6371.000785;
 
+	/**
+	 * This class is an utility class which is not instantiated.
+	 */
 	private CoordinateUtility() {
 
 	}
 
+	/**
+	 * Converts a display coordinate into a coordinate.
+	 * 
+	 * @param coord
+	 *            coordinate to convert
+	 * @param anchor
+	 * @return
+	 */
 	public static DisplayCoordinate coordinateToDisplayCoordinate(
 			Coordinate coord, Coordinate anchor) {
-		return null;
+		return new DisplayCoordinate(0, 0);
 	}
 
+	/**
+	 * Converts a coordinate into a display coordinate.
+	 * 
+	 * @param dispCoord
+	 *            display coordinate to convert
+	 * @param anchor
+	 * @return
+	 */
 	public static Coordinate displayCoordinateToCoordinate(
 			DisplayCoordinate dispCoord, Coordinate anchor) {
-		return null;
+		return new Coordinate(0, 0);
 	}
-
+	
 	// parameter war im entwurf noch nicht drin!
+	/**
+	 * Returns the measures of the display.
+	 * 
+	 * @param activity
+	 *            current activity
+	 * @return the measures of the display
+	 */
 	public static Point getDisplay(Activity activity) {
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = activity.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		return size;
-
 	}
 
 	/**
