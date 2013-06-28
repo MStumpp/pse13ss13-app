@@ -467,44 +467,4 @@ public class MapView extends Activity {
 			return false;
 		}
 	}
-
-	/*
-	 * Erstellt ein Muster aus einer Bitmap
-	 *
-	 * Nicht mehr notwendig - m�glicherweise f�r Mapmodel interressant
-	 *
-	 * @return
-	 *
-	 * private Bitmap getDefaultFogScreen() {
-	 *
-	 * Log.d("MAP_VIEW", "Rufe Display ab."); Display display =
-	 * getWindowManager().getDefaultDisplay(); Point size = new Point();
-	 * display.getSize(size);
-	 *
-	 * Log.d("MAP_VIEW", "Display wurde abgerufen. Breite: " + size.x +
-	 * " H�he: " + size.y);
-	 *
-	 * Bitmap fog = BitmapFactory.decodeResource(getResources(),
-	 * DEFAULT_PATTERN);
-	 *
-	 * int fogWidth = fog.getWidth();
-	 *
-	 * int width = ((int) Math.ceil((double) size.x) / fogWidth) * fogWidth; int
-	 * height = ((int) Math.ceil((double) size.y) / fogWidth) * fogWidth;
-	 *
-	 * Log.d("MAP_VIEW", "H�hen wurden erstellt:" + width + " * " + height +
-	 * " wurde abgerufen.");
-	 *
-	 * Bitmap result = Bitmap.createBitmap(width, height,
-	 * Bitmap.Config.ARGB_8888);
-	 *
-	 * Canvas canvas = new Canvas(result); for (int x = width / fogWidth; x >=
-	 * 0; x--) { for (int y = height / fogWidth; y >= 0; y--) {
-	 * canvas.drawBitmap(fog, (x * fogWidth), (y * fogWidth), null); } }
-	 * Log.d("MAP_VIEW", "Fog wurde erstellt.");
-	 *
-	 * return Bitmap.createScaledBitmap(result, size.x, size.y, false);
-	 *
-	 * }
-	 */
 }

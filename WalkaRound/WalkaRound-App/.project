@@ -34,7 +34,12 @@
 		<link>
 			<name>shared-datastructures</name>
 			<type>2</type>
-			<location>../shared/datastructures/src/main/java</location>
+			<locationURI>shared/datastructures/src/main/java</locationURI>
+		</link>
+		<link>
+			<name>shareddata</name>
+			<type>2</type>
+			<location>F:/Android/pse13ss13-app/WalkaRound/shared/datastructures/src/main/java</location>
 		</link>
 	</linkedResources>
 </projectDescription>
