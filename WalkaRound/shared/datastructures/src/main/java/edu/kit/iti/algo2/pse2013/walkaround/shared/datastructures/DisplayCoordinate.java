@@ -60,4 +60,9 @@ public class DisplayCoordinate {
 	public float getY(){
 		return this.y;
 	}
+	
+	@Override
+	public String toString() {
+		return "DisplayCoordinate X: " + x + " Y: " + y;
+	}
 }
