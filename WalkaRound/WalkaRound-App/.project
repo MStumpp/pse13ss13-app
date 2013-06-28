@@ -32,9 +32,14 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>shared datastructures</name>
+			<type>2</type>
+			<location>C:/Users/Lukas/Desktop/PSE/pse13 app master/WalkaRound/shared/datastructures/src/main/java</location>
+		</link>
+		<link>
 			<name>shared-datastructures</name>
 			<type>2</type>
-			<location>../shared/datastructures/src/main/java</location>
+			<locationURI>shared/datastructures/src/main/java</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

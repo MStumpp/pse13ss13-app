@@ -37,8 +37,9 @@ public class RouteMenusController {
 	}
 
 	private void notifyAllRouteListeners() {
+		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		for (RouteListener rl : this.routeListeners) {
-			rl.onRouteChange((RouteInfo)this.currentRoute, this.currentRoute.getActiveWaypoint());
+			rl.onRouteChange((RouteInfo)this.currentRoute, activeWaypoint);
 		}
 	}
 
