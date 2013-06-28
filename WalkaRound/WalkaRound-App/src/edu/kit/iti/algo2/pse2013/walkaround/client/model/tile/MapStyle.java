@@ -11,7 +11,7 @@ public class MapStyle {
 	/**
 	 *  Mapnik Kartenstil.
 	 */
-	public static MapStyle MAPSTYLE_MAPNIK = new MapStyle(0,18,"Mapnik", "http://tile.osm.org/%3$s/%1$s/%2$s.png", 16);
+	public static MapStyle MAPSTYLE_MAPNIK = new MapStyle(0,18,"Mapnik", "http://tile.openstreetmap.org/%3$s/%1$s/%2$s.png", 16);
 
 	/**
 	 *  Wanderkarten Kartenstil
