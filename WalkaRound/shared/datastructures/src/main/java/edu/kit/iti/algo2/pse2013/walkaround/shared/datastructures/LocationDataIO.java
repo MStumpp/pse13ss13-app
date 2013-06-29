@@ -27,12 +27,12 @@ public class LocationDataIO implements Serializable {
 	/**
 	 * List of all POIs.
 	 */
-	private ArrayList<POI> poiList;
+	private ArrayList<POI> poiList = new ArrayList<>();
 
 	/**
 	 * List of all areas.
 	 */
-	private ArrayList<Area> areaList;
+	private ArrayList<Area> areaList = new ArrayList<>();
 
 	/**
 	 * Returns a list of all POIs.

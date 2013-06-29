@@ -96,7 +96,7 @@ public class POI extends Location {
 	 * 
 	 * @return the wikipedia url of the POI
 	 */
-	public String getWikipeidaURL() {
+	public String getWikipediaURL() {
 		return url;
 	}
 
