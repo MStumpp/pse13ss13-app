@@ -1,9 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.EmptyListOfEdgesException;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.*;
 
 import java.io.*;
 import java.util.*;
@@ -23,9 +20,9 @@ public class ShortestPathProcessorTest {
 
     @Test
     @Ignore
-    public void testPriorityQueueOrderPreservation() {
+    public void testPreprocessGraphDataIO() {
 
-        File verticesFile = new File("/Users/Matthias/Dropbox/PSE/pse13ss13-app/WalkaRound/server/server-model/src/test/resources/_nodes.txt");
+        File verticesFile = new File("/Users/Matthias/Workspace/PSE/data/_nodes.txt");
         FileReader input;
         try {
             input = new FileReader(verticesFile);
@@ -53,9 +50,7 @@ public class ShortestPathProcessorTest {
             return;
         }
 
-        System.out.println(vertices.size());
-
-        File edgesFile = new File("/Users/Matthias/Dropbox/PSE/pse13ss13-app/WalkaRound/server/server-model/src/test/resources/_edges.txt");
+        File edgesFile = new File("/Users/Matthias/Workspace/PSE/data/_edges.txt");
         try {
             input = new FileReader(edgesFile);
         } catch (FileNotFoundException e) {
@@ -63,25 +58,43 @@ public class ShortestPathProcessorTest {
             return;
         }
 
-        List<Edge> edges = new ArrayList<>();
+        GraphDataIO graphDataIO = new GraphDataIO();
 
         bufRead = new BufferedReader(input);
         try {
             while ((myLine = bufRead.readLine()) != null)
             {
                 String[] array = myLine.split("\\s");
-                edges.add(new Edge(vertices.get(Long.parseLong(array[1])), vertices.get(Long.parseLong(array[2]))));
+                graphDataIO.addEdge(new Edge(vertices.get(Long.parseLong(array[1])), vertices.get(Long.parseLong(array[2]))));
             }
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        System.out.println(edges.size());
+        try {
+            GraphDataIO.save(graphDataIO, new File("/Users/Matthias/Workspace/PSE/data/graphDataIO"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testLoadGraphDataIO() {
+
+        GraphDataIO graphDataIO = null;
+        try {
+            graphDataIO = GraphDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/graphDataIO"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Graph graph;
         try {
-            graph = Graph.getInstance(edges);
+            graph = Graph.getInstance(graphDataIO.getEdges());
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
             return;
