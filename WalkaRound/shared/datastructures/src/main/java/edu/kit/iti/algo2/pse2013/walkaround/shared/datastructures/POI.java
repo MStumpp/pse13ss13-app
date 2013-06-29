@@ -33,24 +33,24 @@ public class POI extends Location {
     /**
      * Creates an instance of POI.
      *
-     * @param lon Longitude of POI.
      * @param lat Latitude of POI.
+     * @param lon Longitude of POI.
      * @param id ID of POI.
      * @param name Name of POI.
      * @param textInfo Text info of POI.
      * @param url URL of an image of POI.
      * @param poiCategories Categories of POI.
      */
-    public POI(double lon, double lat, int id, String name, String textInfo, String url, int[] poiCategories) {
-        this(lon, lat, id, name, textInfo, url, poiCategories, null);
+    public POI(double lat, double lon, int id, String name, String textInfo, String url, int[] poiCategories) {
+        this(lat, lon, id, name, textInfo, url, poiCategories, null);
     }
 
 
     /**
      * Creates an instance of POI.
      *
-     * @param lon Longitude of POI.
      * @param lat Latitude of POI.
+     * @param lon Longitude of POI.
      * @param id ID of POI.
      * @param name Name of POI.
      * @param textInfo Text info of POI.
@@ -58,8 +58,8 @@ public class POI extends Location {
      * @param poiCategories Categories of POI.
      * @param address Address of POI.
      */
-    public POI(double lon, double lat, int id, String name, String textInfo, String url, int[] poiCategories, Address address) {
-        super(lon, lat, id, name, address);
+    public POI(double lat, double lon, int id, String name, String textInfo, String url, int[] poiCategories, Address address) {
+        super(lat, lon, id, name, address);
         this.textInfo = textInfo;
         this.url = url;
         this.poiCategories = poiCategories;
@@ -92,7 +92,7 @@ public class POI extends Location {
      *
      * @return int[].
      */
-    public int[] getPoiCategories() {
+    public int[] getPOICategories() {
         return poiCategories;
     }
 

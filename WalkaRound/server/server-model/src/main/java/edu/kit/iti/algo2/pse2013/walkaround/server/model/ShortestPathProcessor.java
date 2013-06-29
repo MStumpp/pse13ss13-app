@@ -75,7 +75,8 @@ public class ShortestPathProcessor {
      * @param graph Graph used for shortest path computation.
      * @return ShortestPathProcessor.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
+    // TODO: unschön, wenn man sich nur eine instance holen möchte,
+    // ohne die Graph instance zu kennen, muss getrennt werden
     public static ShortestPathProcessor getInstance(Graph graph) {
         if (graph == null)
             throw new IllegalArgumentException("graph must be provided");
