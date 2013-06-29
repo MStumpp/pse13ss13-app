@@ -19,7 +19,7 @@ public final class Graph {
     /**
      * Array of Vertices.
      */
-    private final Vertex[] vertices;
+    private Vertex[] vertices;
 
 
     /**
@@ -28,14 +28,28 @@ public final class Graph {
      * @param edges List of Edges to build a Graph.
      */
     private Graph(List<Edge> edges) {
-        vertices = new Vertex[Vertex.getIDCount()];
+        vertices = new Vertex[5000000];
+        int currentID;
         for (Edge edge : edges) {
-            if (vertices[edge.getTail().getID()] == null)
-                vertices[edge.getTail().getID()] = edge.getTail();
-            if (vertices[edge.getHead().getID()] == null)
-                vertices[edge.getHead().getID()] = edge.getHead();
+            currentID = edge.getTail().getID();
+            if (vertices.length <= currentID)
+                vertices = increaseArray(vertices, 1000000);
+            if (vertices[currentID] == null)
+                vertices[currentID] = edge.getTail();
+            currentID = edge.getHead().getID();
+            if (vertices.length <= currentID)
+                vertices = increaseArray(vertices, 1000000);
+            if (vertices[currentID] == null)
+                vertices[currentID] = edge.getHead();
             edge.getTail().addOutgoingEdge(edge);
         }
+    }
+
+
+    private Vertex[] increaseArray(Vertex[] array, int increase) {
+        Vertex[] newArray = new Vertex[array.length + increase];
+        System.arraycopy(array, 0, newArray, 0, array.length);
+        return newArray;
     }
 
 
@@ -46,7 +60,8 @@ public final class Graph {
      * @return Graph.
      * @throws EmptyListOfEdgesException if list of edges is empty.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
+    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die
+    // Graph instance zu kennen, muss getrennt werden
     public static Graph getInstance(List<Edge> edges) throws EmptyListOfEdgesException {
         if (edges == null)
             throw new IllegalArgumentException("list of edges must not be null");
@@ -81,8 +96,11 @@ public final class Graph {
     public Vertex getVertexByID(int id) throws NoVertexForIDExistsException {
         if (id < 0)
             throw new IllegalArgumentException("id must not be smaller then 0");
-        if (id > Vertex.getIDCount()-1)
-            throw new NoVertexForIDExistsException("id must not be greater than " + (Vertex.getIDCount()-1));
+        if (id > vertices.length-1)
+            throw new NoVertexForIDExistsException("id must not be greater than "
+                    + (vertices.length-1));
+        if (vertices[id] == null)
+            throw new NoVertexForIDExistsException("no vertex exists for id: " + id);
         return vertices[id];
     }
 

@@ -121,16 +121,6 @@ public class Vertex extends Coordinate implements Serializable {
 
 
     /**
-     * Returns the current id count.
-     *
-     * @return int.
-     */
-    public static int getIDCount() {
-        return idCounter;
-    }
-
-
-    /**
      * Returns the parent Vertex.
      *
      * @return Vertex.

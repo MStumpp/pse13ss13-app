@@ -7,6 +7,8 @@
 	</parent>
 
 	<artifactId>preprocessor-model-geometry</artifactId>
+    <packaging>jar</packaging>
+    <name>preprocessor-model-geometry</name>
 
     <dependencies>
         <dependency>
@@ -16,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>preprocessor-model-osm</artifactId>
+            <artifactId>server-graph</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
