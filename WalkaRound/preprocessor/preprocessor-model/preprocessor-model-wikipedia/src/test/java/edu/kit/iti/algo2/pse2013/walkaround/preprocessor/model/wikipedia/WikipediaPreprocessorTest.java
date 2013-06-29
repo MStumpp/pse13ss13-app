@@ -18,6 +18,6 @@ public class WikipediaPreprocessorTest {
 		
 		WikipediaPreprocessor.preprocessWikipediaInformation(locData);
 		
-		System.out.println(locData.getPoiList().get(0).getTextInfo());
+		System.out.println(locData.getPOIs().get(0).getTextInfo());
 	}
 }

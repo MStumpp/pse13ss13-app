@@ -32,7 +32,7 @@ public class WikipediaPreprocessor {
 	 */
 	public static void preprocessWikipediaInformation(
 			LocationDataIO locationData) throws IOException, XMLStreamException {
-		for (Iterator<POI> iter = locationData.getPoiList().iterator(); iter
+		for (Iterator<POI> iter = locationData.getPOIs().iterator(); iter
 				.hasNext();) {
 			POI current = iter.next();
 
