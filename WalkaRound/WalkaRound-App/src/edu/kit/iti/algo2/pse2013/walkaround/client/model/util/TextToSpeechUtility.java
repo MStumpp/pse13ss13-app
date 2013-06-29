@@ -1,54 +1,40 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import android.content.Context;
+import android.app.Activity;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
 /**
- * 
+ * This class provides text to speech.
  * 
  * @author Thomas Kadow
- *
+ * @version 1.0
  */
-public final class TextToSpeechUtility {
+public final class TextToSpeechUtility extends Activity implements
+		OnInitListener {
 
-	/**
-	 * 
-	 */
-	private static TextToSpeechUtility ttsu;
-	
-	/**
-	 * 
-	 */
+	private static TextToSpeechUtility instance;
+
 	private TextToSpeech tts;
 
-	/**
-	 * 
-	 * @param con
-	 * @param oil
-	 */
-	private TextToSpeechUtility(Context con, OnInitListener oil) {
-		tts = new TextToSpeech(con, oil);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public TextToSpeech getTextToSpeech() {
-		return tts;
+	private TextToSpeechUtility() {
+		tts = new TextToSpeech(this, this);
 	}
 
-	/**
-	 * 
-	 * @param con
-	 * @param oil
-	 * @return
-	 */
-	public static TextToSpeechUtility getInstance(Context con, OnInitListener oil) {
-		if (ttsu == null) {
-			ttsu = new TextToSpeechUtility(con, oil);
+	public static TextToSpeechUtility getInstance() {
+		if (instance == null) {
+			instance = new TextToSpeechUtility();
 		}
-		return ttsu;
+		return instance;
+	}
+
+	public void speak(String text) {
+		tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+	}
+
+	@Override
+	public void onInit(int status) {
+		// TODO Auto-generated method stub
+
 	}
 }
