@@ -17,8 +17,8 @@ public class DisplayCoordinate {
 	/**
 	 * Erstellt eine Display Koordinate
 	 *
-	 * @param x x-Koordinate (von oben nach unten, in dip)
-	 * @param y y-Koordinate (von links nach rechts, in dip)
+	 * @param x x-Koordinate (von links nach rechts, in dip)
+	 * @param y y-Koordinate (von oben nach unten, in dip)
 	 */
 	public DisplayCoordinate(float x, float y) {
 		setX(x);

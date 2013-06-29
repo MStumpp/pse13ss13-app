@@ -26,7 +26,7 @@ public final class RouteInfoTransfer {
     public RouteInfoTransfer(List<Coordinate> coordinates) {
         if (coordinates == null || coordinates.size() < 2)
             throw new IllegalArgumentException("list of coordinates must be provided and at least two elements long");
-        this.coordinates = new ArrayList<>();
+        this.coordinates = new ArrayList<Coordinate>();
         this.coordinates.addAll(coordinates);
     }
 

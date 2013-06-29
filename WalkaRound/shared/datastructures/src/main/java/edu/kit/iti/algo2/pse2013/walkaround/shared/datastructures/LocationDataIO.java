@@ -4,10 +4,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * This class represents a location.
+ * This class contains some preprocessed data by OSMDataPreprocessor and
+ * WikipediaPreprocessor.
  *
  * @author Matthias Stumpp
+ * @author Thomas Kadow
+ *
  * @version 1.0
  */
 public class LocationDataIO implements Serializable {
@@ -59,11 +63,11 @@ public class LocationDataIO implements Serializable {
 	}
 
 
-    /**
-     * Adds a POI to the list of POIs.
-     *
-     * @param poi POI.
-     */
+	/**
+	 * Adds a POI to the list of all POIs.
+	 *
+	 * @param poi POI to be added.
+	 */
 	public void addPOI(POI poi) {
 		poiList.add(poi);
 	}
@@ -72,7 +76,7 @@ public class LocationDataIO implements Serializable {
     /**
      * Adds an area to the list of Areas.
      *
-     * @param area Area.
+     * @param area Area to be added.
      */
 	public void addArea(Area area) {
 		areaList.add(area);
