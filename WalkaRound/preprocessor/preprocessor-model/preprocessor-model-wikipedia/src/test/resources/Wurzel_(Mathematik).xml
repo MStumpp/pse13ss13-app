@@ -1,0 +1,286 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.8/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.8/ http://www.mediawiki.org/xml/export-0.8.xsd" version="0.8" xml:lang="de">
+  <siteinfo>
+    <sitename>Wikipedia</sitename>
+    <base>http://de.wikipedia.org/wiki/Wikipedia:Hauptseite</base>
+    <generator>MediaWiki 1.22wmf8</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Medium</namespace>
+      <namespace key="-1" case="first-letter">Spezial</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Diskussion</namespace>
+      <namespace key="2" case="first-letter">Benutzer</namespace>
+      <namespace key="3" case="first-letter">Benutzer Diskussion</namespace>
+      <namespace key="4" case="first-letter">Wikipedia</namespace>
+      <namespace key="5" case="first-letter">Wikipedia Diskussion</namespace>
+      <namespace key="6" case="first-letter">Datei</namespace>
+      <namespace key="7" case="first-letter">Datei Diskussion</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki Diskussion</namespace>
+      <namespace key="10" case="first-letter">Vorlage</namespace>
+      <namespace key="11" case="first-letter">Vorlage Diskussion</namespace>
+      <namespace key="12" case="first-letter">Hilfe</namespace>
+      <namespace key="13" case="first-letter">Hilfe Diskussion</namespace>
+      <namespace key="14" case="first-letter">Kategorie</namespace>
+      <namespace key="15" case="first-letter">Kategorie Diskussion</namespace>
+      <namespace key="100" case="first-letter">Portal</namespace>
+      <namespace key="101" case="first-letter">Portal Diskussion</namespace>
+      <namespace key="828" case="first-letter">Modul</namespace>
+      <namespace key="829" case="first-letter">Modul Diskussion</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wurzel (Mathematik)</title>
+    <ns>0</ns>
+    <id>14227</id>
+    <revision>
+      <id>117749189</id>
+      <parentid>117254479</parentid>
+      <timestamp>2013-04-21T16:14:49Z</timestamp>
+      <contributor>
+        <username>Mathmensch</username>
+        <id>1420074</id>
+      </contributor>
+      <minor/>
+      <comment>/* Weblinks */</comment>
+      <text xml:space="preserve" bytes="13197">[[File:Squareroot-0-9-metapost.svg|thumb|Grafische Darstellung der [[Quadratwurzel]]-Funktion &lt;math&gt;y = \sqrt{x}&lt;/math&gt;]]
+[[File:Root-2-3-5-loglog.svg|thumb|right|In [[Doppeltlogarithmisches Papier|doppeltlogarithmischer Auftragung]] werden die &lt;math&gt;n&lt;/math&gt;-ten Wurzeln zu Geraden.]]
+In der [[Mathematik]] versteht man unter '''Wurzelziehen''' oder '''Radizieren''' die Bestimmung der Unbekannten ''x'' in der [[Potenz (Mathematik)|Potenz]]
+:&lt;math&gt;a = x^n.\,&lt;/math&gt;
+Hierbei ist &lt;math&gt;n&lt;/math&gt; eine [[natürliche Zahl]] größer als 1 und &lt;math&gt;a&lt;/math&gt; eine nichtnegative [[reelle Zahl]]. 
+Das Ergebnis des Wurzelziehens bezeichnet man als '''Wurzel''' oder '''Radix''' (von [[Latein|lat.]] ''radix'' „Wurzel“). Das Radizieren ist eine Umkehrung des [[Potenz (Mathematik)|Potenzierens]].&lt;ref name=&quot;Mathematik_2008/1&quot;&gt;T. Arens, F. Hettlich et.al.: ''Mathematik'', 2008, S. 46-47.&lt;/ref&gt;
+Im Fall &lt;math&gt;n = 2&lt;/math&gt; spricht man von ''[[Quadratwurzel]]n'', bei &lt;math&gt;n = 3&lt;/math&gt; von ''Kubikwurzeln''. Wurzeln werden mit Hilfe des [[Wurzelzeichen]]s notiert.
+
+== Definition, Sprech- und Schreibweisen ==
+Es sei &lt;math&gt;n &gt; 1&lt;/math&gt; eine natürliche Zahl. Ist &lt;math&gt;a&lt;/math&gt; eine nichtnegative reelle Zahl, so besitzt die Gleichung 
+: &lt;math&gt;x^n = a&lt;/math&gt;
+genau eine ''nichtnegative'' Lösung. Diese wird als ''&lt;math&gt;n&lt;/math&gt;-te Wurzel'' aus &lt;math&gt;a&lt;/math&gt; bezeichnet. Man schreibt dafür
+:&lt;math&gt;x = \sqrt[n\,]{a}.&lt;/math&gt;
+Hierbei bezeichnet man 
+* &lt;math&gt;\sqrt[n\,]{a}&lt;/math&gt; als ''Wurzel'' oder ''Radix'',
+* &lt;math&gt;\sqrt{\;\;}&lt;/math&gt; als ''[[Wurzelzeichen]]'',
+* &lt;math&gt;n&lt;/math&gt; als ''Wurzelexponent'',
+* &lt;math&gt;a&lt;/math&gt; als ''Radikand'' oder ''Wurzelbasis''.
+
+Gelegentlich betrachtet man auch den Fall &lt;math&gt;n=1&lt;/math&gt;, wobei dann einfach &lt;math&gt;\sqrt[1\,]{a} = a&lt;/math&gt; gilt.
+
+=== Quadrat- und Kubikwurzel ===
+
+Üblicherweise wird die '''zweite''' Wurzel als [[Quadratwurzel]] oder einfach nur als ''die'' Wurzel bezeichnet und der Wurzelexponent weggelassen:
+:&lt;math&gt;\sqrt a = \sqrt[2] a&lt;/math&gt;
+
+Die Wurzel mit dem Wurzelexponenten 3 (dritte Wurzel) bezeichnet man auch als '''Kubikwurzel'''.
+
+''Beispiel:''
+: &lt;math&gt; \sqrt[3]{8} = 2&lt;/math&gt;
+(Sprich: ''Die dritte Wurzel aus 8 ist 2'' oder ''Die Kubikwurzel aus 8 ist 2'')
+
+== Mathematische Grundlagen ==
+=== Zusammenhang mit Potenzen ===
+
+Das Radizieren mit dem Wurzelexponenten ''n'' und das Potenzieren mit dem Exponenten ''n'' heben sich gegenseitig auf, es gilt gemäß obenstehender Definition der Wurzel:
+:&lt;math&gt;\forall\ a \geq 0, n \geq 1\quad \left(\sqrt[n]{a}\right)^n = a&lt;/math&gt;
+
+Das Radizieren mit dem Wurzelexponenten ''n'' wirkt also wie das Potenzieren mit dem Exponenten &lt;math&gt;\tfrac{1}{n}&lt;/math&gt;. Nach den Rechenregeln für Potenzen gilt nämlich:
+:&lt;math&gt;\left(a^{\frac{1}{n}}\right)^n = a^{\frac{n}{n}} = a^1 = a&lt;/math&gt;
+
+Daher kann das Radizieren mit dem Wurzelexponenten ''n'' auch als Potenzieren mit dem Exponenten 1/''n'' interpretiert werden&lt;ref name=&quot;Mathematik_2008/1&quot;/&gt;:
+:&lt;math&gt;\sqrt[n]{a} = a^{\frac{1}{n}}&lt;/math&gt;
+
+=== Eindeutigkeit von Wurzeln aus positiven Zahlen ===
+
+Obwohl die eingangs genannte Fragestellung bei geradzahligen Wurzelexponenten und positiven Radikanden zwei Lösungen mit unterschiedlichen Vorzeichen besitzt, steht die Schreibweise mit dem Wurzelzeichen &lt;math&gt; \sqrt[]{} &lt;/math&gt; grundsätzlich für die positive Lösung. Beispielsweise hat die [[Gleichung]] &lt;math&gt;x^2 = 4&lt;/math&gt; die beiden Lösungen 2 und −2. Der Term &lt;math&gt;\sqrt[2]{4}&lt;/math&gt; hat jedoch den Wert 2 und ''nicht'' den Wert −2.&lt;!-- − --&gt; Allgemein gilt daher für geradzahlige Wurzelexponenten
+:&lt;math&gt;\sqrt[2n]{x^{2n}} = |x|\,.&lt;/math&gt;
+
+=== Wurzeln aus negativen Zahlen ===
+
+Die Behandlung von Wurzeln aus negativen Zahlen ist nicht einheitlich. Es gilt beispielsweise
+: &lt;math&gt;(-2)^3=-8\,,&lt;/math&gt;
+und &lt;math&gt;-2&lt;/math&gt; ist die einzige reelle Zahl, deren dritte Potenz &lt;math&gt;-8&lt;/math&gt; ist. Allgemein ergeben sich für ungerade Potenzen negativer Zahlen wieder negative Zahlen.
+
+Bezüglich der ungeraden Wurzeln aus negativen Zahlen werden folgende Positionen vertreten:
+* Wurzeln aus negativen Zahlen sind generell „verboten“. Beispielsweise ist &lt;math&gt;\sqrt[3]{-8}&lt;/math&gt; also undefiniert. Die Lösung der Gleichung &lt;math&gt;x^3 = -8&lt;/math&gt; wird geschrieben als &lt;math&gt;x = -\sqrt[3]{8}&lt;/math&gt;. 
+* Wurzeln aus negativen Zahlen sind erlaubt, wenn der Wurzelexponent eine ungerade Zahl ist (3, 5, 7, …). Für ungerade Zahlen &lt;math&gt;2n+1&lt;/math&gt; gilt generell
+:: &lt;math&gt;\sqrt[2n+1]{-a}=-\sqrt[2n+1]{a}&lt;/math&gt;.
+: Diese Festlegung ist mit manchen Eigenschaften der Wurzeln, die für positive Radikanden gelten, nicht vereinbar. Beispielsweise ist
+:: &lt;math&gt;-2=\sqrt[3]{-8}\ne\sqrt[6]{(-8)^2}=\sqrt[6]{64}=+2.&lt;/math&gt;
+
+Wurzeln zu geraden Exponenten aus negativen Zahlen können keine reellen Zahlen sein, weil gerade Potenzen reeller Zahlen nie negativ sind. Der Bedarf für Wurzeln aus negativen Zahlen führte zur Einführung der [[Komplexe Zahl|komplexen Zahlen]];&lt;ref&gt;T. Arens, F. Hettlich et.al.: ''Mathematik'', 2008, S. 122.&lt;/ref&gt; allerdings gibt es auch im Bereich der komplexen Zahlen Wurzeln aus negativen Zahlen nur mit gewissen Einschränkungen, siehe unten.
+
+=== Die Wurzelgesetze ===
+
+Die Rechenregeln für Wurzeln ergeben sich aus jenen für [[Potenz (Mathematik)|Potenzen]].
+
+Für positive Zahlen &lt;math&gt;a&lt;/math&gt; und &lt;math&gt;b&lt;/math&gt; und &lt;math&gt;n,m,k \in \N&lt;/math&gt; gelten die folgenden Rechengesetze:
+* Produktregel: &lt;math&gt;\sqrt[n]{a}\cdot\sqrt[n]{b}=\sqrt[n]{a\cdot b}&lt;/math&gt;
+* Quotientenregel: &lt;math&gt;\frac{\sqrt[n]{a}}{\sqrt[n]{b}}=\sqrt[n]{\frac{a}{b}}&lt;/math&gt;
+* &quot;Verschachtelungsregel&quot; oder Iterationsregel: &lt;math&gt;\sqrt[k]{\sqrt[n]{a}}=\sqrt[k\cdot n]{a}&lt;/math&gt;
+* Definition für gebrochenen Exponenten: &lt;math&gt;a^{\frac{m}{n}}=\sqrt[n]{a^m}=\left(\sqrt[n]{a} \right)^m&lt;/math&gt;
+* Definition für negativen Exponenten: &lt;math&gt;a^{-\frac{m}{n}}=\frac{1}{a^\frac{m}{n}}&lt;/math&gt;
+
+Bei negativen Zahlen &lt;math&gt;a&lt;/math&gt; und &lt;math&gt;b&lt;/math&gt; dürfen diese Rechengesetze nur angewendet werden, wenn &lt;math&gt;k&lt;/math&gt; und &lt;math&gt;n&lt;/math&gt; ungerade Zahlen sind. Bei komplexen Zahlen sind sie gänzlich zu vermeiden.
+
+Es gelten außerdem die Konvergenzen
+
+* &lt;math&gt;\lim_{n\rightarrow\infty}\sqrt[n]{n}= 1&lt;/math&gt;,
+
+:wie man mit Hilfe des [[Binomischer Lehrsatz|binomischen Lehrsatzes]] und der Ungleichung
+:&lt;math&gt;\left(1 + \sqrt[2]{\tfrac{2}{n}}\right)^n &gt; n&lt;/math&gt;
+
+:zeigen kann. 
+
+* &lt;math&gt;\lim_{n\to\infty}\sqrt[n]{n^k} = 1&lt;/math&gt;, wobei &lt;math&gt;k&lt;/math&gt; eine beliebige, aber feste natürliche Zahl darstellt. 
+
+* &lt;math&gt;\lim_{n\rightarrow\infty}\frac{\ln(n)}{n} = 0&lt;/math&gt;,
+
+:wie aus der Exponentialdarstellung von &lt;math&gt;\sqrt[n]{n}&lt;/math&gt; hervorgeht.
+
+=== Wurzelfunktionen ===
+Funktionen der Form
+: &lt;math&gt;f\colon \mathbb{R}_0^+\to\mathbb{R}_0^+, x\mapsto\sqrt[n]x&lt;/math&gt; oder allgemeiner &lt;math&gt;x\mapsto\sqrt[n]{x^m}&lt;/math&gt;
+heißen Wurzelfunktionen. Sie sind [[Potenzfunktion]]en, es gilt &lt;math&gt;\sqrt[n]{x^m}=x^\frac{m}{n}&lt;/math&gt;.
+
+== Berechnung ==
+
+Wurzeln können durch [[schriftliches Wurzelziehen]] bestimmt werden; dieses Verfahren ist jedoch von geringer praktischer Bedeutung.
+
+=== Rückführung auf andere Funktionen ===
+
+Höhere Wurzeln aus positiven Zahlen &lt;math&gt;x&lt;/math&gt; kann man wie jede Potenz durch [[Exponentialfunktion]] und [[Logarithmus]]
+ausdrücken:
+: &lt;math&gt;\sqrt[n]{x} = x^{1/n} =  \exp\left(\frac{\ln(x)}{n}\right) &lt;/math&gt;
+
+=== Numerische Berechnung ===
+
+Um einen Näherungswert für eine Wurzel zu erhalten, kann man mehrere Verfahren anwenden. Dazu gehören unter anderem das [[Intervallhalbierungsverfahren]].
+
+Ein weiteres Näherungsverfahren zur Berechnung von &lt;math&gt;\sqrt[n]{x}&lt;/math&gt; ergibt sich, indem man mit dem [[Newton-Verfahren]] eine Nullstelle der Funktion
+
+: &lt;math&gt;y \mapsto y^n-x, \quad n \ge 1 &lt;/math&gt; annähert:
+# Wähle einen (möglichst guten) Startwert &lt;math&gt;y &gt; 0&lt;/math&gt;
+# [[Iteration#Numerische_Mathematik|Iteriere]] nach der Vorschrift
+: &lt;math&gt;y \mapsto \frac{(n-1)y^n + x}{n \cdot y^{n-1}}&lt;/math&gt;
+
+Für &lt;math&gt;n = 2&lt;/math&gt; erhält man gerade das [[Heron-Verfahren]].
+
+''Beispiel'' für eine Näherung für &lt;math&gt;\sqrt[3]{2}&lt;/math&gt; nach dem obigen Iterationsverfahren:
+
+Die Iterationsvorschrift lautet mit &lt;math&gt;x=2&lt;/math&gt; und &lt;math&gt;n=3&lt;/math&gt;
+:&lt;math&gt;y \mapsto \frac{2 \, y^3 + 2}{3 \, y^2}&lt;/math&gt;.
+
+Mit dem Startwert &lt;math&gt;y = 2&lt;/math&gt; erhält man:
+
+{| class=&quot;prettytable&quot; 
+| Startwert: || 2,000000000000
+|-
+| Schritt 1: || 1,500000000000
+|-
+| Schritt 2: || 1,296296296296
+|-
+| Schritt 3: || 1,260932224741
+|-
+| Schritt 4: || 1,259921860565
+|-
+| Schritt 5: || 1,259921049895
+|-
+| Schritt 6: || 1,259921049894
+|}
+
+=== Methode der „Rechenkünstler“ ===
+
+Man kann, wie das Rechenkünstler machen, eine Wurzel auch durch Abschätzung und Anwendung elementarer [[Zahlentheorie]] berechnen, sofern bekannt ist, dass die Wurzel eine [[natürliche Zahl]] ist. Das lässt sich besonders gut am Beispiel der dritten Wurzel zeigen. Dazu muss man zwei Dinge wissen, nämlich die Größenordnung der Kubikzahlen, und die letzte Ziffer der Zahl:
+
+{|
+|
+{| class=&quot;wikitable&quot; 
+| 1 || 1
+|-
+| 8 || 2
+|-
+|  27 || 3
+|-
+|  64 || 4
+|-
+| 125 || 5
+|-
+| 216 || 6
+|-
+| 343 || 7
+|-
+| 512 || 8
+|-
+| 729 || 9
+|-
+| 1.000 || 10
+|}
+|
+{| class=&quot;wikitable&quot; 
+|   1.000 || 10
+|-
+|   8.000 || 20
+|-
+|  27.000 || 30
+|-
+|  64.000 || 40
+|-
+| 125.000 || 50
+|-
+| 216.000 || 60
+|-
+| 343.000 || 70
+|-
+| 512.000 || 80
+|-
+| 729.000 || 90
+|-
+| 1.000.000 || 100
+|}
+|}
+
+Beispiele:
+
+* Die dritte Wurzel von 103.823: &lt;br /&gt; Die Zahl liegt zwischen 64.000 und 125.000, deshalb muss die Zehnerstelle der dritten Wurzel 4 sein. Die letzte Ziffer der Zahl ist eine 3, demnach ist die dritte Wurzel von 103.823 abgeschätzt 47.
+* Die dritte Wurzel von 12.167: &lt;br /&gt; Die Zahl liegt zwischen 8.000 und 27.000, deshalb muss die Zehnerstelle der dritten Wurzel 2 sein. Die letzte Ziffer der Zahl ist eine 7, demnach ist die dritte Wurzel von 12.167 abgeschätzt 23.
+
+Das Ganze funktioniert aber nur dann, wenn man davon ausgehen kann, dass es sich bei der vorgegebenen Zahl um die dritte Potenz einer natürlichen Zahl handelt.
+
+Bei den Aufgaben der Rechenkünstler geht es natürlich um viel höhere Potenzen mehrstelliger Zahlen – zum Beispiel die Berechnung der 25. Wurzel aus 880.794.982.218.444.893.023.439.794.626.120.190.780.624.990.275.329.063.400.179.824.681.489.784.873.773.249 (Lösung: 1729) und extremere Aufgaben.
+
+== Wurzeln aus komplexen Zahlen ==
+[[File:Complex fifth roots.svg|thumb|243px|Die fünf fünften Wurzeln aus 1&amp;nbsp;+&amp;nbsp;i√3&amp;nbsp;=&amp;nbsp;2&amp;nbsp;·&amp;nbsp;e&lt;sup&gt;π&amp;nbsp;·&amp;nbsp;i/3&lt;/sup&gt;]]
+[[File:DritteWurzelAusZ V2.jpg|thumb|Die drei Lösungen der Gleichung &lt;math&gt;w^3 = z&lt;/math&gt; in der komplexen &lt;math&gt;w&lt;/math&gt;-Ebene (rotes, grünes, blaues Gitter). Das rote Netz bildet außerdem die Funktion &lt;math&gt;\sqrt[3] z&lt;/math&gt; ab. Das große farbige &lt;math&gt;z&lt;/math&gt;-Dreieck und seine drei &lt;math&gt;w&lt;/math&gt;-Bilder dienen als Orientierungshilfe.]]
+
+Als die &lt;math&gt;n&lt;/math&gt;''-ten Wurzeln'' einer [[Komplexe Zahl|komplexen Zahl]] &lt;math&gt;a\in\Bbb C&lt;/math&gt; bezeichnet man die Lösungen der Gleichung
+
+: &lt;math&gt;z^n = a &lt;/math&gt;.
+
+Ist &lt;math&gt;a\neq 0&lt;/math&gt; in der [[Komplexe Zahlen#Polarform|Exponentialform]] &lt;math&gt;a=|a|\,\mathrm e^{\mathrm i\varphi}&lt;/math&gt; dargestellt, so sind die &lt;math&gt;n&lt;/math&gt;-ten Wurzeln aus &lt;math&gt;a&lt;/math&gt; genau die &lt;math&gt;n&lt;/math&gt; komplexen Zahlen
+
+: &lt;math&gt;z_k=\sqrt[n]{|a|}\cdot\exp\left(\frac{\mathrm i\varphi}{n} + k\cdot\frac{2\pi\mathrm i}{n}\right)\quad(k=0,1,\dots,n-1)&lt;/math&gt;
+
+Der Sonderfall &lt;math&gt;a=1&lt;/math&gt; wird als n''-te Kreisteilungsgleichung'' bezeichnet, die Lösungen als &lt;math&gt;n&lt;/math&gt;-te [[Einheitswurzel]]n. Die Bezeichnung „Kreisteilungsgleichung“ erklärt sich, wenn man ihre Lösungen in der Gaußschen Ebene betrachtet: die &lt;math&gt; n &lt;/math&gt;-ten Einheitswurzeln teilen den Kreis mit dem Radius &lt;math&gt;1&lt;/math&gt; und dem Koordinatenursprung als Mittelpunkt in &lt;math&gt;n&lt;/math&gt; gleiche Teile, sie bilden die Eckpunkte eines in den Kreis einbeschriebenen regulären &lt;math&gt;n&lt;/math&gt;-Ecks.
+
+Anders als bei reellen Zahlen kann man nicht so einfach eine der Wurzeln als ''die'' Wurzel auszeichnen; dort wählt man die einzige nichtnegative Wurzel. Man kann jedoch eine ([[holomorph]]e) &lt;math&gt;n&lt;/math&gt;-te Wurzelfunktion für komplexe Zahlen, die keine nichtpositiven reellen Zahlen sind, über den Hauptzweig des [[Komplexer Logarithmus|komplexen Logarithmus]] definieren:
+
+: &lt;math&gt;z^{1/n} = \exp{\frac{\ln z}{n}} \quad (z\in\mathbb C\setminus\{x\in\mathbb R\mid x\leq0\})&lt;/math&gt;
+
+Man kann den Logarithmus auch (unstetig) auf die negative reelle Achse fortsetzen, es gilt dann aber mit der so definierten Wurzelfunktion beispielsweise &lt;math&gt;\sqrt[3]{-8} = 2\,\exp{(\mathrm{i}\,60^\circ)} = 1+\mathrm i\sqrt3&lt;/math&gt; und nicht &lt;math&gt;=-2&lt;/math&gt;.
+
+== Einzelnachweise ==
+&lt;references /&gt;
+
+== Literatur ==
+* Hans Kreul, Harald Ziebarth: ''Mathematik leicht gemacht'', Verlag Harri Deutsch, 7. Auflage 2009. Das komplette Kapitel zur Wurzelrechnung mit Erklärungen, Beispielen und Aufgaben ist [http://www.ziebarth-net.de/1836_probe.pdf kostenlos online abrufbar] (PDF; 535&amp;nbsp;kB). ISBN 978-3-8171-1836-6.
+
+== Weblinks ==
+{{Wiktionary|Radikand}}
+
+{{Wikibooks|Komplexe_Zahlen:_Darstellung#Wurzeln:_Satz_von_MOIVRE|Wurzeln: Satz von Moivre| Ausführliche Erklärung mit Beweisen zum komplexen Wurzelziehen}}
+
+[[Kategorie:Arithmetik]]</text>
+      <sha1>dwz2kqstqw7aa1ngzwdsp0kxxw1li2w</sha1>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+    </revision>
+  </page>
+</mediawiki>
