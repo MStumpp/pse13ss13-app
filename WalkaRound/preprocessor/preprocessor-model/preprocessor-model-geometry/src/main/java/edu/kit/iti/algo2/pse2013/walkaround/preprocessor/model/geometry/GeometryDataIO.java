@@ -17,6 +17,32 @@ public class GeometryDataIO implements Serializable {
 
 
     /**
+     * Root GeometryNode.
+     */
+    private GeometryNode root;
+
+
+    /**
+     * Initializes GeometryDataIO with GeometryNode as root.
+     *
+     * @param root GeometyNode as root of tree.
+     */
+    public GeometryDataIO(GeometryNode root) {
+        this.root = root;
+    }
+
+
+    /**
+     * Returns the root GeometryNode.
+     *
+     * @return GeometryNode root of tree.
+     */
+    public GeometryNode getRoot() {
+        return root;
+    }
+
+
+    /**
      * Saves the GeometryDataIO object to an external file.
      *
      * @param objectToSave GeometryDataIO object to save.

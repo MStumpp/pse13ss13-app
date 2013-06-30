@@ -124,7 +124,7 @@ public class PreprocessorAdminTest {
             e.printStackTrace();
             return;
         } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
         try {
