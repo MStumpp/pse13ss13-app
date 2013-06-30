@@ -16,22 +16,22 @@ import java.util.List;
  */
 public class LocationDataIO implements Serializable {
 
-	/**
-	 * Temporary Serial version ID as long as Java serialization is used.
-	 */
-	private static final long serialVersionUID = 3394680623853287034L;
+    /**
+     * Temporary Serial version ID as long as Java serialization is used.
+     */
+    private static final long serialVersionUID = 3394680623853287034L;
 
 
     /**
      * Stores POIs.
      */
-	private List<POI> poiList;
+    private List<POI> poiList;
 
 
     /**
      * Stores Areas.
      */
-	private List<Area> areaList;
+    private List<Area> areaList;
 
 
     /**
@@ -48,9 +48,9 @@ public class LocationDataIO implements Serializable {
      *
      * @return List<Area> List of all POIs.
      */
-	public List<POI> getPOIs() {
-		return poiList;
-	}
+    public List<POI> getPOIs() {
+        return poiList;
+    }
 
 
     /**
@@ -58,19 +58,19 @@ public class LocationDataIO implements Serializable {
      *
      * @return List<Area> List of all areas.
      */
-	public List<Area> getAreas() {
-		return areaList;
-	}
+    public List<Area> getAreas() {
+        return areaList;
+    }
 
 
-	/**
-	 * Adds a POI to the list of all POIs.
-	 *
-	 * @param poi POI to be added.
-	 */
-	public void addPOI(POI poi) {
-		poiList.add(poi);
-	}
+    /**
+     * Adds a POI to the list of all POIs.
+     *
+     * @param poi POI to be added.
+     */
+    public void addPOI(POI poi) {
+        poiList.add(poi);
+    }
 
 
     /**
@@ -78,9 +78,9 @@ public class LocationDataIO implements Serializable {
      *
      * @param area Area to be added.
      */
-	public void addArea(Area area) {
-		areaList.add(area);
-	}
+    public void addArea(Area area) {
+        areaList.add(area);
+    }
 
 
     /**
