@@ -5,7 +5,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
 /**
- * This class provides text to speech.
+ * This class provides text-to-speech.
  * 
  * @author Thomas Kadow
  * @version 1.0

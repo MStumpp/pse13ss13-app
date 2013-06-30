@@ -36,10 +36,15 @@ public class WikipediaPreprocessor {
 				.hasNext();) {
 			POI current = iter.next();
 
-			/*Text information parsing.*/
+			/* Text information parsing. */
 
 			// Prepare wikipedia url
-			String wikipediaURL = current.getWikipediaURL();
+
+			// hier getURL() nicht url vom image sondern zunächst wikipedia url
+			// wird aber während dem preprocessing als url vom image
+			// überschrieben...
+			// könnte eleganter gelöst werden.
+			String wikipediaURL = current.getURL();
 			String partA = wikipediaURL.substring(0,
 					wikipediaURL.lastIndexOf("/"));
 			String partB = wikipediaURL
@@ -54,21 +59,38 @@ public class WikipediaPreprocessor {
 			XMLStreamReader parser = factory.createXMLStreamReader(input);
 
 			// Parse
-			String textInfo = "";
+			StringBuilder sb = new StringBuilder();
 			while (parser.hasNext()) {
 				if (parser.getEventType() == XMLStreamConstants.START_ELEMENT
 						&& parser.getLocalName().equals("text")) {
 					parser.next();
 					while (parser.getEventType() == XMLStreamConstants.CHARACTERS
 							&& !parser.getText().endsWith("==")) {
-						// TODO: Einschränkung verbessern da möglicherweise zu viel unnötiger text mit genommen wird!
-						textInfo += parser.getText();
+						// TODO: Einschränkung verbessern da möglicherweise zu
+						// viel unnötiger text mitgenommen wird!
+						sb.append(parser.getText());
 						parser.next();
 					}
-					textInfo += parser.getText();
+					sb.append(parser.getText());
 				}
 				parser.next();
 			}
+			sb = sb.delete(sb.indexOf("=="), sb.length());
+			// sb = sb.delete(sb.indexOf("<ref>"), sb.indexOf("<\ref>"));
+			//while (sb.indexOf("[[Bild:") != -1) {
+			//	sb = sb.delete(sb.indexOf("[[Bild:"), sb.indexOf("]]") + 2);
+			//}
+			String textInfo = sb.toString();
+			textInfo = textInfo.replaceAll("\\'", "");
+			textInfo = textInfo.replaceAll("\n", "");
+			/*
+			 * textInfo = textInfo.replaceAll("\\[", ""); textInfo =
+			 * textInfo.replaceAll("\\]", ""); textInfo =
+			 * textInfo.replaceAll("\\#", ""); textInfo =
+			 * textInfo.replaceAll("\\|", ""); textInfo =
+			 * textInfo.replaceAll("\\}", ""); textInfo =
+			 * textInfo.replaceAll("\\{", "");
+			 */
 			current.setTextInfo(textInfo);
 		}
 	}

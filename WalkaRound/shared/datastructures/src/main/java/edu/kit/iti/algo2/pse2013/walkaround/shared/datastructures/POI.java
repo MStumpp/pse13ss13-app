@@ -64,7 +64,17 @@ public class POI extends Location {
         this.poiCategories = poiCategories;
     }
 
-
+    
+    /**
+     * Sets the textual information of this POI.
+     * 
+     * @param text text to set
+     */
+    public void setTextInfo(String text) {
+    	this.textInfo = text;
+    }
+    
+    
     /**
      * Returns text info of POI.
      *
@@ -75,6 +85,16 @@ public class POI extends Location {
     }
 
 
+    /**
+     * Returns an url of the image for this POI.
+     * 
+     * @return String
+     */
+    public String getURL() {
+    	return url;
+    }
+    
+    
     /**
      * Returns an image of POI.
      *

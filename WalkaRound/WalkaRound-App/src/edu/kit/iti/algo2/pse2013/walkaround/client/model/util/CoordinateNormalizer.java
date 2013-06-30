@@ -19,6 +19,7 @@ public final class CoordinateNormalizer {
 	}
 
 	/**
+	 * Normalizes a coordinate to a coordinate on a graph.
 	 * 
 	 * @param coord
 	 *            coordinate to normalize
