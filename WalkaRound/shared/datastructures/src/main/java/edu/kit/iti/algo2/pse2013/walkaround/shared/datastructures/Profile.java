@@ -14,7 +14,7 @@ public class Profile {
 	public static Profile PROFILE_JOGGING;
 
 	/**
-	 * Sighseeing profile.
+	 * Sightseeing profile.
 	 */
 	public static Profile PROFILE_SIGHTSEEING;
 
@@ -47,9 +47,29 @@ public class Profile {
 	private int[] poiCategories;
 
 	public Profile(int id, int[] areaCategories, int[] poiCategories) {
-		this.id = id;
-		this.areaCategories = areaCategories;
+		Profile profile = Profile.getByID(id);
+		profile.setAreaCategories(areaCategories);
+		profile.setPoiCategories(poiCategories);
+	}
+
+	/**
+	 * Sets the poi categories of the profile.
+	 * 
+	 * @param poiCategories
+	 *            poi categories to set
+	 */
+	public void setPoiCategories(int[] poiCategories) {
 		this.poiCategories = poiCategories;
+	}
+
+	/**
+	 * Sets the area categories of the profile.
+	 * 
+	 * @param areaCategories
+	 *            area categories to set
+	 */
+	public void setAreaCategories(int[] areaCategories) {
+		this.areaCategories = areaCategories;
 	}
 
 	/**
@@ -59,6 +79,35 @@ public class Profile {
 	 */
 	public int getID() {
 		return id;
+	}
+
+	/**
+	 * Returns the profile to the given ID.
+	 * 
+	 * @param id
+	 *            id of the profile
+	 * @return a profile
+	 */
+	public static Profile getByID(int id) {
+		switch (id) {
+		case 1:
+			return PROFILE_JOGGING;
+
+		case 2:
+			return PROFILE_SIGHTSEEING;
+
+		case 3:
+			return PROFILE_SHOPPING;
+
+		case 4:
+			return PROFILE_CLUBBING;
+
+			// case 5 : return PROFILE_RENAMEME;
+
+		default:
+			throw new IllegalArgumentException(
+					"The profile for this ID is unknown.");
+		}
 	}
 
 	/**
