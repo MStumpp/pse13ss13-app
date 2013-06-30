@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class GeometryDataIOTest {
     @Test
     public void testSandAndLoad() {
 
-        GeometryDataIO geometryDataIO = new GeometryDataIO();
+        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d), null, null));
 
         try {
             GeometryDataIO.save(geometryDataIO, new File(fileLocaton));

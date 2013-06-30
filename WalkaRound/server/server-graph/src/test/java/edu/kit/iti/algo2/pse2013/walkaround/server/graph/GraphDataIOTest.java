@@ -50,7 +50,6 @@ public class GraphDataIOTest {
         GraphDataIO graphDataIO = new GraphDataIO();
         Edge edge1 = new Edge(new Vertex(1.d, 2.d), new Vertex(3.d, 4.d));
         Edge edge2 = new Edge(new Vertex(1.d, 2.d), new Vertex(3.d, 4.d));
-
         graphDataIO.addEdge(edge1);
         graphDataIO.addEdge(edge2);
 
