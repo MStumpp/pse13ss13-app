@@ -9,4 +9,17 @@
     <artifactId>preprocessor-view</artifactId>
     <packaging>jar</packaging>
     <name>preprocessor-view</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+            <artifactId>shared-datastructures</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+            <artifactId>preprocessor-model-geometry</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

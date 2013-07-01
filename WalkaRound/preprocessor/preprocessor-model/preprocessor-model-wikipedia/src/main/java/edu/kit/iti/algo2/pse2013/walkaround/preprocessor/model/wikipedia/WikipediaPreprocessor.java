@@ -3,9 +3,13 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -18,19 +22,75 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  */
 public class WikipediaPreprocessor {
 
+	/**
+	 * Enhances all POIs within the location data file with textual informations
+	 * and a link to an image if available.
+	 * 
+	 * @param locationData
+	 * @throws IOException
+	 * @throws XMLStreamException
+	 */
 	public static void preprocessWikipediaInformation(
-			LocationDataIO locationData) throws IOException {
-		for (Iterator<POI> iter = locationData.getPoiList().iterator(); iter
+			LocationDataIO locationData) throws IOException, XMLStreamException {
+		for (Iterator<POI> iter = locationData.getPOIs().iterator(); iter
 				.hasNext();) {
 			POI current = iter.next();
+
+			/* Text information parsing. */
+
+			// Prepare wikipedia url
+
+			// hier getURL() nicht url vom image sondern zunächst wikipedia url
+			// wird aber während dem preprocessing als url vom image
+			// überschrieben...
+			// könnte eleganter gelöst werden.
+			String wikipediaURL = current.getURL();
+			String partA = wikipediaURL.substring(0,
+					wikipediaURL.lastIndexOf("/"));
+			String partB = wikipediaURL
+					.substring(wikipediaURL.lastIndexOf("/"));
+			wikipediaURL = partA + "/Spezial:Exportieren" + partB;
+			URL url = new URL(wikipediaURL);
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.connect();
+			InputStream input = connection.getInputStream();
+			XMLInputFactory factory = XMLInputFactory.newInstance();
+			XMLStreamReader parser = factory.createXMLStreamReader(input);
+
+			// Parse
+			StringBuilder sb = new StringBuilder();
+			while (parser.hasNext()) {
+				if (parser.getEventType() == XMLStreamConstants.START_ELEMENT
+						&& parser.getLocalName().equals("text")) {
+					parser.next();
+					while (parser.getEventType() == XMLStreamConstants.CHARACTERS
+							&& !parser.getText().endsWith("==")) {
+						// TODO: Einschränkung verbessern da möglicherweise zu
+						// viel unnötiger text mitgenommen wird!
+						sb.append(parser.getText());
+						parser.next();
+					}
+					sb.append(parser.getText());
+				}
+				parser.next();
+			}
+			sb = sb.delete(sb.indexOf("=="), sb.length());
+			// sb = sb.delete(sb.indexOf("<ref>"), sb.indexOf("<\ref>"));
+			//while (sb.indexOf("[[Bild:") != -1) {
+			//	sb = sb.delete(sb.indexOf("[[Bild:"), sb.indexOf("]]") + 2);
+			//}
+			String textInfo = sb.toString();
+			textInfo = textInfo.replaceAll("\\'", "");
+			textInfo = textInfo.replaceAll("\n", "");
 			/*
-			 * URL url = new URL(current.getWikipeidaURL()); HttpURLConnection
-			 * connection = (HttpURLConnection) url .openConnection();
-			 * connection.connect(); InputStream input =
-			 * connection.getInputStream(); // TODO: implement information
-			 * fetching
+			 * textInfo = textInfo.replaceAll("\\[", ""); textInfo =
+			 * textInfo.replaceAll("\\]", ""); textInfo =
+			 * textInfo.replaceAll("\\#", ""); textInfo =
+			 * textInfo.replaceAll("\\|", ""); textInfo =
+			 * textInfo.replaceAll("\\}", ""); textInfo =
+			 * textInfo.replaceAll("\\{", "");
 			 */
-			String textInfo = null;
 			current.setTextInfo(textInfo);
 		}
 	}
