@@ -20,6 +20,6 @@ public class OSMNode extends OSMElement {
 		return lon;
 	}
 	public Vertex convertToVertex() {
-		return new Vertex(id, lat, lon);
+		return new Vertex(lat, lon, id);
 	}
 }
