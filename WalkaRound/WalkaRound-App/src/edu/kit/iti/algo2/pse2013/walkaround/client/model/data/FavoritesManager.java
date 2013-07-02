@@ -7,7 +7,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
  * This class manages all saved locations and routes.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -38,7 +38,7 @@ public class FavoritesManager {
 
 	/**
 	 * Singleton getInstance method.
-	 * 
+	 *
 	 * @return an instance of the FavoritesManager
 	 */
 	public static FavoritesManager getInstance() {
@@ -50,7 +50,7 @@ public class FavoritesManager {
 
 	/**
 	 * Returns a list of all saved routes.
-	 * 
+	 *
 	 * @return a list of all saved routes
 	 */
 	public ArrayList<RouteInfo> getFavoriteRoutes() {
@@ -59,7 +59,7 @@ public class FavoritesManager {
 
 	/**
 	 * Returns a list of all saved locations.
-	 * 
+	 *
 	 * @return a list of all saved locations
 	 */
 	public ArrayList<Location> getFavoriteLocations() {
@@ -68,7 +68,7 @@ public class FavoritesManager {
 
 	/**
 	 * Returns a favorite route by ID.
-	 * 
+	 *
 	 * @param index
 	 *            index of the favorite route.
 	 * @return RouteInfo
@@ -79,7 +79,7 @@ public class FavoritesManager {
 
 	/**
 	 * Returns a favorite location by ID.
-	 * 
+	 *
 	 * @param index
 	 *            index of the favorite location.
 	 * @return Location
@@ -91,29 +91,41 @@ public class FavoritesManager {
 	// changed boolean return to void
 	/**
 	 * Removes a favorite route from the list.
-	 * 
+	 *
 	 * @param index
 	 *            index of the favorite route
+	 * @return
 	 */
-	public void deleteRoute(int index) {
-		savedRoutes.remove(index);
+	public boolean deleteRoute(int index) {
+		try {
+			savedRoutes.remove(index);
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
 	}
 
 	// changed boolean return to void
 	/**
 	 * Removes a favorite location from the list.
-	 * 
+	 *
 	 * @param index
 	 *            index of the favorite location
+	 * @return
 	 */
-	public void deleteLocation(int index) {
-		savedLocations.remove(index);
+	public boolean deleteLocation(int index) {
+		try {
+			savedLocations.remove(index);
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
 	}
 
 	// changed boolean return to void
 	/**
 	 * Adds a route to the list of favorite routes.
-	 * 
+	 *
 	 * @param routeToSave
 	 *            RouteInfo to be saved
 	 * @param name
@@ -128,7 +140,7 @@ public class FavoritesManager {
 	// changed boolean return to void
 	/**
 	 * Adds a location to the list of favorite locations.
-	 * 
+	 *
 	 * @param locationToSave
 	 *            Location to be saved
 	 * @param name
@@ -142,7 +154,7 @@ public class FavoritesManager {
 
 	/**
 	 * Returns whether the given RouteInfo is a favorite.
-	 * 
+	 *
 	 * @param routeInfo
 	 *            RouteInfo to check
 	 * @return true if it is a favorite, false otherwise
@@ -153,7 +165,7 @@ public class FavoritesManager {
 
 	/**
 	 * Returns whether the given Location is a favorite.
-	 * 
+	 *
 	 * @param location
 	 *            Location to check
 	 * @return true if it is a favorite, false otherwise
@@ -161,6 +173,6 @@ public class FavoritesManager {
 	public boolean containsLocation(Location location) {
 		return savedLocations.contains(location);
 	}
-	
-	//Nach schließen der app müssen favoriten gespeichert bleiben
+
+	//Nach schlieï¿½en der app mï¿½ssen favoriten gespeichert bleiben
 }

@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
@@ -12,7 +13,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class manages requests about POIs.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -35,7 +36,7 @@ public class POIManager {
 
 	/**
 	 * Constructs a new manager for POIs.
-	 * 
+	 *
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 */
@@ -46,7 +47,7 @@ public class POIManager {
 
 	/**
 	 * Singleton getInstance method.
-	 * 
+	 *
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
@@ -60,7 +61,7 @@ public class POIManager {
 
 	/**
 	 * Returns the IDs of all active categories.
-	 * 
+	 *
 	 * @return int[] of IDs of all active categories
 	 */
 	public int[] getActiveCategories() {
@@ -70,7 +71,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying within a rectangle.
-	 * 
+	 *
 	 * @param upperLeft
 	 *            upperleft coordinate of the rectangle
 	 * @param bottomRight
@@ -87,7 +88,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying upon a route.
-	 * 
+	 *
 	 * @param routeInfo
 	 *            Route to search POIs in the near
 	 * @param levelOfDetail
@@ -102,13 +103,13 @@ public class POIManager {
 	// aus list Locations[] gemacht
 	/**
 	 * Returns three suggestions of locations searched by query.
-	 * 
+	 *
 	 * @param query
 	 *            query to search with
 	 * @return a list of three suggestions of locations
 	 */
-	public Location[] searchPOIsByQuery(String query) {
-		Location[] suggestions = new Location[3];
+	public List<Location> searchPOIsByQuery(String query) {
+		ArrayList<Location> suggestions = new ArrayList<Location>();
 		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 				.hasNext();) {
 			POI current = iter.next();
@@ -116,33 +117,30 @@ public class POIManager {
 					current.getName());
 
 		}
-		return null;
+		return suggestions;
 	}
 
 	// aus list Locations[] gemacht
 	/**
 	 * Returns three suggestions of locations searched by an address.
-	 * 
+	 *
 	 * @param address
 	 *            address to search with
 	 * @return a list of three suggestions of locations
 	 */
-	public Location[] searchPOIsByAddress(Address address) {
-		Location[] suggestions = new Location[3];
-		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
-				.hasNext();) {
+	public List<Location> searchPOIsByAddress(Address address) {
+		ArrayList<Location> suggestions = new ArrayList<Location>();
+		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter.hasNext();) {
 			POI current = iter.next();
-			/*int similarity = computeLevenstheinDistance(,
-					current.getName());*/
-
+			/*int similarity = computeLevenstheinDistance(, current.getName());*/
 		}
-		return null;
+		return suggestions;
 	}
 
 	// changed boolean return to void
 	/**
 	 * Adds the ID of an active category.
-	 * 
+	 *
 	 * @param id
 	 *            id of the category to activate
 	 */
@@ -155,7 +153,7 @@ public class POIManager {
 	// changed boolean return to void
 	/**
 	 * Removes the ID of an active category.
-	 * 
+	 *
 	 * @param id
 	 *            id of the category to deactivate
 	 */
@@ -167,7 +165,7 @@ public class POIManager {
 
 	/**
 	 * Computes the difference between two strings.
-	 * 
+	 *
 	 * @param first
 	 *            first string to compare
 	 * @param second

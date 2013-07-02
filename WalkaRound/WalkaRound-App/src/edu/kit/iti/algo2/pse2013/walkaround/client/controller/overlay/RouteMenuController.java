@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.route;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.LinkedList;
 
@@ -9,22 +9,22 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
-public class RouteMenusController {
+public class RouteMenuController {
 
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 
 	private static boolean intanceExists;
-	private static RouteMenusController routeMC;
+	private static RouteMenuController routeMC;
 
-	private RouteMenusController() {
+	private RouteMenuController() {
 		this.routeListeners = new LinkedList<RouteListener>();
 		this.currentRoute = new Route(new LinkedList<Coordinate>());
 	}
 
-	public static RouteMenusController getInstance() {
+	public static RouteMenuController getInstance() {
 		if (!intanceExists) {
-			routeMC = new RouteMenusController();
+			routeMC = new RouteMenuController();
 		}
 		return routeMC;
 	}

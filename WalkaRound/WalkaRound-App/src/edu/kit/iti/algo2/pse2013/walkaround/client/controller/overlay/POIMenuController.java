@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 public class POIMenuController {
 	private static POIMenuController instance;

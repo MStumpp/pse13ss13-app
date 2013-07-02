@@ -38,8 +38,8 @@ public class LocationDataIO implements Serializable {
      * Initializes LocationDataIO object.
      */
     public LocationDataIO() {
-        poiList = new ArrayList<>();
-        areaList = new ArrayList<>();
+        poiList = new ArrayList<POI>();
+        areaList = new ArrayList<Area>();
     }
 
 

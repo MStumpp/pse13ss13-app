@@ -1,11 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import java.awt.*;
+import android.graphics.Bitmap;
 
 
 /**
  * This class represents a POI.
- * 
+ *
  * @author Matthias Stumpp
  * @version 1.0
  */
@@ -64,17 +64,17 @@ public class POI extends Location {
         this.poiCategories = poiCategories;
     }
 
-    
+
     /**
      * Sets the textual information of this POI.
-     * 
+     *
      * @param text text to set
      */
     public void setTextInfo(String text) {
     	this.textInfo = text;
     }
-    
-    
+
+
     /**
      * Returns text info of POI.
      *
@@ -87,22 +87,21 @@ public class POI extends Location {
 
     /**
      * Returns an url of the image for this POI.
-     * 
+     *
      * @return String
      */
     public String getURL() {
     	return url;
     }
-    
-    
+
+
     /**
      * Returns an image of POI.
      *
-     * @return BufferedImage.
+     * @return Bitmap image of the POI (Android requires {@link Bitmap} instead of {@link BufferedImage})
      */
-    // TODO: implement image loading
-    public Image getImage() {
-        return null;
+    public Bitmap getImage() {
+        return null; // TODO: implement image loading
     }
 
 
