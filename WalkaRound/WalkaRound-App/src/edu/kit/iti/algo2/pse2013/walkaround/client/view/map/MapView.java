@@ -13,8 +13,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -26,7 +29,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-
 
 public class MapView extends Activity {
 
@@ -84,6 +86,11 @@ public class MapView extends Activity {
 	 * Animation
 	 */
 	long startDelay = 0;
+	
+	/**
+	 * Gestik
+	 */
+	GestureDetector gestureDetector;
 
 	/**
 	 * Routen
@@ -158,7 +165,7 @@ public class MapView extends Activity {
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 
 		// ---------------------------------------------
-		Log.d(TAG_MAPVIEW, "Fragment PullUpMen� wird eingebaut");
+		Log.d(TAG_MAPVIEW, "Fragment PullUpMenue wird eingebaut");
 		Fragment pullUp = new PullUpView();
 		ft.add(R.id.pullUpMain, pullUp).commit();
 
@@ -169,7 +176,8 @@ public class MapView extends Activity {
 
 		// -----------------------TEST---------------------
 		Log.d(TAG_MAPVIEW, "User wird in die Mitte gestellt.");
-		this.setUserPositionOverlayImage(new DisplayCoordinate((float) size.x / 2, (float) size.y / 2), 180);
+		this.setUserPositionOverlayImage(new DisplayCoordinate(
+				(float) size.x / 2, (float) size.y / 2), 180);
 
 		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
 		DisplayWaypoint[] list = new DisplayWaypoint[3];
@@ -189,27 +197,31 @@ public class MapView extends Activity {
 
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
+		
+		
+		gestureDetector = new GestureDetector(this,
+				new MyGestureDetector());
 
 	}
 
 	/**
 	 * Updatet die Karte
-	 *
+	 * 
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
 
-	    runOnUiThread(new Runnable() {
-	    	public void run(){
-	    		map.setImageBitmap(b);
-	    		map.setVisibility(View.VISIBLE);
-	    	}
-	    });
+		runOnUiThread(new Runnable() {
+			public void run() {
+				map.setImageBitmap(b);
+				map.setVisibility(View.VISIBLE);
+			}
+		});
 	}
 
 	/**
 	 * Updatet das Routen Overlay
-	 *
+	 * 
 	 * @param b
 	 */
 	public void updateRouteOverlayImage(Bitmap b) {
@@ -217,8 +229,8 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @param dw
 	 */
 	public void updateDisplayCoordinate(DisplayWaypoint[] dw) {
@@ -251,7 +263,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param dp
 	 */
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
@@ -272,7 +284,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Setzt einen neuen Punkt aktive
-	 *
+	 * 
 	 * @param id
 	 */
 	public void setActive(int id) {
@@ -315,7 +327,7 @@ public class MapView extends Activity {
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
-	 *
+	 * 
 	 * @param coor
 	 *            Zielkoordinate
 	 * @param degree
@@ -405,45 +417,127 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
+	 */
+	private class MyGestureDetector implements OnGestureListener { 
+				
+		@Override
+		public boolean	 onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			Log.d("MAP_TOUCH", "MapTouch Fling");
+			return false;
+		}
+		
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			Log.d("MAP_TOUCH", "MapTouch Scroll");
+
+			if(e1.getY() < e2.getY()){
+				distanceY *= -1;
+			}
+			
+			if(e1.getX() < e2.getX()){
+				distanceX *= -1;
+			}
+				
+			mc.onShift(new DisplayCoordinate(distanceY, distanceX));
+			return true;
+		}
+		
+		@Override
+		public void onLongPress(MotionEvent event) {
+			Log.d("MAP_TOUCH", "MapTouch Long Touch");
+			mc.onCreatePoint(new DisplayCoordinate(event.getX(), event.getY()));
+		}
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			Log.d("MAP_TOUCH", "MapTouch Down");
+			return false;
+		}
+
+		@Override
+		public void onShowPress(MotionEvent e) {
+			Log.d("MAP_TOUCH", "MapTouch Show Press");
+			
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			Log.d("MAP_TOUCH", "MapTouch TapUp");
+			return false;
+		}
+		
+	}
+	/**
+	 * 
+	 * @author Ludwig Biermann
+	 * 
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
+		float startX;
+		float startY;
+		
+		float deltaX;
+		float deltaY;
+		
 		@Override
-		public boolean onTouch(View arg0, MotionEvent arg1) {
-			Log.d("MAP_TOUCH", "MapTouch");
-			// TODO Auto-generated method stub
-			// ziehen touch
-			// zoom
-			//
+		public boolean onTouch(View view, MotionEvent event) {
+			if (map.equals(view)) {
+				Log.d("MAP_TOUCH", "MapTouch " + view.toString());
+				gestureDetector.onTouchEvent(event);
+				return true;
+				// ziehen touch
+				// zoom
+/*
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Log.d("MAP_TOUCH", "MapTouch Down");
+					startX = event.getX();
+					startY = event.getY();
+					return gestureDetector.onTouchEvent(event);
+				}
+				
+				if (event.getAction() == MotionEvent.ACTION_MOVE &&( (Math.abs(startX-event.getX())) > 100 || (Math.abs(startY-event.getY())) > 100) && !gestureDetector.isLongpressEnabled()) {
+					Log.d("MAP_TOUCH", "MapTouch Move");
+					mc.onShift(new DisplayCoordinate(event.getX()-deltaX, event.getY()-deltaY));
+					deltaX = event.getX();
+					deltaY = event.getY();
+					return true;
+				}
+				return false;
+				*/
+			}
+
 			return false;
 		}
+
 
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
 		@Override
-		public boolean onTouch(View arg0, MotionEvent arg1) {
-			Log.d("MAP_TOUCH", "RouteOverlayTouch");
-			// TODO Auto-generated method stub
-			//
+		public boolean onTouch(View view, MotionEvent event) {
+				Log.d("MAP_TOUCH", "RouteOverlayTouch");
+				// TODO Auto-generated method stub
+				//
+			
 			return false;
 		}
 
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
