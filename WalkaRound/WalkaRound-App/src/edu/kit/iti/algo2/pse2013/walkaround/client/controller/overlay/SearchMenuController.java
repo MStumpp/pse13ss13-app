@@ -2,9 +2,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.List;
 
+import android.content.Context;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class SearchMenuController {
 	private SearchMenuController me;
@@ -17,10 +19,10 @@ public class SearchMenuController {
 		}
 		return me;
 	}
-	public List<Location> requestSuggestionsByAddress(Address addr) {
-		return POIManager.getInstance(null/*TODO: replace with real LocationDataIO-Object*/).searchPOIsByAddress(addr);
+	public List<Address> requestSuggestionsByAddress(Address addr, Context context) {
+		return POIManager.getInstance(null/*TODO: replace with real LocationDataIO-Object*/).searchPOIsByAddress(addr, context);
 	}
-	public List<Location> requestSuggestionsByText(String text) {
+	public List<POI> requestSuggestionsByText(String text) {
 		return POIManager.getInstance(null/*TODO: replace with real LocationDataIO-Object*/).searchPOIsByQuery(text);
 	}
 }
