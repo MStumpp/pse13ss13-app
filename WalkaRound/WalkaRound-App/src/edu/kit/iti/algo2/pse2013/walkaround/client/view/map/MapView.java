@@ -165,7 +165,7 @@ public class MapView extends Activity {
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 
 		// ---------------------------------------------
-		Log.d(TAG_MAPVIEW, "Fragment PullUpMen� wird eingebaut");
+		Log.d(TAG_MAPVIEW, "Fragment PullUpMenue wird eingebaut");
 		Fragment pullUp = new PullUpView();
 		ft.add(R.id.pullUpMain, pullUp).commit();
 

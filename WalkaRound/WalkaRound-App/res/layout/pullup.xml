@@ -88,6 +88,71 @@
             android:layout_below="@+id/relativeLayout2"
             android:background="#000000" >
 
+            <include
+                android:id="@+id/pullupInfoViewSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:visibility="gone"
+                layout="@layout/poi_info_view" />
+
+            <include
+                android:id="@+id/pullupRoundtripSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                layout="@layout/roundtrip_menu"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/pullupFavoriteSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                layout="@layout/favorite_menu"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/pullupPOISwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                layout="@layout/poi_menu"
+                android:visibility="gone" />
+            
+            <include
+                android:id="@+id/pullupRoutingSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                layout="@layout/routing_menu"
+                android:visibility="gone" />
+            
+            <include
+                android:id="@+id/pullupSearchSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                layout="@layout/search_menu"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 
