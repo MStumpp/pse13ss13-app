@@ -9,7 +9,7 @@ import org.junit.Test;
 
 /**
  * This class test the class Area.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -25,12 +25,12 @@ public class AreaTest {
 
 	@Before
 	public void setUp() {
-		testCoordinateListA = new ArrayList<>();
+		testCoordinateListA = new ArrayList<Coordinate>();
 		testCoordinateListA.add(new Coordinate(1, 2));
 		testCoordinateListA.add(new Coordinate(3, 4));
 		testCoordinateListA.add(new Coordinate(5, 6));
 
-		testCoordinateListB = new ArrayList<>();
+		testCoordinateListB = new ArrayList<Coordinate>();
 		testCoordinateListB.add(new Coordinate(13, 12));
 		testCoordinateListB.add(new Coordinate(11, 10));
 		testCoordinateListB.add(new Coordinate(9, 8));
@@ -38,13 +38,13 @@ public class AreaTest {
 		testCoordinateListB.add(new Coordinate(72, 23));
 		testCoordinateListB.add(new Coordinate(65, 41));
 
-		testCoordinateListC = new ArrayList<>();
+		testCoordinateListC = new ArrayList<Coordinate>();
 		testCoordinateListC.add(new Coordinate(-15, 15));
 		testCoordinateListC.add(new Coordinate(-20, 20));
 		testCoordinateListC.add(new Coordinate(-37, 37));
 		testCoordinateListC.add(new Coordinate(-42, 65));
 
-		testCoordinateListTooShort = new ArrayList<>();
+		testCoordinateListTooShort = new ArrayList<Coordinate>();
 		testCoordinateListTooShort.add(new Coordinate(1, 1));
 		testCoordinateListTooShort.add(new Coordinate(20, 40));
 	}

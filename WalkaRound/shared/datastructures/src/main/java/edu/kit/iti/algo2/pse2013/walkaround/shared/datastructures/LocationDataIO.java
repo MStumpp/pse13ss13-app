@@ -1,8 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
 
 
 /**
@@ -11,15 +15,11 @@ import java.util.List;
  *
  * @author Matthias Stumpp
  * @author Thomas Kadow
+ * @author Florian Sch&auml;fer
  *
  * @version 1.0
  */
-public class LocationDataIO implements Serializable {
-
-    /**
-     * Temporary Serial version ID as long as Java serialization is used.
-     */
-    private static final long serialVersionUID = 3394680623853287034L;
+public class LocationDataIO {
 
 
     /**
@@ -88,13 +88,19 @@ public class LocationDataIO implements Serializable {
      *
      * @param objectToSave LocationDataIO object to save.
      * @param destination Location of output file on file system.
+     * @throws FileNotFoundException
      * @throws java.io.IOException
      */
-    public static void save(LocationDataIO objectToSave, File destination) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
-        oos.writeObject(objectToSave);
-        oos.flush();
-        oos.close();
+    public static void save(LocationDataIO objectToSave, File destination) throws FileNotFoundException, IOException {
+    	ProtobufIO.write(objectToSave, destination);
+    	/*SaveLocationData.Builder locationData = SaveLocationData.newBuilder();
+    	for (POI p : objectToSave.getPOIs()) {
+    		locationData.addPOI(p.getSavePOI());
+    	}
+    	BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(destination));
+    	locationData.build().writeTo(outStream);
+    	outStream.flush();
+    	outStream.close();*/
     }
 
 
@@ -102,14 +108,18 @@ public class LocationDataIO implements Serializable {
      * Loads and returns a LocationDataIO object from a given file.
      *
      * @param source Location of source file in file system.
+     * @throws FileNotFoundException
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static LocationDataIO load(File source) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(source)));
-        LocationDataIO locationDataIO = (LocationDataIO) ois.readObject();
-        ois.close();
-        return locationDataIO;
+    public static LocationDataIO load(File source) throws FileNotFoundException, IOException {
+    	return ProtobufIO.readLocationData(source);
+    	/*LocationDataIO newLocationData = new LocationDataIO();
+    	SaveLocationData input = SaveLocationData.parseFrom(new BufferedInputStream(new FileInputStream(source)));
+    	for (int i = 0; i < input.getPOICount(); i++) {
+    		newLocationData.addPOI(POI.getInstance(input.getPOI(i)));
+    	}
+    	return newLocationData;*/
     }
 
 }
