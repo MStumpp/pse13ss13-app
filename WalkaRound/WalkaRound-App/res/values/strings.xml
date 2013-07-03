@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WalkAround</string>
+    <string name="address">address</string>
+    <string name="POI">POI</string>
 </resources>

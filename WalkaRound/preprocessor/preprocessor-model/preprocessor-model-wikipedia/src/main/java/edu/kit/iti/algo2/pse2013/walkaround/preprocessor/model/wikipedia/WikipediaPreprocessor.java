@@ -76,13 +76,18 @@ public class WikipediaPreprocessor {
 				parser.next();
 			}
 			sb = sb.delete(sb.indexOf("=="), sb.length());
-			// sb = sb.delete(sb.indexOf("<ref>"), sb.indexOf("<\ref>"));
-			//while (sb.indexOf("[[Bild:") != -1) {
-			//	sb = sb.delete(sb.indexOf("[[Bild:"), sb.indexOf("]]") + 2);
-			//}
+			while (sb.indexOf("<ref>") != -1) {
+				sb = sb.delete(sb.indexOf("<ref>"), sb.indexOf("</ref>") + 6);
+			}
+			while (sb.indexOf("{") != -1) {
+				sb = sb.delete(sb.indexOf("{"), sb.indexOf("}") + 1);
+			}
+			while (sb.indexOf("[[Datei:") != -1) {
+			sb = sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2);
+			}
 			String textInfo = sb.toString();
 			textInfo = textInfo.replaceAll("\\'", "");
-			textInfo = textInfo.replaceAll("\n", "");
+			//textInfo = textInfo.replaceAll("\n", "");
 			/*
 			 * textInfo = textInfo.replaceAll("\\[", ""); textInfo =
 			 * textInfo.replaceAll("\\]", ""); textInfo =
