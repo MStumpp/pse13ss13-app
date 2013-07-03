@@ -164,6 +164,7 @@ public class PullUpView extends Fragment {
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 		pullUpContent = new InfoView();
 		ft.add(R.id.pullupContent, pullUpContent).commit();
+		main.setOnTouchListener(new MainListener());
 
 	}
 
@@ -403,6 +404,24 @@ public class PullUpView extends Fragment {
 		}
 	}
 
+	/**
+	 * Listener beim Touch auf den Content
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
+	private class MainListener implements OnTouchListener {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+
+			if (!v.equals(main)) {
+				return false;
+			}
+
+			Log.d(TAG_PULLUP, "main wurde aufgerufen");
+			return true;
+		}
+	}
 	/**
 	 * Listener zur änderung des Content des Menüs.
 	 * 
