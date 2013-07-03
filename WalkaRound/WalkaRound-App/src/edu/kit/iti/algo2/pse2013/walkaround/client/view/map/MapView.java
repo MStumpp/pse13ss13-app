@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -91,6 +92,7 @@ public class MapView extends Activity {
 	 * Gestik
 	 */
 	GestureDetector gestureDetector;
+	GestureOverlayView mapGest;
 
 	/**
 	 * Routen
@@ -142,7 +144,7 @@ public class MapView extends Activity {
 		map.setMinimumHeight(size.y);
 		map.setOnTouchListener(new MapTouchEventListener());
 		// map.setImageBitmap(this.getDefaultFogScreen());
-
+		
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
 		mc = MapController.initialize(this);
@@ -150,7 +152,7 @@ public class MapView extends Activity {
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
 		routeOverlay = (ImageView) this.findViewById(R.id.mapview_overlay);
-		routeOverlay.setOnTouchListener(new RouteOverlayTouchEventListener());
+		//routeOverlay.setOnTouchListener(new RouteOverlayTouchEventListener());
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "User wird erstellt.");
@@ -468,6 +470,7 @@ public class MapView extends Activity {
 			Log.d("MAP_TOUCH", "MapTouch TapUp");
 			return false;
 		}
+
 		
 	}
 	/**
