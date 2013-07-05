@@ -26,7 +26,7 @@ public class GraphDataIO implements Serializable {
 	 */
 	private static final long serialVersionUID = 3394680623853287035L;
 
-	private ArrayList<Edge> edges = new ArrayList<>();
+	private ArrayList<Edge> edges = new ArrayList<Edge>();
 	/**
 	 * Saves the GraphDataIO-object, which is given as parameter, as the {@code destination}-file.
 	 * @param objectToSave

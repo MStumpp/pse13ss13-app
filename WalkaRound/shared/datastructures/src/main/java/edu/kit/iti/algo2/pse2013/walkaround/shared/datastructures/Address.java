@@ -16,7 +16,7 @@ public class Address {
 	/**
 	 * Number of the building in the street.
 	 */
-	private String streetNumber;
+	private String houseNumber;
 
 	/**
 	 * Name of the city.
@@ -33,17 +33,17 @@ public class Address {
 	 * 
 	 * @param street
 	 *            name of the street
-	 * @param streetNumber
+	 * @param houseNumber
 	 *            number of the building in the street
 	 * @param city
 	 *            name of the city
 	 * @param postalCode
 	 *            postal code of the address
 	 */
-	public Address(String street, String streetNumber, String city,
+	public Address(String street, String houseNumber, String city,
 			int postalCode) {
 		this.street = street;
-		this.streetNumber = streetNumber;
+		this.houseNumber = houseNumber;
 		this.city = city;
 		this.postalCode = postalCode;
 	}
@@ -62,8 +62,8 @@ public class Address {
 	 * 
 	 * @return number of the building in the street
 	 */
-	public String getStreetNumber() {
-		return streetNumber;
+	public String getHouseNumber() {
+		return houseNumber;
 	}
 
 	/**
@@ -86,6 +86,6 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return city + ", " + postalCode + ", " + street + streetNumber;
+		return city + ", " + postalCode + ", " + street + houseNumber;
 	}
 }

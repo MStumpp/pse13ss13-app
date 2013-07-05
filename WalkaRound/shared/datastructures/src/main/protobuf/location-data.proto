@@ -1,0 +1,30 @@
+option java_package = "edu.kit.iti.algo2.pse2013.walkaround.shared.pbf";
+option java_outer_classname = "LocationProtos";
+
+message SaveLocationData {
+	message SaveCoordinate {
+		required double latitude = 1;
+		required double longtitude = 2;
+		repeated float crossroad_angle = 3;
+	}
+	message SaveLocation {
+		message SaveAddress {
+			optional string street = 1;
+			optional string house_number = 2;
+			optional string city = 3;
+			optional int32 postal_code = 4;
+		}
+		required SaveCoordinate parent = 1;
+		optional string name = 2;
+		optional int32 i_d = 3;
+		optional SaveAddress address = 4;
+	}
+	message SavePOI {
+		required SaveLocation parent = 1;
+		optional string text_info = 6;
+		optional string image_u_r_l = 7;
+		repeated int32 p_o_i_category = 8;
+	}
+	repeated SavePOI p_o_i = 1;
+	//repeated Area area = 2;
+}

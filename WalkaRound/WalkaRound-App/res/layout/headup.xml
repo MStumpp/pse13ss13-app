@@ -116,4 +116,12 @@
         android:scaleType="fitCenter"
         android:src="@drawable/loupe" />
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/headup_userlock"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="48dp" >
+    </FrameLayout>
+
 </RelativeLayout>

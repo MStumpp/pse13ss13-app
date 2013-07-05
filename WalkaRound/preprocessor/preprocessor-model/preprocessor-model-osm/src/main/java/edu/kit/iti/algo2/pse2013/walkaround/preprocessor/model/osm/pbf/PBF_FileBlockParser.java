@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf;
 
-import java.lang.management.GarbageCollectorMXBean;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,11 +16,10 @@ import crosby.binary.file.FileBlockPosition;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
-	private HashMap<Long, OSMNode> nodes = new HashMap<>();
+	private HashMap<Long, OSMNode> nodes = new HashMap<Long, OSMNode>();
 	private int numEdges = 0;
 
 	private GraphDataIO graphData;

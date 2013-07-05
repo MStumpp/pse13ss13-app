@@ -12,7 +12,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.headup.HeadUpController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 
 /**
  * Diese Klasse ist für die Anzeige der sogenannten HeadUp Elemente zuständig.
@@ -81,7 +81,7 @@ public class HeadUpView extends Fragment {
 
 		float height = (size.y - size.y / 10) - 50;
 
-		Log.d(HEADUP, "H�he des head Up " + height);
+		Log.d(HEADUP, "High of the HeadUP " + height);
 		this.getActivity().findViewById(R.id.headup_container)
 				.getLayoutParams().height = (int) height;
 
