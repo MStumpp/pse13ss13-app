@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.server;
 
 import java.io.File;
 import java.io.FileNotFoundException;
