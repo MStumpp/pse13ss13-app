@@ -306,8 +306,8 @@ public class MapModel implements TileListener {
 		this.currentLevelOfDetail = nextLevelOfDetail;
 
 		final double deltaX = c.getLatitude() - this.upperLeft.getLatitude();
-		final double deltaY = c.getLongtitude()
-				- this.upperLeft.getLongtitude();
+		final double deltaY = c.getLongitude()
+				- this.upperLeft.getLongitude();
 
 		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaX + " " + deltaY);
 
@@ -383,7 +383,7 @@ public class MapModel implements TileListener {
 	 */
 	public DisplayCoordinate getTileOffset(){
 		float latDiff = (float) ((upperLeft.getLatitude() + 90) % (180 / Math.pow(2, currentLevelOfDetail)));
-		float lonDiff = (float) ((upperLeft.getLongtitude() + 180) % (360 / Math.pow(2, currentLevelOfDetail)));
+		float lonDiff = (float) ((upperLeft.getLongitude() + 180) % (360 / Math.pow(2, currentLevelOfDetail)));
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
 		Log.d(TAG_MAP_MODEL, String.format(

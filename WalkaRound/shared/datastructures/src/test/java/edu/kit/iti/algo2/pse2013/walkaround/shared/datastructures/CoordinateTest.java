@@ -37,11 +37,11 @@ public class CoordinateTest {
 	}
 	@Test
 	public void testLonOverflow() {
-		assertEquals(-180 + OVERFLOW, new Coordinate(0, 180 + OVERFLOW).getLongtitude(), OVERFLOW_PRECISION);
+		assertEquals(-180 + OVERFLOW, new Coordinate(0, 180 + OVERFLOW).getLongitude(), OVERFLOW_PRECISION);
 	}
 	@Test
 	public void testLonUnderflow() {
-		assertEquals(180 - OVERFLOW, new Coordinate(0, -180 - OVERFLOW).getLongtitude(), OVERFLOW_PRECISION);
+		assertEquals(180 - OVERFLOW, new Coordinate(0, -180 - OVERFLOW).getLongitude(), OVERFLOW_PRECISION);
 	}
 	@Test
 	public void testLatOverflow() {
@@ -55,7 +55,7 @@ public class CoordinateTest {
 	public void testLonPersistence() {
 		for (double lon = -180; lon <= 180; lon+= 30) {
 			for (double lat = -90; lat <= 90; lat += 90) {
-				assertTrue(lon == new Coordinate(lat, lon).getLongtitude());
+				assertTrue(lon == new Coordinate(lat, lon).getLongitude());
 			}
 		}
 	}

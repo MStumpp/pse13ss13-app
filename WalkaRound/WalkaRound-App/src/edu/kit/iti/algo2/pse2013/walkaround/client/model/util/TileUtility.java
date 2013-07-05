@@ -34,7 +34,7 @@ public final class TileUtility {
 	 */
 	public static int[] getXYTileIndex(Coordinate c, int levelOfDetail) {
 		return new int[] {
-				(int) Math.floor((c.getLongtitude() + 180) / 360
+				(int) Math.floor((c.getLongitude() + 180) / 360
 						* (1 << levelOfDetail)),
 				(int) Math.floor((1 - Math.log(Math.tan(Math.toRadians(c
 						.getLatitude()))

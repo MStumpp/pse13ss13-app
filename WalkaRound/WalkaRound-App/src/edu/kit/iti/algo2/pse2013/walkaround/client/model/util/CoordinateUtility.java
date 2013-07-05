@@ -61,8 +61,8 @@ public final class CoordinateUtility {
 	 * @see {@link https://de.wikipedia.org/wiki/Orthodrome#Strecke}
 	 */
 	public static double calculateDifferenceInMeters(Coordinate c1, Coordinate c2) {
-		double lon1 = Math.toRadians(c1.getLongtitude());
-		double lon2 = Math.toRadians(c2.getLongtitude());
+		double lon1 = Math.toRadians(c1.getLongitude());
+		double lon2 = Math.toRadians(c2.getLongitude());
 		double lat1 = Math.toRadians(c1.getLatitude());
 		double lat2 = Math.toRadians(c2.getLatitude());
 		double zeta = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
@@ -101,6 +101,6 @@ public final class CoordinateUtility {
 	 * @return a new Coordinate 
 	 */
 	public static Coordinate convertDisplayCoordinateToCoordinate(DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
-		return new Coordinate(upperLeft.getLatitude() + convertDegreesToPixels(dc.getX(),levelOfDetail,CoordinateUtility.DIRECTION_HORIZONTAL),upperLeft.getLongtitude() + convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL));
+		return new Coordinate(upperLeft.getLatitude() + convertDegreesToPixels(dc.getX(),levelOfDetail,CoordinateUtility.DIRECTION_HORIZONTAL),upperLeft.getLongitude() + convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL));
 	}
 }

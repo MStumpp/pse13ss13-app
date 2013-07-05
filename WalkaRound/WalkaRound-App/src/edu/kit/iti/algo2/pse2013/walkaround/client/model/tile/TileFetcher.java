@@ -40,7 +40,7 @@ public class TileFetcher {
 	 * @param numTilesY the number of tile-rows in the requested rectangle
 	 */
 	public boolean requestTiles(final int levelOfDetail, final Coordinate topLeft, final int numTilesX, final int numTilesY) {
-		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongtitude(), numTilesX, numTilesY));
+		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongitude(), numTilesX, numTilesY));
 
 		int minLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
 		int maxLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();

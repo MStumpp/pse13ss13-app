@@ -54,7 +54,7 @@ public class POI extends Location {
      * @param poiCategories the POI-Categories, this POI belongs to
      */
     public POI(Location loc, String textInfo, String imageURL, List<Integer> poiCategories) {
-    	this(loc.getLatitude(), loc.getLongtitude(), loc.getId(), loc.getName(), textInfo, imageURL, poiCategories);
+    	this(loc.getLatitude(), loc.getLongitude(), loc.getId(), loc.getName(), textInfo, imageURL, poiCategories);
     }
     /**
      * Creates an instance of POI.
