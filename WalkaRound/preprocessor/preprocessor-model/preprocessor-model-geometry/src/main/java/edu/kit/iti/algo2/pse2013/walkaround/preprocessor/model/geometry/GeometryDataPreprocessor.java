@@ -3,7 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.LocationDataIO;
 
 import java.util.*;
 
@@ -29,12 +29,12 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
 
         // get all vertices
-        List<Vertex> vertices = new ArrayList<>();
+        List<Vertex> vertices = new ArrayList<Vertex>();
         for (Edge edge : graphDataIO.getEdges())
             for (Vertex vertex : edge.getVertices())
                 vertices.add(vertex);
 
-        Set<Vertex> sortedLatitude = new TreeSet<>(new Comparator<Vertex>() {
+        Set<Vertex> sortedLatitude = new TreeSet<Vertex>(new Comparator<Vertex>() {
             @Override
             public int compare(Vertex v1, Vertex v2) {
                 if (v1.getLatitude() >  v2.getLatitude()){
@@ -47,7 +47,7 @@ public class GeometryDataPreprocessor {
         });
         sortedLatitude.addAll(vertices);
 
-        Set<Vertex> sortedLongitude = new TreeSet<>(new Comparator<Vertex>() {
+        Set<Vertex> sortedLongitude = new TreeSet<Vertex>(new Comparator<Vertex>() {
             @Override
             public int compare(Vertex v1, Vertex v2) {
                 if (v1.getLongtitude() >  v2.getLongtitude()){
@@ -60,7 +60,7 @@ public class GeometryDataPreprocessor {
         });
         sortedLongitude.addAll(vertices);
 
-        GeometryNode node = twoDtree(new ArrayList<>(sortedLatitude), new ArrayList<>(sortedLongitude));
+        GeometryNode node = twoDtree(new ArrayList<Vertex>(sortedLatitude), new ArrayList<Vertex>(sortedLongitude));
         return new GeometryDataIO(node);
     }
 

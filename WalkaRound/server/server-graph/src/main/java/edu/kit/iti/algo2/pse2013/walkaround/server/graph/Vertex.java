@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
 
 /**
  * This class represents an vertex contained in a graph.
@@ -85,7 +85,7 @@ public class Vertex extends Coordinate implements Serializable {
         this.osmID = osmID;
         id = idCounter;
         idCounter += 1;
-        outgoingEdges = new ArrayList<>();
+        outgoingEdges = new ArrayList<Edge>();
         parent = null;
         currentLength = Double.POSITIVE_INFINITY;
         run = 0;
