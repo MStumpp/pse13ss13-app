@@ -3,9 +3,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 
 /**
@@ -32,9 +35,9 @@ public class GeometryDataPreprocessorTest {
 
     private LocationDataIO getLocationDataIO() {
         LocationDataIO locationDataIO = new LocationDataIO();
-        locationDataIO.addPOI(new POI(1.d, 2.d, 1, "poi 1", "info 1", "url 1", new int[]{1}));
-        locationDataIO.addPOI(new POI(3.d, 4.d, 2, "poi 2", "info 2", "url 2", new int[]{1}));
-        locationDataIO.addPOI(new POI(5.d, 7.d, 3, "poi 3", "info 3", "url 3", new int[]{1}));
+        locationDataIO.addPOI(new POI(1.d, 2.d, 1, "poi 1", "info 1", "url 1", new ArrayList<Integer>()));
+        locationDataIO.addPOI(new POI(3.d, 4.d, 2, "poi 2", "info 2", "url 2", new ArrayList<Integer>()));
+        locationDataIO.addPOI(new POI(5.d, 7.d, 3, "poi 3", "info 3", "url 3", new ArrayList<Integer>()));
         return locationDataIO;
     }
 
