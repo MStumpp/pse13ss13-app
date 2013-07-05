@@ -122,7 +122,7 @@ public final class Edge implements Serializable {
      * @return List<Vertex>.
      */
     public List<Vertex> getVertices() {
-        List<Vertex> result = new ArrayList<>();
+        List<Vertex> result = new ArrayList<Vertex>();
         result.add(tail);
         result.add(head);
         return result;

@@ -1,6 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 

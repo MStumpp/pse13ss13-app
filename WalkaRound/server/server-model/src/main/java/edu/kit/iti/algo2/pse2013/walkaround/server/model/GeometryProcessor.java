@@ -1,7 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
 
 /**
  * GeometryProcessor provides some api to query nearest Edges and Vertices based on Coordinates.

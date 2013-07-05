@@ -1,10 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.OptimizeRouteProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.RouteInfoTransfer;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -32,7 +33,12 @@ public class Server {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
-        return ShortestPathProcessor.getInstance(null).computeShortestPath(coordinate1, coordinate2);
+        try {
+            return ShortestPathProcessor.getInstance(null).computeShortestPath(coordinate1, coordinate2);
+        } catch (NoShortestPathExistsException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
     }
 
 
