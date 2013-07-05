@@ -4,8 +4,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.RouteInfoTransfer;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -54,7 +54,7 @@ public class ShortestPathProcessor {
     private ShortestPathProcessor(Graph graph) {
         this.graph = graph;
         // set up the priority queue
-        queue = new PriorityQueue<>(10, new Comparator<Vertex>() {
+        queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
             @Override
             public int compare(Vertex v1, Vertex v2) {
                 if (v1.getCurrentLength() >  v2.getCurrentLength()){
@@ -162,7 +162,7 @@ public class ShortestPathProcessor {
         }
 
         // get the list of coordinates
-        LinkedList<Coordinate> result = new LinkedList<>();
+        LinkedList<Coordinate> result = new LinkedList<Coordinate>();
         result.add(targetVertex);
         Vertex currentParent = targetVertex.getParent();
         while (currentParent != null && !currentParent.equals(sourceVertex)) {

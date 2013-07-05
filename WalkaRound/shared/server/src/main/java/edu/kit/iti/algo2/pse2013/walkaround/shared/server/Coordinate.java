@@ -1,12 +1,19 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.server;
 
+import java.io.Serializable;
+
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
+
+    /**
+     * Temporary Serial version ID as long as Java serialization is used
+     */
+    private static final long serialVersionUID = 3394680623853287035L;
 
 
 	/**

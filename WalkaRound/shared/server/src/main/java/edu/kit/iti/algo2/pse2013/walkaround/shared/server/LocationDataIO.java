@@ -9,12 +9,15 @@ import java.util.List;
  * WikipediaPreprocessor.
  *
  * @author Matthias Stumpp
- * @author Thomas Kadow
- * @author Florian Sch&auml;fer
  *
  * @version 1.0
  */
-public class LocationDataIO {
+public class LocationDataIO implements Serializable {
+
+    /**
+     * Temporary Serial version ID as long as Java serialization is used
+     */
+    private static final long serialVersionUID = 3394680623853287035L;
 
 
     /**

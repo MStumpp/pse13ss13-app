@@ -3,14 +3,15 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.POI;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class PreprocessorAdminTest {
             return;
         }
 
-        Map<Long, Vertex> vertices = new HashMap<>();
+        Map<Long, Vertex> vertices = new HashMap<Long, Vertex>();
 
         BufferedReader bufRead = new BufferedReader(input);
         String myLine;
@@ -117,7 +118,7 @@ public class PreprocessorAdminTest {
             {
                 String[] array = myLine.split(";");
                 locationDataIO.addPOI(new POI(format.parse(array[1]).doubleValue(),
-                        format.parse(array[0]).doubleValue(), idCounter, array[2].replace("\"", ""), array[2].replace("\"", ""), "http://www.walkaround.com", new int[]{1}));
+                        format.parse(array[0]).doubleValue(), idCounter, array[2].replace("\"", ""), array[2].replace("\"", ""), "http://www.walkaround.com", new ArrayList<Integer>()));
                 idCounter += 1;
             }
         } catch (IOException e) {

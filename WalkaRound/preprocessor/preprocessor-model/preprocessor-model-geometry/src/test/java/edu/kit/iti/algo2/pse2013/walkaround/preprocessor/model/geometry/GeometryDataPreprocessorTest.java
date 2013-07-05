@@ -3,9 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.POI;
 import org.junit.Test;
 
 import java.util.ArrayList;
