@@ -23,7 +23,7 @@ public class Coordinate implements Serializable {
 
 
 	/**
-	 * longtitude of this Coordinate.
+	 * longitude of this Coordinate.
 	 */
 	private double lon;
 
@@ -48,7 +48,7 @@ public class Coordinate implements Serializable {
 
     // TODO: Wofür brauchen wir das? (Matthias)
 	public Coordinate(Coordinate reference, double latDelta, double lonDelta) {
-		this(reference.getLatitude() + latDelta, reference.getLongtitude() + lonDelta);
+		this(reference.getLatitude() + latDelta, reference.getLongitude() + lonDelta);
 	}
 
 
@@ -62,7 +62,7 @@ public class Coordinate implements Serializable {
 	 */
 	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
 		setLatitude(lat);
-		setLongtitude(lon);
+		setLongitude(lon);
 		this.crossInfo = crossInfo;
 	}
 
@@ -80,7 +80,7 @@ public class Coordinate implements Serializable {
 	 *
 	 * @return double.
 	 */
-	public double getLongtitude() {
+	public double getLongitude() {
 		return lon;
 	}
 
@@ -100,11 +100,11 @@ public class Coordinate implements Serializable {
 	}
 
 	/**
-	 * Sets the longtitude attribute of this Coordinate.
+	 * Sets the longitude attribute of this Coordinate.
      *
      * @param lon Longitude value.
      */
-	public void setLongtitude(double lon) {
+	public void setLongitude(double lon) {
 		if (lon > 180) {
 			this.lon = -180 + lon % 180;
 		} else if (lon < -180) {

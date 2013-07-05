@@ -91,7 +91,21 @@ public class POIManager {
 	 */
 	public ArrayList<POI> getPOIsWithinRectangle(Coordinate upperLeft,
 			Coordinate bottomRight, int levelOfDetail) {
-		return null;
+		double minLat = bottomRight.getLatitude();
+		double maxLat = upperLeft.getLatitude();
+		double minLon = upperLeft.getLongitude();
+		double maxLon = bottomRight.getLongitude();
+		ArrayList<POI> poiList = new ArrayList<POI>();
+		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
+				.hasNext();) {
+			POI current = iter.next();
+			if((current.getLatitude() >= minLat && current.getLatitude() <= maxLat) && (current.getLongitude() >= minLon && current.getLongitude() <= maxLon)) {
+				poiList.add(current);
+			}
+		}
+		return poiList;
+		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur besseren laufzeit
+		// lvl of detail noch nicht eingebaut
 	}
 
 	// int[] parameter gelÃ¶scht da aktive kategorien als attribut vorliegen
@@ -107,6 +121,7 @@ public class POIManager {
 	public ArrayList<POI> getPOIsAlongRoute(RouteInfo routeInfo,
 			int levelOfDetail) {
 		return null;
+		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur besseren laufzeit
 	}
 
 	// aus location poi gemacht
