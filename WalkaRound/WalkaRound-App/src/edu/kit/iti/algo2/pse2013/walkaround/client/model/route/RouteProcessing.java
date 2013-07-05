@@ -49,9 +49,8 @@ public class RouteProcessing {
      */
     public RouteInfo computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
         List<Coordinate> coordinates = new LinkedList<Coordinate>();
-        coordinates.add(new Coordinate(12.12, 12.12));
-        coordinates.add(new Coordinate(13.13, 13.13));
-        coordinates.add(new Coordinate(14.14, 14.14));
+        coordinates.add(coordinate1);
+        coordinates.add(coordinate2);
         // TODO: change constructor of route from LinkedList to List, then remove the cast
         return new Route((LinkedList<Coordinate>) coordinates);
     }

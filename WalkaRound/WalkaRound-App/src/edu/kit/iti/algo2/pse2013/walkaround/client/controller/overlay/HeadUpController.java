@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.headup;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;

@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 public final class CoordinateUtility {
 	/**
@@ -90,5 +91,16 @@ public final class CoordinateUtility {
 	 */
 	public static float convertDegreesToPixels(float degree, float levelOfDetail, boolean isHorizontal) {
 		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
+	}
+	
+	/**
+	 * Converts a given Display Coordinate to a geographical Coordinate
+	 * 
+	 * @param dc the given DisplayCoordinate
+	 * @param levelOfDetail the current Level of Detail
+	 * @return a new Coordinate 
+	 */
+	public static Coordinate convertDisplayCoordinateToCoordinate(DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
+		return new Coordinate(upperLeft.getLatitude() + convertDegreesToPixels(dc.getX(),levelOfDetail,CoordinateUtility.DIRECTION_HORIZONTAL),upperLeft.getLongtitude() + convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL));
 	}
 }

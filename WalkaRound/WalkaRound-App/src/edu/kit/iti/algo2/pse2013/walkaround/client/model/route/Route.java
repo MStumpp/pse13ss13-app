@@ -9,13 +9,15 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class Route implements RouteInfo {
-	
+
 	private static String TAG_ROUTE = Route.class.getSimpleName();
-	
+
 	private String name;
 	private Waypoint activeWaypoint;
 	private LinkedList<Coordinate> routeCoordinates;
 	private RouteProcessing routeProcessor;
+	
+	private int idCounter;
 
 
 	/*
@@ -27,7 +29,9 @@ public class Route implements RouteInfo {
 		this.activeWaypoint = null;
 		this.name = "";
 		this.routeProcessor = RouteProcessing.getInstance();
+		this.idCounter = 0;
 	}
+	
 
 
 	/*
@@ -62,12 +66,12 @@ public class Route implements RouteInfo {
 		this.deleteActiveWaypoint();
 		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
 		Waypoint nextWaypoint = this.getNextWaypoint(newPos);
-		
-		
-		
-		
-		// F¸ge den aktiven WP an der ¸bergebenen Position in die Route ein.
-		
+
+
+
+
+		// FÔøΩge den aktiven WP an der ÔøΩbergebenen Position in die Route ein.
+
 		this.setActiveWaypoint(activeWaypoint);
 	}
 
@@ -76,15 +80,23 @@ public class Route implements RouteInfo {
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 */
 	public void addWaypoint(Coordinate c) {
-		Log.d(TAG_ROUTE, "addWaypoint(coord)");
-		RouteInfo routeExtension = this.routeProcessor.computeShortestPath(c, this.getEnd());
-		this.addRoute(routeExtension);
+		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c)");
+		if (this.routeCoordinates.size() != 0) {
+			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> sending Route to Server");
+			RouteInfo routeExtension = this.routeProcessor.computeShortestPath(c, this.getEnd());
+
+			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
+			this.addRoute(routeExtension);
+		} else {
+			this.routeCoordinates.add(new Waypoint(c.getLongtitude(), c.getLatitude(), 1, "Wegpunkt"));
+		}
+		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
 	}
-	
-	
-	
-	
+
+
+
+
 
 	/*
 	 *
@@ -102,11 +114,14 @@ public class Route implements RouteInfo {
 	public void addRoute(RouteInfo newRoute) {
 		Log.d(TAG_ROUTE, "addRoute(RouteInfo)");
 		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
-
-		if (!this.getEnd().equals(newRouteCoordsIter)) {
-			this.addRoute(this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart()));
+		
+		if (!(this.getEnd().getLatitude() == newRoute.getStart().getLatitude())
+				|| !(this.getEnd().getLongtitude() == newRoute.getStart().getLongtitude())) {
+			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate path");
+			this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
+			
 		}
-
+		
 		newRouteCoordsIter.next();
 		while (newRouteCoordsIter.hasNext()) {
 			this.routeCoordinates.addLast(newRouteCoordsIter.next());
@@ -121,13 +136,13 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "moveActiveWaypoint(coord)");
 		// TODO:
 		if (this.activeWaypoint != null) {
-			Waypoint beforeActive = (Waypoint) this.getWaypointBeforeActiveWaypoint();
-			Waypoint afterActive = (Waypoint) this.getWaypointPastActiveWaypoint();
-			
-			RouteInfo newRouteBeforeActiveWaypoint = this.routeProcessor.computeShortestPath(beforeActive, coord);
-			RouteInfo newRoutePastActiveWaypoint = this.routeProcessor.computeShortestPath(coord, afterActive);
-			
-			
+			//Waypoint beforeActive = (Waypoint) this.getWaypointBeforeActiveWaypoint();
+			//Waypoint afterActive = (Waypoint) this.getWaypointPastActiveWaypoint();
+
+			//RouteInfo newRouteBeforeActiveWaypoint = this.routeProcessor.computeShortestPath(beforeActive, coord);
+			//RouteInfo newRoutePastActiveWaypoint = this.routeProcessor.computeShortestPath(coord, afterActive);
+
+
 			// Pr√ºfe bei beiden ob null, wenn nicht, schicke Weg an Server zur Neu-Berechnung.
 			// Entferne au√üerdem die alten Routen.
 		}
@@ -136,25 +151,25 @@ public class Route implements RouteInfo {
 
 	public void deleteActiveWaypoint() {
 		Log.d(TAG_ROUTE, "deleteActiveWaypoint()");
-		
+
 		// TODO:
-		
+
 		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
 		Iterator<Coordinate> routeCoordsIterDesc = this.routeCoordinates.descendingIterator();
-		
+
 		while (!routeCoordsIter.equals(this.activeWaypoint)) {
 			routeCoordsIter.next();
 		}
 		while (!routeCoordsIterDesc.equals(this.activeWaypoint)) {
 			routeCoordsIterDesc.next();
 		}
-		
+
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
 		Waypoint previousWaypoint = this.getPreviousWaypoint(indexOfActiveWaypoint);
 		Waypoint nextWaypoint = this.getNextWaypoint(indexOfActiveWaypoint);
-		
-		
+
+
 		if (previousWaypoint == null && nextWaypoint == null) {
 			this.resetRoute();
 		} else if (previousWaypoint == null && nextWaypoint != null) {
@@ -169,13 +184,13 @@ public class Route implements RouteInfo {
 			} while (!routeCoordsIterDesc.equals(previousWaypoint));
 		} else {
 			RouteInfo routePieceAtPositionOfDeletedActiveWaypoint = this.routeProcessor.computeShortestPath(previousWaypoint, nextWaypoint);
-			
+
 		}
 		this.resetActiveWaypoint();
 	}
-	
-	
-	
+
+
+
 
 
 	/*
@@ -239,14 +254,20 @@ public class Route implements RouteInfo {
 	@Override
 	public Waypoint getStart() {
 		Log.d(TAG_ROUTE, "getStart()");
-		return (Waypoint) this.routeCoordinates.getFirst();
+		if (this.routeCoordinates.size() > 0) {
+			return this.getWaypoints().getFirst();
+		}
+		return null;
 	}
 
 
 	@Override
 	public Waypoint getEnd() {
 		Log.d(TAG_ROUTE, "getEnd()");
-		return (Waypoint) this.routeCoordinates.getLast();
+		if (this.routeCoordinates.size() > 0) {
+			return this.getWaypoints().getLast();
+		}
+		return null;
 	}
 
 
@@ -294,9 +315,9 @@ public class Route implements RouteInfo {
 		return this.routeCoordinates;
 	}
 
-	
+
 	/*
-	 * 
+	 *
 	 */
 	private Waypoint getPreviousWaypoint(int posOfWaypoint) {
 		Log.d(TAG_ROUTE, "getPreviousWaypoint(int)");
@@ -308,9 +329,9 @@ public class Route implements RouteInfo {
 		}
 	}
 
-	
+
 	/*
-	 * 
+	 *
 	 */
 	private Waypoint getNextWaypoint(int posOfWaypoint) {
 		Log.d(TAG_ROUTE, "getNextNextWaypoint(int)");
@@ -324,17 +345,17 @@ public class Route implements RouteInfo {
 
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 	private void testMethod() {
 		LinkedList<Integer> ints = new LinkedList<Integer>();
 
@@ -343,6 +364,11 @@ public class Route implements RouteInfo {
 
 
 
+	
+	private int getNextID() {
+		this.idCounter++;
+		return this.idCounter;
+	}
 
 
 

@@ -4,21 +4,28 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  *
  * @author Ludwig Biermann
  *
  */
-public class MapController {
+public class MapController implements RouteListener {
 
 	private static String MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
 
+	private static RouteMenuController routeController;
+	
 	//public static Coordinate defaultCoordinate = new Coordinate(49.00471, 8.3858300); // Brauerstraße
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
 	//public static Coordinate defaultCoordinate = new Coordinate(49.01, 8.40333); // Marktplatz
@@ -56,6 +63,10 @@ public class MapController {
 	 * @param mv
 	 */
 	private MapController(MapView mv) {
+		
+		routeController = RouteMenuController.getInstance();
+		routeController.registerRouteListener(this);
+		
 		Log.d(MAP_CONTROLLER, "Map Controller wird initialisiert");
 		this.mapView = mv;
 
@@ -80,15 +91,14 @@ public class MapController {
 	}
 
 	public void onCreatePoint(DisplayCoordinate dc) {
-
+		routeController.addWaypoint(CoordinateUtility.convertDisplayCoordinateToCoordinate(dc, mapModel.getUpperLeft(), mapModel.getCurrentLevelOfDetail()));
 	}
 
 	public void onLongPressPoint(DisplayCoordinate dc) {
-
 	}
 
 	public void onShift(DisplayCoordinate dc) {
-		mapModel.generateMapOverlayImage();
+		mapModel.shift(dc);
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
@@ -126,6 +136,11 @@ public class MapController {
 	 */
 	public float getCurrentLevelOfDetail() {
 		return this.mapModel.getCurrentLevelOfDetail();
+	}
+
+	@Override
+	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
+		
 	}
 
 }

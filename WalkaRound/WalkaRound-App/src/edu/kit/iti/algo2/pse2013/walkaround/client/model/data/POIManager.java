@@ -1,6 +1,14 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.location.Geocoder;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
@@ -9,19 +17,50 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
+/**
+ * This class manages requests about POIs.
+ * 
+ * @author Thomas Kadow
+ * @version 1.0
+ */
 public class POIManager {
 
+	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
+
+	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
+	/**
+	 * Instance of the POIManager.
+	 */
 	private static POIManager instance;
 
+	/**
+	 * LocationDataIO where all POIs are stored.
+	 */
 	private LocationDataIO locationDataIO;
 
+	/**
+	 * IDs of categories that where activated in the POI menu.
+	 */
 	private int[] activeCategories;
 
+	/**
+	 * Constructs a new manager for POIs.
+	 * 
+	 * @param locationDataIO
+	 *            LocationDataIO object
+	 */
 	private POIManager(LocationDataIO locationDataIO) {
 		this.locationDataIO = locationDataIO;
 		activeCategories = new int[20];
 	}
 
+	/**
+	 * Singleton getInstance method.
+	 * 
+	 * @param locationDataIO
+	 *            LocationDataIO object
+	 * @return an instance of the POIManager
+	 */
 	public static POIManager getInstance(LocationDataIO locationDataIO) {
 		if (instance == null) {
 			instance = new POIManager(locationDataIO);
@@ -29,45 +68,149 @@ public class POIManager {
 		return instance;
 	}
 
+	/**
+	 * Returns the IDs of all active categories.
+	 * 
+	 * @return int[] of IDs of all active categories
+	 */
 	public int[] getActiveCategories() {
 		return activeCategories;
 	}
 
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
+	/**
+	 * Returns all POIs laying within a rectangle.
+	 * 
+	 * @param upperLeft
+	 *            upperleft coordinate of the rectangle
+	 * @param bottomRight
+	 *            bottomright coordinate of the rectangle
+	 * @param levelOfDetail
+	 *            level of detail
+	 * @return a list of all POIs laying within a rectangle
+	 */
 	public ArrayList<POI> getPOIsWithinRectangle(Coordinate upperLeft,
 			Coordinate bottomRight, int levelOfDetail) {
 		return null;
 	}
 
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
+	/**
+	 * Returns all POIs laying upon a route.
+	 * 
+	 * @param routeInfo
+	 *            Route to search POIs in the near
+	 * @param levelOfDetail
+	 *            level of detail
+	 * @return a list of all POIs laying upon a route
+	 */
 	public ArrayList<POI> getPOIsAlongRoute(RouteInfo routeInfo,
 			int levelOfDetail) {
 		return null;
 	}
 
-	public ArrayList<Location> searchPOIsByQuery(String query) {
-		return null;
+	// aus location poi gemacht
+	/**
+	 * Returns suggestions of locations searched by query.
+	 * 
+	 * @param query
+	 *            query to search with
+	 * @return a list of three suggestions of locations
+	 */
+	public ArrayList<POI> searchPOIsByQuery(String query) {
+		TreeMap<Integer, ArrayList<POI>> suggestionsMap = new TreeMap<Integer, ArrayList<POI>>();
+		ArrayList<POI> suggestions = new ArrayList<POI>();
+		for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
+				.hasNext();) {
+			POI currentPOI = poiIter.next();
+			int difference = computeLevenstheinDistance(query,
+					currentPOI.getName());
+			if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
+				if (suggestionsMap.containsKey(difference)) {
+					suggestionsMap.get(difference).add(currentPOI);
+				} else {
+					suggestionsMap.put(difference, new ArrayList<POI>());
+					suggestionsMap.get(difference).add(currentPOI);
+				}
+			}
+		}
+		for (Iterator<Integer> keyIter = suggestionsMap.keySet().iterator(); keyIter
+				.hasNext();) {
+			int currentKey = keyIter.next();
+			suggestions.addAll(suggestionsMap.get(currentKey));
+		}
+		return suggestions;
 	}
 
-	public ArrayList<Location> searchPOIsByAddress(Address address) {
-		return null;
+	// aus list<Location> list<address> gemacht , context parameter dazu
+	// gemacht da auf
+	// android funktion zugegriffen wird
+	/**
+	 * Returns suggestions of locations searched by an address.
+	 * 
+	 * @param address
+	 *            address to search with
+	 * @param context
+	 *            context of the current activity
+	 * @return a list of three suggestions of locations
+	 */
+	public ArrayList<Address> searchPOIsByAddress(Address address,
+			Context context) {
+		ArrayList<Address> suggestions = new ArrayList<Address>();
+		Geocoder geocoder = new Geocoder(context, Locale.GERMANY);
+		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
+		try {
+			addresses = geocoder.getFromLocationName(address.toString(),
+					MAX_NUMBER_OF_SUGGESTIONS);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (Iterator<android.location.Address> iter = addresses.iterator(); iter
+				.hasNext();) {
+			android.location.Address current = iter.next();
+			suggestions.add(new Address(current.getThoroughfare(), current
+					.getSubThoroughfare(), current.getLocality(), Integer
+					.parseInt(current.getPostalCode())));
+		}
+		return suggestions;
 	}
 
 	// changed boolean return to void
+	/**
+	 * Adds the ID of an active category.
+	 * 
+	 * @param id
+	 *            id of the category to activate
+	 */
 	public void addActivePOICategory(int id) {
-		for (int i = 0; i < activeCategories.length; i++) {
-			if(activeCategories[i] )
+		if (activeCategories[id] == 0) {
+			activeCategories[id] = id;
 		}
 	}
 
 	// changed boolean return to void
+	/**
+	 * Removes the ID of an active category.
+	 * 
+	 * @param id
+	 *            id of the category to deactivate
+	 */
 	public void removeActivePOICategory(int id) {
-		if (activeCategories.contains(id)) {
-			activeCategories.remove(id);
+		if (activeCategories[id] == id) {
+			activeCategories[id] = 0;
 		}
 	}
 
-	public static int computeLevenstheinDistance(String first, String second) {
+	/**
+	 * Computes the difference between two strings.
+	 * 
+	 * @param first
+	 *            first string to compare
+	 * @param second
+	 *            second string to compare
+	 * @return an int of the difference between to strings
+	 */
+	private int computeLevenstheinDistance(String first, String second) {
 		int matrix[][] = new int[first.length() + 1][second.length() + 1];
 		for (int i = 0; i < first.length() + 1; i++) {
 			matrix[i][0] = i;

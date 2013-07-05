@@ -1,0 +1,238 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.8/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.8/ http://www.mediawiki.org/xml/export-0.8.xsd" version="0.8" xml:lang="de">
+  <siteinfo>
+    <sitename>Wikipedia</sitename>
+    <base>http://de.wikipedia.org/wiki/Wikipedia:Hauptseite</base>
+    <generator>MediaWiki 1.22wmf8</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Medium</namespace>
+      <namespace key="-1" case="first-letter">Spezial</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Diskussion</namespace>
+      <namespace key="2" case="first-letter">Benutzer</namespace>
+      <namespace key="3" case="first-letter">Benutzer Diskussion</namespace>
+      <namespace key="4" case="first-letter">Wikipedia</namespace>
+      <namespace key="5" case="first-letter">Wikipedia Diskussion</namespace>
+      <namespace key="6" case="first-letter">Datei</namespace>
+      <namespace key="7" case="first-letter">Datei Diskussion</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki Diskussion</namespace>
+      <namespace key="10" case="first-letter">Vorlage</namespace>
+      <namespace key="11" case="first-letter">Vorlage Diskussion</namespace>
+      <namespace key="12" case="first-letter">Hilfe</namespace>
+      <namespace key="13" case="first-letter">Hilfe Diskussion</namespace>
+      <namespace key="14" case="first-letter">Kategorie</namespace>
+      <namespace key="15" case="first-letter">Kategorie Diskussion</namespace>
+      <namespace key="100" case="first-letter">Portal</namespace>
+      <namespace key="101" case="first-letter">Portal Diskussion</namespace>
+      <namespace key="828" case="first-letter">Modul</namespace>
+      <namespace key="829" case="first-letter">Modul Diskussion</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Softwaretechnik</title>
+    <ns>0</ns>
+    <id>84674</id>
+    <revision>
+      <id>119471071</id>
+      <parentid>118559000</parentid>
+      <timestamp>2013-06-12T07:32:33Z</timestamp>
+      <contributor>
+        <username>Sebastian.Dietrich</username>
+        <id>240203</id>
+      </contributor>
+      <comment>/* Projektmanagement */ siehe disk</comment>
+      <text xml:space="preserve" bytes="17751">Die '''Softwaretechnik''' ist eine deutschsprachige Übersetzung des engl. Begriffs ''software engineering'' und beschäftigt sich mit der Herstellung bzw. Entwicklung von [[Software]], der Organisation und Modellierung der zugehörigen [[Datenstruktur]]en und dem Betrieb von Softwaresystemen. Eine Definition von [[Helmut Balzert]] beschreibt das Gebiet als
+
+{{Zitat|Zielorientierte Bereitstellung und systematische Verwendung von [[Prinzip]]ien, [[Methode (Softwaretechnik)|Methoden]] und [[Werkzeug]]en für die arbeitsteilige, ingenieurmäßige Entwicklung und Anwendung von umfangreichen Softwaresystemen.||[[#Literatur|Lit.]]: Balzert, S.36}}
+
+Softwaretechnik umfasst eine Vielzahl von Teilgebieten, die in ihrer Gesamtheit die Softwareentwicklung begleiten. Wichtig ist auch die experimentelle Untersuchung von Softwaretechnik, um ihren praktischen Nutzen zu messen und zu verbessern. Zur Beschreibung des „Standes der Technik“ des Fachgebiets gibt es verschiedene Ansätze, unter anderem den ''Guide to the [[Software Engineering Body of Knowledge]] (SWEBOK)'' der IEEE Computer Society.
+
+In erweitertem Sinn umfasst die Softwaretechnik – neben dem Entwickeln – auch das Betreiben der Software unter Nutzung der [[Informationstechnik]]. 
+
+== Teilgebiete ==
+Aufgrund des hohen Aufwandes zur Erstellung und Wartung komplexer Software erfolgt die Entwicklung durch [[Softwareentwickler]] anhand eines strukturierten (Projekt-)Planes. Dieser Plan (das [[Vorgehensmodell zur Softwareentwicklung|Vorgehensmodell]]) unterteilt den Entwicklungsprozess in überschaubare, zeitlich und inhaltlich begrenzte Phasen. Die Software wird somit Schritt für Schritt fertiggestellt. Die Phasen sind während des ganzen Entwicklungsprozesses eng miteinander verzahnt. In der Praxis werden auch Verfahren eingesetzt, welche die Mehrstufigkeit von Systemanalyse, Systemdesign/Konzept und anschließender Implementierung und Testen aufgeben, beispielsweise unter [[Prototyping (Softwareentwicklung)|Prototyping]], [[Agile Softwareentwicklung]].
+
+Die Softwaretechnik beinhaltet den gesamten Prozess von der Identifizierung des Bedarfs bis hin zur Inbetriebnahme einer konkreten IT-Lösung, zum Teil auch darüber hinaus. Hauptgegenstand ist die Bereitstellung und Einführung einer [[Anwendungssoftware]], teilweise zzgl. der benötigten [[Hardware]] und [[Netzwerk]]e. 
+
+Die zu implementierende Software kann entweder eine [[Individualsoftware]] oder eine Kombination und Konfiguration von [[Standardsoftware]] sein. 
+
+Projekte werden oftmals von oder mit externen Dienstleistungsunternehmen, häufig aber auch als Eigenentwicklung geleistet. Dementsprechend vielfältig, auch abhängig von der [[Projekt#Projektarten|Projektart]], sind auch die [[Vorgehensmodell|Vorgehensweisen]] bei der Projektentwicklung: Von einer sehr strukturierten Herangehensweise, siehe [[Wasserfallmodell]], über verschiedene Mischformen bis hin zu sehr flexiblen, offenen Methoden wie der [[Agile Softwareentwicklung|Agilen Softwareentwicklung]]. Entsprechend wird auch zwischen [[Top-Down- und Bottom-Up-Design|Top-Down- und Bottom-Up]]-Ansätzen unterschieden. 
+
+Im Folgenden werden einige wichtige Aspekte und typische Stufen/Phasen der Projektentwicklung beschrieben, die in der Praxis mehr oder weniger ausgeprägt zum Tragen kommen.
+
+Die Phasen und ihre Aufgabenstellungen sind in der folgenden Tabelle aufgeführt:
+{| border=&quot;0&quot; cellspacing=&quot;15&quot; 
+|
+'''Kernprozesse''' 
+
+'''1. [[Planung]]'''
+* [[Anforderungserhebung]]
+* [[Lastenheft]] ([[Anforderung (Informatik)|Anforderungsdefinition]])
+* [[Pflichtenheft]] (Mit technischen Ansätzen verfeinertes [[Lastenheft]])
+* [[Aufwandsschätzung (Softwaretechnik)|Aufwandsschätzung]] (z.&amp;nbsp;B. mittels [[Function-Point-Verfahren]] oder [[COCOMO]])
+* [[Vorgehensmodell zur Softwareentwicklung|Vorgehensmodell]] 
+
+'''2. [[Analyse]]'''
+* [[Auswertung (Informatik)|Auswertung]]
+* [[Mock-up]]
+* [[Prozessanalyse]] / [[Prozessmodell (Software)|Prozessmodell]]
+* [[Systemanalyse]]
+* [[Strukturierte Analyse]] (SA)
+* [[Objektorientierte Analyse und Design|Objektorientierte Analyse]] (OOA)
+'''3. [[Softwaredesign|Entwurf]]'''
+* [[Softwarearchitektur]]
+* [[Strukturiertes Design]] (SD)
+* [[Objektorientierte Analyse und Design|Objektorientiertes Design]] (OOD)
+* [[Fundamental Modeling Concepts]] (FMC)
+
+'''4. [[Programmierung]]'''
+* [[Normierte Programmierung]]
+* [[Strukturierte Programmierung]]
+* [[Objektorientierte Programmierung]] (OOP)
+* [[Funktionale Programmierung]]
+
+'''5. [[Test (Informatik)|Validierung und Verifikation]]'''
+* [[Modultest]]s (Low-Level-Test)
+* [[Integrationstest]]s (Low-Level-Test)
+* [[Softwaretest|Systemtests]] (High-Level-Test)
+* [[Akzeptanztest (Softwaretechnik)|Akzeptanztests]] (High-Level-Test)
+
+| valign=&quot;top&quot; | 
+
+'''Unterstützungsprozesse'''
+
+'''6. [[Anforderungsmanagement]]'''
+
+'''7. [[Projektmanagement]]'''
+* [[Risikomanagement#Softwareentwicklung|Risikomanagement]]
+* [[Projektplanung]]
+* Projektverfolgung und -steuerung
+* Management von Lieferantenvereinbarungen
+
+'''8. [[Qualitätsmanagement]]'''
+* [[Capability Maturity Model]]
+* [[Spice (Norm)]] (Software Process Improvement and Capability Determination)
+* [[Incident Management]]
+* [[Problem Management]]
+* [[Softwaremetrik]] ([[Messung]] von Softwareeigenschaften)
+* [[Statische Code-Analyse|statische Analyse]] (Berechnung von Schwachstellen)
+* [[Softwareergonomie]]
+
+'''9. [[Konfigurationsmanagement]]'''
+* [[Versionsverwaltung]]
+* [[Änderungsmanagement]] / [[Veränderungsmanagement]]
+* [[Releasemanagement]]
+* [[Application-Management]] ([[ITIL]])
+
+'''10. [[Softwareeinführung]]'''
+
+'''11. [[Dokumentation]]'''
+* [[Technische Dokumentation]]
+* [[Softwaredokumentation]]
+* [[Systemdokumentation]] (Weiterentwicklung und Fehlerbehebung)
+* [[Betriebshandbuch|Betriebsdokumentation]] (Betreiber/Service)
+* [[Bedienungsanleitung]] (Anwender)
+* [[Geschäftsprozess]]e (Konzeption der Weiterentwicklung)
+* [[Verfahrensdokumentation]] (Beschreibung rechtlich relevanter Softwareprozesse)
+|}
+Die oben genannten Teilschritte der Softwareentwicklung werden nicht zwangsläufig bei jedem Projekt komplett durchlaufen. Vielmehr werden einzelne Prozesse spezifisch für die jeweilige Anforderung gewählt. Dies ist aus Sicht der Kosten- und Verwaltungsreduzierung notwendig.
+
+=== Projektmanagement ===
+Der gesamte Prozess einer Projektentwicklung unterliegt meist einem mehr oder weniger stark ausgeprägten [[Projektmanagement]]. Im Falle der Realisierung durch einen IT-Dienstleister wird meist sowohl auf [[Auftraggeber]]- als auch auf [[Auftragnehmer]]-Seite ein jeweils eigenständiges Projektmanagement betrieben. Um Konflikte zwischen den beiden Projektleitern aufzulösen, wird dem übergeordnet oftmals noch ein aus dem Management von Auftraggeber und Auftragnehmer zusammengesetztes Kontrollgremium ([[Project Board]]) eingesetzt.
+
+Typischerweise wird für größere Projekte auch ein größerer Projektmanagement-Aufwand betrieben, während mittlere oder kleinere Projekte häufig „nebenbei“ abgewickelt werden.
+
+Oft werden externe [[IT-Berater]] zur Ergänzung und Unterstützung der an der Projektabwicklung beteiligten Personen herangezogen.
+
+=== Qualitätsmanagement ===
+Das Qualitätsmanagement innerhalb des Projekts wird als Teilbereich des Projektmanagements verstanden.&lt;ref name=&quot;PMBOK&quot;&gt;The Project Management Institute (Hrsg.): ''A Guide to the Project Management Body of Knowledge (PMBOK Guide).'' Deutsche Ausgabe 2000, Newton Square, Penn., Project Management Institute. ISBN 978-1-930699-21-2, S. 95–103&lt;/ref&gt; Es umfasst die Teilgebiete:
+
+* Qualitätsplanung, das heißt Identifizierung der für das Projekt relevanten Qualitätskriterien und der Methoden, mit denen sie erfüllt werden können.
+* Qualitätssicherung, das heißt regelmäßige und regelgerechte Bewertung der Projektleistung, damit das Projekt die Qualitätsstandards erfüllt.
+* Qualitätslenkung, das heißt Überwachen der Projektergebnisse, um festzustellen, ob die Qualitätsstandards erfüllt werden, und um die Ursachen unzureichender Leistungen zu beseitigen.
+
+Das Qualitätsmanagement im Projekt muss sowohl die Leistung des Projekts als auch die Qualität des Projektprodukts ansprechen. Modernes Qualitätsmanagement und modernes Produktmanagement ergänzen sich. Beide Disziplinen erkennen die Bedeutung von 
+
+* Kundenzufriedenheit
+* Prävention geht vor Überprüfung
+* Managementverantwortung
+
+an. Qualitätsverbesserungsprogramme, die von der Trägerorganisation durchgeführt werden, beispielsweise nach [[Total-Quality-Management|TQM]] oder nach [[ISO 9000]], können integriert werden, um die Qualität des Projekts und die des Produkts zu verbessern.&lt;ref name=&quot;PMBOK&quot;/&gt;
+
+[[Datei:Magischesdreieck.gif|thumb|Magisches Dreieck]]
+Wie generell im Projektmanagement ist dem permanenten Zielkonflikt zwischen Qualität, Kosten und Zeit Rechnung zu tragen.&lt;ref&gt;Kessler, Heinrich; Winkelhofer, Georg: ''Projektmanagement''. 4. Auflage. Heidelberg 2004, Springer. S. 55–56&lt;/ref&gt; Speziell in Softwareprojekten steht die Projektleitung häufig unter hohem Termindruck und ist einem besonders hohen Risiko ausgesetzt, die Qualität zu vernachlässigen.&lt;ref&gt;Wendt, Dierk (Sprecher der Arbeitsgruppe): [http://www.theoinf.tu-ilmenau.de/~riebisch/swqs/fehler.html Klassische Fehler in der Software-Entwicklung], [[Technische Universität Ilmenau|TU Ilmenau]], Version vom 6. Oktober 2005, abgerufen am 9. Februar 2011&lt;/ref&gt;
+
+=== Risikomanagement ===
+Aufgrund der Komplexität von [[Informationssystem (Informatik)|Informationssystemen]] sind „absolute“ Sicherheit bzw. Qualität nicht ökonomisch realisierbar. Daher werden zur Kategorisierung und Priorisierung häufig Methoden des [[Risikomanagement]]s eingesetzt, um für das jeweilige Projekt ein adäquates Maß an Systemsicherheit und -qualität zu gewährleisten. 
+
+Aspekte des Risikomanagements sollten über den gesamten [[Software-Lebenszyklus|System-Lebenszyklus]], also beginnend mit dem Konzept, über die Entwicklung oder Programmierung, Implementierung und Konfiguration und während des Betriebes bis hin zur Stilllegung des Systems berücksichtigt werden.
+
+=== Anforderungserhebung ===
+Im Zusammenhang mit der Projektentwicklung ist hier die [[Systemanalyse]] zur Projektvorbereitung gemeint. Gegenstand ist die inhaltliche Erfassung der Anforderungen durch Befragung künftiger Anwender sowie die systematische Untersuchung weiterer sachlicher und technischer Anforderungen und Randbedingungen (Schnittstellen zu Drittsystemen, gesetzliche Anforderungen u.dgl.). Ergebnis ist meist ein [[Fachkonzept]], oftmals auch gleich ein Lastenheft. 
+
+Ein [[Pflichtenheft]] enthält sämtliche Funktionen und Anforderungen an ein Programm. Darin wird festgelegt, welche Funktionen verlangt sind und was diese genau tun. Anhand dieser Übersicht werden die grundlegenden technischen Entwurfsentscheidungen getroffen, und daraus wird die Systemarchitektur abgeleitet. 
+Im Falle einer Beauftragung eines Dienstleistungsunternehmens ist das Pflichtenheft die vertragliche Grundlage für die vereinbarten Leistungen. Deshalb ist die Vollständigkeit und Richtigkeit der darin getroffenen Festlegungen und Anforderungen von besonderer Bedeutung für den Auftraggeber.
+
+=== Systemdesign/technische Konzeption ===
+Ein Systemanalytiker bzw. -designer, bei kleineren Projekten auch der Programmierer, legt anhand des Pflichtenhefts die Programmarchitektur fest. Soweit Standardsoftwareprodukte zum Einsatz kommen, erfolgt in dieser Phase auch eine Spezifikation der geplanten Produkteinbindung bzw. -anpassung.
+Für neu zu entwickelnde Software erfolgt der Entwurf des [[ER-Modell|Datenmodells]] und der einzelnen Funktionen und Algorithmen bzw. der Objekt- und Klassenstruktur. Falls bereits vorhandene Software angepasst (adaptiert) werden muss, so wird in dieser Phase festgelegt, welche Veränderungen und Erweiterungen erforderlich sind. 
+Das Ergebnis des Systemdesigns wird auch [[DV-Konzept]] genannt.
+
+=== Implementierung ===
+In der [[Implementierung]]sphase wird die zuvor konzipierte Anwendungslösung technisch realisiert, indem Softwareprodukte konfiguriert, vorhandene Software angepasst oder Programme bzw. Programmteile vollständig neu erstellt werden. 
+
+Eine Neuerstellung von Software erfolgt meist durch [[Programmierung]], d.&amp;nbsp;h. die einzelnen Funktionen, Objekte, Klassen u.s.w. werden in einer [[Programmiersprache]] mit Hilfe einer [[Integrierte Entwicklungsumgebung|Integrierten Entwicklungsumgebung]] codiert. 
+
+=== Softwaretest ===
+Die Software wird im [[Softwaretest]] in zweierlei Hinsicht getestet, zum einen 
+* technisch, d.&amp;nbsp;h. auf eine korrekte Umsetzung des DV-Konzepts und auf [[Programmfehler]], und zum anderen 
+* inhaltlich, d.&amp;nbsp;h. auf Vollständigkeit bezüglich des Pflichtenhefts und Eignung für den vorgesehenen Zweck. 
+
+Während der Systemtest eine alleinige Angelegenheit des Auftragnehmers ist, erfolgt der Verfahrenstest meist in Zusammenarbeit mit den Endanwendern des Auftraggebers. 
+
+Es gilt in der Softwareentwicklung als normal, dass Programme fehlerhaft sind. Gelegentlich müssen sogar ganze Teile vollständig neu umgesetzt, also neu programmiert werden. Da in komplexeren Applikationen nicht mit Sicherheit ausgeschlossen werden kann, dass geänderte Programmteile nicht etwa andere Programmfunktionen beeinflussen können (Nebeneffekte), sollte nach der Fehlerbeseitigung ein erneuter vollständiger Test des Gesamtsystems erfolgen. Bis zur endgültigen Freigabe der Software sind meist mehrere Test- und Fehlerbeseitigungszyklen (iteratives Vorgehen) erforderlich.
+
+=== Softwareeinführung ===
+Die fertiggestellte Software nebst eventuell erforderlicher Standardsoftwareprodukte, Hardware u.&amp;nbsp;ä. wird sodann im Zuge der [[Installation (Computer)|Installation]] auf den Computersystemen des Auftraggebers oder des Betreibers (eines [[Application Service Provider]]s) aufgespielt und betriebsbereit gemacht. Hierbei wird oftmals zwischen parallelen „Produktiv“-, „Test“-, „Schulungs“- und „Entwicklungs“-Installationen unterschieden. 
+
+Je nach technischer Plattform erfolgt die Installation auf Zentralrechnern ([[Server]]) oder auf den Arbeitsplatzrechnern oder beides. Bei [[Datenbankanwendung]]en erfolgt ggf. noch ein [[Tuning (Datenbank)|Tuning]] der Datenbank. In einigen Fällen erfolgt noch eine [[Migration (Informationstechnik)|Migration]] aus älteren Anwendungslösungen.
+
+Bei größeren Projekten erfolgt oftmals zunächst nur eine Installation auf einem Testsystem bzw. bei wenigen Pilot-Anwendern. Die nachfolgende Ausweitung (Installation und Inbetriebnahme) auf weitere Standorte nennt man [[Rollout]].
+
+Wesentlicher Teil des Projekts ist die Einführungsunterstützung, insbesondere in Form von Schulung bzw. Einweisung der Endanwender, [[Power User]] und [[Administrator (Rolle)|Administratoren]]. 
+
+Es gibt sehr unterschiedliche Schulungskonzepte. Eine größere Anzahl von Benutzern wird oftmals über s.g. „Multiplikatoren“ geschult. Multiplikatoren sind Anwender, die wiederum weitere Anwender schulen. Dieses Verfahren nennt man auch [[Train the Trainers]]. 
+Zunehmend erfolgt die Anwenderschulung auch über das Internet mit entsprechenden Traininganwendungen.
+
+=== Wartung/Pflege ===
+Nach der Inbetriebnahme einer Softwarelösung ist eine kontinuierliche Weiterbetreuung erforderlich und üblich. 
+Diese umfasst sowohl eine Unterstützung der Anwender z.&amp;nbsp;B. per [[Hotline]] im laufenden Betrieb als auch Erweiterungen der Software bei Bedarf. Bei externer Softwareerstellung / Projektabwicklung wird beides in einem [[Support (Dienstleistung)|Support]]-Vertrag geregelt. 
+
+Dabei wird zwischen einem [[Support (Dienstleistung)#Kompetenzen-Aufteilung|First-level-Support]] und einem [[Support (Dienstleistung)#Kompetenzen-Aufteilung|Second-level-Support]] unterschieden. Der First-level Support (auch [[Helpdesk]]) ist erste Anlaufstelle für alle eingehenden Unterstützungsfragen und nimmt alle Problemmeldungen entgegen. Er leitet aber nur schwerwiegende Probleme an den Second-level-Support, bei Standardsoftware z.&amp;nbsp;B. beim Produkthersteller, weiter.
+
+Die laufende Anpassung der Software an sich ändernde Anforderungen oder Umgebungsbedingungen, z.&amp;nbsp;B. an neue [[Version (Software)|Versionen]] verwendeter [[Standardsoftware]], wird als „Softwarepflege“ bezeichnet. Größere Veränderungen werden über eigene [[Projekt|Wartungsprojekte]] bearbeitet, kleinere Anpassungen häufig als Wartungsaufgaben mit einfacheren Prozessregeln. Das Management des nachträglichen Einbringens von Änderungen in ein laufendes System nennt man [[Veränderungsmanagement]].
+
+== Literatur ==
+* [[Helmut Balzert]]: ''Lehrbuch der Software-Technik.'' Bd.1. Software-Entwicklung. Spektrum Akademischer Verlag, Heidelberg 1996, 1998, 2001, ISBN 3-8274-0480-0.
+* [[Jochen Ludewig]], Horst Lichter: ''Software Engineering – Grundlagen, Menschen, Prozesse, Techniken''. dpunkt.verlag, Heidelberg 2006, ISBN 3-89864-268-2.
+* [[Gustav Pomberger]], [[Wolfgang Pree]]: ''Software Engineering.'' Hanser Fachbuchverlag, München 2004, ISBN 3-446-22429-7.
+* [[Ian Sommerville]]: ''Software Engineering.'' 7. Aufl. Addison-Wesley, München 2004, ISBN 0-321-21026-3.
+* Thomas Grechenig, Mario Bernhart, Roland Breiteneder, Karin Kappel: ''Softwaretechnik – Mit Fallbeispielen aus realen Projekten'' Pearson Studium, München 2009, ISBN 3-86894-007-3.
+
+== Weblinks ==
+{{Wikibooks|Softwaretechnik}}
+* [http://www.kreissl.info/download.php?Downloadname=Softwaretech_hokr.pdf Einführung in die Softwaretechnologie]
+
+== Einzelnachweise ==
+&lt;references /&gt;
+
+{{Normdaten|TYP=s|GND=4116521-4|REMARK=Ansetzungsform GND: „Software Engineering“.}}
+
+[[Kategorie:Softwaretechnik| ]]</text>
+      <sha1>iva1gmcm3i58gpap4c5hkva2hib6i7j</sha1>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+    </revision>
+  </page>
+</mediawiki>
