@@ -30,7 +30,7 @@ public class GraphDataIO implements Serializable {
      * Initializes a GraphDataIO object.
      */
     public GraphDataIO() {
-        edges = new ArrayList<>();
+        edges = new ArrayList<Edge>();
     }
 
 

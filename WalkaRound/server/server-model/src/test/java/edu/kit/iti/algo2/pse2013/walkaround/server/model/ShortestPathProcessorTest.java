@@ -4,8 +4,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.graph.*;
 
 import java.io.*;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.server.RouteInfoTransfer;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -15,6 +15,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>preprocessor-model</module>
 		<module>preprocessor-view</module>
 	</modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+            <artifactId>shared-datastructures</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -32,12 +41,4 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			</plugin>
 		</plugins>
 	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-			<artifactId>shared-datastructures</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 </project>

@@ -19,7 +19,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWa
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
-	private HashMap<Long, OSMNode> nodes = new HashMap<>();
+	private HashMap<Long, OSMNode> nodes = new HashMap<Long, OSMNode>();
 	private int numEdges = 0;
 
 	private GraphDataIO graphData;

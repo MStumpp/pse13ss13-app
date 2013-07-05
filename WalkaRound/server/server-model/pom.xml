@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>shared-datastructures</artifactId>
+            <artifactId>shared-server</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

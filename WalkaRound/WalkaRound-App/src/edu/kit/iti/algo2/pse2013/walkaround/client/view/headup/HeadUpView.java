@@ -81,7 +81,7 @@ public class HeadUpView extends Fragment {
 
 		float height = (size.y - size.y / 10) - 50;
 
-		Log.d(HEADUP, "H�he des head Up " + height);
+		Log.d(HEADUP, "High of the HeadUP " + height);
 		this.getActivity().findViewById(R.id.headup_container)
 				.getLayoutParams().height = (int) height;
 

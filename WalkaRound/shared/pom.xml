@@ -13,5 +13,6 @@
 
 	<modules>
 		<module>datastructures</module>
-	</modules>
+        <module>server</module>
+    </modules>
 </project>
