@@ -34,16 +34,11 @@ public class Coordinate {
 	 * @param lon Longitude of the Coordinate.
 	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
 	 */
-	public Coordinate(double lat, double lon) {
+	public Coordinate(final double lat, final double lon) {
 		this(lat, lon, null);
 	}
 
-
-    // TODO: Wofür brauchen wir das? (Matthias)
-	// Das fanden wir (Ldwig und ich) ganz nützlich beim MapView.
-	// Bspw. um ausgehend von einer Ecke eine andere zu erzeugen, wenn man ein Offset hat.
-	// Konkretes Beispiel: bottomRightCorner = newCoordinate(topLeftCorner, latDelta, lonDelta);
-	public Coordinate(Coordinate reference, double latDelta, double lonDelta) {
+	public Coordinate(final Coordinate reference, final double latDelta, final double lonDelta) {
 		this(reference.getLatitude() + latDelta, reference.getLongitude() + lonDelta);
 	}
 

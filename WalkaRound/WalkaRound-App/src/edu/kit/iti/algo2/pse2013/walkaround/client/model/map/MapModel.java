@@ -160,19 +160,17 @@ public class MapModel implements TileListener {
 		// TODO
 
 		Log.d("MAP_TOUCH_SROLL", "Ecke vorher " + this.upperLeft.toString());
-		
+
 		this.upperLeft = new Coordinate(this.upperLeft,
+				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
+						this.currentLevelOfDetail,
+						CoordinateUtility.DIRECTION_Y),
+
 				CoordinateUtility.convertPixelsToDegrees(delta.getX(),
 						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_X),
-						
-						
-				CoordinateUtility.convertPixelsToDegrees(delta.getY(),
-						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_Y)
-						
-				);
+						CoordinateUtility.DIRECTION_X)
 
+				);
 		Log.d("MAP_TOUCH_SROLL", "Ecke Nachher " + this.upperLeft.toString());
 		this.fetchTiles();
 	}
@@ -406,24 +404,22 @@ public class MapModel implements TileListener {
 
 
 	@Override
-	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x +
-		// " y " + y);
+	public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail) {
+		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
 
 		if (tile != null && levelOfDetail == currentLevelOfDetail) {
 
-			int[] xy = TileUtility.getXYTileIndex(upperLeft,
-					Math.round(currentLevelOfDetail));
+			int[] xy = TileUtility.getXYTileIndex(upperLeft, Math.round(currentLevelOfDetail));
 
-			x -= xy[0];
-			y -= xy[1];
-			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + x + " y " + y);
+			int localX = x - xy[0];
+			int localY = y - xy[1];
+			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y " + localY);
 
 			Canvas canvas = new Canvas(map);
 
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-			canvas.drawBitmap(tile, (x * tile.getWidth()) - mapOffset.getX(),
-					(y * tile.getWidth()) - mapOffset.getY(), null);
+			canvas.drawBitmap(tile, (localX * tile.getWidth()) - mapOffset.getX(),
+					(localY * tile.getWidth()) + mapOffset.getY(), null);
 
 			/*
 			 * int left = x * tile.getWidth(); int right = left +

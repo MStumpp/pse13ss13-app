@@ -82,8 +82,7 @@ public final class CoordinateUtility {
 	}
 
 	/**
-	 * Converts a given corresponding geographical degrees into a length in
-	 * display-pixel
+	 * Converts given geographical degrees into the corresponding length in display-pixel
 	 *
 	 * @param degree the given geographical degrees
 	 * @param levelOfDetail the current level of detail
@@ -92,13 +91,13 @@ public final class CoordinateUtility {
 	public static float convertDegreesToPixels(float degree, float levelOfDetail, boolean isHorizontal) {
 		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
 	}
-	
+
 	/**
 	 * Converts a given Display Coordinate to a geographical Coordinate
-	 * 
+	 *
 	 * @param dc the given DisplayCoordinate
 	 * @param levelOfDetail the current Level of Detail
-	 * @return a new Coordinate 
+	 * @return a new Coordinate
 	 */
 	public static Coordinate convertDisplayCoordinateToCoordinate(DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
 		return new Coordinate(upperLeft.getLatitude() + convertDegreesToPixels(dc.getX(),levelOfDetail,CoordinateUtility.DIRECTION_HORIZONTAL),upperLeft.getLongitude() + convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL));

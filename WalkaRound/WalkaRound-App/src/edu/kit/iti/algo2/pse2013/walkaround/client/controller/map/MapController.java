@@ -25,7 +25,7 @@ public class MapController implements RouteListener {
 	private static MapController mapController;
 
 	private static RouteMenuController routeController;
-	
+
 	//public static Coordinate defaultCoordinate = new Coordinate(49.00471, 8.3858300); // Brauerstraße
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
 	//public static Coordinate defaultCoordinate = new Coordinate(49.01, 8.40333); // Marktplatz
@@ -63,10 +63,10 @@ public class MapController implements RouteListener {
 	 * @param mv
 	 */
 	private MapController(MapView mv) {
-		
+
 		routeController = RouteMenuController.getInstance();
 		routeController.registerRouteListener(this);
-		
+
 		Log.d(MAP_CONTROLLER, "Map Controller wird initialisiert");
 		this.mapView = mv;
 
@@ -97,8 +97,8 @@ public class MapController implements RouteListener {
 	public void onLongPressPoint(DisplayCoordinate dc) {
 	}
 
-	public void onShift(float distanceY,float distanceX) {
-		mapModel.shift(new DisplayCoordinate(distanceY, distanceX));
+	public void onShift(float distanceX,float distanceY) {
+		mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
@@ -107,9 +107,9 @@ public class MapController implements RouteListener {
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta to the new ZoomLevel
-	 * @param dc the DisplayCoordinate 
+	 * @param dc the DisplayCoordinate
 	 */
 	public void onZoom(float delta, DisplayCoordinate dc) {
 		this.mapModel.zoom(delta, dc);
@@ -117,7 +117,7 @@ public class MapController implements RouteListener {
 
 	/**
 	 * Zoom by a delta
-	 * 
+	 *
 	 * @param delta to the new ZoomLevel
 	 */
 	public void onZoom(float delta) {
@@ -140,7 +140,7 @@ public class MapController implements RouteListener {
 
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
-		
+
 	}
 
 }

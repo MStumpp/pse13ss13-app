@@ -15,10 +15,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -129,7 +128,7 @@ public class MapView extends Activity {
 		Display display = this.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		Log.d(TAG_MAPVIEW, "DisplayMa�e: " + size.x + " * " + size.y);
+		Log.d(TAG_MAPVIEW, "DisplayMaße: " + size.x + " * " + size.y);
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisere Route und POI Ovetrlay.");
@@ -207,7 +206,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet die Karte
-	 * 
+	 *
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
@@ -222,7 +221,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet das Routen Overlay
-	 * 
+	 *
 	 * @param b
 	 */
 	public void updateRouteOverlayImage(Bitmap b) {
@@ -230,8 +229,8 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param dw
 	 */
 	public void updateDisplayCoordinate(DisplayWaypoint[] dw) {
@@ -264,7 +263,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dp
 	 */
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
@@ -285,7 +284,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Setzt einen neuen Punkt aktive
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setActive(int id) {
@@ -328,7 +327,7 @@ public class MapView extends Activity {
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
-	 * 
+	 *
 	 * @param coor
 	 *            Zielkoordinate
 	 * @param degree
@@ -418,9 +417,9 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MyGestureDetector implements OnGestureListener {
 
@@ -478,18 +477,18 @@ public class MapView extends Activity {
 				Log.d("MAP_TOUCH", "MapTouch Scroll");
 				// distanceY *= -1;
 				if (e1.getY() > e2.getY()) {
-					Log.d("MAP_TOUCH_SROLL", "Runter " + distanceY);
+					Log.d("MAP_TOUCH_SCROLL", "Rauf " + distanceY);
 				} else {
-					Log.d("MAP_TOUCH_SROLL", "Rauf " + distanceY);
+					Log.d("MAP_TOUCH_SCROLL", "Runter " + -distanceY);
 				}
 
 				if (e1.getX() > e2.getX()) {
-					Log.d("MAP_TOUCH_SROLL", "Rechts " + distanceX);
+					Log.d("MAP_TOUCH_SCROLL", "Links " + distanceX);
 				} else {
-					Log.d("MAP_TOUCH_SROLL", "Links " + distanceX);
+					Log.d("MAP_TOUCH_SCROLL", "Rechts " + -distanceX);
 				}
 
-				mc.onShift(distanceY, distanceX);
+				mc.onShift(distanceX, distanceY);
 			}
 			return true;
 		}
@@ -523,9 +522,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -548,7 +547,7 @@ public class MapView extends Activity {
 				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
 				 * startY = event.getY(); return
 				 * gestureDetector.onTouchEvent(event); }
-				 * 
+				 *
 				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
 				 * (Math.abs(startX-event.getX())) > 100 ||
 				 * (Math.abs(startY-event.getY())) > 100) &&
@@ -566,9 +565,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
@@ -584,9 +583,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
