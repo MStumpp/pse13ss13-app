@@ -97,8 +97,8 @@ public class MapController implements RouteListener {
 	public void onLongPressPoint(DisplayCoordinate dc) {
 	}
 
-	public void onShift(DisplayCoordinate dc) {
-		mapModel.shift(dc);
+	public void onShift(float distanceY,float distanceX) {
+		mapModel.shift(new DisplayCoordinate(distanceY, distanceX));
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {

@@ -92,7 +92,7 @@ public class LocationDataIO {
      * @throws java.io.IOException
      */
     public static void save(LocationDataIO objectToSave, File destination) throws FileNotFoundException, IOException {
-    	ProtobufIO.write(objectToSave, destination);
+    	//ProtobufIO.write(objectToSave, destination);
     	/*SaveLocationData.Builder locationData = SaveLocationData.newBuilder();
     	for (POI p : objectToSave.getPOIs()) {
     		locationData.addPOI(p.getSavePOI());
@@ -112,14 +112,14 @@ public class LocationDataIO {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static LocationDataIO load(File source) throws FileNotFoundException, IOException {
+    /*public static LocationDataIO load(File source) throws FileNotFoundException, IOException {
     	return ProtobufIO.readLocationData(source);
     	/*LocationDataIO newLocationData = new LocationDataIO();
     	SaveLocationData input = SaveLocationData.parseFrom(new BufferedInputStream(new FileInputStream(source)));
     	for (int i = 0; i < input.getPOICount(); i++) {
     		newLocationData.addPOI(POI.getInstance(input.getPOI(i)));
     	}
-    	return newLocationData;*/
-    }
+    	return newLocationData;
+    }*/
 
 }

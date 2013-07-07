@@ -87,7 +87,7 @@ public class MapView extends Activity {
 	 * Animation
 	 */
 	long startDelay = 0;
-	
+
 	/**
 	 * Gestik
 	 */
@@ -144,7 +144,7 @@ public class MapView extends Activity {
 		map.setMinimumHeight(size.y);
 		map.setOnTouchListener(new MapTouchEventListener());
 		// map.setImageBitmap(this.getDefaultFogScreen());
-		
+
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
 		mc = MapController.initialize(this);
@@ -152,7 +152,8 @@ public class MapView extends Activity {
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
 		routeOverlay = (ImageView) this.findViewById(R.id.mapview_overlay);
-		//routeOverlay.setOnTouchListener(new RouteOverlayTouchEventListener());
+		// routeOverlay.setOnTouchListener(new
+		// RouteOverlayTouchEventListener());
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "User wird erstellt.");
@@ -199,10 +200,8 @@ public class MapView extends Activity {
 
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
-		
-		
-		gestureDetector = new GestureDetector(this,
-				new MyGestureDetector());
+
+		gestureDetector = new GestureDetector(this, new MyGestureDetector());
 
 	}
 
@@ -423,30 +422,47 @@ public class MapView extends Activity {
 	 * @author Ludwig Biermann
 	 * 
 	 */
-	private class MyGestureDetector implements OnGestureListener { 
-				
+	private class MyGestureDetector implements OnGestureListener {
+
 		@Override
-		public boolean	 onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
 			Log.d("MAP_TOUCH", "MapTouch Fling");
 			return false;
 		}
-		
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			Log.d("MAP_TOUCH", "MapTouch Scroll");
 
-			if(e1.getY() < e2.getY()){
-				distanceY *= -1;
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
+			Log.d("MAP_TOUCH_ZOOM", "Counter1: " + e1.getPointerCount());
+
+			Log.d("MAP_TOUCH_ZOOM", "Counter2: " + e2.getPointerCount());
+
+			if(e2.getPointerCount() >= 2){
+				Log.d("MAP_TOUCH_ZOOM", "event 1 " + e1.getX(0) + " " + e1.getY(0));
+				Log.d("MAP_TOUCH_ZOOM", "Distanc " + distanceX + " " + distanceY);
+				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 1" + e2.getX(0) + " "  + e2.getY(0));
+				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 2" + e2.getX(1) + " "  + e2.getY(1));
 			}
 			
-			if(e1.getX() < e2.getX()){
-				distanceX *= -1;
+			Log.d("MAP_TOUCH", "MapTouch Scroll");
+			// distanceY *= -1;
+			if (e1.getY() > e2.getY()) {
+				Log.d("MAP_TOUCH_SROLL", "Runter " + distanceY);
+			} else {
+				Log.d("MAP_TOUCH_SROLL", "Rauf " + distanceY);
 			}
-				
-			mc.onShift(new DisplayCoordinate(distanceY, distanceX));
+
+			if (e1.getX() > e2.getX()) {
+				Log.d("MAP_TOUCH_SROLL", "Rechts " + distanceX);
+			} else {
+				Log.d("MAP_TOUCH_SROLL", "Links " + distanceX);
+			}
+
+			mc.onShift(distanceY, distanceX);
 			return true;
 		}
-		
+
 		@Override
 		public void onLongPress(MotionEvent event) {
 			Log.d("MAP_TOUCH", "MapTouch Long Touch");
@@ -462,7 +478,7 @@ public class MapView extends Activity {
 		@Override
 		public void onShowPress(MotionEvent e) {
 			Log.d("MAP_TOUCH", "MapTouch Show Press");
-			
+
 		}
 
 		@Override
@@ -471,8 +487,8 @@ public class MapView extends Activity {
 			return false;
 		}
 
-		
 	}
+
 	/**
 	 * 
 	 * @author Ludwig Biermann
@@ -482,10 +498,10 @@ public class MapView extends Activity {
 
 		float startX;
 		float startY;
-		
+
 		float deltaX;
 		float deltaY;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (map.equals(view)) {
@@ -494,28 +510,25 @@ public class MapView extends Activity {
 				return true;
 				// ziehen touch
 				// zoom
-/*
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					Log.d("MAP_TOUCH", "MapTouch Down");
-					startX = event.getX();
-					startY = event.getY();
-					return gestureDetector.onTouchEvent(event);
-				}
-				
-				if (event.getAction() == MotionEvent.ACTION_MOVE &&( (Math.abs(startX-event.getX())) > 100 || (Math.abs(startY-event.getY())) > 100) && !gestureDetector.isLongpressEnabled()) {
-					Log.d("MAP_TOUCH", "MapTouch Move");
-					mc.onShift(new DisplayCoordinate(event.getX()-deltaX, event.getY()-deltaY));
-					deltaX = event.getX();
-					deltaY = event.getY();
-					return true;
-				}
-				return false;
-				*/
+				/*
+				 * if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
+				 * startY = event.getY(); return
+				 * gestureDetector.onTouchEvent(event); }
+				 * 
+				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
+				 * (Math.abs(startX-event.getX())) > 100 ||
+				 * (Math.abs(startY-event.getY())) > 100) &&
+				 * !gestureDetector.isLongpressEnabled()) { Log.d("MAP_TOUCH",
+				 * "MapTouch Move"); mc.onShift(new
+				 * DisplayCoordinate(event.getX()-deltaX, event.getY()-deltaY));
+				 * deltaX = event.getX(); deltaY = event.getY(); return true; }
+				 * return false;
+				 */
 			}
 
 			return false;
 		}
-
 
 	}
 
@@ -528,10 +541,10 @@ public class MapView extends Activity {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
-				Log.d("MAP_TOUCH", "RouteOverlayTouch");
-				// TODO Auto-generated method stub
-				//
-			
+			Log.d("MAP_TOUCH", "RouteOverlayTouch");
+			// TODO Auto-generated method stub
+			//
+
 			return false;
 		}
 
