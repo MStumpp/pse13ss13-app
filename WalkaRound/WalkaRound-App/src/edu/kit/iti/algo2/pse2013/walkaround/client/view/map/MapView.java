@@ -424,6 +424,9 @@ public class MapView extends Activity {
 	 */
 	private class MyGestureDetector implements OnGestureListener {
 
+		float oldX;
+		float oldY;
+
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
@@ -438,28 +441,56 @@ public class MapView extends Activity {
 
 			Log.d("MAP_TOUCH_ZOOM", "Counter2: " + e2.getPointerCount());
 
-			if(e2.getPointerCount() >= 2){
-				Log.d("MAP_TOUCH_ZOOM", "event 1 " + e1.getX(0) + " " + e1.getY(0));
-				Log.d("MAP_TOUCH_ZOOM", "Distanc " + distanceX + " " + distanceY);
-				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 1" + e2.getX(0) + " "  + e2.getY(0));
-				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 2" + e2.getX(1) + " "  + e2.getY(1));
-			}
-			
-			Log.d("MAP_TOUCH", "MapTouch Scroll");
-			// distanceY *= -1;
-			if (e1.getY() > e2.getY()) {
-				Log.d("MAP_TOUCH_SROLL", "Runter " + distanceY);
-			} else {
-				Log.d("MAP_TOUCH_SROLL", "Rauf " + distanceY);
-			}
+			if (e2.getPointerCount() >= 2) {
+				Log.d("MAP_TOUCH_ZOOM",
+						"event 1 " + e1.getX(0) + " " + e1.getY(0));
+				Log.d("MAP_TOUCH_ZOOM", "Distanc " + distanceX + " "
+						+ distanceY);
+				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 1" + e2.getX(0) + " "
+						+ e2.getY(0));
+				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 2" + e2.getX(1) + " "
+						+ e2.getY(1));
 
-			if (e1.getX() > e2.getX()) {
-				Log.d("MAP_TOUCH_SROLL", "Rechts " + distanceX);
-			} else {
-				Log.d("MAP_TOUCH_SROLL", "Links " + distanceX);
-			}
+				float x = Math.abs(e2.getX(0) - e2.getX(1));
+				float y = Math.abs(e2.getY(0) - e2.getY(1));
 
-			mc.onShift(distanceY, distanceX);
+				if (e2.getX(0) < e2.getX(1)) {
+					x += e2.getX(0);
+				} else {
+					x += e2.getX(1);
+				}
+
+				if (e2.getY(0) < e2.getY(1)) {
+					x += e2.getY(0);
+				} else {
+					x += e2.getY(1);
+				}
+
+				Log.d("MAP_TOUCH_ZOOM", "event Coor" + x + " " + y);
+				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / 10);
+
+				this.oldX = e2.getX();
+				this.oldY = e2.getY();
+
+				mc.onZoom(z, new DisplayCoordinate(x, y));
+			} else {
+
+				Log.d("MAP_TOUCH", "MapTouch Scroll");
+				// distanceY *= -1;
+				if (e1.getY() > e2.getY()) {
+					Log.d("MAP_TOUCH_SROLL", "Runter " + distanceY);
+				} else {
+					Log.d("MAP_TOUCH_SROLL", "Rauf " + distanceY);
+				}
+
+				if (e1.getX() > e2.getX()) {
+					Log.d("MAP_TOUCH_SROLL", "Rechts " + distanceX);
+				} else {
+					Log.d("MAP_TOUCH_SROLL", "Links " + distanceX);
+				}
+
+				mc.onShift(distanceY, distanceX);
+			}
 			return true;
 		}
 
@@ -472,6 +503,8 @@ public class MapView extends Activity {
 		@Override
 		public boolean onDown(MotionEvent e) {
 			Log.d("MAP_TOUCH", "MapTouch Down");
+			this.oldX = e.getX();
+			this.oldY = e.getY();
 			return false;
 		}
 

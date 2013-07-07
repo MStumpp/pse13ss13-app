@@ -294,7 +294,7 @@ public class MapModel implements TileListener {
 	 */
 	public boolean zoom(float delta, Coordinate c) {
 
-		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + mid.toString());
+		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + c.toString());
 
 		// TODO
 
