@@ -2,8 +2,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.TreeMap;
 
 import android.graphics.Bitmap;
@@ -14,11 +17,17 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
  * Testfälle kommen in {@code client-view}, da hier Android-Klassen verwendet werden.
+ *
+ * Diese Klasse implementiert einen Downloader für Karten-Kacheln, der eine Tile-Cache mit LRU-Ersetzungsstrategie
+ * verwendet.
  * @author Florian Sch&auml;fer
  */
 public class TileFetcher {
 	private static final String TAG = TileFetcher.class.getSimpleName();
+	private static final int MAX_CACHE_SIZE = 500;
 	private TreeMap<String, TimestampedBitmap> cache = new TreeMap<String, TimestampedBitmap>();
+	private FetchingQueue currentRunnable = new FetchingQueue();
+	private Thread currentThread = new Thread(currentRunnable);
 
 	private TileListener listener;
 
@@ -51,68 +60,84 @@ public class TileFetcher {
 			return false;
 		}
 		Log.d(TAG, "LoD valid!");
+		currentRunnable.clearQueue();
 
 		Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
 		final int[] startTileIndex = TileUtility.getXYTileIndex(topLeft, levelOfDetail);
-
 		Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
+
 		int tileGridWith = (int) Math.pow(2, levelOfDetail);
-		for (int x = 0; x < numTilesX; x++) {
-			for (int y = 0; y < numTilesY; y++) {
-				Thread t = new Thread(new SingleTileFetcher((startTileIndex[0] + x) % tileGridWith, (startTileIndex[1] + y) % tileGridWith, levelOfDetail));
-				t.start();
+
+		for (int xOffset = 0; xOffset < numTilesX; xOffset++) {
+			for (int yOffset = 0; yOffset < numTilesY; yOffset++) {
+				final int x = (startTileIndex[0] + xOffset) % tileGridWith;
+				final int y = (startTileIndex[1] + yOffset) % tileGridWith;
+
+				final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
+				if (cache.containsKey(urlString)) {
+					Log.d(TAG, String.format("Fetched tile from cache: %s (%s/%s/%s.png)", cache.get(urlString).getBitmap(), levelOfDetail, x, y));
+					listener.receiveTile(cache.get(urlString).getBitmap(), x, y, levelOfDetail);
+					cache.get(urlString).updateTimestamp();
+				} else {
+					currentRunnable.offerQueue(urlString, x, y, levelOfDetail);
+					if (!currentThread.isAlive()) {
+						currentThread = new Thread(currentRunnable);
+						currentThread.start();
+					}
+				}
 			}
 		}
-
 		return true;
 	}
 
-	private class SingleTileFetcher implements Runnable {
+	private class FetchingQueue implements Runnable {
+		private Queue<String> urlList = new LinkedList<String>();
+		private Queue<Integer> xList = new LinkedList<Integer>();
+		private Queue<Integer> yList = new LinkedList<Integer>();
+		private Queue<Integer> levelOfDetailList = new LinkedList<Integer>();
+		public FetchingQueue() { }
 
-		private static final int MAX_CACHE_SIZE = 500;
-		private int x;
-		private int y;
-		private int levelOfDetail;
-
-		/**
-		 * Initializes the Fetcher, which downloads a single tile and sends it to the tilelistener of the surrounding class.
-		 *
-		 * @param x the column index of the tile
-		 * @param y	the row index of the tile
-		 * @param levelOfDetail	the level of detail of the tile (aka zoomlevel)
-		 * @throws MalformedURLException if the fetcher tried to fetch the tile from the server with a broken URL
-		 * @throws IOException if an error occured while reading
-		 */
-		public SingleTileFetcher(int x, int y, int levelOfDetail) {
-			this.x = x;
-			this.y = y;
-			this.levelOfDetail = levelOfDetail;
+		public void offerQueue(String url, int x, int y, int levelOfDetail) {
+			urlList.offer(url);
+			xList.offer(x);
+			yList.offer(y);
+			levelOfDetailList.offer(levelOfDetail);
+		}
+		public void clearQueue() {
+			xList.clear();
+			yList.clear();
+			urlList.clear();
+			levelOfDetailList.clear();
 		}
 
 		@Override
 		public void run() {
-			final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
-			try {
-				if (cache.containsKey(urlString)) {
-					Log.d(TAG, String.format("Fetched tile from cache: %s (%s/%s/%s.png)", cache.get(urlString).getBitmap(), levelOfDetail, x, y));
-					listener.receiveTile(cache.get(urlString).getBitmap(), x, y, levelOfDetail);
-				} else {
-					BufferedInputStream bis = new BufferedInputStream(new URL(urlString).openStream());
+			while(xList.size() > 0) {
+				int x = xList.poll();
+				int y = yList.poll();
+				String url = urlList.poll();
+				int levelOfDetail = levelOfDetailList.poll();
+
+				try {
+					InputStream inStream = new URL(url).openStream();
+					BufferedInputStream bis = new BufferedInputStream(inStream);
 					Bitmap result = BitmapFactory.decodeStream(bis);
 					bis.close();
+					inStream.close();
 					Log.d(TAG, String.format("Send to TileListener: %s (%s/%s/%s.png)", result, levelOfDetail, x, y));
 					listener.receiveTile(result, x, y, levelOfDetail);
-					cache.put(urlString, new TimestampedBitmap(System.currentTimeMillis(), result));
+					cache.put(url, new TimestampedBitmap(System.currentTimeMillis(), result));
 					if (cache.size() > MAX_CACHE_SIZE) {
 						cache.pollFirstEntry();
+						cache.pollFirstEntry();
 					}
+				} catch (MalformedURLException e) {
+					Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url));
+					Log.e(TAG, e.getLocalizedMessage());
+				} catch (IOException e) {
+					Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, url));
+					Log.e(TAG, e.getLocalizedMessage());
 				}
-			} catch (MalformedURLException e) {
-				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, urlString));
-				Log.e(TAG, e.getLocalizedMessage());
-			} catch (IOException e) {
-				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, urlString));
-				Log.e(TAG, e.getLocalizedMessage());
 			}
 		}
 	}
