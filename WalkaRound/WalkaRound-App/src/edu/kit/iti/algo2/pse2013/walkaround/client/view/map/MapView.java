@@ -181,6 +181,7 @@ public class MapView extends Activity {
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
 
+		/*
 		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
 		DisplayWaypoint[] list = new DisplayWaypoint[3];
 		list[0] = new DisplayWaypoint(50, 150, 1);
@@ -195,8 +196,10 @@ public class MapView extends Activity {
 		list2[1] = new DisplayPOI(450, 400, 5);
 		list2[2] = new DisplayPOI(700, 500, 6);
 
+		
 		updateDisplayCoordinate(list2);
-
+		*/
+		
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
 

@@ -87,6 +87,11 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "wichtige Punkte werden berechner");
 		this.size = size;
 		this.upperLeft = c;
+		//this.computeMid();
+		
+		//this.upperLeft = new Coordinate(this.upperLeft,
+		//		this.mid.getLatitude() - this.upperLeft.getLatitude(),
+		//		this.mid.getLatitude() - this.upperLeft.getLatitude());
 
 		Log.d(TAG_MAP_MODEL, "Default LOD wird gesetzt");
 		this.currentLevelOfDetail = CurrentMapStyleModel.getInstance()
