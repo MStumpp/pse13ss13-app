@@ -17,18 +17,50 @@ public class GeometryNode implements Serializable {
      */
     private static final long serialVersionUID = 3394680123853287035L;
 
+
+    /**
+     * Geometrizable.
+     */
     private Geometrizable geometrizable;
 
+
+    /**
+     * Value for split plane.
+     */
     private double splitValue;
 
+
+    /**
+     * Parent GeometryNode.
+     */
     private GeometryNode parent;
 
+
+    /**
+     * Depth of node.
+     */
     private int depth;
 
+
+    /**
+     * Left GeometryNode.
+     */
     private GeometryNode leftNode;
 
+
+    /**
+     * Right GeometryNode.
+     */
     private GeometryNode rightNode;
 
+
+    /**
+     * Initializes GeometryNode as leaf node.
+     *
+     * @param parent Parent GeometryNode.
+     * @param depth Depth of this GeometryNode.
+     * @param geometrizable Geometrizable.
+     */
     public GeometryNode(GeometryNode parent, int depth, Geometrizable geometrizable) {
         this.geometrizable = geometrizable;
         this.splitValue = Double.NaN;
@@ -37,6 +69,13 @@ public class GeometryNode implements Serializable {
     }
 
 
+    /**
+     * Initializes GeometryNode as inner node.
+     *
+     * @param parent Parent GeometryNode.
+     * @param depth Depth of this GeometryNode.
+     * @param splitValue Split value.
+     */
     public GeometryNode(GeometryNode parent, int depth, double splitValue) {
         this.geometrizable = null;
         this.splitValue = splitValue;
@@ -44,6 +83,12 @@ public class GeometryNode implements Serializable {
         this.depth = depth;
     }
 
+
+    /**
+     * Initializes GeometryNode.
+     *
+     * @param geometrizable Geometrizable.
+     */
     public GeometryNode(Geometrizable geometrizable) {
         this.geometrizable = geometrizable;
         this.splitValue = Double.NaN;
@@ -51,6 +96,12 @@ public class GeometryNode implements Serializable {
         this.depth = -1;
     }
 
+
+    /**
+     * Initializes GeometryNode.
+     *
+     * @param splitValue Split value.
+     */
     public GeometryNode(double splitValue) {
         this.geometrizable = null;
         this.splitValue = splitValue;
@@ -58,49 +109,116 @@ public class GeometryNode implements Serializable {
         this.depth = -1;
     }
 
+
+    /**
+     * Returns split value.
+     *
+     * @return double.
+     */
     public double getSplitValue() {
         return splitValue;
     }
 
+
+    /**
+     * Returns parent.
+     *
+     * @return GeometryNode.
+     */
     public GeometryNode getParent() {
         return parent;
     }
 
+
+    /**
+     * Returns the depth.
+     *
+     * @return int depth.
+     */
     public int getDepth() {
         return depth;
     }
 
+
+    /**
+     * Returns the left GeometryNode.
+     *
+     * @return GeometryNode.
+     */
     public GeometryNode getLeftNode() {
         return leftNode;
     }
 
+
+    /**
+     * Returns the right GeometryNode.
+     *
+     * @return GeometryNode.
+     */
     public GeometryNode getRightNode() {
         return rightNode;
     }
 
+
+    /**
+     * Sets the left Geometrizable.
+     *
+     * @param leftNode Geometrizable.
+     */
     public void setLeftNode(GeometryNode leftNode) {
         this.leftNode = leftNode;
     }
 
+
+    /**
+     * Sets the right Geometrizable.
+     *
+     * @param rightNode Geometrizable.
+     */
     public void setRightNode(GeometryNode rightNode) {
         this.rightNode = rightNode;
     }
 
+
+    /**
+     * Returns the Geometrizable.
+     *
+     * @return Geometrizable.
+     */
     public Geometrizable getGeometrizable() {
         return geometrizable;
     }
 
+
+    /**
+     * Sets the Geometrizable.
+     *
+     * @param geometrizable Geometrizable.
+     */
     public void setGeometrizable(Geometrizable geometrizable) {
         this.geometrizable = geometrizable;
     }
 
+
+    /**
+     * Returns whether this is a root node or not.
+     *
+     * @return true if root node, false otherwise.
+     */
     public boolean isRoot() {
         return parent == null;
     }
 
+
+    /**
+     * Returns whether this is a leaf node or not.
+     *
+     * @return true if leaf node, false otherwise.
+     */
     public boolean isLeaf() {
         return geometrizable != null;
     }
+
 
     @Override
     public String toString() {

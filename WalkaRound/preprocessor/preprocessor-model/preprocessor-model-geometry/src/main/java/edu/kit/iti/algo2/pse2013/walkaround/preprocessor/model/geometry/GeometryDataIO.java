@@ -39,7 +39,7 @@ public class GeometryDataIO implements Serializable {
     public GeometryDataIO(GeometryNode root, int numDimensions) {
         if (root == null)
             throw new IllegalArgumentException("root node must not be null");
-        if (numDimensions > 0)
+        if (numDimensions < 1)
             throw new IllegalArgumentException("number of dimensions must be greater than 0");
         this.root = root;
         this.numDimensions = numDimensions;

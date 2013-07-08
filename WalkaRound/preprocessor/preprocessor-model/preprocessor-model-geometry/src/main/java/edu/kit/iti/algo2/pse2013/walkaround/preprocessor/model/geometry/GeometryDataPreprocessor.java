@@ -74,7 +74,16 @@ public class GeometryDataPreprocessor {
     }
 
 
-    // build tree
+    /**
+     * Builds a k-dimensional binary search tree.
+     *
+     * @param data Double array consisting of sorted arrays per dimension.
+     * @param parent Parent node for current processing.
+     * @param depth Depth for current processing.
+     * @param start Start index for current processing.
+     * @param end End index for current processing.
+     * @return GeometryNode Node.
+     */
     private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end) {
 
         int dim = depth % data.length;
@@ -91,7 +100,7 @@ public class GeometryDataPreprocessor {
         if (size == 2) {
             median = start;
 
-            // otherwise compute median, if size of range is at least 3
+        // otherwise compute median, if size of range is at least 3
         } else {
             if (size%2 == 0)
                 median = start+size/2-1;
