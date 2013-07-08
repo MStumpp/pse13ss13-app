@@ -16,28 +16,28 @@ import java.io.IOException;
  */
 public class GeometryDataIOTest {
 
-    private static String fileLocaton = System.getProperty("java.io.tmpdir") + File.separator + "geometryDataIO";
+    private static String fileLocation = System.getProperty("java.io.tmpdir") + File.separator + "geometryDataIO";
 
     @Test
     public void testSandAndLoad() {
 
         GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
-        GeometryNode node = writeGeometryDataIO.getRoot();
+        int numDimensions = writeGeometryDataIO.getNumDimensions();
 
         try {
-            GeometryDataIO.save(writeGeometryDataIO, new File(fileLocaton));
+            GeometryDataIO.save(writeGeometryDataIO, new File(fileLocation));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        File f = new File(fileLocaton);
+        File f = new File(fileLocation);
         Assert.assertTrue(f.exists());
 
         GeometryDataIO readGeometryDataIO = null;
         try {
-            readGeometryDataIO = GeometryDataIO.load(new File(fileLocaton));
+            readGeometryDataIO = GeometryDataIO.load(new File(fileLocation));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -50,6 +50,17 @@ public class GeometryDataIOTest {
         Assert.assertNotNull(readGeometryDataIO);
         // Check, if the same number of POI was written and read
         Assert.assertNotNull(readGeometryDataIO.getRoot());
+        // Check, if the same number of POI was written and read
+        Assert.assertNotNull(readGeometryDataIO.getRoot().getGeometrizable());
+        // Check, if value for dimension 0 is the same
+        Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable().valueForDimension(0),
+                writeGeometryDataIO.getRoot().getGeometrizable().valueForDimension(0), 0.d);
+        // Check, if value for dimension 1 is the same
+        Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable().valueForDimension(1),
+                writeGeometryDataIO.getRoot().getGeometrizable().valueForDimension(1), 0.d);
+
+        // Check, if number of dimensions is the same
+        Assert.assertEquals(readGeometryDataIO.getNumDimensions(), numDimensions);
     }
 
     private GeometryDataIO getGeometryDataIO() {

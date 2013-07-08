@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class GraphDataIOTest {
 
-    private static String fileLocaton = System.getProperty("java.io.tmpdir") + File.separator + "graphDataIO";
+    private static String fileLocation = System.getProperty("java.io.tmpdir") + File.separator + "graphDataIO";
 
     @Test
     public void testSandAndLoad() {
@@ -22,17 +22,17 @@ public class GraphDataIOTest {
         int size = graphDataIO.getEdges().size();
 
         try {
-            GraphDataIO.save(graphDataIO, new File(fileLocaton));
+            GraphDataIO.save(graphDataIO, new File(fileLocation));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        File f = new File(fileLocaton);
+        File f = new File(fileLocation);
         Assert.assertTrue(f.exists());
 
         graphDataIO = null;
         try {
-            graphDataIO = GraphDataIO.load(new File(fileLocaton));
+            graphDataIO = GraphDataIO.load(new File(fileLocation));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
