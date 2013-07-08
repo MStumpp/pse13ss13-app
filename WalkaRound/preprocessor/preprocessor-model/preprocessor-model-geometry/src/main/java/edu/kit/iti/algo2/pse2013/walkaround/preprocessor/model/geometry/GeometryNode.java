@@ -17,22 +17,24 @@ public class GeometryNode implements Serializable {
      */
     private static final long serialVersionUID = 3394680123853287035L;
 
-    private Vertex vertex;
+    private double splitValue;
 
     private GeometryNode leftNode;
 
     private GeometryNode rightNode;
 
-    public GeometryNode(Vertex vertex, GeometryNode leftNode, GeometryNode rightNode) {
-        if (vertex == null)
-            throw new IllegalArgumentException("vertex must not be null");
+    private Vertex vertex;
+
+    public GeometryNode(Vertex vertex) {
         this.vertex = vertex;
-        this.leftNode = leftNode;
-        this.rightNode = rightNode;
     }
 
-    public Vertex getVertex() {
-        return vertex;
+    public GeometryNode(double splitValue) {
+        this.splitValue = splitValue;
+    }
+
+    public double getSplitValue() {
+        return splitValue;
     }
 
     public GeometryNode getLeftNode() {
@@ -43,14 +45,30 @@ public class GeometryNode implements Serializable {
         return rightNode;
     }
 
+    public void setLeftNode(GeometryNode leftNode) {
+        this.leftNode = leftNode;
+    }
+
+    public void setRightNode(GeometryNode rightNode) {
+        this.rightNode = rightNode;
+    }
+
+    public Vertex getVertex() {
+        return vertex;
+    }
+
+    public void setVertex(Vertex vertex) {
+        this.vertex = vertex;
+    }
+
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("\n" + vertex.toString() + "\n");
+        //sb.append("\n" + vertex.toString() + "\n");
         if (leftNode != null)
-            sb.append("-> leftNode: " + leftNode.getVertex().toString() + "\n");
+        //    sb.append("-> leftNode: " + leftNode.getVertex().toString() + "\n");
         if (rightNode != null)
-            sb.append("-> rightNode: " + rightNode.getVertex().toString() + "\n");
+        //    sb.append("-> rightNode: " + rightNode.getVertex().toString() + "\n");
 
         if (leftNode != null)
             sb.append(leftNode.toString() + "\n");

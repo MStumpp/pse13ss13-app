@@ -60,74 +60,115 @@ public class GeometryDataPreprocessor {
         });
         sortedLongitude.addAll(vertices);
 
-        GeometryNode node = twoDtree(new ArrayList<Vertex>(sortedLatitude), new ArrayList<Vertex>(sortedLongitude));
+        Vertex[][] array = new Vertex[][]{(Vertex[]) sortedLatitude.toArray(), (Vertex[]) sortedLongitude.toArray()};
+        GeometryNode node = buildtree(array);
         return new GeometryDataIO(node);
     }
 
-    private static GeometryNode twoDtree(List<Vertex> sortedLatitude, List<Vertex> sortedLongitude) {
-        if (sortedLatitude.size() != sortedLongitude.size())
+    private static GeometryNode buildtree(Vertex[][] data) {
+        if (data[0].length != data[1].length)
             throw new IllegalArgumentException("both lists must be of same size");
-        if (sortedLatitude.size() == 0)
+        if (data[0].length == 0)
             throw new IllegalArgumentException("list of vertices must be greater than 0");
-        System.out.println(sortedLatitude.toString());
-        System.out.println(sortedLongitude.toString());
-        return twoDtree(sortedLatitude, sortedLongitude, 0, 0, sortedLatitude.size()-1);
+        return buildtree(data, 0, 0, data[0].length-1);
     }
 
-    private static GeometryNode twoDtree(List<Vertex> sortedLatitude, List<Vertex> sortedLongitude, int depth, int start, int end) {
+    private static GeometryNode buildtree(Vertex[][] data, int depth, int start, int end) {
         if (end-start < 0)
             return null;
 
         // select dimension
         // 0 latitude
         // 1 longitude
-        int dim = depth % 2;
-        List<Vertex> workingList;
-        if (dim == 0)
-            workingList = sortedLatitude;
-        else
-            workingList = sortedLongitude;
+        int dim = depth % data.length;
 
-        System.out.println(dim);
+        int size = end-start+1;
+        // only one point in range, then take as leaf
+        // eventually put more than one point in leaf
+        if (size == 1)
+            return new GeometryNode(data[dim][0]);
 
-        int median = indexOfMedian(workingList, dim, start, end);
-        System.out.println("median -> start: " + start + " end: " + end + " median: " + median);
+        // otherwise, compute median;
+        int median;
+        // if range of size 2, than take first point as median
+        if (size == 2) {
+            median = start;
+
+        // otherwise compute median, if size of range is at least 3
+        } else {
+            if (size%2 == 0)
+                median = start+size/2-1;
+            else
+                median = start+size/2;
+            // to make sure all less or equal
+            // points to median go to left tree
+            int tmpMedian = median+1;
+            if (dim == 0)
+                while (tmpMedian <= end+1 && data[dim][tmpMedian].getLatitude() == data[dim][median].getLatitude())
+                    tmpMedian += 1;
+            else
+                while (tmpMedian <= end+1 && data[dim][tmpMedian].getLongtitude() == data[dim][median].getLongtitude())
+                    tmpMedian += 1;
+            median = tmpMedian-1;
+        }
+
+//      System.out.println("median -> start: " + start + " end: " + end + " median: " + median);
         if (median == -1)
             throw new RuntimeException("something went wrong internally");
-        GeometryNode leftNode = twoDtree(sortedLatitude, sortedLongitude, depth+1, start, median-1);
-        GeometryNode rightNode = twoDtree(sortedLatitude, sortedLongitude, depth+1, median+1, end);
-        GeometryNode node = new GeometryNode(workingList.get(median), leftNode, rightNode);
 
+        // sort longitude
+        int leftIndex = 0;
+        int rightIndex = median+1;
+        Vertex[] toReplaceArray;
+        if (dim == 0) toReplaceArray = data[1];
+        else toReplaceArray = data[0];
+        Vertex[] tmpArray = new Vertex[toReplaceArray.length];
+        List<Vertex> vertexForLeft = Arrays.asList(Arrays.copyOfRange(data[dim], start, median));
+        for (Vertex vertex : toReplaceArray) {
+            if (vertexForLeft.contains(vertex)) {
+                tmpArray[leftIndex] = vertex;
+                leftIndex += 1;
+            } else {
+                tmpArray[rightIndex] = vertex;
+                rightIndex += 1;
+            }
+        }
+        if (dim == 0) data[1] = tmpArray;
+        else data[0] = tmpArray;
+
+        GeometryNode node = new GeometryNode(median);
+        node.setLeftNode(buildtree(data, depth+1, start, median));
+        node.setRightNode(buildtree(data, depth+1, median+1, end));
         return node;
     }
 
-    private static int indexOfMedian(List<Vertex> vertices, int dim, int start, int end) {
-        if (end-start < 0)
-            return -1;
-        if (start == end)
-            return start;
-
-        int size = end-start+1;
-        int median = start+size/2;
-        int tmpMedian = median-1;
-        switch (dim)
-        {
-            case 0:
-            {
-                while (tmpMedian >= start-1 && vertices.get(tmpMedian).getLatitude() == vertices.get(median).getLatitude())
-                    tmpMedian -= 1;
-                break;
-            }
-
-            case 1:
-            {
-                while (tmpMedian >= start-1 && vertices.get(tmpMedian).getLongtitude() == vertices.get(median).getLongtitude())
-                    tmpMedian -= 1;
-                break;
-            }
-        }
-        return tmpMedian+1;
-    }
+//    private static int indexOfMedian(Vertex[] vertices, int start, int length) {
+//        if (end-start < 0)
+//            return -1;
+//        if (start == end)
+//            return start;
+//
+//        int size = end-start+1;
+//        int median = start+size/2;
+//        int tmpMedian = median-1;
+//        switch (dim)
+//        {
+//            case 0:
+//            {
+//                while (tmpMedian >= start-1 && vertices.get(tmpMedian).getLatitude() == vertices.get(median).getLatitude())
+//                    tmpMedian -= 1;
+//                break;
+//            }
+//
+//            case 1:
+//            {
+//                while (tmpMedian >= start-1 && vertices.get(tmpMedian).getLongtitude() == vertices.get(median).getLongtitude())
+//                    tmpMedian -= 1;
+//                break;
+//            }
+//        }
+//        return tmpMedian+1;
+//    }
 
     // Heapsort
 
