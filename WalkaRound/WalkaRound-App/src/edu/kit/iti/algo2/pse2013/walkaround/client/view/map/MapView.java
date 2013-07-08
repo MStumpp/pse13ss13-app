@@ -9,6 +9,9 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -100,13 +103,15 @@ public class MapView extends Activity {
 	RelativeLayout routeList;
 	RelativeLayout poiList;
 	int sizeOfPoints;
-	
+
 	/**
 	 * 
 	 */
 
 	PullUpView pullUp;
 	
+	Point size;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -132,7 +137,7 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
 
 		Display display = this.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
+		size = new Point();
 		display.getSize(size);
 		Log.d(TAG_MAPVIEW, "DisplayMaße: " + size.x + " * " + size.y);
 
@@ -188,50 +193,49 @@ public class MapView extends Activity {
 				(float) size.x / 2, (float) size.y / 2), 180);
 
 		/*
-		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
-		DisplayWaypoint[] list = new DisplayWaypoint[3];
-		list[0] = new DisplayWaypoint(50, 150, 1);
-		list[1] = new DisplayWaypoint(250, 200, 2);
-		list[2] = new DisplayWaypoint(500, 300, 3);
+		 * Log.d(TAG_MAPVIEW,
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt");
+		 * DisplayWaypoint[] list = new DisplayWaypoint[3]; list[0] = new
+		 * DisplayWaypoint(50, 150, 1); list[1] = new DisplayWaypoint(250, 200,
+		 * 2); list[2] = new DisplayWaypoint(500, 300, 3);
+		 * 
+		 * updateDisplayCoordinate(list);
+		 * 
+		 * Log.d(TAG_MAPVIEW,
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[]
+		 * list2 = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4);
+		 * list2[1] = new DisplayPOI(450, 400, 5); list2[2] = new
+		 * DisplayPOI(700, 500, 6);
+		 * 
+		 * 
+		 * updateDisplayCoordinate(list2);
+		 */
 
-		updateDisplayCoordinate(list);
-
-		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
-		DisplayPOI[] list2 = new DisplayPOI[3];
-		list2[0] = new DisplayPOI(250, 350, 4);
-		list2[1] = new DisplayPOI(450, 400, 5);
-		list2[2] = new DisplayPOI(700, 500, 6);
-
-		
-		updateDisplayCoordinate(list2);
-		*/
-		
-		
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
 
 		gestureDetector = new GestureDetector(this, new MyGestureDetector());
 
+		this.updateRouteOverlayImage();
 	}
 
 	/**
 	 * 
 	 */
-	public PullUpView getPullUpView(){
+	public PullUpView getPullUpView() {
 		return pullUp;
 	}
-	
-	
+
 	/**
 	 * Updatet die Karte
-	 *
+	 * 
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
-		
+
 		runOnUiThread(new Runnable() {
 			public void run() {
-				
+
 				map.setImageBitmap(b);
 				map.setVisibility(View.VISIBLE);
 			}
@@ -240,16 +244,29 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet das Routen Overlay
-	 *
+	 * 
 	 * @param b
 	 */
-	public void updateRouteOverlayImage(Bitmap b) {
-		this.routeOverlay.setImageBitmap(b);
+	public void updateRouteOverlayImage() {
+		Bitmap routeOverlay = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		routeOverlay.prepareToDraw();
+		
+		Canvas canvas = new Canvas(routeOverlay);
+
+		Paint pinsel = new Paint();
+		pinsel.setColor(Color.rgb(64, 64, 255));
+		pinsel.setStrokeWidth(5);
+		
+
+		   // Diagonale durch Leinwand zeichnen
+		canvas.drawLine(0, 0, 800, 1005, pinsel);
+		
+		this.routeOverlay.setImageBitmap(routeOverlay);
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @param dw
 	 */
 	public void updateDisplayCoordinate(DisplayWaypoint[] dw) {
@@ -282,13 +299,13 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param dp
 	 */
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
 		poiList.removeAllViews();
 		currentActive = null;
-		
+
 		for (DisplayPOI value : dp) {
 			ImageView iv = new ImageView(this);
 			iv.setImageDrawable(poi);
@@ -303,7 +320,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Setzt einen neuen Punkt aktive
-	 *
+	 * 
 	 * @param id
 	 */
 	public void setActive(int id) {
@@ -346,7 +363,7 @@ public class MapView extends Activity {
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
-	 *
+	 * 
 	 * @param coor
 	 *            Zielkoordinate
 	 * @param degree
@@ -436,9 +453,9 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class MyGestureDetector implements OnGestureListener {
 
@@ -487,12 +504,12 @@ public class MapView extends Activity {
 
 				Log.d("MAP_TOUCH_ZOOM", "event Coor" + x + " " + y);
 				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / 10);
-				Log.d("MAP_TOUCH_ZOOM", "Zoom Faktor: " + z) ;
-				//float z = 1;
-				
+				Log.d("MAP_TOUCH_ZOOM", "Zoom Faktor: " + z);
+				// float z = 1;
+
 				gesamt += z;
-				Log.d("MAP_TOUCH_ZOOM", "Gesamt Zoom Faktor: " + z) ;
-				
+				Log.d("MAP_TOUCH_ZOOM", "Gesamt Zoom Faktor: " + z);
+
 				this.oldX = e2.getX();
 				this.oldY = e2.getY();
 
@@ -547,9 +564,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -572,7 +589,7 @@ public class MapView extends Activity {
 				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
 				 * startY = event.getY(); return
 				 * gestureDetector.onTouchEvent(event); }
-				 *
+				 * 
 				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
 				 * (Math.abs(startX-event.getX())) > 100 ||
 				 * (Math.abs(startY-event.getY())) > 100) &&
@@ -590,9 +607,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
@@ -608,9 +625,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 

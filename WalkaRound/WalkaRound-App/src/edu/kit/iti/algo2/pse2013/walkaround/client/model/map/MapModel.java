@@ -441,9 +441,9 @@ public class MapModel implements TileListener {
 			int localX = x - xy[0];
 			int localY = y - xy[1];
 			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y " + localY);
-
+			
 			Canvas canvas = new Canvas(map);
-
+			
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
 			canvas.drawBitmap(tile, (localX * tile.getWidth()) - mapOffset.getX(),
 					(localY * tile.getWidth()) + mapOffset.getY(), null);
