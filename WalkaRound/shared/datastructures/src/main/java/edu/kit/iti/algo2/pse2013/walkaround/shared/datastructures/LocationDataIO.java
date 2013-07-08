@@ -1,10 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +14,12 @@ import java.util.List;
  *
  * @version 1.0
  */
-public class LocationDataIO {
+public class LocationDataIO implements Serializable {
+
+    /**
+     * Temporary Serial version ID as long as Java serialization is used
+     */
+    private static final long serialVersionUID = 3384680623853287035L;
 
 
     /**
@@ -90,9 +91,14 @@ public class LocationDataIO {
      * @throws FileNotFoundException
      * @throws java.io.IOException
      */
-    public static void save(LocationDataIO objectToSave, File destination) throws FileNotFoundException, IOException {
-    	ProtobufIO.write(objectToSave, destination);
-    	/*SaveLocationData.Builder locationData = SaveLocationData.newBuilder();
+    public static void save(LocationDataIO objectToSave, File destination) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
+        oos.writeObject(objectToSave);
+        oos.flush();
+        oos.close();
+
+    	/*ProtobufIO.write(objectToSave, destination);
+    	SaveLocationData.Builder locationData = SaveLocationData.newBuilder();
     	for (POI p : objectToSave.getPOIs()) {
     		locationData.addPOI(p.getSavePOI());
     	}
@@ -111,9 +117,14 @@ public class LocationDataIO {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static LocationDataIO load(File source) throws FileNotFoundException, IOException {
-    	return ProtobufIO.readLocationData(source);
-    	/*LocationDataIO newLocationData = new LocationDataIO();
+    public static LocationDataIO load(File source) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(source)));
+        LocationDataIO location = (LocationDataIO) ois.readObject();
+        ois.close();
+        return location;
+
+    	/*return ProtobufIO.readLocationData(source);
+    	LocationDataIO newLocationData = new LocationDataIO();
     	SaveLocationData input = SaveLocationData.parseFrom(new BufferedInputStream(new FileInputStream(source)));
     	for (int i = 0; i < input.getPOICount(); i++) {
     		newLocationData.addPOI(POI.getInstance(input.getPOI(i)));

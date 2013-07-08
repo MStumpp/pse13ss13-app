@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,17 +9,25 @@ import java.util.ArrayList;
  * @author Thomas Kadow
  * @version 1.0
  */
-public class Area {
+public class Area implements Serializable {
+
+    /**
+     * Temporary Serial version ID as long as Java serialization is used
+     */
+    private static final long serialVersionUID = 3384680623853287035L;
+
 
 	/**
 	 * IDs of the categories where the area belongs to.
 	 */
 	private int[] areaCategories;
 
+
 	/**
 	 * Coordinates of the area.
 	 */
 	private ArrayList<Coordinate> areaCoordinates;
+
 
 	/**
 	 * Constructs a new area.
@@ -37,6 +46,7 @@ public class Area {
 		
 	}
 
+
 	/**
 	 * Returns all IDs of the Categories where the area belongs to.
 	 * 
@@ -45,6 +55,7 @@ public class Area {
 	public int[] getAreaCategories() {
 		return areaCategories;
 	}
+
 
 	/**
 	 * Sets the area categories of this area.
@@ -56,6 +67,7 @@ public class Area {
 		this.areaCategories = areaCategories;
 	}
 
+
 	/**
 	 * Returns the coordinates of the area.
 	 * 
@@ -64,4 +76,5 @@ public class Area {
 	public ArrayList<Coordinate> getAreaCoordinates() {
 		return areaCoordinates;
 	}
+
 }
