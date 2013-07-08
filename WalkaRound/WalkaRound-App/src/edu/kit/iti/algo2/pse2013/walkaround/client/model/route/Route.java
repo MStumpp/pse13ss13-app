@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
-
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -30,6 +29,18 @@ public class Route implements RouteInfo {
 		this.name = "";
 		this.routeProcessor = RouteProcessing.getInstance();
 		this.idCounter = 0;
+
+		// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
+		// 8.3858300); // Brauerstraße
+		// public static Coordinate defaultCoordinate = new Coordinate(49.0145,
+		// 8.419); // 211
+		// public static Coordinate defaultCoordinate = new Coordinate(49.01,
+		// 8.40333); // Marktplatz
+
+		routeCoordinates.add(new Waypoint(49.00471, 8.3858300, 1, "Brauerstraße"));
+		routeCoordinates.add(new Waypoint(49.0145, 8.419,2, "Raum 211"));
+		routeCoordinates.add(new Waypoint(49.01, 8.40333,3, "Marktplatz Karlsruhe"));
+		this.activeWaypoint = new Waypoint(49.01, 8.40333, 3, "Marktplatz Karlsruhe");
 	}
 	
 
@@ -88,7 +99,7 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
-			this.routeCoordinates.add(new Waypoint(c.getLongtitude(), c.getLatitude(), 1, "Wegpunkt"));
+			this.routeCoordinates.add(new Waypoint(c.getLongitude(), c.getLatitude(), 1, "Wegpunkt"));
 		}
 		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
@@ -116,7 +127,7 @@ public class Route implements RouteInfo {
 		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
 		
 		if (!(this.getEnd().getLatitude() == newRoute.getStart().getLatitude())
-				|| !(this.getEnd().getLongtitude() == newRoute.getStart().getLongtitude())) {
+				|| !(this.getEnd().getLongitude() == newRoute.getStart().getLongitude())) {
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate path");
 			this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
 			

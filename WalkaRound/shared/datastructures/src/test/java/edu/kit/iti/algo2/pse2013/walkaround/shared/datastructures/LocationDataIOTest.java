@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
+
 /**
  * LocationDataIOTest.
  *
@@ -37,7 +39,7 @@ public class LocationDataIOTest {
 
         LocationDataIO readLocationData = null;
         try {
-			readLocationData = LocationDataIO.load(new File(fileLocaton));
+			readLocationData = .load(new File(fileLocaton));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

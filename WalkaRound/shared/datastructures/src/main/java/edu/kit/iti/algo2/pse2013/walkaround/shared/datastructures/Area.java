@@ -34,6 +34,7 @@ public class Area {
 					"An area has at least 3 Coordinates.");
 		this.areaCategories = areaCategories;
 		this.areaCoordinates = new ArrayList<Coordinate>(areaCoordinates);
+		
 	}
 
 	/**

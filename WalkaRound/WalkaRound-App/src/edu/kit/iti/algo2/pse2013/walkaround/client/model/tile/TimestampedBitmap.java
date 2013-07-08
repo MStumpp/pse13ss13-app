@@ -32,5 +32,9 @@ public class TimestampedBitmap implements Comparable<TimestampedBitmap> {
 		return bitmap;
 	}
 
+	public void updateTimestamp() {
+		timestamp = System.currentTimeMillis();
+	}
+
 
 }

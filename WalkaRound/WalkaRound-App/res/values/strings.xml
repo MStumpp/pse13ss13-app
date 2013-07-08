@@ -3,4 +3,10 @@
     <string name="app_name">WalkAround</string>
     <string name="address">address</string>
     <string name="POI">POI</string>
+    <string name="current">current</string>
+    <string name="Route">Route</string>
+    <string name="current_route">Current Route</string>
+    <string name="reset">Reset</string>
+    <string name="add_favorite">add Favorite</string>
+    <string name="go_to_map">go to map</string>
 </resources>

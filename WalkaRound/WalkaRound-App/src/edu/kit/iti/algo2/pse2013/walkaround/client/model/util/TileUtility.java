@@ -5,7 +5,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 /**
  * This class provides methods which are needed by the map model and the tile
  * fetcher.
- * 
+ *
  * @author the team from OpenStreetMap-Wiki
  * @see <a
  *      href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Java">Slippy
@@ -23,7 +23,7 @@ public final class TileUtility {
 	/**
 	 * Calculates the x- and y-Part of the tile URL for a given Coordinate
 	 * anywhere on that tile
-	 * 
+	 *
 	 * @param c
 	 *            a geographical coordinate which should lie on the tile with
 	 *            the returned indices
@@ -34,7 +34,7 @@ public final class TileUtility {
 	 */
 	public static int[] getXYTileIndex(Coordinate c, int levelOfDetail) {
 		return new int[] {
-				(int) Math.floor((c.getLongtitude() + 180) / 360
+				(int) Math.floor((c.getLongitude() + 180) / 360
 						* (1 << levelOfDetail)),
 				(int) Math.floor((1 - Math.log(Math.tan(Math.toRadians(c
 						.getLatitude()))
@@ -44,7 +44,7 @@ public final class TileUtility {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param levelOfDetail

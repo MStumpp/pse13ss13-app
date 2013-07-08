@@ -9,11 +9,9 @@ import java.util.TreeMap;
 
 import android.content.Context;
 import android.location.Geocoder;
-
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
@@ -28,6 +26,8 @@ public class POIManager {
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
+
+	private final int NUMBER_OF_CATEGORIES = 20;
 	/**
 	 * Instance of the POIManager.
 	 */
@@ -51,7 +51,10 @@ public class POIManager {
 	 */
 	private POIManager(LocationDataIO locationDataIO) {
 		this.locationDataIO = locationDataIO;
-		activeCategories = new int[20];
+		activeCategories = new int[NUMBER_OF_CATEGORIES];
+		for (int i = 0; i < activeCategories.length; i++) {
+			activeCategories[i] = -1;
+		}
 	}
 
 	/**
@@ -89,9 +92,30 @@ public class POIManager {
 	 *            level of detail
 	 * @return a list of all POIs laying within a rectangle
 	 */
-	public ArrayList<POI> getPOIsWithinRectangle(Coordinate upperLeft,
+	public List<POI> getPOIsWithinRectangle(Coordinate upperLeft,
 			Coordinate bottomRight, int levelOfDetail) {
-		return null;
+		double minLat = bottomRight.getLatitude();
+		double maxLat = upperLeft.getLatitude();
+		double minLon = upperLeft.getLongitude();
+		double maxLon = bottomRight.getLongitude();
+		ArrayList<POI> poiList = new ArrayList<POI>();
+		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
+				.hasNext();) {
+			POI current = iter.next();
+			if ((current.getLatitude() >= minLat && current.getLatitude() <= maxLat)
+					&& (current.getLongitude() >= minLon && current
+							.getLongitude() <= maxLon)) {
+				for (int i = 0; i < current.getPOICategories().length; i++) {
+					if (activeCategories[current.getPOICategories()[i]] != -1) {
+						poiList.add(current);
+					}
+				}
+			}
+		}
+		return poiList;
+		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
+		// besseren laufzeit
+		// lvl of detail noch nicht eingebaut
 	}
 
 	// int[] parameter gelÃ¶scht da aktive kategorien als attribut vorliegen
@@ -104,9 +128,11 @@ public class POIManager {
 	 *            level of detail
 	 * @return a list of all POIs laying upon a route
 	 */
-	public ArrayList<POI> getPOIsAlongRoute(RouteInfo routeInfo,
+	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo,
 			int levelOfDetail) {
 		return null;
+		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
+		// besseren laufzeit
 	}
 
 	// aus location poi gemacht
@@ -117,7 +143,7 @@ public class POIManager {
 	 *            query to search with
 	 * @return a list of three suggestions of locations
 	 */
-	public ArrayList<POI> searchPOIsByQuery(String query) {
+	public List<POI> searchPOIsByQuery(String query) {
 		TreeMap<Integer, ArrayList<POI>> suggestionsMap = new TreeMap<Integer, ArrayList<POI>>();
 		ArrayList<POI> suggestions = new ArrayList<POI>();
 		for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
@@ -154,7 +180,7 @@ public class POIManager {
 	 *            context of the current activity
 	 * @return a list of three suggestions of locations
 	 */
-	public ArrayList<Address> searchPOIsByAddress(Address address,
+	public List<Address> searchPOIsByAddress(Address address,
 			Context context) {
 		ArrayList<Address> suggestions = new ArrayList<Address>();
 		Geocoder geocoder = new Geocoder(context, Locale.GERMANY);
@@ -183,7 +209,7 @@ public class POIManager {
 	 *            id of the category to activate
 	 */
 	public void addActivePOICategory(int id) {
-		if (activeCategories[id] == 0) {
+		if (activeCategories[id] == -1) {
 			activeCategories[id] = id;
 		}
 	}
@@ -197,7 +223,7 @@ public class POIManager {
 	 */
 	public void removeActivePOICategory(int id) {
 		if (activeCategories[id] == id) {
-			activeCategories[id] = 0;
+			activeCategories[id] = -1;
 		}
 	}
 

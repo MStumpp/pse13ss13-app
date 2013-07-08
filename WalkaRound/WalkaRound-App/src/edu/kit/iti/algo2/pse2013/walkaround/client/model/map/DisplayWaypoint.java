@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * Diese Klasse verindet eine DisplayCoordinate mit einem Waypoint

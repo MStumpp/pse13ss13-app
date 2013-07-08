@@ -4,10 +4,10 @@ import java.util.LinkedList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class RouteMenuController {
 
@@ -19,7 +19,20 @@ public class RouteMenuController {
 
 	private RouteMenuController() {
 		this.routeListeners = new LinkedList<RouteListener>();
-		this.currentRoute = new Route(new LinkedList<Coordinate>());
+		// Beispiele aus MapController :
+		// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
+		// 8.3858300); // Brauerstraße
+		// public static Coordinate defaultCoordinate = new Coordinate(49.0145,
+		// 8.419); // 211
+		// public static Coordinate defaultCoordinate = new Coordinate(49.01,
+		// 8.40333); // Marktplatz
+		LinkedList<Coordinate> ll = new LinkedList<Coordinate>();
+		//ll.add(new Coordinate(49.00471, 8.3858300));
+		//ll.add(new Coordinate(49.0145, 8.419));
+		//ll.add(new Coordinate(49.01, 8.40333));
+		this.currentRoute = new Route(ll);
+
+		
 	}
 
 	public static RouteMenuController getInstance() {
@@ -38,11 +51,12 @@ public class RouteMenuController {
 
 	private void notifyAllRouteListeners() {
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
-		for (RouteListener rl : this.routeListeners) {
-			rl.onRouteChange((RouteInfo)this.currentRoute, activeWaypoint);
+		if(this.currentRoute != null && activeWaypoint != null) {
+			for (RouteListener rl : this.routeListeners) {
+				rl.onRouteChange((RouteInfo)this.currentRoute, activeWaypoint);
+			}
 		}
 	}
-
 
 	public void setActiveWaypoint(Waypoint wp) {
 		this.currentRoute.setActiveWaypoint(wp);
@@ -109,12 +123,11 @@ public class RouteMenuController {
 	}
 
 	public void addRouteToFavorites(RouteInfo ri, String name) {
-		//TODO
+		// TODO
 	}
 
 	public void addLocationToFavorites(Location ri, String name) {
-		//TODO
+		// TODO
 	}
-
 
 }

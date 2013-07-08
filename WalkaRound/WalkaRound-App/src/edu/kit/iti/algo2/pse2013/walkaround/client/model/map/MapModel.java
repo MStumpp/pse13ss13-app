@@ -88,6 +88,17 @@ public class MapModel implements TileListener {
 		this.size = size;
 		this.upperLeft = c;
 
+		Log.d("WTF", "upperleft " +  upperLeft);
+		
+		//this.computeMid();
+		Log.d("WTF", "mid " +  mid);
+		
+		//this.upperLeft = new Coordinate(this.upperLeft,
+		//		-Math.abs(this.mid.getLatitude() - this.upperLeft.getLatitude()),
+		//		Math.abs(this.mid.getLongitude() - this.upperLeft.getLongitude()));
+
+		Log.d("WTF", "upperLeft2 " +  upperLeft);
+		
 		Log.d(TAG_MAP_MODEL, "Default LOD wird gesetzt");
 		this.currentLevelOfDetail = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getDefaultLevelOfDetail();
@@ -124,6 +135,9 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Map wird initialisiert");
 		this.generateMapOverlayImage();
 
+		//this.mapController.onMapOverlayImageChange(map);
+		
+		
 		Log.d(TAG_MAP_MODEL, "Map Model wurde initialisiert");
 	}
 
@@ -136,9 +150,14 @@ public class MapModel implements TileListener {
 	 * @return geographische Koordiante
 	 */
 	private Coordinate computeCoordinateByDisplayCoordinate(DisplayCoordinate dc) {
-
+		Log.d("WTF", "CoordDiffY: "+-CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+				currentLevelOfDetail, CoordinateUtility.DIRECTION_Y));
+		Log.d("WTF", "CoordDiffX: "+CoordinateUtility.convertPixelsToDegrees(dc.getX(),
+				currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
+		Log.d("WTF","PixelDiffX: "+dc.getX());
+		Log.d("WTF","PixelDiffY: "+dc.getY());
 		return new Coordinate(this.upperLeft,
-				CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+				-CoordinateUtility.convertPixelsToDegrees(dc.getY(),
 						currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
 				CoordinateUtility.convertPixelsToDegrees(dc.getX(),
 						currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
@@ -158,13 +177,20 @@ public class MapModel implements TileListener {
 	 */
 	public void shift(DisplayCoordinate delta) {
 		// TODO
+
+		Log.d("MAP_TOUCH_SROLL", "Ecke vorher " + this.upperLeft.toString());
+
 		this.upperLeft = new Coordinate(this.upperLeft,
+				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
+						this.currentLevelOfDetail,
+						CoordinateUtility.DIRECTION_Y),
+
 				CoordinateUtility.convertPixelsToDegrees(delta.getX(),
 						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_HORIZONTAL),
-				CoordinateUtility.convertPixelsToDegrees(delta.getY(),
-						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_VERTICAL));
+						CoordinateUtility.DIRECTION_X)
+
+				);
+		Log.d("MAP_TOUCH_SROLL", "Ecke Nachher " + this.upperLeft.toString());
 		this.fetchTiles();
 	}
 
@@ -179,7 +205,7 @@ public class MapModel implements TileListener {
 	 *
 	 */
 	public void generateMapOverlayImage() {
-
+		
 		Log.d(TAG_MAP_MODEL, "LOD " + currentLevelOfDetail + " x " + xZoomBorder + " y " + yZoomBorder);
 		Log.d(TAG_MAP_MODEL, "MapStyle: " + CurrentMapStyleModel.getInstance().getCurrentMapStyle().getName());
 
@@ -187,29 +213,37 @@ public class MapModel implements TileListener {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner display ");
 			final int size = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
+			//this.map.recycle();
 			this.map = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x Achse ");
 			final int sizeX = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
+			//this.map.recycle();
 			this.map = Bitmap.createBitmap(sizeX, size.y,
 					Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner y Achse ");
 			final int sizeY = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
+			//this.map.recycle();
 			this.map = Bitmap.createBitmap(size.x, sizeY,
 					Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
 			this.fetchTiles();
 			return;
 		}
 
 		Log.d(TAG_MAP_MODEL, "create Bitmap greater than Display ");
+		//this.map.recycle();
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.map.prepareToDraw();
 		this.fetchTiles();
 	}
 
@@ -285,7 +319,7 @@ public class MapModel implements TileListener {
 	 */
 	public boolean zoom(float delta, Coordinate c) {
 
-		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + mid.toString());
+		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + c.toString());
 
 		// TODO
 
@@ -306,8 +340,8 @@ public class MapModel implements TileListener {
 		this.currentLevelOfDetail = nextLevelOfDetail;
 
 		final double deltaX = c.getLatitude() - this.upperLeft.getLatitude();
-		final double deltaY = c.getLongtitude()
-				- this.upperLeft.getLongtitude();
+		final double deltaY = c.getLongitude()
+				- this.upperLeft.getLongitude();
 
 		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaX + " " + deltaY);
 
@@ -383,7 +417,7 @@ public class MapModel implements TileListener {
 	 */
 	public DisplayCoordinate getTileOffset(){
 		float latDiff = (float) ((upperLeft.getLatitude() + 90) % (180 / Math.pow(2, currentLevelOfDetail)));
-		float lonDiff = (float) ((upperLeft.getLongtitude() + 180) % (360 / Math.pow(2, currentLevelOfDetail)));
+		float lonDiff = (float) ((upperLeft.getLongitude() + 180) % (360 / Math.pow(2, currentLevelOfDetail)));
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
 		Log.d(TAG_MAP_MODEL, String.format(
@@ -397,24 +431,22 @@ public class MapModel implements TileListener {
 
 
 	@Override
-	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x +
-		// " y " + y);
+	public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail) {
+		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
 
-		if (tile != null && levelOfDetail == currentLevelOfDetail) {
+		//if (tile != null && levelOfDetail == currentLevelOfDetail) {
+			
+			int[] xy = TileUtility.getXYTileIndex(upperLeft, Math.round(currentLevelOfDetail));
 
-			int[] xy = TileUtility.getXYTileIndex(upperLeft,
-					Math.round(currentLevelOfDetail));
-
-			x -= xy[0];
-			y -= xy[1];
-			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + x + " y " + y);
-
+			int localX = x - xy[0];
+			int localY = y - xy[1];
+			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y " + localY);
+			
 			Canvas canvas = new Canvas(map);
-
+			
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-			canvas.drawBitmap(tile, (x * tile.getWidth()) - mapOffset.getX(),
-					(y * tile.getWidth()) -mapOffset.getY(), null);
+			canvas.drawBitmap(tile, (localX * tile.getWidth()) - mapOffset.getX(),
+					(localY * tile.getWidth()) + mapOffset.getY(), null);
 
 			/*
 			 * int left = x * tile.getWidth(); int right = left +
@@ -428,8 +460,8 @@ public class MapModel implements TileListener {
 			// Log.d("MAP_VIEW", "Fog wurde erstellt.");
 
 			// Bitmap newTile = tile.copy(tile.getConfig(), tile.isMutable());
-
+			
 			this.mapController.onMapOverlayImageChange(map);
-		}
+		//}
 	}
 }
