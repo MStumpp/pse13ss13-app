@@ -1,9 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
  * This class provides a set of delegation methods for computing a shortest path,

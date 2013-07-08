@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+
 public class CoordinateUtilityTest {
 	private final static double FRACTION_DELTA = 1e-4; // TODO: Can this be lowered any further by improving the conversion-method?
 	private final static double INTEGER_DELTA = 1e-64;
@@ -13,6 +14,7 @@ public class CoordinateUtilityTest {
 	 */
 	@Test
 	public void testPixelDegreeConversionIntegerLevelsOfDetail() {
+		assertEquals(360,CoordinateUtility.convertPixelsToDegrees(256,0,CoordinateUtility.DIRECTION_HORIZONTAL),1);
 		for (int i = 0; i <= 18; i++) {
 			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
 			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);

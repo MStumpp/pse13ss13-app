@@ -1,10 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 public class InfoView extends Fragment {
 

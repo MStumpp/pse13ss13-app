@@ -160,9 +160,19 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                layout="@layout/routing_menu"
+                layout="@layout/search_menu"
                 android:visibility="gone" />
 
+            <include
+                android:id="@+id/pullupOptionSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                layout="@layout/options_view"
+                android:visibility="gone" />
         </RelativeLayout>
 
     </RelativeLayout>

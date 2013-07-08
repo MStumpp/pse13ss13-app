@@ -61,8 +61,8 @@ public final class CoordinateUtility {
 	 * @see {@link https://de.wikipedia.org/wiki/Orthodrome#Strecke}
 	 */
 	public static double calculateDifferenceInMeters(Coordinate c1, Coordinate c2) {
-		double lon1 = Math.toRadians(c1.getLongtitude());
-		double lon2 = Math.toRadians(c2.getLongtitude());
+		double lon1 = Math.toRadians(c1.getLongitude());
+		double lon2 = Math.toRadians(c2.getLongitude());
 		double lat1 = Math.toRadians(c1.getLatitude());
 		double lat2 = Math.toRadians(c2.getLatitude());
 		double zeta = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
@@ -82,8 +82,7 @@ public final class CoordinateUtility {
 	}
 
 	/**
-	 * Converts a given corresponding geographical degrees into a length in
-	 * display-pixel
+	 * Converts given geographical degrees into the corresponding length in display-pixel
 	 *
 	 * @param degree the given geographical degrees
 	 * @param levelOfDetail the current level of detail
@@ -92,15 +91,28 @@ public final class CoordinateUtility {
 	public static float convertDegreesToPixels(float degree, float levelOfDetail, boolean isHorizontal) {
 		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
 	}
-	
+
 	/**
 	 * Converts a given Display Coordinate to a geographical Coordinate
-	 * 
+	 *
 	 * @param dc the given DisplayCoordinate
+	 * @param upperLeft the upper left Edge of the display
 	 * @param levelOfDetail the current Level of Detail
-	 * @return a new Coordinate 
+	 * @return a new Coordinate
 	 */
 	public static Coordinate convertDisplayCoordinateToCoordinate(DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
-		return new Coordinate(upperLeft.getLatitude() + convertDegreesToPixels(dc.getX(),levelOfDetail,CoordinateUtility.DIRECTION_HORIZONTAL),upperLeft.getLongtitude() + convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL));
+		double x = convertDegreesToPixels(dc.getX(),levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
+		double y = convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
+
+		Log.d("UTIL", "upperLeft: " + upperLeft);
+		
+		Log.d("UTIL", x + " " + y);
+		Log.d("UTIL", upperLeft.getLatitude() + " " + upperLeft.getLongitude());
+		x = x + upperLeft.getLatitude();
+		y = y + upperLeft.getLongitude();
+		double z = 5.0d + 10.0d;
+		Log.d("UTIL", x + " " + y + " " + z);
+		
+		return new Coordinate(x,y);
 	}
 }

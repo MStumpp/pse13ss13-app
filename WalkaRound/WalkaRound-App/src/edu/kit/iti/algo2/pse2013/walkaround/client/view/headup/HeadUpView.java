@@ -308,6 +308,7 @@ public class HeadUpView extends Fragment {
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(option)) {
 				Log.d(HEADUP_TOUCH, "Optionen werden gestartet");
+				headUpController.startOption();
 			}
 			return false;
 		}
@@ -315,7 +316,7 @@ public class HeadUpView extends Fragment {
 	}
 
 	/**
-	 * Ein Listener der auf eine Vergr��ern Eingabe wartet.
+	 * Ein Listener der auf eine Vergrößern Eingabe wartet.
 	 *
 	 * @author Ludwig Biermann
 	 *
@@ -383,7 +384,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(userLock)) {
-				Log.d(HEADUP_TOUCH, "UserLock wird ausgef�hrt");
+				Log.d(HEADUP_TOUCH, "UserLock wird ausgeführt");
 				headUpController.switchUserPositionLock(true);
 			}
 			return false;

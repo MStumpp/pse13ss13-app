@@ -8,7 +8,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
  */
 public class CurrentMapStyleModel {
 
-	private final static MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPNIK;
+	private final static MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPQUEST;
 	private static CurrentMapStyleModel currentMapModel;
 	private MapStyle style;
 
@@ -17,7 +17,7 @@ public class CurrentMapStyleModel {
 	}
 
 	/**
-	 * Gibt das CurrentMapStyleModel zurück. Falls dieses Objekt noch nicht initialisiert ist, wird Mapnik als 
+	 * Gibt das CurrentMapStyleModel zurück. Falls dieses Objekt noch nicht initialisiert ist, wird Mapnik als
 	 * Kartenstil verwendet.
 	 *
 	 * @return CurrentMapStyleModel Objekt

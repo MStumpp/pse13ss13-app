@@ -9,16 +9,18 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -87,7 +89,7 @@ public class MapView extends Activity {
 	 * Animation
 	 */
 	long startDelay = 0;
-	
+
 	/**
 	 * Gestik
 	 */
@@ -101,6 +103,14 @@ public class MapView extends Activity {
 	RelativeLayout routeList;
 	RelativeLayout poiList;
 	int sizeOfPoints;
+
+	/**
+	 * 
+	 */
+
+	PullUpView pullUp;
+	
+	Point size;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -127,9 +137,9 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
 
 		Display display = this.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
+		size = new Point();
 		display.getSize(size);
-		Log.d(TAG_MAPVIEW, "DisplayMa�e: " + size.x + " * " + size.y);
+		Log.d(TAG_MAPVIEW, "DisplayMaße: " + size.x + " * " + size.y);
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisere Route und POI Ovetrlay.");
@@ -144,7 +154,7 @@ public class MapView extends Activity {
 		map.setMinimumHeight(size.y);
 		map.setOnTouchListener(new MapTouchEventListener());
 		// map.setImageBitmap(this.getDefaultFogScreen());
-		
+
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
 		mc = MapController.initialize(this);
@@ -152,7 +162,8 @@ public class MapView extends Activity {
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
 		routeOverlay = (ImageView) this.findViewById(R.id.mapview_overlay);
-		//routeOverlay.setOnTouchListener(new RouteOverlayTouchEventListener());
+		// routeOverlay.setOnTouchListener(new
+		// RouteOverlayTouchEventListener());
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "User wird erstellt.");
@@ -168,7 +179,7 @@ public class MapView extends Activity {
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragment PullUpMenue wird eingebaut");
-		Fragment pullUp = new PullUpView();
+		this.pullUp = new PullUpView();
 		ft.add(R.id.pullUpMain, pullUp).commit();
 
 		// ---------------------------------------------
@@ -181,29 +192,38 @@ public class MapView extends Activity {
 		this.setUserPositionOverlayImage(new DisplayCoordinate(
 				(float) size.x / 2, (float) size.y / 2), 180);
 
-		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
-		DisplayWaypoint[] list = new DisplayWaypoint[3];
-		list[0] = new DisplayWaypoint(50, 150, 1);
-		list[1] = new DisplayWaypoint(250, 200, 2);
-		list[2] = new DisplayWaypoint(500, 300, 3);
-
-		updateDisplayCoordinate(list);
-
-		Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
-		DisplayPOI[] list2 = new DisplayPOI[3];
-		list2[0] = new DisplayPOI(250, 350, 4);
-		list2[1] = new DisplayPOI(450, 400, 5);
-		list2[2] = new DisplayPOI(700, 500, 6);
-
-		updateDisplayCoordinate(list2);
+		/*
+		 * Log.d(TAG_MAPVIEW,
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt");
+		 * DisplayWaypoint[] list = new DisplayWaypoint[3]; list[0] = new
+		 * DisplayWaypoint(50, 150, 1); list[1] = new DisplayWaypoint(250, 200,
+		 * 2); list[2] = new DisplayWaypoint(500, 300, 3);
+		 * 
+		 * updateDisplayCoordinate(list);
+		 * 
+		 * Log.d(TAG_MAPVIEW,
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[]
+		 * list2 = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4);
+		 * list2[1] = new DisplayPOI(450, 400, 5); list2[2] = new
+		 * DisplayPOI(700, 500, 6);
+		 * 
+		 * 
+		 * updateDisplayCoordinate(list2);
+		 */
 
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
-		
-		
-		gestureDetector = new GestureDetector(this,
-				new MyGestureDetector());
 
+		gestureDetector = new GestureDetector(this, new MyGestureDetector());
+
+		this.updateRouteOverlayImage();
+	}
+
+	/**
+	 * 
+	 */
+	public PullUpView getPullUpView() {
+		return pullUp;
 	}
 
 	/**
@@ -215,6 +235,7 @@ public class MapView extends Activity {
 
 		runOnUiThread(new Runnable() {
 			public void run() {
+
 				map.setImageBitmap(b);
 				map.setVisibility(View.VISIBLE);
 			}
@@ -226,8 +247,21 @@ public class MapView extends Activity {
 	 * 
 	 * @param b
 	 */
-	public void updateRouteOverlayImage(Bitmap b) {
-		this.routeOverlay.setImageBitmap(b);
+	public void updateRouteOverlayImage() {
+		Bitmap routeOverlay = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		routeOverlay.prepareToDraw();
+		
+		Canvas canvas = new Canvas(routeOverlay);
+
+		Paint pinsel = new Paint();
+		pinsel.setColor(Color.rgb(64, 64, 255));
+		pinsel.setStrokeWidth(5);
+		
+
+		   // Diagonale durch Leinwand zeichnen
+		canvas.drawLine(0, 0, 800, 1005, pinsel);
+		
+		this.routeOverlay.setImageBitmap(routeOverlay);
 	}
 
 	/**
@@ -423,30 +457,84 @@ public class MapView extends Activity {
 	 * @author Ludwig Biermann
 	 * 
 	 */
-	private class MyGestureDetector implements OnGestureListener { 
-				
+	private class MyGestureDetector implements OnGestureListener {
+
+		float oldX;
+		float oldY;
+		float gesamt;
+
 		@Override
-		public boolean	 onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
 			Log.d("MAP_TOUCH", "MapTouch Fling");
 			return false;
 		}
-		
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			Log.d("MAP_TOUCH", "MapTouch Scroll");
 
-			if(e1.getY() < e2.getY()){
-				distanceY *= -1;
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
+			Log.d("MAP_TOUCH_ZOOM", "Counter1: " + e1.getPointerCount());
+
+			Log.d("MAP_TOUCH_ZOOM", "Counter2: " + e2.getPointerCount());
+
+			if (e2.getPointerCount() >= 2) {
+				Log.d("MAP_TOUCH_ZOOM",
+						"event 1 " + e1.getX(0) + " " + e1.getY(0));
+				Log.d("MAP_TOUCH_ZOOM", "Distanc " + distanceX + " "
+						+ distanceY);
+				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 1" + e2.getX(0) + " "
+						+ e2.getY(0));
+				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 2" + e2.getX(1) + " "
+						+ e2.getY(1));
+
+				float x = Math.abs(e2.getX(0) - e2.getX(1));
+				float y = Math.abs(e2.getY(0) - e2.getY(1));
+
+				if (e2.getX(0) < e2.getX(1)) {
+					x += e2.getX(0);
+				} else {
+					x += e2.getX(1);
+				}
+
+				if (e2.getY(0) < e2.getY(1)) {
+					x += e2.getY(0);
+				} else {
+					x += e2.getY(1);
+				}
+
+				Log.d("MAP_TOUCH_ZOOM", "event Coor" + x + " " + y);
+				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / 10);
+				Log.d("MAP_TOUCH_ZOOM", "Zoom Faktor: " + z);
+				// float z = 1;
+
+				gesamt += z;
+				Log.d("MAP_TOUCH_ZOOM", "Gesamt Zoom Faktor: " + z);
+
+				this.oldX = e2.getX();
+				this.oldY = e2.getY();
+
+				mc.onZoom(z, new DisplayCoordinate(x, y));
+			} else {
+
+				Log.d("MAP_TOUCH", "MapTouch Scroll");
+				// distanceY *= -1;
+				if (e1.getY() > e2.getY()) {
+					Log.d("MAP_TOUCH_SCROLL", "Rauf " + distanceY);
+				} else {
+					Log.d("MAP_TOUCH_SCROLL", "Runter " + -distanceY);
+				}
+
+				if (e1.getX() > e2.getX()) {
+					Log.d("MAP_TOUCH_SCROLL", "Links " + distanceX);
+				} else {
+					Log.d("MAP_TOUCH_SCROLL", "Rechts " + -distanceX);
+				}
+
+				mc.onShift(distanceX, distanceY);
 			}
-			
-			if(e1.getX() < e2.getX()){
-				distanceX *= -1;
-			}
-				
-			mc.onShift(new DisplayCoordinate(distanceY, distanceX));
 			return true;
 		}
-		
+
 		@Override
 		public void onLongPress(MotionEvent event) {
 			Log.d("MAP_TOUCH", "MapTouch Long Touch");
@@ -456,13 +544,15 @@ public class MapView extends Activity {
 		@Override
 		public boolean onDown(MotionEvent e) {
 			Log.d("MAP_TOUCH", "MapTouch Down");
+			this.oldX = e.getX();
+			this.oldY = e.getY();
 			return false;
 		}
 
 		@Override
 		public void onShowPress(MotionEvent e) {
 			Log.d("MAP_TOUCH", "MapTouch Show Press");
-			
+
 		}
 
 		@Override
@@ -471,8 +561,8 @@ public class MapView extends Activity {
 			return false;
 		}
 
-		
 	}
+
 	/**
 	 * 
 	 * @author Ludwig Biermann
@@ -482,10 +572,10 @@ public class MapView extends Activity {
 
 		float startX;
 		float startY;
-		
+
 		float deltaX;
 		float deltaY;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (map.equals(view)) {
@@ -494,28 +584,25 @@ public class MapView extends Activity {
 				return true;
 				// ziehen touch
 				// zoom
-/*
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					Log.d("MAP_TOUCH", "MapTouch Down");
-					startX = event.getX();
-					startY = event.getY();
-					return gestureDetector.onTouchEvent(event);
-				}
-				
-				if (event.getAction() == MotionEvent.ACTION_MOVE &&( (Math.abs(startX-event.getX())) > 100 || (Math.abs(startY-event.getY())) > 100) && !gestureDetector.isLongpressEnabled()) {
-					Log.d("MAP_TOUCH", "MapTouch Move");
-					mc.onShift(new DisplayCoordinate(event.getX()-deltaX, event.getY()-deltaY));
-					deltaX = event.getX();
-					deltaY = event.getY();
-					return true;
-				}
-				return false;
-				*/
+				/*
+				 * if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
+				 * startY = event.getY(); return
+				 * gestureDetector.onTouchEvent(event); }
+				 * 
+				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
+				 * (Math.abs(startX-event.getX())) > 100 ||
+				 * (Math.abs(startY-event.getY())) > 100) &&
+				 * !gestureDetector.isLongpressEnabled()) { Log.d("MAP_TOUCH",
+				 * "MapTouch Move"); mc.onShift(new
+				 * DisplayCoordinate(event.getX()-deltaX, event.getY()-deltaY));
+				 * deltaX = event.getX(); deltaY = event.getY(); return true; }
+				 * return false;
+				 */
 			}
 
 			return false;
 		}
-
 
 	}
 
@@ -528,10 +615,10 @@ public class MapView extends Activity {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
-				Log.d("MAP_TOUCH", "RouteOverlayTouch");
-				// TODO Auto-generated method stub
-				//
-			
+			Log.d("MAP_TOUCH", "RouteOverlayTouch");
+			// TODO Auto-generated method stub
+			//
+
 			return false;
 		}
 
