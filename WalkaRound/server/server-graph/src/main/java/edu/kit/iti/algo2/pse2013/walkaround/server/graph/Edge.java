@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Edge implements Serializable {
+public final class Edge implements Geometrizable, Serializable {
 
     /**
      * Temporary Serial version ID as long as Java serialization is used
@@ -136,6 +138,22 @@ public final class Edge implements Serializable {
      */
     public double getLength() {
         return length;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+        throw new RuntimeException("not yet supported");
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+        throw new RuntimeException("not yet supported");
     }
 
 
