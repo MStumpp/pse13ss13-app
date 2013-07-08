@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -71,7 +72,7 @@ public class FavoritesManager implements Serializable {
 	 * 
 	 * @return a list of all saved routes
 	 */
-	public ArrayList<RouteInfo> getFavoriteRoutes() {
+	public List<RouteInfo> getFavoriteRoutes() {
 		ArrayList<RouteInfo> list = new ArrayList<RouteInfo>();
 		list.addAll(savedRoutes.values());
 		return list;
@@ -82,7 +83,7 @@ public class FavoritesManager implements Serializable {
 	 * 
 	 * @return a list of all saved locations
 	 */
-	public ArrayList<Location> getFavoriteLocations() {
+	public List<Location> getFavoriteLocations() {
 		ArrayList<Location> list = new ArrayList<Location>();
 		list.addAll(savedLocations.values());
 		return list;
@@ -93,7 +94,7 @@ public class FavoritesManager implements Serializable {
 	 * 
 	 * @return a list of all names of saved routes
 	 */
-	public ArrayList<String> getNamesOfFavoriteRoutes() {
+	public List<String> getNamesOfFavoriteRoutes() {
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(savedRoutes.keySet());
 		return list;
@@ -104,7 +105,7 @@ public class FavoritesManager implements Serializable {
 	 * 
 	 * @return a list of all names of saved routes
 	 */
-	public ArrayList<String> getNamesOfFavoriteLocations() {
+	public List<String> getNamesOfFavoriteLocations() {
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(savedLocations.keySet());
 		return list;

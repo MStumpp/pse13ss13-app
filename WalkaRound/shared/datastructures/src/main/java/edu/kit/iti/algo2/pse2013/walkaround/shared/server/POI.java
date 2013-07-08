@@ -27,7 +27,7 @@ public class POI extends Location {
     /**
      * poi categories of POI.
      */
-    private List<Integer> poiCategories;
+    private int[] poiCategories;
 
 
     /**
@@ -41,7 +41,7 @@ public class POI extends Location {
      * @param url URL of an image of POI.
      * @param poiCategories Categories of POI.
      */
-    public POI(double lat, double lon, int id, String name, String textInfo, String url, List<Integer> poiCategories) {
+    public POI(double lat, double lon, int id, String name, String textInfo, String url, int[] poiCategories) {
         this(lat, lon, id, name, textInfo, url, poiCategories, null);
     }
 
@@ -53,7 +53,7 @@ public class POI extends Location {
      * @param imageURL an URL to an image of the POI
      * @param poiCategories the POI-Categories, this POI belongs to
      */
-    public POI(Location loc, String textInfo, String imageURL, List<Integer> poiCategories) {
+    public POI(Location loc, String textInfo, String imageURL, int[] poiCategories) {
     	this(loc.getLatitude(), loc.getLongtitude(), loc.getId(), loc.getName(), textInfo, imageURL, poiCategories);
     }
     /**
@@ -68,7 +68,7 @@ public class POI extends Location {
      * @param poiCategories Categories of POI.
      * @param address Address of POI.
      */
-    public POI(double lat, double lon, int id, String name, String textInfo, String url, List<Integer> poiCategories, Address address) {
+    public POI(double lat, double lon, int id, String name, String textInfo, String url, int[] poiCategories, Address address) {
         super(lat, lon, id, name, address);
         this.textInfo = textInfo;
         this.url = url;
@@ -121,7 +121,7 @@ public class POI extends Location {
      *
      * @return A list of category-IDs
      */
-    public List<Integer> getPOICategories() {
+    public int[] getPOICategories() {
         return poiCategories;
     }
 

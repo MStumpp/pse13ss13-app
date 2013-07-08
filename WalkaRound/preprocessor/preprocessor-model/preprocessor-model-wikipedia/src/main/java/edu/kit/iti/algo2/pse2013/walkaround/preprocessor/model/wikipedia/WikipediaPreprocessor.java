@@ -40,10 +40,10 @@ public class WikipediaPreprocessor {
 
 			// Prepare wikipedia url
 
-			// hier getURL() nicht url vom image sondern zunächst wikipedia url
-			// wird aber während dem preprocessing als url vom image
-			// überschrieben...
-			// könnte eleganter gelöst werden.
+			// hier getURL() nicht url vom image sondern zunï¿½chst wikipedia url
+			// wird aber wï¿½hrend dem preprocessing als url vom image
+			// ï¿½berschrieben...
+			// kï¿½nnte eleganter gelï¿½st werden.
 			String wikipediaURL = current.getURL();
 			String partA = wikipediaURL.substring(0,
 					wikipediaURL.lastIndexOf("/"));
@@ -66,8 +66,8 @@ public class WikipediaPreprocessor {
 					parser.next();
 					while (parser.getEventType() == XMLStreamConstants.CHARACTERS
 							&& !parser.getText().endsWith("==")) {
-						// TODO: Einschränkung verbessern da möglicherweise zu
-						// viel unnötiger text mitgenommen wird!
+						// TODO: Einschrï¿½nkung verbessern da mï¿½glicherweise zu
+						// viel unnï¿½tiger text mitgenommen wird!
 						sb.append(parser.getText());
 						parser.next();
 					}
@@ -82,12 +82,13 @@ public class WikipediaPreprocessor {
 			while (sb.indexOf("{") != -1) {
 				sb = sb.delete(sb.indexOf("{"), sb.indexOf("}") + 1);
 			}
-			while (sb.indexOf("[[Datei:") != -1) {
-			sb = sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2);
-			}
+			/*while (sb.indexOf("[[Datei:") != -1) {
+				sb = sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2);
+			}*/
+			
 			String textInfo = sb.toString();
 			textInfo = textInfo.replaceAll("\\'", "");
-			//textInfo = textInfo.replaceAll("\n", "");
+			textInfo = textInfo.replaceAll("\n\n", " ");
 			/*
 			 * textInfo = textInfo.replaceAll("\\[", ""); textInfo =
 			 * textInfo.replaceAll("\\]", ""); textInfo =
