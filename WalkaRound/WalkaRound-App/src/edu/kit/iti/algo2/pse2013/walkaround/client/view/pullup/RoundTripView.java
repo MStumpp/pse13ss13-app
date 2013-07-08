@@ -1,8 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 import android.app.Fragment;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -26,6 +28,7 @@ public class RoundTripView extends Fragment {
 	private NumberPicker np;
 
 	private TextView meter;
+	private TextView length;
 	private TextView profiles;
 	private TextView jogging;
 	private TextView sightseeing;
@@ -51,6 +54,7 @@ public class RoundTripView extends Fragment {
 		np.setValue(100);
 
 		meter = (TextView) this.getActivity().findViewById(R.id.meter);
+		length = (TextView) this.getActivity().findViewById(R.id.length_text);
 		profiles = (TextView) this.getActivity().findViewById(R.id.profiles);
 		jogging = (TextView) this.getActivity().findViewById(
 				R.id.profile_jogging);
@@ -62,6 +66,32 @@ public class RoundTripView extends Fragment {
 				R.id.profile_clubbing);
 		computeRoundtrip = (Button) this.getActivity().findViewById(
 				R.id.roundtrip_compute);
+		
+		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+		Display display = this.getActivity().getWindowManager()
+				.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		
+		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
+		meter.setX(size.x / 3 * 2);
+		meter.getLayoutParams().width = size.x;
+		np.setX(size.x / 3);
+		np.getLayoutParams().width = size.x / 3;
+		length.setX(size.x / 10);
+		length.getLayoutParams().width = size.x / 5;
+		profiles.setX((size.x / 2.6f));
+		profiles.getLayoutParams().width = size.x / 2;
+		jogging.setX(size.x / 6);
+		jogging.getLayoutParams().width = size.x / 2;
+		sightseeing.setX((size.x / 6));
+		sightseeing.getLayoutParams().width = size.x / 2;
+		shopping.setX(size.x / 6);
+		shopping.getLayoutParams().width = size.x / 2;
+		clubbing.setX(size.x / 6);
+		clubbing.getLayoutParams().width = size.x / 2;
+		computeRoundtrip.setX(size.x / 4);
+		computeRoundtrip.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 		computeRoundtrip.setOnTouchListener(new RoundtripComputeListener());
