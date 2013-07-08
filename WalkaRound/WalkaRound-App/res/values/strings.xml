@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WalkAround</string>
-    <string name="address">address</string>
-    <string name="POI">POI</string>
+    <string name="address">Address</string>
+    <string name="poi">POI</string>
     <string name="current">current</string>
     <string name="Route">Route</string>
     <string name="current_route">Current Route</string>
     <string name="reset">Reset</string>
     <string name="add_favorite">add Favorite</string>
     <string name="go_to_map">go to map</string>
+    <string name="query">Query...</string>
+    <string name="zip_code">ZIP</string>
+    <string name="city">City</string>
+    <string name="street">Street</string>
+    <string name="number">Number</string>
+    <string name="start_search">Go</string>
+    <string name="favorite">Favorites</string>
+    <string name="meter">Meter</string>
+    <string name="compute_roundtrip">Compute roundtrip</string>
+    <string name="profiles">Profiles</string>
+    <string name="clubbing">Clubbing</string>
+    <string name="shopping">Shopping</string>
+    <string name="sightseeing">Sightseeing</string>
+    <string name="jogging">Jogging</string>
+    <string name="length">Length:</string>
 </resources>
