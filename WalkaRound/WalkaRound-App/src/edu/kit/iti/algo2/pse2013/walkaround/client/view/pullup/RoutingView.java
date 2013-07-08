@@ -1,8 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 import android.app.Fragment;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -22,6 +24,14 @@ public class RoutingView extends Fragment {
 
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create RoutingView");
+		
+		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+		Display display = this.getActivity().getWindowManager()
+				.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		
+		
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
