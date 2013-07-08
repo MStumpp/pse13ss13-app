@@ -92,6 +92,10 @@ public class MapController implements RouteListener {
 
 	public void onCreatePoint(DisplayCoordinate dc) {
 		routeController.addWaypoint(CoordinateUtility.convertDisplayCoordinateToCoordinate(dc, mapModel.getUpperLeft(), mapModel.getCurrentLevelOfDetail()));
+
+		Log.d(MAP_CONTROLLER, "upper Left ist: " + mapModel.getUpperLeft());
+		Log.d(MAP_CONTROLLER, "upper DisplayCoor ist: " + dc);
+		Log.d(MAP_CONTROLLER, "Coordinate wird übernommen:" + CoordinateUtility.convertDisplayCoordinateToCoordinate(dc, mapModel.getUpperLeft(), mapModel.getCurrentLevelOfDetail()));
 	}
 
 	public void onLongPressPoint(DisplayCoordinate dc) {

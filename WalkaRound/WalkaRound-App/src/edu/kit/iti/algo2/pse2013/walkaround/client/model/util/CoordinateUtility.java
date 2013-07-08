@@ -96,10 +96,23 @@ public final class CoordinateUtility {
 	 * Converts a given Display Coordinate to a geographical Coordinate
 	 *
 	 * @param dc the given DisplayCoordinate
+	 * @param upperLeft the upper left Edge of the display
 	 * @param levelOfDetail the current Level of Detail
 	 * @return a new Coordinate
 	 */
 	public static Coordinate convertDisplayCoordinateToCoordinate(DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
-		return new Coordinate(upperLeft.getLatitude() + convertDegreesToPixels(dc.getX(),levelOfDetail,CoordinateUtility.DIRECTION_HORIZONTAL),upperLeft.getLongitude() + convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL));
+		double x = convertDegreesToPixels(dc.getX(),levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
+		double y = convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
+
+		Log.d("UTIL", "upperLeft: " + upperLeft);
+		
+		Log.d("UTIL", x + " " + y);
+		Log.d("UTIL", upperLeft.getLatitude() + " " + upperLeft.getLongitude());
+		x = x + upperLeft.getLatitude();
+		y = y + upperLeft.getLongitude();
+		double z = 5.0d + 10.0d;
+		Log.d("UTIL", x + " " + y + " " + z);
+		
+		return new Coordinate(x,y);
 	}
 }

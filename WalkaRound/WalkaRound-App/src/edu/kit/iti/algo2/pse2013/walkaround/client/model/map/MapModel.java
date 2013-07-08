@@ -186,7 +186,7 @@ public class MapModel implements TileListener {
 	 *
 	 */
 	public void generateMapOverlayImage() {
-
+		
 		Log.d(TAG_MAP_MODEL, "LOD " + currentLevelOfDetail + " x " + xZoomBorder + " y " + yZoomBorder);
 		Log.d(TAG_MAP_MODEL, "MapStyle: " + CurrentMapStyleModel.getInstance().getCurrentMapStyle().getName());
 
@@ -194,29 +194,37 @@ public class MapModel implements TileListener {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner display ");
 			final int size = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
+			//this.map.recycle();
 			this.map = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x Achse ");
 			final int sizeX = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
+			//this.map.recycle();
 			this.map = Bitmap.createBitmap(sizeX, size.y,
 					Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner y Achse ");
 			final int sizeY = ((int) Math.pow(2, this.currentLevelOfDetail))
 					* DEFAULT_TILE_SIZE;
+			//this.map.recycle();
 			this.map = Bitmap.createBitmap(size.x, sizeY,
 					Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
 			this.fetchTiles();
 			return;
 		}
 
 		Log.d(TAG_MAP_MODEL, "create Bitmap greater than Display ");
+		//this.map.recycle();
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.map.prepareToDraw();
 		this.fetchTiles();
 	}
 
@@ -407,7 +415,7 @@ public class MapModel implements TileListener {
 	public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail) {
 		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
 
-		if (tile != null && levelOfDetail == currentLevelOfDetail) {
+		//if (tile != null && levelOfDetail == currentLevelOfDetail) {
 
 			int[] xy = TileUtility.getXYTileIndex(upperLeft, Math.round(currentLevelOfDetail));
 
@@ -435,6 +443,6 @@ public class MapModel implements TileListener {
 			// Bitmap newTile = tile.copy(tile.getConfig(), tile.isMutable());
 
 			this.mapController.onMapOverlayImageChange(map);
-		}
+		//}
 	}
 }

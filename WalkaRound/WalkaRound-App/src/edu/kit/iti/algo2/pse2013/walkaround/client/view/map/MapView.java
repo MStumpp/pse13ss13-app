@@ -425,6 +425,7 @@ public class MapView extends Activity {
 
 		float oldX;
 		float oldY;
+		float gesamt;
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
@@ -467,7 +468,12 @@ public class MapView extends Activity {
 
 				Log.d("MAP_TOUCH_ZOOM", "event Coor" + x + " " + y);
 				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / 10);
-
+				Log.d("MAP_TOUCH_ZOOM", "Zoom Faktor: " + z) ;
+				//float z = 1;
+				
+				gesamt += z;
+				Log.d("MAP_TOUCH_ZOOM", "Gesamt Zoom Faktor: " + z) ;
+				
 				this.oldX = e2.getX();
 				this.oldY = e2.getY();
 
