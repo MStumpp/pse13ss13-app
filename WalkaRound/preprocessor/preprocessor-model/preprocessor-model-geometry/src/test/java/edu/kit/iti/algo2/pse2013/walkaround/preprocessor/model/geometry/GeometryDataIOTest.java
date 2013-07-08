@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -20,10 +21,13 @@ public class GeometryDataIOTest {
     @Test
     public void testSandAndLoad() {
 
-        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d), null, null));
+        GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
+        GeometryNode node = writeGeometryDataIO.getRoot();
 
         try {
-            GeometryDataIO.save(geometryDataIO, new File(fileLocaton));
+            GeometryDataIO.save(writeGeometryDataIO, new File(fileLocaton));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,16 +35,27 @@ public class GeometryDataIOTest {
         File f = new File(fileLocaton);
         Assert.assertTrue(f.exists());
 
-        geometryDataIO = null;
+        GeometryDataIO readGeometryDataIO = null;
         try {
-            geometryDataIO = GeometryDataIO.load(new File(fileLocaton));
-        } catch (ClassNotFoundException e) {
+            readGeometryDataIO = GeometryDataIO.load(new File(fileLocaton));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
-        Assert.assertNotNull(geometryDataIO);
+        // Check, if something was read
+        Assert.assertNotNull(readGeometryDataIO);
+        // Check, if the same number of POI was written and read
+        Assert.assertNotNull(readGeometryDataIO.getRoot());
+    }
+
+    private GeometryDataIO getGeometryDataIO() {
+
+        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d)), 2);
+        return geometryDataIO;
     }
 
 }

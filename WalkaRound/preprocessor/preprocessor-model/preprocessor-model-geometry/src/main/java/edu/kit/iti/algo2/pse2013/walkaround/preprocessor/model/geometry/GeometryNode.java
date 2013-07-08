@@ -1,6 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
 import java.io.Serializable;
 
@@ -17,6 +17,8 @@ public class GeometryNode implements Serializable {
      */
     private static final long serialVersionUID = 3394680123853287035L;
 
+    private Geometrizable geometrizable;
+
     private double splitValue;
 
     private GeometryNode parent;
@@ -27,27 +29,33 @@ public class GeometryNode implements Serializable {
 
     private GeometryNode rightNode;
 
-    private Vertex vertex;
-
-    public GeometryNode(GeometryNode parent, int depth, Vertex vertex) {
+    public GeometryNode(GeometryNode parent, int depth, Geometrizable geometrizable) {
+        this.geometrizable = geometrizable;
+        this.splitValue = Double.NaN;
         this.parent = parent;
         this.depth = depth;
-        this.vertex = vertex;
-        this.splitValue = Double.NaN;
     }
+
 
     public GeometryNode(GeometryNode parent, int depth, double splitValue) {
+        this.geometrizable = null;
+        this.splitValue = splitValue;
         this.parent = parent;
         this.depth = depth;
-        this.splitValue = splitValue;
     }
 
-    public GeometryNode(Vertex vertex) {
-        this.vertex = vertex;
+    public GeometryNode(Geometrizable geometrizable) {
+        this.geometrizable = geometrizable;
+        this.splitValue = Double.NaN;
+        this.parent = null;
+        this.depth = -1;
     }
 
     public GeometryNode(double splitValue) {
+        this.geometrizable = null;
         this.splitValue = splitValue;
+        this.parent = null;
+        this.depth = -1;
     }
 
     public double getSplitValue() {
@@ -78,12 +86,12 @@ public class GeometryNode implements Serializable {
         this.rightNode = rightNode;
     }
 
-    public Vertex getVertex() {
-        return vertex;
+    public Geometrizable getGeometrizable() {
+        return geometrizable;
     }
 
-    public void setVertex(Vertex vertex) {
-        this.vertex = vertex;
+    public void setGeometrizable(Geometrizable geometrizable) {
+        this.geometrizable = geometrizable;
     }
 
     public boolean isRoot() {
@@ -91,7 +99,7 @@ public class GeometryNode implements Serializable {
     }
 
     public boolean isLeaf() {
-        return vertex != null;
+        return geometrizable != null;
     }
 
     @Override
@@ -100,8 +108,8 @@ public class GeometryNode implements Serializable {
         sb.append("\n\n -> depth: " + depth + "\n");
         sb.append("-> split: " + splitValue + "\n");
 
-        if (vertex != null)
-            sb.append("\n vertex: " + vertex.toString() + "\n");
+        if (geometrizable != null)
+            sb.append("\n geometrizable: " + geometrizable.toString() + "\n");
         else
             sb.append("\n no vertex \n");
 
