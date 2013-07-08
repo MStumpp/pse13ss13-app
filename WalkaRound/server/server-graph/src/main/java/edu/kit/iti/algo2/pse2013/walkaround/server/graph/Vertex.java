@@ -183,6 +183,7 @@ public class Vertex extends Coordinate implements Serializable {
         return "Vertex - id: " + id + " - lat: " + getLatitude() + " - lon: " + getLongtitude() + " - current length: " + getCurrentLength();
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -195,6 +196,7 @@ public class Vertex extends Coordinate implements Serializable {
 
         return true;
     }
+
 
     @Override
     public int hashCode() {
