@@ -132,11 +132,17 @@ public class Coordinate implements Geometrizable, Serializable {
 	}
 
 
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
+     */
     public int numberDimensions() {
         return 2;
     }
 
 
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension(int)
+     */
     public double valueForDimension(int dim) {
         if (dim == 0)
             return getLatitude();

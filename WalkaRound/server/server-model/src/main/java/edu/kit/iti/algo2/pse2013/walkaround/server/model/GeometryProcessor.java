@@ -145,13 +145,13 @@ public class GeometryProcessor {
                 if (geometrizable.getGeometrizable() == null)
                     geometrizable.setGeometrizable(node.getGeometrizable());
                 else
-                if (node.getGeometrizable().valueForDimension(dim) <
-                        geometrizable.getGeometrizable().valueForDimension(dim))
-                    geometrizable.setGeometrizable(node.getGeometrizable());
+                    if (node.getGeometrizable().valueForDimension(dim) <
+                            geometrizable.getGeometrizable().valueForDimension(dim))
+                        geometrizable.setGeometrizable(node.getGeometrizable());
             }
             searchTreeUp(node.getParent(), search, geometrizable, node);
 
-            // otherwise, traverse further down the tree
+        // otherwise, traverse further down the tree
         } else {
 
             // either further visit left or right child

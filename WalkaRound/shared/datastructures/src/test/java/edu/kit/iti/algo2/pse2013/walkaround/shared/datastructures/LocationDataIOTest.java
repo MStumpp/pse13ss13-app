@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class LocationDataIOTest {
 
-    private static final String fileLocaton = System.getProperty("java.io.tmpdir") + File.separator + "locationDataIO";
+    private static final String fileLocation = System.getProperty("java.io.tmpdir") + File.separator + "locationDataIO";
 
     @Test
     public void testSandAndLoad() {
@@ -24,19 +24,19 @@ public class LocationDataIOTest {
         int size = writeLocationData.getPOIs().size();
 
         try {
-			LocationDataIO.save(writeLocationData, new File(fileLocaton));
+			LocationDataIO.save(writeLocationData, new File(fileLocation));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-        File f = new File(fileLocaton);
+        File f = new File(fileLocation);
         Assert.assertTrue(f.exists());
 
         LocationDataIO readLocationData = null;
         try {
-			readLocationData = LocationDataIO.load(new File(fileLocaton));
+			readLocationData = LocationDataIO.load(new File(fileLocation));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
