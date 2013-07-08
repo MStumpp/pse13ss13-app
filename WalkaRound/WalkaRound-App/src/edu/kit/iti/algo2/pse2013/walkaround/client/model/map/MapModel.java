@@ -90,12 +90,12 @@ public class MapModel implements TileListener {
 
 		Log.d("WTF", "upperleft " +  upperLeft);
 		
-		this.computeMid();
+		//this.computeMid();
 		Log.d("WTF", "mid " +  mid);
 		
-		this.upperLeft = new Coordinate(this.upperLeft,
-				-Math.abs(this.mid.getLatitude() - this.upperLeft.getLatitude()),
-				Math.abs(this.mid.getLongitude() - this.upperLeft.getLongitude()));
+		//this.upperLeft = new Coordinate(this.upperLeft,
+		//		-Math.abs(this.mid.getLatitude() - this.upperLeft.getLatitude()),
+		//		Math.abs(this.mid.getLongitude() - this.upperLeft.getLongitude()));
 
 		Log.d("WTF", "upperLeft2 " +  upperLeft);
 		
