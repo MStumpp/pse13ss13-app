@@ -15,6 +15,13 @@ public class CoordinateUtilityTest {
 	@Test
 	public void testPixelDegreeConversionIntegerLevelsOfDetail() {
 		assertEquals(360,CoordinateUtility.convertPixelsToDegrees(256,0,CoordinateUtility.DIRECTION_HORIZONTAL),1);
+		assertEquals(180,CoordinateUtility.convertPixelsToDegrees(256,1,CoordinateUtility.DIRECTION_HORIZONTAL),1);
+		assertEquals(90,CoordinateUtility.convertPixelsToDegrees(256,2,CoordinateUtility.DIRECTION_HORIZONTAL),1);
+
+		assertEquals(180,CoordinateUtility.convertPixelsToDegrees(128,0,CoordinateUtility.DIRECTION_HORIZONTAL),1);
+		assertEquals(90,CoordinateUtility.convertPixelsToDegrees(128,1,CoordinateUtility.DIRECTION_HORIZONTAL),1);
+		assertEquals(45,CoordinateUtility.convertPixelsToDegrees(128,2,CoordinateUtility.DIRECTION_HORIZONTAL),1);
+
 		for (int i = 0; i <= 18; i++) {
 			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
 			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);
