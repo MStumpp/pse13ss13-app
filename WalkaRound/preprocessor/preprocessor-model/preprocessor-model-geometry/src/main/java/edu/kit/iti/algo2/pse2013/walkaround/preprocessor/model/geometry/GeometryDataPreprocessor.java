@@ -3,7 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.server.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 
 import java.util.*;
 
@@ -29,17 +30,17 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
 
         // get all vertices
-        List<Vertex> vertices = new ArrayList<Vertex>();
+        List<Geometrizable> vertices = new ArrayList<Geometrizable>();
         for (Edge edge : graphDataIO.getEdges())
             for (Vertex vertex : edge.getVertices())
                 vertices.add(vertex);
 
-        Set<Vertex> sortedLatitude = new TreeSet<Vertex>(new Comparator<Vertex>() {
+        Set<Geometrizable> sortedLatitude = new TreeSet<Geometrizable>(new Comparator<Geometrizable>() {
             @Override
-            public int compare(Vertex v1, Vertex v2) {
-                if (v1.getLatitude() >  v2.getLatitude()){
+            public int compare(Geometrizable v1, Geometrizable v2) {
+                if (v1.valueForDimension(0) >  v2.valueForDimension(0)){
                     return 1;
-                } else if (v1.getLatitude() < v2.getLatitude()){
+                } else if (v1.valueForDimension(0) < v2.valueForDimension(0)){
                     return -1;
                 } else
                     return 0;
@@ -47,12 +48,12 @@ public class GeometryDataPreprocessor {
         });
         sortedLatitude.addAll(vertices);
 
-        Set<Vertex> sortedLongitude = new TreeSet<Vertex>(new Comparator<Vertex>() {
+        Set<Geometrizable> sortedLongitude = new TreeSet<Geometrizable>(new Comparator<Geometrizable>() {
             @Override
-            public int compare(Vertex v1, Vertex v2) {
-                if (v1.getLongtitude() >  v2.getLongtitude()){
+            public int compare(Geometrizable v1, Geometrizable v2) {
+                if (v1.valueForDimension(1) >  v2.valueForDimension(1)){
                     return 1;
-                } else if (v1.getLongtitude() < v2.getLongtitude()){
+                } else if (v1.valueForDimension(1) < v2.valueForDimension(1)){
                     return -1;
                 } else
                     return 0;
@@ -60,106 +61,84 @@ public class GeometryDataPreprocessor {
         });
         sortedLongitude.addAll(vertices);
 
-        GeometryNode node = twoDtree(new ArrayList<Vertex>(sortedLatitude), new ArrayList<Vertex>(sortedLongitude));
-        return new GeometryDataIO(node);
-    }
+        Geometrizable[][] data = new Geometrizable[][]{sortedLatitude.toArray(new Geometrizable[0]), sortedLongitude.toArray(new Geometrizable[0])};
 
-    private static GeometryNode twoDtree(List<Vertex> sortedLatitude, List<Vertex> sortedLongitude) {
-        if (sortedLatitude.size() != sortedLongitude.size())
+        if (data[0].length != data[1].length)
             throw new IllegalArgumentException("both lists must be of same size");
-        if (sortedLatitude.size() == 0)
+        if (data[0].length == 0)
             throw new IllegalArgumentException("list of vertices must be greater than 0");
-        System.out.println(sortedLatitude.toString());
-        System.out.println(sortedLongitude.toString());
-        return twoDtree(sortedLatitude, sortedLongitude, 0, 0, sortedLatitude.size()-1);
+
+        // build tree
+        GeometryNode node = buildTree(data, null, 0, 0, data[0].length-1);
+        return new GeometryDataIO(node, data.length);
     }
 
-    private static GeometryNode twoDtree(List<Vertex> sortedLatitude, List<Vertex> sortedLongitude, int depth, int start, int end) {
-        if (end-start < 0)
-            return null;
 
-        // select dimension
-        // 0 latitude
-        // 1 longitude
-        int dim = depth % 2;
-        List<Vertex> workingList;
-        if (dim == 0)
-            workingList = sortedLatitude;
-        else
-            workingList = sortedLongitude;
+    // build tree
+    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end) {
 
-        System.out.println(dim);
-
-        int median = indexOfMedian(workingList, dim, start, end);
-        System.out.println("median -> start: " + start + " end: " + end + " median: " + median);
-        if (median == -1)
-            throw new RuntimeException("something went wrong internally");
-        GeometryNode leftNode = twoDtree(sortedLatitude, sortedLongitude, depth+1, start, median-1);
-        GeometryNode rightNode = twoDtree(sortedLatitude, sortedLongitude, depth+1, median+1, end);
-        GeometryNode node = new GeometryNode(workingList.get(median), leftNode, rightNode);
-
-        return node;
-    }
-
-    private static int indexOfMedian(List<Vertex> vertices, int dim, int start, int end) {
-        if (end-start < 0)
-            return -1;
-        if (start == end)
-            return start;
+        int dim = depth % data.length;
 
         int size = end-start+1;
-        int median = start+size/2;
-        int tmpMedian = median-1;
-        switch (dim)
-        {
-            case 0:
-            {
-                while (tmpMedian >= start-1 && vertices.get(tmpMedian).getLatitude() == vertices.get(median).getLatitude())
-                    tmpMedian -= 1;
-                break;
-            }
+        // only one point in range, then take as leaf
+        // eventually put more than one point in leaf
+        if (size == 1)
+            return new GeometryNode(parent, depth, data[dim][start]);
 
-            case 1:
-            {
-                while (tmpMedian >= start-1 && vertices.get(tmpMedian).getLongtitude() == vertices.get(median).getLongtitude())
-                    tmpMedian -= 1;
-                break;
-            }
-        }
-        return tmpMedian+1;
-    }
+        // otherwise, compute median;
+        int median;
+        // if range of size 2, than take first point as median
+        if (size == 2) {
+            median = start;
 
-    // Heapsort
-
-    private static void sort(int[] a) {
-        sort(a, a.length - 1);
-    }
-
-    private static void sort(int[] a, int end) {
-        for (int i = end / 2; i >= 1; i--)
-            fixHeap(a, i, end, a[i]);
-        for (int i = end; i > 1; i--) {
-            swap(a, 1, i);
-            fixHeap(a, 1, i - 1, a[1]);
-        }
-    }
-
-    private static void fixHeap(int[] a, int root, int end, int key) {
-        int child = 2*root;
-        if (child < end && a[child] < a[child + 1])
-            child++;
-        if (child <= end && key < a[child]) {
-            a[root] = a[child];
-            fixHeap(a, child, end, key);
+            // otherwise compute median, if size of range is at least 3
         } else {
-            a[root] = key;
-        }
-    }
+            if (size%2 == 0)
+                median = start+size/2-1;
+            else
+                median = start+size/2;
 
-    private static void swap(int[] a, int i, int j) {
-        int temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
+            // to make sure all less or equal
+            // points to median go to left tree
+            int tmpMedian = median+1;
+            while (tmpMedian <= end+1 && data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim))
+                tmpMedian += 1;
+            median = tmpMedian-1;
+        }
+
+        Map<Integer, Geometrizable[]> backupArray = new HashMap<Integer, Geometrizable[]>();
+        for (int i=0; i<data.length; i++) {
+            if (i == dim)
+                continue;
+            Geometrizable[] array = new Geometrizable[size];
+            System.arraycopy(data[i], start, array, 0, size);
+            backupArray.put(i, array);
+        }
+
+        // median + 1 becuase to parameter is exclusive, but median must be in left tree by definition
+        List<Geometrizable> geometrizableForLeft = Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1));
+        int leftIndex;
+        int rightIndex;
+        for (Map.Entry<Integer, Geometrizable[]> entry : backupArray.entrySet()) {
+            Integer currentDim = entry.getKey();
+            Geometrizable[] geometrizables = entry.getValue();
+            leftIndex = start;
+            rightIndex = median+1;
+            for (Geometrizable geometrizable : geometrizables) {
+                if (geometrizableForLeft.contains(geometrizable)) {
+                    data[currentDim][leftIndex] = geometrizable;
+                    leftIndex += 1;
+                } else {
+                    data[currentDim][rightIndex] = geometrizable;
+                    rightIndex += 1;
+                }
+            }
+        }
+
+        GeometryNode node = new GeometryNode(parent, depth, (data[dim][median].valueForDimension(dim)));
+        node.setLeftNode(buildTree(data, node, depth+1, start, median));
+        node.setRightNode(buildTree(data, node, depth+1, median+1, end));
+        return node;
     }
 
 }

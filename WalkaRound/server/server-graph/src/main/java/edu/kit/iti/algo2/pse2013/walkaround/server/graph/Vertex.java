@@ -1,10 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
 
 /**
  * This class represents an vertex contained in a graph.
@@ -180,7 +181,7 @@ public class Vertex extends Coordinate implements Serializable {
 
     @Override
     public String toString() {
-        return "Vertex - id: " + id + " - lat: " + getLatitude() + " - lon: " + getLongtitude() + " - current length: " + getCurrentLength();
+        return "Vertex - id: " + id + " - lat: " + getLatitude() + " - lon: " + getLongitude() + " - current length: " + getCurrentLength();
     }
 
 
@@ -192,6 +193,7 @@ public class Vertex extends Coordinate implements Serializable {
         Vertex vertex = (Vertex) o;
 
         if (id != vertex.id) return false;
+        if (parent != null ? !parent.equals(vertex.parent) : vertex.parent != null) return false;
 
         return true;
     }
@@ -199,7 +201,9 @@ public class Vertex extends Coordinate implements Serializable {
 
     @Override
     public int hashCode() {
-        return id;
+        int result = id;
+        result = 31 * result + (parent != null ? parent.hashCode() : 0);
+        return result;
     }
 
 }

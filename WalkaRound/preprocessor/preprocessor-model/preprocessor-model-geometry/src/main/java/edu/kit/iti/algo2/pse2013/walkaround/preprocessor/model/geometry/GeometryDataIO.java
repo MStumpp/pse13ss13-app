@@ -23,12 +23,26 @@ public class GeometryDataIO implements Serializable {
 
 
     /**
+     * Number of dimensions.
+     */
+    private int numDimensions;
+
+
+    /**
      * Initializes GeometryDataIO with GeometryNode as root.
      *
      * @param root GeometyNode as root of tree.
+     * @param numDimensions Number of dimensions.
+     * @throws IllegalArgumentException if root is null or number of
+     *              dimensions is not greater than 0.
      */
-    public GeometryDataIO(GeometryNode root) {
+    public GeometryDataIO(GeometryNode root, int numDimensions) {
+        if (root == null)
+            throw new IllegalArgumentException("root node must not be null");
+        if (numDimensions > 0)
+            throw new IllegalArgumentException("number of dimensions must be greater than 0");
         this.root = root;
+        this.numDimensions = numDimensions;
     }
 
 
@@ -39,6 +53,16 @@ public class GeometryDataIO implements Serializable {
      */
     public GeometryNode getRoot() {
         return root;
+    }
+
+
+    /**
+     * Returns the number of dimensions.
+     *
+     * @return int Number of dimensions.
+     */
+    public int getNumDimensions() {
+        return numDimensions;
     }
 
 

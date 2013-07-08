@@ -1,12 +1,19 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.io.Serializable;
+
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Coordinate {
+public class Coordinate implements Geometrizable, Serializable {
+
+    /**
+     * Temporary Serial version ID as long as Java serialization is used
+     */
+    private static final long serialVersionUID = 3384680623853287035L;
 
 
 	/**
@@ -38,6 +45,11 @@ public class Coordinate {
 		this(lat, lon, null);
 	}
 
+
+    // TODO: Wofür brauchen wir das? (Matthias)
+    // Das fanden wir (Ldwig und ich) ganz nützlich beim MapView.
+    // Bspw. um ausgehend von einer Ecke eine andere zu erzeugen, wenn man ein Offset hat.
+    // Konkretes Beispiel: bottomRightCorner = newCoordinate(topLeftCorner, latDelta, lonDelta);
 	public Coordinate(final Coordinate reference, final double latDelta, final double lonDelta) {
 		this(reference.getLatitude() + latDelta, reference.getLongitude() + lonDelta);
 	}
@@ -57,6 +69,7 @@ public class Coordinate {
 		this.crossInfo = crossInfo;
 	}
 
+
 	/**
 	 * Returns latitude of this Coordinate.
 	 *
@@ -66,6 +79,7 @@ public class Coordinate {
 		return lat;
 	}
 
+
 	/**
 	 * Returns longitude of this Coordinate.
 	 *
@@ -74,6 +88,7 @@ public class Coordinate {
 	public double getLongitude() {
 		return lon;
 	}
+
 
 	/**
 	 * Returns latitude of this Coordinate.
@@ -90,6 +105,7 @@ public class Coordinate {
 		}
 	}
 
+
 	/**
 	 * Sets the longitude attribute of this Coordinate.
      *
@@ -105,6 +121,7 @@ public class Coordinate {
 		}
 	}
 
+
 	/**
 	 * Returns CrossingInformation for this Coordinate.
 	 *
@@ -114,8 +131,49 @@ public class Coordinate {
 		return crossInfo;
 	}
 
+
+    public int numberDimensions() {
+        return 2;
+    }
+
+
+    public double valueForDimension(int dim) {
+        if (dim == 0)
+            return getLatitude();
+        else
+            return getLongitude();
+    }
+
+
 	@Override
 	public String toString() {
 		return String.format("Coordinate latitude: %.8f° longtitude %.8f°", this.lat, this.lon);
 	}
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Coordinate that = (Coordinate) o;
+
+        if (Double.compare(that.lat, lat) != 0) return false;
+        if (Double.compare(that.lon, lon) != 0) return false;
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(lat);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(lon);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
 }
