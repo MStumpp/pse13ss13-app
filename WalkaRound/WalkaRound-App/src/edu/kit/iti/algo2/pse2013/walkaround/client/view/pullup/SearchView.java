@@ -140,6 +140,7 @@ public class SearchView extends Fragment {
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if(v.equals(query)) {
+				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
 				searchMenuController.requestSuggestionsByText(v.getText().toString());
 			}
 			return false;

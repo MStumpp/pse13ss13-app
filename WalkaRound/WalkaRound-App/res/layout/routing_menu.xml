@@ -39,11 +39,11 @@
                 android:scaleType="center" />
 
             <ImageButton
-                android:id="@+id/save"
+                android:id="@+id/tsp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/rundkurs"
-                android:scaleType="center" />
+                android:scaleType="center"
+                android:src="@drawable/rundkurs" />
 
             <ImageButton
                 android:id="@+id/load"
