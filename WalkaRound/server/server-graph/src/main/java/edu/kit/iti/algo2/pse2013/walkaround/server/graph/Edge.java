@@ -167,7 +167,7 @@ public final class Edge implements Serializable {
     private double computeLength() {
         double earthRadius = 6371009;
         double dLat = Math.toRadians(head.getLatitude() - tail.getLatitude());
-        double dLng = Math.toRadians(head.getLongtitude() - tail.getLongtitude());
+        double dLng = Math.toRadians(head.getLongitude() - tail.getLongitude());
         double sindLat = Math.sin(dLat / 2);
         double sindLng = Math.sin(dLng / 2);
         double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)

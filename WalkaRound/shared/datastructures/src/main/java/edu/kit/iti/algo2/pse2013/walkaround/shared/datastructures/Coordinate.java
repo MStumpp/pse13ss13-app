@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Coordinate implements Serializable {
+public class Coordinate implements Geometrizable, Serializable {
 
     /**
      * Temporary Serial version ID as long as Java serialization is used
@@ -130,6 +130,19 @@ public class Coordinate implements Serializable {
 	public CrossingInformation getCrossingInformation() {
 		return crossInfo;
 	}
+
+
+    public int numberDimensions() {
+        return 2;
+    }
+
+
+    public double valueForDimension(int dim) {
+        if (dim == 0)
+            return getLatitude();
+        else
+            return getLongitude();
+    }
 
 
 	@Override
