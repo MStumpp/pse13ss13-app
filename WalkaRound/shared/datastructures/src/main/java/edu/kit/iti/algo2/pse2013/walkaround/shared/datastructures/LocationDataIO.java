@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
-
 
 /**
  * This class contains some preprocessed data by OSMDataPreprocessor and

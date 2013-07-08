@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
-import android.app.Fragment;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;

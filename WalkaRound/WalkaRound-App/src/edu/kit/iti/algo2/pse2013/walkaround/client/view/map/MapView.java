@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
@@ -207,6 +206,7 @@ public class MapView extends Activity {
 		updateDisplayCoordinate(list2);
 		*/
 		
+		
 		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
 		this.setActive(3);
 
@@ -228,9 +228,10 @@ public class MapView extends Activity {
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
-
+		
 		runOnUiThread(new Runnable() {
 			public void run() {
+				
 				map.setImageBitmap(b);
 				map.setVisibility(View.VISIBLE);
 			}
@@ -287,7 +288,7 @@ public class MapView extends Activity {
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
 		poiList.removeAllViews();
 		currentActive = null;
-
+		
 		for (DisplayPOI value : dp) {
 			ImageView iv = new ImageView(this);
 			iv.setImageDrawable(poi);

@@ -87,12 +87,18 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "wichtige Punkte werden berechner");
 		this.size = size;
 		this.upperLeft = c;
-		//this.computeMid();
-		
-		//this.upperLeft = new Coordinate(this.upperLeft,
-		//		this.mid.getLatitude() - this.upperLeft.getLatitude(),
-		//		this.mid.getLatitude() - this.upperLeft.getLatitude());
 
+		Log.d("WTF", "upperleft " +  upperLeft);
+		
+		this.computeMid();
+		Log.d("WTF", "mid " +  mid);
+		
+		this.upperLeft = new Coordinate(this.upperLeft,
+				-Math.abs(this.mid.getLatitude() - this.upperLeft.getLatitude()),
+				Math.abs(this.mid.getLongitude() - this.upperLeft.getLongitude()));
+
+		Log.d("WTF", "upperLeft2 " +  upperLeft);
+		
 		Log.d(TAG_MAP_MODEL, "Default LOD wird gesetzt");
 		this.currentLevelOfDetail = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getDefaultLevelOfDetail();
@@ -129,6 +135,9 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Map wird initialisiert");
 		this.generateMapOverlayImage();
 
+		//this.mapController.onMapOverlayImageChange(map);
+		
+		
 		Log.d(TAG_MAP_MODEL, "Map Model wurde initialisiert");
 	}
 
@@ -141,9 +150,14 @@ public class MapModel implements TileListener {
 	 * @return geographische Koordiante
 	 */
 	private Coordinate computeCoordinateByDisplayCoordinate(DisplayCoordinate dc) {
-
+		Log.d("WTF", "CoordDiffY: "+-CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+				currentLevelOfDetail, CoordinateUtility.DIRECTION_Y));
+		Log.d("WTF", "CoordDiffX: "+CoordinateUtility.convertPixelsToDegrees(dc.getX(),
+				currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
+		Log.d("WTF","PixelDiffX: "+dc.getX());
+		Log.d("WTF","PixelDiffY: "+dc.getY());
 		return new Coordinate(this.upperLeft,
-				CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+				-CoordinateUtility.convertPixelsToDegrees(dc.getY(),
 						currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
 				CoordinateUtility.convertPixelsToDegrees(dc.getX(),
 						currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
@@ -421,7 +435,7 @@ public class MapModel implements TileListener {
 		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
 
 		//if (tile != null && levelOfDetail == currentLevelOfDetail) {
-
+			
 			int[] xy = TileUtility.getXYTileIndex(upperLeft, Math.round(currentLevelOfDetail));
 
 			int localX = x - xy[0];
@@ -446,7 +460,7 @@ public class MapModel implements TileListener {
 			// Log.d("MAP_VIEW", "Fog wurde erstellt.");
 
 			// Bitmap newTile = tile.copy(tile.getConfig(), tile.isMutable());
-
+			
 			this.mapController.onMapOverlayImageChange(map);
 		//}
 	}

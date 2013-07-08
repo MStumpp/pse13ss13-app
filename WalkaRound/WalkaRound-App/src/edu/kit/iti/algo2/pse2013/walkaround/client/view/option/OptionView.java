@@ -1,20 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.option;
 
 //  Importiere die Resourcen
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 //Nötige Imports
 //Fragment Import
 //Preferences Import
 // Log Ausgabe
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 /**
  * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs kümmert.
