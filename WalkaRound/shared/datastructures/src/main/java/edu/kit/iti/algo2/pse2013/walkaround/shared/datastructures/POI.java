@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import java.util.List;
-
 import android.graphics.Bitmap;
 
 /**
@@ -45,6 +43,7 @@ public class POI extends Location {
         this(lat, lon, id, name, textInfo, url, poiCategories, null);
     }
 
+
     /**
      * Creates an instance of POI. This is for example useful when parsing from a PBF-File.
      *
@@ -56,6 +55,8 @@ public class POI extends Location {
     public POI(Location loc, String textInfo, String imageURL, int[] poiCategories) {
     	this(loc.getLatitude(), loc.getLongitude(), loc.getId(), loc.getName(), textInfo, imageURL, poiCategories);
     }
+
+
     /**
      * Creates an instance of POI.
      *
@@ -109,7 +110,7 @@ public class POI extends Location {
     /**
      * Returns an image of POI.
      *
-     * @return Bitmap image of the POI (Android requires {@link Bitmap} instead of {@link BufferedImage})
+     * @return Bitmap image of the POI (Android requires {@link Bitmap} instead of)
      */
     public Bitmap getImage() {
         return null; // TODO: implement image loading
@@ -125,6 +126,7 @@ public class POI extends Location {
         return poiCategories;
     }
 
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -139,6 +141,7 @@ public class POI extends Location {
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
