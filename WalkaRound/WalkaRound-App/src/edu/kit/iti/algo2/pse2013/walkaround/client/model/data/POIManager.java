@@ -182,6 +182,7 @@ public class POIManager {
 	 */
 	public List<Address> searchPOIsByAddress(Address address,
 			Context context) {
+		
 		ArrayList<Address> suggestions = new ArrayList<Address>();
 		Geocoder geocoder = new Geocoder(context, Locale.GERMANY);
 		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
