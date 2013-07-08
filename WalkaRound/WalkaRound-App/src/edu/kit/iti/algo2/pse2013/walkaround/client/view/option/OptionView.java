@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 //Nötige Imports
 //Fragment Import
 //Preferences Import
 // Log Ausgabe
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 /**
  * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs kümmert.
@@ -28,21 +30,36 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
  * @author Ludwig Biermann
  *
  */
-public class OptionView extends Activity {
+public class OptionView extends PreferenceFragment {
 
+	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	
+	private int switcher = R.id.pullupOptionSwitcher;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.setContentView(R.layout.options_view);
+		Log.d(TAG_PULLUP_CONTENT,"Create FavoriteView");
+		
+		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
+		Log.d("Options",
+				"Optionen.xml wird als default Preference Manager ausgef�hrt.");
 
-		Fragment f = new OptionFragment();
-		FragmentTransaction t = getFragmentManager().beginTransaction();
+		PreferenceManager.setDefaultValues(getActivity(), R.xml.options,
+				false);
+		Log.d("Options", "Optionen werden gestartet.");
+		addPreferencesFromResource(R.xml.options);
+		
+		//this.setContentView(R.layout.options_view);
 
-		t.replace(R.id.options_view_id, f);
-		t.addToBackStack(null);
+		//Fragment f = new OptionFragment();
+		//FragmentTransaction t = getFragmentManager().beginTransaction();
 
-		t.commit();
+		//t.replace(R.id.options_view_id, f);
+		//t.addToBackStack(null);
+
+		//t.commit();
 	}
 
 	/**
@@ -72,4 +89,19 @@ public class OptionView extends Activity {
 			addPreferencesFromResource(R.xml.options);
 		}
 	}
+
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		Log.d(TAG_PULLUP_CONTENT,"Destroy FavoriteView");
+		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
+	}
+	
+	public boolean equals(Fragment f){
+		if(f.toString().equals(PullUpView.CONTENT_FAVORITE)){
+			return true;
+		}
+		return false;
+	}
+	
 }

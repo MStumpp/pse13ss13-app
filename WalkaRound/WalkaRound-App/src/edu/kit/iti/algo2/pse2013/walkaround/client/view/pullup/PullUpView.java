@@ -18,6 +18,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
 
 /**
  * 
@@ -47,6 +48,7 @@ public class PullUpView extends Fragment {
 	public static final int CONTENT_POI = 3;
 	public static final int CONTENT_SEARCH = 4;
 	public static final int CONTENT_INFO = 5;
+	public static final int CONTENT_OPTION = 6;
 
 	private RelativeLayout main;
 
@@ -171,7 +173,7 @@ public class PullUpView extends Fragment {
 	/**
 	 * Setzt die Höhe des Menüs auf FullSize
 	 */
-	private void setFullSizeHeight() {
+	public void setFullSizeHeight() {
 		this.setHeight(main.getY() * -1, 1000);
 		// this.duration = 0;
 	}
@@ -179,7 +181,7 @@ public class PullUpView extends Fragment {
 	/**
 	 * Setzt die Höhe des Menüs auf HalfSize
 	 */
-	private void setHalfSizeHeight() {
+	public void setHalfSizeHeight() {
 		this.setHeight(halfHeight - main.getY(), 1000);
 		// this.duration = 0;
 	}
@@ -187,7 +189,7 @@ public class PullUpView extends Fragment {
 	/**
 	 * Setzt die Höhe des Menüs auf Minimal
 	 */
-	private void setNullSizeHeight() {
+	public void setNullSizeHeight() {
 		this.setHeight(maxHeight - main.getY(), 1000);
 		// this.duration = 0;
 	}
@@ -243,12 +245,11 @@ public class PullUpView extends Fragment {
 
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
-			Log.d(TAG_PULLUP, "routing wird gestartet");
 			
 			if (!this.pullUpContent.equals(CONTENT_ROUTING)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+				Log.d(TAG_PULLUP, "routing wird gestartet");
 				ft.remove(pullUpContent);
 				pullUpContent = new RoutingView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -256,12 +257,11 @@ public class PullUpView extends Fragment {
 			
 			break;
 		case PullUpView.CONTENT_FAVORITE:
-			Log.d(TAG_PULLUP, "favorite wird gestartet");
 
 			if (!this.pullUpContent.equals(CONTENT_FAVORITE)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+				Log.d(TAG_PULLUP, "favorite wird gestartet");
 				ft.remove(pullUpContent);
 				pullUpContent = new FavoriteView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -281,12 +281,11 @@ public class PullUpView extends Fragment {
 			
 			break;
 		case PullUpView.CONTENT_POI:
-			Log.d(TAG_PULLUP, "poi wird gestartet");
 
 			if (!this.pullUpContent.equals(CONTENT_POI)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+				Log.d(TAG_PULLUP, "poi wird gestartet");
 				ft.remove(pullUpContent);
 				pullUpContent = new POIView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -294,25 +293,35 @@ public class PullUpView extends Fragment {
 			
 			break;
 		case PullUpView.CONTENT_SEARCH:
-			Log.d(TAG_PULLUP, "search wird gestartet");
 
 			if (!this.pullUpContent.equals(CONTENT_SEARCH)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+				Log.d(TAG_PULLUP, "search wird gestartet");
 				ft.remove(pullUpContent);
 				pullUpContent = new SearchView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
 			
 			break;
+		case PullUpView.CONTENT_OPTION:
+
+			if (!this.pullUpContent.equals(CONTENT_OPTION)) {
+				FragmentTransaction ft = this.getFragmentManager()
+						.beginTransaction();
+				Log.d(TAG_PULLUP, "optionen wird gestartet");
+				ft.remove(pullUpContent);
+				pullUpContent = new OptionView();
+				ft.add(R.id.pullupContent, pullUpContent).commit();
+			}
+			
+			break;
 		default:
-			Log.d(TAG_PULLUP, "InfoView wird gestartet");
 			
 			if (!this.pullUpContent.equals(CONTENT_INFO)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+				Log.d(TAG_PULLUP, "InfoView wird gestartet");
 				ft.remove(pullUpContent);
 				pullUpContent = new InfoView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();

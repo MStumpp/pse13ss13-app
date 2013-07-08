@@ -308,6 +308,7 @@ public class HeadUpView extends Fragment {
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(option)) {
 				Log.d(HEADUP_TOUCH, "Optionen werden gestartet");
+				headUpController.startOption();
 			}
 			return false;
 		}

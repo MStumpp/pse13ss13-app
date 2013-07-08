@@ -1,8 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
+import android.app.Fragment;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 /**
  * Diese klassebehandelt und kontrolliert die Aus/Eingabe des HeadUpView
@@ -25,6 +27,7 @@ public class HeadUpController {
 	private static String HEAD_CONTROLLER = "HEAD_CONTROLLER";
 
 	private HeadUpView headUpView;
+	private PullUpView pullUp;
 	private MapController mapController;
 	private boolean navi;
 
@@ -33,6 +36,7 @@ public class HeadUpController {
 	 *
 	 * @param headUpView
 	 *            die nötige Referenz zum HeadUpView
+	 * @param pullUpView 
 	 */
 	private HeadUpController(HeadUpView headUpView) {
 		this.headUpView = headUpView;
@@ -191,4 +195,11 @@ public class HeadUpController {
 		}
 	}
 
+	/**
+	 * 
+	 */
+	public void startOption() {
+		this.mapController.getPullUpView().changeView(PullUpView.CONTENT_OPTION);
+		this.mapController.getPullUpView().setFullSizeHeight();
+	}
 }

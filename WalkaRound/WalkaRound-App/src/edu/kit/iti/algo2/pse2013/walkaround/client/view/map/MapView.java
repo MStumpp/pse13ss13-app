@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
@@ -100,7 +101,13 @@ public class MapView extends Activity {
 	RelativeLayout routeList;
 	RelativeLayout poiList;
 	int sizeOfPoints;
+	
+	/**
+	 * 
+	 */
 
+	PullUpView pullUp;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -168,7 +175,7 @@ public class MapView extends Activity {
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragment PullUpMenue wird eingebaut");
-		Fragment pullUp = new PullUpView();
+		this.pullUp = new PullUpView();
 		ft.add(R.id.pullUpMain, pullUp).commit();
 
 		// ---------------------------------------------
@@ -207,6 +214,14 @@ public class MapView extends Activity {
 
 	}
 
+	/**
+	 * 
+	 */
+	public PullUpView getPullUpView(){
+		return pullUp;
+	}
+	
+	
 	/**
 	 * Updatet die Karte
 	 *

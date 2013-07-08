@@ -32,6 +32,7 @@ public class RouteMenuController {
 		//ll.add(new Coordinate(49.01, 8.40333));
 		this.currentRoute = new Route(ll);
 
+		
 	}
 
 	public static RouteMenuController getInstance() {
