@@ -13,12 +13,13 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteMenuController;
 
 public class RoundTripView extends Fragment {
 
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
-	private final int MAXIMUM_LENGTH_ROUNDTRIP = 500;
+	private final int MAXIMUM_LENGTH_ROUNDTRIP = 5000;
 
 	private final int MINIMUN_LENGTH_ROUNDTRIP = 100;
 
@@ -27,6 +28,8 @@ public class RoundTripView extends Fragment {
 	private final int ON_LONG_CLICK_UPDATE_INTERVALL_MS = 100;
 
 	private int switcher = R.id.pullupRoundtripSwitcher;
+
+	RouteMenuController routeController;
 
 	private NumberPicker np;
 
@@ -43,6 +46,8 @@ public class RoundTripView extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create RoundtripView");
+
+		routeController = RouteMenuController.getInstance();
 
 		Log.d(TAG_PULLUP_CONTENT, "Create NumberPicker");
 		np = (NumberPicker) this.getActivity().findViewById(R.id.length_picker);
@@ -124,8 +129,21 @@ public class RoundTripView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(computeRoundtrip)) {
-				// ACHTUNG: hier bei länge np.getValue * 100 übergeben
+				if (jogging.isSelected()) {
+					//routeController.addRoundtrip(jogging.getId(),
+					//		np.getValue() * 100);
+				} else if (shopping.isSelected()) {
+					//routeController.addRoundtrip(shopping.getId(),
+					//		np.getValue() * 100);
+				} else if (sightseeing.isSelected()) {
+					//routeController.addRoundtrip(sightseeing.getId(),
+					//		np.getValue() * 100);
+				} else if (clubbing.isSelected()) {
+					//routeController.addRoundtrip(clubbing.getId(),
+					//		np.getValue() * 100);
+				}
 			}
+			//TODO: implement
 			return false;
 		}
 
@@ -137,38 +155,53 @@ public class RoundTripView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(jogging)) {
 				if (!jogging.isSelected()) {
-					jogging.setSelected(true);
-					jogging.setTextColor(Color.YELLOW);
+					setSelected(jogging);
+					setUnselected(sightseeing);
+					setUnselected(shopping);
+					setUnselected(clubbing);
+
 				} else {
-					jogging.setSelected(false);
-					jogging.setTextColor(Color.WHITE);
+					setUnselected(jogging);
 				}
 			} else if (v.equals(shopping)) {
 				if (!shopping.isSelected()) {
-					shopping.setSelected(true);
-					shopping.setTextColor(Color.YELLOW);
+					setSelected(shopping);
+					setUnselected(sightseeing);
+					setUnselected(jogging);
+					setUnselected(clubbing);
 				} else {
-					shopping.setSelected(false);
-					shopping.setTextColor(Color.WHITE);
+					setUnselected(shopping);
 				}
 			} else if (v.equals(sightseeing)) {
 				if (!sightseeing.isSelected()) {
-					sightseeing.setSelected(true);
-					sightseeing.setTextColor(Color.YELLOW);
+					setSelected(sightseeing);
+					setUnselected(jogging);
+					setUnselected(shopping);
+					setUnselected(clubbing);
 				} else {
-					sightseeing.setSelected(false);
-					sightseeing.setTextColor(Color.WHITE);
+					setUnselected(sightseeing);
 				}
 			} else if (v.equals(clubbing)) {
 				if (!clubbing.isSelected()) {
-					clubbing.setSelected(true);
-					clubbing.setTextColor(Color.YELLOW);
+					setSelected(clubbing);
+					setUnselected(sightseeing);
+					setUnselected(shopping);
+					setUnselected(jogging);
 				} else {
-					clubbing.setSelected(false);
-					clubbing.setTextColor(Color.WHITE);
+					setUnselected(clubbing);
 				}
 			}
 			return false;
+		}
+
+		private void setUnselected(TextView v) {
+			v.setSelected(false);
+			v.setTextColor(Color.WHITE);
+		}
+
+		private void setSelected(TextView v) {
+			v.setSelected(true);
+			v.setTextColor(Color.YELLOW);
 		}
 
 	}

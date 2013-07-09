@@ -113,86 +113,77 @@ public class POIView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(category1)) {
 				if (!category1.isSelected()) {
-					category1.setSelected(true);
-					category1.setTextColor(Color.YELLOW);
+					setSelected(category1);
 				} else {
-					category1.setSelected(false);
-					category1.setTextColor(Color.WHITE);
+					setUnselected(category1);
 				}
 			} else if (v.equals(category2)) {
 				if (!category2.isSelected()) {
-					category2.setSelected(true);
-					category2.setTextColor(Color.YELLOW);
+					setSelected(category2);
 				} else {
-					category2.setSelected(false);
-					category2.setTextColor(Color.WHITE);
+					setUnselected(category2);
 				}
 			} else if (v.equals(category3)) {
 				if (!category3.isSelected()) {
-					category3.setSelected(true);
-					category3.setTextColor(Color.YELLOW);
+					setSelected(category3);
 				} else {
-					category3.setSelected(false);
-					category3.setTextColor(Color.WHITE);
+					setUnselected(category3);
 				}
 			} else if (v.equals(category4)) {
 				if (!category4.isSelected()) {
-					category4.setSelected(true);
-					category4.setTextColor(Color.YELLOW);
+					setSelected(category4);
 				} else {
-					category4.setSelected(false);
-					category4.setTextColor(Color.WHITE);
+					setUnselected(category4);
 				}
 			} else if (v.equals(category5)) {
 				if (!category5.isSelected()) {
-					category5.setSelected(true);
-					category5.setTextColor(Color.YELLOW);
+					setSelected(category5);
 				} else {
-					category5.setSelected(false);
-					category5.setTextColor(Color.WHITE);
+					setUnselected(category5);
 				}
 			} else if (v.equals(category6)) {
 				if (!category6.isSelected()) {
-					category6.setSelected(true);
-					category6.setTextColor(Color.YELLOW);
+					setSelected(category6);
 				} else {
-					category6.setSelected(false);
-					category6.setTextColor(Color.WHITE);
+					setUnselected(category6);
 				}
 			} else if (v.equals(category7)) {
 				if (!category7.isSelected()) {
-					category7.setSelected(true);
-					category7.setTextColor(Color.YELLOW);
+					setSelected(category7);
 				} else {
-					category7.setSelected(false);
-					category7.setTextColor(Color.WHITE);
+					setUnselected(category7);
 				}
 			} else if (v.equals(category8)) {
 				if (!category8.isSelected()) {
-					category8.setSelected(true);
-					category8.setTextColor(Color.YELLOW);
+					setSelected(category8);
 				} else {
-					category8.setSelected(false);
-					category8.setTextColor(Color.WHITE);
+					setUnselected(category8);
 				}
 			} else if (v.equals(category9)) {
 				if (!category9.isSelected()) {
-					category9.setSelected(true);
-					category9.setTextColor(Color.YELLOW);
+					setSelected(category9);
 				} else {
-					category9.setSelected(false);
-					category9.setTextColor(Color.WHITE);
+					setUnselected(category9);
 				}
 			} else if (v.equals(category10)) {
 				if (!category10.isSelected()) {
-					category10.setSelected(true);
-					category10.setTextColor(Color.YELLOW);
+					setSelected(category10);
 				} else {
-					category10.setSelected(false);
-					category10.setTextColor(Color.WHITE);
+					setUnselected(category10);
 				}
 			}
+			//TODO: POIs der kategorie werden auf der karte angezeigt....
 			return false;
+		}
+
+		private void setUnselected(TextView v) {
+			v.setSelected(false);
+			v.setTextColor(Color.WHITE);
+		}
+
+		private void setSelected(TextView v) {
+			v.setSelected(true);
+			v.setTextColor(Color.YELLOW);
 		}
 	}
 }

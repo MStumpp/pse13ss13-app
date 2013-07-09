@@ -23,9 +23,9 @@ public class SearchView extends Fragment {
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupSearchSwitcher;
-	
+
 	SearchMenuController searchMenuController;
-	
+
 	TabHost tabHost;
 
 	private TextView postalCode;
@@ -43,13 +43,14 @@ public class SearchView extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create SearchView");
-		
+
 		searchMenuController = SearchMenuController.getInstance();
-		
+
 		Log.d(TAG_PULLUP_CONTENT, "Create Tabs");
-		tabHost = (TabHost) this.getActivity().findViewById(R.id.tabhost_search);
+		tabHost = (TabHost) this.getActivity()
+				.findViewById(R.id.tabhost_search);
 		tabHost.setup();
-		
+
 		TabSpec spec1 = tabHost.newTabSpec("address_tab");
 		spec1.setContent(R.id.address_search);
 		spec1.setIndicator("Address");
@@ -64,19 +65,23 @@ public class SearchView extends Fragment {
 		city = (TextView) this.getActivity().findViewById(R.id.city);
 		street = (TextView) this.getActivity().findViewById(R.id.street);
 		number = (TextView) this.getActivity().findViewById(R.id.number);
-		postalCodeSearch = (EditText) this.getActivity().findViewById(R.id.postal_code_search);
-		citySearch = (EditText) this.getActivity().findViewById(R.id.city_search);
-		streetSearch = (EditText) this.getActivity().findViewById(R.id.street_search);
-		numberSearch = (EditText) this.getActivity().findViewById(R.id.number_search);
+		postalCodeSearch = (EditText) this.getActivity().findViewById(
+				R.id.postal_code_search);
+		citySearch = (EditText) this.getActivity().findViewById(
+				R.id.city_search);
+		streetSearch = (EditText) this.getActivity().findViewById(
+				R.id.street_search);
+		numberSearch = (EditText) this.getActivity().findViewById(
+				R.id.number_search);
 		query = (EditText) this.getActivity().findViewById(R.id.query);
 		goButton = (Button) this.getActivity().findViewById(R.id.go_button);
-		
+
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		
+
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der GrÃ¶ÃŸenverhÃ¤ltnisse");
 		city.setX(size.x / 18);
 		city.getLayoutParams().width = size.x / 12;
@@ -98,12 +103,12 @@ public class SearchView extends Fragment {
 		query.getLayoutParams().width = size.x;
 		goButton.setX(size.x / 4);
 		goButton.getLayoutParams().width = size.x / 2;
-		
+
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugefï¿½gt");
-		
+
 		goButton.setOnTouchListener(new GoListener());
 		query.setOnEditorActionListener(new QueryActionListener());
-		
+
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
 
@@ -120,31 +125,40 @@ public class SearchView extends Fragment {
 		}
 		return false;
 	}
-	
+
 	private class GoListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			
+
 			if (v.equals(goButton)) {
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedrückt");
-				//searchMenuController.requestSuggestionsByAddress(postalCodeSearch.getText(), citySearch.getText(), streetSearch.getText(), numberSearch.getText(), );
+				searchMenuController
+						.requestSuggestionsByAddress(
+								Integer.parseInt(postalCodeSearch.getText()
+										.toString()), citySearch.getText()
+										.toString(), streetSearch.getText()
+										.toString(), numberSearch.getText()
+										.toString(), getActivity());
+				//TODO: zur vorschlägen gehen
 			}
 			return false;
 		}
-		
+
 	}
-	
+
 	private class QueryActionListener implements OnEditorActionListener {
 
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			if(v.equals(query)) {
+			if (v.equals(query)) {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
-				searchMenuController.requestSuggestionsByText(v.getText().toString());
+				searchMenuController.requestSuggestionsByText(v.getText()
+						.toString());
+				//TODO: zur karte zurückkehren
 			}
 			return false;
 		}
-		
+
 	}
 }
