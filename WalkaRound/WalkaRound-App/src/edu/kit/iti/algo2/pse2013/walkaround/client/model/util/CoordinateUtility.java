@@ -108,10 +108,22 @@ public final class CoordinateUtility {
 
 		Log.d(TAG, "DisplayCoordinate: " + dc);
 		Log.d(TAG, "Delta upperLeft to DisplayCoordinate: x:" + deltaX + " y:" + deltaY);
-		Coordinate center = new Coordinate(upperLeft, deltaY, deltaX);
+		Coordinate center = new Coordinate(upperLeft, -deltaY, deltaX);
 		Log.d(TAG, "UpperLeft: " + upperLeft + " Center: " + center);
 
 
 		return center;
+	}
+
+	/**
+	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer Koordinate
+	 *
+	 * @param dc die zu konvertierende DisplayCoordinate
+	 * @return
+	 */
+	private DisplayCoordinate convertDisplayCoordinateToCoordinate(Coordinate c, Coordinate upperLeft, float levelOfDetail) {
+		double deltaX = CoordinateUtility.convertDegreesToPixels(c.getLongitude() - upperLeft.getLongitude(), levelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE);
+		double deltaY = CoordinateUtility.convertDegreesToPixels(c.getLatitude() - upperLeft.getLatitude(), levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
+		return new DisplayCoordinate((float) deltaX, (float) deltaY);
 	}
 }

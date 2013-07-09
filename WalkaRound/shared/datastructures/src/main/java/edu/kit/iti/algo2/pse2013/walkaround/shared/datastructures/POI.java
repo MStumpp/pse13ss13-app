@@ -39,8 +39,8 @@ public class POI extends Location {
      * @param url URL of an image of POI.
      * @param poiCategories Categories of POI.
      */
-    public POI(double lat, double lon, int id, String name, String textInfo, String url, int[] poiCategories) {
-        this(lat, lon, id, name, textInfo, url, poiCategories, null);
+    public POI(double lat, double lon, String name, String textInfo, String url, int[] poiCategories) {
+        this(lat, lon, name, textInfo, url, poiCategories, null);
     }
 
 
@@ -53,7 +53,7 @@ public class POI extends Location {
      * @param poiCategories the POI-Categories, this POI belongs to
      */
     public POI(Location loc, String textInfo, String imageURL, int[] poiCategories) {
-    	this(loc.getLatitude(), loc.getLongitude(), loc.getId(), loc.getName(), textInfo, imageURL, poiCategories);
+    	this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, imageURL, poiCategories);
     }
 
 
@@ -69,8 +69,8 @@ public class POI extends Location {
      * @param poiCategories Categories of POI.
      * @param address Address of POI.
      */
-    public POI(double lat, double lon, int id, String name, String textInfo, String url, int[] poiCategories, Address address) {
-        super(lat, lon, id, name, address);
+    public POI(double lat, double lon, String name, String textInfo, String url, int[] poiCategories, Address address) {
+        super(lat, lon, name, address);
         this.textInfo = textInfo;
         this.url = url;
         this.poiCategories = poiCategories;
