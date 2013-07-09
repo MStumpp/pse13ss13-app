@@ -8,6 +8,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Location extends Coordinate {
 
+	/**
+	 * id counter
+	 */
+	private static int idCounter = 0;
+	
     /**
      * id of Location.
      */
@@ -46,8 +51,8 @@ public class Location extends Coordinate {
      * @param id ID of Location.
      * @param name Name of Location.
      */
-    public Location(double lat, double lon, int id, String name) {
-        this(lat, lon, id, name, null);
+    public Location(double lat, double lon, String name) {
+        this(lat, lon, name, null);
     }
 
 
@@ -60,11 +65,10 @@ public class Location extends Coordinate {
      * @param name Name of Location.
      * @param address Address of Location.
      */
-    public Location(double lat, double lon, int id, String name, Address address) {
+    public Location(double lat, double lon, String name, Address address) {
         super(lat, lon);
-        if (id < 0)
-            throw new IllegalArgumentException("id must be greater than zero");
-        this.id = id;
+        this.id = idCounter;
+        idCounter++;
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("name must not be null and not be empty");
         this.name = name;

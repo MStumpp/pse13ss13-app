@@ -11,6 +11,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListe
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
@@ -86,14 +88,30 @@ public class MapController implements RouteListener {
 
 		this.mapView = mv;
 
+		
 		Display display = mapView.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 
-		this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
 
+		dw = new DisplayWaypoint[0];
+		Log.d("TAG_MAPVIEW_DRAW", "--------->!" + dw.length);
+
+		this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
+		
+		
 		routeController = RouteController.getInstance();
 		routeController.registerRouteListener(this);
+
+		routeController.addWaypoint(new Waypoint(49.01,8.40333,1,"Marktplatz"));
+		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
+		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
+		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
+		routeController.addWaypoint(new Waypoint(49.0145, 8.419,3,"211"));
+		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
+		
+
+		
 	}
 
 	public void onMapOverlayImageChange(Bitmap b) {
@@ -133,7 +151,9 @@ public class MapController implements RouteListener {
 	public void onShift(float distanceX, float distanceY) {
 		mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
 		if(dw != null){
+			Log.d("wtf2", "DisplayRoute wird gezeichnet");
 			mapModel.drawDisplayCoordinates(dw.clone());
+			mapView.updateDisplayCoordinate(dw.clone());
 		}
 	}
 
@@ -188,21 +208,16 @@ public class MapController implements RouteListener {
 
 	DisplayWaypoint[] dw;
 
-	@Override
-	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
-		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
-		//LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
+	public DisplayWaypoint[] convertRouteInfoToDisplayWapoints(RouteInfo currentRoute){
 
-		LinkedList<Waypoint> waypointList = new LinkedList<Waypoint>();
-		waypointList.add(new Waypoint(49.01,8.40333,1,"Marktplatz"));
-		waypointList.add(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
-		waypointList.add(new Waypoint(49.0145, 8.419,3,"211"));
-
-		DisplayWaypoint[] dw = new DisplayWaypoint[waypointList.size()];
+		Log.d("CONVERT_ROUTEINFO", " " + currentRoute.getWaypoints());
+		
+		
+		DisplayWaypoint[] dw = new DisplayWaypoint[currentRoute.getWaypoints().size()];
 		int a = 0;
-
-		for (Waypoint value : waypointList) {
-			Log.d(TAG_MAP_CONTROLLER, "Value " + value.toString());
+		for (Waypoint value : currentRoute.getWaypoints()) {
+			Log.d("CONVERT_ROUTEINFO", " " + value);
+			Log.d("CONVERT_ROUTEINFO", " " + mapModel.getUpperLeft());
 
 			float x = (float) (value.getLongitude() - mapModel.getUpperLeft().getLongitude());
 			float y = (float) (value.getLatitude() - mapModel.getUpperLeft().getLatitude());
@@ -221,19 +236,32 @@ public class MapController implements RouteListener {
 			a++;
 
 		}
+		
+		return dw;
+	}
+	
+	public DisplayWaypoint[] getCurrentRoute() {
+		return this.dw;
+	}
+	
+	@Override
+	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
+		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
+		//LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
 
-		/*DisplayWaypoint[] dw = new DisplayWaypoint[4];
-		dw[0] = new DisplayWaypoint(-50, 550, 1);
-		dw[1] = new DisplayWaypoint(250, 700, 2);
-		dw[2] = new DisplayWaypoint(500, 800, 3);
-		dw[3] = new DisplayWaypoint(300, 900, 4);
-		*/
+		if(currentRoute.getWaypoints() == null){
+			return;
+		}
+
+		Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
+		
+		dw = this.convertRouteInfoToDisplayWapoints(currentRoute).clone();
 
 		// TODO
 		mapView.updateDisplayCoordinate(dw);
 		mapModel.drawDisplayCoordinates(dw);
-		this.dw = dw.clone();
 		// mapView.setActive(activeWaypoint.getId());
+		
 	}
 
 }
