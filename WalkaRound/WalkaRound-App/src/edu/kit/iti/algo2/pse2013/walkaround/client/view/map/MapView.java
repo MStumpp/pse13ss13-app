@@ -36,13 +36,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
 
-public class MapView extends Activity implements PositionListener {
+public class MapView extends Activity {
 
 	private static final String TAG_MAPVIEW = "MAP_VIEW";
 
@@ -246,7 +247,6 @@ public class MapView extends Activity implements PositionListener {
 
 		// this.drawRoute(0, 0, 500, 500);
 		
-		this.onPositionChange(null);
 	}
 
 	/**
@@ -329,6 +329,20 @@ public class MapView extends Activity implements PositionListener {
 
 	}
 
+	float userX;
+	float userY;
+	
+	public void onPositionChange(final float x, final float y) {
+		// TODO Auto-generated method stub
+		runOnUiThread(new Runnable() {
+			public void run() {
+				userX = x;
+				userY = y;
+			}
+		});
+		this.setUserPositionOverlayImage(new DisplayCoordinate(userX,userY), 0);
+	}
+	
 	/**
 	 *
 	 *
@@ -756,10 +770,5 @@ public class MapView extends Activity implements PositionListener {
 		}
 	}
 
-	@Override
-	public void onPositionChange(Location androidLocation) {
-		// TODO Auto-generated method stub
-		this.setUserPositionOverlayImage(new DisplayCoordinate(500,300), 0);
-	}
 
 }

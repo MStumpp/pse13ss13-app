@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.location.Location;
 import android.util.Log;
 import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
@@ -25,7 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  * @author Ludwig Biermann
  *
  */
-public class MapController implements RouteListener {
+public class MapController implements RouteListener, PositionListener {
 
 	private static String TAG_MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
@@ -110,6 +111,8 @@ public class MapController implements RouteListener {
 		routeController.addWaypoint(new Waypoint(49.0145, 8.419,"211"));
 		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
 		
+		//PositionManager.initialize(mapView);
+		//PositionManager.getInstance().registerPositionListener(this);
 
 		
 	}
@@ -261,6 +264,12 @@ public class MapController implements RouteListener {
 		mapView.updateDisplayCoordinate(dw);
 		mapModel.drawDisplayCoordinates(dw);
 		// mapView.setActive(activeWaypoint.getId());
+		
+	}
+
+	@Override
+	public void onPositionChange(Location androidLocation) {
+		// TODO Auto-generated method stub
 		
 	}
 
