@@ -25,7 +25,6 @@ public class Waypoint extends Location {
      *
      * @param lat Latitude of Waypoint.
      * @param lon Longitude of Waypoint.
-     * @param id ID of Waypoint.
      * @param name Name of Waypoint.
      */
     public Waypoint(double lat, double lon, String name) {
@@ -38,7 +37,6 @@ public class Waypoint extends Location {
      *
      * @param lat Latitude of Waypoint.
      * @param lon Longitude of Waypoint.
-     * @param id ID of Waypoint.
      * @param name Name of Waypoint.
      * @param address Address of Waypoint.
      */

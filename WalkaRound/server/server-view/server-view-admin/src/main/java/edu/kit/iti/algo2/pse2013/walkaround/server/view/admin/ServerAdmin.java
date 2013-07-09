@@ -60,7 +60,6 @@ public class ServerAdmin {
         GraphDataIO graphDataIO = getGraphDataIO();
         LocationDataIO locationDataIO = getLocationDataIO();
 
-        Graph graph = null;
         try {
             Graph.init(graphDataIO.getEdges());
         } catch (EmptyListOfEdgesException e) {
@@ -119,7 +118,6 @@ public class ServerAdmin {
     }
 
     private static LocationDataIO getLocationDataIO() {
-
         LocationDataIO locationDataIO = new LocationDataIO();
         locationDataIO.addPOI(new POI(1.d, 2.d, 1, "poi 1", "info 1", "url 1", new int[]{0, 1}));
         locationDataIO.addPOI(new POI(3.d, 4.d, 2, "poi 2", "info 2", "url 2", new int[]{0, 1}));
