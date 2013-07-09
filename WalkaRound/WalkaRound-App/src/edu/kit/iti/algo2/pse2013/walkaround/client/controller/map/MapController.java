@@ -40,6 +40,7 @@ public class MapController implements RouteListener {
 	private MapModel mapModel;
 
 	private boolean lockUserPosition = true;
+	
 
 	/**
 	 * 
@@ -94,6 +95,7 @@ public class MapController implements RouteListener {
 
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
+		this.onRouteChange(null, null);
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
@@ -179,10 +181,18 @@ public class MapController implements RouteListener {
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
 		Log.d(MAP_CONTROLLER, "Route Change!");
-		LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
+		//LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
+		
+		LinkedList<Waypoint> waypointList = new LinkedList<Waypoint>();
+		waypointList.add(new Waypoint(49.01,8.40333,1,"Marktplatz"));
+		waypointList.add(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
+		waypointList.add(new Waypoint(49.0145, 8.419,3,"211"));
+
 		DisplayWaypoint[] dw = new DisplayWaypoint[waypointList.size()];
 		int a = 0;
 
+		
+		
 		for (Waypoint value : waypointList) {
 			Log.d(MAP_CONTROLLER, "Value " + value.toString());
 
@@ -204,8 +214,17 @@ public class MapController implements RouteListener {
 
 			value.getId());
 			a++;
+
 		}
 
+		/*DisplayWaypoint[] dw = new DisplayWaypoint[4];
+		dw[0] = new DisplayWaypoint(-50, 550, 1);
+		dw[1] = new DisplayWaypoint(250, 700, 2);
+		dw[2] = new DisplayWaypoint(500, 800, 3);
+		dw[3] = new DisplayWaypoint(300, 900, 4);
+		*/
+		
+		// TODO
 		mapView.updateDisplayCoordinate(dw);
 
 		// mapView.setActive(activeWaypoint.getId());
