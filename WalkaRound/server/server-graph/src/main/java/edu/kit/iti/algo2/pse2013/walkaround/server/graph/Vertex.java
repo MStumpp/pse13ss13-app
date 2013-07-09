@@ -189,11 +189,11 @@ public class Vertex extends Coordinate implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Vertex vertex = (Vertex) o;
 
         if (id != vertex.id) return false;
-        if (parent != null ? !parent.equals(vertex.parent) : vertex.parent != null) return false;
 
         return true;
     }
@@ -201,8 +201,8 @@ public class Vertex extends Coordinate implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (parent != null ? parent.hashCode() : 0);
+        int result = super.hashCode();
+        result = 31 * result + id;
         return result;
     }
 

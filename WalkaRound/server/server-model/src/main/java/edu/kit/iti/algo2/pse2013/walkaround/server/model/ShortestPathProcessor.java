@@ -90,36 +90,29 @@ public class ShortestPathProcessor {
      * Computes a shortest path between any given two Coordinates using the provided
      * graph.
      *
-     * @param coordinate1 One end of the route to be computed.
-     * @param coordinate2 One end of the route to be computed.
+     * @param source Source of the route to be computed.
+     * @param target Target of the route to be computed.
      * @return RouteInfoTransfer.
-     * @throw NoShortestPathExistsException If no shortest path between given Coordinates exists
+     * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
+     * @throws ShortestPathComputeException If something during computation goes wrong.
      */
-    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2)
-            throws NoShortestPathExistsException {
-        if (coordinate1 == null || coordinate2 == null)
-            throw new IllegalArgumentException("coordinate1 and coordinate2 must be provided");
+    public RouteInfoTransfer computeShortestPath(Vertex source,
+                                                 Vertex target)
+            throws NoShortestPathExistsException, ShortestPathComputeException {
+        if (source == null || target == null)
+            throw new IllegalArgumentException("source and target must be provided");
 
-        //int startVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate1);
-        //int endVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate2);
-
-        int sourceVertexId = 2295;
-        int targetVertexId = 2441;
-
-        // get source and target Vertex objects
-        Vertex sourceVertex = null, targetVertex = null;
+        Vertex sourceVertex;
+        Vertex targetVertex;
         try {
-            sourceVertex = graph.getVertexByID(sourceVertexId);
-            targetVertex = graph.getVertexByID(targetVertexId);
+            sourceVertex = graph.getVertexByID(source.getID());
+            targetVertex = graph.getVertexByID(target.getID());
         } catch (NoVertexForIDExistsException e) {
-            e.printStackTrace();
+            throw new ShortestPathComputeException("source and/or target not in graph provided");
         }
 
-        System.out.println(sourceVertex);
-        System.out.println(targetVertex);
-
         if (sourceVertex == null || targetVertex == null)
-            return null;
+            throw new ShortestPathComputeException("source and/or target not in graph provided");
 
         // some init
         runCounter += 1;
