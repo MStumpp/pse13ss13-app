@@ -19,6 +19,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -140,6 +141,10 @@ public class MapView extends Activity {
 			Log.e(TAG_MAPVIEW, e.getLocalizedMessage());
 		}
 
+
+		// Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
+		// Debug.getMemoryInfo(memoryInfo);
+		// Log.d("wtf", memoryInfo.toString());
 
 		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
 
@@ -274,16 +279,36 @@ public class MapView extends Activity {
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-
-				map.setImageBitmap(b);
-				map.setVisibility(View.VISIBLE);
+				if(!b.isRecycled()){
+					map.setImageBitmap(b);
+					map.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 	}
 
+	/**
+	 * 
+	 * @param b
+	 */
+	public void updateRouteOverlayImage(final Bitmap b) {
+
+		if (routeOverlay == null) {
+			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
+		}
+
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if(!b.isRecycled()){
+					routeOverlay.setImageBitmap(b);
+					routeOverlay.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+	}
+	
 	Canvas canvas;
 	Bitmap routeOverlayBitmap;
-
 
 	float fromX;
 	float fromY;
@@ -323,14 +348,16 @@ public class MapView extends Activity {
 	 *
 	 * @param dw
 	 */
-	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
+	private void updateDisplayWaypoint(final DisplayWaypoint[] way) {
 
 		final Context context = this;
-
-		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
-				Bitmap.Config.ARGB_8888);
-		routeOverlayBitmap.prepareToDraw();
-
+		
+		if(way == null){
+			return;
+		}
+		
+		final DisplayWaypoint[] dw = way.clone();
+		
 		runOnUiThread(new Runnable() {
 			public void run() {
 				routeList.removeAllViews();
@@ -367,8 +394,8 @@ public class MapView extends Activity {
 
 					// drawRoute(fromX, fromY, value.getX(), value.getY());
 
-					//fromX = value.getX();
-					//fromY = value.getY();
+					// fromX = value.getX();
+					// fromY = value.getY();
 				}
 
 				if (routeList.getChildCount() > 0) {
@@ -739,4 +766,5 @@ public class MapView extends Activity {
 			return false;
 		}
 	}
+
 }

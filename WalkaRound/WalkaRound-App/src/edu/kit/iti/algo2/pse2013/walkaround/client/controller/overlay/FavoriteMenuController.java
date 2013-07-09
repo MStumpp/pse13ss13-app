@@ -65,4 +65,12 @@ public class FavoriteMenuController {
 	public void appendFavoriteLocationToRoute(int index) {
 		RouteMenuController.getInstance().addWaypoint(FavoritesManager.getInstance().getFavoriteLocation(index));
 	}
+	
+	public void saveFavoriteLocation(String name) {
+		//FavoritesManager.getInstance().addLocationToFavorites(, name);
+	}
+	
+	public void saveFavoriteRoute(String name) {
+		//FavoritesManager.getInstance().addRouteToFavorites(, name);
+	}
 }
