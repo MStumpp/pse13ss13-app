@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -83,7 +82,7 @@ public class MapController implements RouteListener {
 		Log.d(TAG_MAP_CONTROLLER, "Map Controller wird initialisiert");
 		//DisplayWaypoint[] dw = new DisplayWaypoint[1];
 		//dw[0] = new DisplayWaypoint(-50, -50, 1);
-		
+
 		this.mapView = mv;
 
 		Display display = mapView.getWindowManager().getDefaultDisplay();
@@ -99,7 +98,7 @@ public class MapController implements RouteListener {
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
 		//this.onRouteChange(null, null);
-		
+
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {

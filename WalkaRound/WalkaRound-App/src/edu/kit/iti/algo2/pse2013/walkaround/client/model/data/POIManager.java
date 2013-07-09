@@ -31,7 +31,7 @@ public class POIManager {
 
 	private final int NUMBER_OF_CATEGORIES = 20;
 
-	private final int MAX_DIFFERENCE_OF_COORDINATES = 200;
+	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 100;
 	/**
 	 * Instance of the POIManager.
 	 */
@@ -142,7 +142,7 @@ public class POIManager {
 					.hasNext();) {
 				Coordinate currentCoordinate = coordIter.next();
 				if (CoordinateUtility.calculateDifferenceInMeters(
-						currentCoordinate, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES) {
+						currentCoordinate, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES_IN_METER) {
 					poiList.add(currentPOI);
 				}
 			}
