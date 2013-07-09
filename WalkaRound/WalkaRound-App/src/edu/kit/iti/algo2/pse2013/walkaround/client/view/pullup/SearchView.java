@@ -116,6 +116,7 @@ public class SearchView extends Fragment {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG_PULLUP_CONTENT, "Destroy SearchView");
+		tabHost.getTabWidget().removeAllViews();
 		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
 	}
 
