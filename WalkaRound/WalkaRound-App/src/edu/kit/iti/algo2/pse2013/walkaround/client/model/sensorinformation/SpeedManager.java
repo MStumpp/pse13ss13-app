@@ -23,7 +23,8 @@ public class SpeedManager implements PositionListener {
 	public SpeedManager getInstance() {
 		if (speedManager == null) {
 			speedManager = new SpeedManager();
-			PositionManager.getInstance().registerPositionListener(speedManager);
+			// TODO
+			//PositionManager.getInstance().registerPositionListener(speedManager);
 		}
 		return speedManager;
 	}
