@@ -184,19 +184,18 @@ public class MapModel implements TileListener {
 
 		Log.d("MAP_TOUCH_SROLL", "Ecke vorher " + this.upperLeft.toString());
 		Log.d("MAP_TOUCH_SROLL", "Delta " + delta);
-		
-		
 
-		this.upperLeft = new Coordinate(this.upperLeft,
-				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
-						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_Y),
 
-				CoordinateUtility.convertPixelsToDegrees(delta.getX(),
-						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_X)
 
-				);
+		this.upperLeft = new Coordinate(
+			this.upperLeft,
+			- CoordinateUtility.convertPixelsToDegrees(delta.getY(),
+				this.currentLevelOfDetail,
+				CoordinateUtility.DIRECTION_Y),
+			CoordinateUtility.convertPixelsToDegrees(delta.getX(),
+				this.currentLevelOfDetail,
+				CoordinateUtility.DIRECTION_X)
+		);
 		Log.d("MAP_TOUCH_SROLL", "Ecke Nachher " + this.upperLeft.toString());
 		this.generateMapOverlayImage();
 		//this.fetchTiles();
@@ -455,7 +454,7 @@ public class MapModel implements TileListener {
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
 			canvas.drawBitmap(tile, (localX * tile.getWidth()) - mapOffset.getX(),
 					(localY * tile.getHeight()) + mapOffset.getY(), null);
-			
+
 
 			/*
 			 * int left = x * tile.getWidth(); int right = left +
