@@ -118,7 +118,7 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
-			this.routeCoordinates.add(new Waypoint(c.getLongtitude(), c.getLatitude(), 1, "Wegpunkt"));
+			this.routeCoordinates.add(new Waypoint(c.getLongitude(), c.getLatitude(), 1, "Wegpunkt"));
 		}
 		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
@@ -148,7 +148,7 @@ public class Route implements RouteInfo {
 		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
 		
 		if (!(this.getEnd().getLatitude() == newRoute.getStart().getLatitude())
-				|| !(this.getEnd().getLongtitude() == newRoute.getStart().getLongtitude())) {
+				|| !(this.getEnd().getLongitude() == newRoute.getStart().getLongitude())) {
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate path");
 			this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
 			
@@ -185,7 +185,7 @@ public class Route implements RouteInfo {
 				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, beforeActive, this.activeWaypoint);
 			}
 			
-			this.activeWaypoint.setLongtitude(coord.getLongtitude());
+			this.activeWaypoint.setLongitude(coord.getLongitude());
 			this.activeWaypoint.setLatitude(coord.getLatitude());
 			
 		}
