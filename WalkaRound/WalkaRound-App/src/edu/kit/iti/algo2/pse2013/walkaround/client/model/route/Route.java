@@ -18,9 +18,6 @@ public class Route implements RouteInfo {
 	private LinkedList<Coordinate> routeCoordinates;
 	private RouteProcessing routeProcessor;
 	
-	// TODO or NOT TODO that is the question:
-	private int idCounter;
-
 
 	/*
 	 *
@@ -31,20 +28,6 @@ public class Route implements RouteInfo {
 		this.activeWaypoint = null;
 		this.name = "";
 		this.routeProcessor = RouteProcessing.getInstance();
-		this.idCounter = 0;
-
-		// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
-		// 8.3858300); // Brauerstraße
-		// public static Coordinate defaultCoordinate = new Coordinate(49.0145,
-		// 8.419); // 211
-		// public static Coordinate defaultCoordinate = new Coordinate(49.01,
-		// 8.40333); // Marktplatz
-		/*
-		routeCoordinates.add(new Waypoint(49.00471, 8.3858300, 1, "Brauerstraße"));
-		routeCoordinates.add(new Waypoint(49.0145, 8.419,2, "Raum 211"));
-		routeCoordinates.add(new Waypoint(49.01, 8.40333,3, "Marktplatz Karlsruhe"));
-		this.activeWaypoint = new Waypoint(49.01, 8.40333, 3, "Marktplatz Karlsruhe");
-		*/
 	}
 	
 
@@ -264,7 +247,7 @@ public class Route implements RouteInfo {
 	 * (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */
-	public Route clone() {
+	public RouteInfo clone() {
 		Log.d(TAG_ROUTE, "clone()");
 		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
