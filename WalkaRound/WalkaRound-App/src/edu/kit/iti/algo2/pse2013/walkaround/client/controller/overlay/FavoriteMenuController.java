@@ -56,13 +56,13 @@ public class FavoriteMenuController {
 	 * @param index the index of the route to add
 	 */
 	public void appendFavoriteRouteToRoute(int index) {
-		RouteMenuController.getInstance().addRoute(FavoritesManager.getInstance().getFavoriteRoute(index));
+		RouteController.getInstance().addRoute(FavoritesManager.getInstance().getFavoriteRoute(index));
 	}
 	/**
 	 * Appends the favorite route with the given index to the currently active route.
 	 * @param index the index of the route to add
 	 */
 	public void appendFavoriteLocationToRoute(int index) {
-		RouteMenuController.getInstance().addWaypoint(FavoritesManager.getInstance().getFavoriteLocation(index));
+		RouteController.getInstance().addWaypoint(FavoritesManager.getInstance().getFavoriteLocation(index));
 	}
 }

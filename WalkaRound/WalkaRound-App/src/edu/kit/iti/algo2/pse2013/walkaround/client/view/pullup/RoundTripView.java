@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 
 public class RoundTripView extends Fragment {
 
@@ -29,7 +29,7 @@ public class RoundTripView extends Fragment {
 
 	private int switcher = R.id.pullupRoundtripSwitcher;
 
-	RouteMenuController routeController;
+	RouteController routeController;
 
 	private NumberPicker np;
 
@@ -47,7 +47,7 @@ public class RoundTripView extends Fragment {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create RoundtripView");
 
-		routeController = RouteMenuController.getInstance();
+		routeController = RouteController.getInstance();
 
 		Log.d(TAG_PULLUP_CONTENT, "Create NumberPicker");
 		np = (NumberPicker) this.getActivity().findViewById(R.id.length_picker);
