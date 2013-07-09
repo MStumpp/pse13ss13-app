@@ -11,8 +11,10 @@ message SaveGraphData {
 		optional int32 run = 6;
 	}
 	message SaveEdge {
-		required SaveVertex tail = 1;
-		required SaveVertex head = 2;
+		optional int32 id = 1;
+		optional int64 osm_i_d = 2;
+		required SaveVertex tail = 3;
+		required SaveVertex head = 4;
 	}
 	repeated SaveEdge edge = 1;
 }
