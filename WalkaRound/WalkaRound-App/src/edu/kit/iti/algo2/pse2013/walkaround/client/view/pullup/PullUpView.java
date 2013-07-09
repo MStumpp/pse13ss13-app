@@ -447,7 +447,7 @@ public class PullUpView extends Fragment {
 
 			Log.d(TAG_PULLUP, "search wurde aufgerufen");
 			changeView(PullUpView.CONTENT_SEARCH);
-			setHalfSizeHeight();
+			setFullSizeHeight();
 			return true;
 		}
 	}
