@@ -149,8 +149,10 @@
                         android:hint="@string/query" />
 
                 </LinearLayout>
+
             </FrameLayout>
         </LinearLayout>
+
     </TabHost>
 
     <LinearLayout
