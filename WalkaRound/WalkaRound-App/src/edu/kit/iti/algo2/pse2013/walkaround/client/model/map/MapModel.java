@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
@@ -248,6 +249,9 @@ public class MapModel implements TileListener {
 			this.routeOverlayBitmap.prepareToDraw();
 
 			this.fetchTiles();
+			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
+			
+			
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x Achse ");
@@ -265,6 +269,8 @@ public class MapModel implements TileListener {
 			this.routeOverlayBitmap.prepareToDraw();
 
 			this.fetchTiles();
+			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
+			
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner y Achse ");
@@ -282,6 +288,8 @@ public class MapModel implements TileListener {
 			this.routeOverlayBitmap.prepareToDraw();
 
 			this.fetchTiles();
+			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
+			
 			return;
 		}
 
@@ -297,6 +305,8 @@ public class MapModel implements TileListener {
 		this.routeOverlayBitmap.prepareToDraw();
 
 		this.fetchTiles();
+		this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
+		
 	}
 
 	private float getCurrentTileWidthInPixels() {
@@ -484,9 +494,10 @@ public class MapModel implements TileListener {
 
 	public void drawDisplayCoordinates(final DisplayCoordinate[] dw) {
 
-		Log.d("wtf", " " + dw.length);
+		
+		Log.d("CANVAS_DRAW_LINE", "Länge" + dw.length);
 		for (int a = 0; a < (dw.length - 1); a++) {
-			Log.d("wtf", " " + a + " : " + (a + 1));
+			Log.d("CANVAS_DRAW_LINE", "Von" + a + " nach " + (a + 1));
 			if (a + 1 < dw.length && dw[a] != null && dw[a + 1] != null) {
 				this.drawRoute(dw[a].getX(), dw[a].getY(), dw[a + 1].getX(),
 						dw[a + 1].getY());
@@ -524,8 +535,6 @@ public class MapModel implements TileListener {
 
 		mapController.onRouteOverlayImageChange(routeOverlayBitmap);
 		}
-
-
 	}
 
 	@Override
