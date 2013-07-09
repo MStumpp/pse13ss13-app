@@ -1,8 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
-
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,65 +15,59 @@ import java.util.List;
  */
 public class LocationDataIO {
 
+	/**
+	 * Stores POIs.
+	 */
+	private List<POI> poiList;
 
+	/**
+	 * Stores Areas.
+	 */
+	private List<Area> areaList;
 
-    /**
-     * Stores POIs.
-     */
-    private List<POI> poiList;
+	/**
+	 * Initializes LocationDataIO object.
+	 */
+	public LocationDataIO() {
+		poiList = new ArrayList<POI>();
+		areaList = new ArrayList<Area>();
+	}
 
+	/**
+	 * Returns a list of all POIs.
+	 *
+	 * @return List<Area> List of all POIs.
+	 */
+	public List<POI> getPOIs() {
+		return poiList;
+	}
 
-    /**
-     * Stores Areas.
-     */
-    private List<Area> areaList;
+	/**
+	 * Returns a list of all areas.
+	 *
+	 * @return List<Area> List of all areas.
+	 */
+	public List<Area> getAreas() {
+		return areaList;
+	}
 
+	/**
+	 * Adds a POI to the list of all POIs.
+	 *
+	 * @param poi
+	 *            POI to be added.
+	 */
+	public void addPOI(POI poi) {
+		poiList.add(poi);
+	}
 
-    /**
-     * Initializes LocationDataIO object.
-     */
-    public LocationDataIO() {
-        poiList = new ArrayList<POI>();
-        areaList = new ArrayList<Area>();
-    }
-
-
-    /**
-     * Returns a list of all POIs.
-     *
-     * @return List<Area> List of all POIs.
-     */
-    public List<POI> getPOIs() {
-        return poiList;
-    }
-
-
-    /**
-     * Returns a list of all areas.
-     *
-     * @return List<Area> List of all areas.
-     */
-    public List<Area> getAreas() {
-        return areaList;
-    }
-
-
-    /**
-     * Adds a POI to the list of all POIs.
-     *
-     * @param poi POI to be added.
-     */
-    public void addPOI(POI poi) {
-        poiList.add(poi);
-    }
-
-
-    /**
-     * Adds an area to the list of Areas.
-     *
-     * @param area Area to be added.
-     */
-    public void addArea(Area area) {
-        areaList.add(area);
-    }
+	/**
+	 * Adds an area to the list of Areas.
+	 *
+	 * @param area
+	 *            Area to be added.
+	 */
+	public void addArea(Area area) {
+		areaList.add(area);
+	}
 }
