@@ -21,7 +21,16 @@ public final class Edge implements Geometrizable, Serializable {
     private int id;
 
 
-    /**
+    @Override
+	public String toString() {
+		return "Edge [id=" + id + ", "
+				+ (tail != null ? "tail=" + tail + ", " : "")
+				+ (head != null ? "head=" + head + ", " : "") + "osmID="
+				+ osmID + ", length=" + length + "]";
+	}
+
+
+	/**
      * Tail of this Edge.
      */
     private final Vertex tail;
@@ -91,6 +100,14 @@ public final class Edge implements Geometrizable, Serializable {
         return id;
     }
 
+    /**
+     * Returns osm-id of this Edge.
+     *
+     * @return long.
+     */
+    public long getOSMID() {
+        return osmID;
+    }
 
     /**
      * Returns tail of this Edge.
@@ -183,6 +200,9 @@ public final class Edge implements Geometrizable, Serializable {
     /**
      * Returns distance between tail and head in meters using Haversine formula.
      * Source: http://stackoverflow.com/questions/120283/working-with-latitude-longitude-values-in-java
+     *
+     * FIXME: Dafür haben wir Utilities:
+     * {@link edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility#calculateDifferenceInMeters}
      *
      * @return double.
      */

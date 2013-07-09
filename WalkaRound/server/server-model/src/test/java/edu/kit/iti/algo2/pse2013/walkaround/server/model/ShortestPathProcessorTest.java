@@ -1,11 +1,16 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.*;
-
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.EmptyListOfEdgesException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.NoVertexForIDExistsException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 
 /**
  * ShortestPathProcessorTest.

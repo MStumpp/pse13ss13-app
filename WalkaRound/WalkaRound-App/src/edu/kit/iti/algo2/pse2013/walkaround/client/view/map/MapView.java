@@ -1,10 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -18,9 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -35,13 +28,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
 
 public class MapView extends Activity {
 
@@ -246,7 +235,7 @@ public class MapView extends Activity {
 		// this.updateRouteOverlayImage();
 
 		// this.drawRoute(0, 0, 500, 500);
-		
+
 	}
 
 	/**
@@ -274,7 +263,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param b
 	 */
 	public void updateRouteOverlayImage(final Bitmap b) {
@@ -292,7 +281,7 @@ public class MapView extends Activity {
 			}
 		});
 	}
-	
+
 	Canvas canvas;
 	Bitmap routeOverlayBitmap;
 
@@ -331,7 +320,7 @@ public class MapView extends Activity {
 
 	float userX;
 	float userY;
-	
+
 	public void onPositionChange(final float x, final float y) {
 		// TODO Auto-generated method stub
 		runOnUiThread(new Runnable() {
@@ -342,7 +331,7 @@ public class MapView extends Activity {
 		});
 		this.setUserPositionOverlayImage(new DisplayCoordinate(userX,userY), 0);
 	}
-	
+
 	/**
 	 *
 	 *
@@ -351,11 +340,11 @@ public class MapView extends Activity {
 	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
 
 		final Context context = this;
-		
+
 		if(dw == null){
 			return;
 		}
-		
+
 		runOnUiThread(new Runnable() {
 			public void run() {
 				routeList.removeAllViews();
@@ -365,7 +354,7 @@ public class MapView extends Activity {
 				fromY = dw[0].getY();
 				Log.d("TAG_MAPVIEW_DRAW", "Anzahl " + dw.length);
 
-				
+
 				for (DisplayWaypoint value : dw) {
 					Log.d("TAG_MAPVIEW_DRAW", "x " + value.getX());
 					Log.d("TAG_MAPVIEW_DRAW", "y " + value.getY());
@@ -488,7 +477,7 @@ public class MapView extends Activity {
 	private void setUserPositionOverlayImage(DisplayCoordinate coor, float degree) {
 
 		//Log.d("wtf2",""+(coor == null));
-		
+
 		AnimatorSet set = new AnimatorSet();
 
 		Log.d("MAP_THREAD", "Thread Animator Set UP");
@@ -514,7 +503,7 @@ public class MapView extends Activity {
 		set.setStartDelay(startDelay);
 		startDelay += 1000;
 		set.start();
-			
+
 
 	}
 

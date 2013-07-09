@@ -1,10 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveEdge;
 
 
 /**
@@ -100,6 +100,15 @@ public class Vertex extends Coordinate {
         return id;
     }
 
+    /**
+     * Returns id of this Vertex.
+     *
+     * @return int.
+     */
+    public long getOSMID() {
+        return osmID;
+    }
+
 
     /**
      * Returns the list of outgoing Edges.
@@ -179,7 +188,7 @@ public class Vertex extends Coordinate {
 
     @Override
     public String toString() {
-        return "Vertex - id: " + id + " - lat: " + getLatitude() + " - lon: " + getLongitude() + " - current length: " + getCurrentLength();
+        return "Vertex - id: " + id + " - OSM-ID: " + osmID + " - lat: " + getLatitude() + " - lon: " + getLongitude() + " - current length: " + getCurrentLength();
     }
 
 

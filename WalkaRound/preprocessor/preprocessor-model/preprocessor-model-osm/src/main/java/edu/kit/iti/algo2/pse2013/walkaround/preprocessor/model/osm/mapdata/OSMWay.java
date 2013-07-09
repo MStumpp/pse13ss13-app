@@ -17,9 +17,6 @@ public class OSMWay extends OSMElement {
 		nodes.add(osmNode);
 	}
 	public List<Edge> getEdges() {
-		if (!getTags().containsKey("highway")) {
-			return new ArrayList<Edge>(); //TODO: Durch richtige Selektion ersetzen
-		}
 		ArrayList<Edge> edges = new ArrayList<Edge>();
 		for (int i = 0; i < nodes.size() - 1; i++) {
 			edges.add(new Edge(nodes.get(i).convertToVertex(), nodes.get(i+1).convertToVertex(), id));

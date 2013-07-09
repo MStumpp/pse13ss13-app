@@ -7,10 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import crosby.binary.file.BlockInputStream;
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
 
 public class OSMDataPreprocessor {
 	private File graphDestination;
@@ -57,27 +58,28 @@ public class OSMDataPreprocessor {
 			blockStream.process();
 			blockStream.close();
 		} while (parser.needsFurtherRun());
+
 		FileOutputStream graphOutput = new FileOutputStream(graphDestination);
-		ProtobufIO.write(graphData, graphOutput);
+		ProtobufConverter.getGraphDataBuilder(graphData).build().writeTo(graphOutput);
+		graphOutput.flush();
+		graphOutput.close();
+
 		FileOutputStream locationOutput = new FileOutputStream(locationDestination);
-		ProtobufIO.write(locationData, locationOutput);
+		ProtobufConverter.getLocationDataBuilder(locationData).build().writeTo(locationOutput);
 		locationOutput.flush();
 		locationOutput.close();
-	}
-	/**
-	 *
-	 * @param c1
-	 * @param c2
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public void parseRectangle(Coordinate c1, Coordinate c2) throws FileNotFoundException, IOException {
-		GraphDataIO graphData = new GraphDataIO();
-		GraphDataIO.save(graphData, graphDestination);
+
+		FileInputStream fis = new FileInputStream(graphDestination);
+		GraphDataIO graph = ProtobufConverter.getGraphData(SaveGraphData.parseFrom(fis));
+		fis.close();
+		System.out.println(graph.getEdges().size() + " Edges are written to the file");
+		for (Edge e : graph.getEdges()) {
+			System.out.println("Edge: " + e);
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
-		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
+		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-06-22-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
 		prep.parse();
 	}
 }

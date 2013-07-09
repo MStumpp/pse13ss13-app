@@ -2,10 +2,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
 
+import android.app.Activity;
 import android.location.Location;
 import android.util.Log;
 
-public class SpeedManager implements PositionListener {
+public class SpeedManager extends Activity implements PositionListener {
 
 	private static String TAG_SPEED_MANAGER = SpeedManager.class
 			.getSimpleName();
@@ -23,11 +24,11 @@ public class SpeedManager implements PositionListener {
 	public SpeedManager getInstance() {
 		if (speedManager == null) {
 			speedManager = new SpeedManager();
-			PositionManager.getInstance().registerPositionListener(speedManager);
+			PositionManager.getInstance(getApplicationContext()).registerPositionListener(speedManager);
 		}
 		return speedManager;
 	}
-	
+
 
 	// Observer Pattern:
 	public void registerSpeedListener(SpeedListener newSL) {

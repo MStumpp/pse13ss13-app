@@ -1,14 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,9 +7,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.util.Log;
-
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 
 public class GraphDataIO implements Serializable {
 	/**
@@ -39,6 +30,10 @@ public class GraphDataIO implements Serializable {
 	}
 	public Graph getGraph() {
 		Log.d(this.getClass().getSimpleName(), "getGraph()-Stub!");
+		return null;
+	}
+	public List<Vertex> getVertices() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -31,7 +31,7 @@ public class OSMNode extends OSMElement {
 		this.lat = lat;
 	}
 
-	public void setLongitude(double lat) {
-		this.lat = lat;
+	public void setLongitude(double lon) {
+		this.lon = lon;
 	}
 }

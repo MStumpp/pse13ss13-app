@@ -11,11 +11,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-			<artifactId>server-graph</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>crosby</groupId>
 			<artifactId>binary</artifactId>
 			<version>0.0.1</version>

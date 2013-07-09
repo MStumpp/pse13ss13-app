@@ -10,9 +10,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 /**
  * LocationDataIOTest.

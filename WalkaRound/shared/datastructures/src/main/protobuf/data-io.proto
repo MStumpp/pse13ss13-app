@@ -1,0 +1,79 @@
+option java_package = "edu.kit.iti.algo2.pse2013.walkaround.shared.pbf";
+option java_outer_classname = "Protos";
+
+///////////////////////////////////
+/// LocationDataIO from here on ///
+///////////////////////////////////
+
+message SaveCoordinate {
+	required double latitude = 1;
+	required double longitude = 2;
+	repeated float crossroad_angle = 3;
+}
+message SaveAddress {
+	optional string street = 1;
+	optional string house_number = 2;
+	optional string city = 3;
+	optional int32 postal_code = 4;
+}
+message SaveLocation {
+	required SaveCoordinate parent = 1;
+	optional string name = 2;
+	optional int32 i_d = 3;
+	optional SaveAddress address = 4;
+}
+message SavePOI {
+	optional SaveLocation parent = 1;
+	optional string text_info = 2;
+	optional string image_u_r_l = 3;
+	repeated int32 p_o_i_category = 4;
+}
+message SaveLocationData {
+	repeated SavePOI p_o_i = 1;
+	//repeated Area area = 2;
+}
+
+////////////////////////////////
+/// GraphDataIO from here on ///
+////////////////////////////////
+
+message SaveVertex {
+	optional SaveCoordinate coordinate = 1;
+	optional int32 id = 2;
+	optional int64 o_s_m_i_d = 3;
+	repeated SaveEdge outgoing_edge = 4;
+	//optional SaveVertex parent = 5;
+	//optional double current_length = 6;
+	//optional int32 run = 7;
+}
+message SaveEdge {
+	optional int32 id = 1;
+	optional int64 o_s_m_i_d = 2;
+	optional SaveVertex tail = 3;
+	optional SaveVertex head = 4;
+	optional double length = 5;
+}
+message SaveGraphData {
+	repeated SaveEdge edge = 1;
+}
+
+///////////////////////////////////
+/// GeometryDataIO from here on ///
+///////////////////////////////////
+
+message SaveGeometrizable {
+	optional SaveEdge edge = 1;
+	optional SaveCoordinate coordinate = 2;
+}
+message SaveGeometryNode {
+	optional SaveGeometryNode parent = 1;
+	optional SaveGeometryNode left = 2;
+	optional SaveGeometryNode right = 3;
+	optional SaveGeometrizable geometrizable = 4;
+	optional int32 depth = 5;
+	optional double split_value = 6;
+}
+message SaveGeometryData {
+	optional SaveGeometryNode root = 1;
+	optional int32 num_dimensions = 2;
+}
