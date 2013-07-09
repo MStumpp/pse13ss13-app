@@ -6,6 +6,8 @@ public class CompassManager {
 	private static CompassManager compassManager;
 	
 	private CompassManager() {
+
+		
 		//TODO: Starte Direction Zeug
 	}
 	

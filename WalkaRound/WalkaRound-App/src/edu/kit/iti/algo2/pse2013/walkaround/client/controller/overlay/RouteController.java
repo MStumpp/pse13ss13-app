@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.LinkedList;
 
+import android.util.Log;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -10,15 +12,18 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
-public class RouteMenuController {
+public class RouteController {
+	
+	private static String TAG_ROUTE_CONTROLLER = "RouteController";
 
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 
 	private static boolean intanceExists;
-	private static RouteMenuController routeMC;
+	private static RouteController routeMC;
 
-	private RouteMenuController() {
+	private RouteController() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController Constructor");
 		this.routeListeners = new LinkedList<RouteListener>();
 		// Beispiele aus MapController :
 		// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
@@ -27,23 +32,25 @@ public class RouteMenuController {
 		// 8.419); // 211
 		// public static Coordinate defaultCoordinate = new Coordinate(49.01,
 		// 8.40333); // Marktplatz
-		LinkedList<Coordinate> ll = new LinkedList<Coordinate>();
+		LinkedList<Coordinate> coordinateList = new LinkedList<Coordinate>();
 		//ll.add(new Coordinate(49.00471, 8.3858300));
 		//ll.add(new Coordinate(49.0145, 8.419));
 		//ll.add(new Coordinate(49.01, 8.40333));
-		this.currentRoute = new Route(ll);
+		this.currentRoute = new Route(coordinateList);
 
 		
 	}
 
-	public static RouteMenuController getInstance() {
+	public static RouteController getInstance() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.getInstance()");
 		if (!intanceExists) {
-			routeMC = new RouteMenuController();
+			routeMC = new RouteController();
 		}
 		return routeMC;
 	}
 
 	public void registerRouteListener(RouteListener newRL) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.registerRouteListener(RouteListener " + newRL.getClass().getSimpleName() + ")");
 		if (!this.routeListeners.contains(newRL)) {
 			this.routeListeners.add(newRL);
 		}
@@ -51,6 +58,7 @@ public class RouteMenuController {
 	}
 
 	private void notifyAllRouteListeners() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners()");
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if(this.currentRoute != null && activeWaypoint != null) {
 			for (RouteListener rl : this.routeListeners) {
@@ -60,74 +68,89 @@ public class RouteMenuController {
 	}
 
 	public void setActiveWaypoint(Waypoint wp) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(Waypoint)");
 		this.currentRoute.setActiveWaypoint(wp);
 		this.notifyAllRouteListeners();
 	}
 
 	public void resetAvticeWaypoint() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.resetActiveWaypoint()");
 		this.currentRoute.resetActiveWaypoint();
 		this.notifyAllRouteListeners();
 	}
 
 	public void moveActiveWaypointInOrder(int i) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.moveActiveWaypointInOrder(int)");
 		this.currentRoute.moveActiveWaypointInOrder(i);
 		this.notifyAllRouteListeners();
 	}
 
 	public void addWaypoint(Coordinate c) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addWaypoint(Coordinate)");
 		this.currentRoute.addWaypoint(c);
 		this.notifyAllRouteListeners();
 	}
 
 	public void addRoundtrip(Profile p, int i) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(Profile, int)");
 		this.currentRoute.addRoundtripAtActiveWaypoint(p.getID(), i);
 		this.notifyAllRouteListeners();
 	}
 
 	public void addRoute(RouteInfo ri) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoute(RouteInfo)");
 		this.currentRoute.addRoute(ri);
 		this.notifyAllRouteListeners();
 	}
 
 	public void moveActiveWaypoint(Coordinate c) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.moveActiveWaypoint(Coordinate)");
 		this.currentRoute.moveActiveWaypoint(c);
 		this.notifyAllRouteListeners();
 	}
 
 	public void deleteActiveWaypoint() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.deleteActiveWaypoint()");
 		this.currentRoute.deleteActiveWaypoint();
 		this.notifyAllRouteListeners();
 	}
 
 	public void revertRoute() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.revertRoute()");
 		this.currentRoute.revertRoute();
 		this.notifyAllRouteListeners();
 	}
 
 	public void resetRoute() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.resetRoute()");
 		this.currentRoute.resetRoute();
 		this.notifyAllRouteListeners();
 	}
 
 	public void optimizeRoute() {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.optimizeRoute()");
 		this.currentRoute.optimizeRoute();
 		this.notifyAllRouteListeners();
 	}
 
 	public void replaceFullRoute(Route r) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.replaceFullRoute(Route)");
 		this.currentRoute = r;
 		this.notifyAllRouteListeners();
 	}
 
 	public boolean containsWaypoint(Waypoint w) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.containsWaypoint(Waypoint)");
 		return this.currentRoute.containsWaypoint(w);
 	}
 
 	public void addRouteToFavorites(RouteInfo ri, String name) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRouteToFavorites(RouteInfo, String)");
 		FavoritesManager.getInstance().addRouteToFavorites(ri, name);
 	}
 
 	public void addLocationToFavorites(Location ri, String name) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addLocationToFavorites(Location, String)");
 		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}
 
