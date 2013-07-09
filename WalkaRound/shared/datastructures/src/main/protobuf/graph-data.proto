@@ -3,11 +3,16 @@ option java_outer_classname = "GraphProtos";
 
 message SaveGraphData {
 	message SaveVertex {
-		required
+		required int32 id = 1;
+		required int64 osm_i_d = 2;
+		repeated SaveEdge outgoing_edges = 3;
+		optional SaveVertex parent = 4;
+		optional double current_length = 5;
+		optional int32 run = 6;
 	}
 	message SaveEdge {
-		required Vertex tail = 1;
-		required Vertex head = 1;
+		required SaveVertex tail = 1;
+		required SaveVertex head = 2;
 	}
 	repeated SaveEdge edge = 1;
 }
