@@ -24,4 +24,6 @@
     <string name="sightseeing">Sightseeing</string>
     <string name="jogging">Jogging</string>
     <string name="length">Length:</string>
+    <string name="pois">POIs</string>
+    <string name="favorite_name">Name...</string>
 </resources>

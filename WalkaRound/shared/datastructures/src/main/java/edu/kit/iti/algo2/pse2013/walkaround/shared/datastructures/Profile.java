@@ -29,7 +29,7 @@ public class Profile {
 	public static Profile PROFILE_CLUBBING;
 
 	// CHANGE ME!!!
-	public static Profile PROFILE_RENAMEME;
+	//public static Profile PROFILE_RENAMEME;
 
 	/**
 	 * ID of the profile.
@@ -47,9 +47,9 @@ public class Profile {
 	private int[] poiCategories;
 
 	public Profile(int id, int[] areaCategories, int[] poiCategories) {
-		Profile profile = Profile.getByID(id);
-		profile.setAreaCategories(areaCategories);
-		profile.setPoiCategories(poiCategories);
+		id = this.id;
+		getByID(id).setAreaCategories(areaCategories);
+		getByID(id).setPoiCategories(poiCategories);
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class Profile {
 	 * @return the IDs of all existing Profiles
 	 */
 	public static int[] getAllProfiles() {
-		int[] allProfiles = new int[] { 1, 2, 3, 4, 5 };
+		int[] allProfiles = new int[] {1, 2, 3, 4};
 		return allProfiles;
 	}
 

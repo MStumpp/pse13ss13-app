@@ -16,50 +16,43 @@
             <TextView
                 android:id="@+id/length_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="80dp"
+                android:layout_height="match_parent"
                 android:text="@string/length"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <NumberPicker
                 android:id="@+id/length_picker"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="23dp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/meter"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="80dp"
+                android:layout_height="match_parent"
                 android:text="@string/meter"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/profiles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="140dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/profiles"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/profiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/profiles"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/profile_jogging"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
+                android:tag="1"
                 android:text="@string/jogging"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -67,8 +60,8 @@
                 android:id="@+id/profile_sightseeing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
+                android:tag="2"
                 android:text="@string/sightseeing"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -76,8 +69,8 @@
                 android:id="@+id/profile_shopping"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
+                android:tag="3"
                 android:text="@string/shopping"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -85,20 +78,19 @@
                 android:id="@+id/profile_clubbing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
+                android:tag="4"
                 android:text="@string/clubbing"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/roundtrip_compute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/compute_roundtrip" />
 
-        <Button
-            android:id="@+id/roundtrip_compute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="44dp"
-            android:text="@string/compute_roundtrip" />
+        </LinearLayout>
 
     </LinearLayout>
 

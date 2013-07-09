@@ -19,7 +19,9 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="match_parent"
+                android:tabStripEnabled="false" >
+
             </TabWidget>
 
             <FrameLayout
@@ -28,7 +30,7 @@
                 android:layout_height="match_parent" >
 
                 <LinearLayout
-                    android:id="@+id/roundtrip_favorites"
+                    android:id="@+id/route_favorites"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
@@ -42,26 +44,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/route_favorites"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" >
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/poi_favorites"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
 
                     </LinearLayout>
 
@@ -71,12 +61,17 @@
         </LinearLayout>
     </TabHost>
 
-    <TextView
-        android:id="@+id/favorite"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
-        android:text="@string/favorite"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/favorite"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
 
 </RelativeLayout>
