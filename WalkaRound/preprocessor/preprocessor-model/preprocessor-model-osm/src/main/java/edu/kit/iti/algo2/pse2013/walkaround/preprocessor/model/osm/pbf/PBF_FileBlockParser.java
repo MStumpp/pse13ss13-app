@@ -46,6 +46,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseDense(DenseNodes dNodes) {
+		if (dNodes.getIdList().size() > 0) {
+			System.out.println("ParseDenseNodes");
+		}
 		List<Long> ids = dNodes.getIdList();
 		long id = 0;
 		long lat = 0;
@@ -64,6 +67,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseNodes(List<Node> inNodes) {
+		if (inNodes.size() > 0) {
+			System.out.println("ParseNodes");
+		}
 		for (Node inNode : inNodes) {
 			OSMNode node = new OSMNode(inNode.getId(), inNode.getLat(), inNode.getLon());
 			List<Integer> keys = inNode.getKeysList();
@@ -82,6 +88,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseWays(List<Way> inWays) {
+		if (inWays.size() > 0) {
+			System.out.println("ParseWays");
+		}
 		for (Way w : inWays) {
 			boolean isValidWay = true;
 			OSMWay way = new OSMWay(w.getId());

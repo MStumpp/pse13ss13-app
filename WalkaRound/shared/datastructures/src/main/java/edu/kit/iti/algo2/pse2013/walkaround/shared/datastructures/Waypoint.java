@@ -28,8 +28,8 @@ public class Waypoint extends Location {
      * @param id ID of Waypoint.
      * @param name Name of Waypoint.
      */
-    public Waypoint(double lat, double lon, int id, String name) {
-        this(lat, lon, id, name, null);
+    public Waypoint(double lat, double lon, String name) {
+        this(lat, lon, name, null);
     }
 
 
@@ -42,8 +42,8 @@ public class Waypoint extends Location {
      * @param name Name of Waypoint.
      * @param address Address of Waypoint.
      */
-    public Waypoint(double lat, double lon, int id, String name, Address address) {
-        super(lat, lon, id, name, address);
+    public Waypoint(double lat, double lon, String name, Address address) {
+        super(lat, lon, name, address);
         profile = -1;
         poi = null;
     }

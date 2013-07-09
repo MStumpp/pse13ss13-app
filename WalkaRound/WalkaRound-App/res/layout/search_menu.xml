@@ -129,7 +129,6 @@
                             android:layout_marginTop="20dp"
                             android:layout_weight="0.40"
                             android:text="@string/start_search" />
-
                     </LinearLayout>
                 </LinearLayout>
 
@@ -147,7 +146,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="@string/query" />
-
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
