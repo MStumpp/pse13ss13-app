@@ -75,15 +75,12 @@ public class GeometryDataIOTest {
 				.getGeometrizable().valueForDimension(1), 0.d);
 
 		// Check, if number of dimensions is the same
-		Assert.assertEquals(readGeometryDataIO.getNumDimensions(),
-				numDimensions);
+		Assert.assertEquals(readGeometryDataIO.getNumDimensions(), numDimensions);
 	}
 
 	private GeometryDataIO getGeometryDataIO() {
-
-		GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(
-				new Vertex(1.d, 2.d)), 2);
-		return geometryDataIO;
-	}
+        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d)), 2);
+        return geometryDataIO;
+    }
 
 }

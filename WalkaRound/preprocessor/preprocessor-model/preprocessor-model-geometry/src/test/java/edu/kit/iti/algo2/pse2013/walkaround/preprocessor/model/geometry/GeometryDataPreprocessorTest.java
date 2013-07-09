@@ -124,7 +124,7 @@ public class GeometryDataPreprocessorTest {
 
     @Test
     public void testPreprocessGraphDataIO2() {
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO(),
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO2(),
                 getLocationDataIO());
 
         // check that root is not null

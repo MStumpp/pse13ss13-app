@@ -1,13 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
@@ -34,38 +33,26 @@ public class GeometryDataPreprocessor {
         if (graphDataIO == null || locationDataIO == null)
             throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
 
-        Set<Geometrizable> geometrizables = new HashSet<Geometrizable>();
-
-        int duplicates = 0;
-        // get all vertices from graphDataIO
-
-        for (Geometrizable geometrizable : graphDataIO.getVertices())
-            if (!geometrizables.contains(geometrizable))
-                geometrizables.add(geometrizable);
-            else
-                duplicates++;
+        List<Geometrizable> geometrizables = new ArrayList<Geometrizable>(graphDataIO.getVertices());
 
         // get all POIs from locationDataIO
 //        for (POI poi : locationDataIO.getPOIs())
 //            geometrizables.add(poi);
 
-        System.out.println("number duplicates: " + duplicates);
-
         // throw exception if number of geometrizables is not greater than 0
         if (geometrizables.size() == 0)
-            throw new IllegalArgumentException("number of geometrizables must be greater than 0");
+            throw new IllegalArgumentException("number of geometrizables must be at least of size 1");
 
         // number of dimensions, use first element of geometrizables
         int numDimensions = 2;
 
         // set up data
-        Set[] sorted = new TreeSet[numDimensions];
         Geometrizable[][] data = new Geometrizable[numDimensions][];
 
-        // fill and sort data
+        // sort data
         for (int i = 0; i<numDimensions; i++) {
             final int dim = i;
-            Set<Geometrizable> sortedGeometrizables = new TreeSet<Geometrizable>(new Comparator<Geometrizable>() {
+            Collections.sort(geometrizables, new Comparator<Geometrizable>() {
                 @Override
                 public int compare(Geometrizable v1, Geometrizable v2) {
                     if (v1.valueForDimension(dim) > v2.valueForDimension(dim)) {
@@ -76,9 +63,7 @@ public class GeometryDataPreprocessor {
                         return 0;
                 }
             });
-            sortedGeometrizables.addAll(geometrizables);
-            sorted[i] = sortedGeometrizables;
-            data[i] = sortedGeometrizables.toArray(new Geometrizable[0]);
+            data[i] = geometrizables.toArray(new Geometrizable[0]);
         }
 
         System.out.println(data[0].length);
@@ -90,7 +75,7 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("list of vertices must be greater than 0");
 
         // build tree
-        GeometryNode node = buildTree(data, sorted, null, 0, 0, data[0].length-1);
+        GeometryNode node = buildTree(data, null, 0, 0, data[0].length-1);
         return new GeometryDataIO(node, data.length);
     }
 
@@ -105,7 +90,7 @@ public class GeometryDataPreprocessor {
      * @param end End index for current processing.
      * @return GeometryNode Node.
      */
-    private static GeometryNode buildTree(Geometrizable[][] data, Set[] sorted, GeometryNode parent, int depth, int start, int end) {
+    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end) {
 
         int dim = depth % data.length;
 
@@ -174,8 +159,8 @@ public class GeometryDataPreprocessor {
         }
 
         GeometryNode node = new GeometryNode(parent, depth, (data[dim][median].valueForDimension(dim)));
-        node.setLeftNode(buildTree(data, sorted, node, depth+1, start, median));
-        node.setRightNode(buildTree(data, sorted, node, depth+1, median+1, end));
+        node.setLeftNode(buildTree(data, node, depth+1, start, median));
+        node.setRightNode(buildTree(data, node, depth+1, median+1, end));
         return node;
     }
 
