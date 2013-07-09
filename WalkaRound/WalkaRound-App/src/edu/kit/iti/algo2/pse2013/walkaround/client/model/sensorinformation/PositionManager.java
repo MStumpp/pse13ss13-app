@@ -54,7 +54,7 @@ public class PositionManager implements Listener {
 	}
 
 	private void notifyAllPositionListeners() {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.notifyAllRouteListeners()");		
+		Log.d(TAG_POSITION_MANAGER, "PositionManager.notifyAllPositionListeners()");		
 		for (PositionListener pl : this.positionListeners) {
 			pl.onPositionChange(lastKnownLocation);
 		}
