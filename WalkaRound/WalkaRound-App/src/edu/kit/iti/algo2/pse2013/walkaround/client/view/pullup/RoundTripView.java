@@ -18,11 +18,13 @@ public class RoundTripView extends Fragment {
 
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
-	public final int MAXIMUM_LENGTH_ROUNDTRIP = 200;
+	private final int MAXIMUM_LENGTH_ROUNDTRIP = 500;
 
-	public final int MINIMUN_LENGTH_ROUNDTRIP = 100;
+	private final int MINIMUN_LENGTH_ROUNDTRIP = 100;
 
-	public final int NUMBER_OF_STEPS = MAXIMUM_LENGTH_ROUNDTRIP / 100;
+	private final int NUMBER_OF_STEPS = MAXIMUM_LENGTH_ROUNDTRIP / 100;
+
+	private final int ON_LONG_CLICK_UPDATE_INTERVALL_MS = 100;
 
 	private int switcher = R.id.pullupRoundtripSwitcher;
 
@@ -45,13 +47,13 @@ public class RoundTripView extends Fragment {
 		Log.d(TAG_PULLUP_CONTENT, "Create NumberPicker");
 		np = (NumberPicker) this.getActivity().findViewById(R.id.length_picker);
 		String[] nums = new String[NUMBER_OF_STEPS];
-		// Geeigneter wert für number of steps noch nicht gefunden....
 		for (int i = 0; i < nums.length; i++)
 			nums[i] = Integer.toString(100 + i * 100);
-		np.setMinValue(MINIMUN_LENGTH_ROUNDTRIP);
-		np.setMaxValue(MAXIMUM_LENGTH_ROUNDTRIP);
+		np.setMinValue(MINIMUN_LENGTH_ROUNDTRIP / 100);
+		np.setMaxValue(MAXIMUM_LENGTH_ROUNDTRIP / 100);
 		np.setWrapSelectorWheel(false);
 		np.setDisplayedValues(nums);
+		np.setOnLongPressUpdateInterval(ON_LONG_CLICK_UPDATE_INTERVALL_MS);
 
 		meter = (TextView) this.getActivity().findViewById(R.id.meter);
 		length = (TextView) this.getActivity().findViewById(R.id.length_text);
@@ -122,7 +124,7 @@ public class RoundTripView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(computeRoundtrip)) {
-				// TODO:implement
+				// ACHTUNG: hier bei länge np.getValue * 100 übergeben
 			}
 			return false;
 		}
