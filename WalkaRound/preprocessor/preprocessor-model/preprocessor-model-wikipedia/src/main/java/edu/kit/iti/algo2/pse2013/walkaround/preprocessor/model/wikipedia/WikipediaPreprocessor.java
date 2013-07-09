@@ -82,10 +82,11 @@ public class WikipediaPreprocessor {
 			while (sb.indexOf("{") != -1) {
 				sb = sb.delete(sb.indexOf("{"), sb.indexOf("}") + 1);
 			}
-			/*while (sb.indexOf("[[Datei:") != -1) {
-				sb = sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2);
-			}*/
-			
+			/*
+			 * while (sb.indexOf("[[Datei:") != -1) { sb =
+			 * sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2); }
+			 */
+
 			String textInfo = sb.toString();
 			textInfo = textInfo.replaceAll("\\'", "");
 			textInfo = textInfo.replaceAll("\n\n", " ");
@@ -98,6 +99,9 @@ public class WikipediaPreprocessor {
 			 * textInfo.replaceAll("\\{", "");
 			 */
 			current.setTextInfo(textInfo);
+
+			// Bilder... commons.wikimedia.org/wiki/File: + erster teil nach
+			// Datei: .... leerzeichen werden dabei zu _
 		}
 	}
 }

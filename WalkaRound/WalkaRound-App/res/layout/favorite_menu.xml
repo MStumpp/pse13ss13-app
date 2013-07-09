@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp" >
+        android:layout_alignParentTop="true" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,7 +19,9 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="match_parent"
+                android:tabStripEnabled="false" >
+
             </TabWidget>
 
             <FrameLayout
