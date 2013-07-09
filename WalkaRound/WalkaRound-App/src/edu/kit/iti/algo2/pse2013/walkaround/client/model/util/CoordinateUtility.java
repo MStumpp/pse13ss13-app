@@ -8,6 +8,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 public final class CoordinateUtility {
+
+	public static final String TAG = CoordinateUtility.class.getSimpleName();
 	/**
 	 * Used when pixels are converted to degrees horizontally or vice versa
 	 */
@@ -77,8 +79,8 @@ public final class CoordinateUtility {
 	 * @param one of the constants {@link CoordinateUtility#HORIZONTAL} or {@link CoordinateUtility#VERTICAL}
 	 * @return the given length in degrees
 	 */
-	public static float convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
-		return (float) (45 * pixels / Math.pow(2, levelOfDetail + 6)) * (isHorizontal ? 2 : 1);
+	public static double convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
+		return (45 * pixels / Math.pow(2, levelOfDetail + 6)) * (isHorizontal ? 2 : 1);
 	}
 
 	/**
@@ -88,7 +90,7 @@ public final class CoordinateUtility {
 	 * @param levelOfDetail the current level of detail
 	 * @return the given length in degrees
 	 */
-	public static float convertDegreesToPixels(float degree, float levelOfDetail, boolean isHorizontal) {
+	public static float convertDegreesToPixels(double degree, float levelOfDetail, boolean isHorizontal) {
 		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
 	}
 
@@ -101,18 +103,27 @@ public final class CoordinateUtility {
 	 * @return a new Coordinate
 	 */
 	public static Coordinate convertDisplayCoordinateToCoordinate(DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
-		double x = convertDegreesToPixels(dc.getX(),levelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
-		double y = convertDegreesToPixels(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
+		double deltaX = convertPixelsToDegrees(dc.getX(), levelOfDetail, CoordinateUtility.DIRECTION_X);
+		double deltaY = convertPixelsToDegrees(dc.getY(), levelOfDetail, CoordinateUtility.DIRECTION_Y);
 
-		Log.d("UTIL", "upperLeft: " + upperLeft);
-		
-		Log.d("UTIL", x + " " + y);
-		Log.d("UTIL", upperLeft.getLatitude() + " " + upperLeft.getLongitude());
-		x = x + upperLeft.getLatitude();
-		y = y + upperLeft.getLongitude();
-		double z = 5.0d + 10.0d;
-		Log.d("UTIL", x + " " + y + " " + z);
-		
-		return new Coordinate(x,y);
+		Log.d(TAG, "DisplayCoordinate: " + dc);
+		Log.d(TAG, "Delta upperLeft to DisplayCoordinate: x:" + deltaX + " y:" + deltaY);
+		Coordinate center = new Coordinate(upperLeft, -deltaY, deltaX);
+		Log.d(TAG, "UpperLeft: " + upperLeft + " Center: " + center);
+
+
+		return center;
+	}
+
+	/**
+	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer Koordinate
+	 *
+	 * @param dc die zu konvertierende DisplayCoordinate
+	 * @return
+	 */
+	private DisplayCoordinate convertDisplayCoordinateToCoordinate(Coordinate c, Coordinate upperLeft, float levelOfDetail) {
+		double deltaX = CoordinateUtility.convertDegreesToPixels(c.getLongitude() - upperLeft.getLongitude(), levelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE);
+		double deltaY = CoordinateUtility.convertDegreesToPixels(c.getLatitude() - upperLeft.getLatitude(), levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
+		return new DisplayCoordinate((float) deltaX, (float) deltaY);
 	}
 }

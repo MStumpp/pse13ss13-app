@@ -35,39 +35,50 @@
                 android:id="@+id/invert"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/pause_100x100"
-                android:scaleType="center" />
+                android:background="@android:drawable/btn_default_small"
+                android:scaleType="fitCenter"
+                android:src="@drawable/invert" />
 
             <ImageButton
-                android:id="@+id/save"
+                android:id="@+id/tsp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/rundkurs"
-                android:scaleType="center" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/tsp" />
 
             <ImageButton
                 android:id="@+id/load"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher"
-                android:scaleType="center" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/load" />
 
             <ImageButton
                 android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/favorite"
-                android:scaleType="center" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/favorite" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/waylist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.99"
             android:orientation="vertical" >
 
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/name_favorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:ems="10"
+            android:hint="@string/favorite_name"
+            android:visibility="invisible" />
 
         <LinearLayout
             android:layout_width="wrap_content"

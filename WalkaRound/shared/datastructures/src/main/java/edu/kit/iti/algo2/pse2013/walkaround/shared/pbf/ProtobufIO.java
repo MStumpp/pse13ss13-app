@@ -1,47 +1,55 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
 
-//import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData;
-//import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveCoordinate;
-//import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveLocation;
-//import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveLocation.SaveAddress;
-//import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SavePOI;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+
+import com.google.protobuf.Message;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveLocation;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveLocation.SaveAddress;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SavePOI;
 
 public class ProtobufIO {
-	/*public static Coordinate readCoordinate(File source) throws FileNotFoundException, IOException {
-		BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(source));
-		return coordinateFromBuilder(SaveCoordinate.parseFrom(inStream));
+	public static Coordinate readCoordinate(InputStream fileStream) throws IOException {
+		return coordinateFromBuilder(SaveCoordinate.parseFrom(fileStream));
 	}
-	public static Location readLocation(File source) throws FileNotFoundException, IOException {
-		BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(source));
-		return locationFromBuilder(SaveLocation.parseFrom(inStream));
+	public static Location readLocation(InputStream fileStream) throws IOException {
+		return locationFromBuilder(SaveLocation.parseFrom(fileStream));
 	}
-	public static LocationDataIO readLocationData(File source) throws FileNotFoundException, IOException {
-		BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(source));
-		return locationDataFromBuilder(SaveLocationData.parseFrom(inStream));
+	public static LocationDataIO readLocationData(InputStream fileStream) throws IOException {
+		return locationDataFromBuilder(SaveLocationData.parseFrom(fileStream));
 	}
-	public static POI readPOI(File source) throws FileNotFoundException, IOException {
-		BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(source));
-		return poiFromBuilder(SavePOI.parseFrom(inStream));
+	public static POI readPOI(InputStream fileStream) throws IOException {
+		return poiFromBuilder(SavePOI.parseFrom(fileStream));
 	}
-	public static void write(Coordinate c, File target) throws FileNotFoundException, IOException {
-		write(coordinateToBuilder(c), target);
+	public static void write(Coordinate c, OutputStream fileStream) throws IOException {
+		write(coordinateToBuilder(c), fileStream);
 	}
-	public static void write(Location l, File target) throws FileNotFoundException, IOException {
-		write(locationToBuilder(l), target);
+	public static void write(Location l, OutputStream fileStream) throws IOException {
+		write(locationToBuilder(l), fileStream);
 	}
-	public static void write(LocationDataIO l, File target) throws FileNotFoundException, IOException {
-		write(locationDataToBuilder(l), target);
+	public static void write(LocationDataIO l, OutputStream fileStream) throws IOException {
+		write(locationDataToBuilder(l), fileStream);
 	}
-	public static void write(POI p, File target) throws FileNotFoundException, IOException {
-		write(poiToBuilder(p), target);
+	public static void write(POI p, OutputStream fileStream) throws IOException {
+		write(poiToBuilder(p), fileStream);
 	}
 
-	private static void write(Message.Builder builder, File target) throws FileNotFoundException, IOException {
-		BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(target));
-		builder.build().writeTo(outStream);
-		outStream.flush();
-		outStream.close();
+	private static void write(Message.Builder builder, OutputStream fileStream) throws IOException {
+		builder.build().writeTo(fileStream);
+		fileStream.flush();
+		fileStream.close();
 	}
 
 	private static Address addressFromBuilder(SaveAddress saveAddress) {
@@ -67,15 +75,18 @@ public class ProtobufIO {
 	private static Coordinate coordinateFromBuilder(SaveCoordinate saveCoord) {
 		float[] crossroads = new float[saveCoord.getCrossroadAngleCount()];
 		for (int i = 0; i < saveCoord.getCrossroadAngleCount(); i++) {
-			crossroads[i] = saveCoord.getCrossroadAngleList().get(i);
+			crossroads[i] = saveCoord.getCrossroadAngle(i);
 		}
-		CrossingInformation crossInfo = new CrossingInformation(crossroads);
-		return new Coordinate(saveCoord.getLatitude(), saveCoord.getLongtitude(), crossInfo);
+		CrossingInformation crossInfo = null;
+		if (crossroads.length > 0) {
+			crossInfo = new CrossingInformation(crossroads);
+		}
+		return new Coordinate(saveCoord.getLatitude(), saveCoord.getLongitude(), crossInfo);
 	}
 	private static SaveCoordinate.Builder coordinateToBuilder(Coordinate coord) {
 		SaveCoordinate.Builder saveCoord = SaveCoordinate.newBuilder()
 				.setLatitude(coord.getLatitude())
-				.setLongtitude(coord.getLongtitude());
+				.setLongitude(coord.getLongitude());
 		if (coord.getCrossingInformation() != null && coord.getCrossingInformation().getCrossingAngles() != null) {
 			for (float angle : coord.getCrossingInformation().getCrossingAngles()) {
 				saveCoord.addCrossroadAngle(angle);
@@ -86,7 +97,7 @@ public class ProtobufIO {
 	private static Location locationFromBuilder(SaveLocation saveLoc) {
 		return new Location(
 			saveLoc.getParent().getLatitude(),
-			saveLoc.getParent().getLongtitude(),
+			saveLoc.getParent().getLongitude(),
 			saveLoc.getID(),
 			saveLoc.getName(),
 			addressFromBuilder(saveLoc.getAddress()));
@@ -116,23 +127,22 @@ public class ProtobufIO {
 		return builder;
 	}
 	private static POI poiFromBuilder(SavePOI savePOI) {
-		return new POI(locationFromBuilder(savePOI.getParent()), savePOI.getTextInfo(), savePOI.getImageURL(), savePOI.getPOICategoryList());
+		int[] cats = new int[savePOI.getPOICategoryList().size()];
+		for (int i = 0; i < cats.length; i++) {
+			cats[i] = savePOI.getPOICategory(i);
+		}
+		return new POI(locationFromBuilder(savePOI.getParent()), savePOI.getTextInfo(), savePOI.getImageURL(), cats);
 	}
 	private static SavePOI.Builder poiToBuilder(POI p) {
+		int[] cats = p.getPOICategories();
+		ArrayList<Integer> poiList = new ArrayList<Integer>();
+		for (int i = 0; i < cats.length; i++) {
+			poiList.add(cats[i]);
+		}
 		return SavePOI.newBuilder()
 				.setParent(locationToBuilder(p))
 				.setTextInfo(p.getTextInfo())
 				.setImageURL(p.getURL())
-				.addAllPOICategory(p.getPOICategories());
+				.addAllPOICategory(poiList);
 	}
-
-	/**
-	public SavePOI.Builder getSavePOI() {
-    	return SavePOI.newBuilder().setLatitude(getLatitude()).setLongtitude(getLongtitude())
-    			.setName(getName()).setID(getId()).setTextInfo(getTextInfo()).setImageURL(getURL()).addAllPOICategory(poiCategories);
-    }
-    public static POI getInstance(SavePOI poi) {
-    	return new POI(poi.getLatitude(), poi.getLongtitude(), poi.getID(), poi.getName(), poi.getTextInfo(), poi.getImageURL(), poi.getPOICategoryList());
-    }
-	 */
 }

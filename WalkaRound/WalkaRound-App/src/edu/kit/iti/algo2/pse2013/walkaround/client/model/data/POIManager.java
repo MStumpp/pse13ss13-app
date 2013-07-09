@@ -3,9 +3,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 
 import android.content.Context;
 import android.location.Geocoder;
@@ -28,6 +30,8 @@ public class POIManager {
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
 
 	private final int NUMBER_OF_CATEGORIES = 20;
+
+	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 100;
 	/**
 	 * Instance of the POIManager.
 	 */
@@ -128,11 +132,25 @@ public class POIManager {
 	 *            level of detail
 	 * @return a list of all POIs laying upon a route
 	 */
-	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo,
-			int levelOfDetail) {
-		return null;
+	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, int levelOfDetail) {
+		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
+		ArrayList<POI> poiList = new ArrayList<POI>();
+		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
+				.hasNext();) {
+			POI currentPOI = iter.next();
+			for (Iterator<Coordinate> coordIter = coords.iterator(); coordIter
+					.hasNext();) {
+				Coordinate currentCoordinate = coordIter.next();
+				if (CoordinateUtility.calculateDifferenceInMeters(
+						currentCoordinate, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES_IN_METER) {
+					poiList.add(currentPOI);
+				}
+			}
+		}
+		return poiList;
 		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
 		// besseren laufzeit
+		// lvl of detail noch nicht eingebaut
 	}
 
 	// aus location poi gemacht
@@ -180,9 +198,8 @@ public class POIManager {
 	 *            context of the current activity
 	 * @return a list of three suggestions of locations
 	 */
-	public List<Address> searchPOIsByAddress(Address address,
-			Context context) {
-		
+	public List<Address> searchPOIsByAddress(Address address, Context context) {
+
 		ArrayList<Address> suggestions = new ArrayList<Address>();
 		Geocoder geocoder = new Geocoder(context, Locale.GERMANY);
 		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
