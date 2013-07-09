@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +17,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 public class RoundTripView extends Fragment {
 
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
-	
+
 	public final int MAXIMUM_LENGTH_ROUNDTRIP = 200;
 
 	public final int MINIMUN_LENGTH_ROUNDTRIP = 100;
-	
+
 	public final int NUMBER_OF_STEPS = MAXIMUM_LENGTH_ROUNDTRIP / 100;
 
 	private int switcher = R.id.pullupRoundtripSwitcher;
@@ -44,14 +45,13 @@ public class RoundTripView extends Fragment {
 		Log.d(TAG_PULLUP_CONTENT, "Create NumberPicker");
 		np = (NumberPicker) this.getActivity().findViewById(R.id.length_picker);
 		String[] nums = new String[NUMBER_OF_STEPS];
-		//Geeigneter wert für number of steps noch nicht gefunden....
+		// Geeigneter wert für number of steps noch nicht gefunden....
 		for (int i = 0; i < nums.length; i++)
 			nums[i] = Integer.toString(100 + i * 100);
 		np.setMinValue(MINIMUN_LENGTH_ROUNDTRIP);
 		np.setMaxValue(MAXIMUM_LENGTH_ROUNDTRIP);
 		np.setWrapSelectorWheel(false);
 		np.setDisplayedValues(nums);
-		np.setValue(100);
 
 		meter = (TextView) this.getActivity().findViewById(R.id.meter);
 		length = (TextView) this.getActivity().findViewById(R.id.length_text);
@@ -66,13 +66,13 @@ public class RoundTripView extends Fragment {
 				R.id.profile_clubbing);
 		computeRoundtrip = (Button) this.getActivity().findViewById(
 				R.id.roundtrip_compute);
-		
+
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		
+
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der GrÃ¶ÃŸenverhÃ¤ltnisse");
 		meter.setX(size.x / 3 * 2);
 		meter.getLayoutParams().width = size.x;
@@ -95,6 +95,10 @@ public class RoundTripView extends Fragment {
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugefï¿½gt");
 		computeRoundtrip.setOnTouchListener(new RoundtripComputeListener());
+		jogging.setOnTouchListener(new OnProfileTouch());
+		sightseeing.setOnTouchListener(new OnProfileTouch());
+		shopping.setOnTouchListener(new OnProfileTouch());
+		clubbing.setOnTouchListener(new OnProfileTouch());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
@@ -119,6 +123,51 @@ public class RoundTripView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(computeRoundtrip)) {
 				// TODO:implement
+			}
+			return false;
+		}
+
+	}
+
+	private class OnProfileTouch implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(jogging)) {
+				if (!jogging.isSelected()) {
+					jogging.setSelected(true);
+					jogging.setTextColor(Color.YELLOW);
+				} else {
+					jogging.setSelected(false);
+					jogging.setTextColor(Color.WHITE);
+				}
+			}
+			if (v.equals(shopping)) {
+				if (!shopping.isSelected()) {
+					shopping.setSelected(true);
+					shopping.setTextColor(Color.YELLOW);
+				} else {
+					shopping.setSelected(false);
+					shopping.setTextColor(Color.WHITE);
+				}
+			}
+			if (v.equals(sightseeing)) {
+				if (!sightseeing.isSelected()) {
+					sightseeing.setSelected(true);
+					sightseeing.setTextColor(Color.YELLOW);
+				} else {
+					sightseeing.setSelected(false);
+					sightseeing.setTextColor(Color.WHITE);
+				}
+			}
+			if (v.equals(clubbing)) {
+				if (!clubbing.isSelected()) {
+					clubbing.setSelected(true);
+					clubbing.setTextColor(Color.YELLOW);
+				} else {
+					clubbing.setSelected(false);
+					clubbing.setTextColor(Color.WHITE);
+				}
 			}
 			return false;
 		}
