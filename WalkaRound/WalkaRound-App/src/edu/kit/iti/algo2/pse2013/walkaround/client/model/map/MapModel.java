@@ -183,6 +183,9 @@ public class MapModel implements TileListener {
 		// TODO
 
 		Log.d("MAP_TOUCH_SROLL", "Ecke vorher " + this.upperLeft.toString());
+		Log.d("MAP_TOUCH_SROLL", "Delta " + delta);
+		
+		
 
 		this.upperLeft = new Coordinate(this.upperLeft,
 				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
@@ -195,7 +198,8 @@ public class MapModel implements TileListener {
 
 				);
 		Log.d("MAP_TOUCH_SROLL", "Ecke Nachher " + this.upperLeft.toString());
-		this.fetchTiles();
+		this.generateMapOverlayImage();
+		//this.fetchTiles();
 	}
 
 	/**
@@ -420,10 +424,10 @@ public class MapModel implements TileListener {
 	 * @return
 	 */
 	public DisplayCoordinate getTileOffset(){
-		float latDiff = (float) ((upperLeft.getLatitude() + 90) % (180 / Math.pow(2, currentLevelOfDetail)));
 		float lonDiff = (float) ((upperLeft.getLongitude() + 180) % (360 / Math.pow(2, currentLevelOfDetail)));
-		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
+		float latDiff = (float) ((upperLeft.getLatitude() + 90) % (180 / Math.pow(2, currentLevelOfDetail)));
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
+		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, currentLevelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
 		Log.d(TAG_MAP_MODEL, String.format(
 				"TileOffset: x: %.8fdp y: %.8fdp\n" +
 				"TileOffset: lon: %.8f lat: %.8f\n" +
@@ -450,7 +454,8 @@ public class MapModel implements TileListener {
 
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
 			canvas.drawBitmap(tile, (localX * tile.getWidth()) - mapOffset.getX(),
-					(localY * tile.getWidth()) + mapOffset.getY(), null);
+					(localY * tile.getHeight()) + mapOffset.getY(), null);
+			
 
 			/*
 			 * int left = x * tile.getWidth(); int right = left +

@@ -153,7 +153,7 @@ public class Coordinate implements Geometrizable, Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Coordinate latitude: %.8f° longtitude %.8f°", this.lat, this.lon);
+		return String.format("Coordinate longtitude %.8f° latitude: %.8f°",this.lon, this.lat);
 	}
 
 
