@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.LinkedList;
 
+import android.util.Log;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -12,6 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class RouteMenuController {
 
+	private static final String TAG = RouteMenuController.class.getSimpleName();
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 
@@ -33,7 +36,7 @@ public class RouteMenuController {
 		//ll.add(new Coordinate(49.01, 8.40333));
 		this.currentRoute = new Route(ll);
 
-		
+
 	}
 
 	public static RouteMenuController getInstance() {
@@ -75,6 +78,7 @@ public class RouteMenuController {
 	}
 
 	public void addWaypoint(Coordinate c) {
+		Log.d(TAG, "addWaypoint(" + c + ")");
 		this.currentRoute.addWaypoint(c);
 		this.notifyAllRouteListeners();
 	}
