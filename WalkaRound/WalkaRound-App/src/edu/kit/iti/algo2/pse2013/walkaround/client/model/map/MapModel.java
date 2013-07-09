@@ -160,18 +160,9 @@ public class MapModel implements TileListener {
 	 * @return geographische Koordiante
 	 */
 	private Coordinate computeCoordinateByDisplayCoordinate(DisplayCoordinate dc) {
-		Log.d("WTF", dc.getX() + " " + dc.getY() + " " + currentLevelOfDetail
-				+ " " + CoordinateUtility.DIRECTION_Y);
-		Log.d("WTF",
-				"CoordDiffY: "
-						+ -CoordinateUtility.convertPixelsToDegrees(dc.getY(),
-								currentLevelOfDetail,
-								CoordinateUtility.DIRECTION_Y));
-		Log.d("WTF",
-				"CoordDiffX: "
-						+ CoordinateUtility.convertPixelsToDegrees(dc.getX(),
-								currentLevelOfDetail,
-								CoordinateUtility.DIRECTION_X));
+		Log.d("WTF", dc.getX() + " " + dc.getY() + " " + currentLevelOfDetail + " " + CoordinateUtility.DIRECTION_Y);
+		Log.d("WTF", "CoordDiffY: " + -CoordinateUtility.convertPixelsToDegrees(dc.getY(), currentLevelOfDetail, CoordinateUtility.DIRECTION_Y));
+		Log.d("WTF", "CoordDiffX: " + CoordinateUtility.convertPixelsToDegrees(dc.getX(), currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
 		Log.d("WTF", "PixelDiffX: " + dc.getX());
 		Log.d("WTF", "PixelDiffY: " + dc.getY());
 		return new Coordinate(this.upperLeft,
@@ -179,6 +170,17 @@ public class MapModel implements TileListener {
 						currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
 				CoordinateUtility.convertPixelsToDegrees(dc.getX(),
 						currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
+	}
+	/**
+	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer Koordinate
+	 *
+	 * @param dc die zu konvertierende DisplayCoordinate
+	 * @return
+	 */
+	private DisplayCoordinate computeDisplayCoordinateByCoordinate(Coordinate c) {
+		double deltaX = CoordinateUtility.convertDegreesToPixels(c.getLongitude() - upperLeft.getLongitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE);
+		double deltaY = CoordinateUtility.convertDegreesToPixels(c.getLatitude() - upperLeft.getLatitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
+		return new DisplayCoordinate((float) deltaX, (float) deltaY);
 	}
 
 	/**

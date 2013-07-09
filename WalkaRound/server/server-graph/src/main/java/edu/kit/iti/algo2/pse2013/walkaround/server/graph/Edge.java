@@ -16,12 +16,6 @@ import java.util.List;
 public final class Edge implements Geometrizable, Serializable {
 
     /**
-     * Temporary Serial version ID as long as Java serialization is used
-     */
-    private static final long serialVersionUID = 3182638429343198592L;
-
-
-    /**
      * Internally used ID of Edge.
      */
     private int id;
