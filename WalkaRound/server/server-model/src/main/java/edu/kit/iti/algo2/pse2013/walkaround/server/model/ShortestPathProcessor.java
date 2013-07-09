@@ -72,16 +72,27 @@ public class ShortestPathProcessor {
     /**
      * Instantiates and/or returns a singleton instance of ShortestPathProcessor.
      *
+     * @return ShortestPathProcessor.
+     */
+    public static ShortestPathProcessor getInstance() {
+        if (instance == null)
+            throw new IllegalArgumentException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of ShortestPathProcessor.
+     *
      * @param graph Graph used for shortest path computation.
      * @return ShortestPathProcessor.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte,
-    // ohne die Graph instance zu kennen, muss getrennt werden
-    public static ShortestPathProcessor getInstance(Graph graph) {
+    public static ShortestPathProcessor init(Graph graph) {
         if (graph == null)
-            throw new IllegalArgumentException("graph must be provided");
-        if (instance == null)
-            instance = new ShortestPathProcessor(graph);
+            throw new IllegalArgumentException("Graph must be provided");
+        if (instance != null)
+            throw new IllegalArgumentException("ShortestPathProcessor already initialized");
+        instance = new ShortestPathProcessor(graph);
         return instance;
     }
 
@@ -90,36 +101,29 @@ public class ShortestPathProcessor {
      * Computes a shortest path between any given two Coordinates using the provided
      * graph.
      *
-     * @param coordinate1 One end of the route to be computed.
-     * @param coordinate2 One end of the route to be computed.
+     * @param source Source of the route to be computed.
+     * @param target Target of the route to be computed.
      * @return RouteInfoTransfer.
-     * @throw NoShortestPathExistsException If no shortest path between given Coordinates exists
+     * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
+     * @throws ShortestPathComputeException If something during computation goes wrong.
      */
-    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2)
-            throws NoShortestPathExistsException {
-        if (coordinate1 == null || coordinate2 == null)
-            throw new IllegalArgumentException("coordinate1 and coordinate2 must be provided");
+    public RouteInfoTransfer computeShortestPath(Vertex source,
+                                                 Vertex target)
+            throws NoShortestPathExistsException, ShortestPathComputeException {
+        if (source == null || target == null)
+            throw new IllegalArgumentException("source and target must be provided");
 
-        //int startVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate1);
-        //int endVertexId = GeometryProcessor.getInstance(null).getNearestVertex(coordinate2);
-
-        int sourceVertexId = 2295;
-        int targetVertexId = 2441;
-
-        // get source and target Vertex objects
-        Vertex sourceVertex = null, targetVertex = null;
+        Vertex sourceVertex;
+        Vertex targetVertex;
         try {
-            sourceVertex = graph.getVertexByID(sourceVertexId);
-            targetVertex = graph.getVertexByID(targetVertexId);
+            sourceVertex = graph.getVertexByID(source.getID());
+            targetVertex = graph.getVertexByID(target.getID());
         } catch (NoVertexForIDExistsException e) {
-            e.printStackTrace();
+            throw new ShortestPathComputeException("source and/or target provided not in graph contained");
         }
 
-        System.out.println(sourceVertex);
-        System.out.println(targetVertex);
-
         if (sourceVertex == null || targetVertex == null)
-            return null;
+            throw new ShortestPathComputeException("source and/or target provided not in graph contained");
 
         // some init
         runCounter += 1;
