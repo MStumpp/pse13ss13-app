@@ -51,13 +51,18 @@ public class OSMDataPreprocessor {
 		 * Das Programm crasht sonst unter Umständen (siehe {@link crosby.binary.file.BlockinputStream}, Zeile 25).
 		 * Der InputStream muss "seekable" sein.
 		 */
-		BlockInputStream blockStream = new BlockInputStream(new FileInputStream(osmSource), new PBF_FileBlockParser(graphData, locationData));
-		blockStream.process();
-		GraphDataIO.save(graphData, graphDestination);
-		FileOutputStream fos = new FileOutputStream(locationDestination);
-		ProtobufIO.write(locationData, fos);
-		fos.flush();
-		fos.close();
+		PBF_FileBlockParser parser = new PBF_FileBlockParser(graphData, locationData);
+		do {
+			BlockInputStream blockStream = new BlockInputStream(new FileInputStream(osmSource), parser);
+			blockStream.process();
+			blockStream.close();
+		} while (parser.needsFurtherRun());
+		FileOutputStream graphOutput = new FileOutputStream(graphDestination);
+		ProtobufIO.write(graphData, graphOutput);
+		FileOutputStream locationOutput = new FileOutputStream(locationDestination);
+		ProtobufIO.write(locationData, locationOutput);
+		locationOutput.flush();
+		locationOutput.close();
 	}
 	/**
 	 *

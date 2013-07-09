@@ -27,35 +27,6 @@ public class GraphDataIO implements Serializable {
 	private static final long serialVersionUID = 3394680623853287035L;
 
 	private ArrayList<Edge> edges = new ArrayList<Edge>();
-	/**
-	 * Saves the GraphDataIO-object, which is given as parameter, as the {@code destination}-file.
-	 * @param objectToSave
-	 * @param destination
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public static void save(GraphDataIO objectToSave, File destination) throws FileNotFoundException, IOException {
-		//TODO: Replace the simple java-serialization by a better one
-		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
-		oos.writeObject(objectToSave);
-		oos.flush();
-		oos.close();
-	}
-	/**
-	 * Loads a GraphDataIO-object from the given {@code source}-file
-	 * @param destination
-	 * @param objectToSave
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public static GraphDataIO load(File source) throws FileNotFoundException, IOException, ClassNotFoundException {
-		//TODO: Replace the simple java-serialization by a better one
-		ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(source)));
-		GraphDataIO graph = (GraphDataIO) ois.readObject();
-		ois.close();
-		return graph;
-	}
 	public void addEdge(Edge e) {
 		this.edges.add(e);
 	}

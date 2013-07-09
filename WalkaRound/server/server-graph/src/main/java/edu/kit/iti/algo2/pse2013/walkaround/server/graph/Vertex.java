@@ -67,6 +67,10 @@ public class Vertex extends Coordinate {
         this(lat, lon, -1);
     }
 
+    public Vertex(long osmID) {
+    	this(Double.NaN, Double.NaN, osmID);
+    }
+
 
     /**
      * Creates an instance of Vertex.

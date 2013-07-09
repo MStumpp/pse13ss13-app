@@ -10,7 +10,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos.SaveLocationData.SaveCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 
 /**
  * LocationDataIOTest.
@@ -29,8 +31,10 @@ public class LocationDataIOTest {
 		int size = writeLocationData.getPOIs().size();
 
 		try {
-			ProtobufIO.write(writeLocationData, new FileOutputStream(new File(
-					fileLocation)));
+			FileOutputStream fos = new FileOutputStream(fileLocation);
+			ProtobufConverter.getLocationDataBuilder(writeLocationData).build().writeTo(fos);
+			fos.flush();
+			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -42,8 +46,8 @@ public class LocationDataIOTest {
 
 		LocationDataIO readLocationData = null;
 		try {
-			ProtobufIO.readLocationData(new FileInputStream(new File(
-					fileLocation)));
+			FileInputStream fis = new FileInputStream(fileLocation);
+			readLocationData = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
