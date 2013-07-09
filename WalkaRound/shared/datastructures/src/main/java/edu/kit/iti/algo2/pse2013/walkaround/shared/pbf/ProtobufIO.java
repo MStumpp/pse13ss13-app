@@ -98,7 +98,6 @@ public class ProtobufIO {
 		return new Location(
 			saveLoc.getParent().getLatitude(),
 			saveLoc.getParent().getLongitude(),
-			saveLoc.getID(),
 			saveLoc.getName(),
 			addressFromBuilder(saveLoc.getAddress()));
 	}

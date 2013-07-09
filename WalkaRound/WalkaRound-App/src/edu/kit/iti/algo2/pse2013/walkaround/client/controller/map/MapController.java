@@ -103,11 +103,11 @@ public class MapController implements RouteListener {
 		routeController = RouteController.getInstance();
 		routeController.registerRouteListener(this);
 
-		routeController.addWaypoint(new Waypoint(49.01,8.40333,1,"Marktplatz"));
+		routeController.addWaypoint(new Waypoint(49.01,8.40333,"Marktplatz"));
 		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
-		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
+		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,"Brauerstraße"));
 		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
-		routeController.addWaypoint(new Waypoint(49.0145, 8.419,3,"211"));
+		routeController.addWaypoint(new Waypoint(49.0145, 8.419,"211"));
 		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
 		
 
