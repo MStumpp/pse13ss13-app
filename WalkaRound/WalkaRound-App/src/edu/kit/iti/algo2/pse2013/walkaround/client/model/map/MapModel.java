@@ -551,7 +551,7 @@ public class MapModel implements TileListener {
 			Log.d("wtf", "cancas " + (canvas == null));
 			canvas.drawBitmap(tile,
 					(localX * tile.getWidth()) - mapOffset.getX(),
-					(localY * tile.getHeight()) + mapOffset.getY(), null);
+					(localY * tile.getHeight()) - mapOffset.getY() , null);
 
 			/*
 			 * int left = x * tile.getWidth(); int right = left +

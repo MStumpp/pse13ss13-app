@@ -40,7 +40,6 @@ public class MapController implements RouteListener {
 	private MapModel mapModel;
 
 	private boolean lockUserPosition = true;
-	
 
 	/**
 	 * 
@@ -70,10 +69,10 @@ public class MapController implements RouteListener {
 	/**
 	 * 
 	 */
-	public PullUpView getPullUpView(){
+	public PullUpView getPullUpView() {
 		return mapView.getPullUpView();
 	}
-	
+
 	/**
 	 * 
 	 * @param mv
@@ -81,6 +80,8 @@ public class MapController implements RouteListener {
 	private MapController(MapView mv) {
 
 		Log.d(MAP_CONTROLLER, "Map Controller wird initialisiert");
+		DisplayWaypoint[] dw = new DisplayWaypoint[1];
+		dw[0] = new DisplayWaypoint(-50, -50, 1);
 		this.mapView = mv;
 
 		Display display = mapView.getWindowManager().getDefaultDisplay();
@@ -95,7 +96,7 @@ public class MapController implements RouteListener {
 
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
-		this.onRouteChange(null, null);
+		//this.onRouteChange(null, null);
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
@@ -107,7 +108,8 @@ public class MapController implements RouteListener {
 	}
 
 	public void onCreatePoint(DisplayCoordinate dc) {
-		routeController.addWaypoint(CoordinateUtility
+		routeController.addWaypoint(
+				CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
 						mapModel.getUpperLeft(),
 						mapModel.getCurrentLevelOfDetail()));
@@ -178,40 +180,37 @@ public class MapController implements RouteListener {
 	public float getCurrentLevelOfDetail() {
 		return this.mapModel.getCurrentLevelOfDetail();
 	}
-	
+
 	DisplayWaypoint[] dw;
-	
+
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
-		Log.d(MAP_CONTROLLER, "Route Change!");
-		//LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
-		
-		LinkedList<Waypoint> waypointList = new LinkedList<Waypoint>();
-		waypointList.add(new Waypoint(49.01,8.40333,1,"Marktplatz"));
-		waypointList.add(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
-		waypointList.add(new Waypoint(49.0145, 8.419,3,"211"));
+		Log.d(MAP_CONTROLLER, "Route Change!" + (currentRoute == null));
+		LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
 
-		dw = new DisplayWaypoint[waypointList.size()];
+		//LinkedList<Waypoint> waypointList = new LinkedList<Waypoint>();
+		waypointList.add(new Waypoint(49.01, 8.40333, 1, "Marktplatz"));
+		waypointList.add(new Waypoint(49.00471, 8.3858300, 2, "Brauerstraße"));
+		waypointList.add(new Waypoint(49.0145, 8.419, 3, "211"));
+
+		DisplayWaypoint[] dw = new DisplayWaypoint[waypointList.size()];
 		int a = 0;
 
-		
-		
 		for (Waypoint value : waypointList) {
 			Log.d(MAP_CONTROLLER, "Value " + value.toString());
 
-			float x = (float) (value.getLongitude() - mapModel.getUpperLeft().getLongitude());
-			float y = (float) (value.getLatitude() - mapModel.getUpperLeft().getLatitude());
-			
-			dw[a] = new DisplayWaypoint(
-					
+			float x = (float) (value.getLongitude() - mapModel.getUpperLeft()
+					.getLongitude());
+			float y = (float) (value.getLatitude() - mapModel.getUpperLeft()
+					.getLatitude());
 
-			CoordinateUtility.convertDegreesToPixels(
-					x,
+			dw[a] = new DisplayWaypoint(
+
+			CoordinateUtility.convertDegreesToPixels(x,
 					mapModel.getCurrentLevelOfDetail(),
 					CoordinateUtility.DIRECTION_LONGTITUDE),
 
-			CoordinateUtility.convertDegreesToPixels(
-					y,
+			CoordinateUtility.convertDegreesToPixels(y,
 					mapModel.getCurrentLevelOfDetail(),
 					CoordinateUtility.DIRECTION_LATITUDE),
 
@@ -220,17 +219,17 @@ public class MapController implements RouteListener {
 
 		}
 
-		/*DisplayWaypoint[] dw = new DisplayWaypoint[4];
-		dw[0] = new DisplayWaypoint(-50, 550, 1);
-		dw[1] = new DisplayWaypoint(250, 700, 2);
-		dw[2] = new DisplayWaypoint(500, 800, 3);
-		dw[3] = new DisplayWaypoint(300, 900, 4);
-		*/
-		
+		/*
+		 * DisplayWaypoint[] dw = new DisplayWaypoint[4]; dw[0] = new
+		 * DisplayWaypoint(-50, 550, 1); dw[1] = new DisplayWaypoint(250, 700,
+		 * 2); dw[2] = new DisplayWaypoint(500, 800, 3); dw[3] = new
+		 * DisplayWaypoint(300, 900, 4);
+		 */
+
 		// TODO
 		mapView.updateDisplayCoordinate(dw);
 		mapModel.drawDisplayCoordinates(dw);
-
+		this.dw = dw.clone();
 		// mapView.setActive(activeWaypoint.getId());
 	}
 

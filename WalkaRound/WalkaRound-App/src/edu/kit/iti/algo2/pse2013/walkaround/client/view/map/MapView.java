@@ -16,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -117,6 +118,10 @@ public class MapView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
+		// Debug.getMemoryInfo(memoryInfo);
+		// Log.d("wtf", memoryInfo.toString());
 
 		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
 
@@ -251,8 +256,7 @@ public class MapView extends Activity {
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-
-				if (!b.isRecycled()) {
+				if(!b.isRecycled()){
 					map.setImageBitmap(b);
 					map.setVisibility(View.VISIBLE);
 				}
@@ -260,6 +264,26 @@ public class MapView extends Activity {
 		});
 	}
 
+	/**
+	 * 
+	 * @param b
+	 */
+	public void updateRouteOverlayImage(final Bitmap b) {
+
+		if (routeOverlay == null) {
+			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
+		}
+
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if(!b.isRecycled()){
+					routeOverlay.setImageBitmap(b);
+					routeOverlay.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+	}
+	
 	Canvas canvas;
 	Bitmap routeOverlayBitmap;
 
@@ -301,10 +325,16 @@ public class MapView extends Activity {
 	 * 
 	 * @param dw
 	 */
-	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
+	private void updateDisplayWaypoint(final DisplayWaypoint[] way) {
 
 		final Context context = this;
-
+		
+		if(way == null){
+			return;
+		}
+		
+		final DisplayWaypoint[] dw = way.clone();
+		
 		runOnUiThread(new Runnable() {
 			public void run() {
 				routeList.removeAllViews();
@@ -714,23 +744,4 @@ public class MapView extends Activity {
 		}
 	}
 
-	/**
-	 * 
-	 * @param b
-	 */
-	public void updateRouteOverlayImage(final Bitmap b) {
-
-		if (routeOverlay == null) {
-			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
-		}
-
-		runOnUiThread(new Runnable() {
-			public void run() {
-				if (!b.isRecycled()) {
-					routeOverlay.setImageBitmap(b);
-					routeOverlay.setVisibility(View.VISIBLE);
-				}
-			}
-		});
-	}
 }
