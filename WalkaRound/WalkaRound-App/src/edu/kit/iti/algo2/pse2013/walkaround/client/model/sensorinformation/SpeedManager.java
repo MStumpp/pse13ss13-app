@@ -1,18 +1,55 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
-public class SpeedManager {
+import java.util.LinkedList;
+
+import android.location.Location;
+import android.util.Log;
+
+public class SpeedManager implements PositionListener {
+
+	private static String TAG_SPEED_MANAGER = SpeedManager.class
+			.getSimpleName();
+
+	// Observers:
+	private LinkedList<SpeedListener> speedListeners;
 
 	private static boolean intanceExists;
 	private static SpeedManager speedManager;
-	
+
+	private static double lastKnownSpeed;
+
 	private SpeedManager() {
-		//TODO: Hole Instanz von GPS Zeug, und irgendwie Zeit
+
 	}
-	
+
 	public static SpeedManager getInstance() {
 		if (!intanceExists) {
 			speedManager = new SpeedManager();
 		}
 		return speedManager;
+	}
+
+	// Observer Pattern:
+	public void registerSpeedListener(SpeedListener newSL) {
+		Log.d(TAG_SPEED_MANAGER,
+				"Speedmanager.registerSpeedListener(SpeedListener "
+						+ newSL.getClass().getSimpleName() + ")");
+		if (!this.speedListeners.contains(newSL)) {
+			this.speedListeners.add(newSL);
+		}
+		this.notifyAllSpeedListeners();
+	}
+
+	private void notifyAllSpeedListeners() {
+		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllRouteListeners()");
+		for (SpeedListener sl : this.speedListeners) {
+			sl.onSpeedChange(lastKnownSpeed);
+		}
+
+	}
+
+	@Override
+	public void onPositionChange(Location androidLocation) {
+		lastKnownSpeed = androidLocation.getSpeed();
 	}
 }
