@@ -39,10 +39,14 @@ public class Coordinate implements Geometrizable {
 	}
 
 
-    // TODO: Wofür brauchen wir das? (Matthias)
-    // Das fanden wir (Ldwig und ich) ganz nützlich beim MapView.
-    // Bspw. um ausgehend von einer Ecke eine andere zu erzeugen, wenn man ein Offset hat.
-    // Konkretes Beispiel: bottomRightCorner = newCoordinate(topLeftCorner, latDelta, lonDelta);
+    /**
+     * Creates an instance of Coordinate based on a reference Coordinate
+     * and deltas for longitude and latitude.
+     *
+     * @param reference Reference Coordinate.
+     * @param latDelta Latitude delta of the Coordinate.
+     * @param lonDelta Longitude delta of the Coordinate.
+     */
 	public Coordinate(final Coordinate reference, final double latDelta, final double lonDelta) {
 		this(reference.getLatitude() + latDelta, reference.getLongitude() + lonDelta);
 	}

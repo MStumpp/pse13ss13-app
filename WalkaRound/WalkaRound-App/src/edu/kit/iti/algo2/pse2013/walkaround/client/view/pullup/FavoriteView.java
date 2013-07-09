@@ -63,7 +63,9 @@ public class FavoriteView extends Fragment {
 	public void onDestroy(){
 		super.onDestroy();
 		Log.d(TAG_PULLUP_CONTENT,"Destroy FavoriteView");
+		tabHost.getTabWidget().removeAllViews();
 		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
+		
 	}
 	
 	public boolean equals(Fragment f){
