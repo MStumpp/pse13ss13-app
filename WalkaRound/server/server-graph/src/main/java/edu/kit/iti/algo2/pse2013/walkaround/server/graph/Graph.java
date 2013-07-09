@@ -1,6 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * This class represents a graph consisting of edges and vertices.
@@ -25,9 +25,9 @@ public final class Graph {
     /**
      * Creates an instance of Graph.
      *
-     * @param edges List of Edges to build a Graph.
+     * @param edges Set of Edges to build a Graph.
      */
-    private Graph(List<Edge> edges) {
+    private Graph(Set<Edge> edges) {
         vertices = new Vertex[5000000];
         int currentID;
         for (Edge edge : edges) {
@@ -65,7 +65,7 @@ public final class Graph {
      * @return Graph.
      * @throws EmptyListOfEdgesException if list of edges is empty.
      */
-    public static Graph init(List<Edge> edges) throws EmptyListOfEdgesException {
+    public static Graph init(Set<Edge> edges) throws EmptyListOfEdgesException {
         if (edges == null)
             throw new IllegalArgumentException("list of edges must not be null");
         if (edges.size() == 0)

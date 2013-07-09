@@ -18,6 +18,7 @@ public class GraphDataIOTest {
     private static String fileLocation = System.getProperty("java.io.tmpdir") + File.separator + "graphDataIO";
 
     @Test
+    @Ignore
     public void testSandAndLoad() {
         GraphDataIO graphDataIO = getGraphDataIO();
         int size = graphDataIO.getEdges().size();

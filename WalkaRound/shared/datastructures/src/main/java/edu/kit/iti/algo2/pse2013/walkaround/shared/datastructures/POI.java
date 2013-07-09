@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import android.graphics.Bitmap;
-
 /**
  * This class represents a POI.
  *
@@ -33,7 +31,6 @@ public class POI extends Location {
      *
      * @param lat Latitude of POI.
      * @param lon Longitude of POI.
-     * @param id ID of POI.
      * @param name Name of POI.
      * @param textInfo Text info of POI.
      * @param url URL of an image of POI.
@@ -62,7 +59,6 @@ public class POI extends Location {
      *
      * @param lat Latitude of POI.
      * @param lon Longitude of POI.
-     * @param id ID of POI.
      * @param name Name of POI.
      * @param textInfo Text info of POI.
      * @param url URL of an image of POI.
@@ -104,16 +100,6 @@ public class POI extends Location {
      */
     public String getURL() {
     	return url;
-    }
-
-
-    /**
-     * Returns an image of POI.
-     *
-     * @return Bitmap image of the POI (Android requires {@link Bitmap} instead of)
-     */
-    public Bitmap getImage() {
-        return null; // TODO: implement image loading
     }
 
 
