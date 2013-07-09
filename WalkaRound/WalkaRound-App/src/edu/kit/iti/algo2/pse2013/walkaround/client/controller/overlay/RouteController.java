@@ -16,6 +16,7 @@ public class RouteController {
 	
 	private static String TAG_ROUTE_CONTROLLER = "RouteController";
 
+	private static final String TAG = RouteMenuController.class.getSimpleName();
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 
@@ -25,20 +26,10 @@ public class RouteController {
 	private RouteController() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController Constructor");
 		this.routeListeners = new LinkedList<RouteListener>();
-		// Beispiele aus MapController :
-		// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
-		// 8.3858300); // Brauerstraße
-		// public static Coordinate defaultCoordinate = new Coordinate(49.0145,
-		// 8.419); // 211
-		// public static Coordinate defaultCoordinate = new Coordinate(49.01,
-		// 8.40333); // Marktplatz
 		LinkedList<Coordinate> coordinateList = new LinkedList<Coordinate>();
-		//ll.add(new Coordinate(49.00471, 8.3858300));
-		//ll.add(new Coordinate(49.0145, 8.419));
-		//ll.add(new Coordinate(49.01, 8.40333));
 		this.currentRoute = new Route(coordinateList);
 
-		
+
 	}
 
 	public static RouteController getInstance() {
@@ -86,7 +77,11 @@ public class RouteController {
 	}
 
 	public void addWaypoint(Coordinate c) {
+<<<<<<< HEAD:WalkaRound/WalkaRound-App/src/edu/kit/iti/algo2/pse2013/walkaround/client/controller/overlay/RouteController.java
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addWaypoint(Coordinate)");
+=======
+		Log.d(TAG, "addWaypoint(" + c + ")");
+>>>>>>> 5c6d093dbdc97168cc686e02ef399cc1e1abd962:WalkaRound/WalkaRound-App/src/edu/kit/iti/algo2/pse2013/walkaround/client/controller/overlay/RouteMenuController.java
 		this.currentRoute.addWaypoint(c);
 		this.notifyAllRouteListeners();
 	}

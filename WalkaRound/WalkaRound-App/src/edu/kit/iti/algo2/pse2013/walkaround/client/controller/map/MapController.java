@@ -19,13 +19,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapController implements RouteListener {
 
-	private static String MAP_CONTROLLER = "MAP_CONTROLLER";
+	private static String TAG_MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
 
 	private static RouteMenuController routeController;
@@ -40,10 +40,9 @@ public class MapController implements RouteListener {
 	private MapModel mapModel;
 
 	private boolean lockUserPosition = true;
-	
 
 	/**
-	 * 
+	 *
 	 * @param mapView
 	 * @return
 	 */
@@ -55,12 +54,12 @@ public class MapController implements RouteListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static MapController getInstance() {
 		if (mapController == null) {
-			Log.d(MAP_CONTROLLER, "bitte initialisieren Sie zuerst MapView");
+			Log.d(TAG_MAP_CONTROLLER, "bitte initialisieren Sie zuerst MapView");
 			// mapController = new MapController();
 			return null;
 		}
@@ -68,19 +67,19 @@ public class MapController implements RouteListener {
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	public PullUpView getPullUpView(){
+	public PullUpView getPullUpView() {
 		return mapView.getPullUpView();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param mv
 	 */
 	private MapController(MapView mv) {
 
-		Log.d(MAP_CONTROLLER, "Map Controller wird initialisiert");
+		Log.d(TAG_MAP_CONTROLLER, "Map Controller wird initialisiert");
 		this.mapView = mv;
 
 		Display display = mapView.getWindowManager().getDefaultDisplay();
@@ -95,7 +94,7 @@ public class MapController implements RouteListener {
 
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
-		this.onRouteChange(null, null);
+		//this.onRouteChange(null, null);
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
@@ -107,14 +106,15 @@ public class MapController implements RouteListener {
 	}
 
 	public void onCreatePoint(DisplayCoordinate dc) {
+		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
 		routeController.addWaypoint(CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
 						mapModel.getUpperLeft(),
 						mapModel.getCurrentLevelOfDetail()));
 
-		Log.d(MAP_CONTROLLER, "upper Left ist: " + mapModel.getUpperLeft());
-		Log.d(MAP_CONTROLLER, "upper DisplayCoor ist: " + dc);
-		Log.d(MAP_CONTROLLER,
+		Log.d(TAG_MAP_CONTROLLER, "upper Left ist: " + mapModel.getUpperLeft());
+		Log.d(TAG_MAP_CONTROLLER, "upper DisplayCoor ist: " + dc);
+		Log.d(TAG_MAP_CONTROLLER,
 				"Coordinate wird übernommen:"
 						+ CoordinateUtility
 								.convertDisplayCoordinateToCoordinate(dc,
@@ -127,7 +127,9 @@ public class MapController implements RouteListener {
 
 	public void onShift(float distanceX, float distanceY) {
 		mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
-		mapModel.drawDisplayCoordinates(dw);
+		if(dw != null){
+			mapModel.drawDisplayCoordinates(dw.clone());
+		}
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
@@ -136,7 +138,7 @@ public class MapController implements RouteListener {
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
@@ -148,20 +150,20 @@ public class MapController implements RouteListener {
 
 	/**
 	 * Zoom by a delta
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
 	public void onZoom(float delta) {
-		Log.d(MAP_CONTROLLER, "Gibt ZoomDelta " + delta + " zu MapModel weiter");
+		Log.d(TAG_MAP_CONTROLLER, "Gibt ZoomDelta " + delta + " zu MapModel weiter");
 		this.mapModel.zoom(delta);
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void onLockUserPosition() {
-		Log.d(MAP_CONTROLLER, "Lock User Position");
+		Log.d(TAG_MAP_CONTROLLER, "Lock User Position");
 		if (this.lockUserPosition) {
 			this.lockUserPosition = false;
 		} else {
@@ -172,46 +174,41 @@ public class MapController implements RouteListener {
 
 	/**
 	 * Gibt das aktuelle Level Of Detail zurück
-	 * 
+	 *
 	 * @return aktuelles Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
 		return this.mapModel.getCurrentLevelOfDetail();
 	}
-	
+
 	DisplayWaypoint[] dw;
-	
+
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
-		Log.d(MAP_CONTROLLER, "Route Change!");
+		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
 		//LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
-		
+
 		LinkedList<Waypoint> waypointList = new LinkedList<Waypoint>();
 		waypointList.add(new Waypoint(49.01,8.40333,1,"Marktplatz"));
 		waypointList.add(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
 		waypointList.add(new Waypoint(49.0145, 8.419,3,"211"));
 
-		dw = new DisplayWaypoint[waypointList.size()];
+		DisplayWaypoint[] dw = new DisplayWaypoint[waypointList.size()];
 		int a = 0;
 
-		
-		
 		for (Waypoint value : waypointList) {
-			Log.d(MAP_CONTROLLER, "Value " + value.toString());
+			Log.d(TAG_MAP_CONTROLLER, "Value " + value.toString());
 
 			float x = (float) (value.getLongitude() - mapModel.getUpperLeft().getLongitude());
 			float y = (float) (value.getLatitude() - mapModel.getUpperLeft().getLatitude());
-			
-			dw[a] = new DisplayWaypoint(
-					
 
-			CoordinateUtility.convertDegreesToPixels(
-					x,
+			dw[a] = new DisplayWaypoint(
+
+			CoordinateUtility.convertDegreesToPixels(x,
 					mapModel.getCurrentLevelOfDetail(),
 					CoordinateUtility.DIRECTION_LONGTITUDE),
 
-			CoordinateUtility.convertDegreesToPixels(
-					y,
+			CoordinateUtility.convertDegreesToPixels(y,
 					mapModel.getCurrentLevelOfDetail(),
 					CoordinateUtility.DIRECTION_LATITUDE),
 
@@ -226,11 +223,11 @@ public class MapController implements RouteListener {
 		dw[2] = new DisplayWaypoint(500, 800, 3);
 		dw[3] = new DisplayWaypoint(300, 900, 4);
 		*/
-		
+
 		// TODO
 		mapView.updateDisplayCoordinate(dw);
 		mapModel.drawDisplayCoordinates(dw);
-
+		this.dw = dw.clone();
 		// mapView.setActive(activeWaypoint.getId());
 	}
 

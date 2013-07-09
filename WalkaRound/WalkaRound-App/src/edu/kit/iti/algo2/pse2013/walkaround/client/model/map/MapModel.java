@@ -8,8 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
-import android.widget.ImageView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
@@ -22,9 +20,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapModel implements TileListener {
 
@@ -51,7 +49,7 @@ public class MapModel implements TileListener {
 	int yZoomBorder;
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -64,7 +62,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static MapModel getInstance() {
@@ -77,7 +75,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 */
 	private MapModel(Coordinate c, MapController mapController, Point size) {
@@ -156,7 +154,7 @@ public class MapModel implements TileListener {
 	/**
 	 * berechnet die Koordinate anhand einer DisplayKoordinate relativ zu oberen
 	 * Ecke
-	 * 
+	 *
 	 * @param dc
 	 *            die zu konvertierende DisplayCoordinate
 	 * @return geographische Koordiante
@@ -192,7 +190,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 */
 	public void shift(DisplayCoordinate delta) {
@@ -317,7 +315,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	private boolean fetchTiles() {
@@ -330,7 +328,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public Coordinate getUpperLeft() {
@@ -345,7 +343,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param delta
 	 * @param c
 	 */
@@ -355,7 +353,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param delta
 	 */
 	public boolean zoom(float delta) {
@@ -365,7 +363,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param delta
 	 * @param c
 	 */
@@ -417,7 +415,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dc
 	 * @param category
 	 * @param profile
@@ -430,7 +428,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Gibt das aktuelle Level Of Detail zurück
-	 * 
+	 *
 	 * @return aktuellen Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -438,7 +436,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param lod
 	 */
 	public void setCurrentLevelOfDetail(float levelOfDetail) {
@@ -453,7 +451,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -462,8 +460,8 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @return
 	 */
 	public DisplayCoordinate getTileOffset() {
@@ -497,7 +495,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Updatet das Routen Overlay
-	 * 
+	 *
 	 * @param b
 	 */
 	public void drawRoute(final float fromX, final float fromY,
@@ -506,10 +504,10 @@ public class MapModel implements TileListener {
 		if (!routeOverlayBitmap.isRecycled()) {
 			Canvas canvas = new Canvas(routeOverlayBitmap);
 
-			Paint pinsel = new Paint();
-			pinsel.setColor(Color.rgb(64, 64, 255));
-			// TODO
-			pinsel.setStrokeWidth(8);
+		Paint pinsel = new Paint();
+		pinsel.setColor(Color.rgb(64, 64, 255));
+		//TODO
+		pinsel.setStrokeWidth(8);
 
 			// Diagonale durch Leinwand zeichnen
 			if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
@@ -519,11 +517,12 @@ public class MapModel implements TileListener {
 				}
 			}
 
-			Log.d(TAG_MAP_MODEL + "_DRAW", "routeOverlayBitmap "
-					+ (routeOverlayBitmap == null));
+		Log.d(TAG_MAP_MODEL + "_DRAW", "routeOverlayBitmap "
+				+ (routeOverlayBitmap == null));
 
-			mapController.onRouteOverlayImageChange(routeOverlayBitmap);
+		mapController.onRouteOverlayImageChange(routeOverlayBitmap);
 		}
+
 
 	}
 
@@ -551,13 +550,13 @@ public class MapModel implements TileListener {
 			Log.d("wtf", "cancas " + (canvas == null));
 			canvas.drawBitmap(tile,
 					(localX * tile.getWidth()) - mapOffset.getX(),
-					(localY * tile.getHeight()) + mapOffset.getY(), null);
+					(localY * tile.getHeight()) - mapOffset.getY() , null);
 
 			/*
 			 * int left = x * tile.getWidth(); int right = left +
 			 * tile.getWidth(); int top = y * tile.getHeight(); int bottom = top
 			 * + tile.getHeight();
-			 * 
+			 *
 			 * // canvas.drawBitmap(tile, new
 			 * Rect(0,0,tile.getWidth(),tile.getWidth()), new Rect(left, top
 			 * ,right, bottom), null);

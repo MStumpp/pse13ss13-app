@@ -16,7 +16,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class manages requests about POIs.
@@ -134,16 +133,16 @@ public class POIManager {
 	 * @return a list of all POIs laying upon a route
 	 */
 	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, int levelOfDetail) {
-		LinkedList<Waypoint> waypoints = routeInfo.getWaypoints();
+		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
 		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 				.hasNext();) {
 			POI currentPOI = iter.next();
-			for (Iterator<Waypoint> waypointIter = waypoints.iterator(); waypointIter
+			for (Iterator<Coordinate> coordIter = coords.iterator(); coordIter
 					.hasNext();) {
-				Waypoint currentWaypoint = waypointIter.next();
+				Coordinate currentCoordinate = coordIter.next();
 				if (CoordinateUtility.calculateDifferenceInMeters(
-						currentWaypoint, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES) {
+						currentCoordinate, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES) {
 					poiList.add(currentPOI);
 				}
 			}

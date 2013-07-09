@@ -1,21 +1,23 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteMenuController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 
 public class RoutingView extends Fragment {
 
@@ -33,6 +35,7 @@ public class RoutingView extends Fragment {
 	private ImageView save;
 	private Button addFavorite;
 	private Button goToMap; 
+	private EditText name;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class RoutingView extends Fragment {
 		save = (ImageView) this.getActivity().findViewById(R.id.save);
 		addFavorite = (Button) this.getActivity().findViewById(R.id.add_favorite);
 		goToMap = (Button) this.getActivity().findViewById(R.id.go_to_map);
+		name = (EditText) this.getActivity().findViewById(R.id.name_favorites);
 		
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -77,6 +81,8 @@ public class RoutingView extends Fragment {
 		addFavorite.getLayoutParams().width = size.x / 2;
 		goToMap.setX(size.x / 2);
 		goToMap.getLayoutParams().width = size.x / 2;
+		name.setX(size.x / 5);
+		name.setY(size.y / 8);
 		
 		Log.d(TAG_PULLUP_CONTENT, "Zuweisung der Listener");
 		reset.setOnTouchListener(new resetListener());
@@ -86,6 +92,7 @@ public class RoutingView extends Fragment {
 		save.setOnTouchListener(new saveListener());
 		addFavorite.setOnTouchListener(new favoriteListener());
 		goToMap.setOnTouchListener(new backToMapListener());
+		name.setOnEditorActionListener(new saveFavoriteListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
@@ -109,9 +116,13 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(reset)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "reset wurde gedrückt");
 				routeController.resetRoute();
 			}
+			//TODO: refresh activity?
 			return false;
 		}
 		
@@ -122,9 +133,13 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(invert)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "invert wurde gedrückt");
 				routeController.revertRoute();
 			}
+			//TODO: refresh activity?
 			return false;
 		}
 		
@@ -135,6 +150,9 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(tsp)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedrückt");
 				routeController.optimizeRoute();
 			}
@@ -148,6 +166,9 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(load)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "load wurde gedrückt");
 				//TODO: ansicht wechselt in die liste der favorisierten routen
 			}
@@ -161,7 +182,11 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(save)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedrückt");
+				name.setVisibility(View.VISIBLE);
 				//TODO : routemenucontroller ruft save route auf, wie gibt man den namen mit!?
 			}
 			return false;
@@ -174,6 +199,9 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(addFavorite)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "add favorite wurde gedrückt");
 				//TODO: ansicht wechselt in die liste der favorisierten orte
 			}
@@ -187,8 +215,26 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(goToMap)) {
+				if(name.getVisibility() == View.VISIBLE) {
+					name.setVisibility(View.INVISIBLE);
+				}
 				Log.d(TAG_PULLUP_CONTENT, "go to map wurde gedrückt");
-				//TODO: ansicht wecheslt zurück zur karte
+				// TODO:pullup muss sich schließen
+			}
+			return false;
+		}
+		
+	}
+	
+	private class saveFavoriteListener implements OnEditorActionListener {
+
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (v.equals(name)) {
+				Log.d(TAG_PULLUP_CONTENT, "Ein name wurde eingegeben wurde eingegeben");
+				favController.saveFavoriteRoute(name.toString());
+				name.setVisibility(View.INVISIBLE);
+				//TODO:fix problem wie die route angegeben wird
 			}
 			return false;
 		}
