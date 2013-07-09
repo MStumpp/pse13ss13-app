@@ -79,13 +79,11 @@ public class MapController implements RouteListener {
 	 */
 	private MapController(MapView mv) {
 
-<<<<<<< HEAD
-		Log.d(MAP_CONTROLLER, "Map Controller wird initialisiert");
-=======
+
 		Log.d(TAG_MAP_CONTROLLER, "Map Controller wird initialisiert");
-		DisplayWaypoint[] dw = new DisplayWaypoint[1];
-		dw[0] = new DisplayWaypoint(-50, -50, 1);
->>>>>>> e4d824726b171400a113db0d8deaba7fbe641ea0
+		//DisplayWaypoint[] dw = new DisplayWaypoint[1];
+		//dw[0] = new DisplayWaypoint(-50, -50, 1);
+		
 		this.mapView = mv;
 
 		Display display = mapView.getWindowManager().getDefaultDisplay();
@@ -101,6 +99,7 @@ public class MapController implements RouteListener {
 	public void onMapOverlayImageChange(Bitmap b) {
 		this.mapView.updateMapImage(b);
 		//this.onRouteChange(null, null);
+		
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
