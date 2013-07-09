@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
@@ -75,7 +76,7 @@ public class SearchView extends Fragment {
 				R.id.number_search);
 		query = (EditText) this.getActivity().findViewById(R.id.query);
 		goButton = (Button) this.getActivity().findViewById(R.id.go_button);
-
+		
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -103,7 +104,7 @@ public class SearchView extends Fragment {
 		query.getLayoutParams().width = size.x;
 		goButton.setX(size.x / 4);
 		goButton.getLayoutParams().width = size.x / 2;
-
+		
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 
 		goButton.setOnTouchListener(new GoListener());

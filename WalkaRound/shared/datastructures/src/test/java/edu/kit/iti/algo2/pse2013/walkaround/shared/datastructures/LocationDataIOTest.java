@@ -74,8 +74,8 @@ public class LocationDataIOTest {
 
 		LocationDataIO locationDataIO = new LocationDataIO();
 
-		POI poi1 = new POI(1.d, 2.d, 1, "poi 1", "info 1", "url 1", new int[] { 0, 1 });
-		POI poi2 = new POI(3.d, 4.d, 1, "poi 2", "info 2", "url 2", new int[] { 0, 1 });
+		POI poi1 = new POI(1.d, 2.d, "poi 1", "info 1", "url 1", new int[] { 0, 1 });
+		POI poi2 = new POI(3.d, 4.d, "poi 2", "info 2", "url 2", new int[] { 0, 1 });
 
 		locationDataIO.addPOI(poi1);
 		locationDataIO.addPOI(poi2);

@@ -102,10 +102,11 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
-			this.routeCoordinates.add(new Waypoint(c.getLongitude(), c.getLatitude(), 1, "Wegpunkt"));
+			this.routeCoordinates.add(new Waypoint(c.getLongitude(), c.getLatitude(), "Wegpunkt"));
 		}
 		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
+		Log.d(TAG_ROUTE, "Amount of Waypoints" + this.routeCoordinates.size());
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 

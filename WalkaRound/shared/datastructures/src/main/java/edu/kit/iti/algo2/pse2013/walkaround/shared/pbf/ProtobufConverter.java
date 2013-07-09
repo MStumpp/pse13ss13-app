@@ -62,7 +62,6 @@ public class ProtobufConverter {
 		return new Location(
 			saveLoc.getParent().getLatitude(),
 			saveLoc.getParent().getLongitude(),
-			saveLoc.getID(),
 			saveLoc.getName(),
 			getAddress(saveLoc.getAddress()));
 	}
