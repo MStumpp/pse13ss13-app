@@ -143,8 +143,7 @@ public class RoundTripView extends Fragment {
 					jogging.setSelected(false);
 					jogging.setTextColor(Color.WHITE);
 				}
-			}
-			if (v.equals(shopping)) {
+			} else if (v.equals(shopping)) {
 				if (!shopping.isSelected()) {
 					shopping.setSelected(true);
 					shopping.setTextColor(Color.YELLOW);
@@ -152,8 +151,7 @@ public class RoundTripView extends Fragment {
 					shopping.setSelected(false);
 					shopping.setTextColor(Color.WHITE);
 				}
-			}
-			if (v.equals(sightseeing)) {
+			} else if (v.equals(sightseeing)) {
 				if (!sightseeing.isSelected()) {
 					sightseeing.setSelected(true);
 					sightseeing.setTextColor(Color.YELLOW);
@@ -161,8 +159,7 @@ public class RoundTripView extends Fragment {
 					sightseeing.setSelected(false);
 					sightseeing.setTextColor(Color.WHITE);
 				}
-			}
-			if (v.equals(clubbing)) {
+			} else if (v.equals(clubbing)) {
 				if (!clubbing.isSelected()) {
 					clubbing.setSelected(true);
 					clubbing.setTextColor(Color.YELLOW);
