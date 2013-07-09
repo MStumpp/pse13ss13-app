@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -19,6 +20,7 @@ public class GeometryDataIOTest {
     private static String fileLocation = System.getProperty("java.io.tmpdir") + File.separator + "geometryDataIO";
 
     @Test
+    @Ignore
     public void testSandAndLoad() {
 
         GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
