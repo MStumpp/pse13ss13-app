@@ -13,13 +13,7 @@ import java.io.Serializable;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Vertex extends Coordinate implements Serializable {
-
-    /**
-     * Temporary Serial version ID as long as Java serialization is used
-     */
-    private static final long serialVersionUID = -4228194461207025121L;
-
+public class Vertex extends Coordinate {
 
     /**
      * Internally used ID of that Vertex.
@@ -46,7 +40,7 @@ public class Vertex extends Coordinate implements Serializable {
 
 
     /**
-     * Parent Edge.
+     * Parent Vertex.
      */
     private Vertex parent;
 
