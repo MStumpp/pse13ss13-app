@@ -41,7 +41,7 @@ public class SpeedManager implements PositionListener {
 	}
 
 	private void notifyAllSpeedListeners() {
-		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllRouteListeners()");
+		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllCompassListeners()");
 		for (SpeedListener sl : this.speedListeners) {
 			sl.onSpeedChange(lastKnownSpeed);
 		}
