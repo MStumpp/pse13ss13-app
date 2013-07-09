@@ -24,4 +24,17 @@ public abstract class OSMElement {
 		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
+	public boolean hasTag(String key, String value) {
+		for (String curKey : tags.keySet()) {
+			if (curKey.equals(key)) {
+				String[] values = tags.get(curKey).split(";");
+				for (String curValue : values) {
+					if (curValue.equals(value)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
