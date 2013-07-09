@@ -12,9 +12,9 @@ public class POIInfoController {
 		return me;
 	}
 	public void addPOIToFavorites(POI poi) {
-		RouteMenuController.getInstance().addLocationToFavorites(poi, poi.getName());
+		RouteController.getInstance().addLocationToFavorites(poi, poi.getName());
 	}
 	public void addPOIToRoute(POI poi) {
-		RouteMenuController.getInstance().addWaypoint(poi);
+		RouteController.getInstance().addWaypoint(poi);
 	}
 }

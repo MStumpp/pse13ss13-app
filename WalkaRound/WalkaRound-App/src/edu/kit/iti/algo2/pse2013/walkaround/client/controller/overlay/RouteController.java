@@ -83,9 +83,9 @@ public class RouteController {
 		this.notifyAllRouteListeners();
 	}
 
-	public void addRoundtrip(Profile p, int i) {
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(Profile, int)");
-		this.currentRoute.addRoundtripAtActiveWaypoint(p.getID(), i);
+	public void addRoundtrip(int profileID, int length) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(int-profile " + profileID + ", int-length " + length + ")");
+		this.currentRoute.addRoundtripAtActiveWaypoint(profileID, length);
 		this.notifyAllRouteListeners();
 	}
 

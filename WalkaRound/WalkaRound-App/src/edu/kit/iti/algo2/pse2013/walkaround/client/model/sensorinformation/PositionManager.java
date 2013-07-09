@@ -1,14 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import android.content.Context;
-import android.location.GpsStatus;
 import android.location.GpsStatus.Listener;
+import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
@@ -25,8 +20,8 @@ public class PositionManager implements Listener {
 	
 	// 
 	private static LocationManager locationManager;
-	private static GpsStatus gpsStatus;
 	private static int lastGPSEvent;
+	private static Location lastKnownLocation;
 	
 	private PositionManager() {
 	}
@@ -34,6 +29,7 @@ public class PositionManager implements Listener {
 	public static void initialize(Context context) {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.initialize(Context)");
 		locationManager = (LocationManager) context.getApplicationContext().getSystemService("LOCATION_SERVICE");
+		locationManager.addGpsStatusListener(positionManager);
 	}
 	
 	public static PositionManager getInstance() {
@@ -42,9 +38,10 @@ public class PositionManager implements Listener {
 		if (!intanceExists) {
 			positionManager = new PositionManager();
 		}
+		lastKnownLocation = locationManager.getLastKnownLocation("GPS");
 		return positionManager;
 	}
-	
+
 
 	
 	// Observer Pattern:
@@ -53,28 +50,25 @@ public class PositionManager implements Listener {
 		if (!this.positionListeners.contains(newPL)) {
 			this.positionListeners.add(newPL);
 		}
-		this.notifyAllRouteListeners();
+		this.notifyAllPositionListeners();
 	}
 
-	private void notifyAllRouteListeners() {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.notifyAllRouteListeners()");
-		Coordinate gpsPosition;
-		
-		// TODO: wenn GPS status nicht null, bestimme Coord zur aktuelle GPS Position und übergebe diese
-		
+	private void notifyAllPositionListeners() {
+		Log.d(TAG_POSITION_MANAGER, "PositionManager.notifyAllRouteListeners()");		
 		for (PositionListener pl : this.positionListeners) {
-			pl.onPositionChange(gpsPosition);
+			pl.onPositionChange(lastKnownLocation);
 		}
-		
 		
 	}
 	
 	
+	// Android GPS Listener method:
 	public void onGpsStatusChanged(int event) {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int " + event + ")");
 		lastGPSEvent = event;
+		lastKnownLocation = locationManager.getLastKnownLocation("GPS");
 		if (lastGPSEvent == 3 || lastGPSEvent == 4) {
-			notifyAllRouteListeners();
+			notifyAllPositionListeners();
 		}
 	}
 	
