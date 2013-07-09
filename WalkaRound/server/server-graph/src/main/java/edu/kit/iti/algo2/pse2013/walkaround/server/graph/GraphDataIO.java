@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GraphDataIO implements Serializable {
 
@@ -21,30 +22,60 @@ public class GraphDataIO implements Serializable {
 
 
     /**
-     * Stores a list of Edge objects.
+     * Stores a set of Edge objects.
      */
-    private List<Edge> edges;
+    private Set<Edge> edges;
 
 
     /**
      * Initializes a GraphDataIO object.
      */
     public GraphDataIO() {
-        edges = new ArrayList<Edge>();
+        edges = new HashSet<Edge>();
     }
 
 
     /**
-     * Returns a list of all Vertex objects contained in all edges.
+     * Returns a set of all Vertex objects contained in all edges.
      *
-     * @return List<Vertex> List of all egdes.
+     * @return Set<Vertex> List of all egdes.
      */
-    public List<Vertex> getVertices() {
-        List<Vertex> vertices = new ArrayList<Vertex>();
+    public Set<Vertex> getVertices() {
+        Set<Vertex> vertices = new HashSet<Vertex>();
         for (Edge edge : edges)
             for (Vertex vertex : edge.getVertices())
                 vertices.add(vertex);
         return vertices;
+    }
+
+
+    /**
+     * Adds an Edge to the list of all Edges.
+     *
+     * @param edge Edge to be added.
+     */
+    public void addEdge(Edge edge) {
+        edges.add(edge);
+    }
+
+
+    /**
+     * Adds a list of Edges to the list of all Edges.
+     *
+     * @param edges List of Edges to be added.
+     */
+    public void addEdges(List<Edge> edges) {
+        edges.addAll(edges);
+    }
+
+
+    /**
+     * Returns the set of all Edges.
+     *
+     * @return Set<Edge>.
+     */
+    public Set<Edge> getEdges() {
+        return edges;
     }
 
 
@@ -75,36 +106,6 @@ public class GraphDataIO implements Serializable {
         GraphDataIO graph = (GraphDataIO) ois.readObject();
         ois.close();
         return graph;
-    }
-
-
-    /**
-     * Adds an Edge to the list of all Edges.
-     *
-     * @param edge Edge to be added.
-     */
-    public void addEdge(Edge edge) {
-        edges.add(edge);
-    }
-
-
-    /**
-     * Adds a list of Edges to the list of all Edges.
-     *
-     * @param edges List of Edges to be added.
-     */
-    public void addEdges(List<Edge> edges) {
-        edges.addAll(edges);
-    }
-
-
-    /**
-     * Returns the list of all Edges.
-     *
-     * @return List<Edge>.
-     */
-    public List<Edge> getEdges() {
-        return edges;
     }
 
 }
