@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 
 public class RoutingView extends Fragment {
 
@@ -26,7 +26,7 @@ public class RoutingView extends Fragment {
 	private int switcher = R.id.pullupRoutingSwitcher;
 	
 	FavoriteMenuController favController;
-	RouteMenuController routeController;
+	RouteController routeController;
 	
 	private Button reset;
 	private ImageView invert;
@@ -44,7 +44,7 @@ public class RoutingView extends Fragment {
 		Log.d(TAG_PULLUP_CONTENT, "Create RoutingView");
 		
 		favController = FavoriteMenuController.getInstance();
-		routeController = RouteMenuController.getInstance();
+		routeController = RouteController.getInstance();
 		
 		reset = (Button) this.getActivity().findViewById(R.id.reset);
 		invert = (ImageView) this.getActivity().findViewById(R.id.invert);

@@ -7,7 +7,7 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -28,7 +28,7 @@ public class MapController implements RouteListener {
 	private static String TAG_MAP_CONTROLLER = "MAP_CONTROLLER";
 	private static MapController mapController;
 
-	private static RouteMenuController routeController;
+	private static RouteController routeController;
 
 	// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
 	// 8.3858300); // Brauerstraße
@@ -92,7 +92,7 @@ public class MapController implements RouteListener {
 
 		this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
 
-		routeController = RouteMenuController.getInstance();
+		routeController = RouteController.getInstance();
 		routeController.registerRouteListener(this);
 	}
 
