@@ -103,7 +103,7 @@ public class SearchView extends Fragment {
 		query.getLayoutParams().width = size.x;
 		goButton.setX(size.x / 4);
 		goButton.getLayoutParams().width = size.x / 2;
-
+		
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 
 		goButton.setOnTouchListener(new GoListener());

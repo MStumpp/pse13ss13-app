@@ -106,6 +106,7 @@ public class Route implements RouteInfo {
 		}
 		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
+		Log.d(TAG_ROUTE, "Amount of Waypoints" + this.routeCoordinates.size());
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
