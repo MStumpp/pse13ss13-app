@@ -152,43 +152,11 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * berechnet die Koordinate anhand einer DisplayKoordinate relativ zu oberen
-	 * Ecke
-	 *
-	 * @param dc
-	 *            die zu konvertierende DisplayCoordinate
-	 * @return geographische Koordiante
-	 */
-	private Coordinate computeCoordinateByDisplayCoordinate(DisplayCoordinate dc) {
-		Log.d("WTF", dc.getX() + " " + dc.getY() + " " + currentLevelOfDetail + " " + CoordinateUtility.DIRECTION_Y);
-		Log.d("WTF", "CoordDiffY: " + -CoordinateUtility.convertPixelsToDegrees(dc.getY(), currentLevelOfDetail, CoordinateUtility.DIRECTION_Y));
-		Log.d("WTF", "CoordDiffX: " + CoordinateUtility.convertPixelsToDegrees(dc.getX(), currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
-		Log.d("WTF", "PixelDiffX: " + dc.getX());
-		Log.d("WTF", "PixelDiffY: " + dc.getY());
-		return new Coordinate(this.upperLeft,
-				-CoordinateUtility.convertPixelsToDegrees(dc.getY(),
-						currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
-				CoordinateUtility.convertPixelsToDegrees(dc.getX(),
-						currentLevelOfDetail, CoordinateUtility.DIRECTION_X));
-	}
-	/**
-	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer Koordinate
-	 *
-	 * @param dc die zu konvertierende DisplayCoordinate
-	 * @return
-	 */
-	private DisplayCoordinate computeDisplayCoordinateByCoordinate(Coordinate c) {
-		double deltaX = CoordinateUtility.convertDegreesToPixels(c.getLongitude() - upperLeft.getLongitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE);
-		double deltaY = CoordinateUtility.convertDegreesToPixels(c.getLatitude() - upperLeft.getLatitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
-		return new DisplayCoordinate((float) deltaX, (float) deltaY);
-	}
-
-	/**
 	 * berechnet die Mitte der karte
 	 */
 	private void computeMid() {
-		this.mid = computeCoordinateByDisplayCoordinate(new DisplayCoordinate(
-				size.x / 2, size.y / 2));
+		this.mid = CoordinateUtility.convertDisplayCoordinateToCoordinate(new DisplayCoordinate(
+				size.x / 2, size.y / 2), upperLeft, currentLevelOfDetail);
 	}
 
 	/**
@@ -351,7 +319,7 @@ public class MapModel implements TileListener {
 	 */
 	public boolean zoom(float delta, DisplayCoordinate c) {
 		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + c.toString());
-		return this.zoom(delta, this.computeCoordinateByDisplayCoordinate(c));
+		return this.zoom(delta, CoordinateUtility.convertDisplayCoordinateToCoordinate(c, upperLeft, currentLevelOfDetail));
 	}
 
 	/**
