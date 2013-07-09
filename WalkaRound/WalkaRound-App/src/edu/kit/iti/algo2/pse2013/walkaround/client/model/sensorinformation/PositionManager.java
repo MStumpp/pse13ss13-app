@@ -15,7 +15,6 @@ public class PositionManager implements Listener {
 	private LinkedList<PositionListener> positionListeners;
 	
 	// Singleton Pattern:
-	private static boolean intanceExists;
 	private static PositionManager positionManager;
 	
 	// 
@@ -35,7 +34,7 @@ public class PositionManager implements Listener {
 	public static PositionManager getInstance() {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.getInstance()");
 		assert (locationManager != null);
-		if (!intanceExists) {
+		if (positionManager == null) {
 			positionManager = new PositionManager();
 		}
 		lastKnownLocation = locationManager.getLastKnownLocation("GPS");
