@@ -16,7 +16,7 @@ public class RouteController {
 	
 	private static String TAG_ROUTE_CONTROLLER = "RouteController";
 
-	private static final String TAG = RouteMenuController.class.getSimpleName();
+	private static final String TAG = RouteController.class.getSimpleName();
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 
@@ -77,11 +77,8 @@ public class RouteController {
 	}
 
 	public void addWaypoint(Coordinate c) {
-<<<<<<< HEAD:WalkaRound/WalkaRound-App/src/edu/kit/iti/algo2/pse2013/walkaround/client/controller/overlay/RouteController.java
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addWaypoint(Coordinate)");
-=======
 		Log.d(TAG, "addWaypoint(" + c + ")");
->>>>>>> 5c6d093dbdc97168cc686e02ef399cc1e1abd962:WalkaRound/WalkaRound-App/src/edu/kit/iti/algo2/pse2013/walkaround/client/controller/overlay/RouteMenuController.java
 		this.currentRoute.addWaypoint(c);
 		this.notifyAllRouteListeners();
 	}

@@ -63,7 +63,7 @@ public class PositionManager implements Listener {
 		// TODO: wenn GPS status nicht null, bestimme Coord zur aktuelle GPS Position und übergebe diese
 		
 		for (PositionListener pl : this.positionListeners) {
-			//pl.onPositionChange(gpsPosition);
+			pl.onPositionChange(gpsPosition);
 		}
 		
 		
