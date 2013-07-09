@@ -140,6 +140,14 @@ public class MapModel implements TileListener {
 		}
 
 		Log.d(TAG_MAP_MODEL, "Map wird initialisiert");
+		
+
+		this.map = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		this.map.prepareToDraw();
+		
+		this.routeOverlayBitmap = Bitmap.createBitmap(1, 1,
+				Bitmap.Config.ARGB_8888);
+		
 		this.generateMapOverlayImage();
 
 		//this.mapController.onMapOverlayImageChange(map);
@@ -222,6 +230,9 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "LOD " + currentLevelOfDetail + " x " + xZoomBorder + " y " + yZoomBorder);
 		Log.d(TAG_MAP_MODEL, "MapStyle: " + CurrentMapStyleModel.getInstance().getCurrentMapStyle().getName());
 
+		this.map.recycle();
+		this.routeOverlayBitmap.recycle();
+		
 		if (this.currentLevelOfDetail < this.xZoomBorder && this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner display ");
 			final int size = ((int) Math.pow(2, this.currentLevelOfDetail))
@@ -463,9 +474,13 @@ public class MapModel implements TileListener {
 	}
 
 	public void drawDisplayCoordinates(final DisplayCoordinate[] dw){
-		for(int a = 0;a < dw.length; a++){
-			if(a++ < dw.length){
-				this.drawRoute(dw[a].getX(),dw[a].getY(),dw[a++].getX(),dw[a++].getY());
+
+		Log.d("wtf", " " + dw.length);
+		for(int a = 0;a < (dw.length -1); a++){
+			Log.d("wtf", " " + a + " : " + (a+1));
+			if(a+1 < dw.length && dw[a] != null && dw[a+1] != null){
+				this.drawRoute(dw[a].getX(),dw[a].getY(),dw[a+1].getX(),dw[a+1].getY());
+				
 			}
 		}
 	}
@@ -517,6 +532,9 @@ public class MapModel implements TileListener {
 			Canvas canvas = new Canvas(map);
 
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+
+			Log.d("wtf", "tile " +(tile == null));
+			Log.d("wtf", "cancas " +(canvas == null));
 			canvas.drawBitmap(tile, (localX * tile.getWidth()) - mapOffset.getX(),
 					(localY * tile.getHeight()) + mapOffset.getY(), null);
 			

@@ -99,7 +99,7 @@ public class MapController implements RouteListener {
 	}
 
 	public void onRouteOverlayImageChange(Bitmap b) {
-
+		mapView.updateRouteOverlayImage(b);
 	}
 
 	public void onDeletePoint(DisplayCoordinate dc) {
@@ -127,6 +127,7 @@ public class MapController implements RouteListener {
 
 	public void onShift(float distanceX, float distanceY) {
 		mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
+		mapModel.drawDisplayCoordinates(dw);
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
@@ -177,7 +178,9 @@ public class MapController implements RouteListener {
 	public float getCurrentLevelOfDetail() {
 		return this.mapModel.getCurrentLevelOfDetail();
 	}
-
+	
+	DisplayWaypoint[] dw;
+	
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
 		Log.d(MAP_CONTROLLER, "Route Change!");
@@ -188,7 +191,7 @@ public class MapController implements RouteListener {
 		waypointList.add(new Waypoint(49.00471, 8.3858300,2,"Brauerstraße"));
 		waypointList.add(new Waypoint(49.0145, 8.419,3,"211"));
 
-		DisplayWaypoint[] dw = new DisplayWaypoint[waypointList.size()];
+		dw = new DisplayWaypoint[waypointList.size()];
 		int a = 0;
 
 		
@@ -226,6 +229,7 @@ public class MapController implements RouteListener {
 		
 		// TODO
 		mapView.updateDisplayCoordinate(dw);
+		mapModel.drawDisplayCoordinates(dw);
 
 		// mapView.setActive(activeWaypoint.getId());
 	}

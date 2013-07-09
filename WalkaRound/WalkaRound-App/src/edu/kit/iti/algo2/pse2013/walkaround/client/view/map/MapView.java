@@ -304,10 +304,6 @@ public class MapView extends Activity {
 
 		final Context context = this;
 
-		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
-				Bitmap.Config.ARGB_8888);
-		routeOverlayBitmap.prepareToDraw();
-
 		runOnUiThread(new Runnable() {
 			public void run() {
 				routeList.removeAllViews();
@@ -715,5 +711,24 @@ public class MapView extends Activity {
 			//
 			return false;
 		}
+	}
+
+	/**
+	 * 
+	 * @param b
+	 */
+	public void updateRouteOverlayImage(final Bitmap b) {
+
+		if(routeOverlay == null){
+			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
+		}
+		
+		runOnUiThread(new Runnable() {
+			public void run() {
+
+				routeOverlay.setImageBitmap(b);
+				routeOverlay.setVisibility(View.VISIBLE);
+			}
+		});
 	}
 }
