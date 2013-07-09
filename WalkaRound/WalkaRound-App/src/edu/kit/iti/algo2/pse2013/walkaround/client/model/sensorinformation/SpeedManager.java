@@ -13,21 +13,21 @@ public class SpeedManager implements PositionListener {
 	// Observers:
 	private LinkedList<SpeedListener> speedListeners;
 
-	private static boolean intanceExists;
 	private static SpeedManager speedManager;
 
 	private static double lastKnownSpeed;
 
 	private SpeedManager() {
-
 	}
 
-	public static SpeedManager getInstance() {
-		if (!intanceExists) {
+	public SpeedManager getInstance() {
+		if (speedManager == null) {
 			speedManager = new SpeedManager();
+			PositionManager.getInstance().registerPositionListener(speedManager);
 		}
 		return speedManager;
 	}
+	
 
 	// Observer Pattern:
 	public void registerSpeedListener(SpeedListener newSL) {

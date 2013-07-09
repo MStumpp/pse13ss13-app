@@ -135,6 +135,16 @@ public final class Edge implements Geometrizable, Serializable {
     }
 
 
+    /**
+     * Overwrites the length computed in constructor.
+     *
+     * @param length Length.
+     */
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+
     /* (non-Javadoc)
      * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
      */

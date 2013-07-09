@@ -62,7 +62,7 @@ public class Location extends Coordinate {
      */
     public Location(double lat, double lon, int id, String name, Address address) {
         super(lat, lon);
-        if (id <= 0)
+        if (id < 0)
             throw new IllegalArgumentException("id must be greater than zero");
         this.id = id;
         if (name == null || name.isEmpty())

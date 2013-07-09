@@ -20,7 +20,6 @@ public class RouteController {
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 
-	private static boolean intanceExists;
 	private static RouteController routeMC;
 
 	private RouteController() {
@@ -28,13 +27,11 @@ public class RouteController {
 		this.routeListeners = new LinkedList<RouteListener>();
 		LinkedList<Coordinate> coordinateList = new LinkedList<Coordinate>();
 		this.currentRoute = new Route(coordinateList);
-
-
 	}
 
 	public static RouteController getInstance() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.getInstance()");
-		if (!intanceExists) {
+		if (routeMC == null) {
 			routeMC = new RouteController();
 		}
 		return routeMC;
@@ -51,7 +48,7 @@ public class RouteController {
 	private void notifyAllRouteListeners() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners()");
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
-		if(this.currentRoute != null && activeWaypoint != null) {
+		if (this.currentRoute != null && activeWaypoint != null) {
 			for (RouteListener rl : this.routeListeners) {
 				rl.onRouteChange((RouteInfo)this.currentRoute, activeWaypoint);
 			}

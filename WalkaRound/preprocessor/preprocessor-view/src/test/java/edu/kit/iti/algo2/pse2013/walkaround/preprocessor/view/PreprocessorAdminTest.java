@@ -1,8 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import org.junit.Ignore;
@@ -11,9 +14,7 @@ import org.junit.Test;
 import java.io.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -95,7 +96,9 @@ public class PreprocessorAdminTest {
         }
     }
 
+
     @Test
+    @Ignore
     public void testPreprocessLocationDataIO() {
 
         File verticesFile = new File("/Users/Matthias/Workspace/PSE/data/restaurant.csv");
@@ -130,6 +133,37 @@ public class PreprocessorAdminTest {
 
         try {
             LocationDataIO.save(locationDataIO, new File("/Users/Matthias/Workspace/PSE/data/locationDataIO"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testPreprocessGeometryDataIO() {
+
+        GraphDataIO graphDataIO = null;
+        try {
+            graphDataIO = GraphDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/graphDataIO"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LocationDataIO locationDataIO = null;
+        try {
+            locationDataIO = LocationDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/locationDataIO"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
+
+        try {
+            GeometryDataIO.save(geometryDataIO, new File("/Users/Matthias/Workspace/PSE/data/geometryDataIO"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -26,8 +26,6 @@ public class GeometryProcessor {
 
     /**
      * Creates an instance of GeometryProcessor.
-     *
-     * @param geometryDataIO GeometryDataIO containing relevant data.
      */
     private GeometryProcessor(GeometryDataIO geometryDataIO) {
         this.geometryDataIO = geometryDataIO;
@@ -35,17 +33,29 @@ public class GeometryProcessor {
 
 
     /**
-     * Instantiates and/or returns a singleton instance of GeometryProcessor.
+     * Returns a singleton instance of GeometryProcessor if available.
+     *
+     * @return GeometryProcessor.
+     */
+    public static GeometryProcessor getInstance() {
+        if (instance == null)
+            throw new IllegalArgumentException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of GeometryProcessor.
      *
      * @param geometryDataIO GeometryDataIO containing relevant data.
      * @return GeometryProcessor.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
-    public static GeometryProcessor getInstance(GeometryDataIO geometryDataIO) {
+    public static GeometryProcessor init(GeometryDataIO geometryDataIO) {
         if (geometryDataIO == null)
-            throw new IllegalArgumentException("geometryProcessor must be provided");
-        if (instance == null)
-            instance = new GeometryProcessor(geometryDataIO);
+            throw new IllegalArgumentException("GeometryDataIO must be provided");
+        if (instance != null)
+            throw new IllegalArgumentException("GeometryProcessor already initialized");
+        instance = new GeometryProcessor(geometryDataIO);
         return instance;
     }
 
