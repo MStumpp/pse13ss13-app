@@ -79,8 +79,8 @@ public class RouteMenuController {
 		this.notifyAllRouteListeners();
 	}
 
-	public void addRoundtrip(Profile p, int i) {
-		this.currentRoute.addRoundtripAtActiveWaypoint(p.getID(), i);
+	public void addRoundtrip(int profileID, int i) {
+		this.currentRoute.addRoundtripAtActiveWaypoint(profileID, i);
 		this.notifyAllRouteListeners();
 	}
 
