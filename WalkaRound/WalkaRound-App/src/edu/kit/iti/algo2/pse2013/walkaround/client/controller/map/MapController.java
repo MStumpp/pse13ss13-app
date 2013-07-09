@@ -190,7 +190,7 @@ public class MapController implements RouteListener {
 
 		//LinkedList<Waypoint> waypointList = new LinkedList<Waypoint>();
 		waypointList.add(new Waypoint(49.01, 8.40333, 1, "Marktplatz"));
-		waypointList.add(new Waypoint(49.00471, 8.3858300, 2, "Brauerstra√üe"));
+		waypointList.add(new Waypoint(49.00471, 8.3858300, 2, "Brauerstraﬂe"));
 		waypointList.add(new Waypoint(49.0145, 8.419, 3, "211"));
 
 		DisplayWaypoint[] dw = new DisplayWaypoint[waypointList.size()];
