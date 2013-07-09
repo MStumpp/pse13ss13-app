@@ -252,15 +252,16 @@ public class MapView extends Activity {
 		runOnUiThread(new Runnable() {
 			public void run() {
 
-				map.setImageBitmap(b);
-				map.setVisibility(View.VISIBLE);
+				if (!b.isRecycled()) {
+					map.setImageBitmap(b);
+					map.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 	}
 
 	Canvas canvas;
 	Bitmap routeOverlayBitmap;
-
 
 	float fromX;
 	float fromY;
@@ -340,8 +341,8 @@ public class MapView extends Activity {
 
 					// drawRoute(fromX, fromY, value.getX(), value.getY());
 
-					//fromX = value.getX();
-					//fromY = value.getY();
+					// fromX = value.getX();
+					// fromY = value.getY();
 				}
 
 				if (routeList.getChildCount() > 0) {
@@ -719,15 +720,16 @@ public class MapView extends Activity {
 	 */
 	public void updateRouteOverlayImage(final Bitmap b) {
 
-		if(routeOverlay == null){
+		if (routeOverlay == null) {
 			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
 		}
-		
+
 		runOnUiThread(new Runnable() {
 			public void run() {
-
-				routeOverlay.setImageBitmap(b);
-				routeOverlay.setVisibility(View.VISIBLE);
+				if (!b.isRecycled()) {
+					routeOverlay.setImageBitmap(b);
+					routeOverlay.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 	}
