@@ -18,26 +18,27 @@ public class PositionManager implements Listener {
 	private static PositionManager positionManager;
 	
 	// 
-	private static LocationManager locationManager;
+	private LocationManager locationManager;
 	private static int lastGPSEvent;
 	private static Location lastKnownLocation;
 	
-	private PositionManager() {
+	private PositionManager(Context context) {
+		Log.d(TAG_POSITION_MANAGER, "Context da " + (context != null));
+		locationManager = (LocationManager) context.getApplicationContext().getSystemService("LOCATION_SERVICE");
+		locationManager.addGpsStatusListener(this);
 	}
 	
 	public static void initialize(Context context) {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.initialize(Context)");
-		locationManager = (LocationManager) context.getApplicationContext().getSystemService("LOCATION_SERVICE");
-		locationManager.addGpsStatusListener(positionManager);
+		positionManager = new PositionManager(context);
 	}
 	
 	public static PositionManager getInstance() {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.getInstance()");
-		assert (locationManager != null);
 		if (positionManager == null) {
-			positionManager = new PositionManager();
+			Log.d(TAG_POSITION_MANAGER, "Initialisieren Sie den PositionManager zuerst");
+			return null;
 		}
-		lastKnownLocation = locationManager.getLastKnownLocation("GPS");
 		return positionManager;
 	}
 
@@ -58,6 +59,10 @@ public class PositionManager implements Listener {
 			pl.onPositionChange(lastKnownLocation);
 		}
 		
+	}
+	
+	public Location  getLastKnownLocation(){
+		return locationManager.getLastKnownLocation("GPS");
 	}
 	
 	
