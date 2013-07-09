@@ -162,7 +162,7 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if(v.equals(save)) {
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedrückt");
-				//TODO : favController ruft save route auf
+				//TODO : routemenucontroller ruft save route auf, wie gibt man den namen mit!?
 			}
 			return false;
 		}
