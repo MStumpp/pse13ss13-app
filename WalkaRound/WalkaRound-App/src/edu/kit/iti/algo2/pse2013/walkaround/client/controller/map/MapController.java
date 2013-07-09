@@ -80,8 +80,6 @@ public class MapController implements RouteListener {
 	private MapController(MapView mv) {
 
 		Log.d(MAP_CONTROLLER, "Map Controller wird initialisiert");
-		DisplayWaypoint[] dw = new DisplayWaypoint[1];
-		dw[0] = new DisplayWaypoint(-50, -50, 1);
 		this.mapView = mv;
 
 		Display display = mapView.getWindowManager().getDefaultDisplay();
@@ -129,7 +127,9 @@ public class MapController implements RouteListener {
 
 	public void onShift(float distanceX, float distanceY) {
 		mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
-		mapModel.drawDisplayCoordinates(dw);
+		if(dw != null){
+			mapModel.drawDisplayCoordinates(dw.clone());
+		}
 	}
 
 	public void containsWaypoint(DisplayCoordinate dc) {
