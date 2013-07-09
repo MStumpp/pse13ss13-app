@@ -1,0 +1,13 @@
+option java_package = "edu.kit.iti.algo2.pse2013.walkaround.shared.pbf";
+option java_outer_classname = "GraphProtos";
+
+message SaveGraphData {
+	message SaveVertex {
+		required
+	}
+	message SaveEdge {
+		required Vertex tail = 1;
+		required Vertex head = 1;
+	}
+	repeated SaveEdge edge = 1;
+}
