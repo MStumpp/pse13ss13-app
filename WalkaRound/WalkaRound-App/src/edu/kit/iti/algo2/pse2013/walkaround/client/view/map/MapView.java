@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -34,6 +35,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -123,24 +126,6 @@ public class MapView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG_MAPVIEW, "Start");
-		String testFile = "protobufTest";
-		try {
-			FileOutputStream fos = openFileOutput(testFile, Context.MODE_PRIVATE);
-			ProtobufIO.write(new Coordinate(49, 9), fos);
-			fos.flush();
-			fos.close();
-			Log.d(TAG_MAPVIEW, "Written...");
-			FileInputStream fis = openFileInput(testFile);
-			Coordinate c = ProtobufIO.readCoordinate(fis);
-			fis.close();
-			Log.d(TAG_MAPVIEW, "I have succesfully read the following coordinate: " + c);
-		} catch (FileNotFoundException e) {
-			Log.e(TAG_MAPVIEW, e.getLocalizedMessage());
-		} catch (IOException e) {
-			Log.e(TAG_MAPVIEW, e.getLocalizedMessage());
-		}
-
 
 		// Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
 		// Debug.getMemoryInfo(memoryInfo);
@@ -261,6 +246,7 @@ public class MapView extends Activity {
 		// this.updateRouteOverlayImage();
 
 		// this.drawRoute(0, 0, 500, 500);
+		
 	}
 
 	/**
@@ -343,20 +329,32 @@ public class MapView extends Activity {
 
 	}
 
+	float userX;
+	float userY;
+	
+	public void onPositionChange(final float x, final float y) {
+		// TODO Auto-generated method stub
+		runOnUiThread(new Runnable() {
+			public void run() {
+				userX = x;
+				userY = y;
+			}
+		});
+		this.setUserPositionOverlayImage(new DisplayCoordinate(userX,userY), 0);
+	}
+	
 	/**
 	 *
 	 *
 	 * @param dw
 	 */
-	private void updateDisplayWaypoint(final DisplayWaypoint[] way) {
+	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
 
 		final Context context = this;
 		
-		if(way == null){
+		if(dw == null){
 			return;
 		}
-		
-		final DisplayWaypoint[] dw = way.clone();
 		
 		runOnUiThread(new Runnable() {
 			public void run() {
@@ -365,10 +363,12 @@ public class MapView extends Activity {
 
 				fromX = dw[0].getX();
 				fromY = dw[0].getY();
-				Log.d(TAG_MAPVIEW + "_DRAW", "tt " + dw[0].getX());
-				Log.d(TAG_MAPVIEW + "_DRAW", "tt " + dw[0].getY());
+				Log.d("TAG_MAPVIEW_DRAW", "Anzahl " + dw.length);
 
+				
 				for (DisplayWaypoint value : dw) {
+					Log.d("TAG_MAPVIEW_DRAW", "x " + value.getX());
+					Log.d("TAG_MAPVIEW_DRAW", "y " + value.getY());
 					ImageView iv = new ImageView(context);
 					iv.setImageDrawable(waypoint);
 					iv.setY(value.getY() - sizeOfPoints);
@@ -485,8 +485,10 @@ public class MapView extends Activity {
 	 *            Rotation
 	 * @return
 	 */
-	public void setUserPositionOverlayImage(DisplayCoordinate coor, float degree) {
+	private void setUserPositionOverlayImage(DisplayCoordinate coor, float degree) {
 
+		//Log.d("wtf2",""+(coor == null));
+		
 		AnimatorSet set = new AnimatorSet();
 
 		Log.d("MAP_THREAD", "Thread Animator Set UP");
@@ -512,6 +514,7 @@ public class MapView extends Activity {
 		set.setStartDelay(startDelay);
 		startDelay += 1000;
 		set.start();
+			
 
 	}
 
@@ -766,5 +769,6 @@ public class MapView extends Activity {
 			return false;
 		}
 	}
+
 
 }
