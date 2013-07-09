@@ -58,12 +58,12 @@ public class PositionManager implements Listener {
 
 	private void notifyAllRouteListeners() {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.notifyAllRouteListeners()");
-		Coordinate gpsPosition;
+		Coordinate position;
 		
 		// TODO: wenn GPS status nicht null, bestimme Coord zur aktuelle GPS Position und übergebe diese
 		
 		for (PositionListener pl : this.positionListeners) {
-			pl.onPositionChange(gpsPosition);
+			// pl.onPositionChange(position);
 		}
 		
 		
