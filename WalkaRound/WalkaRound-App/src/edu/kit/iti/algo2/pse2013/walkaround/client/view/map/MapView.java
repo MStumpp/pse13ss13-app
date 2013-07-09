@@ -1,5 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -11,8 +16,6 @@ import android.content.Context;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -32,7 +35,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
 
 public class MapView extends Activity {
 
@@ -107,7 +112,7 @@ public class MapView extends Activity {
 	int sizeOfRoute = 6;
 
 	/**
-	 * 
+	 *
 	 */
 
 	PullUpView pullUp;
@@ -117,6 +122,24 @@ public class MapView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG_MAPVIEW, "Start");
+		String testFile = "protobufTest";
+		try {
+			FileOutputStream fos = openFileOutput(testFile, Context.MODE_PRIVATE);
+			ProtobufIO.write(new Coordinate(49, 9), fos);
+			fos.flush();
+			fos.close();
+			Log.d(TAG_MAPVIEW, "Written...");
+			FileInputStream fis = openFileInput(testFile);
+			Coordinate c = ProtobufIO.readCoordinate(fis);
+			fis.close();
+			Log.d(TAG_MAPVIEW, "I have succesfully read the following coordinate: " + c);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG_MAPVIEW, e.getLocalizedMessage());
+		} catch (IOException e) {
+			Log.e(TAG_MAPVIEW, e.getLocalizedMessage());
+		}
+
 
 		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
 
@@ -209,19 +232,19 @@ public class MapView extends Activity {
 		 * DisplayWaypoint(-50, 550, 1); list[1] = new DisplayWaypoint(250, 700,
 		 * 2); list[2] = new DisplayWaypoint(500, 800, 3); list[3] = new
 		 * DisplayWaypoint(300, 900, 4);
-		 * 
+		 *
 		 * this.updateDisplayCoordinate(list);
 		 */
 		/*
 		 * updateDisplayCoordinate(list);
-		 * 
+		 *
 		 * /* Log.d(TAG_MAPVIEW,
 		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[]
 		 * list2 = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4);
 		 * list2[1] = new DisplayPOI(450, 400, 5); list2[2] = new
 		 * DisplayPOI(700, 500, 6);
-		 * 
-		 * 
+		 *
+		 *
 		 * updateDisplayCoordinate(list2);
 		 */
 
@@ -236,7 +259,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public PullUpView getPullUpView() {
 		return pullUp;
@@ -244,7 +267,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet die Karte
-	 * 
+	 *
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
@@ -266,7 +289,7 @@ public class MapView extends Activity {
 	float fromY;
 
 	/**
-	 * 
+	 *
 	 * @param dip
 	 * @return
 	 */
@@ -296,8 +319,8 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param dw
 	 */
 	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
@@ -363,7 +386,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dp
 	 */
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
@@ -385,7 +408,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Setzt einen neuen Punkt aktive
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setActive(int id) {
@@ -428,7 +451,7 @@ public class MapView extends Activity {
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
-	 * 
+	 *
 	 * @param coor
 	 *            Zielkoordinate
 	 * @param degree
@@ -518,9 +541,9 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MyGestureDetector implements OnGestureListener {
 
@@ -629,9 +652,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -654,7 +677,7 @@ public class MapView extends Activity {
 				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
 				 * startY = event.getY(); return
 				 * gestureDetector.onTouchEvent(event); }
-				 * 
+				 *
 				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
 				 * (Math.abs(startX-event.getX())) > 100 ||
 				 * (Math.abs(startY-event.getY())) > 100) &&
@@ -672,9 +695,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
@@ -690,9 +713,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 

@@ -8,8 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
-import android.widget.ImageView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
@@ -228,11 +226,11 @@ public class MapModel implements TileListener {
 			//this.map.recycle();
 			this.map = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
-			
+
 			this.routeOverlayBitmap = Bitmap.createBitmap(size, size,
 					Bitmap.Config.ARGB_8888);
 			this.routeOverlayBitmap.prepareToDraw();
-			
+
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
@@ -247,7 +245,7 @@ public class MapModel implements TileListener {
 			this.routeOverlayBitmap = Bitmap.createBitmap(sizeX, size.y,
 					Bitmap.Config.ARGB_8888);
 			this.routeOverlayBitmap.prepareToDraw();
-			
+
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
@@ -262,7 +260,7 @@ public class MapModel implements TileListener {
 			this.routeOverlayBitmap = Bitmap.createBitmap(size.x, sizeY,
 					Bitmap.Config.ARGB_8888);
 			this.routeOverlayBitmap.prepareToDraw();
-			
+
 			this.fetchTiles();
 			return;
 		}
@@ -275,7 +273,7 @@ public class MapModel implements TileListener {
 		this.routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
 		this.routeOverlayBitmap.prepareToDraw();
-		
+
 		this.fetchTiles();
 	}
 
@@ -471,7 +469,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Updatet das Routen Overlay
-	 * 
+	 *
 	 * @param b
 	 */
 	public void drawRoute(final float fromX, final float fromY,
@@ -481,7 +479,7 @@ public class MapModel implements TileListener {
 
 		Paint pinsel = new Paint();
 		pinsel.setColor(Color.rgb(64, 64, 255));
-		//TODO 
+		//TODO
 		pinsel.setStrokeWidth(8);
 
 		// Diagonale durch Leinwand zeichnen
@@ -494,13 +492,13 @@ public class MapModel implements TileListener {
 
 		Log.d(TAG_MAP_MODEL + "_DRAW", "routeOverlayBitmap "
 				+ (routeOverlayBitmap == null));
-		
+
 		mapController.onRouteOverlayImageChange(routeOverlayBitmap);
-		
-		
+
+
 
 	}
-	
+
 	@Override
 	public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail) {
 		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);
