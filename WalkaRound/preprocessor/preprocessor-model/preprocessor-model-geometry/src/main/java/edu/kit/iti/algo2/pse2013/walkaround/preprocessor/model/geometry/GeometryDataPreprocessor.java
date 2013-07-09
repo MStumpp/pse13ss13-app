@@ -2,9 +2,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 import java.util.*;
 
@@ -29,39 +29,55 @@ public class GeometryDataPreprocessor {
         if (graphDataIO == null || locationDataIO == null)
             throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
 
-        // get all vertices
-        List<Geometrizable> vertices = new ArrayList<Geometrizable>();
-        for (Edge edge : graphDataIO.getEdges())
-            for (Vertex vertex : edge.getVertices())
-                vertices.add(vertex);
+        Set<Geometrizable> geometrizables = new HashSet<Geometrizable>();
 
-        Set<Geometrizable> sortedLatitude = new TreeSet<Geometrizable>(new Comparator<Geometrizable>() {
-            @Override
-            public int compare(Geometrizable v1, Geometrizable v2) {
-                if (v1.valueForDimension(0) >  v2.valueForDimension(0)){
-                    return 1;
-                } else if (v1.valueForDimension(0) < v2.valueForDimension(0)){
-                    return -1;
-                } else
-                    return 0;
-            }
-        });
-        sortedLatitude.addAll(vertices);
+        int duplicates = 0;
+        // get all vertices from graphDataIO
 
-        Set<Geometrizable> sortedLongitude = new TreeSet<Geometrizable>(new Comparator<Geometrizable>() {
-            @Override
-            public int compare(Geometrizable v1, Geometrizable v2) {
-                if (v1.valueForDimension(1) >  v2.valueForDimension(1)){
-                    return 1;
-                } else if (v1.valueForDimension(1) < v2.valueForDimension(1)){
-                    return -1;
-                } else
-                    return 0;
-            }
-        });
-        sortedLongitude.addAll(vertices);
+        for (Geometrizable geometrizable : graphDataIO.getVertices())
+            if (!geometrizables.contains(geometrizable))
+                geometrizables.add(geometrizable);
+            else
+                duplicates++;
 
-        Geometrizable[][] data = new Geometrizable[][]{sortedLatitude.toArray(new Geometrizable[0]), sortedLongitude.toArray(new Geometrizable[0])};
+        // get all POIs from locationDataIO
+//        for (POI poi : locationDataIO.getPOIs())
+//            geometrizables.add(poi);
+
+        System.out.println("number duplicates: " + duplicates);
+
+        // throw exception if number of geometrizables is not greater than 0
+        if (geometrizables.size() == 0)
+            throw new IllegalArgumentException("number of geometrizables must be greater than 0");
+
+        // number of dimensions, use first element of geometrizables
+        int numDimensions = 2;
+
+        // set up data
+        Set[] sorted = new TreeSet[numDimensions];
+        Geometrizable[][] data = new Geometrizable[numDimensions][];
+
+        // fill and sort data
+        for (int i = 0; i<numDimensions; i++) {
+            final int dim = i;
+            Set<Geometrizable> sortedGeometrizables = new TreeSet<Geometrizable>(new Comparator<Geometrizable>() {
+                @Override
+                public int compare(Geometrizable v1, Geometrizable v2) {
+                    if (v1.valueForDimension(dim) > v2.valueForDimension(dim)) {
+                        return 1;
+                    } else if (v1.valueForDimension(dim) < v2.valueForDimension(dim)) {
+                        return -1;
+                    } else
+                        return 0;
+                }
+            });
+            sortedGeometrizables.addAll(geometrizables);
+            sorted[i] = sortedGeometrizables;
+            data[i] = sortedGeometrizables.toArray(new Geometrizable[0]);
+        }
+
+        System.out.println(data[0].length);
+        System.out.println(data[1].length);
 
         if (data[0].length != data[1].length)
             throw new IllegalArgumentException("both lists must be of same size");
@@ -69,7 +85,7 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("list of vertices must be greater than 0");
 
         // build tree
-        GeometryNode node = buildTree(data, null, 0, 0, data[0].length-1);
+        GeometryNode node = buildTree(data, sorted, null, 0, 0, data[0].length-1);
         return new GeometryDataIO(node, data.length);
     }
 
@@ -84,7 +100,7 @@ public class GeometryDataPreprocessor {
      * @param end End index for current processing.
      * @return GeometryNode Node.
      */
-    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end) {
+    private static GeometryNode buildTree(Geometrizable[][] data, Set[] sorted, GeometryNode parent, int depth, int start, int end) {
 
         int dim = depth % data.length;
 
@@ -126,6 +142,7 @@ public class GeometryDataPreprocessor {
 
         // median + 1 becuase to parameter is exclusive, but median must be in left tree by definition
         List<Geometrizable> geometrizableForLeft = Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1));
+        //Geometrizable[] geometrizableForLeft = Arrays.copyOfRange(data[dim], start, median+1);
         int leftIndex;
         int rightIndex;
         for (Map.Entry<Integer, Geometrizable[]> entry : backupArray.entrySet()) {
@@ -135,6 +152,13 @@ public class GeometryDataPreprocessor {
             rightIndex = median+1;
             for (Geometrizable geometrizable : geometrizables) {
                 if (geometrizableForLeft.contains(geometrizable)) {
+                //if (Arrays.binarySearch(geometrizableForLeft, geometrizable)) {
+                /*System.out.println("geometrizable: " + geometrizable + " dim: " + dim + " start: " + start + " median: " + median);
+                System.out.println("old: bool: " + geometrizableForLeft.contains(geometrizable));
+                System.out.println(geometrizableForLeft);
+                System.out.println("new: bool: " + contains(data[dim], dim, geometrizable, start, median));
+                System.out.println(Arrays.toString(data[dim]));
+                if (contains(data[dim], dim, geometrizable, start, median)) { */
                     data[currentDim][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {
@@ -145,9 +169,29 @@ public class GeometryDataPreprocessor {
         }
 
         GeometryNode node = new GeometryNode(parent, depth, (data[dim][median].valueForDimension(dim)));
-        node.setLeftNode(buildTree(data, node, depth+1, start, median));
-        node.setRightNode(buildTree(data, node, depth+1, median+1, end));
+        node.setLeftNode(buildTree(data, sorted, node, depth+1, start, median));
+        node.setRightNode(buildTree(data, sorted, node, depth+1, median+1, end));
         return node;
+    }
+
+    private static boolean contains(Geometrizable[] array, int dim, Geometrizable geometrizable, int start, int end) {
+        final int i = dim;
+        int idx = Arrays.binarySearch(array, geometrizable, new Comparator<Geometrizable>() {
+            @Override
+            public int compare(Geometrizable v1, Geometrizable v2) {
+                if (v1.valueForDimension(i) > v2.valueForDimension(i)) {
+                    return 1;
+                } else if (v1.valueForDimension(i) < v2.valueForDimension(i)) {
+                    return -1;
+                } else
+                    return 0;
+            }
+        });
+        System.out.println("idx " + idx);
+        boolean result = false;
+        if (idx >= start && idx <= end)
+            result = true;
+        return result;
     }
 
 }

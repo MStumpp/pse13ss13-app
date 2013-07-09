@@ -1,11 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsException;
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.OptimizeRouteProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.server.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.server.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -32,12 +30,31 @@ public class Server {
     @Path("computeShortestPath")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
+    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1,
+                                                 Coordinate coordinate2) {
+
+        // check input
+        if (coordinate1 == null || coordinate2 == null)
+            throw new IllegalArgumentException("coordinate1 and coordinate2 must not be null");
+
+        // project coordinate
+        Vertex sourceVertex = null;
+        Vertex targetVertex = null;
         try {
-            return ShortestPathProcessor.getInstance(null).computeShortestPath(coordinate1, coordinate2);
-        } catch (NoShortestPathExistsException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            sourceVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate1);
+            targetVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate2);
+        } catch (GeometryProcessorException e) {
+            e.printStackTrace();
         }
+
+        try {
+            return ShortestPathProcessor.getInstance().computeShortestPath(sourceVertex, targetVertex);
+        } catch (NoShortestPathExistsException e) {
+            e.printStackTrace();
+        } catch (ShortestPathComputeException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
@@ -55,10 +72,12 @@ public class Server {
     @Path("computeRoundtrip/profile/{profile}/length/{length}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public RouteInfoTransfer computeRoundtrip(Coordinate coordinate, @PathParam("profile") String profile, @PathParam("length") String length) {
+    public RouteInfoTransfer computeRoundtrip(Coordinate coordinate,
+                                              @PathParam("profile") String profile,
+                                              @PathParam("length") String length) {
         int profileAsInt = Integer.parseInt(profile);
         int lengthAsInt = Integer.parseInt(length);
-        return RoundtripProcessor.getInstance(null).computeRoundtrip(coordinate, profileAsInt, lengthAsInt);
+        return RoundtripProcessor.getInstance().computeRoundtrip(coordinate, profileAsInt, lengthAsInt);
     }
 
 
@@ -74,7 +93,7 @@ public class Server {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public RouteInfoTransfer computeOptimizedRoute(RouteInfoTransfer routeInfoTransfer) {
-        return OptimizeRouteProcessor.getInstance(null).computeOptimizedRoute(routeInfoTransfer);
+        return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
     }
 
 }

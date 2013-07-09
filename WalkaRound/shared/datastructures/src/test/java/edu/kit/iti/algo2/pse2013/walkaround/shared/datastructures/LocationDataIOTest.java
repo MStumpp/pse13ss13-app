@@ -53,10 +53,10 @@ public class LocationDataIOTest {
         // Check, if the POIs are really the same
         List<POI> oldPOIs = writeLocationData.getPOIs();
         List<POI> newPOIs = readLocationData.getPOIs();
-        // TODO check whats wrong here
-        /*for (int i = 0; i < size; i++) {
-        	Assert.assertEquals(oldPOIs.get(i), newPOIs.get(i));
-        }*/
+        for (int i = 0; i < size; i++) {
+        	Assert.assertEquals(oldPOIs.get(i).getLatitude(), newPOIs.get(i).getLatitude(), 0.d);
+            Assert.assertEquals(oldPOIs.get(i).getLongitude(), newPOIs.get(i).getLongitude(), 0.d);
+        }
     }
 
 

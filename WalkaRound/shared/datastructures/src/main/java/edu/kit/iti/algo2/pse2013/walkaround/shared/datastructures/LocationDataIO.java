@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,20 +94,19 @@ public class LocationDataIO implements Serializable {
      * @throws java.io.IOException
      */
     public static void save(LocationDataIO objectToSave, File destination) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
-        oos.writeObject(objectToSave);
-        oos.flush();
-        oos.close();
-
-    	/*ProtobufIO.write(objectToSave, destination);
-    	SaveLocationData.Builder locationData = SaveLocationData.newBuilder();
-    	for (POI p : objectToSave.getPOIs()) {
-    		locationData.addPOI(p.getSavePOI());
-    	}
-    	BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(destination));
-    	locationData.build().writeTo(outStream);
-    	outStream.flush();
-    	outStream.close();*/
+//        ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
+//        oos.writeObject(objectToSave);
+//        oos.flush();
+//        oos.close();
+    	ProtobufIO.write(objectToSave, destination);
+//    	LocationProtos.SaveLocationData.Builder locationData = LocationProtos.SaveLocationData.newBuilder();
+//    	for (POI p : objectToSave.getPOIs()) {
+//    		locationData.addPOI(p.getSavePOI());
+//    	}
+//    	BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(destination));
+//    	locationData.build().writeTo(outStream);
+//    	outStream.flush();
+//    	outStream.close();
     }
 
 
@@ -118,18 +119,17 @@ public class LocationDataIO implements Serializable {
      * @throws ClassNotFoundException
      */
     public static LocationDataIO load(File source) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(source)));
-        LocationDataIO location = (LocationDataIO) ois.readObject();
-        ois.close();
-        return location;
-
-    	/*return ProtobufIO.readLocationData(source);
-    	LocationDataIO newLocationData = new LocationDataIO();
-    	SaveLocationData input = SaveLocationData.parseFrom(new BufferedInputStream(new FileInputStream(source)));
-    	for (int i = 0; i < input.getPOICount(); i++) {
-    		newLocationData.addPOI(POI.getInstance(input.getPOI(i)));
-    	}
-    	return newLocationData;*/
+//        ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(source)));
+//        LocationDataIO location = (LocationDataIO) ois.readObject();
+//        ois.close();
+//        return location;
+    	return ProtobufIO.readLocationData(source);
+//    	LocationDataIO newLocationData = new LocationDataIO();
+//    	LocationProtos.SaveLocationData input = LocationProtos.SaveLocationData.parseFrom(new BufferedInputStream(new FileInputStream(source)));
+//    	for (int i = 0; i < input.getPOICount(); i++) {
+//    		newLocationData.addPOI(POI.getInstance(input.getPOI(i)));
+//    	}
+//    	return newLocationData;
     }
 
 }

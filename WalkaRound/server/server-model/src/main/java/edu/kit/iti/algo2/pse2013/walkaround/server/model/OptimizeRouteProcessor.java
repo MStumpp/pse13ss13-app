@@ -41,15 +41,27 @@ public class OptimizeRouteProcessor {
     /**
      * Instantiates and/or returns a singleton instance of OptimizeRouteProcessor.
      *
-     * @param shortestPathProcessor ShortestPathProcessor used for route optimization.
      * @return OptimizeRouteProcessor.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
-    public static OptimizeRouteProcessor getInstance(ShortestPathProcessor shortestPathProcessor) {
-        if (shortestPathProcessor == null)
-            throw new IllegalArgumentException("shortestPathProcessor must be provided");
+    public static OptimizeRouteProcessor getInstance() {
         if (instance == null)
-            instance = new OptimizeRouteProcessor(shortestPathProcessor);
+            throw new IllegalArgumentException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of OptimizeRouteProcessor.
+     *
+     * @param shortestPathProcessor ShortestPathProcessor used for shortest path computation.
+     * @return OptimizeRouteProcessor.
+     */
+    public static OptimizeRouteProcessor init(ShortestPathProcessor shortestPathProcessor) {
+        if (shortestPathProcessor == null)
+            throw new IllegalArgumentException("ShortestPathProcessor must be provided");
+        if (instance != null)
+            throw new IllegalArgumentException("OptimizeRouteProcessor already initialized");
+        instance = new OptimizeRouteProcessor(shortestPathProcessor);
         return instance;
     }
 
@@ -68,8 +80,7 @@ public class OptimizeRouteProcessor {
         coordinates.add(new Coordinate(12.12, 12.12));
         coordinates.add(new Coordinate(13.13, 13.13));
         coordinates.add(new Coordinate(14.14, 14.14));
-        // TODO: change constructor of route from LinkedList to List, then remove the cast
-        return new RouteInfoTransfer((LinkedList<Coordinate>) coordinates);
+        return new RouteInfoTransfer(coordinates);
     }
 
 }
