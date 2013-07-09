@@ -4,8 +4,12 @@ import java.util.LinkedList;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
+import android.widget.ImageView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
@@ -37,6 +41,7 @@ public class MapModel implements TileListener {
 	private TileFetcher tileFetcher;
 
 	private Bitmap map;
+	private Bitmap routeOverlayBitmap;
 	DisplayCoordinate mapOffset;
 	int xAmount;
 	int yAmount;
@@ -223,6 +228,11 @@ public class MapModel implements TileListener {
 			//this.map.recycle();
 			this.map = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
+			
+			this.routeOverlayBitmap = Bitmap.createBitmap(size, size,
+					Bitmap.Config.ARGB_8888);
+			this.routeOverlayBitmap.prepareToDraw();
+			
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
@@ -233,6 +243,11 @@ public class MapModel implements TileListener {
 			this.map = Bitmap.createBitmap(sizeX, size.y,
 					Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
+
+			this.routeOverlayBitmap = Bitmap.createBitmap(sizeX, size.y,
+					Bitmap.Config.ARGB_8888);
+			this.routeOverlayBitmap.prepareToDraw();
+			
 			this.fetchTiles();
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
@@ -243,6 +258,11 @@ public class MapModel implements TileListener {
 			this.map = Bitmap.createBitmap(size.x, sizeY,
 					Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
+
+			this.routeOverlayBitmap = Bitmap.createBitmap(size.x, sizeY,
+					Bitmap.Config.ARGB_8888);
+			this.routeOverlayBitmap.prepareToDraw();
+			
 			this.fetchTiles();
 			return;
 		}
@@ -251,6 +271,11 @@ public class MapModel implements TileListener {
 		//this.map.recycle();
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 		this.map.prepareToDraw();
+
+		this.routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
+				Bitmap.Config.ARGB_8888);
+		this.routeOverlayBitmap.prepareToDraw();
+		
 		this.fetchTiles();
 	}
 
@@ -436,7 +461,46 @@ public class MapModel implements TileListener {
 		return new DisplayCoordinate(xDiff, yDiff);
 	}
 
+	public void drawDisplayCoordinates(final DisplayCoordinate[] dw){
+		for(int a = 0;a < dw.length; a++){
+			if(a++ < dw.length){
+				this.drawRoute(dw[a].getX(),dw[a].getY(),dw[a++].getX(),dw[a++].getY());
+			}
+		}
+	}
 
+	/**
+	 * Updatet das Routen Overlay
+	 * 
+	 * @param b
+	 */
+	public void drawRoute(final float fromX, final float fromY,
+			final float toX, final float toY) {
+
+		Canvas canvas = new Canvas(routeOverlayBitmap);
+
+		Paint pinsel = new Paint();
+		pinsel.setColor(Color.rgb(64, 64, 255));
+		//TODO 
+		pinsel.setStrokeWidth(8);
+
+		// Diagonale durch Leinwand zeichnen
+		if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
+			if (fromX < size.x || fromY < size.y || toX < size.x
+					|| toY < size.y) {
+				canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
+			}
+		}
+
+		Log.d(TAG_MAP_MODEL + "_DRAW", "routeOverlayBitmap "
+				+ (routeOverlayBitmap == null));
+		
+		mapController.onRouteOverlayImageChange(routeOverlayBitmap);
+		
+		
+
+	}
+	
 	@Override
 	public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail) {
 		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x + " y " + y);

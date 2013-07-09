@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -16,6 +18,7 @@ public class Route implements RouteInfo {
 	private LinkedList<Coordinate> routeCoordinates;
 	private RouteProcessing routeProcessor;
 	
+	// TODO or NOT TODO that is the question:
 	private int idCounter;
 
 
@@ -73,17 +76,33 @@ public class Route implements RouteInfo {
 	public void moveActiveWaypointInOrder(int newPos) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointInOrder(int)");
 		// TODO:
+		
+		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Waypoint activeWaypoint = this.activeWaypoint;
-		this.deleteActiveWaypoint();
+		
+		assert (newPos > 0 && newPos <= waypoints.size());
+		
 		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
+		waypoints.add(newPos, activeWaypoint);
 		Waypoint nextWaypoint = this.getNextWaypoint(newPos);
-
-
-
-
+		
+		
+		this.deletePathBetweenTwoWaypoints(previousWaypoint, nextWaypoint);
+		this.routeCoordinates.add(this.routeCoordinates.indexOf(previousWaypoint) + 1, activeWaypoint);
+		
+		
+		
+		this.deleteActiveWaypoint();
+		
+		
+		// this.routeProcessor.computeShortestPath(coordinate1, coordinate2)
+		
+		// this.addRouteBetweenTwoCoords(route, one, two)
+		
 		// F�ge den aktiven WP an der �bergebenen Position in die Route ein.
-
+		
 		this.setActiveWaypoint(activeWaypoint);
+		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
 
@@ -103,6 +122,7 @@ public class Route implements RouteInfo {
 		}
 		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
+		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
 
@@ -124,6 +144,7 @@ public class Route implements RouteInfo {
 	 */
 	public void addRoute(RouteInfo newRoute) {
 		Log.d(TAG_ROUTE, "addRoute(RouteInfo)");
+		
 		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
 		
 		if (!(this.getEnd().getLatitude() == newRoute.getStart().getLatitude())
@@ -137,6 +158,7 @@ public class Route implements RouteInfo {
 		while (newRouteCoordsIter.hasNext()) {
 			this.routeCoordinates.addLast(newRouteCoordsIter.next());
 		}
+		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
 
@@ -145,59 +167,56 @@ public class Route implements RouteInfo {
 	 */
 	public void moveActiveWaypoint(Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypoint(coord)");
-		// TODO:
+		
 		if (this.activeWaypoint != null) {
-			//Waypoint beforeActive = (Waypoint) this.getWaypointBeforeActiveWaypoint();
-			//Waypoint afterActive = (Waypoint) this.getWaypointPastActiveWaypoint();
-
-			//RouteInfo newRouteBeforeActiveWaypoint = this.routeProcessor.computeShortestPath(beforeActive, coord);
-			//RouteInfo newRoutePastActiveWaypoint = this.routeProcessor.computeShortestPath(coord, afterActive);
-
-
-			// Prüfe bei beiden ob null, wenn nicht, schicke Weg an Server zur Neu-Berechnung.
-			// Entferne außerdem die alten Routen.
+			int indexOfActiveWaypoint = this.getWaypoints().indexOf(this.getActiveWaypoint());
+			Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
+			Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
+			
+			if (beforeActive != null) {
+				RouteInfo newRouteBeforeActiveWaypoint = this.routeProcessor.computeShortestPath(beforeActive, coord);
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, this.activeWaypoint);
+			}
+			
+			if (afterActive != null) {
+				RouteInfo newRoutePastActiveWaypoint = this.routeProcessor.computeShortestPath(coord, afterActive);
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, beforeActive, this.activeWaypoint);
+			}
+			
+			this.activeWaypoint.setLongitude(coord.getLongitude());
+			this.activeWaypoint.setLatitude(coord.getLatitude());
+			
 		}
+		
+		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
 
 	public void deleteActiveWaypoint() {
 		Log.d(TAG_ROUTE, "deleteActiveWaypoint()");
+		
+		int indexOfActiveWaypoint = this.getWaypoints().indexOf(this.getActiveWaypoint());
+		Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
+		Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
 
-		// TODO:
-
-		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
-		Iterator<Coordinate> routeCoordsIterDesc = this.routeCoordinates.descendingIterator();
-
-		while (!routeCoordsIter.equals(this.activeWaypoint)) {
-			routeCoordsIter.next();
-		}
-		while (!routeCoordsIterDesc.equals(this.activeWaypoint)) {
-			routeCoordsIterDesc.next();
-		}
-
-		LinkedList<Waypoint> waypoints = this.getWaypoints();
-		int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
-		Waypoint previousWaypoint = this.getPreviousWaypoint(indexOfActiveWaypoint);
-		Waypoint nextWaypoint = this.getNextWaypoint(indexOfActiveWaypoint);
-
-
-		if (previousWaypoint == null && nextWaypoint == null) {
+		if (beforeActive == null && afterActive == null) {
 			this.resetRoute();
-		} else if (previousWaypoint == null && nextWaypoint != null) {
-			do {
-				routeCoordsIter.remove();
-				routeCoordsIter.next();
-			} while (!routeCoordsIter.equals(nextWaypoint));
-		} else if (previousWaypoint != null && nextWaypoint == null) {
-			do {
-				routeCoordsIterDesc.remove();
-				routeCoordsIterDesc.next();
-			} while (!routeCoordsIterDesc.equals(previousWaypoint));
-		} else {
-			RouteInfo routePieceAtPositionOfDeletedActiveWaypoint = this.routeProcessor.computeShortestPath(previousWaypoint, nextWaypoint);
-
+		} else if (beforeActive == null && afterActive != null) {
+			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+		} else if (beforeActive != null && afterActive == null) {
+			this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+		} else if (beforeActive != null && afterActive != null){
+			this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+			this.routeCoordinates.remove(this.activeWaypoint);
+			
+			RouteInfo route = this.routeProcessor.computeShortestPath(beforeActive, afterActive);
+			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);
 		}
 		this.resetActiveWaypoint();
+		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
 
@@ -248,7 +267,7 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "clone()");
 		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
-			//clonedCoords.add(coord.clone()); // TODO: Entweder clone() implementieren, oder diese Zeile entfernen
+				// TODO: Bitte in Coordinate clone implementieren clonedCoords.add(coord.clone());
 		}
 		return new Route(clonedCoords);
 	}
@@ -293,9 +312,9 @@ public class Route implements RouteInfo {
 	public LinkedList<Waypoint> getWaypoints() {
 		Log.d(TAG_ROUTE, "getWaypoints()");
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
-		for (Coordinate cor : this.routeCoordinates) {
-			if (cor instanceof Waypoint) {
-				waypoints.add((Waypoint)cor);
+		for (Coordinate coord : this.routeCoordinates) {
+			if (coord instanceof Waypoint) {
+				waypoints.add((Waypoint) coord);
 			}
 		}
 		return waypoints;
@@ -305,8 +324,7 @@ public class Route implements RouteInfo {
 	@Override
 	public boolean isFavorite() {
 		Log.d(TAG_ROUTE, "isFavorite()");
-		return false;
-		// TODO: Zugriff auf Favs über getInstance();
+		return FavoritesManager.getInstance().containsRoute(this);
 	}
 
 
@@ -330,13 +348,13 @@ public class Route implements RouteInfo {
 	/*
 	 *
 	 */
-	private Waypoint getPreviousWaypoint(int posOfWaypoint) {
+	private Waypoint getPreviousWaypoint(int waypointNr) {
 		Log.d(TAG_ROUTE, "getPreviousWaypoint(int)");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
-		if (posOfWaypoint == 0) {
+		if (waypointNr == 0) {
 			return null;
 		} else {
-			return (waypoints.get(posOfWaypoint - 1));
+			return (waypoints.get(waypointNr - 1));
 		}
 	}
 
@@ -344,13 +362,75 @@ public class Route implements RouteInfo {
 	/*
 	 *
 	 */
-	private Waypoint getNextWaypoint(int posOfWaypoint) {
+	private Waypoint getNextWaypoint(int waypointNr) {
 		Log.d(TAG_ROUTE, "getNextNextWaypoint(int)");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
-		if (posOfWaypoint == (waypoints.size() - 1)) {
+		if (waypointNr == (waypoints.size() - 1)) {
 			return null;
 		} else {
-			return (waypoints.get(posOfWaypoint + 1));
+			return (waypoints.get(waypointNr + 1));
+		}
+	}
+	
+	
+	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
+		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint)");
+		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
+		
+		Coordinate tempCoord = null;
+		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
+			tempCoord = routeCoordsIter.next();
+		}
+		
+		while (routeCoordsIter.hasNext() && !two.equals(tempCoord)) {
+			routeCoordsIter.remove();
+			tempCoord = routeCoordsIter.next();
+		}
+		return true;
+	}
+	
+	
+	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one, Coordinate two) {
+		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coordinate, Coordinate)");
+		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates.indexOf(two));
+		assert (route.getStart().equals(one) && route.getEnd().equals(two));
+		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
+		
+		Coordinate tempCoord = null;
+		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
+			tempCoord = routeCoordsIter.next();
+		}
+		
+		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
+		int indexOfInstertion = this.routeCoordinates.indexOf(one);
+		
+		for (Coordinate coord : bridgingCoords) {
+			this.routeCoordinates.add(indexOfInstertion, coord);
+			indexOfInstertion++;
+		}
+		
+		return true;
+	}
+
+
+
+
+	private void cleanRouteOfDuplicateCoordinatePairs() {
+		Log.d(TAG_ROUTE, "cleanRouteOfDuplicateCoordinatePairs()");
+		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
+		Coordinate previousCoord = null;
+		Coordinate tempCoord;
+		
+		if (routeCoordsIter.hasNext()) {
+			previousCoord = routeCoordsIter.next();
+		}
+		
+		while (routeCoordsIter.hasNext()) {
+			tempCoord = routeCoordsIter.next();
+			if (tempCoord.equals(previousCoord)) {
+				routeCoordsIter.remove();
+			}
+			previousCoord = tempCoord;
 		}
 	}
 
@@ -362,24 +442,12 @@ public class Route implements RouteInfo {
 
 
 
-
-
-
-
-
-	private void testMethod() {
-		LinkedList<Integer> ints = new LinkedList<Integer>();
-
-	}
-
-
-
-
-	
+	/*
 	private int getNextID() {
 		this.idCounter++;
 		return this.idCounter;
 	}
+	*/
 
 
 
