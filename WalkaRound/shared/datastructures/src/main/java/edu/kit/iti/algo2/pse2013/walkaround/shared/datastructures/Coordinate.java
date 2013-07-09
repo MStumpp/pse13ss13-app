@@ -1,14 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import java.io.Serializable;
-
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Coordinate implements Geometrizable{
+public class Coordinate implements Geometrizable {
 
 
 	/**
@@ -148,7 +146,7 @@ public class Coordinate implements Geometrizable{
 
 	@Override
 	public String toString() {
-		return String.format("Coordinate longtitude %.8f° latitude: %.8f°",this.lon, this.lat);
+		return String.format("Coordinate latitude: %.8f° longitude %.8f°", lat, lon);
 	}
 
 

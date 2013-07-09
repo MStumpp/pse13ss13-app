@@ -43,15 +43,27 @@ public class RoundtripProcessor {
     /**
      * Instantiates and/or returns a singleton instance of RoundtripProcessor.
      *
+     * @return RoundtripProcessor.
+     */
+    public static RoundtripProcessor getInstance() {
+        if (instance == null)
+            throw new IllegalArgumentException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of RoundtripProcessor.
+     *
      * @param graph Graph used for shortest path computation.
      * @return RoundtripProcessor.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die Graph instance zu kennen, muss getrennt werden
-    public static RoundtripProcessor getInstance(Graph graph) {
+    public static RoundtripProcessor init(Graph graph) {
         if (graph == null)
-            throw new IllegalArgumentException("graph must be provided");
-        if (instance == null)
-            instance = new RoundtripProcessor(graph);
+            throw new IllegalArgumentException("Graph must be provided");
+        if (instance != null)
+            throw new IllegalArgumentException("RoundtripProcessor already initialized");
+        instance = new RoundtripProcessor(graph);
         return instance;
     }
 

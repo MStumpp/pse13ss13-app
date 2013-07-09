@@ -35,6 +35,20 @@ public class GraphDataIO implements Serializable {
 
 
     /**
+     * Returns a list of all Vertex objects contained in all edges.
+     *
+     * @return List<Vertex> List of all egdes.
+     */
+    public List<Vertex> getVertices() {
+        List<Vertex> vertices = new ArrayList<Vertex>();
+        for (Edge edge : edges)
+            for (Vertex vertex : edge.getVertices())
+                vertices.add(vertex);
+        return vertices;
+    }
+
+
+    /**
      * Saves the GraphDataIO  object to an external file.
      *
      * @param objectToSave GeometryDataIO object to save.
