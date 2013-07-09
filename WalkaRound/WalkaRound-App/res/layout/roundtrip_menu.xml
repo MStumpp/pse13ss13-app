@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:tag="1"
                 android:text="@string/jogging"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -60,6 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:tag="2"
                 android:text="@string/sightseeing"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -68,6 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:tag="3"
                 android:text="@string/shopping"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -76,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:tag="4"
                 android:text="@string/clubbing"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 

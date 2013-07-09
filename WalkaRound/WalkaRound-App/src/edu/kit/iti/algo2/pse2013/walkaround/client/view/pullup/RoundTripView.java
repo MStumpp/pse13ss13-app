@@ -130,20 +130,26 @@ public class RoundTripView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(computeRoundtrip)) {
 				if (jogging.isSelected()) {
-					//routeController.addRoundtrip(jogging.getId(),
-					//		np.getValue() * 100);
+					routeController.addRoundtrip(
+							Integer.parseInt(jogging.getTag().toString()),
+							np.getValue() * 100);
 				} else if (shopping.isSelected()) {
-					//routeController.addRoundtrip(shopping.getId(),
-					//		np.getValue() * 100);
+					routeController.addRoundtrip(
+							Integer.parseInt(shopping.getTag().toString()),
+							np.getValue() * 100);
 				} else if (sightseeing.isSelected()) {
-					//routeController.addRoundtrip(sightseeing.getId(),
-					//		np.getValue() * 100);
+					routeController.addRoundtrip(
+							Integer.parseInt(sightseeing.getTag().toString()),
+							np.getValue() * 100);
 				} else if (clubbing.isSelected()) {
-					//routeController.addRoundtrip(clubbing.getId(),
-					//		np.getValue() * 100);
+					routeController.addRoundtrip(
+							Integer.parseInt(clubbing.getTag().toString()),
+							np.getValue() * 100);
+				} else {
+					routeController.addRoundtrip(0, np.getValue() * 100);
 				}
 			}
-			//TODO: implement
+			// TODO: zur karte zurückkehren
 			return false;
 		}
 

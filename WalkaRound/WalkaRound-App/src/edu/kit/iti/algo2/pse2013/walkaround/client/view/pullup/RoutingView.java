@@ -232,7 +232,7 @@ public class RoutingView extends Fragment {
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (v.equals(name)) {
 				Log.d(TAG_PULLUP_CONTENT, "Ein name wurde eingegeben wurde eingegeben");
-				favController.saveFavoriteRoute(name.toString());
+			//	routeController.addRouteToFavorites((name.toString());
 				name.setVisibility(View.INVISIBLE);
 				//TODO:fix problem wie die route angegeben wird
 			}
