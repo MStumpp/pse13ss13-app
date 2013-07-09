@@ -132,7 +132,7 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
 		// routeOverlay.setOnTouchListener(new
 		// RouteOverlayTouchEventListener());
-		
+
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere Layout.");
 		this.setContentView(R.layout.map);
@@ -172,7 +172,6 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
 		mc = MapController.initialize(this);
 
-
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "User wird erstellt.");
 		user = (ImageView) this.findViewById(R.id.mapview_user);
@@ -204,7 +203,8 @@ public class MapView extends Activity {
 				Bitmap.Config.ARGB_8888);
 		routeOverlayBitmap.prepareToDraw();
 		/*
-		 * Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
+		 * Log.d(TAG_MAPVIEW,
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt");
 		 * DisplayWaypoint[] list = new DisplayWaypoint[4]; list[0] = new
 		 * DisplayWaypoint(-50, 550, 1); list[1] = new DisplayWaypoint(250, 700,
 		 * 2); list[2] = new DisplayWaypoint(500, 800, 3); list[3] = new
@@ -216,10 +216,10 @@ public class MapView extends Activity {
 		 * updateDisplayCoordinate(list);
 		 * 
 		 * /* Log.d(TAG_MAPVIEW,
-		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[] list2
-		 * = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4); list2[1]
-		 * = new DisplayPOI(450, 400, 5); list2[2] = new DisplayPOI(700, 500,
-		 * 6);
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[]
+		 * list2 = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4);
+		 * list2[1] = new DisplayPOI(450, 400, 5); list2[2] = new
+		 * DisplayPOI(700, 500, 6);
 		 * 
 		 * 
 		 * updateDisplayCoordinate(list2);
@@ -252,44 +252,16 @@ public class MapView extends Activity {
 		runOnUiThread(new Runnable() {
 			public void run() {
 
-				map.setImageBitmap(b);
-				map.setVisibility(View.VISIBLE);
+				if (!b.isRecycled()) {
+					map.setImageBitmap(b);
+					map.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 	}
 
 	Canvas canvas;
 	Bitmap routeOverlayBitmap;
-
-	/**
-	 * Updatet das Routen Overlay
-	 * 
-	 * @param b
-	 */
-	public void drawRoute(final float fromX, final float fromY,
-			final float toX, final float toY) {
-
-		canvas = new Canvas(routeOverlayBitmap);
-
-		Paint pinsel = new Paint();
-		pinsel.setColor(Color.rgb(64, 64, 255));
-		pinsel.setStrokeWidth(sizeOfRoute);
-
-		// Diagonale durch Leinwand zeichnen
-		if(fromX > 0 || fromY > 0 || toX > 0 || toY > 0){
-			if(fromX < size.x || fromY < size.y || toX < size.x || toY < size.y){
-				canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
-			}
-		}
-		
-		Log.d(TAG_MAPVIEW + "_DRAW", "routeOverlayBitmap " + (routeOverlayBitmap == null));
-		if(routeOverlay == null){
-			routeOverlay = (ImageView) this.findViewById(R.id.mapview_overlay);
-		}
-		Log.d(TAG_MAPVIEW + "_DRAW", "routeOverlay  " + (routeOverlay == null));
-		routeOverlay.setImageBitmap(routeOverlayBitmap);
-
-	}
 
 	float fromX;
 	float fromY;
@@ -332,59 +304,57 @@ public class MapView extends Activity {
 	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
 
 		final Context context = this;
-		
-		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
-				Bitmap.Config.ARGB_8888);
-		routeOverlayBitmap.prepareToDraw();
-		
+
 		runOnUiThread(new Runnable() {
 			public void run() {
-		routeList.removeAllViews();
-		currentActive = null;
+				routeList.removeAllViews();
+				currentActive = null;
 
-		fromX = dw[0].getX();
-		fromY = dw[0].getY();
-		Log.d(TAG_MAPVIEW + "_DRAW", "tt " + dw[0].getX());
-		Log.d(TAG_MAPVIEW + "_DRAW", "tt " + dw[0].getY());
+				fromX = dw[0].getX();
+				fromY = dw[0].getY();
+				Log.d(TAG_MAPVIEW + "_DRAW", "tt " + dw[0].getX());
+				Log.d(TAG_MAPVIEW + "_DRAW", "tt " + dw[0].getY());
 
-		for (DisplayWaypoint value : dw) {
-			ImageView iv = new ImageView(context);
-			iv.setImageDrawable(waypoint);
-			iv.setY(value.getY() - sizeOfPoints);
-			iv.setX(value.getX() - sizeOfPoints / 2);
-			iv.setTag(value.getId());
-			iv.setVisibility(View.VISIBLE);
-			iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
-					(int) sizeOfPoints));
-			// iv.setBackgroundColor(Color.rgb(0, 0, 0));
-			// iv.setX(sizeOfPoints);
-			// iv.setY(sizeOfPoints);
+				for (DisplayWaypoint value : dw) {
+					ImageView iv = new ImageView(context);
+					iv.setImageDrawable(waypoint);
+					iv.setY(value.getY() - sizeOfPoints);
+					iv.setX(value.getX() - sizeOfPoints / 2);
+					iv.setTag(value.getId());
+					iv.setVisibility(View.VISIBLE);
+					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
+							(int) sizeOfPoints));
+					// iv.setBackgroundColor(Color.rgb(0, 0, 0));
+					// iv.setX(sizeOfPoints);
+					// iv.setY(sizeOfPoints);
 
-			// iv.getLayoutParams().width = sizeOfPoints;
-			// iv.getLayoutParams().height = sizeOfPoints;
-			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			routeList.addView(iv);
-			Log.d(TAG_MAPVIEW + "_DRAW", " " + fromX);
-			Log.d(TAG_MAPVIEW + "_DRAW", " " + fromY);
-			Log.d(TAG_MAPVIEW + "_DRAW", " " + value.getX() + " : " + iv.getX());
-			Log.d(TAG_MAPVIEW + "_DRAW", " " + value.getY() + " : " + iv.getY());
+					// iv.getLayoutParams().width = sizeOfPoints;
+					// iv.getLayoutParams().height = sizeOfPoints;
+					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					routeList.addView(iv);
+					Log.d(TAG_MAPVIEW + "_DRAW", " " + fromX);
+					Log.d(TAG_MAPVIEW + "_DRAW", " " + fromY);
+					Log.d(TAG_MAPVIEW + "_DRAW", " " + value.getX() + " : "
+							+ iv.getX());
+					Log.d(TAG_MAPVIEW + "_DRAW", " " + value.getY() + " : "
+							+ iv.getY());
 
-			drawRoute(fromX, fromY, value.getX(), value.getY());
+					// drawRoute(fromX, fromY, value.getX(), value.getY());
 
-			fromX = value.getX();
-			fromY = value.getY();
-		}
+					// fromX = value.getX();
+					// fromY = value.getY();
+				}
 
-		if (routeList.getChildCount() > 0) {
-			ImageView iv = (ImageView) routeList.getChildAt(0);
-			iv.setImageDrawable(flag);
-			iv.setX(iv.getX() - (sizeOfPoints / 2));
+				if (routeList.getChildCount() > 0) {
+					ImageView iv = (ImageView) routeList.getChildAt(0);
+					iv.setImageDrawable(flag);
+					iv.setX(iv.getX() - (sizeOfPoints / 2));
 
-			iv = (ImageView) routeList
-					.getChildAt((routeList.getChildCount() - 1));
-			iv.setImageDrawable(flagTarget);
-			iv.setX(iv.getX() - (sizeOfPoints / 2));
-		}
+					iv = (ImageView) routeList.getChildAt((routeList
+							.getChildCount() - 1));
+					iv.setImageDrawable(flagTarget);
+					iv.setX(iv.getX() - (sizeOfPoints / 2));
+				}
 			}
 		});
 	}
@@ -609,7 +579,7 @@ public class MapView extends Activity {
 			} else {
 
 				Log.d("MAP_TOUCH", "MapTouch Scroll");
-				//distanceY *= -1;
+				// distanceY *= -1;
 				if (e1.getY() > e2.getY()) {
 					Log.d("MAP_TOUCH_SCROLL", "Rauf " + distanceY);
 				} else {
@@ -742,5 +712,25 @@ public class MapView extends Activity {
 			//
 			return false;
 		}
+	}
+
+	/**
+	 * 
+	 * @param b
+	 */
+	public void updateRouteOverlayImage(final Bitmap b) {
+
+		if (routeOverlay == null) {
+			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
+		}
+
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if (!b.isRecycled()) {
+					routeOverlay.setImageBitmap(b);
+					routeOverlay.setVisibility(View.VISIBLE);
+				}
+			}
+		});
 	}
 }
