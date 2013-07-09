@@ -72,16 +72,27 @@ public class ShortestPathProcessor {
     /**
      * Instantiates and/or returns a singleton instance of ShortestPathProcessor.
      *
+     * @return ShortestPathProcessor.
+     */
+    public static ShortestPathProcessor getInstance() {
+        if (instance == null)
+            throw new IllegalArgumentException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of ShortestPathProcessor.
+     *
      * @param graph Graph used for shortest path computation.
      * @return ShortestPathProcessor.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte,
-    // ohne die Graph instance zu kennen, muss getrennt werden
-    public static ShortestPathProcessor getInstance(Graph graph) {
+    public static ShortestPathProcessor init(Graph graph) {
         if (graph == null)
-            throw new IllegalArgumentException("graph must be provided");
-        if (instance == null)
-            instance = new ShortestPathProcessor(graph);
+            throw new IllegalArgumentException("Graph must be provided");
+        if (instance != null)
+            throw new IllegalArgumentException("ShortestPathProcessor already initialized");
+        instance = new ShortestPathProcessor(graph);
         return instance;
     }
 
@@ -108,11 +119,11 @@ public class ShortestPathProcessor {
             sourceVertex = graph.getVertexByID(source.getID());
             targetVertex = graph.getVertexByID(target.getID());
         } catch (NoVertexForIDExistsException e) {
-            throw new ShortestPathComputeException("source and/or target not in graph provided");
+            throw new ShortestPathComputeException("source and/or target provided not in graph contained");
         }
 
         if (sourceVertex == null || targetVertex == null)
-            throw new ShortestPathComputeException("source and/or target not in graph provided");
+            throw new ShortestPathComputeException("source and/or target provided not in graph contained");
 
         // some init
         runCounter += 1;

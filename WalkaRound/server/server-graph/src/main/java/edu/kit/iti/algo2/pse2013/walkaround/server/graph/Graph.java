@@ -46,29 +46,33 @@ public final class Graph {
     }
 
 
-    private Vertex[] increaseArray(Vertex[] array, int increase) {
-        Vertex[] newArray = new Vertex[array.length + increase];
-        System.arraycopy(array, 0, newArray, 0, array.length);
-        return newArray;
+    /**
+     * Instantiates and/or returns a singleton instance of Graph.
+     *
+     * @return Graph.
+     */
+    public static Graph getInstance() {
+        if (instance == null)
+            throw new IllegalArgumentException("singleton must be initialized first");
+        return instance;
     }
 
 
     /**
-     * Instantiates and/or returns a singleton instance of Graph.
+     * Instantiates and returns a singleton instance of Graph.
      *
      * @param edges List of Edges to build a Graph.
      * @return Graph.
      * @throws EmptyListOfEdgesException if list of edges is empty.
      */
-    // TODO: unschön, wenn man sich nur eine instance holen möchte, ohne die
-    // Graph instance zu kennen, muss getrennt werden
-    public static Graph getInstance(List<Edge> edges) throws EmptyListOfEdgesException {
+    public static Graph init(List<Edge> edges) throws EmptyListOfEdgesException {
         if (edges == null)
             throw new IllegalArgumentException("list of edges must not be null");
         if (edges.size() == 0)
             throw new EmptyListOfEdgesException("list of edges must be at least of size 1");
-        if (instance == null)
-            instance = new Graph(edges);
+        if (instance != null)
+            throw new IllegalArgumentException("GeometryProcessor already initialized");
+        instance = new Graph(edges);
         return instance;
     }
 
@@ -102,6 +106,20 @@ public final class Graph {
         if (vertices[id] == null)
             throw new NoVertexForIDExistsException("no vertex exists for id: " + id);
         return vertices[id];
+    }
+
+
+    /**
+     * Increase the size of an array containing Vertex objects.
+     *
+     * @param array The array to be increased.
+     * @param increase The target size.
+     * @return Vertex[] The increased array.
+     */
+    private Vertex[] increaseArray(Vertex[] array, int increase) {
+        Vertex[] newArray = new Vertex[array.length + increase];
+        System.arraycopy(array, 0, newArray, 0, array.length);
+        return newArray;
     }
 
 }

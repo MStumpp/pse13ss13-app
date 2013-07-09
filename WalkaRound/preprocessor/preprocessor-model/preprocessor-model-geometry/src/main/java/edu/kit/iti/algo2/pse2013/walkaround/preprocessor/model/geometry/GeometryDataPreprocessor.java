@@ -33,13 +33,12 @@ public class GeometryDataPreprocessor {
 
         int duplicates = 0;
         // get all vertices from graphDataIO
-        for (Edge edge : graphDataIO.getEdges())
-            for (Geometrizable geometrizable : edge.getVertices()) {
-                if (!geometrizables.contains(geometrizable))
-                    geometrizables.add(geometrizable);
-                else
-                    duplicates++;
-            }
+
+        for (Geometrizable geometrizable : graphDataIO.getVertices())
+            if (!geometrizables.contains(geometrizable))
+                geometrizables.add(geometrizable);
+            else
+                duplicates++;
 
         // get all POIs from locationDataIO
 //        for (POI poi : locationDataIO.getPOIs())

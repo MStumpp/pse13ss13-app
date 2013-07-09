@@ -17,14 +17,22 @@ public class ShortestPathProcessorTest {
 
     @Test
     @Ignore
-    public void testGetInstance() {
+    public void testInit() {
         Graph graph = getGraph();
-        ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance(graph);
-        Assert.assertNotNull(shortestPathProcessor);
+        Assert.assertNotNull(ShortestPathProcessor.init(graph));
     }
+
 
     @Test
     @Ignore
+    public void testGetInstance() {
+        Graph graph = getGraph();
+        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        Assert.assertNotNull(ShortestPathProcessor.getInstance());
+    }
+
+
+    @Test
     public void testComputesShortestPath() {
 
         Graph graph = getGraph();
@@ -37,7 +45,8 @@ public class ShortestPathProcessorTest {
             e.printStackTrace();
         }
 
-        ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance(graph);
+        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
         RouteInfoTransfer path = null;
         try {
             path = shortestPathProcessor.computeShortestPath(source, target);
@@ -101,7 +110,8 @@ public class ShortestPathProcessorTest {
 
         Graph graph = null;
         try {
-            graph = Graph.getInstance(graphDataIO.getEdges());
+            Graph.init(graphDataIO.getEdges());
+            graph = Graph.getInstance();
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         }

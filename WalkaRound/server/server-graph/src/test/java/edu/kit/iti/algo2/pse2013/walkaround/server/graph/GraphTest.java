@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -15,10 +16,10 @@ public class GraphTest {
     public void testSandAndLoad() {
 
         GraphDataIO graphDataIO = getGraphDataIO();
-
         Graph graph;
         try {
-            graph = Graph.getInstance(graphDataIO.getEdges());
+            Graph.init(graphDataIO.getEdges());
+            graph = Graph.getInstance();
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
             return;
