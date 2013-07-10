@@ -142,7 +142,6 @@ public class GeometryDataPreprocessorTest {
         Assert.assertNull(depth_3_8_right_11.getRightNode());
     }
 
-
     @Test
     public void testPreprocessGraphDataIO2() {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO2(),
@@ -152,7 +151,6 @@ public class GeometryDataPreprocessorTest {
         Assert.assertNotNull(geometryDataIO.getRoot());
     }
 
-
     private GraphDataIO getGraphDataIO() {
         GraphDataIO graphDataIO = new GraphDataIO();
         graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
@@ -160,7 +158,6 @@ public class GeometryDataPreprocessorTest {
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
         return graphDataIO;
     }
-
 
     private GraphDataIO getGraphDataIO2() {
         GraphDataIO graphDataIO = new GraphDataIO();
@@ -205,7 +202,6 @@ public class GeometryDataPreprocessorTest {
 
         return graphDataIO;
     }
-
 
     private LocationDataIO getLocationDataIO() {
         LocationDataIO locationDataIO = new LocationDataIO();

@@ -1,1 +1,28 @@
 \subsubsection{map}
+add DisplayPOI
+eine Datenstrucktur die einen POI mit Display Koordinaten verbindet
+
+add DisplayWaypoint
+eine Datenstrucktur die einen POI mit Display Wegpunkt verbindet
+
+Changelog MapModel
+public static MapModel initialize(Coordinate c, MapController mapController, Point size) 
+
+das MapModel braucht bestimmte Referenzen um initialisiert werden zu können.
+
+add public Coordinate getUpperLeft()
+upperLeft wird auch an anderer Stelle gebraucht.
+
+add public float getCurrentLevelOfDetail()
+das derzeitige Level of Detail wird auch ander anderer Stelle gebraucht
+
+change public void shift(DisplayCoordinate delta)
+wird nun ein delta der verschobenen Pixel übergeben
+
+add public boolean zoom(float delta)
+add public boolean zoom(float delta, DisplayCoordinate c)
+es wurden neue Möglichkeiten hinzugefügt zoom auszulösen
+
+merge generateMapOverlayImages and generateRouteOverlayImages
+to public boolean generateOverlayImages()
+weil es sich nicht lohnt zwei verschiedene Methoden aufzurufen wo beide Bilder gleichzeitig gelöscht und erstellt werden.

@@ -6,36 +6,42 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 /**
- * Diese klassebehandelt und kontrolliert die Aus/Eingabe des HeadUpView
- * Elementes
+ * This class controls the data flow between the control Elements on the View and the System
  *
  * @author Ludwig Biermann
  *
  */
 public class HeadUpController {
 
-	public static String TAG_HEADUP_CONTROLLER = "HEADUP_CONTROLLER";
+	/**
+	 * Debug Information
+	 */
+	public static String TAG_HEADUP_CONTROLLER = HeadUpController.class.getSimpleName();
 	
 	/**
-	 * Die Instanz des headUpController
+	 * The Controller
 	 */
 	private static HeadUpController headUpController;
-	/**
-	 * Der Log Tag
-	 */
-	private static String HEAD_CONTROLLER = "HEAD_CONTROLLER";
-
-	private HeadUpView headUpView;
-	private PullUpView pullUp;
 	private MapController mapController;
+
+	/**
+	 * The Views
+	 */
+	private HeadUpView headUpView;
+	
+	/**
+	 * permanent values
+	 */
 	private boolean navi;
 
+	/*
+	 * -----------------Initialization-----------------
+	 */
+	
 	/**
-	 * initialisiert den HeadUpController
+	 * constructor of the HeadUpController
 	 *
-	 * @param headUpView
-	 *            die nötige Referenz zum HeadUpView
-	 * @param pullUpView 
+	 * @param headUpView the required HeadUpView
 	 */
 	private HeadUpController(HeadUpView headUpView) {
 		this.headUpView = headUpView;
@@ -44,11 +50,10 @@ public class HeadUpController {
 	}
 
 	/**
-	 * initialisiert einmal den HeadUpController
+	 * Initialize the unique HeadUpController
 	 *
-	 * @param headUpView
-	 *            die noetige Instanz des HeadUpViews
-	 * @return eine Instanz des headUpControllers
+	 * @param headUpView the required HeadUpView
+	 * @return Instance of headUpControllers
 	 */
 	public static HeadUpController initializes(HeadUpView headUpView) {
 		if (headUpController == null) {
@@ -58,147 +63,155 @@ public class HeadUpController {
 	}
 
 	/**
-	 * gibt eine Instanz des HeadUpControllers zurück
+	 * gives back the initialize of HeadUpControllers
 	 *
-	 * @return HeadUpController oder {@code null}, falls initializes nicht aufgerufen
-	 *         wurde
+	 * @return HeadUpController or {@code null}, if HeadUpController isn't initialize
 	 */
 	public static HeadUpController getInstance() {
 		if (headUpController == null) {
-			Log.d(HEAD_CONTROLLER, "bitte initialisieren sie zuerst MapView");
+			Log.d(TAG_HEADUP_CONTROLLER, "you have to initialice first");
 			return null;
 		}
 		return headUpController;
 	}
 
-	public void showOptions() {
-		// TODO
-	}
+	/*
+	 * -----------------Zoom Forwarding-----------------
+	 */
 
 	/**
-	 * Vergrößert die Karte um eine (ganzzahlige) Skalierungsstufe
+	 * 	scales up the map by one step
 	 */
 	public void zoomInOneLevel() {
-		Log.d(TAG_HEADUP_CONTROLLER, String.format("Zoomstufe wird um eins erhöht (%.2f => %.2f)", mapController.getCurrentLevelOfDetail(), mapController.getCurrentLevelOfDetail() + 1));
-		mapController.onZoom(+1.0F);
+		Log.d(TAG_HEADUP_CONTROLLER, String.format("zoom step increased by one (%.2f => %.2f)", this.mapController.getCurrentLevelOfDetail(), this.mapController.getCurrentLevelOfDetail() + 1));
+		this.mapController.onZoom(+1.0F);
 	}
 
 	/**
-	 * Verkleinert die Karte um eine (ganzzahlige) Skalierungsstufe
+	 * scales down the map by one step 
 	 */
 	public void zoomOutOneLevel() {
-		Log.d(TAG_HEADUP_CONTROLLER, String.format("Zoomstufe wird um eins gesenkt (%.2f => %.2f)", mapController.getCurrentLevelOfDetail(), mapController.getCurrentLevelOfDetail() - 1));
-		mapController.onZoom(-1.0F);
+		Log.d(TAG_HEADUP_CONTROLLER, String.format("zoom step decreasedby one (%.2f => %.2f)", this.mapController.getCurrentLevelOfDetail(), this.mapController.getCurrentLevelOfDetail() - 1));
+		this.mapController.onZoom(-1.0F);
 	}
 
-	/**
-	 * startet oder deaktiviert die Navigation
+	/*
+	 * -----------------Position Lock Forwarding-----------------
 	 */
-	public void toggleNavigation() {
-		Log.d(HEAD_CONTROLLER ,"Navigation ist " + navi);
-		// TODO fehlt die Referenzierung zur Navi Komponente
-		if(!navi){
-			headUpView.showNavigationElements();
-			Log.d(HEAD_CONTROLLER ,"false->true");
-			navi = true;
-		} else {
-			headUpView.hideNavigationElements();
-			Log.d(HEAD_CONTROLLER ,"true->false");
-			navi = false;
+	
+	/**
+	 * 
+	 * toggle between lock on user position and free movable map
+	 * true if lock (default) centers the map on user position
+	 * false if unlock map is free moveable
+	 *
+	 * @param b
+	 *           true if lock
+	 */
+	public void toggleUserPositionLock(boolean b) {
+		Log.d(TAG_HEADUP_CONTROLLER ,"Toggle user position lock!");
+		this.headUpView.toggleUserPositionLock(b);
+		if (b == true) {
+			this.mapController.onLockUserPosition();
 		}
 	}
 
-	/**
-	 * Updatet das Piktogramm anhand einer Id.
-	 *
-	 * @param piktogramm
-	 *            id des Piktogramm.
+	/*
+	 * -----------------Option Forwarding-----------------
 	 */
-	public void setPiktogram(int id) {
-		headUpView.updatePiktogram(id);
+	
+	/**
+	 * forward the action to the pullup menu to start the option
+	 */
+	public void startOption() {
+		Log.d(TAG_HEADUP_CONTROLLER ,"Start Option!");
+		this.mapController.getPullUpView().changeView(PullUpView.CONTENT_OPTION);
+		this.mapController.getPullUpView().setFullSizeHeight();
+	}
+	
+	/*
+	 * -----------------Navigation Forwarding-----------------
+	 */
+	
+	/**
+	 * stoogle Navigation
+	 */
+	public void toggleNavigation() {
+		if(!this.navi){
+			this.headUpView.showNavigationElements();
+			this.navi = true;
+		} else {
+			this.headUpView.hideNavigationElements();
+			this.navi = false;
+		}
+		Log.d(TAG_HEADUP_CONTROLLER ,"Navigation " + this.navi);
 	}
 
 	/**
-	 * Updatet den Navigationstext.
+	 * Updates pictogram by unique id
+	 *
+	 * @param piktogramm id of pictogram
+	 */
+	public void setPiktogram(int id) {
+		this.headUpView.updatePiktogram(id);
+	}
+
+	/**
+	 * Updates the navigation text.
 	 *
 	 * @param text
 	 *            neuer Text
 	 */
 	public void setNavigationsText(String text) {
-		headUpView.updateNavigationsText(text);
+		this.headUpView.updateNavigationsText(text);
 	}
 
 	/**
-	 * Updatet die Geschwindigkeit. Eingabe in m/s
+	 * Updates the speed. Input must be in m/s
 	 *
-	 * @param speed
-	 *            neue Geschwindigkeit
+	 * @param speed the new speed
 	 */
 	public void setSpeed(double speed) {
-		headUpView.updateSpeed(speed);
+		this.headUpView.updateSpeed(speed);
 	}
 
 	/**
-	 * Updatet den noch zulaufenden Weg. Eingabe in m
+	 * Updates the way to go. Input in meters
 	 *
 	 * @param waytogo
-	 *            noch zulaufenenden Weg.
+	 *            Way to go.
 	 */
 	public void setWayToGo(int waytogo) {
-		headUpView.updateWayToGo(waytogo);
+		this.headUpView.updateWayToGo(waytogo);
 	}
 
 	/**
-	 * Updatet die gelaufenden Weg Eingabe in m
+	 * Updates way passed. Input in meters
 	 *
 	 * @param wayPassed
-	 *            gelaufender Weg
+	 *             way passed
 	 */
 	public void setWayPassed(int wayPassed) {
-		headUpView.updateWayPassed(wayPassed);
+		this.headUpView.updateWayPassed(wayPassed);
 
 	}
 
 	/**
-	 * Updatet die noch zu laufende Zeit Eingabe in s
+	 * Updates time to go. Input in seconds
 	 *
-	 * @param timeToGo
-	 *            noch zu laufende zeit
+	 * @param timeToGo time to go
 	 */
 	public void setTimeToGo(double timeToGo) {
-		headUpView.updateTimeToGo(timeToGo);
+		this.headUpView.updateTimeToGo(timeToGo);
 	}
 
 	/**
-	 * updatet die vergangene Zeit. Eingabe in s
+	 * Updates time passed. Input in seconds
 	 *
-	 * @param timePassed
-	 *            vergangene Zeit
+	 * @param timePassed time passed
 	 */
 	public void setTimePassed(int timePassed) {
-		headUpView.updateWayPassed(timePassed);
+		this.headUpView.updateWayPassed(timePassed);
 
-	}
-
-	/**
-	 * wechselt zwischen den Ansichts Modi. true Karte ist auf User
-	 * zentriert(default) false Karte ist frei beweglich
-	 *
-	 * @param b
-	 *            der Modi
-	 */
-	public void switchUserPositionLock(boolean b) {
-		headUpView.switchUserPositionLock(b);
-		if (b == true) {
-			mapController.onLockUserPosition();
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public void startOption() {
-		this.mapController.getPullUpView().changeView(PullUpView.CONTENT_OPTION);
-		this.mapController.getPullUpView().setFullSizeHeight();
 	}
 }

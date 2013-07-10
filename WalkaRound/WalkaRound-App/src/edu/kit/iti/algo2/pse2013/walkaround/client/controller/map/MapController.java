@@ -1,19 +1,22 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
+//Java library
 import java.util.LinkedList;
+import java.util.List;
 
+//Android library
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
-import android.view.Display;
+
+//Walkaround library
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
@@ -22,32 +25,64 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
- *
+ * This Class controls the data flow between the System and the real View.
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class MapController implements RouteListener, PositionListener {
 
-	private static String TAG_MAP_CONTROLLER = "MAP_CONTROLLER";
-	private static MapController mapController;
-
-	private static RouteController routeController;
-
 	// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
 	// 8.3858300); // Brauerstraße
-	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
 	// public static Coordinate defaultCoordinate = new Coordinate(49.01,
 	// 8.40333); // Marktplatz
 
+	/**
+	 * default starting Coordinate if GPS is offline
+	 */
+	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
+	public static String TAG_MAP_CONTROLLER = MapController.class
+			.getSimpleName();
+
+	/**
+	 * The Controller
+	 */
+	private static MapController mapController;
+	private RouteController routeController;
+
+	/**
+	 * Map Components
+	 */
 	private MapView mapView;
 	private MapModel mapModel;
 
+	/**
+	 * permanent class variables
+	 */
 	private boolean lockUserPosition = true;
+	
+	/**
+	 * DisplayWaypoints to display the Display Points
+	 */
+	private List<DisplayWaypoint> displayPoints;
 
 	/**
-	 *
+	 * DisplayCoordinats to draw he Lines
+	 */
+	//TODO Es gibt anscheinend zwei Methoden Wegpunkte zu bekommen es muss noch unterschieden werden welche zum Routen zeichnen welche zum Wegpunkt zeichnen benutzt werden.
+	@SuppressWarnings("unused")
+	private List<DisplayWaypoint> lines;
+	
+	/*
+	 * -----------------Initialization-----------------
+	 */
+	
+	/**
+	 * Initializes the MapController. Needs the current mapView
+	 * 
 	 * @param mapView
-	 * @return
+	 *            the mapView
+	 * @return the mapController
 	 */
 	public static MapController initialize(MapView mapView) {
 		if (mapController == null) {
@@ -57,220 +92,235 @@ public class MapController implements RouteListener, PositionListener {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gives back the unique Instance of the Map Controller
+	 * 
+	 * @return the MapController
 	 */
 	public static MapController getInstance() {
 		if (mapController == null) {
-			Log.d(TAG_MAP_CONTROLLER, "bitte initialisieren Sie zuerst MapView");
-			// mapController = new MapController();
+			Log.d(TAG_MAP_CONTROLLER, "you need to initialice MapView first");
 			return null;
 		}
 		return mapController;
 	}
 
+	/*
+	 * -----------------Constructor-----------------
+	 */
+	
 	/**
-	 *
+	 * private Constructor of the Map Controller
+	 * 
+	 * @param mv
+	 *            the required MapView
+	 */
+	private MapController(MapView mv) {
+
+		Log.d(TAG_MAP_CONTROLLER, "Map Controller will be initialice!");
+
+		this.mapView = mv;
+		Point size = mv.getDisplaySize();
+		
+		Log.d(TAG_MAP_CONTROLLER, "Initialice List of Display Points!");
+		displayPoints = new LinkedList<DisplayWaypoint>();
+
+		Log.d(TAG_MAP_CONTROLLER, "Initialice MapModel!");
+		this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
+
+		Log.d(TAG_MAP_CONTROLLER, "Initialice and register routeController!");
+		routeController = RouteController.getInstance();
+		routeController.registerRouteListener(this);
+
+		Log.d(TAG_MAP_CONTROLLER,
+				"Add three Example Waypoints to routeController!");
+		routeController.addWaypoint(new Waypoint(49.01, 8.40333, "Marktplatz"));
+		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,
+				"Brauerstraße"));
+		routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
+
+	}
+
+	/*
+	 * -----------------Getter Methods-----------------
+	 */
+	
+	/**
+	 * Gives the current Pull Up View back.
 	 */
 	public PullUpView getPullUpView() {
 		return mapView.getPullUpView();
 	}
 
 	/**
-	 *
-	 * @param mv
+	 * Gives back the current Level of Detail.
+	 * 
+	 * @return current Level ofDetail.
 	 */
-	private MapController(MapView mv) {
-
-
-		Log.d(TAG_MAP_CONTROLLER, "Map Controller wird initialisiert");
-		//DisplayWaypoint[] dw = new DisplayWaypoint[1];
-		//dw[0] = new DisplayWaypoint(-50, -50, 1);
-
-		this.mapView = mv;
-
-		
-		Display display = mapView.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-
-
-		dw = new DisplayWaypoint[0];
-		Log.d("TAG_MAPVIEW_DRAW", "--------->!" + dw.length);
-
-		this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
-		
-		
-		routeController = RouteController.getInstance();
-		routeController.registerRouteListener(this);
-
-		routeController.addWaypoint(new Waypoint(49.01,8.40333,"Marktplatz"));
-		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
-		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,"Brauerstraße"));
-		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
-		routeController.addWaypoint(new Waypoint(49.0145, 8.419,"211"));
-		//Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
-		
-		//PositionManager.initialize(mapView);
-		//PositionManager.getInstance().registerPositionListener(this);
-
-		
+	public float getCurrentLevelOfDetail() {
+		return this.mapModel.getCurrentLevelOfDetail();
 	}
 
+	/**
+	 * Gives the current Route back.
+	 * 
+	 * @return current Route
+	 */
+	public List<DisplayWaypoint> getCurrentRoute() {
+		return this.displayPoints;
+	}
+	
+	/*
+	 * -----------------Forwarding To MapView-----------------
+	 */
+	
+	/**
+	 * Forward the Bitmap of the current Map
+	 * 
+	 * @param b
+	 *            the Bitmap of the current Map
+	 */
 	public void onMapOverlayImageChange(Bitmap b) {
+		Log.d(TAG_MAP_CONTROLLER, "Bitmap Map Forwarding.");
 		this.mapView.updateMapImage(b);
-		//this.onRouteChange(null, null);
-
 	}
 
+	/**
+	 * Forward the Bitmap of the Route
+	 * 
+	 * @param b
+	 *            the Bitmap of the Route
+	 */
 	public void onRouteOverlayImageChange(Bitmap b) {
-		mapView.updateRouteOverlayImage(b);
+		Log.d(TAG_MAP_CONTROLLER, "Bitmap Route Forwarding.");
+		this.mapView.updateRouteOverlayImage(b);
 	}
 
-	public void onDeletePoint(DisplayCoordinate dc) {
-
-	}
-
-	public void onCreatePoint(DisplayCoordinate dc) {
-		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
-		routeController.addWaypoint(CoordinateUtility
-				.convertDisplayCoordinateToCoordinate(dc,
-						mapModel.getUpperLeft(),
-						mapModel.getCurrentLevelOfDetail()));
-
-		Log.d(TAG_MAP_CONTROLLER, "upper Left ist: " + mapModel.getUpperLeft());
-		Log.d(TAG_MAP_CONTROLLER, "upper DisplayCoor ist: " + dc);
-		Log.d(TAG_MAP_CONTROLLER,
-				"Coordinate wird übernommen:"
-						+ CoordinateUtility
-								.convertDisplayCoordinateToCoordinate(dc,
-										mapModel.getUpperLeft(),
-										mapModel.getCurrentLevelOfDetail()));
-	}
-
-	public void onLongPressPoint(DisplayCoordinate dc) {
-	}
-
+	/*
+	 * -----------------Forwarding To MapModel-----------------
+	 */
+	
+	/**
+	 * Forward a shift action to the Map Model. This contains: shifting the map
+	 * shifting the Route drawing shifting the Display Waypoints
+	 * 
+	 * @param distanceX
+	 *            the x delta distance
+	 * @param distanceY
+	 *            the y delta distance
+	 */
 	public void onShift(float distanceX, float distanceY) {
-		mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
-		if(dw != null){
-			Log.d("wtf2", "DisplayRoute wird gezeichnet");
-			mapModel.drawDisplayCoordinates(dw.clone());
-			mapView.updateDisplayCoordinate(dw.clone());
+		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : " + distanceY);
+		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
+		if (displayPoints != null) {
+			this.mapModel.drawDisplayCoordinates(displayPoints);
+			this.mapView.updateDisplayCoordinate(displayPoints);
 		}
-	}
-
-	public void containsWaypoint(DisplayCoordinate dc) {
-
 	}
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
 	 *            the DisplayCoordinate
 	 */
 	public void onZoom(float delta, DisplayCoordinate dc) {
+		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
+				+ " to " + dc.toString() + " will be forwarding to MapModel");
 		this.mapModel.zoom(delta, dc);
 	}
 
 	/**
-	 * Zoom by a delta
-	 *
+	 * Zoom by a delta.
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
 	public void onZoom(float delta) {
-		Log.d(TAG_MAP_CONTROLLER, "Gibt ZoomDelta " + delta + " zu MapModel weiter");
+		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
+				+ " will be forwarding to MapModel");
 		this.mapModel.zoom(delta);
 	}
 
+
+	/*
+	 * -----------------Calls to Map Controller-----------------
+	 */
+	
 	/**
-	 *
+	 * Switch UserLock between true and false.
 	 */
 	public void onLockUserPosition() {
-		Log.d(TAG_MAP_CONTROLLER, "Lock User Position");
 		if (this.lockUserPosition) {
 			this.lockUserPosition = false;
 		} else {
 			this.lockUserPosition = true;
 		}
+		Log.d(TAG_MAP_CONTROLLER, "Lock User Position: "
+				+ this.lockUserPosition);
+	}
 
+	/*
+	 * -----------------Forwarding To Route Controller-----------------
+	 */
+	
+	/**
+	 * Delete the Active Waypoint
+	 */
+	public void onDeletePoint() {
+		Log.d(TAG_MAP_CONTROLLER, "Delete active Waypoint");
+		this.routeController.deleteActiveWaypoint();
 	}
 
 	/**
-	 * Gibt das aktuelle Level Of Detail zurück
-	 *
-	 * @return aktuelles Level ofDetail
+	 * Creates a new Point.
+	 * 
+	 * @param dc
+	 *            the DisplayCoordinats of the new Point
 	 */
-	public float getCurrentLevelOfDetail() {
-		return this.mapModel.getCurrentLevelOfDetail();
+	public void onCreatePoint(DisplayCoordinate dc) {
+		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
+		this.routeController.addWaypoint(CoordinateUtility
+				.convertDisplayCoordinateToCoordinate(dc,
+						mapModel.getUpperLeft(),
+						mapModel.getCurrentLevelOfDetail()));
 	}
 
-	DisplayWaypoint[] dw;
 
-	public DisplayWaypoint[] convertRouteInfoToDisplayWapoints(RouteInfo currentRoute){
-
-		Log.d("CONVERT_ROUTEINFO", " " + currentRoute.getWaypoints());
-		
-		
-		DisplayWaypoint[] dw = new DisplayWaypoint[currentRoute.getWaypoints().size()];
-		int a = 0;
-		for (Waypoint value : currentRoute.getWaypoints()) {
-			Log.d("CONVERT_ROUTEINFO", " " + value);
-			Log.d("CONVERT_ROUTEINFO", " " + mapModel.getUpperLeft());
-
-			float x = (float) (value.getLongitude() - mapModel.getUpperLeft().getLongitude());
-			float y = (float) (value.getLatitude() - mapModel.getUpperLeft().getLatitude());
-
-			dw[a] = new DisplayWaypoint(
-
-			CoordinateUtility.convertDegreesToPixels(x,
-					mapModel.getCurrentLevelOfDetail(),
-					CoordinateUtility.DIRECTION_LONGTITUDE),
-
-			CoordinateUtility.convertDegreesToPixels(y,
-					mapModel.getCurrentLevelOfDetail(),
-					CoordinateUtility.DIRECTION_LATITUDE),
-
-			value.getId());
-			a++;
-
-		}
-		
-		return dw;
-	}
-	
-	public DisplayWaypoint[] getCurrentRoute() {
-		return this.dw;
-	}
+	/*
+	 * -----------------Implemented Listener-----------------
+	 */
 	
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
-		//LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
+		// LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
 
-		if(currentRoute.getWaypoints() == null){
+		if (currentRoute.getWaypoints() == null) {
 			return;
 		}
 
-		Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl " + currentRoute.getWaypoints().size());
-		
-		dw = this.convertRouteInfoToDisplayWapoints(currentRoute).clone();
+		Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl "
+				+ currentRoute.getWaypoints().size());
 
-		// TODO
-		mapView.updateDisplayCoordinate(dw);
-		mapModel.drawDisplayCoordinates(dw);
-		// mapView.setActive(activeWaypoint.getId());
+		displayPoints = CoordinateUtility.extractDisplayWaypointsOutOfRouteInfo(
+				currentRoute, this.mapModel.getUpperLeft(),
+				this.mapModel.getCurrentLevelOfDetail());
+
+		mapView.updateDisplayCoordinate(displayPoints);
+		mapModel.drawDisplayCoordinates(displayPoints);
 		
+		// TODO Auto-generated method stub
+		// mapView.setActive(activeWaypoint.getId());
+
 	}
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
+		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

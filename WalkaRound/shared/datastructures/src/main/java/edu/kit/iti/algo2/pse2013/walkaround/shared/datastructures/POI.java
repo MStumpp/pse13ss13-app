@@ -112,6 +112,14 @@ public class POI extends Location {
         return poiCategories;
     }
 
+    public String toString() {
+    	return "POI:\n\tCoordinate: (" + getLatitude() + "|" + getLongitude() + ")\n\t"
+    		+ "Name: " + getName() + "\n\t"
+    	    + "TextInfo: " + getTextInfo() + "\n\t"
+    	    + "URL: " + getURL() + "\n\t"
+    	    + "POI-Categories: " + getURL() + "\n\t";
+    }
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
