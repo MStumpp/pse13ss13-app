@@ -50,10 +50,11 @@ public final class Graph {
      * Instantiates and/or returns a singleton instance of Graph.
      *
      * @return Graph.
+     * @throws InstantiationException If class is not instatiated.
      */
-    public static Graph getInstance() {
+    public static Graph getInstance() throws InstantiationException {
         if (instance == null)
-            throw new IllegalArgumentException("singleton must be initialized first");
+            throw new InstantiationException("singleton must be initialized first");
         return instance;
     }
 

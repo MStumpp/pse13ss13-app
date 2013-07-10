@@ -1,44 +1,22 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.*;
-
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * PreprocessorAdminTest.
@@ -151,14 +129,12 @@ public class PreprocessorAdminTest {
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         BufferedReader bufRead = new BufferedReader(input);
         String myLine;
-        int idCounter = 1;
         try {
             while ((myLine = bufRead.readLine()) != null)
             {
                 String[] array = myLine.split(";");
                 locationDataIO.addPOI(new POI(format.parse(array[1]).doubleValue(),
-                        format.parse(array[0]).doubleValue(), idCounter, array[2].replace("\"", ""), array[2].replace("\"", ""), "http://www.walkaround.com", new int[]{0, 1}));
-                idCounter += 1;
+                        format.parse(array[0]).doubleValue(), array[2].replace("\"", ""), array[2].replace("\"", ""), "http://www.walkaround.com", new int[]{0, 1}));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -181,8 +157,6 @@ public class PreprocessorAdminTest {
         GraphDataIO graphDataIO = null;
         try {
             graphDataIO = GraphDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/graphDataIO"));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -190,11 +164,10 @@ public class PreprocessorAdminTest {
         LocationDataIO locationDataIO = null;
         try {
             locationDataIO = LocationDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/locationDataIO"));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
 
