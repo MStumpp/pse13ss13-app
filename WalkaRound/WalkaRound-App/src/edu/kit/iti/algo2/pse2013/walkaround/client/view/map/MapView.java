@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -123,6 +124,10 @@ public class MapView extends Activity {
 
 	Point size;
 
+	public Point getDisplaySize(){
+		return size;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -314,10 +319,10 @@ public class MapView extends Activity {
 
 	// DisplayWaypoint[] dw;
 
-	public void updateDisplayCoordinate(final DisplayWaypoint[] dw) {
+	public void updateDisplayCoordinate(final List<DisplayWaypoint> displayPoints) {
 
 		// fromX = dw[0].getX();
-		updateDisplayWaypoint(dw);
+		updateDisplayWaypoint(displayPoints);
 		/*
 		 * DisplayWaypoint[] dw = new DisplayWaypoint[4]; dw[0] = new
 		 * DisplayWaypoint(-50, 550, 1); dw[1] = new DisplayWaypoint(250, 700,
@@ -346,13 +351,13 @@ public class MapView extends Activity {
 	/**
 	 *
 	 *
-	 * @param dw
+	 * @param displayPoints
 	 */
-	private void updateDisplayWaypoint(final DisplayWaypoint[] dw) {
+	private void updateDisplayWaypoint(final List<DisplayWaypoint> displayPoints) {
 
 		final Context context = this;
 		
-		if(dw == null){
+		if(displayPoints == null){
 			return;
 		}
 		
@@ -361,12 +366,12 @@ public class MapView extends Activity {
 				routeList.removeAllViews();
 				currentActive = null;
 
-				fromX = dw[0].getX();
-				fromY = dw[0].getY();
-				Log.d("TAG_MAPVIEW_DRAW", "Anzahl " + dw.length);
+				fromX = displayPoints.get(0).getX();
+				fromY = displayPoints.get(0).getY();
+				Log.d("TAG_MAPVIEW_DRAW", "Anzahl " + displayPoints.size());
 
 				
-				for (DisplayWaypoint value : dw) {
+				for (DisplayWaypoint value : displayPoints) {
 					Log.d("TAG_MAPVIEW_DRAW", "x " + value.getX());
 					Log.d("TAG_MAPVIEW_DRAW", "y " + value.getY());
 					ImageView iv = new ImageView(context);

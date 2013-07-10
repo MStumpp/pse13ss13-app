@@ -1,15 +1,19 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+// Java Library
 import java.util.LinkedList;
+import java.util.List;
 
+// Android Library
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
+
+// Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
@@ -21,38 +25,80 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
- *
+ * This class compute the Bitmaps of map and route.
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class MapModel implements TileListener {
 
+	/**
+	 * Debug Tag
+	 */
 	private static String TAG_MAP_MODEL = MapModel.class.getSimpleName();
+
+	/**
+	 * the Instance of MapModel
+	 */
 	private static MapModel mapModel;
 	private final static int DEFAULT_TILE_SIZE = 256;
 
-	private float currentLevelOfDetail;
+	/**
+	 * the require references
+	 */
 	private MapController mapController;
+	private TileFetcher tileFetcher;
+
+	/**
+	 * current Level of Detail
+	 */
+	private float currentLevelOfDetail;
+
+	/**
+	 * the size of the current display
+	 */
+	private Point size;
+
+	/**
+	 * the required Coordinates
+	 */
 	private Coordinate upperLeft;
 	private Coordinate mid;
 
-	private Point size;
-	private TileFetcher tileFetcher;
-
+	/**
+	 * The Bitmap
+	 */
 	private Bitmap map;
 	private Bitmap routeOverlayBitmap;
-	DisplayCoordinate mapOffset;
-	int xAmount;
-	int yAmount;
-	float currentTileWidth;
 
-	int xZoomBorder;
-	int yZoomBorder;
-
+	private int strokeWidth = 8;
+	
 	/**
-	 *
+	 * The Tile values
+	 */
+	private DisplayCoordinate mapOffset;
+	private float currentTileWidth;
+
+	private int xAmount;
+	private int yAmount;
+
+	private int xZoomBorder;
+	private int yZoomBorder;
+
+	/*
+	 * -----------------Initialization-----------------
+	 */
+	
+	/**
+	 * initialize MapModel
+	 * 
 	 * @param c
-	 * @return
+	 *            the Coordinate of the mid
+	 * @param mapController
+	 *            required reference of MapController
+	 * @param size
+	 *            display size
+	 * @return instance of mapModel
 	 */
 	public static MapModel initialize(Coordinate c,
 			MapController mapController, Point size) {
@@ -63,57 +109,63 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gives back a Instance of MapView
+	 * 
+	 * @return null if MapModel isn't initialize
 	 */
 	public static MapModel getInstance() {
-		// TODO RUUNN KITY RUN
 		if (mapModel != null) {
-			Log.d(TAG_MAP_MODEL, "Bitte initialisieren Sie zuerst MapView");
+			Log.d(TAG_MAP_MODEL, "initialice MapView first");
 			return null;
 		}
 		return mapModel;
 	}
 
 	/**
-	 *
+	 * Construct a new MapModel
+	 * 
 	 * @param c
+	 *            the Coordinate of the mid
+	 * @param mapController
+	 *            required reference of MapController
+	 * @param size
+	 *            display size
 	 */
 	private MapModel(Coordinate c, MapController mapController, Point size) {
-		Log.d(TAG_MAP_MODEL, "Display-Maße: " + size.x + " * " + size.y);
-		Log.d(TAG_MAP_MODEL, "Map Model wird initialisiert");
+		Log.d(TAG_MAP_MODEL, "Display-Size: " + size.x + " * " + size.y);
+		Log.d(TAG_MAP_MODEL, "Map Model will initialice");
 
-		Log.d(TAG_MAP_MODEL, "Referenzen werden gesetzt");
+		Log.d(TAG_MAP_MODEL, "Referenzen will initialice");
 		this.mapController = mapController;
 		this.tileFetcher = new TileFetcher();
 		this.tileFetcher.setTileListener(this);
 
-		Log.d(TAG_MAP_MODEL, "wichtige Punkte werden berechner");
+		Log.d(TAG_MAP_MODEL, "compute important Points");
 		this.size = size;
 		this.upperLeft = c;
 
-		Log.d(TAG_MAP_MODEL, "Default LOD wird gesetzt");
+		Log.d(TAG_MAP_MODEL, "get default Level of Detail");
 		this.currentLevelOfDetail = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getDefaultLevelOfDetail();
 
-		Log.d("WTF", "upperleft " + upperLeft);
+		Log.d("TAG_MAP_MODEL", "upperleft: " + upperLeft);
 
 		this.computeMid();
-		Log.d("WTF", "mid " + mid);
+		Log.d("TAG_MAP_MODEL", "Mid: " + mid);
 
 		this.upperLeft = new Coordinate(this.upperLeft, -Math.abs(this.mid
 				.getLatitude() - this.upperLeft.getLatitude()),
 				Math.abs(this.mid.getLongitude()
 						- this.upperLeft.getLongitude()));
 
-		Log.d("WTF", "upperLeft2 " + upperLeft);
+		Log.d("TAG_MAP_MODEL", "real upperLeft " + upperLeft);
 
-		Log.d(TAG_MAP_MODEL, "Anzahl der Tiles werden ausgerechnet.");
+		Log.d(TAG_MAP_MODEL, "compute Amount of Tiles");
 		computeAmountsOfTiles();
 
 		Log.d(TAG_MAP_MODEL, "Amount x " + xAmount + " y " + yAmount);
 
-		Log.d(TAG_MAP_MODEL, "ZoomLevel werden analysiert ");
+		Log.d(TAG_MAP_MODEL, "compute zoom levels ");
 		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle();
 
@@ -137,7 +189,7 @@ public class MapModel implements TileListener {
 			}
 		}
 
-		Log.d(TAG_MAP_MODEL, "Map wird initialisiert");
+		Log.d(TAG_MAP_MODEL, "initialice map");
 
 		this.map = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 		this.map.prepareToDraw();
@@ -145,306 +197,43 @@ public class MapModel implements TileListener {
 		this.routeOverlayBitmap = Bitmap.createBitmap(1, 1,
 				Bitmap.Config.ARGB_8888);
 
-		this.generateMapOverlayImage();
+		this.generateOverlayImages();
 
-		// this.mapController.onMapOverlayImageChange(map);
-
-		Log.d(TAG_MAP_MODEL, "Map Model wurde initialisiert");
 	}
 
+	/*
+	 * -----------------Compute-----------------
+	 */
+	
 	/**
-	 * berechnet die Mitte der karte
+	 * compute the middle of the map
 	 */
 	private void computeMid() {
-		this.mid = CoordinateUtility.convertDisplayCoordinateToCoordinate(new DisplayCoordinate(
-				size.x / 2, size.y / 2), upperLeft, currentLevelOfDetail);
+		this.mid = CoordinateUtility.convertDisplayCoordinateToCoordinate(
+				new DisplayCoordinate(size.x / 2, size.y / 2), upperLeft,
+				currentLevelOfDetail);
 	}
 
 	/**
-	 *
-	 * @param c
-	 */
-	public void shift(DisplayCoordinate delta) {
-		// TODO
-
-		Log.d("MAP_TOUCH_SROLL", "Ecke vorher " + this.upperLeft.toString());
-		Log.d("MAP_TOUCH_SROLL", "Delta " + delta);
-
-		this.upperLeft = new Coordinate(this.upperLeft,
-				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
-						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_Y),
-				CoordinateUtility.convertPixelsToDegrees(delta.getX(),
-						this.currentLevelOfDetail,
-						CoordinateUtility.DIRECTION_X));
-		Log.d("MAP_TOUCH_SROLL", "Ecke Nachher " + this.upperLeft.toString());
-		this.generateMapOverlayImage();
-		// this.fetchTiles();
-	}
-
-	/**
-	 *
-	 */
-	public void generateRouteOverlayImage() {
-
-	}
-
-	/**
-	 *
-	 */
-	public void generateMapOverlayImage() {
-
-		Log.d(TAG_MAP_MODEL, "LOD " + currentLevelOfDetail + " x "
-				+ xZoomBorder + " y " + yZoomBorder);
-		Log.d(TAG_MAP_MODEL, "MapStyle: "
-				+ CurrentMapStyleModel.getInstance().getCurrentMapStyle()
-						.getName());
-
-
-		if (this.currentLevelOfDetail < this.xZoomBorder
-				&& this.currentLevelOfDetail < this.yZoomBorder) {
-			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner display ");
-			final int size = ((int) Math.pow(2, this.currentLevelOfDetail))
-					* DEFAULT_TILE_SIZE;
-			// this.map.recycle();
-			this.map.recycle();
-			this.map = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-			this.map.prepareToDraw();
-
-			this.routeOverlayBitmap.recycle();
-			this.routeOverlayBitmap = Bitmap.createBitmap(size, size,
-					Bitmap.Config.ARGB_8888);
-			this.routeOverlayBitmap.prepareToDraw();
-
-			this.fetchTiles();
-			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-			
-			
-			return;
-		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
-			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x Achse ");
-			final int sizeX = ((int) Math.pow(2, this.currentLevelOfDetail))
-					* DEFAULT_TILE_SIZE;
-			// this.map.recycle();
-			this.map.recycle();
-			this.map = Bitmap.createBitmap(sizeX, size.y,
-					Bitmap.Config.ARGB_8888);
-			this.map.prepareToDraw();
-
-			this.routeOverlayBitmap.recycle();
-			this.routeOverlayBitmap = Bitmap.createBitmap(sizeX, size.y,
-					Bitmap.Config.ARGB_8888);
-			this.routeOverlayBitmap.prepareToDraw();
-
-			this.fetchTiles();
-			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-			
-			return;
-		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
-			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner y Achse ");
-			final int sizeY = ((int) Math.pow(2, this.currentLevelOfDetail))
-					* DEFAULT_TILE_SIZE;
-			// this.map.recycle();
-			this.map.recycle();
-			this.map = Bitmap.createBitmap(size.x, sizeY,
-					Bitmap.Config.ARGB_8888);
-			this.map.prepareToDraw();
-
-			this.routeOverlayBitmap.recycle();
-			this.routeOverlayBitmap = Bitmap.createBitmap(size.x, sizeY,
-					Bitmap.Config.ARGB_8888);
-			this.routeOverlayBitmap.prepareToDraw();
-
-			this.fetchTiles();
-			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-			
-			return;
-		}
-
-		Log.d(TAG_MAP_MODEL, "create Bitmap greater than Display ");
-		// this.map.recycle();
-		this.map.recycle();
-		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
-		this.map.prepareToDraw();
-
-		this.routeOverlayBitmap.recycle();
-		this.routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
-				Bitmap.Config.ARGB_8888);
-		this.routeOverlayBitmap.prepareToDraw();
-
-		this.fetchTiles();
-		this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-		
-	}
-
-	private float getCurrentTileWidthInPixels() {
-		return (float) ((256 * Math.pow(2, getCurrentLevelOfDetail())) / Math
-				.pow(2, Math.round(getCurrentLevelOfDetail())));
-	}
-
-	/**
-	 *
+	 * compute the amount tiles possible to show
 	 */
 	private void computeAmountsOfTiles() {
-		currentTileWidth = getCurrentTileWidthInPixels();
+		
+		currentTileWidth = CoordinateUtility.computeCurrentTileWidthInPixels(this.currentLevelOfDetail);
 
 		xAmount = (int) Math.ceil(size.x / currentTileWidth);
 		yAmount = (int) Math.ceil(size.y / currentTileWidth);
+		
 		xAmount++;
 		yAmount++;
 	}
 
 	/**
-	 *
-	 * @return
+	 * Compute and gives the Tile Offset back
+	 * 
+	 * @return Tile Offset
 	 */
-	private boolean fetchTiles() {
-		this.mapOffset = this.getTileOffset();
-		final boolean result = tileFetcher.requestTiles(
-				Math.round(currentLevelOfDetail), upperLeft, xAmount, yAmount);
-		Log.d(TAG_MAP_MODEL, "Tiles werden angefordert: " + result + " x "
-				+ xAmount + " y " + yAmount);
-		return result;
-	}
-
-	/**
-	 *
-	 * @return
-	 */
-	public Coordinate getUpperLeft() {
-		return upperLeft;
-	}
-
-	/**
-	 *
-	 */
-	public void setNewStyle() {
-		this.generateMapOverlayImage();
-	}
-
-	/**
-	 *
-	 * @param delta
-	 * @param c
-	 */
-	public boolean zoom(float delta, DisplayCoordinate c) {
-		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + c.toString());
-		return this.zoom(delta, CoordinateUtility.convertDisplayCoordinateToCoordinate(c, upperLeft, currentLevelOfDetail));
-	}
-
-	/**
-	 *
-	 * @param delta
-	 */
-	public boolean zoom(float delta) {
-		this.computeMid();
-		// Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + mid.toString());
-		return this.zoom(delta, mid);
-	}
-
-	/**
-	 *
-	 * @param delta
-	 * @param c
-	 */
-	public boolean zoom(float delta, Coordinate c) {
-
-		Log.d(TAG_MAP_MODEL, "ZOOM um " + delta + " auf " + c.toString());
-
-		// TODO
-
-		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
-				.getCurrentMapStyle();
-		final float nextLevelOfDetail = this.currentLevelOfDetail + delta;
-
-		Log.d(TAG_MAP_MODEL, "ZOOM von " + this.currentLevelOfDetail + " auf "
-				+ nextLevelOfDetail + " wird geprüft");
-		if (nextLevelOfDetail > mapStyle.getMaxLevelOfDetail()
-				|| nextLevelOfDetail < mapStyle.getMinLevelOfDetail()) {
-			Log.d(TAG_MAP_MODEL, "ZOOM wird abgebrochen");
-			return false;
-		}
-
-		Log.d(TAG_MAP_MODEL, "ZOOM auf " + nextLevelOfDetail
-				+ " wird ausgeführt");
-		this.currentLevelOfDetail = nextLevelOfDetail;
-
-		final double deltaX = c.getLatitude() - this.upperLeft.getLatitude();
-		final double deltaY = c.getLongitude() - this.upperLeft.getLongitude();
-
-		Log.d(TAG_MAP_MODEL, "Deltas : " + deltaX + " " + deltaY);
-
-		/*
-		 * float deltaLatitude = CoordinateUtility.convertDegreesToPixel(deltaX,
-		 * nextLevelOfDetail); float deltaLongitude =
-		 * CoordinateUtility.convertDegreesToPixel(deltaY, nextLevelOfDetail);
-		 * deltaLatitude =
-		 * CoordinateUtility.convertPixelsToDegrees(-deltaLatitude,
-		 * nextLevelOfDetail); deltaLongitude =
-		 * CoordinateUtility.convertPixelsToDegrees(-deltaLongitude,
-		 * nextLevelOfDetail);
-		 */
-
-		Log.d(TAG_MAP_MODEL, "UpperLeft war: " + this.upperLeft);
-		this.upperLeft = new Coordinate(c, -deltaY, -deltaY);
-		Log.d(TAG_MAP_MODEL, "Neuer upperLeft ist: " + this.upperLeft);
-
-		this.computeAmountsOfTiles();
-		this.generateMapOverlayImage();
-		return true;
-	}
-
-	/**
-	 *
-	 * @param dc
-	 * @param category
-	 * @param profile
-	 * @return
-	 */
-	public LinkedList<DisplayCoordinate> getPOIofDisplay(DisplayCoordinate dc,
-			int[] category, int profile) {
-		return null;
-	}
-
-	/**
-	 * Gibt das aktuelle Level Of Detail zurück
-	 *
-	 * @return aktuellen Level ofDetail
-	 */
-	public float getCurrentLevelOfDetail() {
-		return this.currentLevelOfDetail;
-	}
-
-	/**
-	 *
-	 * @param lod
-	 */
-	public void setCurrentLevelOfDetail(float levelOfDetail) {
-		this.currentLevelOfDetail = levelOfDetail;
-	}
-
-	/**
-	 *
-	 */
-	public void onChangeOfActivePOICategories() {
-
-	}
-
-	/**
-	 *
-	 * @param c
-	 * @return
-	 */
-	public Location getNearbyLocation(Coordinate c) {
-		return null;
-	}
-
-	/**
-	 *
-	 *
-	 * @return
-	 */
-	public DisplayCoordinate getTileOffset() {
+	private DisplayCoordinate computeTileOffset() {
 		float lonDiff = (float) ((upperLeft.getLongitude() + 180) % (360 / Math
 				.pow(2, currentLevelOfDetail)));
 		float latDiff = (float) ((upperLeft.getLatitude() + 90) % (180 / Math
@@ -460,56 +249,300 @@ public class MapModel implements TileListener {
 		return new DisplayCoordinate(xDiff, yDiff);
 	}
 
-	public void drawDisplayCoordinates(final DisplayCoordinate[] dw) {
+	
+	/*
+	 * -----------------Getter-----------------
+	 */
+
+	/**
+	 * gives the upperLeft Coordinate back
+	 * 
+	 * @return the upper left Coordinate
+	 */
+	public Coordinate getUpperLeft() {
+		return upperLeft;
+	}
+
+	/**
+	 * Gives back the current Level Of Detail
+	 * 
+	 * @return current Level ofDetail
+	 */
+	public float getCurrentLevelOfDetail() {
+		return this.currentLevelOfDetail;
+	}
+
+	/**
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public Location getNearbyLocation(Coordinate c) {
+		//TODO
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param dc
+	 * @param category
+	 * @param profile
+	 * @return
+	 */
+	public LinkedList<DisplayCoordinate> getPOIofDisplay(DisplayCoordinate dc,
+			int[] category, int profile) {
+		//TODO
+		return null;
+	}
+
+	/*
+	 * -----------------Setter-----------------
+	 */
+
+	/**
+	 * set a new MapStyle
+	 */
+	public void setNewStyle() {
+		this.generateOverlayImages();
+	}
+
+	/**
+	 * Set a new current Level of Detail
+	 * 
+	 */
+	public void setCurrentLevelOfDetail(float levelOfDetail) {
+		this.currentLevelOfDetail = levelOfDetail;
+	}
+
+	/*
+	 * -----------------MapModel Calls-----------------
+	 */
+	
+	/**
+	 * shifts the map by a delta
+	 * 
+	 * @param delta
+	 *            the shifting delta
+	 */
+	public void shift(DisplayCoordinate delta) {
+
+		Log.d(TAG_MAP_MODEL, "UpperLeft " + this.upperLeft.toString());
+		Log.d(TAG_MAP_MODEL, "Delta " + delta);
+
+		this.upperLeft = new Coordinate(this.upperLeft,
+				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
+						this.currentLevelOfDetail,
+						CoordinateUtility.DIRECTION_Y),
+				CoordinateUtility.convertPixelsToDegrees(delta.getX(),
+						this.currentLevelOfDetail,
+						CoordinateUtility.DIRECTION_X));
+
+		Log.d(TAG_MAP_MODEL, "upperLeft " + this.upperLeft.toString());
+
+		this.generateOverlayImages();
+	}
+
+	/**
+	 * Zooms by a Delta to a DisplayCoordinate
+	 * 
+	 * @param delta the zoom delta
+	 * @param c the target DisplayCoordinate
+	 */
+	public boolean zoom(float delta, DisplayCoordinate c) {
+		return this.zoom(delta, CoordinateUtility
+				.convertDisplayCoordinateToCoordinate(c, upperLeft,
+						currentLevelOfDetail));
+	}
+
+	/**
+	 * Zooms by a delta to the middle of the Display
+	 * 
+	 * @param delta the zoom delta
+	 */
+	public boolean zoom(float delta) {
+		this.computeMid();
+		return this.zoom(delta, mid);
+	}
+
+	/**
+	 * Zooms by a Delta to a Coordinate
+	 * 
+	 * @param delta the zoom delta
+	 * @param c the target Coordinate
+	 */
+	public boolean zoom(float delta, Coordinate c) {
+
+		Log.d(TAG_MAP_MODEL, "ZOOM by " + delta + " to " + c.toString());
+
+		final MapStyle mapStyle = CurrentMapStyleModel.getInstance()
+				.getCurrentMapStyle();
+		final float nextLevelOfDetail = this.currentLevelOfDetail + delta;
 
 		
-		Log.d("CANVAS_DRAW_LINE", "L�nge" + dw.length);
-		for (int a = 0; a < (dw.length - 1); a++) {
+		if (nextLevelOfDetail > mapStyle.getMaxLevelOfDetail()
+				|| nextLevelOfDetail < mapStyle.getMinLevelOfDetail()) {
+			return false;
+		}
+
+		
+		this.currentLevelOfDetail = nextLevelOfDetail;
+
+		final double deltaX = c.getLongitude() - this.upperLeft.getLongitude();
+		final double deltaY = c.getLatitude() - this.upperLeft.getLatitude();
+
+		this.upperLeft = new Coordinate(c, -deltaX, -deltaY);
+		
+		this.computeAmountsOfTiles();
+		this.generateOverlayImages();
+		
+		return true;
+	}
+
+	/**
+	 *
+	 */
+	public void onChangeOfActivePOICategories() {
+		//TODO
+	}
+
+	/*
+	 * -----------------Generate-----------------
+	 */
+	
+	/**
+	 * generate the Image with the right Sizes
+	 */
+	public boolean generateOverlayImages() {
+
+		if (this.currentLevelOfDetail < this.xZoomBorder
+				&& this.currentLevelOfDetail < this.yZoomBorder) {
+			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner display ");
+			final int size = ((int) Math.pow(2, this.currentLevelOfDetail))
+					* DEFAULT_TILE_SIZE;
+			this.createBitmap(size, size);
+			return true;
+		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
+			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x Achse ");
+			final int sizeX = ((int) Math.pow(2, this.currentLevelOfDetail))
+					* DEFAULT_TILE_SIZE;
+			this.createBitmap(sizeX, size.y);
+			return true;
+		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
+			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner y Achse ");
+			final int sizeY = ((int) Math.pow(2, this.currentLevelOfDetail))
+					* DEFAULT_TILE_SIZE;
+			this.createBitmap(size.x, sizeY);
+			return true;
+		}
+		Log.d(TAG_MAP_MODEL, "create Bitmap greater than Display ");
+		this.createBitmap(size.x, size.y);
+		return true;
+	}
+
+	/**
+	 * recycle and creates a new map
+	 * recycle and creates a new routeOverlay
+	 * 
+	 * @param width of the map and routeOverlay
+	 * @param height of the map and routeOverlay
+	 */
+	private void createBitmap(int width, int height) {
+
+		Log.d(TAG_MAP_MODEL, "create Map Bitmap");
+		this.map.recycle();
+		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.map.prepareToDraw();
+
+		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
+		this.routeOverlayBitmap.recycle();
+		this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
+				Bitmap.Config.ARGB_8888);
+		this.routeOverlayBitmap.prepareToDraw();
+
+		Log.d(TAG_MAP_MODEL, "call drawing");
+		this.fetchTiles();
+		this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
+
+	}
+
+
+
+	/**
+	 * asks the tile fetcher to send back the needed tiles
+	 * 
+	 * @return true if it is possible to get the tiles
+	 */
+	private boolean fetchTiles() {
+		
+		this.mapOffset = this.computeTileOffset();
+		
+		final boolean result = tileFetcher.requestTiles(
+				Math.round(currentLevelOfDetail), upperLeft, xAmount, yAmount);
+		
+		Log.d(TAG_MAP_MODEL, "Tiles werden angefordert: " + result + " x "
+				+ xAmount + " y " + yAmount);
+		
+		return result;
+	}
+
+	/*
+	 * -----------------Drawn Methods-----------------
+	 */
+	
+	/**
+	 * Draws the Route Overlay between DisplayWaypoints
+	 * 
+	 * @param displayPoints a list of Points
+	 */
+	public void drawDisplayCoordinates(final List<DisplayWaypoint> displayPoints) {
+
+		Log.d("CANVAS_DRAW_LINE", "Länge" + displayPoints.size());
+		for (int a = 0; a < (displayPoints.size() - 1); a++) {
 			Log.d("CANVAS_DRAW_LINE", "Von" + a + " nach " + (a + 1));
-			if (a + 1 < dw.length && dw[a] != null && dw[a + 1] != null) {
-				this.drawRoute(dw[a].getX(), dw[a].getY(), dw[a + 1].getX(),
-						dw[a + 1].getY());
+			if (a + 1 < displayPoints.size() && displayPoints.get(a) != null
+					&& displayPoints.get(a + 1) != null) {
+				this.drawRouteLine(displayPoints.get(a).getX(), displayPoints
+						.get(a).getY(), displayPoints.get(a + 1).getX(),
+						displayPoints.get(a + 1).getY());
 
 			}
 		}
 	}
 
 	/**
-	 * Updatet das Routen Overlay
-	 *
-	 * @param b
+	 * Draw a Line between two points.
+	 * 
+	 * @param fromX from x
+	 * @param fromY from y
+	 * @param toX to x
+	 * @param toY to y
 	 */
-	public void drawRoute(final float fromX, final float fromY,
+	private void drawRouteLine(final float fromX, final float fromY,
 			final float toX, final float toY) {
 
 		if (!routeOverlayBitmap.isRecycled()) {
 			Canvas canvas = new Canvas(routeOverlayBitmap);
 
-		Paint pinsel = new Paint();
-		pinsel.setColor(Color.rgb(64, 64, 255));
-		//TODO
-		pinsel.setStrokeWidth(8);
+			Paint pinsel = new Paint();
+			pinsel.setColor(Color.rgb(64, 64, 255));
+			pinsel.setStrokeWidth(this.strokeWidth);
 
-			// Diagonale durch Leinwand zeichnen
 			if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
 				if (fromX < size.x || fromY < size.y || toX < size.x
 						|| toY < size.y) {
+					Log.d(TAG_MAP_MODEL, "ZEICHNE!");
 					canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
 				}
 			}
 
-		Log.d(TAG_MAP_MODEL + "_DRAW", "routeOverlayBitmap "
-				+ (routeOverlayBitmap == null));
-
-		mapController.onRouteOverlayImageChange(routeOverlayBitmap);
+			mapController.onRouteOverlayImageChange(routeOverlayBitmap);
 		}
 	}
 
 	@Override
 	public void receiveTile(final Bitmap tile, final int x, final int y,
 			final int levelOfDetail) {
-		// Log.d(TAG_MAP_MODEL, "Receive Tile: " + (tile != null) + " x " + x +
-		// " y " + y);
+		Log.d(TAG_MAP_MODEL, "Receive Tile!");
 
 		if (!map.isRecycled()) {
 
@@ -524,27 +557,12 @@ public class MapModel implements TileListener {
 			Canvas canvas = new Canvas(map);
 
 			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-
-			Log.d("wtf", "tile " + (tile == null));
-			Log.d("wtf", "cancas " + (canvas == null));
 			canvas.drawBitmap(tile,
 					(localX * tile.getWidth()) - mapOffset.getX(),
-					(localY * tile.getHeight()) - mapOffset.getY() , null);
-
-			/*
-			 * int left = x * tile.getWidth(); int right = left +
-			 * tile.getWidth(); int top = y * tile.getHeight(); int bottom = top
-			 * + tile.getHeight();
-			 *
-			 * // canvas.drawBitmap(tile, new
-			 * Rect(0,0,tile.getWidth(),tile.getWidth()), new Rect(left, top
-			 * ,right, bottom), null);
-			 */
-			// Log.d("MAP_VIEW", "Fog wurde erstellt.");
-
-			// Bitmap newTile = tile.copy(tile.getConfig(), tile.isMutable());
+					(localY * tile.getHeight()) - mapOffset.getY(), null);
 
 			this.mapController.onMapOverlayImageChange(map);
 		}
+		
 	}
 }

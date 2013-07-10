@@ -3,7 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
- * Diese Klasse verindet eine DisplayCoordinate mit einem Waypoint
+ * This class connect DisplayCoordinate with a Waypoint
  * 
  * @author Ludwig Biermann
  *
@@ -11,16 +11,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 public class DisplayWaypoint extends DisplayCoordinate {
 	
 	/**
-	 * Der Waypoint
+	 * The id of the waypoint
 	 */
 	private int id;
 	
 	/**
-	 * Erstellt ein Displaywaypoint.
+	 * Construct a new DisplayWaypoint
 	 * 
-	 * @param x Koordinate
-	 * @param y Koordinate
-	 * @param waypoint der Wegpunkt
+	 * @param x Coordinate
+	 * @param y Coordinate
+	 * @param id of the waypoint
 	 */
 	public DisplayWaypoint(float x, float y, int id) {
 		super(x, y);
@@ -28,9 +28,9 @@ public class DisplayWaypoint extends DisplayCoordinate {
 	}
 	
 	/**
-	 * Gibt den Wegpunkt zur�ck
+	 * Gives the id of the Waypoint back
 	 * 
-	 * @return Wegpunkt
+	 * @return the id of the Waypoint
 	 */
 	public int  getId() {
 		return this.id;

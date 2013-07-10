@@ -3,7 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
- * Diese Klasse verindet eine DisplayCoordinate mit einem Point of Interest
+ * This class connect a DisplayCoordinate with a Point of Interest
  * 
  * @author Ludwig Biermann
  *
@@ -16,11 +16,11 @@ public class DisplayPOI extends DisplayCoordinate {
 	private int id;
 	
 	/**
-	 * Erstellt ein Displaywaypoint.
+	 * Construct a new DisplayCoordinate
 	 * 
-	 * @param x Koordinate
-	 * @param y Koordinate
-	 * @param waypoint der Wegpunkt
+	 * @param x Coordinate
+	 * @param y Coordinate
+	 * @param id Id of the Point of Interest
 	 */
 	public DisplayPOI(float x, float y, int id) {
 		super(x, y);
@@ -28,9 +28,9 @@ public class DisplayPOI extends DisplayCoordinate {
 	}
 	
 	/**
-	 * gibt den POI zur�ck
+	 * gives the id of Point of Interest back
 	 * 
-	 * @return POI
+	 * @return the id of Point of Interest
 	 */
 	public int getId() {
 		return this.id;
