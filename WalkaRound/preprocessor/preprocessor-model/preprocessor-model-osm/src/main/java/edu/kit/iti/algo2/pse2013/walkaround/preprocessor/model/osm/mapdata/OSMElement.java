@@ -13,6 +13,7 @@ public abstract class OSMElement {
 	}
 	public void addTag(String key, String value) {
 		this.tags.put(key, value);
+		System.out.println(String.format("Key: %s Value: %s", key, value));
 	}
 	public HashMap<String, String> getTags() {
 		return tags;
