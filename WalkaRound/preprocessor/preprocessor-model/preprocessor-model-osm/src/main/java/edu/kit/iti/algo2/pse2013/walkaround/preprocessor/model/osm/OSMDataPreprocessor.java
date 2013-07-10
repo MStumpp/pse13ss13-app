@@ -7,11 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import crosby.binary.file.BlockInputStream;
-import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
@@ -89,7 +90,7 @@ public class OSMDataPreprocessor {
 	}
 
 	public static void main(String[] args) throws IOException {
-		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-06-22-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
+		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
 		prep.parse();
 	}
 }
