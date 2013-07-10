@@ -3,6 +3,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

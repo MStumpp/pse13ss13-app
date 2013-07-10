@@ -1,8 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
-import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.GraphProtos;
-
 import java.io.*;
 import java.util.HashSet;
 import java.util.List;
@@ -82,10 +79,10 @@ public class GraphDataIO implements Serializable {
      * @throws java.io.IOException
      */
     public static void save(GraphDataIO objectToSave, File destination) throws IOException {
-        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-        ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);
-        out.flush();
-        out.close();
+//        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+//        ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);
+//        out.flush();
+//        out.close();
     }
 
 
@@ -97,10 +94,11 @@ public class GraphDataIO implements Serializable {
      * @throws ClassNotFoundException
      */
     public static GraphDataIO load(File source) throws IOException, ClassNotFoundException {
-        InputStream in = new BufferedInputStream(new FileInputStream(source));
-        GraphDataIO geom = ProtobufConverter.getGraphData(GraphProtos.SaveGraphData.parseFrom(in));
-        in.close();
-        return geom;
+//        InputStream in = new BufferedInputStream(new FileInputStream(source));
+//        GraphDataIO geom = ProtobufConverter.getGraphData(GraphProtos.SaveGraphData.parseFrom(in));
+//        in.close();
+//        return geom;
+        return null;
     }
 
 }
