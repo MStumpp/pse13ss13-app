@@ -76,7 +76,11 @@ public class ServerAdmin {
             e.printStackTrace();
         }
 
-        ShortestPathProcessor.init(Graph.getInstance());
+        try {
+            ShortestPathProcessor.init(Graph.getInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
         GeometryProcessor.init(geometryDataIO);
