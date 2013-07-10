@@ -36,7 +36,7 @@ public class GeometryDataIOTest {
 
 
     @Test
-    public void testSandAndLoad() {
+    public void testSaveAndLoad() {
 		GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
 		int numDimensions = writeGeometryDataIO.getNumDimensions();
 		try {

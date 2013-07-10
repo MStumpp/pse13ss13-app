@@ -2,8 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,8 +56,4 @@ public class AreaTest {
 				testCoordinateListC));
 	}
 
-	@Test
-	public void testInvalidConstructionsOfAreas() {
-
-	}
 }
