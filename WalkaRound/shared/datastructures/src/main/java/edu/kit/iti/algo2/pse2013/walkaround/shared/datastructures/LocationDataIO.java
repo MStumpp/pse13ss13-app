@@ -11,8 +11,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.LocationProtos;
 
 /**
  * This class contains some preprocessed data by OSMDataPreprocessor and
@@ -97,10 +95,10 @@ public class LocationDataIO {
      * @throws java.io.IOException
      */
 	public static void save(LocationDataIO objectToSave, File destination) throws IOException {
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-		ProtobufConverter.getLocationDataBuilder(objectToSave).build().writeTo(out);
-		out.flush();
-		out.close();
+//		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+//		ProtobufConverter.getLocationDataBuilder(objectToSave).build().writeTo(out);
+//		out.flush();
+//		out.close();
 	}
 
 
@@ -111,10 +109,11 @@ public class LocationDataIO {
      * @throws java.io.IOException
      */
 	public static LocationDataIO load(File source) throws IOException {
-		InputStream in = new BufferedInputStream(new FileInputStream(source));
-		LocationDataIO geom = ProtobufConverter.getLocationData(LocationProtos.SaveLocationData.parseFrom(in));
-		in.close();
-		return geom;
+//		InputStream in = new BufferedInputStream(new FileInputStream(source));
+//		LocationDataIO geom = ProtobufConverter.getLocationData(LocationProtos.SaveLocationData.parseFrom(in));
+//		in.close();
+//		return geom;
+        return null;
 	}
 
 }

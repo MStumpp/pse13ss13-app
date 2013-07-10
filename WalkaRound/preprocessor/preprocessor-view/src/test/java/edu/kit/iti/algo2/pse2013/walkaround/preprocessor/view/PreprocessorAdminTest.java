@@ -20,7 +20,6 @@ import java.util.Map;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
@@ -30,6 +29,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+
 import org.junit.Ignore;
 import org.junit.Test;
 

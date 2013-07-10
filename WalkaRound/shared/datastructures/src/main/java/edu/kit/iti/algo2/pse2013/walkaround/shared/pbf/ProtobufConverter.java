@@ -1,12 +1,7 @@
-package edu.kit.iti.algo2.pse2013.walkaround.pbf;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
 import java.util.ArrayList;
 
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryNode;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
@@ -14,6 +9,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveAddress;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveEdge;
@@ -87,8 +87,7 @@ public class ProtobufConverter {
 		return SaveEdge.newBuilder()
 			.setHead(getVertexBuilder(e.getHead()))
 			.setTail(getVertexBuilder(e.getTail()))
-			.setLength(e.getLength())
-			.setOSMID(e.getOSMID());
+			.setLength(e.getLength());
 	}
 
 	public static Geometrizable getGeometrizable(SaveGeometrizable geometrizable) {
@@ -240,7 +239,7 @@ public class ProtobufConverter {
 		if (saveVertex == null) {
 			return null;
 		}
-		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getOSMID());
+		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude());
 		//v.setParent(getVertex(saveVertex.getParent())); // TODO: Aufpassen, dass das nicht zur Endlosschleife wird!
 		//v.setRun(saveVertex.getRun());
 		//v.setCurrentLength(saveVertex.getCurrentLength());
@@ -255,8 +254,7 @@ public class ProtobufConverter {
 		}
 		SaveVertex.Builder builder = SaveVertex.newBuilder()
 			.setCoordinate(getCoordinateBuilder(vertex))
-			.setId(vertex.getID())
-			.setOSMID(vertex.getOSMID());
+			.setId(vertex.getID());
 		for (Edge e : vertex.getOutgoingEdges()) {
 			builder.addOutgoingEdge(getEdgeBuilder(e));
 		}
