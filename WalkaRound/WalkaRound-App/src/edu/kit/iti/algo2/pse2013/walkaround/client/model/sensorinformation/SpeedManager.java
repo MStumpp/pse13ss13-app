@@ -23,7 +23,8 @@ public class SpeedManager implements PositionListener {
 	public SpeedManager getInstance() {
 		if (speedManager == null) {
 			speedManager = new SpeedManager();
-			PositionManager.getInstance().registerPositionListener(speedManager);
+			// TODO
+			//PositionManager.getInstance().registerPositionListener(speedManager);
 		}
 		return speedManager;
 	}
@@ -41,7 +42,7 @@ public class SpeedManager implements PositionListener {
 	}
 
 	private void notifyAllSpeedListeners() {
-		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllRouteListeners()");
+		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllCompassListeners()");
 		for (SpeedListener sl : this.speedListeners) {
 			sl.onSpeedChange(lastKnownSpeed);
 		}
