@@ -100,8 +100,9 @@ public class WikipediaPreprocessor {
 			 */
 			current.setTextInfo(textInfo);
 
-			// Bilder... commons.wikimedia.org/wiki/File: + erster teil nach
-			// Datei: .... leerzeichen werden dabei zu _
+			//Seitenquelltext(HTML) durchgehen suchen nach erstem auftreten von upload.wikimedia.org/wikipedia/commons/ (in <body> suchen
+			//Link: http://commons.wikimedia.org/wiki/File:    +      was nach Datei: steht dabei werden " " zu "_"
+			//Link mit view-source: anreichern
 		}
 	}
 }

@@ -1,17 +1,21 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GraphDataIO implements Serializable {
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
 
-    /**
-     * Temporary Serial version ID as long as Java serialization is used
-     */
-    private static final long serialVersionUID = 3394680623853287035L;
-
+public class GraphDataIO {
 
     /**
      * Stores a set of Edge objects.
@@ -57,7 +61,7 @@ public class GraphDataIO implements Serializable {
      * @param edges List of Edges to be added.
      */
     public void addEdges(List<Edge> edges) {
-        edges.addAll(edges);
+        this.edges.addAll(edges);
     }
 
 
@@ -79,10 +83,10 @@ public class GraphDataIO implements Serializable {
      * @throws java.io.IOException
      */
     public static void save(GraphDataIO objectToSave, File destination) throws IOException {
-//        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-//        ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);
-//        out.flush();
-//        out.close();
+        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+        ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);
+        out.flush();
+        out.close();
     }
 
 
@@ -94,11 +98,10 @@ public class GraphDataIO implements Serializable {
      * @throws ClassNotFoundException
      */
     public static GraphDataIO load(File source) throws IOException, ClassNotFoundException {
-//        InputStream in = new BufferedInputStream(new FileInputStream(source));
-//        GraphDataIO geom = ProtobufConverter.getGraphData(GraphProtos.SaveGraphData.parseFrom(in));
-//        in.close();
-//        return geom;
-        return null;
+        InputStream in = new BufferedInputStream(new FileInputStream(source));
+        GraphDataIO geom = ProtobufConverter.getGraphData(Protos.SaveGraphData.parseFrom(in));
+        in.close();
+        return geom;
     }
 
 }

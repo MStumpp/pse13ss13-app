@@ -3,6 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
+
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
@@ -18,6 +20,11 @@ public class RouteProcessing {
      * RouteProcessing instance.
      */
     private static RouteProcessing instance;
+    
+    /**
+     * TAG for android debugging.
+     */
+	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class.getSimpleName();
 
 
     /**
@@ -33,6 +40,7 @@ public class RouteProcessing {
      * @return RouteProcessing.
      */
     public static RouteProcessing getInstance() {
+    	Log.d(TAG_ROUTE_PROCESSING, "getInstance()");
         if (instance == null)
             instance = new RouteProcessing();
         return instance;
@@ -48,6 +56,7 @@ public class RouteProcessing {
      * @return RouteInfo.
      */
     public RouteInfo computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
+    	Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate coordinate1, Coordinate coordinate2)");
         List<Coordinate> coordinates = new LinkedList<Coordinate>();
         coordinates.add(coordinate1);
         coordinates.add(coordinate2);
@@ -66,6 +75,7 @@ public class RouteProcessing {
      * @return RouteInfo.
      */
     public RouteInfo computeRoundtrip(Coordinate coordinate, int profile, int length) {
+    	Log.d(TAG_ROUTE_PROCESSING, "computeRoundtrip(Coordinate coordinate, int profile, int length)");
         throw new RuntimeException("to be implemented");
     }
 

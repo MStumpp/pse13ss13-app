@@ -14,7 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 public class POIView extends Fragment {
 
-	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupPOISwitcher;
 
@@ -29,6 +29,7 @@ public class POIView extends Fragment {
 	private TextView category8;
 	private TextView category9;
 	private TextView category10;
+	private TextView category11;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,8 @@ public class POIView extends Fragment {
 		category9 = (TextView) this.getActivity().findViewById(R.id.category_9);
 		category10 = (TextView) this.getActivity().findViewById(
 				R.id.category_10);
+		category11 = (TextView) this.getActivity().findViewById(
+				R.id.category_11);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -77,6 +80,8 @@ public class POIView extends Fragment {
 		category9.getLayoutParams().width = size.x / 2;
 		category10.setX((size.x / 6));
 		category10.getLayoutParams().width = size.x / 2;
+		category11.setX((size.x / 6));
+		category11.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 		category1.setOnTouchListener(new onCategoryTouch());
@@ -89,6 +94,7 @@ public class POIView extends Fragment {
 		category8.setOnTouchListener(new onCategoryTouch());
 		category9.setOnTouchListener(new onCategoryTouch());
 		category10.setOnTouchListener(new onCategoryTouch());
+		category11.setOnTouchListener(new onCategoryTouch());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
@@ -171,8 +177,14 @@ public class POIView extends Fragment {
 				} else {
 					setUnselected(category10);
 				}
+			} else if (v.equals(category11)) {
+				if (!category11.isSelected()) {
+					setSelected(category11);
+				} else {
+					setUnselected(category11);
+				}
 			}
-			//TODO: POIs der kategorie werden auf der karte angezeigt....
+			// TODO: POIs der kategorie werden auf der karte angezeigt....
 			return false;
 		}
 

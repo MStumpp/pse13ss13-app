@@ -94,20 +94,21 @@ public class Route implements RouteInfo {
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 */
 	public void addWaypoint(Coordinate c) {
-		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c)");
+		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) METHOD START");
+		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) to route with " + this.routeCoordinates.size() + " Coordinates");
 		if (this.routeCoordinates.size() != 0) {
-			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> sending Route to Server");
-			RouteInfo routeExtension = this.routeProcessor.computeShortestPath(c, this.getEnd());
+			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> computing shortest path");
+			RouteInfo routeExtension = this.routeProcessor.computeShortestPath(this.getEnd(), c);
 
 			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
 			this.routeCoordinates.add(new Waypoint(c.getLongitude(), c.getLatitude(), "Wegpunkt"));
 		}
-		Log.d(TAG_ROUTE, "" + this.routeCoordinates.size());
 		this.setActiveWaypoint(this.getEnd());
-		Log.d(TAG_ROUTE, "Amount of Waypoints" + this.routeCoordinates.size());
 		this.cleanRouteOfDuplicateCoordinatePairs();
+		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) - new size of route: "+ this.routeCoordinates.size());
+		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) METHOD END");
 	}
 
 
@@ -132,9 +133,11 @@ public class Route implements RouteInfo {
 		
 		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
 		
+		
 		if (!(this.getEnd().getLatitude() == newRoute.getStart().getLatitude())
 				|| !(this.getEnd().getLongitude() == newRoute.getStart().getLongitude())) {
-			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate path");
+			Log.d(TAG_ROUTE, "intermediate path has to be computed. Current Route end: " + this.getEnd() + ", new Route start" + newRoute.getStart());
+			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
 			this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
 			
 		}
