@@ -19,7 +19,7 @@ public final class Graph {
     /**
      * Array of Vertices.
      */
-    private Vertex[] vertices;
+    public Vertex[] vertices;
 
 
     /**

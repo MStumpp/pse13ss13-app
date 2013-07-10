@@ -27,22 +27,25 @@ public class Server {
      * Endpoint method for computation of a shortest path between any given two Coordinates.
      * The actual computation is done by an instance of ShortestPathProcessor.
      *
-     * @param coordinate1 One end of the route to be computed.
-     * @param coordinate2 One end of the route to be computed.
+//     * @param coordinate1 One end of the route to be computed.
+//     * @param coordinate2 One end of the route to be computed.
      * @return RouteInfoTransfer.
      */
-    @GET
-    @Path("computeShortestPath")
+    @POST
+    @Path("/computeShortestPath")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public RouteInfoTransfer computeShortestPath(Coordinate coordinate1,
-                                                 Coordinate coordinate2) {
+                                                 Coordinate coordinate2)
+            throws InstantiationException {
 
+        throw new IllegalArgumentException("blabla");
+            /*
         // check input
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate1 and coordinate2 must not be null");
 
-        Graph graph;
+        Graph graph = null;
         try {
             graph = Graph.getInstance();
         } catch (InstantiationException e) {
@@ -94,7 +97,7 @@ public class Server {
                     vertex.getLongitude(),
                     new CrossingInformation(new float[]{50.f, 100.f})));
 
-        return transfer;
+        return transfer;     */
     }
 
 
