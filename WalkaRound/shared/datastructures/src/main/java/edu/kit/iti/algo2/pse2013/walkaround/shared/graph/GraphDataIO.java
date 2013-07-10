@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +15,7 @@ import java.util.Set;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
 
-public class GraphDataIO implements Serializable {
+public class GraphDataIO {
 
     /**
      * Stores a set of Edge objects.
@@ -63,7 +62,8 @@ public class GraphDataIO implements Serializable {
      * @param edges List of Edges to be added.
      */
     public void addEdges(List<Edge> edges) {
-        edges.addAll(edges);
+        this.edges.addAll(edges);
+        System.out.println("Edge-Size: " + this.edges.size());
     }
 
 
