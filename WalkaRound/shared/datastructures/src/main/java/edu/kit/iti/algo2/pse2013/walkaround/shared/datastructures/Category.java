@@ -8,6 +8,27 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Category {
 
+	public static Category FOOD;
+	
+	public static Category FAST_FOOD;
+	
+	public static Category BARS_AND_PUBS;
+	
+	public static Category CLUBS_AND_NIGHTCLUBS;
+	
+	public static Category SUPERMARKET;
+	
+	public static Category SHOP;
+	
+	public static Category PUBLIC_TRANSPORTATION;
+	
+	public static Category MUSEUM;
+	
+	public static Category THEATRE;
+	
+	public static Category CINEMA;
+	
+	public static Category SLEEPING_ACCOMODATIONS;
 	/**
 	 * IDs of all existing categories for areas.
 	 */
