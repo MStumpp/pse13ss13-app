@@ -10,7 +10,7 @@ public class NaviModel implements NaviInfo {
 	
 	private static String TAG_NAVI_MODEL = NaviModel.class.getSimpleName();
 	
-	private static NaviModel navigationModel;
+	private static NaviModel naviModel;
 	
 	private LinkedList<NaviOutput> naviOutputs;
 	
@@ -36,11 +36,10 @@ public class NaviModel implements NaviInfo {
 	
 	public NaviModel getInstance() {
 		Log.d(TAG_NAVI_MODEL, "getInstance()");
-		if (this.navigationModel == null) {
-			this.navigationModel = new NaviModel();
+		if (this.naviModel == null) {
+			this.naviModel = new NaviModel();
 		}
-		
-		return this.navigationModel;
+		return this.naviModel;
 	}
 	
 	
@@ -77,26 +76,31 @@ public class NaviModel implements NaviInfo {
 	}
 
 	public NaviInfo getNavigationInfo() {
+		Log.d(TAG_NAVI_MODEL, "getNavigationInfo()");
 		return this.naviInfo;
 	}
 
 	@Override
 	public int getDistOnRouteInMeters() {
+		Log.d(TAG_NAVI_MODEL, "getDistOnRouteInMeters()");
 		return this.distOnRouteInMeters;
 	}
 
 	@Override
 	public int getDistLeftOnRouteInMeter() {
+		Log.d(TAG_NAVI_MODEL, "getDistLeftOnRouteInMeter()");
 		return this.distLeftOnRouteInMeter;
 	}
 
 	@Override
 	public int getTimeOnRouteInSec() {
+		Log.d(TAG_NAVI_MODEL, "getTimeOnRouteInSec()");
 		return this.timeOnRouteInSec;
 	}
 
 	@Override
 	public int getTimeLeftOnRoute() {
+		Log.d(TAG_NAVI_MODEL, "getTimeLeftOnRoute()");
 		return this.timeLeftOnRouteInSec;
 	}
 	

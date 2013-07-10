@@ -4,6 +4,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInform
 
 public class ArrowNaviOutput implements NaviOutput {
 
+	private ArrowNaviOutput arrowNaviOutput;
+	
 	@Override
 	public NaviOutput getInstance() {
 		// TODO Auto-generated method stub
