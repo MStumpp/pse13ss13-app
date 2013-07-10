@@ -1,11 +1,13 @@
-package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * GraphDataIOTest.
@@ -16,6 +18,19 @@ import java.io.IOException;
 public class GraphDataIOTest {
 
     private static String fileLocation = System.getProperty("java.io.tmpdir") + File.separator + "graphDataIO";
+
+
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field instance = Graph.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        Field idCounter = Vertex.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+    }
+
 
     @Test
     @Ignore

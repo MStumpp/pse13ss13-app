@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import java.io.*;
 
@@ -85,7 +85,7 @@ public class GeometryDataIO implements Serializable {
      * Loads and returns a GeometryDataIO object from a given file.
      *
      * @param source Location of source file in file system.
-     * @throws IOException
+     * @throws java.io.IOException
      * @throws ClassNotFoundException
      */
     public static GeometryDataIO load(File source) throws IOException, ClassNotFoundException {

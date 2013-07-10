@@ -1,14 +1,6 @@
-package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -98,7 +90,7 @@ public class GraphDataIO implements Serializable {
      * Loads and returns a GraphDataIO  object from a given file.
      *
      * @param source Location of source file in file system.
-     * @throws IOException
+     * @throws java.io.IOException
      * @throws ClassNotFoundException
      */
     public static GraphDataIO load(File source) throws IOException, ClassNotFoundException {

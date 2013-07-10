@@ -1,11 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.NoVertexForIDExistsException;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import java.util.Comparator;
 import java.util.LinkedList;

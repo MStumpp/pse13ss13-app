@@ -3,8 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-
 
 public class OSMWay extends OSMElement {
 	private ArrayList<OSMNode> nodes = new ArrayList<OSMNode>();
