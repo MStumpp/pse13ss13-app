@@ -1,9 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.TreeMultiset;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
 import java.util.*;
 
@@ -61,8 +64,8 @@ public class GeometryDataPreprocessor {
             data[i] = geometrizables.toArray(new Geometrizable[0]);
         }
 
-        System.out.println(data[0].length);
-        System.out.println(data[1].length);
+//        System.out.println(Arrays.toString(data[0]));
+//        System.out.println(Arrays.toString(data[1]));
 
         if (data[0].length != data[1].length)
             throw new IllegalArgumentException("both lists must be of same size");
@@ -87,9 +90,10 @@ public class GeometryDataPreprocessor {
      */
     private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end) {
 
-        int dim = depth % data.length;
+        final int dim = depth % data.length;
 
         int size = end-start+1;
+
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
         if (size == 1)
@@ -111,43 +115,61 @@ public class GeometryDataPreprocessor {
             // to make sure all less or equal
             // points to median go to left tree
             int tmpMedian = median+1;
-            while (tmpMedian <= end+1 && data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim))
-                tmpMedian += 1;
-            median = tmpMedian-1;
+            while (tmpMedian <= end) {
+                if (data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim)) {
+                    if (tmpMedian == end) {
+                        median = tmpMedian;
+                        break;
+                    } else {
+                        tmpMedian += 1;
+                    }
+                } else {
+                    median = tmpMedian-1;
+                    break;
+                }
+            }
         }
 
-        Map<Integer, Geometrizable[]> backupArray = new HashMap<Integer, Geometrizable[]>();
+        Multiset<Geometrizable> geometrizablesForLeft = TreeMultiset.create(new Comparator<Geometrizable>() {
+            @Override
+            public int compare(Geometrizable v1, Geometrizable v2) {
+                if (v1.valueForDimension(dim) > v2.valueForDimension(dim)) {
+                    return 1;
+                } else if (v1.valueForDimension(dim) < v2.valueForDimension(dim)) {
+                    return -1;
+                } else
+                    return 0;
+            }
+        });
+        geometrizablesForLeft.clear();
+        Collections.addAll(geometrizablesForLeft, Arrays.copyOfRange(data[dim], start, median+1));
+
+        //System.out.println("size: " + geometrizablesForLeft.size());
+
+        Geometrizable[] currentBackupArray;
+        int leftIndex;
+        int rightIndex;
         for (int i=0; i<data.length; i++) {
             if (i == dim)
                 continue;
-            Geometrizable[] array = new Geometrizable[size];
-            System.arraycopy(data[i], start, array, 0, size);
-            backupArray.put(i, array);
-        }
-
-        // median + 1 becuase to parameter is exclusive, but median must be in left tree by definition
-        List<Geometrizable> geometrizableForLeft = Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1));
-        //Geometrizable[] geometrizableForLeft = Arrays.copyOfRange(data[dim], start, median+1);
-        int leftIndex;
-        int rightIndex;
-        for (Map.Entry<Integer, Geometrizable[]> entry : backupArray.entrySet()) {
-            Integer currentDim = entry.getKey();
-            Geometrizable[] geometrizables = entry.getValue();
+            currentBackupArray = new Geometrizable[size];
+            System.arraycopy(data[i], start, currentBackupArray, 0, size);
             leftIndex = start;
             rightIndex = median+1;
-            for (Geometrizable geometrizable : geometrizables) {
-                if (geometrizableForLeft.contains(geometrizable)) {
-                //if (Arrays.binarySearch(geometrizableForLeft, geometrizable)) {
-                /*System.out.println("geometrizable: " + geometrizable + " dim: " + dim + " start: " + start + " median: " + median);
-                System.out.println("old: bool: " + geometrizableForLeft.contains(geometrizable));
-                System.out.println(geometrizableForLeft);
-                System.out.println("new: bool: " + contains(data[dim], dim, geometrizable, start, median));
-                System.out.println(Arrays.toString(data[dim]));
-                if (contains(data[dim], dim, geometrizable, start, median)) { */
-                    data[currentDim][leftIndex] = geometrizable;
+            for (Geometrizable geometrizable : currentBackupArray) {
+//                System.out.println("------");
+//                System.out.println("geometrizable: " + geometrizable + " dim: " + dim + " start: " + start + " median: " + median);
+//                System.out.println("old: bool: " + geometrizableForLeft.contains(geometrizable));
+//                System.out.println(geometrizableForLeft);
+//                System.out.println("new: bool: " + contains(data[dim], dim, geometrizable, start, median));
+//                System.out.println(Arrays.toString(data[dim]));
+//                if (contains(data[dim], dim, geometrizable, start, median)) {
+                if (geometrizablesForLeft.contains(geometrizable)) {
+                    geometrizablesForLeft.remove(geometrizable);
+                    data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {
-                    data[currentDim][rightIndex] = geometrizable;
+                    data[i][rightIndex] = geometrizable;
                     rightIndex += 1;
                 }
             }
@@ -160,10 +182,18 @@ public class GeometryDataPreprocessor {
     }
 
     private static boolean contains(Geometrizable[] array, int dim, Geometrizable geometrizable, int start, int end) {
+//        System.out.println("------>");
+//        System.out.println(Arrays.toString(array));
+//        System.out.println(dim);
+//        System.out.println(geometrizable.toString());
+//        System.out.println(start);
+//        System.out.println(end);
+//        System.out.println("------>");
         final int i = dim;
-        int idx = Arrays.binarySearch(array, geometrizable, new Comparator<Geometrizable>() {
+        int idx = Arrays.binarySearch(array, start, end+1, geometrizable, new Comparator<Geometrizable>() {
             @Override
             public int compare(Geometrizable v1, Geometrizable v2) {
+                System.out.println("v1: " + v1.valueForDimension(i) + " v2: " + v2.valueForDimension(i));
                 if (v1.valueForDimension(i) > v2.valueForDimension(i)) {
                     return 1;
                 } else if (v1.valueForDimension(i) < v2.valueForDimension(i)) {

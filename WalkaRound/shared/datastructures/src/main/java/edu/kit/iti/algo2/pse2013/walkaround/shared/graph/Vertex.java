@@ -1,10 +1,9 @@
-package edu.kit.iti.algo2.pse2013.walkaround.server.graph;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
 
 
 /**

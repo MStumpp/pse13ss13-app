@@ -1,13 +1,19 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 
 /**
@@ -18,8 +24,23 @@ import org.junit.Test;
  */
 public class GeometryDataPreprocessorTest {
 
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field instance = Graph.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        Field idCounter = Vertex.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+
+        idCounter = Edge.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+    }
+
+
     @Test
-    @Ignore
     public void testPreprocessGraphDataIO() {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO(), getLocationDataIO());
 
@@ -121,6 +142,7 @@ public class GeometryDataPreprocessorTest {
         Assert.assertNull(depth_3_8_right_11.getRightNode());
     }
 
+
     @Test
     public void testPreprocessGraphDataIO2() {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO2(),
@@ -130,6 +152,7 @@ public class GeometryDataPreprocessorTest {
         Assert.assertNotNull(geometryDataIO.getRoot());
     }
 
+
     private GraphDataIO getGraphDataIO() {
         GraphDataIO graphDataIO = new GraphDataIO();
         graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
@@ -138,14 +161,15 @@ public class GeometryDataPreprocessorTest {
         return graphDataIO;
     }
 
+
     private GraphDataIO getGraphDataIO2() {
         GraphDataIO graphDataIO = new GraphDataIO();
         Vertex vertex1 = new Vertex(1.d, 1.d);
-        Vertex vertex2 = new Vertex(1.d, 2.d);
-        Vertex vertex3 = new Vertex(1.d, 3.d);
-        Vertex vertex4 = new Vertex(1.d, 4.d);
-        Vertex vertex5 = new Vertex(1.d, 5.d);
-        Vertex vertex6 = new Vertex(1.d, 6.d);
+        Vertex vertex2 = new Vertex(2.d, 2.d);
+        Vertex vertex3 = new Vertex(3.d, 3.d);
+        Vertex vertex4 = new Vertex(4.d, 4.d);
+        Vertex vertex5 = new Vertex(5.d, 5.d);
+        Vertex vertex6 = new Vertex(6.d, 6.d);
 
         Edge edge1 = new Edge(vertex1, vertex2);
         edge1.setLength(5.d);
@@ -181,6 +205,7 @@ public class GeometryDataPreprocessorTest {
 
         return graphDataIO;
     }
+
 
     private LocationDataIO getLocationDataIO() {
         LocationDataIO locationDataIO = new LocationDataIO();

@@ -1,9 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 
 import java.util.LinkedList;
 import java.util.List;
