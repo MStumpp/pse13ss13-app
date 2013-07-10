@@ -113,7 +113,7 @@ public class ProtobufConverter {
 		return new GeometryDataIO(getGeometryNode(saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
-		if (geometryData == null) {
+		if (geometryData == null || geometryData.getRoot() == null) {
 			return null;
 		}
 		return SaveGeometryData.newBuilder()
@@ -124,23 +124,43 @@ public class ProtobufConverter {
 		if (saveNode == null) {
 			return null;
 		}
-		GeometryNode node = new GeometryNode(getGeometryNode(saveNode.getParent()), saveNode.getDepth(), saveNode.getSplitValue());
-		node.setLeftNode(getGeometryNode(saveNode.getLeft()));
-		node.setRightNode(getGeometryNode(saveNode.getRight()));
-		node.setGeometrizable(getGeometrizable(saveNode.getGeometrizable()));
+		GeometryNode node;
+		//if (!saveNode.hasParent()) {
+			SaveGeometryNode parent = saveNode.hasParent()?saveNode.getParent():null;
+		//} else {
+			node = new GeometryNode(getGeometryNode(parent), saveNode.getDepth(), saveNode.getSplitValue());
+		//}
+		if (saveNode.hasLeft()) {
+			node.setLeftNode(getGeometryNode(saveNode.getLeft()));
+		}
+		if (saveNode.hasRight()) {
+			node.setRightNode(getGeometryNode(saveNode.getRight()));
+		}
+		if (saveNode.hasGeometrizable()) {
+			node.setGeometrizable(getGeometrizable(saveNode.getGeometrizable()));
+		}
 		return node;
 	}
 	public static SaveGeometryNode.Builder getGeometryNodeBuilder(GeometryNode node) {
 		if (node == null) {
 			return null;
 		}
-		return SaveGeometryNode.newBuilder()
-			.setParent(getGeometryNodeBuilder(node.getParent()))
+		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()
 			.setDepth(node.getDepth())
-			.setSplitValue(node.getSplitValue())
-			.setLeft(getGeometryNodeBuilder(node.getLeftNode()))
-			.setRight(getGeometryNodeBuilder(node.getRightNode()))
-			.setGeometrizable(getGeometrizableBuilder(node.getGeometrizable()));
+			.setSplitValue(node.getSplitValue());
+		if (node.getParent() != null) {
+			builder.setParent(getGeometryNodeBuilder(node.getParent()));
+		}
+		if (node.getLeftNode() != null) {
+			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));
+		}
+		if (node.getRightNode() != null) {
+			builder.setRight(getGeometryNodeBuilder(node.getLeftNode()));
+		}
+		if (node.getGeometrizable() != null) {
+			builder.setGeometrizable(getGeometrizableBuilder(node.getGeometrizable()));
+		}
+		return builder;
 	}
 	public static GraphDataIO getGraphData(SaveGraphData saveGraphData) {
 		if (saveGraphData == null) {
