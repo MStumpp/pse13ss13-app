@@ -2,6 +2,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import java.io.*;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
+
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
  *
@@ -88,12 +91,11 @@ public class GeometryDataIO implements Serializable {
      * @throws java.io.IOException
      * @throws ClassNotFoundException
      */
-    public static GeometryDataIO load(File source) throws IOException, ClassNotFoundException {
-//        InputStream in = new BufferedInputStream(new FileInputStream(source));
-//        GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));
-//        in.close();
-//        return geom;
-        return null;
+    public static GeometryDataIO load(File source) throws IOException {
+        InputStream in = new BufferedInputStream(new FileInputStream(source));
+        GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));
+        in.close();
+        return geom;
     }
 
 }

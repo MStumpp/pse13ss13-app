@@ -1,19 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * LocationDataIOTest.
@@ -23,8 +22,7 @@ import org.junit.Test;
  */
 public class LocationDataIOTest {
 
-	private static final String fileLocation = System
-			.getProperty("java.io.tmpdir") + File.separator + "locationDataIO";
+	private static final File file = new File(System.getProperty("java.io.tmpdir") + File.separator + "locationDataIO");
 
 
     @Before
@@ -40,49 +38,40 @@ public class LocationDataIOTest {
 
 
 	@Test
-    @Ignore
-	public void testSandAndLoad() {
-//		LocationDataIO writeLocationData = getLocationDataIO();
-//		int size = writeLocationData.getPOIs().size();
-//
-//		try {
-//			FileOutputStream fos = new FileOutputStream(fileLocation);
-//			ProtobufConverter.getLocationDataBuilder(writeLocationData).build().writeTo(fos);
-//			fos.flush();
-//			fos.close();
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		File f = new File(fileLocation);
-//		Assert.assertTrue(f.exists());
-//
-//		LocationDataIO readLocationData = null;
-//		try {
-//			FileInputStream fis = new FileInputStream(fileLocation);
-//			readLocationData = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis));
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		// Check, if something was read
-//		Assert.assertNotNull(readLocationData);
-//		// Check, if the same number of POI was written and read
-//		Assert.assertEquals(size, readLocationData.getPOIs().size());
-//
-//		// Check, if the POIs are really the same
-//		List<POI> oldPOIs = writeLocationData.getPOIs();
-//		List<POI> newPOIs = readLocationData.getPOIs();
-//		for (int i = 0; i < size; i++) {
-//			Assert.assertEquals(oldPOIs.get(i).getLatitude(), newPOIs.get(i)
-//					.getLatitude(), 0.d);
-//			Assert.assertEquals(oldPOIs.get(i).getLongitude(), newPOIs.get(i)
-//					.getLongitude(), 0.d);
-//		}
+	public void testSaveAndLoad() {
+		LocationDataIO writeLocationData = getLocationDataIO();
+		int size = writeLocationData.getPOIs().size();
+		try {
+			LocationDataIO.save(writeLocationData, file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Assert.assertTrue(file.exists());
+
+		LocationDataIO readLocationData = null;
+		try {
+			readLocationData = LocationDataIO.load(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Check, if something was read
+		Assert.assertNotNull(readLocationData);
+		// Check, if the same number of POI was written and read
+		Assert.assertEquals(size, readLocationData.getPOIs().size());
+
+		// Check, if the POIs are really the same
+		List<POI> oldPOIs = writeLocationData.getPOIs();
+		List<POI> newPOIs = readLocationData.getPOIs();
+		for (int i = 0; i < size; i++) {
+			Assert.assertEquals(oldPOIs.get(i).getLatitude(), newPOIs.get(i).getLatitude(), 0.d);
+			Assert.assertEquals(oldPOIs.get(i).getLongitude(), newPOIs.get(i).getLongitude(), 0.d);
+		}
 	}
 
 	private LocationDataIO getLocationDataIO() {
