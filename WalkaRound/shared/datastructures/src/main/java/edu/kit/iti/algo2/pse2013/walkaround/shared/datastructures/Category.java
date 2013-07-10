@@ -81,24 +81,4 @@ public class Category {
 	public static int[] getAllPOICategories() {
 		return allPOICategories;
 	}
-
-	/**
-	 * Sets all existing categories of areas.
-	 *
-	 * @param areaCategories
-	 *            all existing categories of areas
-	 */
-	public static void setAllAreaCategories(int[] areaCategories) {
-		allAreaCategories = areaCategories;
-	}
-
-	/**
-	 * Sets all existing categories of POIs.
-	 *
-	 * @param poiCategories
-	 *            all existing categories of POIs
-	 */
-	public static void setAllPOICategories(int[] poiCategories) {
-		allPOICategories = poiCategories;
-	}
 }
