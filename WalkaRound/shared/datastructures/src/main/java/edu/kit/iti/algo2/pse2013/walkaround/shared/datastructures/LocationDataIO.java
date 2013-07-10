@@ -1,9 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
 
 
 /**
@@ -89,10 +98,10 @@ public class LocationDataIO {
      * @throws java.io.IOException
      */
 	public static void save(LocationDataIO objectToSave, File destination) throws IOException {
-//		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-//		ProtobufConverter.getLocationDataBuilder(objectToSave).build().writeTo(out);
-//		out.flush();
-//		out.close();
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+		ProtobufConverter.getLocationDataBuilder(objectToSave).build().writeTo(out);
+		out.flush();
+		out.close();
 	}
 
 
@@ -103,11 +112,10 @@ public class LocationDataIO {
      * @throws java.io.IOException
      */
 	public static LocationDataIO load(File source) throws IOException {
-//		InputStream in = new BufferedInputStream(new FileInputStream(source));
-//		LocationDataIO geom = ProtobufConverter.getLocationData(LocationProtos.SaveLocationData.parseFrom(in));
-//		in.close();
-//		return geom;
-        return null;
+		InputStream in = new BufferedInputStream(new FileInputStream(source));
+		LocationDataIO geom = ProtobufConverter.getLocationData(Protos.SaveLocationData.parseFrom(in));
+		in.close();
+		return geom;
 	}
 
 }
