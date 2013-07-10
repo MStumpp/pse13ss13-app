@@ -75,6 +75,12 @@ public class WikipediaPreprocessor {
 				}
 				parser.next();
 			}
+			if(sb.indexOf("[[Datei:") != -1) {
+				String imageUrl = sb.substring(sb.indexOf("[[Datei:") + 8, sb.indexOf("|"));
+				imageUrl = imageUrl.replaceAll(" ", "_");
+				imageUrl = "http://commons.wikimedia.org/wiki/File:" + imageUrl;
+				System.out.println(imageUrl);
+			}
 			sb = sb.delete(sb.indexOf("=="), sb.length());
 			while (sb.indexOf("<ref>") != -1) {
 				sb = sb.delete(sb.indexOf("<ref>"), sb.indexOf("</ref>") + 6);
@@ -82,11 +88,9 @@ public class WikipediaPreprocessor {
 			while (sb.indexOf("{") != -1) {
 				sb = sb.delete(sb.indexOf("{"), sb.indexOf("}") + 1);
 			}
-			/*
-			 * while (sb.indexOf("[[Datei:") != -1) { sb =
-			 * sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2); }
-			 */
-
+			while (sb.indexOf("[[Datei:") != -1) {
+				sb = sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2);
+			}
 			String textInfo = sb.toString();
 			textInfo = textInfo.replaceAll("\\'", "");
 			textInfo = textInfo.replaceAll("\n\n", " ");
@@ -100,9 +104,11 @@ public class WikipediaPreprocessor {
 			 */
 			current.setTextInfo(textInfo);
 
-			//Seitenquelltext(HTML) durchgehen suchen nach erstem auftreten von upload.wikimedia.org/wikipedia/commons/ (in <body> suchen
-			//Link: http://commons.wikimedia.org/wiki/File:    +      was nach Datei: steht dabei werden " " zu "_"
-			//Link mit view-source: anreichern
+			// Seitenquelltext(HTML) durchgehen suchen nach erstem auftreten von
+			// upload.wikimedia.org/wikipedia/commons/ (in <body> suchen
+			// Link: http://commons.wikimedia.org/wiki/File: + was nach Datei:
+			// steht dabei werden " " zu "_"
+			// Link mit view-source: anreichern
 		}
 	}
 }
