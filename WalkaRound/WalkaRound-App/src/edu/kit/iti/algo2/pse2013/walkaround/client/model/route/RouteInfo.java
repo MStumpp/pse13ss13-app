@@ -22,4 +22,6 @@ public interface RouteInfo {
 	public boolean containsWaypoint(Waypoint wp);
 
 	public boolean isFavorite();
+	
+	public RouteInfo clone();
 }

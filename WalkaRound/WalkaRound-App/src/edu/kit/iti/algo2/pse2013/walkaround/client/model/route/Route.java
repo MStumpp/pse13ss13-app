@@ -257,7 +257,7 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "clone()");
 		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
-				// TODO: Bitte in Coordinate clone implementieren clonedCoords.add(coord.clone());
+				clonedCoords.add(coord.clone());
 		}
 		return new Route(clonedCoords);
 	}

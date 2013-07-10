@@ -141,7 +141,7 @@ public class FavoritesManager implements Serializable {
 	 * @return RouteInfo
 	 */
 	public RouteInfo getFavoriteRoute(int index) {
-		return savedRoutes.get(index);
+		return savedRoutes.get(index).clone();
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class FavoritesManager implements Serializable {
 	 * @return Location
 	 */
 	public Location getFavoriteLocation(int index) {
-		return savedLocations.get(index);
+		return savedLocations.get(index).clone();
 	}
 
 	/**
