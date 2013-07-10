@@ -2,33 +2,33 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 /**
  * This class represents a category.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
 public class Category {
 
-	public static Category FOOD;
-	
-	public static Category FAST_FOOD;
-	
-	public static Category BARS_AND_PUBS;
-	
-	public static Category CLUBS_AND_NIGHTCLUBS;
-	
-	public static Category SUPERMARKET;
-	
-	public static Category SHOP;
-	
-	public static Category PUBLIC_TRANSPORTATION;
-	
-	public static Category MUSEUM;
-	
-	public static Category THEATRE;
-	
-	public static Category CINEMA;
-	
-	public static Category SLEEPING_ACCOMODATIONS;
+	public static final Category FOOD = new Category(1);
+
+	public static final Category FAST_FOOD = new Category(2);
+
+	public static final Category BARS_AND_PUBS = new Category(3);
+
+	public static final Category CLUBS_AND_NIGHTCLUBS = new Category(4);
+
+	public static final Category SUPERMARKET = new Category(5);
+
+	public static final Category SHOP = new Category(6);
+
+	public static final Category PUBLIC_TRANSPORTATION = new Category(7);
+
+	public static final Category MUSEUM = new Category(8);
+
+	public static final Category THEATRE = new Category(9);
+
+	public static final Category CINEMA = new Category(10);
+
+	public static final Category SLEEPING_ACCOMODATIONS = new Category(11);
 	/**
 	 * IDs of all existing categories for areas.
 	 */
@@ -37,7 +37,9 @@ public class Category {
 	/**
 	 * IDs of all existing categories for POIs.
 	 */
-	private static int[] allPOICategories;
+	private static int[] allPOICategories = {FOOD.getID(), FAST_FOOD.getID(), BARS_AND_PUBS.getID(),
+		CLUBS_AND_NIGHTCLUBS.getID(), SUPERMARKET.getID(), SHOP.getID(), PUBLIC_TRANSPORTATION.getID(),
+		MUSEUM.getID(), THEATRE.getID(), CINEMA.getID(), SLEEPING_ACCOMODATIONS.getID()};
 
 	/**
 	 * ID of the category.
@@ -46,7 +48,7 @@ public class Category {
 
 	/**
 	 * Constructs a new category.
-	 * 
+	 *
 	 * @param id
 	 *            id of the category
 	 */
@@ -56,7 +58,7 @@ public class Category {
 
 	/**
 	 * Returns the ID of the category.
-	 * 
+	 *
 	 * @return ID of the category
 	 */
 	public int getID() {
@@ -65,7 +67,7 @@ public class Category {
 
 	/**
 	 * Returns all existing categories of areas.
-	 * 
+	 *
 	 * @return all existing categories of areas.
 	 */
 	public static int[] getAllAreaCategories() {
@@ -74,7 +76,7 @@ public class Category {
 
 	/**
 	 * Returns all existing categories of POIs.
-	 * 
+	 *
 	 * @return all existing categories of POIs
 	 */
 	public static int[] getAllPOICategories() {
@@ -83,7 +85,7 @@ public class Category {
 
 	/**
 	 * Sets all existing categories of areas.
-	 * 
+	 *
 	 * @param areaCategories
 	 *            all existing categories of areas
 	 */
@@ -93,7 +95,7 @@ public class Category {
 
 	/**
 	 * Sets all existing categories of POIs.
-	 * 
+	 *
 	 * @param poiCategories
 	 *            all existing categories of POIs
 	 */
