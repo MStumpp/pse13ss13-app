@@ -178,7 +178,7 @@ public class POIView extends Fragment {
 					setUnselected(category10);
 				}
 			} else if (v.equals(category11)) {
-				if (!category10.isSelected()) {
+				if (!category11.isSelected()) {
 					setSelected(category11);
 				} else {
 					setUnselected(category11);

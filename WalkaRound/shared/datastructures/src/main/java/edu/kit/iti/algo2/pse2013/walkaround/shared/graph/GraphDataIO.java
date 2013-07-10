@@ -52,7 +52,6 @@ public class GraphDataIO {
      */
     public void addEdge(Edge edge) {
         edges.add(edge);
-        System.out.println("Added edge");
     }
 
 
@@ -63,7 +62,6 @@ public class GraphDataIO {
      */
     public void addEdges(List<Edge> edges) {
         this.edges.addAll(edges);
-        System.out.println("Edge-Size: " + this.edges.size());
     }
 
 

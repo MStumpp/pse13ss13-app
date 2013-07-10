@@ -77,7 +77,7 @@ public class OSMDataPreprocessor {
 		fis.close();
 		System.out.println(graph.getEdges().size() + " Edges are written to the file");
 		for (Edge e : graph.getEdges()) {
-			System.out.println("Edge: " + e);
+			//System.out.println("Edge: " + e);
 		}
 
 		FileInputStream fis2 = new FileInputStream(locationDestination);
@@ -85,7 +85,7 @@ public class OSMDataPreprocessor {
 		fis2.close();
 		System.out.println(location.getPOIs().size() + " POIs are written to the file");
 		for (POI p : location.getPOIs()) {
-			System.out.println("POI: " + p);
+			//System.out.println("POI: " + p);
 		}
 	}
 
