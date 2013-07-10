@@ -5,6 +5,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import javax.ws.rs.*;
@@ -28,7 +30,7 @@ public class Server {
      * @param coordinate2 One end of the route to be computed.
      * @return RouteInfoTransfer.
      */
-    @POST
+    @GET
     @Path("computeShortestPath")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -39,18 +41,28 @@ public class Server {
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate1 and coordinate2 must not be null");
 
-        // project coordinate
-        Vertex sourceVertex = null;
-        Vertex targetVertex = null;
+        Graph graph = Graph.getInstance();
+        Vertex source = null;
+        Vertex target = null;
         try {
-            sourceVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate1);
-            targetVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate2);
-        } catch (GeometryProcessorException e) {
+            source = graph.getVertexByID(0);
+            target = graph.getVertexByID(4);
+        } catch (NoVertexForIDExistsException e) {
             e.printStackTrace();
         }
 
+        // project coordinate
+//        Vertex sourceVertex = null;
+//        Vertex targetVertex = null;
+//        try {
+//            sourceVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate1);
+//            targetVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate2);
+//        } catch (GeometryProcessorException e) {
+//            e.printStackTrace();
+//        }
+
         try {
-            return ShortestPathProcessor.getInstance().computeShortestPath(sourceVertex, targetVertex);
+            return ShortestPathProcessor.getInstance().computeShortestPath(source, target);
         } catch (NoShortestPathExistsException e) {
             e.printStackTrace();
         } catch (ShortestPathComputeException e) {
