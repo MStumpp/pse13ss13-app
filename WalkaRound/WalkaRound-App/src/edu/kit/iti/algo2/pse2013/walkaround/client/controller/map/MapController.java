@@ -69,10 +69,6 @@ public class MapController implements RouteListener, PositionListener {
 	/**
 	 * DisplayCoordinats to draw he Lines
 	 */
-	// TODO Es gibt anscheinend zwei Methoden Wegpunkte zu bekommen es muss noch
-	// unterschieden werden welche zum Routen zeichnen welche zum Wegpunkt
-	// zeichnen benutzt werden.
-	@SuppressWarnings("unused")
 	private List<DisplayCoordinate> lines;
 	RouteInfo currentRoute;
 
@@ -355,6 +351,17 @@ public class MapController implements RouteListener, PositionListener {
 		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * forwards a set active action to route controller
+	 * @param id of the waypoint
+	 * 
+	 */
+	public void setActive(int id) {
+		//TODO route muss id als actove setzen lassen
+		//this.routeController.setActiveWaypoint(id);
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
+// Android Library
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Point;
@@ -17,31 +18,32 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+// Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
 
 /**
  * 
- * Diese Klasse implementiert ein sogenanntes PullUp Menü. Dieses Menü ist
- * speziell für Walkaround entwickelt worden und bietet ein statisches Menü zum
- * wechseln der Nutzerinteraktionsmöglichkeiten. Sowie speziellen animationen um
- * das Menü so Nutzer freundlich wie Möglich zu machen.
- * 
+ * This class creates a variant of a pull down menu.
+ * Instead of pulling down you can pull this menu up.
+ * This Class enables us to integrate a different fragments to display different menus.
  * 
  * @author Ludwig Biermann
  * 
  */
 public class PullUpView extends Fragment {
 
-	/*
-	 * private static final int SWIPE_MIN_DISTANCE = 120; private static final
-	 * int SWIPE_MAX_OFF_PATH = 250; private static final int
-	 * SWIPE_THRESHOLD_VELOCITY = 200;
+	/**
+	 * Debug Information
 	 */
-	private static final String TAG_PULLUP = "PULL_UP";
+	private static final String TAG_PULLUP = PullUpView.class.getSimpleName();
+	private static final String TAG_PULLUP_ANIMATIOn = PullUpView.class.getSimpleName() + "_animate";
+	private static final String TAG_PULLUP_TOUCH = PullUpView.class.getSimpleName() + "_touch";
 
-	// private float height;
-
+	/**
+	 * Content ID 
+	 */
 	public static final int CONTENT_ROUTING = 0;
 	public static final int CONTENT_FAVORITE = 1;
 	public static final int CONTENT_ROUNDTRIP = 2;
@@ -50,6 +52,9 @@ public class PullUpView extends Fragment {
 	public static final int CONTENT_INFO = 5;
 	public static final int CONTENT_OPTION = 6;
 
+	/**
+	 * Views
+	 */
 	private RelativeLayout main;
 
 	private RelativeLayout menu;
@@ -61,24 +66,29 @@ public class PullUpView extends Fragment {
 
 	private ImageView regulator;
 
+	/**
+	 * Permanent values
+	 */
 	private float minHeight;
 	private float minBorderHeight;
 	private float halfHeight;
 	private float maxBorderHeight;
 	private float maxHeight;
+	private boolean animationRun = false;
 
+	/**
+	 * Gestik
+	 */
 	private GestureDetector gestureDetector;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.pullup);
 
-		Log.d(TAG_PULLUP, "Zuweisung des layouts");
-
+		Log.d(TAG_PULLUP, "allocate views");
 		main = (RelativeLayout) this.getActivity()
 				.findViewById(R.id.pullUpMain);
-
 		menu = (RelativeLayout) this.getActivity()
 				.findViewById(R.id.staticMenu);
 		routing = (ImageView) this.getActivity().findViewById(
@@ -94,7 +104,7 @@ public class PullUpView extends Fragment {
 		regulator = (ImageView) this.getActivity().findViewById(
 				R.id.pullupOpenClose);
 
-		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+		Log.d("COORDINATE_UTILITY", "get display size");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
 		Point size = new Point();
@@ -109,16 +119,10 @@ public class PullUpView extends Fragment {
 		Log.d(TAG_PULLUP, "Max = " + maxHeight);
 		Log.d(TAG_PULLUP, "Min = " + minHeight);
 
-		Log.d(TAG_PULLUP, "Einstellen der Größenverhältnisse");
-
-		// Menü
-		// menu.setLayoutParams(new LayoutParams(size.x, size.y));
+		Log.d(TAG_PULLUP, "Resize views");
 		menu.getLayoutParams().width = size.x;
 		menu.getLayoutParams().height = size.y / 10;
-		Log.d(TAG_PULLUP,
-				"Das static Menü hat die Breite: "
-						+ menu.getLayoutParams().width);
-
+		
 		routing.setX(size.x / 5 * 0);
 		routing.getLayoutParams().width = size.x / 5;
 
@@ -134,35 +138,20 @@ public class PullUpView extends Fragment {
 		search.setX(size.x / 5 * 4);
 		search.getLayoutParams().width = size.x / 5;
 
-		Log.d(TAG_PULLUP, "Die Position des Routing Button: " + routing.getX());
-		Log.d(TAG_PULLUP, "Die Position des Search Button: " + search.getX());
-
-		// main
-		// main.getLayoutParams().height = size.y;
-		Log.d(TAG_PULLUP, "Die Höhe von main ist: "
-				+ main.getLayoutParams().height);
-
-		// Pull Up Controll Button
-
 		regulator.getLayoutParams().height = size.y / 20;
 
-		Log.d(TAG_PULLUP, "Zuweisung der Listener");
+		Log.d(TAG_PULLUP, "allocate Listener");
 		routing.setOnTouchListener(new RoutingListener());
 		favorite.setOnTouchListener(new FavoriteListener());
 		roundtrip.setOnTouchListener(new RoundtripListener());
 		poi.setOnTouchListener(new POIListener());
 		search.setOnTouchListener(new SearchListener());
-
-		// regulator.setTag("Schieberegler");
 		regulator.setOnTouchListener(new RegulatorListener());
 		gestureDetector = new GestureDetector(getActivity(),
-				new MyGestureDetector());
-		// regulator.setOnTouchListener(new RegulatorListener());
-		// regulator.setOnDragListener(new DragListener());
-
-		// regulator.setOnTouchListener(new PullUpMenuListener());
+				new FlingDetector());
 		main.setY(maxHeight);
 
+		Log.d(TAG_PULLUP, "allocate fragments");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 		pullUpContent = new InfoView();
 		ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -171,7 +160,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Setzt die Höhe des Menüs auf FullSize
+	 * Set the height to FullSize
 	 */
 	public void setFullSizeHeight() {
 		this.setHeight(main.getY() * -1, 1000);
@@ -179,7 +168,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Setzt die Höhe des Menüs auf HalfSize
+	 * Set the height to HalfSize
 	 */
 	public void setHalfSizeHeight() {
 		this.setHeight(halfHeight - main.getY(), 1000);
@@ -187,46 +176,42 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Setzt die Höhe des Menüs auf Minimal
+	 * Set the height to minimum
 	 */
 	public void setNullSizeHeight() {
 		this.setHeight(maxHeight - main.getY(), 1000);
-		// this.duration = 0;
 	}
 
 	/**
-	 * ändert die Höhe des Menüs um ein Delta
+	 * change the height
 	 * 
 	 * @param delta
-	 *            Differenz zur neuen Höhe
+	 *            to the new height
 	 */
 	private void setHeight(float delta) {
 		setHeight(delta, 1);
-		// TODO 1ms ist bissel wenig
 	}
 
 	/**
-	 * ändert die Höhe des Menüs um ein Delta in einer bestimmten Zeit
+	 * change the height in a time
 	 * 
 	 * @param delta
-	 *            Differenz zur neuen Höhe
+	 *            to the new height
 	 * @param duration
-	 *            dauer der Animation
+	 *            of the animation
 	 */
 	private void setHeight(float delta, long duration) {
 		TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delta);
-		// anim.setFillAfter(true);
 		anim.setDuration(duration);
-		// this.duration += duration;
 		anim.setAnimationListener(new RegulatorAnimationListener(delta
 				+ main.getY()));
 		main.startAnimation(anim);
 	}
 
 	/**
-	 * Gibt die derzeitige Höhe zurück
+	 * Gives the height back
 	 * 
-	 * @return Höhe des PullUpMenüs
+	 * @return height of the PullUpMenüs
 	 */
 	public float getHeight() {
 		return main.getY();
@@ -235,13 +220,13 @@ public class PullUpView extends Fragment {
 	Fragment pullUpContent;
 
 	/**
-	 * ändert den Content des Menüs
+	 * change the content of the pullup
 	 * 
 	 * @param id
-	 *            des Contents
+	 *            of content
 	 */
 	public void changeView(int id) {
-		Log.d(TAG_PULLUP, "Content wird geändert");
+		Log.d(TAG_PULLUP, "Content Change");
 
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
@@ -249,7 +234,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_ROUTING)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "routing wird gestartet");
+				Log.d(TAG_PULLUP, "routing starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new RoutingView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -261,7 +246,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_FAVORITE)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "favorite wird gestartet");
+				Log.d(TAG_PULLUP, "favorite starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new FavoriteView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -273,7 +258,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_ROUNDTRIP)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip wird gestartet");
+				Log.d(TAG_PULLUP, "roundtrip starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new RoundTripView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -285,7 +270,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_POI)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "poi wird gestartet");
+				Log.d(TAG_PULLUP, "poi starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new POIView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -297,7 +282,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_SEARCH)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "search wird gestartet");
+				Log.d(TAG_PULLUP, "search starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new SearchView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -309,7 +294,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_OPTION)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "optionen wird gestartet");
+				Log.d(TAG_PULLUP, "optionen starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new OptionView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -321,7 +306,7 @@ public class PullUpView extends Fragment {
 			if (!this.pullUpContent.equals(CONTENT_INFO)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
-				Log.d(TAG_PULLUP, "InfoView wird gestartet");
+				Log.d(TAG_PULLUP, "InfoView starts");
 				ft.remove(pullUpContent);
 				pullUpContent = new InfoView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
@@ -333,7 +318,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur änderung des Content des Menüs.
+	 * Routing button Listener
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -344,7 +329,7 @@ public class PullUpView extends Fragment {
 			if (!v.equals(routing)) {
 				return false;
 			}
-			Log.d(TAG_PULLUP, "routing wurde aufgerufen");
+			Log.d(TAG_PULLUP_TOUCH, "routing starts");
 			changeView(PullUpView.CONTENT_ROUTING);
 			setFullSizeHeight();
 			return true;
@@ -352,7 +337,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur änderung des Content des Menüs.
+	 * Favorite button listener.
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -364,7 +349,7 @@ public class PullUpView extends Fragment {
 				return false;
 			}
 
-			Log.d(TAG_PULLUP, "Favorite wurde aufgerufen");
+			Log.d(TAG_PULLUP_TOUCH, "Favorite starts");
 			changeView(PullUpView.CONTENT_FAVORITE);
 			setFullSizeHeight();
 			return true;
@@ -372,7 +357,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur änderung des Content des Menüs.
+	 * roundtrip button listener
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -385,7 +370,7 @@ public class PullUpView extends Fragment {
 				return false;
 			}
 
-			Log.d(TAG_PULLUP, "roundtrip wurde aufgerufen");
+			Log.d(TAG_PULLUP_TOUCH, "roundtrip starts");
 			changeView(PullUpView.CONTENT_ROUNDTRIP);
 			setFullSizeHeight();
 			return true;
@@ -393,7 +378,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener zur änderung des Content des Menüs.
+	 * poi button listener
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -406,7 +391,7 @@ public class PullUpView extends Fragment {
 				return false;
 			}
 
-			Log.d(TAG_PULLUP, "poi wurde aufgerufen");
+			Log.d(TAG_PULLUP_TOUCH, "poi starts");
 			changeView(PullUpView.CONTENT_POI);
 			setHalfSizeHeight();
 			return true;
@@ -414,7 +399,7 @@ public class PullUpView extends Fragment {
 	}
 
 	/**
-	 * Listener beim Touch auf den Content
+	 * Listener to get general touch events
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -427,7 +412,7 @@ public class PullUpView extends Fragment {
 				return false;
 			}
 
-			Log.d(TAG_PULLUP, "main wurde aufgerufen");
+			Log.d(TAG_PULLUP_TOUCH, "main starts");
 			return true;
 		}
 	}
@@ -445,15 +430,19 @@ public class PullUpView extends Fragment {
 				return false;
 			}
 
-			Log.d(TAG_PULLUP, "search wurde aufgerufen");
+			Log.d(TAG_PULLUP_TOUCH, "search starts");
 			changeView(PullUpView.CONTENT_SEARCH);
 			setFullSizeHeight();
 			return true;
 		}
 	}
 
-	private boolean animationRun = false;
-
+	/**
+	 * Implements the listener of height regulator button
+	 * 
+	 * @author ludwig Biermann
+	 *
+	 */
 	private class RegulatorListener implements OnTouchListener {
 
 		@Override
@@ -462,27 +451,25 @@ public class PullUpView extends Fragment {
 			int action = MotionEventCompat.getActionMasked(event);
 			switch (action) {
 			case (MotionEvent.ACTION_DOWN):
-				Log.d(TAG_PULLUP, "Action was DOWN");
+				Log.d(TAG_PULLUP_TOUCH, "Action was DOWN");
 				return true;
 			case (MotionEvent.ACTION_MOVE):
-				Log.d(TAG_PULLUP, "Action was MOVE");
+				Log.d(TAG_PULLUP_TOUCH, "Action was MOVE");
 				if (!animationRun) {
 					animationRun = true;
 					float delta = event.getY() - regulator.getY();
 					setHeight(delta);
-					Log.d(TAG_PULLUP, "los gehts endlich2");
 				}
 				return gestureDetector.onTouchEvent(event);
 			case (MotionEvent.ACTION_UP):
-				// Log.d(TAG_PULLUP, "Animations Ende " + duration);
-				Log.d(TAG_PULLUP, "Action was UP");
+				Log.d(TAG_PULLUP_TOUCH, "Action was UP");
 				return gestureDetector.onTouchEvent(event);
 
 			case (MotionEvent.ACTION_CANCEL):
-				Log.d(TAG_PULLUP, "Action was CANCEL");
+				Log.d(TAG_PULLUP_TOUCH, "Action was CANCEL");
 				return gestureDetector.onTouchEvent(event);
 			case (MotionEvent.ACTION_OUTSIDE):
-				Log.d(TAG_PULLUP, "Movement occurred outside bounds "
+				Log.d(TAG_PULLUP_TOUCH, "Movement occurred outside bounds "
 						+ "of current screen element");
 				return gestureDetector.onTouchEvent(event);
 			default:
@@ -491,8 +478,12 @@ public class PullUpView extends Fragment {
 		}
 	}
 
-	// private long duration = 0;
-
+	/**
+	 * Implements the Animation listener of the transaction of the pullupview
+	 * 
+	 * @author Ludwig Biermann
+	 *
+	 */
 	private class RegulatorAnimationListener implements AnimationListener {
 
 		float height;
@@ -506,31 +497,25 @@ public class PullUpView extends Fragment {
 
 			main.setY(height);
 			animationRun = false;
-			// duration -= anim.getDuration();
-			// if(duration<0) {
-			// duration = 0;
-			// }
 			main.clearAnimation();
-			// Log.d(TAG_PULLUP, " " + duration);
-			// if (duration == 0) {
 
 			if (main.getY() != halfHeight && main.getY() <= maxBorderHeight
 					&& main.getY() >= minBorderHeight) {
 				float delta = (main.getY() - halfHeight) * -1;
-				Log.d(TAG_PULLUP, "Korregieren auf halfSize");
+				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to halfSize");
 				setHeight(delta, 1000);
 			}
 
 			if (main.getY() > maxBorderHeight && main.getY() != maxHeight) {
 
 				float delta = (main.getY() - maxHeight) * -1;
-				Log.d(TAG_PULLUP, "Korregieren Out of Bound Max delta: "
+				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Max delta: "
 						+ delta);
 				setHeight(delta, 1000);
 
 			} else if (main.getY() < minBorderHeight && main.getY() != 0.0F) {
 				float delta = main.getY() * -1;
-				Log.d(TAG_PULLUP, "Korregieren Out of Bound Min delta" + delta);
+				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Min delta" + delta);
 				setHeight(delta, 1000);
 			}
 
@@ -538,24 +523,29 @@ public class PullUpView extends Fragment {
 
 		@Override
 		public void onAnimationRepeat(Animation arg0) {
-			// TODO Auto-generated method stub
+			Log.d(TAG_PULLUP_ANIMATIOn, "Repeat Animation");
 
 		}
 
 		@Override
 		public void onAnimationStart(Animation arg0) {
-			// TODO Auto-generated method stub
-
+			Log.d(TAG_PULLUP_ANIMATIOn, "Repeat Animation");
 		}
 
 	}
 
-	private class MyGestureDetector extends SimpleOnGestureListener {
+	/**
+	 * Detect fling events on the pull up menu
+	 * 
+	 * @author Ludwig Biermann
+	 *
+	 */
+	private class FlingDetector extends SimpleOnGestureListener {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 
-			Log.d(TAG_PULLUP, "Fling! " + velocityY + " " + e2.getY());
+			Log.d(TAG_PULLUP_TOUCH, "Fling! " + velocityY + " " + e2.getY());
 			if (Math.abs(velocityY) > 1000) {
 				if (e2.getY() < 0) {
 					setFullSizeHeight();
@@ -563,49 +553,7 @@ public class PullUpView extends Fragment {
 					setNullSizeHeight();
 				}
 			}
-
-			/*
-			 * try { if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-			 * return false;
-			 * 
-			 * if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MIN_DISTANCE) { if
-			 * (e1.getY() > e2.getY()) { setNullSizeHeight();
-			 * 
-			 * } else { setFullSizeHeight(); } } } catch (Exception e) {
-			 * 
-			 * }
-			 * 
-			 * 
-			 * if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) return
-			 * false; // right to left swipe if (e1.getX() - e2.getX() >
-			 * SWIPE_MIN_DISTANCE && Math.abs(velocityX) >
-			 * SWIPE_THRESHOLD_VELOCITY) { Log.d(TAG_PULLUP, "Links Swift"); }
-			 * else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE &&
-			 * Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-			 * Log.d(TAG_PULLUP, "Right Swift"); }
-			 */
-
 			return false;
 		}
-
 	}
-
-	/*
-	 * 
-	 * @Override public boolean onTouch(View view, MotionEvent motionEvent) { if
-	 * (motionEvent.getAction() == MotionEvent.ACTION_DOWN) { ClipData data =
-	 * ClipData.newPlainText("", ""); DragShadowBuilder shadowBuilder = new
-	 * View.DragShadowBuilder(main); main.startDrag(data, shadowBuilder, view,
-	 * 0); main.setVisibility(View.INVISIBLE); return true; } else { return
-	 * false; } }
-	 * 
-	 * }
-	 * 
-	 * private class DragListener implements OnDragListener {
-	 * 
-	 * @Override public boolean onDrag(View v, DragEvent event) {
-	 * Log.d(TAG_PULLUP, "drag event"); int action = event.getAction();
-	 * 
-	 * return true; } }
-	 */
 }
