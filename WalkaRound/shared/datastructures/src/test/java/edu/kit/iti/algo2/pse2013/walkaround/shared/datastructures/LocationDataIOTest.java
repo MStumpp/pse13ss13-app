@@ -5,14 +5,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.junit.Assert;
+<<<<<<< HEAD
+=======
+import org.junit.Before;
 import org.junit.Ignore;
+>>>>>>> master
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
-//import sun.awt.X11.XErrorHandler;
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 /**
  * LocationDataIOTest.
@@ -25,14 +32,30 @@ public class LocationDataIOTest {
 	private static final String fileLocation = System
 			.getProperty("java.io.tmpdir") + File.separator + "locationDataIO";
 
+
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field instance = Graph.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        Field idCounter = Vertex.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+    }
+
+
 	@Test
+    @Ignore
 	public void testSandAndLoad() {
 		LocationDataIO writeLocationData = getLocationDataIO();
 		int size = writeLocationData.getPOIs().size();
 
 		try {
-			ProtobufIO.write(writeLocationData, new FileOutputStream(new File(
-					fileLocation)));
+			FileOutputStream fos = new FileOutputStream(fileLocation);
+			ProtobufConverter.getLocationDataBuilder(writeLocationData).build().writeTo(fos);
+			fos.flush();
+			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -44,8 +67,8 @@ public class LocationDataIOTest {
 
 		LocationDataIO readLocationData = null;
 		try {
-			ProtobufIO.readLocationData(new FileInputStream(new File(
-					fileLocation)));
+			FileInputStream fis = new FileInputStream(fileLocation);
+			readLocationData = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -17,9 +17,6 @@ import java.util.logging.Logger;
 
 import android.util.Log;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
-
 public class GraphDataIO implements Serializable {
 	/**
 	 * Temporary Serial version ID as long as Java serialization is used

@@ -1,8 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import crosby.binary.BinaryParser;
@@ -16,14 +17,19 @@ import crosby.binary.file.FileBlockPosition;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMTagCategory;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
-	private HashMap<Long, OSMNode> nodes = new HashMap<Long, OSMNode>();
-	private int numEdges = 0;
+	private static final short STATE_FIND_NEEDED_NODES = 0;
+	private static final short STATE_PARSE_WAYS_N_POIS = 1;
+	private static final short STATE_FINISH = 2;
+
+	private Map<Long, OSMNode> nodes = new TreeMap<Long, OSMNode>();
 
 	private GraphDataIO graphData;
 	private LocationDataIO locationData;
+	private short state = STATE_FIND_NEEDED_NODES;
 
 	public PBF_FileBlockParser(GraphDataIO graphData, LocationDataIO locationData) {
 		this.graphData = graphData;
@@ -32,6 +38,7 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	public void complete() {
+		state++;
 		Logger.getLogger(this.getClass().getName()).info("Finished parsing osm-file");
 		System.out.println(nodes.size());
 	}
@@ -46,38 +53,53 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseDense(DenseNodes dNodes) {
-		if (dNodes.getIdList().size() > 0) {
-			System.out.println("ParseDenseNodes");
-		}
-		List<Long> ids = dNodes.getIdList();
-		long id = 0;
-		long lat = 0;
-		long lon = 0;
-		Iterator<Integer> keysVals = dNodes.getKeysValsList().iterator();
-		for (int i = 0; i < ids.size(); i++) {
-			OSMNode node = new OSMNode(id += ids.get(i), (lat += dNodes.getLat(i)) * granularity * .000000001, (lon += dNodes.getLon(i)) * granularity * .000000001);
+		if (state == STATE_PARSE_WAYS_N_POIS) {
+//			if (dNodes.getIdList().size() > 0) {
+//				System.out.println(String.format("ParseDenseNodes (%d)", nodes.size()));
+//			}
+			List<Long> ids = dNodes.getIdList();
+			long id = 0;
+			long lat = 0;
+			long lon = 0;
+			Iterator<Integer> keysVals = dNodes.getKeysValsList().iterator();
+			for (int i = 0; i < ids.size(); i++) {
+				id += ids.get(i);
+				lat += dNodes.getLat(i);
+				lon += dNodes.getLon(i);
 
-			int j;
-			while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
-				node.addTag(getStringById(j), getStringById(keysVals.next()));
+				OSMNode currentNode = null;
+
+				if (nodes.containsKey(id)) {
+					currentNode = nodes.get(id);
+				} else {
+					currentNode = new OSMNode(id, lat, lon);
+				}
+				currentNode.setLatitude(lat * granularity * .000000001);
+				currentNode.setLongitude(lon * granularity * .000000001);
+
+				int j;
+				while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
+					currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
+				}
+				if (currentNode.getName() != null && currentNode.getPOICategories().length > 0) {
+					locationData.addPOI(currentNode.convertToPOI());
+				}
 			}
-			nodes.put(node.getID(), node);
 		}
 	}
 
 	@Override
 	protected void parseNodes(List<Node> inNodes) {
-		if (inNodes.size() > 0) {
-			System.out.println("ParseNodes");
-		}
-		for (Node inNode : inNodes) {
-			OSMNode node = new OSMNode(inNode.getId(), inNode.getLat(), inNode.getLon());
-			List<Integer> keys = inNode.getKeysList();
-			List<Integer> vals = inNode.getValsList();
-			for (int i = 0; i < Math.min(keys.size(), vals.size()); i++) {
-				node.addTag(getStringById(keys.get(i)), getStringById(vals.get(i)));
+		if (state == STATE_PARSE_WAYS_N_POIS) {
+			for (Node inNode : inNodes) {
+				OSMNode node = new OSMNode(inNode.getId(), inNode.getLat(), inNode.getLon());
+				List<Integer> keys = inNode.getKeysList();
+				List<Integer> vals = inNode.getValsList();
+				for (int i = 0; i < Math.min(keys.size(), vals.size()); i++) {
+					node.addTag(getStringById(keys.get(i)), getStringById(vals.get(i)));
+				}
+				this.nodes.put(node.getID(), node);
 			}
-			this.nodes.put(node.getID(), node);
 		}
 	}
 
@@ -88,30 +110,43 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseWays(List<Way> inWays) {
-		if (inWays.size() > 0) {
-			System.out.println("ParseWays");
-		}
+//		if (inWays.size() > 0) {
+//			System.out.println(String.format("parseWays(%d NeededNodes)", nodes.size()));
+//		}
 		for (Way w : inWays) {
 			boolean isValidWay = true;
 			OSMWay way = new OSMWay(w.getId());
-			List<Long> refs = w.getRefsList();
-			if (refs != null) {
+			List<Long> nodeRefs = w.getRefsList();
+
+			if (nodeRefs != null) {
 				long ref = 0;
-				for (int i = 0; i < refs.size() && isValidWay; i++) {
-					ref += refs.get(i);
-					if (nodes.containsKey(ref)) {
-						way.addNode(nodes.get(ref));
+				for (int i = 0; i < nodeRefs.size() && isValidWay; i++) {
+					ref += nodeRefs.get(i);
+					if (state != STATE_FIND_NEEDED_NODES) {
+						if (nodes.containsKey(ref)) {
+							way.addNode(nodes.get(ref));
+						} else {
+							isValidWay = false;
+						}
+					}
+				}
+				for (int i = 0; i < Math.min(w.getKeysCount(), w.getValsCount()); i++) {
+					way.addTag(getStringById(w.getKeys(i)), getStringById(w.getVals(i)));
+				}
+				if (isValidWay && OSMTagCategory.getFootwayCategory().accepts(way)) {
+					if (state == STATE_FIND_NEEDED_NODES) {
+						long curID = 0;
+						for (Long idDiff : w.getRefsList()) {
+							nodes.put(curID += idDiff, new OSMNode(curID));
+						}
 					} else {
-						isValidWay = false;
+						graphData.addEdges(way.getEdges());
 					}
 				}
 			}
-			for (int i = 0; i < Math.min(w.getKeysCount(), w.getValsCount()); i++) {
-				way.addTag(getStringById(w.getKeys(i)), getStringById(w.getVals(i)));
-			}
-			if (isValidWay) {
-				graphData.addEdges(way.getEdges());
-			}
 		}
+	}
+	public boolean needsFurtherRun() {
+		return state != STATE_FINISH;
 	}
 }

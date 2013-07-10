@@ -26,11 +26,16 @@ public class PositionManager implements Listener {
 		locationManager = (LocationManager) context.getApplicationContext().getSystemService("LOCATION_SERVICE");
 	}
 	
-	public static PositionManager getInstance(Context context) {
+	public static void initialize(Context context) {
+		positionManager = new PositionManager(context);
+		locationManager.addGpsStatusListener(positionManager);
+	}
+	
+	public static PositionManager getInstance() {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.getInstance()");
-		if (positionManager == null && context != null) {
-			positionManager = new PositionManager(context);
-			locationManager.addGpsStatusListener(positionManager);
+		if (positionManager == null) {
+			Log.d(TAG_POSITION_MANAGER, "PositionManager not initialized");
+			return null;
 		}
 		return positionManager;
 	}
