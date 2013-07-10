@@ -345,10 +345,6 @@ public class MapController implements RouteListener, PositionListener {
 		mapView.setActive(activeWaypoint.getId());
 		//mapView.setActive(2);
 		mapModel.drawDisplayCoordinates(lines);
-		
-		
-		// TODO Auto-generated method stub
-		// mapView.setActive(activeWaypoint.getId());
 
 	}
 
