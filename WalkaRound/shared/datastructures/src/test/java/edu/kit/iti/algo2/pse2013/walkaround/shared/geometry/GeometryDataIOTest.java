@@ -1,9 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-<<<<<<< HEAD:WalkaRound/preprocessor/preprocessor-model/preprocessor-model-geometry/src/test/java/edu/kit/iti/algo2/pse2013/walkaround/preprocessor/model/geometry/GeometryDataIOTest.java
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-=======
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.junit.Assert;
@@ -11,25 +9,16 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
->>>>>>> master:WalkaRound/shared/datastructures/src/test/java/edu/kit/iti/algo2/pse2013/walkaround/shared/geometry/GeometryDataIOTest.java
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-<<<<<<< HEAD:WalkaRound/preprocessor/preprocessor-model/preprocessor-model-geometry/src/test/java/edu/kit/iti/algo2/pse2013/walkaround/preprocessor/model/geometry/GeometryDataIOTest.java
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
-=======
 import java.lang.reflect.Field;
->>>>>>> master:WalkaRound/shared/datastructures/src/test/java/edu/kit/iti/algo2/pse2013/walkaround/shared/geometry/GeometryDataIOTest.java
 
 /**
  * GeometryDataIOTest.
@@ -42,10 +31,6 @@ public class GeometryDataIOTest {
 	private static String fileLocation = System.getProperty("java.io.tmpdir")
 			+ File.separator + "geometryDataIO";
 
-<<<<<<< HEAD:WalkaRound/preprocessor/preprocessor-model/preprocessor-model-geometry/src/test/java/edu/kit/iti/algo2/pse2013/walkaround/preprocessor/model/geometry/GeometryDataIOTest.java
-	@Test
-	public void testSandAndLoad() {
-=======
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -62,8 +47,6 @@ public class GeometryDataIOTest {
     @Test
     @Ignore
     public void testSandAndLoad() {
->>>>>>> master:WalkaRound/shared/datastructures/src/test/java/edu/kit/iti/algo2/pse2013/walkaround/shared/geometry/GeometryDataIOTest.java
-
 		GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
 		int numDimensions = writeGeometryDataIO.getNumDimensions();
 
@@ -110,6 +93,7 @@ public class GeometryDataIOTest {
 		// Check, if number of dimensions is the same
 		Assert.assertEquals(readGeometryDataIO.getNumDimensions(), numDimensions);
 	}
+
 
 	private GeometryDataIO getGeometryDataIO() {
         GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d)), 2);

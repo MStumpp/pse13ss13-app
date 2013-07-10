@@ -88,6 +88,7 @@ public class LocationDataIOTest {
 		}
 	}
 
+
 	private LocationDataIO getLocationDataIO() {
 
 		LocationDataIO locationDataIO = new LocationDataIO();
