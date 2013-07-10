@@ -1,14 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-@XmlRootElement
 public class Coordinate implements Geometrizable {
 
 	/**

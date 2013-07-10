@@ -8,36 +8,40 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Category {
 
+	//hard-coded
+	
 	public static Category FOOD;
-	
+
 	public static Category FAST_FOOD;
-	
+
 	public static Category BARS_AND_PUBS;
-	
+
 	public static Category CLUBS_AND_NIGHTCLUBS;
-	
+
 	public static Category SUPERMARKET;
-	
+
 	public static Category SHOP;
-	
+
 	public static Category PUBLIC_TRANSPORTATION;
-	
+
 	public static Category MUSEUM;
-	
+
 	public static Category THEATRE;
-	
+
 	public static Category CINEMA;
-	
+
 	public static Category SLEEPING_ACCOMODATIONS;
-	/**
-	 * IDs of all existing categories for areas.
-	 */
-	private static int[] allAreaCategories;
 
 	/**
-	 * IDs of all existing categories for POIs.
+	 * IDs of all existing categories for POIs. (0 is default ID for empty category)
 	 */
-	private static int[] allPOICategories;
+	private static final int[] ALL_POI_CATEGORIES = new int[] { 1, 2, 3, 4, 5,
+			6, 7, 8, 9, 10, 11 };
+
+	/**
+	 * IDs of all existing categories for areas. (0 is default ID for empty category)
+	 */
+	private static final int[] ALL_AREA_CATEGORIES = new int[] { 1 };
 
 	/**
 	 * ID of the category.
@@ -69,7 +73,7 @@ public class Category {
 	 * @return all existing categories of areas.
 	 */
 	public static int[] getAllAreaCategories() {
-		return allAreaCategories;
+		return ALL_AREA_CATEGORIES;
 	}
 
 	/**
@@ -78,26 +82,6 @@ public class Category {
 	 * @return all existing categories of POIs
 	 */
 	public static int[] getAllPOICategories() {
-		return allPOICategories;
-	}
-
-	/**
-	 * Sets all existing categories of areas.
-	 * 
-	 * @param areaCategories
-	 *            all existing categories of areas
-	 */
-	public static void setAllAreaCategories(int[] areaCategories) {
-		allAreaCategories = areaCategories;
-	}
-
-	/**
-	 * Sets all existing categories of POIs.
-	 * 
-	 * @param poiCategories
-	 *            all existing categories of POIs
-	 */
-	public static void setAllPOICategories(int[] poiCategories) {
-		allPOICategories = poiCategories;
+		return ALL_POI_CATEGORIES;
 	}
 }
