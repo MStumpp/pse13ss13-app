@@ -176,7 +176,9 @@ public final class CoordinateUtility {
 		for (Waypoint value : currentRoute.getWaypoints()) {
 
 			float x = (float) (value.getLongitude() - upperLeft.getLongitude());
+			Log.d("wtf", "" + x);
 			float y = (float) (value.getLatitude() - upperLeft.getLatitude());
+			Log.d("wtf", "" + y);
 
 			dw.add(new DisplayWaypoint(
 
@@ -187,6 +189,10 @@ public final class CoordinateUtility {
 					CoordinateUtility.DIRECTION_LATITUDE),
 
 			value.getId()));
+			Log.d("d x", "" + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
+					CoordinateUtility.DIRECTION_LONGTITUDE));
+			Log.d("d y", "" + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
+					CoordinateUtility.DIRECTION_LATITUDE));
 		}
 
 		return dw;
