@@ -16,17 +16,4 @@ public abstract class OSMCategory {
 		this.inverted = inverted;
 	}
 	public abstract boolean accepts(OSMElement element);
-
-
-	public static final OSMCategory getFootwayCategory() {
-		OSMTagCategory footway = new OSMTagCategory();
-		footway.addTag("highway", "footway");
-		OSMTagCategory sidewalkBoth = new OSMTagCategory();
-		sidewalkBoth.addTag("sidewalk", "both");
-		OSMTagCategory sidewalkLeft = new OSMTagCategory();
-		sidewalkBoth.addTag("sidewalk", "left");
-		OSMTagCategory sidewalkRight = new OSMTagCategory();
-		sidewalkBoth.addTag("sidewalk", "right");
-		return new OSMOrCategory(footway, new OSMOrCategory(sidewalkLeft, new OSMOrCategory(sidewalkBoth, sidewalkRight)));
-	}
 }
