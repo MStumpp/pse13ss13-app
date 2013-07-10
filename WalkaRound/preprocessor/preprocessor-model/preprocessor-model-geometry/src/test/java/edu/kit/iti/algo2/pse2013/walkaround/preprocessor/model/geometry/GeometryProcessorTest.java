@@ -1,8 +1,5 @@
-package edu.kit.iti.algo2.pse2013.walkaround.server.model;
+package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
@@ -13,6 +10,18 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 /**
  * GeometryProcessorTest.
@@ -22,8 +31,27 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  */
 public class GeometryProcessorTest {
 
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field instance = Graph.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        instance = GeometryProcessor.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        Field idCounter = Vertex.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+
+        idCounter = Edge.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+    }
+
+
     @Test
-    @Ignore
     public void testInit() {
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
@@ -31,7 +59,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetInstance() {
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
@@ -40,7 +67,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertex() {
 
         GeometryDataIO geometryDataIO = getGeometryDataIO();

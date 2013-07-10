@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.server.model;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 /**
  * GeometryProcessorException.

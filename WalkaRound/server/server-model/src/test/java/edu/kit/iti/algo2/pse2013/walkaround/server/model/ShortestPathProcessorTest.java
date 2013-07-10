@@ -1,9 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.EmptyListOfEdgesException;
@@ -20,8 +23,27 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTrans
  */
 public class ShortestPathProcessorTest {
 
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field instance = Graph.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        instance = ShortestPathProcessor.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        Field idCounter = Vertex.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+
+        idCounter = Edge.class.getDeclaredField("idCounter");
+        idCounter.setAccessible(true);
+        idCounter.setInt(null, 0);
+    }
+
+
     @Test
-    @Ignore
     public void testInit() {
         Graph graph = getGraph();
         Assert.assertNotNull(ShortestPathProcessor.init(graph));
@@ -29,7 +51,6 @@ public class ShortestPathProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetInstance() {
         Graph graph = getGraph();
         Assert.assertNotNull(ShortestPathProcessor.init(graph));

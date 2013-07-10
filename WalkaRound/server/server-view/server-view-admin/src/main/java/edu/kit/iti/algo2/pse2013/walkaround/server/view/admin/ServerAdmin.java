@@ -5,6 +5,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.*;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.EmptyListOfEdgesException;
@@ -14,6 +16,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.model.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  * This class launches the web application in an embedded Jetty container.
@@ -82,11 +89,11 @@ public class ServerAdmin {
 
         GraphDataIO graphDataIO = new GraphDataIO();
         Vertex vertex1 = new Vertex(1.d, 1.d);
-        Vertex vertex2 = new Vertex(1.d, 2.d);
-        Vertex vertex3 = new Vertex(1.d, 3.d);
-        Vertex vertex4 = new Vertex(1.d, 4.d);
-        Vertex vertex5 = new Vertex(1.d, 5.d);
-        Vertex vertex6 = new Vertex(1.d, 6.d);
+        Vertex vertex2 = new Vertex(2.d, 2.d);
+        Vertex vertex3 = new Vertex(3.d, 3.d);
+        Vertex vertex4 = new Vertex(4.d, 4.d);
+        Vertex vertex5 = new Vertex(5.d, 5.d);
+        Vertex vertex6 = new Vertex(6.d, 6.d);
 
         Edge edge1 = new Edge(vertex1, vertex2);
         edge1.setLength(5.d);
