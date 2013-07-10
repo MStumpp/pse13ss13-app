@@ -15,7 +15,7 @@ import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 
-public class RoundTripView extends Fragment {
+public class RoundTripView extends PullUpView {
 
 	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
@@ -149,7 +149,7 @@ public class RoundTripView extends Fragment {
 					routeController.addRoundtrip(0, np.getValue() * 100);
 				}
 			}
-			// TODO: zur karte zurückkehren
+			setNullSizeHeight();
 			return false;
 		}
 
