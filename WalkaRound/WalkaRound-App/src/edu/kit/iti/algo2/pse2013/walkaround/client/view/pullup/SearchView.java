@@ -21,7 +21,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenu
 
 public class SearchView extends Fragment {
 
-	private final TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupSearchSwitcher;
 

@@ -17,7 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 
 public class RoundTripView extends Fragment {
 
-	private final TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private final int MAXIMUM_LENGTH_ROUNDTRIP = 5000;
 

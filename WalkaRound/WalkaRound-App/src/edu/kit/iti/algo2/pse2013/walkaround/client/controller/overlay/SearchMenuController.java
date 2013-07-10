@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class SearchMenuController {
@@ -18,7 +19,7 @@ public class SearchMenuController {
 		}
 		return me;
 	}
-	public List<Address> requestSuggestionsByAddress(int postalCode, String city, String street, String number, Context context) {
+	public List<Location> requestSuggestionsByAddress(int postalCode, String city, String street, String number, Context context) {
 		Address addr = new Address(street, number, city, postalCode);
 		return POIManager.getInstance(null/*TODO: replace with real LocationDataIO-Object*/).searchPOIsByAddress(addr, context);
 	}
