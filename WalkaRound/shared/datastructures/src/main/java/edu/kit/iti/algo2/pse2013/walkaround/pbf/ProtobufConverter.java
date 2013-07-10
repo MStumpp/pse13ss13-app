@@ -225,11 +225,16 @@ public class ProtobufConverter {
 		for (int i = 0; i < cats.length; i++) {
 			poiList.add(cats[i]);
 		}
-		return SavePOI.newBuilder()
-				.setParent(getLocationBuilder(p))
-				.setTextInfo(p.getTextInfo())
-				.setImageURL(p.getURL())
-				.addAllPOICategory(poiList);
+		SavePOI.Builder builder = SavePOI.newBuilder()
+			.setParent(getLocationBuilder(p))
+			.addAllPOICategory(poiList);
+		if (p.getTextInfo() != null) {
+			builder.setTextInfo(p.getTextInfo());
+		}
+		if (p.getURL() != null) {
+			builder.setImageURL(p.getURL());
+		}
+		return builder;
 	}
 	public static Vertex getVertex(SaveVertex saveVertex) {
 		if (saveVertex == null) {

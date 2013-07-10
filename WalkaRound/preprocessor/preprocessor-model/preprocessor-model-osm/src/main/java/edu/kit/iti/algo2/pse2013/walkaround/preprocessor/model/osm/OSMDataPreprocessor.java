@@ -11,7 +11,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
 import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 public class OSMDataPreprocessor {
 	private File graphDestination;
@@ -75,6 +77,14 @@ public class OSMDataPreprocessor {
 		System.out.println(graph.getEdges().size() + " Edges are written to the file");
 		for (Edge e : graph.getEdges()) {
 			System.out.println("Edge: " + e);
+		}
+
+		FileInputStream fis2 = new FileInputStream(locationDestination);
+		LocationDataIO location = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis2));
+		fis2.close();
+		System.out.println(location.getPOIs().size() + " POIs are written to the file");
+		for (POI p : location.getPOIs()) {
+			System.out.println("POI: " + p);
 		}
 	}
 

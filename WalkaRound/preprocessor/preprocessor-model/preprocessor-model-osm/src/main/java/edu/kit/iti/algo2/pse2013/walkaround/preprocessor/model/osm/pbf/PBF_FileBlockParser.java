@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import crosby.binary.BinaryParser;
@@ -19,16 +18,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMTagCategory;
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
 	private static final short STATE_FIND_NEEDED_NODES = 0;
-	private static final short STATE_PARSE_WAYS = 1;
+	private static final short STATE_PARSE_WAYS_N_POIS = 1;
 	private static final short STATE_FINISH = 2;
 
 	private Map<Long, OSMNode> nodes = new TreeMap<Long, OSMNode>();
-	private int numEdges = 0;
 
 	private GraphDataIO graphData;
 	private LocationDataIO locationData;
@@ -56,10 +53,10 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseDense(DenseNodes dNodes) {
-		if (state == STATE_PARSE_WAYS) {
-			if (dNodes.getIdList().size() > 0) {
-				System.out.println(String.format("ParseDenseNodes (%d)", nodes.size()));
-			}
+		if (state == STATE_PARSE_WAYS_N_POIS) {
+//			if (dNodes.getIdList().size() > 0) {
+//				System.out.println(String.format("ParseDenseNodes (%d)", nodes.size()));
+//			}
 			List<Long> ids = dNodes.getIdList();
 			long id = 0;
 			long lat = 0;
@@ -69,15 +66,23 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				id += ids.get(i);
 				lat += dNodes.getLat(i);
 				lon += dNodes.getLon(i);
-				if (nodes.containsKey(id)) {
-					OSMNode currentNode = nodes.get(id);
-					currentNode.setLatitude(lat * granularity * .000000001);
-					currentNode.setLongitude(lon * granularity * .000000001);
 
-					int j;
-					while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
-						currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
-					}
+				OSMNode currentNode = null;
+
+				if (nodes.containsKey(id)) {
+					currentNode = nodes.get(id);
+				} else {
+					currentNode = new OSMNode(id, lat, lon);
+				}
+				currentNode.setLatitude(lat * granularity * .000000001);
+				currentNode.setLongitude(lon * granularity * .000000001);
+
+				int j;
+				while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
+					currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
+				}
+				if (currentNode.getName() != null && currentNode.getPOICategories().length > 0) {
+					locationData.addPOI(currentNode.convertToPOI());
 				}
 			}
 		}
@@ -85,7 +90,7 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseNodes(List<Node> inNodes) {
-		if (state == STATE_PARSE_WAYS) {
+		if (state == STATE_PARSE_WAYS_N_POIS) {
 			for (Node inNode : inNodes) {
 				OSMNode node = new OSMNode(inNode.getId(), inNode.getLat(), inNode.getLon());
 				List<Integer> keys = inNode.getKeysList();
@@ -105,9 +110,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parseWays(List<Way> inWays) {
-		if (inWays.size() > 0) {
-			System.out.println(String.format("parseWays(%d NeededNodes)", nodes.size()));
-		}
+//		if (inWays.size() > 0) {
+//			System.out.println(String.format("parseWays(%d NeededNodes)", nodes.size()));
+//		}
 		for (Way w : inWays) {
 			boolean isValidWay = true;
 			OSMWay way = new OSMWay(w.getId());
@@ -136,7 +141,6 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 						}
 					} else {
 						graphData.addEdges(way.getEdges());
-						numEdges++;
 					}
 				}
 			}

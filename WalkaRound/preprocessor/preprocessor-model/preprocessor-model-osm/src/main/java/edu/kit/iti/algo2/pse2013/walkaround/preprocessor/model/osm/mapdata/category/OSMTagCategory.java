@@ -5,11 +5,6 @@ import java.util.HashMap;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMElement;
 
 public class OSMTagCategory extends OSMCategory {
-	public static OSMCategory getFootwayCategory() {
-		OSMTagCategory cat = new OSMTagCategory();
-		cat.addTag("highway", "footway");
-		return cat;
-	}
 
 	private HashMap<String, String> mustHaveTags = new HashMap<String, String>();
 

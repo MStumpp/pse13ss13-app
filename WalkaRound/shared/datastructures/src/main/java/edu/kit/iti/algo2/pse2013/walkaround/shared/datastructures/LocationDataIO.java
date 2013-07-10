@@ -1,7 +1,21 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 /**
  * This class contains some preprocessed data by OSMDataPreprocessor and
@@ -75,6 +89,19 @@ public class LocationDataIO {
 	 */
 	public void addArea(Area area) {
 		areaList.add(area);
+	}
+	public static void save(LocationDataIO locationData, File destination) throws FileNotFoundException, IOException {
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+		ProtobufConverter.getLocationDataBuilder(locationData).build().writeTo(out);
+		out.flush();
+		out.close();
+	}
+
+	public static LocationDataIO load(File source) throws FileNotFoundException, IOException {
+		InputStream in = new BufferedInputStream(new FileInputStream(source));
+		LocationDataIO geom = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(in));
+		in.close();
+		return geom;
 	}
 
 }

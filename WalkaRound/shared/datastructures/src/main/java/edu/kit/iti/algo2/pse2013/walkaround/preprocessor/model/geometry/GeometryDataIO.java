@@ -1,5 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
+
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
  *
@@ -55,5 +68,19 @@ public class GeometryDataIO {
 	 */
 	public int getNumDimensions() {
 		return numDimensions;
+	}
+
+	public static void save(GeometryDataIO geometryData, File destination) throws FileNotFoundException, IOException {
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+		ProtobufConverter.getGeometryDataBuilder(geometryData).build().writeTo(out);
+		out.flush();
+		out.close();
+	}
+
+	public static GeometryDataIO load(File source) throws FileNotFoundException, IOException {
+		InputStream in = new BufferedInputStream(new FileInputStream(source));
+		GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));
+		in.close();
+		return geom;
 	}
 }

@@ -47,7 +47,7 @@ public class GraphDataIOTest {
 		graphDataIO = null;
 		try {
 			InputStream fis = new BufferedInputStream(new FileInputStream(GRAPH_DATA_FILE));
-			ProtobufConverter.getGraphData(SaveGraphData.parseFrom(fis));
+			graphDataIO = ProtobufConverter.getGraphData(SaveGraphData.parseFrom(fis));
 			fis.close();
 		} catch (IOException e) {
 			e.printStackTrace();

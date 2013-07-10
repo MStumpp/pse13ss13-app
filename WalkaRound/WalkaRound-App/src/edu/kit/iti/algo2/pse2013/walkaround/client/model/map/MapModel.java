@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
@@ -171,7 +170,7 @@ public class MapModel implements TileListener {
 		Log.d("MAP_TOUCH_SROLL", "Delta " + delta);
 
 		this.upperLeft = new Coordinate(this.upperLeft,
-				-CoordinateUtility.convertPixelsToDegrees(delta.getY(),
+				CoordinateUtility.convertPixelsToDegrees(delta.getY(),
 						this.currentLevelOfDetail,
 						CoordinateUtility.DIRECTION_Y),
 				CoordinateUtility.convertPixelsToDegrees(delta.getX(),
@@ -218,8 +217,8 @@ public class MapModel implements TileListener {
 
 			this.fetchTiles();
 			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-			
-			
+
+
 			return;
 		} else if (this.currentLevelOfDetail < this.xZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner x Achse ");
@@ -238,7 +237,7 @@ public class MapModel implements TileListener {
 
 			this.fetchTiles();
 			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-			
+
 			return;
 		} else if (this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner y Achse ");
@@ -257,7 +256,7 @@ public class MapModel implements TileListener {
 
 			this.fetchTiles();
 			this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-			
+
 			return;
 		}
 
@@ -274,7 +273,7 @@ public class MapModel implements TileListener {
 
 		this.fetchTiles();
 		this.drawDisplayCoordinates(this.mapController.getCurrentRoute());
-		
+
 	}
 
 	private float getCurrentTileWidthInPixels() {
@@ -462,8 +461,8 @@ public class MapModel implements TileListener {
 
 	public void drawDisplayCoordinates(final DisplayCoordinate[] dw) {
 
-		
-		Log.d("CANVAS_DRAW_LINE", "Länge" + dw.length);
+
+		Log.d("CANVAS_DRAW_LINE", "Lï¿½nge" + dw.length);
 		for (int a = 0; a < (dw.length - 1); a++) {
 			Log.d("CANVAS_DRAW_LINE", "Von" + a + " nach " + (a + 1));
 			if (a + 1 < dw.length && dw[a] != null && dw[a + 1] != null) {
