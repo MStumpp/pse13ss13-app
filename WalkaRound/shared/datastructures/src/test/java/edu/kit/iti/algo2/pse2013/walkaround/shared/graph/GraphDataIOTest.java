@@ -1,12 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.*;
-import java.lang.reflect.Field;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
 
 /**
  * GraphDataIOTest.
@@ -17,7 +23,6 @@ import java.lang.reflect.Field;
 public class GraphDataIOTest {
 
     private static final File GRAPH_DATA_FILE = new File(System.getProperty("java.io.tmpdir")
-            + File.separatorChar + "walkaround"
             + File.separatorChar + "graphData.io");
 
 
@@ -35,31 +40,26 @@ public class GraphDataIOTest {
 
     @Test
     public void testSandAndLoad() {
-//        GraphDataIO graphDataIO = getGraphDataIO();
-//        int size = graphDataIO.getEdges().size();
-//
-//        try {
-//            OutputStream fos = new BufferedOutputStream(new FileOutputStream(GRAPH_DATA_FILE));
-//            ProtobufConverter.getGraphDataBuilder(graphDataIO).build().writeTo(fos);
-//            fos.flush();
-//            fos.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Assert.assertTrue(GRAPH_DATA_FILE.exists());
-//
-//        graphDataIO = null;
-//        try {
-//            InputStream fis = new BufferedInputStream(new FileInputStream(GRAPH_DATA_FILE));
-//            graphDataIO = ProtobufConverter.getGraphData(SaveGraphData.parseFrom(fis));
-//            fis.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Assert.assertNotNull(graphDataIO);
-//        Assert.assertEquals(graphDataIO.getEdges().size(), size);
+        GraphDataIO graphDataIO = getGraphDataIO();
+        int size = graphDataIO.getEdges().size();
+
+        try {
+        	GraphDataIO.save(graphDataIO, GRAPH_DATA_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertTrue(GRAPH_DATA_FILE.exists());
+
+        graphDataIO = null;
+        try {
+        	graphDataIO = GraphDataIO.load(GRAPH_DATA_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertNotNull(graphDataIO);
+        Assert.assertEquals(graphDataIO.getEdges().size(), size);
     }
 
 

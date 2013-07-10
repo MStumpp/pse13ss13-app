@@ -103,7 +103,7 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
-			this.routeCoordinates.add(new Waypoint(c.getLongitude(), c.getLatitude(), "Wegpunkt"));
+			this.routeCoordinates.add(new Waypoint(c.getLatitude(), c.getLongitude(), "Wegpunkt"));
 		}
 		this.setActiveWaypoint(this.getEnd());
 		this.cleanRouteOfDuplicateCoordinatePairs();
@@ -129,13 +129,12 @@ public class Route implements RouteInfo {
 	 * Adds the given RouteInfo to the end of the route.
 	 */
 	public void addRoute(RouteInfo newRoute) {
-		Log.d(TAG_ROUTE, "addRoute(RouteInfo)");
-		
+		Log.d(TAG_ROUTE, "addRoute(RouteInfo) METHOD START");
+		Log.d(TAG_ROUTE, "addRoute(RouteInfo) adding route with the following coordinates: " + newRoute);
+
 		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
 		
-		
-		if (!(this.getEnd().getLatitude() == newRoute.getStart().getLatitude())
-				|| !(this.getEnd().getLongitude() == newRoute.getStart().getLongitude())) {
+		if (!this.getEnd().equals(newRoute.getStart())) {
 			Log.d(TAG_ROUTE, "intermediate path has to be computed. Current Route end: " + this.getEnd() + ", new Route start" + newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
 			this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
@@ -423,7 +422,14 @@ public class Route implements RouteInfo {
 	}
 
 
-
+	public String toString() {
+		Log.d(TAG_ROUTE, "toString()");
+		String output = "";
+		for (int i = 0; i < this.routeCoordinates.size(); i++) {
+			output += i + ". " + this.routeCoordinates.get(i) + ", ";
+		}
+		return output;
+	}
 
 
 
