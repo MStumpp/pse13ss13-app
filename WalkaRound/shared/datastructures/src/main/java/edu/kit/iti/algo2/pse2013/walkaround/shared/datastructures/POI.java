@@ -175,5 +175,12 @@ public class POI extends Location {
 		}
 		return true;
 	}
+	
+	public POI clone() {
+		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this.getName().toString(), this.getTextInfo().toString(), this.getURL().toString(), this.getPOICategories(), this.getAddress().clone());
+		return clonedPOI;
+	}
+	
+	
 
 }

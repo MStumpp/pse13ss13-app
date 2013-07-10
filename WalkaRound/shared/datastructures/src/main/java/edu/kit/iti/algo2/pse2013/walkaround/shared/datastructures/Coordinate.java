@@ -179,4 +179,15 @@ public class Coordinate implements Geometrizable {
         return result;
     }
 
+    public Coordinate clone() {
+    	Coordinate clonedCoordinate;
+    	if (this.crossInfo == null) {
+    		clonedCoordinate = new Coordinate (this.lat, this.lon);
+    	} else {
+    		clonedCoordinate = new Coordinate(this.lat, this.lon, this.crossInfo.clone());
+    	}
+    	return clonedCoordinate;
+    }
+    
+    
 }

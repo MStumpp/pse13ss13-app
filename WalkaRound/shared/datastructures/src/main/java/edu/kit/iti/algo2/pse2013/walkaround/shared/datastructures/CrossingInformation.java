@@ -59,4 +59,8 @@ public final class CrossingInformation {
         return crossroadAngles.length;
     }
 
+    public CrossingInformation clone() {
+    	return new CrossingInformation(this.crossroadAngles);
+    }
+    
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import android.util.Log;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class provides a set of delegation methods for computing a shortest path,
@@ -56,12 +57,14 @@ public class RouteProcessing {
      * @return RouteInfo.
      */
     public RouteInfo computeShortestPath(Coordinate coordinate1, Coordinate coordinate2) {
-    	Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate coordinate1, Coordinate coordinate2)");
+    	Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate " + coordinate1 + ", Coordinate " + coordinate2 + ")");
         List<Coordinate> coordinates = new LinkedList<Coordinate>();
-        coordinates.add(coordinate1);
-        coordinates.add(coordinate2);
+        coordinates.add(new Waypoint (coordinate1.getLatitude(), coordinate1.getLongitude(), "Wegpunkt"));
+        coordinates.add(new Waypoint (coordinate2.getLatitude(), coordinate2.getLongitude(), "Wegpunkt"));
         // TODO: change constructor of route from LinkedList to List, then remove the cast
-        return new Route((LinkedList<Coordinate>) coordinates);
+        RouteInfo computedShortestPath =  new Route((LinkedList<Coordinate>) coordinates);
+    	Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate, Coordinate) returning Route: " + computedShortestPath);
+        return computedShortestPath;
     }
 
 

@@ -44,6 +44,7 @@ public class Waypoint extends Location {
         super(lat, lon, name, address);
         profile = -1;
         poi = null;
+        this.setMoveability(true);
     }
 
 
@@ -95,5 +96,14 @@ public class Waypoint extends Location {
     public boolean isPOI() {
         return poi != null;
     }
+    
+    
+    public Waypoint clone() {
+    	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), this.getName().toString(), this.getAddress().clone());
+    	clonedWaypoint.setPOI(this.getPOI().clone());
+    	clonedWaypoint.setProfile(this.getProfile());
+    	return clonedWaypoint;
+    }
+    
 
 }

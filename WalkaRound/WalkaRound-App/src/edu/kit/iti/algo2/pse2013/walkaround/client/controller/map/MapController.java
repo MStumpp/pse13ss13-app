@@ -14,6 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
@@ -70,7 +71,7 @@ public class MapController implements RouteListener, PositionListener {
 	 */
 	//TODO Es gibt anscheinend zwei Methoden Wegpunkte zu bekommen es muss noch unterschieden werden welche zum Routen zeichnen welche zum Wegpunkt zeichnen benutzt werden.
 	@SuppressWarnings("unused")
-	private List<DisplayWaypoint> lines;
+	private List<DisplayCoordinate> lines;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -122,6 +123,7 @@ public class MapController implements RouteListener, PositionListener {
 
 		Log.d(TAG_MAP_CONTROLLER, "Initialice List of Display Points!");
 		displayPoints = new LinkedList<DisplayWaypoint>();
+		lines = new LinkedList<DisplayCoordinate>();
 
 		Log.d(TAG_MAP_CONTROLLER, "Initialice MapModel!");
 		this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
@@ -164,8 +166,8 @@ public class MapController implements RouteListener, PositionListener {
 	 *
 	 * @return current Route
 	 */
-	public List<DisplayWaypoint> getCurrentRoute() {
-		return this.displayPoints;
+	public List<DisplayCoordinate> getCurrentRouteLines() {
+		return this.lines;
 	}
 
 	/*
@@ -211,8 +213,8 @@ public class MapController implements RouteListener, PositionListener {
 		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : " + distanceY);
 		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
 		if (displayPoints != null) {
-			this.mapModel.drawDisplayCoordinates(displayPoints);
-			this.mapView.updateDisplayCoordinate(displayPoints);
+			this.mapModel.drawDisplayCoordinates(lines);
+			this.mapView.updateDisplayWaypoints(displayPoints);
 		}
 	}
 
@@ -280,10 +282,18 @@ public class MapController implements RouteListener, PositionListener {
 	 */
 	public void onCreatePoint(DisplayCoordinate dc) {
 		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
-		this.routeController.addWaypoint(CoordinateUtility
+		
+		Coordinate next = CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
 						mapModel.getUpperLeft(),
-						mapModel.getCurrentLevelOfDetail()));
+						mapModel.getCurrentLevelOfDetail());
+		try {
+			// TODO lösche int wenn der normelizer korreckt ist
+			CoordinateNormalizer.normalizeCoordinate(next,(int) this.getCurrentLevelOfDetail());
+		} catch (IllegalArgumentException e){
+			Log.e(TAG_MAP_CONTROLLER, "Coordinate konnte nicht normalisiert werden!");
+		}
+		this.routeController.addWaypoint(new Waypoint(next.getLatitude(),next.getLongitude(),"PLACEHOLDER"));
 	}
 
 
@@ -303,15 +313,38 @@ public class MapController implements RouteListener, PositionListener {
 		Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl "
 				+ currentRoute.getWaypoints().size());
 
-		displayPoints = CoordinateUtility.extractDisplayWaypointsOutOfRouteInfo(
+		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
 				currentRoute, this.mapModel.getUpperLeft(),
 				this.mapModel.getCurrentLevelOfDetail());
 
-		mapView.updateDisplayCoordinate(displayPoints);
-		mapModel.drawDisplayCoordinates(displayPoints);
+		this.displayPoints = CoordinateUtility.extractDisplayWaypointsOutOfRouteInfo(
+				currentRoute, this.mapModel.getUpperLeft(),
+				this.mapModel.getCurrentLevelOfDetail());
+		
+		
+		Log.d("TAG_MAPVIEW_DRAW", "current Waypoint Amount "
+				+ displayPoints.size());
 
-		// TODO Auto-generated method stub
-		// mapView.setActive(activeWaypoint.getId());
+		Log.d("TAG_MAPVIEW_DRAW", "current Coordinate Amount "
+				+ lines.size());
+		
+		/*
+		this.lines.clear();
+		this.displayPoints.clear();
+		this.lines.add(new DisplayCoordinate( 100, 100));
+		this.lines.add(new DisplayCoordinate( 150, 150));
+		this.lines.add(new DisplayCoordinate( 300, 600));
+		this.lines.add(new DisplayCoordinate( 350, 700));
+		this.lines.add(new DisplayCoordinate( 800, 400));
+		this.displayPoints.add(new DisplayWaypoint(100,100,1));
+		this.displayPoints.add(new DisplayWaypoint(300,600,2));
+		this.displayPoints.add(new DisplayWaypoint(800,400,3));
+		*/
+		
+		mapView.updateDisplayWaypoints(displayPoints);
+		mapView.setActive(activeWaypoint.getId());
+		//mapView.setActive(2);
+		mapModel.drawDisplayCoordinates(lines);
 
 	}
 

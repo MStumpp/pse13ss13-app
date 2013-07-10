@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.List;
 
+import android.content.Context;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -15,7 +17,7 @@ public class FavoriteMenuController {
 	 * Singleton-method
 	 * @return everytime the same instance of {@link FavoriteMenuController}
 	 */
-	public static  FavoriteMenuController getInstance() {
+	public static FavoriteMenuController getInstance() {
 		if (me == null) { //Wenn ich eine Null bin...^^
 			return me = new FavoriteMenuController();
 		}
