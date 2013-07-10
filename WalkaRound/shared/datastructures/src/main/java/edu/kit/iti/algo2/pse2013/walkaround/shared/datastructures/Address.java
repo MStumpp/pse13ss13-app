@@ -88,4 +88,9 @@ public class Address {
 	public String toString() {
 		return city + ", " + postalCode + ", " + street + houseNumber;
 	}
+	
+	
+	public Address clone() {
+		return new Address(this.street.toString(), this.houseNumber.toString(), this.city.toString(), this.postalCode);
+	}
 }

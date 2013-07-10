@@ -11,19 +11,19 @@ public class Location extends Coordinate {
     /**
      * id of Location.
      */
-    private final int id;
+    private int id;
 
 
     /**
      * name of Location.
      */
-    private final String name;
+    private String name;
 
 
     /**
      * address of Location.
      */
-    private final Address address;
+    private Address address;
 
 
     /**
@@ -176,4 +176,19 @@ public class Location extends Coordinate {
 		return true;
 	}
 
+	
+	public Location clone() {
+		Location clonedLocation = new Location(this.getLatitude(), this.getLongitude(), this.name.toString(), this.address.clone());
+		clonedLocation.setMoveability(this.isMoveable());
+		clonedLocation.setIsFavorite(this.isFavorite());
+		return clonedLocation;
+	}
+	
+	protected void setMoveability(boolean moveable) {
+		this.isMoveable = moveable;
+	}
+	
+	public void setIsFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
 }

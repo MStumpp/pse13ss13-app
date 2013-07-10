@@ -41,7 +41,7 @@ public class Profile {
 	 * ID of the profile.
 	 */
 	private int id;
-
+	
 	/**
 	 * All area categories IDs belonging to the profile.
 	 */
@@ -142,5 +142,5 @@ public class Profile {
 	public static int[] getAllProfileIDs() {
 		return ALL_PROFILE_IDS;
 	}
-
+	
 }

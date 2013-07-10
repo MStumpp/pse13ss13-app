@@ -149,7 +149,6 @@ public class RoundTripView extends Fragment {
 					routeController.addRoundtrip(0, np.getValue() * 100);
 				}
 			}
-			// TODO: zur karte zurückkehren
 			return false;
 		}
 
