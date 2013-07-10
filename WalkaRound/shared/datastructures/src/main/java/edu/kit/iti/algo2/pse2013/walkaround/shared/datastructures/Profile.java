@@ -8,6 +8,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Profile {
 
+	//hard-coded
 	/**
 	 * Jogging profile.
 	 */
@@ -28,8 +29,13 @@ public class Profile {
 	 */
 	public static Profile PROFILE_CLUBBING;
 
+	/**
+	 * IDs of all Profiles. (0 is default ID for empty Profile)
+	 */
+	public static final int[] ALL_PROFILE_IDS = new int[] { 1, 2, 3, 4 };
+
 	// CHANGE ME!!!
-	//public static Profile PROFILE_RENAMEME;
+	// public static Profile PROFILE_RENAMEME;
 
 	/**
 	 * ID of the profile.
@@ -133,9 +139,8 @@ public class Profile {
 	 * 
 	 * @return the IDs of all existing Profiles
 	 */
-	public static int[] getAllProfiles() {
-		int[] allProfiles = new int[] {1, 2, 3, 4};
-		return allProfiles;
+	public static int[] getAllProfileIDs() {
+		return ALL_PROFILE_IDS;
 	}
 
 }
