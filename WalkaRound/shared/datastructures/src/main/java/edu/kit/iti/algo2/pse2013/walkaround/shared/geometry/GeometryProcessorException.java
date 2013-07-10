@@ -8,7 +8,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
  */
 public class GeometryProcessorException extends Exception {
 
-    public GeometryProcessorException(String message) {
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = -6845924328134858970L;
+
+	public GeometryProcessorException(String message) {
         super(message);
     }
 

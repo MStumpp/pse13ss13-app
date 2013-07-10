@@ -21,12 +21,6 @@ public class Vertex extends Coordinate {
 
 
     /**
-     * OSM ID of that Vertex.
-     */
-    private transient long osmID;
-
-
-    /**
      * ID counter for internal id.
      */
     private static int idCounter = 0;
@@ -63,20 +57,7 @@ public class Vertex extends Coordinate {
      * @param lon Longitude of Vertex.
      */
     public Vertex(double lat, double lon) {
-        this(lat, lon, -1);
-    }
-
-
-    /**
-     * Creates an instance of Vertex.
-     *
-     * @param lat Latitude of Vertex
-     * @param lon Longitude of Vertex.
-     * @param osmID Corresponding OSM ID of Vertex.
-     */
-    public Vertex(double lat, double lon, long osmID) {
         super(lat, lon);
-        this.osmID = osmID;
         id = idCounter;
         idCounter += 1;
         outgoingEdges = new ArrayList<Edge>();

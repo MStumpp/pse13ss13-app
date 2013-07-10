@@ -1,10 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
 /**
  * This class represents an egde contained in a graph. An edge has two coordinates,
@@ -13,7 +12,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Edge implements Geometrizable, Serializable {
+public final class Edge implements Geometrizable {
 
     /**
      * Internally used ID of Edge.
@@ -31,12 +30,6 @@ public final class Edge implements Geometrizable, Serializable {
      * Head of this Edge.
      */
     private final Vertex head;
-
-
-    /**
-     * OSM ID of that Edge.
-     */
-    private transient long osmID;
 
 
     /**
@@ -58,24 +51,10 @@ public final class Edge implements Geometrizable, Serializable {
      * @param head Head of Edge.
      */
     public Edge(Vertex tail, Vertex head) {
-        this(tail, head, -1);
-    }
-
-
-    /**
-     * Creates an instance of Edge.
-     *
-     * @param tail Tail of Edge.
-     * @param head Head of Edge.
-     * @param osmID Corresponding OSM ID of this Edge.
-     * @throws IllegalArgumentException If tail or head are null.
-     */
-    public Edge(Vertex tail, Vertex head, long osmID) {
         if (tail == null || head == null)
             throw new IllegalArgumentException("tail and head must not be null");
         this.tail = tail;
         this.head = head;
-        this.osmID = osmID;
         id = idCounter;
         idCounter += 1;
         length = computeLength();

@@ -1,7 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 
 public class OSMNode extends OSMElement {
@@ -25,7 +25,7 @@ public class OSMNode extends OSMElement {
 		return lon;
 	}
 	public Vertex convertToVertex() {
-		return new Vertex(lat, lon, id);
+		return new Vertex(lat, lon);
 	}
 
 	public void setLatitude(double lat) {

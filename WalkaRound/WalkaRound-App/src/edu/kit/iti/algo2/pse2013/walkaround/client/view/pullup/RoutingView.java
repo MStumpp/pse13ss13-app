@@ -21,12 +21,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 
 public class RoutingView extends Fragment {
 
-	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupRoutingSwitcher;
 	
-	FavoriteMenuController favController;
-	RouteController routeController;
+	private FavoriteMenuController favController;
+	private RouteController routeController;
 	
 	private Button reset;
 	private ImageView invert;

@@ -14,11 +14,11 @@ import crosby.binary.Osmformat.Relation;
 import crosby.binary.Osmformat.Way;
 import crosby.binary.file.BlockReaderAdapter;
 import crosby.binary.file.FileBlockPosition;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMTagCategory;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
 	private static final short STATE_FIND_NEEDED_NODES = 0;
@@ -132,8 +132,11 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				}
 				for (int i = 0; i < Math.min(w.getKeysCount(), w.getValsCount()); i++) {
 					way.addTag(getStringById(w.getKeys(i)), getStringById(w.getVals(i)));
+					if (getStringById(i).equals("sidewalk")) {
+						System.out.println("Sidewalk");
+					}
 				}
-				if (isValidWay && OSMTagCategory.getFootwayCategory().accepts(way)) {
+				if (isValidWay && OSMCategoryFactory.createFootwayCategory().accepts(way)) {
 					if (state == STATE_FIND_NEEDED_NODES) {
 						long curID = 0;
 						for (Long idDiff : w.getRefsList()) {

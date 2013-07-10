@@ -29,7 +29,7 @@ public abstract class OSMElement {
 			if (curKey.equals(key)) {
 				String[] values = tags.get(curKey).split(";");
 				for (String curValue : values) {
-					if (curValue.equals(value)) {
+					if (curValue.trim().equals(value)) {
 						return true;
 					}
 				}

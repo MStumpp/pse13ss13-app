@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-@XmlRootElement
 public final class RouteInfoTransfer {
 
     /**

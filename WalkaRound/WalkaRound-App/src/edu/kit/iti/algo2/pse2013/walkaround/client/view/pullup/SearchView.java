@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
@@ -21,13 +20,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenu
 
 public class SearchView extends Fragment {
 
-	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupSearchSwitcher;
 
-	SearchMenuController searchMenuController;
+	private SearchMenuController searchMenuController;
 
-	TabHost tabHost;
+	private TabHost tabHost;
 
 	private TextView postalCode;
 	private TextView city;
