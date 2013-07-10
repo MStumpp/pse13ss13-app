@@ -29,17 +29,17 @@ public class Category {
 	public static final Category CINEMA = new Category(10);
 
 	public static final Category SLEEPING_ACCOMODATIONS = new Category(11);
+	/**
+	 * IDs of all existing categories for areas.
+	 */
+	private static int[] allAreaCategories;
 
 	/**
-	 * IDs of all existing categories for POIs. (0 is default ID for empty category)
+	 * IDs of all existing categories for POIs.
 	 */
-	private static final int[] ALL_POI_CATEGORIES = new int[] { 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11 };
-
-	/**
-	 * IDs of all existing categories for areas. (0 is default ID for empty category)
-	 */
-	private static final int[] ALL_AREA_CATEGORIES = new int[] { 1 };
+	private static int[] allPOICategories = {FOOD.getID(), FAST_FOOD.getID(), BARS_AND_PUBS.getID(),
+		CLUBS_AND_NIGHTCLUBS.getID(), SUPERMARKET.getID(), SHOP.getID(), PUBLIC_TRANSPORTATION.getID(),
+		MUSEUM.getID(), THEATRE.getID(), CINEMA.getID(), SLEEPING_ACCOMODATIONS.getID()};
 
 	/**
 	 * ID of the category.
@@ -48,9 +48,8 @@ public class Category {
 
 	/**
 	 * Constructs a new category.
-	 * 
-	 * @param id
-	 *            id of the category
+	 *
+	 * @param id id of the category
 	 */
 	public Category(int id) {
 		this.id = id;
@@ -58,7 +57,7 @@ public class Category {
 
 	/**
 	 * Returns the ID of the category.
-	 * 
+	 *
 	 * @return ID of the category
 	 */
 	public int getID() {
@@ -67,18 +66,39 @@ public class Category {
 
 	/**
 	 * Returns all existing categories of areas.
-	 * 
+	 *
 	 * @return all existing categories of areas.
 	 */
 	public static int[] getAllAreaCategories() {
-		return ALL_AREA_CATEGORIES;
+		return allAreaCategories;
 	}
 
 	/**
 	 * Returns all existing categories of POIs.
-	 * 
+	 *
 	 * @return all existing categories of POIs
 	 */
 	public static int[] getAllPOICategories() {
-		return ALL_POI_CATEGORIES;
+		return allPOICategories;
 	}
+
+	/**
+	 * Sets all existing categories of areas.
+	 *
+	 * @param areaCategories
+	 *            all existing categories of areas
+	 */
+	public static void setAllAreaCategories(int[] areaCategories) {
+		allAreaCategories = areaCategories;
+	}
+
+	/**
+	 * Sets all existing categories of POIs.
+	 *
+	 * @param poiCategories
+	 *            all existing categories of POIs
+	 */
+	public static void setAllPOICategories(int[] poiCategories) {
+		allPOICategories = poiCategories;
+	}
+}

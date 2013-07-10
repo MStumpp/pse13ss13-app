@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+
 /**
  * This class represents CrossingInformation belonging to some Coordinate.
  *
