@@ -141,7 +141,6 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "intermediate path has to be computed. Current Route end: " + this.getEnd() + ", new Route start" + newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
 			this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
-			
 		}
 		
 		newRouteCoordsIter.next();
