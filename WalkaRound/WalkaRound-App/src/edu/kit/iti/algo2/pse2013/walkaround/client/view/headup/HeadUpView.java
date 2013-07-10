@@ -159,7 +159,7 @@ public class HeadUpView extends Fragment {
 
 		lockPosition = defaultLockPosition;
 
-		headUpController.switchUserPositionLock(lockPosition);
+		headUpController.toggleUserPositionLock(lockPosition);
 
 		// -----------------------------------------------
 		Log.d(HEADUP, "initialisiere die Navigation Position");
@@ -288,7 +288,7 @@ public class HeadUpView extends Fragment {
 	 *
 	 * @param Modi
 	 */
-	public void switchUserPositionLock(boolean b) {
+	public void toggleUserPositionLock(boolean b) {
 		if (!b) {
 			userLock.setImageDrawable(unlock);
 		} else {
@@ -385,7 +385,7 @@ public class HeadUpView extends Fragment {
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(userLock)) {
 				Log.d(HEADUP_TOUCH, "UserLock wird ausgeführt");
-				headUpController.switchUserPositionLock(true);
+				headUpController.toggleUserPositionLock(true);
 			}
 			return false;
 		}

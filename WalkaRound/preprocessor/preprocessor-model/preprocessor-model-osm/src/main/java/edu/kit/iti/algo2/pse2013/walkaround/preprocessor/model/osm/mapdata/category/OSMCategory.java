@@ -3,8 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.cate
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMElement;
 
 public abstract class OSMCategory {
-	private boolean inverted;
-	private OSMCategory decorated;
+	protected boolean inverted;
+	protected OSMCategory decorated;
 	public OSMCategory() {
 		this(false);
 	}
@@ -16,4 +16,17 @@ public abstract class OSMCategory {
 		this.inverted = inverted;
 	}
 	public abstract boolean accepts(OSMElement element);
+
+
+	public static final OSMCategory getFootwayCategory() {
+		OSMTagCategory footway = new OSMTagCategory();
+		footway.addTag("highway", "footway");
+		OSMTagCategory sidewalkBoth = new OSMTagCategory();
+		sidewalkBoth.addTag("sidewalk", "both");
+		OSMTagCategory sidewalkLeft = new OSMTagCategory();
+		sidewalkBoth.addTag("sidewalk", "left");
+		OSMTagCategory sidewalkRight = new OSMTagCategory();
+		sidewalkBoth.addTag("sidewalk", "right");
+		return new OSMOrCategory(footway, new OSMOrCategory(sidewalkLeft, new OSMOrCategory(sidewalkBoth, sidewalkRight)));
+	}
 }

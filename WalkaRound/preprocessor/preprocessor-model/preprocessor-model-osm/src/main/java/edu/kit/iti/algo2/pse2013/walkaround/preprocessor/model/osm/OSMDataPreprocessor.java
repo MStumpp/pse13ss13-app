@@ -7,10 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import crosby.binary.file.BlockInputStream;
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 public class OSMDataPreprocessor {
 	private File graphDestination;
@@ -51,28 +54,42 @@ public class OSMDataPreprocessor {
 		 * Das Programm crasht sonst unter Umständen (siehe {@link crosby.binary.file.BlockinputStream}, Zeile 25).
 		 * Der InputStream muss "seekable" sein.
 		 */
-		BlockInputStream blockStream = new BlockInputStream(new FileInputStream(osmSource), new PBF_FileBlockParser(graphData, locationData));
-		blockStream.process();
-		GraphDataIO.save(graphData, graphDestination);
-		FileOutputStream fos = new FileOutputStream(locationDestination);
-		ProtobufIO.write(locationData, fos);
-		fos.flush();
-		fos.close();
-	}
-	/**
-	 *
-	 * @param c1
-	 * @param c2
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public void parseRectangle(Coordinate c1, Coordinate c2) throws FileNotFoundException, IOException {
-		GraphDataIO graphData = new GraphDataIO();
-		GraphDataIO.save(graphData, graphDestination);
+		PBF_FileBlockParser parser = new PBF_FileBlockParser(graphData, locationData);
+		do {
+			BlockInputStream blockStream = new BlockInputStream(new FileInputStream(osmSource), parser);
+			blockStream.process();
+			blockStream.close();
+		} while (parser.needsFurtherRun());
+
+		FileOutputStream graphOutput = new FileOutputStream(graphDestination);
+		ProtobufConverter.getGraphDataBuilder(graphData).build().writeTo(graphOutput);
+		graphOutput.flush();
+		graphOutput.close();
+
+		FileOutputStream locationOutput = new FileOutputStream(locationDestination);
+		ProtobufConverter.getLocationDataBuilder(locationData).build().writeTo(locationOutput);
+		locationOutput.flush();
+		locationOutput.close();
+
+		FileInputStream fis = new FileInputStream(graphDestination);
+		GraphDataIO graph = ProtobufConverter.getGraphData(SaveGraphData.parseFrom(fis));
+		fis.close();
+		System.out.println(graph.getEdges().size() + " Edges are written to the file");
+		for (Edge e : graph.getEdges()) {
+			System.out.println("Edge: " + e);
+		}
+
+		FileInputStream fis2 = new FileInputStream(locationDestination);
+		LocationDataIO location = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis2));
+		fis2.close();
+		System.out.println(location.getPOIs().size() + " POIs are written to the file");
+		for (POI p : location.getPOIs()) {
+			System.out.println("POI: " + p);
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
-		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
+		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-06-22-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
 		prep.parse();
 	}
 }

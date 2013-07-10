@@ -1,5 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
+
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;

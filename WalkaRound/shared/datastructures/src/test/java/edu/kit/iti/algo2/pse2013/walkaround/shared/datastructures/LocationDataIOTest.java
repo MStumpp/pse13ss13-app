@@ -15,8 +15,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
-//import sun.awt.X11.XErrorHandler;
+import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 /**
  * LocationDataIOTest.
@@ -49,8 +49,10 @@ public class LocationDataIOTest {
 		int size = writeLocationData.getPOIs().size();
 
 		try {
-			ProtobufIO.write(writeLocationData, new FileOutputStream(new File(
-					fileLocation)));
+			FileOutputStream fos = new FileOutputStream(fileLocation);
+			ProtobufConverter.getLocationDataBuilder(writeLocationData).build().writeTo(fos);
+			fos.flush();
+			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -62,8 +64,8 @@ public class LocationDataIOTest {
 
 		LocationDataIO readLocationData = null;
 		try {
-			ProtobufIO.readLocationData(new FileInputStream(new File(
-					fileLocation)));
+			FileInputStream fis = new FileInputStream(fileLocation);
+			readLocationData = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

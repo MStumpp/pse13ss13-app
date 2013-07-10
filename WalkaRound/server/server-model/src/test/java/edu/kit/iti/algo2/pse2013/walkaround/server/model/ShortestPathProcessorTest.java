@@ -7,6 +7,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.EmptyListOfEdgesException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.NoVertexForIDExistsException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 
 /**
  * ShortestPathProcessorTest.
