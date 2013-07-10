@@ -1,12 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * ShortestPathProcessorTest.
@@ -44,7 +44,7 @@ public class ShortestPathProcessorTest {
 
 
     @Test
-    public void testGetInstance() {
+    public void testGetInstance() throws InstantiationException {
         Graph graph = getGraph();
         Assert.assertNotNull(ShortestPathProcessor.init(graph));
         Assert.assertNotNull(ShortestPathProcessor.getInstance());
@@ -52,7 +52,7 @@ public class ShortestPathProcessorTest {
 
 
     @Test
-    public void testComputesShortestPath() {
+    public void testComputesShortestPath() throws InstantiationException {
 
         Graph graph = getGraph();
         Vertex source = null;
@@ -66,22 +66,22 @@ public class ShortestPathProcessorTest {
 
         Assert.assertNotNull(ShortestPathProcessor.init(graph));
         ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
-        RouteInfoTransfer path = null;
+        List<Vertex> route = null;
         try {
-            path = shortestPathProcessor.computeShortestPath(source, target);
+            route = shortestPathProcessor.computeShortestPath(source, target);
         } catch (NoShortestPathExistsException e) {
             e.printStackTrace();
         } catch (ShortestPathComputeException e) {
             e.printStackTrace();
         }
 
-        Assert.assertNotNull(path);
-        Assert.assertEquals(path.getCoordinates().size(), 4);
+        Assert.assertNotNull(route);
+        Assert.assertEquals(route.size(), 4);
 
-        Assert.assertEquals(((Vertex) path.getCoordinates().get(0)).getID(), 0);
-        Assert.assertEquals(((Vertex) path.getCoordinates().get(1)).getID(), 2);
-        Assert.assertEquals(((Vertex) path.getCoordinates().get(2)).getID(), 1);
-        Assert.assertEquals(((Vertex) path.getCoordinates().get(3)).getID(), 4);
+        Assert.assertEquals((route.get(0)).getID(), 0);
+        Assert.assertEquals((route.get(1)).getID(), 2);
+        Assert.assertEquals((route.get(2)).getID(), 1);
+        Assert.assertEquals((route.get(3)).getID(), 4);
     }
 
 
@@ -133,6 +133,8 @@ public class ShortestPathProcessorTest {
             graph = Graph.getInstance();
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         return graph;

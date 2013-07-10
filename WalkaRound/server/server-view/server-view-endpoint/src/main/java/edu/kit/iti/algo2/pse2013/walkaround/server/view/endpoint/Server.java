@@ -1,8 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
@@ -11,6 +11,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * This class represents the endpoint to be deployed to a JAX-WS
@@ -41,7 +42,14 @@ public class Server {
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate1 and coordinate2 must not be null");
 
-        Graph graph = Graph.getInstance();
+        Graph graph;
+        try {
+            graph = Graph.getInstance();
+        } catch (InstantiationException e) {
+            return null;
+        }
+
+        // project temporary
         Vertex source = null;
         Vertex target = null;
         try {
@@ -49,27 +57,44 @@ public class Server {
             target = graph.getVertexByID(4);
         } catch (NoVertexForIDExistsException e) {
             e.printStackTrace();
+            return null;
         }
 
         // project coordinate
-//        Vertex sourceVertex = null;
-//        Vertex targetVertex = null;
+//        Vertex source = null;
+//        Vertex target = null;
 //        try {
-//            sourceVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate1);
-//            targetVertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate2);
+//            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(new C);
+//            target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate2);
 //        } catch (GeometryProcessorException e) {
 //            e.printStackTrace();
+//            return null;
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//            return null;
 //        }
 
+        List<Vertex> route = null;
         try {
-            return ShortestPathProcessor.getInstance().computeShortestPath(source, target);
-        } catch (NoShortestPathExistsException e) {
-            e.printStackTrace();
+            route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
         } catch (ShortestPathComputeException e) {
             e.printStackTrace();
+            return null;
+        } catch (NoShortestPathExistsException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            return null;
         }
 
-        return null;
+        RouteInfoTransfer transfer = new RouteInfoTransfer();
+        for (Vertex vertex : route)
+            transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
+                    vertex.getLongitude(),
+                    new CrossingInformation(new float[]{50.f, 100.f})));
+
+        return transfer;
     }
 
 
@@ -89,9 +114,11 @@ public class Server {
     public RouteInfoTransfer computeRoundtrip(Coordinate coordinate,
                                               @PathParam("profile") String profile,
                                               @PathParam("length") String length) {
-        int profileAsInt = Integer.parseInt(profile);
-        int lengthAsInt = Integer.parseInt(length);
-        return RoundtripProcessor.getInstance().computeRoundtrip(coordinate, profileAsInt, lengthAsInt);
+//        int profileAsInt = Integer.parseInt(profile);
+//        int lengthAsInt = Integer.parseInt(length);
+//        return RoundtripProcessor.getInstance().computeRoundtrip(coordinate, profileAsInt, lengthAsInt);        RouteInfoTransfer transfer = new RouteInfoTransfer();
+        RouteInfoTransfer transfer = new RouteInfoTransfer();
+        return transfer;
     }
 
 
@@ -107,7 +134,9 @@ public class Server {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public RouteInfoTransfer computeOptimizedRoute(RouteInfoTransfer routeInfoTransfer) {
-        return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
+//        return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
+        RouteInfoTransfer transfer = new RouteInfoTransfer();
+        return transfer;
     }
 
 }

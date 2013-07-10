@@ -1,15 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * ShortestPathProcessor which takes two Coordinates and computes the shortest path between
@@ -73,10 +69,11 @@ public class ShortestPathProcessor {
      * Instantiates and/or returns a singleton instance of ShortestPathProcessor.
      *
      * @return ShortestPathProcessor.
+     * @throws InstantiationException If not instantiated before.
      */
-    public static ShortestPathProcessor getInstance() {
+    public static ShortestPathProcessor getInstance() throws InstantiationException {
         if (instance == null)
-            throw new IllegalArgumentException("singleton must be initialized first");
+            throw new InstantiationException("singleton must be initialized first");
         return instance;
     }
 
@@ -107,8 +104,8 @@ public class ShortestPathProcessor {
      * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
      * @throws ShortestPathComputeException If something during computation goes wrong.
      */
-    public RouteInfoTransfer computeShortestPath(Vertex source,
-                                                 Vertex target)
+    public List<Vertex> computeShortestPath(Vertex source,
+                                            Vertex target)
             throws NoShortestPathExistsException, ShortestPathComputeException {
         if (source == null || target == null)
             throw new IllegalArgumentException("source and target must be provided");
@@ -119,7 +116,7 @@ public class ShortestPathProcessor {
             sourceVertex = graph.getVertexByID(source.getID());
             targetVertex = graph.getVertexByID(target.getID());
         } catch (NoVertexForIDExistsException e) {
-            throw new ShortestPathComputeException("source and/or target provided not in graph contained");
+            throw new ShortestPathComputeException("source and/or target vertex provided not in graph contained");
         }
 
         if (sourceVertex == null || targetVertex == null)
@@ -166,25 +163,23 @@ public class ShortestPathProcessor {
         }
 
         // get the list of coordinates
-        LinkedList<Coordinate> result = new LinkedList<Coordinate>();
-        result.add(targetVertex);
+        LinkedList<Vertex> route = new LinkedList<Vertex>();
+        route.add(targetVertex);
         Vertex currentParent = targetVertex.getParent();
         while (currentParent != null && !currentParent.equals(sourceVertex)) {
-            result.addFirst(currentParent);
+            route.addFirst(currentParent);
             currentParent = currentParent.getParent();
         }
         if (currentParent != null)
-            result.addFirst(currentParent);
+            route.addFirst(currentParent);
 
         // throw exception if not shortest path exists
-        if (result.size() == 1)
+        if (route.size() == 1)
             throw new NoShortestPathExistsException("no shortest path exists "
                     + "between source vertex with id: "
                     + sourceVertex.getID() + " and target vertex with id: "
                     + targetVertex.getID());
 
-        // set up route transfer and return
-        RouteInfoTransfer route = new RouteInfoTransfer(result);
         return route;
     }
 

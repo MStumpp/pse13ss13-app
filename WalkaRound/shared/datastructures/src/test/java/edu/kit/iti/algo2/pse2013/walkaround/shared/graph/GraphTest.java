@@ -27,16 +27,17 @@ public class GraphTest {
 
 
     @Test
-    public void testSandAndLoad() {
+    public void testSAndLoad() {
 
         GraphDataIO graphDataIO = getGraphDataIO();
-        Graph graph;
+        Graph graph = null;
         try {
             Graph.init(graphDataIO.getEdges());
             graph = Graph.getInstance();
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
-            return;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
 
         try {

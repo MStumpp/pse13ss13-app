@@ -34,10 +34,11 @@ public class GeometryProcessor {
      * Returns a singleton instance of GeometryProcessor if available.
      *
      * @return GeometryProcessor.
+     * @throws InstantiationException If not instantiated
      */
-    public static GeometryProcessor getInstance() {
+    public static GeometryProcessor getInstance() throws InstantiationException {
         if (instance == null)
-            throw new IllegalArgumentException("singleton must be initialized first");
+            throw new InstantiationException("singleton must be initialized first");
         return instance;
     }
 
