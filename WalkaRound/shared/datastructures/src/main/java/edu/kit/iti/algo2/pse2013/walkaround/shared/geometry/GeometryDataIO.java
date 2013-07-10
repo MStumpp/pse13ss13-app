@@ -1,6 +1,15 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
@@ -12,11 +21,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
  * @version 1.0
  */
 public class GeometryDataIO implements Serializable {
-
-    /**
-     * Temporary Serial version ID as long as Java serialization is used
-     */
-    private static final long serialVersionUID = 3394680623853287035L;
 
 
     /**
@@ -77,10 +81,10 @@ public class GeometryDataIO implements Serializable {
      * @throws java.io.IOException
      */
     public static void save(GeometryDataIO objectToSave, File destination) throws IOException {
-//        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-//        ProtobufConverter.getGeometryDataBuilder(objectToSave).build().writeTo(out);
-//        out.flush();
-//        out.close();
+        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+        ProtobufConverter.getGeometryDataBuilder(objectToSave).build().writeTo(out);
+        out.flush();
+        out.close();
     }
 
 
@@ -97,5 +101,4 @@ public class GeometryDataIO implements Serializable {
         in.close();
         return geom;
     }
-
 }
