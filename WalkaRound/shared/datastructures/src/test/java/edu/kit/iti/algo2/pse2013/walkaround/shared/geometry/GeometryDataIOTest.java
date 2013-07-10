@@ -1,23 +1,16 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.lang.reflect.Field;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * GeometryDataIOTest.
@@ -46,7 +39,6 @@ public class GeometryDataIOTest {
     public void testSandAndLoad() {
 		GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
 		int numDimensions = writeGeometryDataIO.getNumDimensions();
-
 		try {
 			GeometryDataIO.save(writeGeometryDataIO, file);
 		} catch (FileNotFoundException e) {
@@ -59,7 +51,7 @@ public class GeometryDataIOTest {
 
 		GeometryDataIO readGeometryDataIO = null;
 		try {
-			GeometryDataIO.load(file);
+			readGeometryDataIO = GeometryDataIO.load(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
