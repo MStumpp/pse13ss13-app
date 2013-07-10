@@ -97,7 +97,7 @@ public class GraphDataIO {
      * @throws java.io.IOException
      * @throws ClassNotFoundException
      */
-    public static GraphDataIO load(File source) throws IOException, ClassNotFoundException {
+    public static GraphDataIO load(File source) throws IOException {
         InputStream in = new BufferedInputStream(new FileInputStream(source));
         GraphDataIO geom = ProtobufConverter.getGraphData(Protos.SaveGraphData.parseFrom(in));
         in.close();
