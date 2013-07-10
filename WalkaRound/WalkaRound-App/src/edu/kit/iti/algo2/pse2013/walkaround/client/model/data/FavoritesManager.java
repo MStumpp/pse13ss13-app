@@ -1,15 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import android.content.Context;
+import android.util.Log;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -21,6 +24,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
  * @version 1.0
  */
 public class FavoritesManager implements Serializable {
+
+	private static final String TAG_FAVORITE_MANAGER = FavoritesManager.class
+			.getSimpleName();
 
 	/**
 	 * Serialization ID.
@@ -42,10 +48,9 @@ public class FavoritesManager implements Serializable {
 	 */
 	private HashMap<String, Location> savedLocations;
 
-	/**
-	 * Location where the favorites manager is saved.
-	 */
-	private final File SAVE_LOCATION = new File("");
+	private static Context applicationContext;
+
+	private final static String FILENAME = "Favorites_Save";
 
 	/**
 	 * Constructs a new manager for the favorites.
@@ -55,6 +60,10 @@ public class FavoritesManager implements Serializable {
 		savedLocations = new HashMap<String, Location>();
 	}
 
+	public static void initialize(Context context) {
+		applicationContext = context.getApplicationContext();
+	}
+
 	/**
 	 * Singleton getInstance method.
 	 * 
@@ -62,6 +71,19 @@ public class FavoritesManager implements Serializable {
 	 */
 	public static FavoritesManager getInstance() {
 		if (instance == null) {
+			try {
+				FileInputStream fis = applicationContext
+						.openFileInput(FILENAME);
+				ObjectInputStream oos = new ObjectInputStream(fis);
+				instance = (FavoritesManager) oos.readObject();
+				return instance;
+			} catch (FileNotFoundException e) {
+				Log.d(TAG_FAVORITE_MANAGER, e.toString());
+			} catch (IOException ioe) {
+				Log.d(TAG_FAVORITE_MANAGER, ioe.toString());
+			} catch (ClassNotFoundException cnfe) {
+				Log.d(TAG_FAVORITE_MANAGER, cnfe.toString());
+			}
 			instance = new FavoritesManager();
 		}
 		return instance;
@@ -146,7 +168,7 @@ public class FavoritesManager implements Serializable {
 		try {
 			savedRoutes.remove(index);
 			try {
-				save(this, SAVE_LOCATION);
+				save(this);
 			} catch (FileNotFoundException fnfe) {
 				fnfe.printStackTrace();
 			} catch (IOException e) {
@@ -171,7 +193,7 @@ public class FavoritesManager implements Serializable {
 		try {
 			savedLocations.remove(index);
 			try {
-				save(this, SAVE_LOCATION);
+				save(this);
 			} catch (FileNotFoundException fnfe) {
 				fnfe.printStackTrace();
 			} catch (IOException e) {
@@ -197,7 +219,7 @@ public class FavoritesManager implements Serializable {
 		if (!savedRoutes.containsKey(name)) {
 			savedRoutes.put(name, routeToSave);
 			try {
-				save(this, SAVE_LOCATION);
+				save(this);
 			} catch (FileNotFoundException fnfe) {
 				fnfe.printStackTrace();
 			} catch (IOException e) {
@@ -222,7 +244,7 @@ public class FavoritesManager implements Serializable {
 		if (!savedLocations.containsKey(name)) {
 			savedLocations.put(name, locationToSave);
 			try {
-				save(this, SAVE_LOCATION);
+				save(this);
 			} catch (FileNotFoundException fnfe) {
 				fnfe.printStackTrace();
 			} catch (IOException e) {
@@ -264,11 +286,12 @@ public class FavoritesManager implements Serializable {
 	 *            Location of output file on file system.
 	 * @throws java.io.IOException
 	 */
-	private void save(FavoritesManager objectToSave, File destination)
+	private void save(FavoritesManager objectToSave)
 			throws FileNotFoundException, IOException {
-		ObjectOutputStream oos = new ObjectOutputStream(
-				new BufferedOutputStream(new FileOutputStream(destination)));
-		oos.writeObject(objectToSave);
+		FileOutputStream fos = applicationContext.openFileOutput(FILENAME,
+				Context.MODE_PRIVATE);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(this);
 		oos.flush();
 		oos.close();
 	}
