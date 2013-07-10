@@ -13,5 +13,7 @@
     <modules>
   	    <module>server-view-admin</module>
   	    <module>server-view-endpoint</module>
+        <module>server-view-tomcat</module>
+        <module>server-view-heroku</module>
     </modules>
 </project>
