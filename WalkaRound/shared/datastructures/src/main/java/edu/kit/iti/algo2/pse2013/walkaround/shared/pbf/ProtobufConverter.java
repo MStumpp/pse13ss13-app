@@ -76,7 +76,7 @@ public class ProtobufConverter {
 		if (saveEdge == null) {
 			return null;
 		}
-		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()), saveEdge.getOSMID());
+		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()));
 		e.setLength(saveEdge.getLength());
 		return e;
 	}
