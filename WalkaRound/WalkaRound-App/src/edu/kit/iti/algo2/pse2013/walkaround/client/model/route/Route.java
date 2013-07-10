@@ -58,13 +58,16 @@ public class Route implements RouteInfo {
 	 * Moves the coordinate represented by the active waypoint to the given waypoint-position within the route.
 	 */
 	public void moveActiveWaypointInOrder(int newPos) {
-		Log.d(TAG_ROUTE, "moveActiveWaypointInOrder(int)");
-		// TODO:
+		Log.d(TAG_ROUTE, "moveActiveWaypointInOrder(" + newPos + ")");
 		
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Waypoint activeWaypoint = this.activeWaypoint;
 		
-		assert (newPos > 0 && newPos <= waypoints.size());
+		// TODO: bestimme vorherigen und nächsten WP an neuer Position
+		
+		
+		
+		assert (newPos >= 0 && newPos <= waypoints.size());
 		
 		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
 		waypoints.add(newPos, activeWaypoint);
