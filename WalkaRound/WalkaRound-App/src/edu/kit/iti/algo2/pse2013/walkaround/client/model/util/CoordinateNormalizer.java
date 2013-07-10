@@ -37,6 +37,8 @@ public final class CoordinateNormalizer {
 			return (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coord);
 		} catch (GeometryProcessorException e) {
 			Log.d(TAG_COORDINATENORMALIZER, e.toString());
+		} catch (InstantiationException e) {
+			Log.d(TAG_COORDINATENORMALIZER, e.toString());
 		}
 		return null;
 	}

@@ -26,9 +26,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This Class controls the data flow between the System and the real View.
- *
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class MapController implements RouteListener, PositionListener {
 
@@ -69,9 +69,8 @@ public class MapController implements RouteListener, PositionListener {
 	/**
 	 * DisplayCoordinats to draw he Lines
 	 */
-	//TODO Es gibt anscheinend zwei Methoden Wegpunkte zu bekommen es muss noch unterschieden werden welche zum Routen zeichnen welche zum Wegpunkt zeichnen benutzt werden.
-	@SuppressWarnings("unused")
 	private List<DisplayCoordinate> lines;
+	RouteInfo currentRoute;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -79,7 +78,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 *
+	 * 
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
@@ -93,7 +92,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 *
+	 * 
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
@@ -110,7 +109,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * private Constructor of the Map Controller
-	 *
+	 * 
 	 * @param mv
 	 *            the required MapView
 	 */
@@ -154,7 +153,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Gives back the current Level of Detail.
-	 *
+	 * 
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -163,7 +162,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Gives the current Route back.
-	 *
+	 * 
 	 * @return current Route
 	 */
 	public List<DisplayCoordinate> getCurrentRouteLines() {
@@ -176,7 +175,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Forward the Bitmap of the current Map
-	 *
+	 * 
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
@@ -187,7 +186,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Forward the Bitmap of the Route
-	 *
+	 * 
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
@@ -203,38 +202,37 @@ public class MapController implements RouteListener, PositionListener {
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 *
+	 * 
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
 	 *            the y delta distance
 	 */
 	public void onShift(float distanceX, float distanceY) {
-		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : " + distanceY);
+		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : "
+				+ distanceY);
 		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
-		if (displayPoints != null) {
-			this.mapModel.drawDisplayCoordinates(lines);
-			this.mapView.updateDisplayWaypoints(displayPoints);
-		}
+		this.updateRouteOverlay();
 	}
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
 	 *            the DisplayCoordinate
 	 */
 	public void onZoom(float delta, DisplayCoordinate dc) {
-		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
-				+ " to " + dc.toString() + " will be forwarding to MapModel");
+		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
+				+ dc.toString() + " will be forwarding to MapModel");
 		this.mapModel.zoom(delta, dc);
+		this.updateRouteOverlay();
 	}
 
 	/**
 	 * Zoom by a delta.
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
@@ -242,8 +240,8 @@ public class MapController implements RouteListener, PositionListener {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
 				+ " will be forwarding to MapModel");
 		this.mapModel.zoom(delta);
+		this.updateRouteOverlay();
 	}
-
 
 	/*
 	 * -----------------Calls to Map Controller-----------------
@@ -276,76 +274,76 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Creates a new Point.
-	 *
+	 * 
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
 	public void onCreatePoint(DisplayCoordinate dc) {
 		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
-		
+
 		Coordinate next = CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
 						mapModel.getUpperLeft(),
 						mapModel.getCurrentLevelOfDetail());
 		try {
 			// TODO lösche int wenn der normelizer korreckt ist
-			CoordinateNormalizer.normalizeCoordinate(next,(int) this.getCurrentLevelOfDetail());
-		} catch (IllegalArgumentException e){
-			Log.e(TAG_MAP_CONTROLLER, "Coordinate konnte nicht normalisiert werden!");
+			CoordinateNormalizer.normalizeCoordinate(next,
+					(int) this.getCurrentLevelOfDetail());
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG_MAP_CONTROLLER,
+					"Coordinate konnte nicht normalisiert werden!");
 		}
-		this.routeController.addWaypoint(new Waypoint(next.getLatitude(),next.getLongitude(),"PLACEHOLDER"));
+		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next
+				.getLongitude(), "PLACEHOLDER"));
 	}
-
 
 	/*
 	 * -----------------Implemented Listener-----------------
 	 */
 
+	/**
+	 * Helper Method that updateRouteOverlay
+	 */
+	private void updateRouteOverlay() {
+
+		try {
+			this.lines = CoordinateUtility
+					.extractDisplayCoordinatesOutOfRouteInfo(currentRoute,
+							this.mapModel.getUpperLeft(),
+							this.mapModel.getCurrentLevelOfDetail());
+
+			this.displayPoints = CoordinateUtility
+					.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
+							this.mapModel.getUpperLeft(),
+							this.mapModel.getCurrentLevelOfDetail());
+
+			/*
+			 * this.lines.clear(); this.displayPoints.clear();
+			 * this.lines.add(new DisplayCoordinate( 100, 100));
+			 * this.lines.add(new DisplayCoordinate( 150, 150));
+			 * this.lines.add(new DisplayCoordinate( 300, 600));
+			 * this.lines.add(new DisplayCoordinate( 350, 700));
+			 * this.lines.add(new DisplayCoordinate( 800, 400));
+			 * this.displayPoints.add(new DisplayWaypoint(100,100,1));
+			 * this.displayPoints.add(new DisplayWaypoint(300,600,2));
+			 * this.displayPoints.add(new DisplayWaypoint(800,400,3));
+			 */
+
+			mapView.updateDisplayWaypoints(displayPoints);
+			// mapView.setActive(2);
+			mapModel.drawDisplayCoordinates(lines);
+			mapView.setActive(currentRoute.getActiveWaypoint().getId());
+		} catch (NullPointerException e) {
+			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
+		}
+	}
+
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
-		// LinkedList<Waypoint> waypointList = currentRoute.getWaypoints();
 
-		if (currentRoute.getWaypoints() == null) {
-			return;
-		}
-
-		Log.d("TAG_MAPVIEW_DRAW", "current Route Anzahl "
-				+ currentRoute.getWaypoints().size());
-
-		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
-				currentRoute, this.mapModel.getUpperLeft(),
-				this.mapModel.getCurrentLevelOfDetail());
-
-		this.displayPoints = CoordinateUtility.extractDisplayWaypointsOutOfRouteInfo(
-				currentRoute, this.mapModel.getUpperLeft(),
-				this.mapModel.getCurrentLevelOfDetail());
-		
-		
-		Log.d("TAG_MAPVIEW_DRAW", "current Waypoint Amount "
-				+ displayPoints.size());
-
-		Log.d("TAG_MAPVIEW_DRAW", "current Coordinate Amount "
-				+ lines.size());
-		
-		/*
-		this.lines.clear();
-		this.displayPoints.clear();
-		this.lines.add(new DisplayCoordinate( 100, 100));
-		this.lines.add(new DisplayCoordinate( 150, 150));
-		this.lines.add(new DisplayCoordinate( 300, 600));
-		this.lines.add(new DisplayCoordinate( 350, 700));
-		this.lines.add(new DisplayCoordinate( 800, 400));
-		this.displayPoints.add(new DisplayWaypoint(100,100,1));
-		this.displayPoints.add(new DisplayWaypoint(300,600,2));
-		this.displayPoints.add(new DisplayWaypoint(800,400,3));
-		*/
-		
-		mapView.updateDisplayWaypoints(displayPoints);
-		mapView.setActive(activeWaypoint.getId());
-		//mapView.setActive(2);
-		mapModel.drawDisplayCoordinates(lines);
-
+		this.currentRoute = currentRoute;
+		updateRouteOverlay();
 	}
 
 	@Override
@@ -353,6 +351,17 @@ public class MapController implements RouteListener, PositionListener {
 		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * forwards a set active action to route controller
+	 * @param id of the waypoint
+	 * 
+	 */
+	public void setActive(int id) {
+		//TODO route muss id als actove setzen lassen
+		//this.routeController.setActiveWaypoint(id);
+		
 	}
 
 }
