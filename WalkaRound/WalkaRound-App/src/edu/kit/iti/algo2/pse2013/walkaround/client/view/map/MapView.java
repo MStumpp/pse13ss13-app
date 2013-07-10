@@ -114,7 +114,7 @@ public class MapView extends Activity {
 
 	Point size;
 
-	public Point getDisplaySize(){
+	public Point getDisplaySize() {
 		return size;
 	}
 
@@ -211,25 +211,24 @@ public class MapView extends Activity {
 				Bitmap.Config.ARGB_8888);
 		routeOverlayBitmap.prepareToDraw();
 		/*
-		 * Log.d(TAG_MAPVIEW,
-		 * "ein paar DisplayCoordinaten werden hinzugef�gt");
+		 * Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
 		 * DisplayWaypoint[] list = new DisplayWaypoint[4]; list[0] = new
 		 * DisplayWaypoint(-50, 550, 1); list[1] = new DisplayWaypoint(250, 700,
 		 * 2); list[2] = new DisplayWaypoint(500, 800, 3); list[3] = new
 		 * DisplayWaypoint(300, 900, 4);
-		 *
+		 * 
 		 * this.updateDisplayCoordinate(list);
 		 */
 		/*
 		 * updateDisplayCoordinate(list);
-		 *
+		 * 
 		 * /* Log.d(TAG_MAPVIEW,
-		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[]
-		 * list2 = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4);
-		 * list2[1] = new DisplayPOI(450, 400, 5); list2[2] = new
-		 * DisplayPOI(700, 500, 6);
-		 *
-		 *
+		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[] list2
+		 * = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4); list2[1]
+		 * = new DisplayPOI(450, 400, 5); list2[2] = new DisplayPOI(700, 500,
+		 * 6);
+		 * 
+		 * 
 		 * updateDisplayCoordinate(list2);
 		 */
 
@@ -253,14 +252,14 @@ public class MapView extends Activity {
 
 	/**
 	 * Updatet die Karte
-	 *
+	 * 
 	 * @param b
 	 */
 	public void updateMapImage(final Bitmap b) {
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-				if(!b.isRecycled()){
+				if (!b.isRecycled()) {
 					map.setImageBitmap(b);
 					map.setVisibility(View.VISIBLE);
 				}
@@ -269,7 +268,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param b
 	 */
 	public void updateRouteOverlayImage(final Bitmap b) {
@@ -280,7 +279,7 @@ public class MapView extends Activity {
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-				if(!b.isRecycled()){
+				if (!b.isRecycled()) {
 					routeOverlay.setImageBitmap(b);
 					routeOverlay.setVisibility(View.VISIBLE);
 				}
@@ -295,7 +294,7 @@ public class MapView extends Activity {
 	float fromY;
 
 	/**
-	 *
+	 * 
 	 * @param dip
 	 * @return
 	 */
@@ -309,7 +308,7 @@ public class MapView extends Activity {
 
 	// DisplayWaypoint[] dw;
 
-	public void updateDisplayCoordinate(final List<DisplayWaypoint> displayPoints) {
+	public void updateDisplayWaypoints(final List<DisplayWaypoint> displayPoints) {
 
 		// fromX = dw[0].getX();
 		updateDisplayWaypoint(displayPoints);
@@ -335,31 +334,30 @@ public class MapView extends Activity {
 				userY = y;
 			}
 		});
-		this.setUserPositionOverlayImage(new DisplayCoordinate(userX,userY), 0);
+		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY), 0);
 	}
 
 	/**
-	 *
-	 *
+	 * 
+	 * 
 	 * @param displayPoints
 	 */
 	private void updateDisplayWaypoint(final List<DisplayWaypoint> displayPoints) {
 
 		final Context context = this;
 
-		if(displayPoints == null){
+		if (displayPoints == null) {
 			return;
 		}
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-				routeList.removeAllViews();
 				currentActive = null;
+				routeList.removeAllViews();
 
 				fromX = displayPoints.get(0).getX();
 				fromY = displayPoints.get(0).getY();
 				Log.d("TAG_MAPVIEW_DRAW", "Anzahl " + displayPoints.size());
-
 
 				for (DisplayWaypoint value : displayPoints) {
 					Log.d("TAG_MAPVIEW_DRAW", "x " + value.getX());
@@ -408,12 +406,12 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param dp
 	 */
 	public void updateDisplayCoordinate(DisplayPOI[] dp) {
-		poiList.removeAllViews();
 		currentActive = null;
+		poiList.removeAllViews();
 
 		for (DisplayPOI value : dp) {
 			ImageView iv = new ImageView(this);
@@ -430,59 +428,72 @@ public class MapView extends Activity {
 
 	/**
 	 * Setzt einen neuen Punkt aktive
-	 *
+	 * 
 	 * @param id
 	 */
 	public void setActive(int id) {
 		// TODO is equal von Location pr�fen
+		Log.d("lol", "jo " + id);
 
 		if (currentActive != null) {
 			if (currentActive.getDrawable().equals(flagActive)) {
 				currentActive.setImageDrawable(flag);
-				return;
+
 			}
+			
 			if (currentActive.getDrawable().equals(flagTargetActive)) {
 				currentActive.setImageDrawable(flagTarget);
-				return;
+
 			}
+			
 			if (currentActive.getDrawable().equals(waypointActive)) {
 				currentActive.setImageDrawable(waypoint);
-				return;
+
 			}
 		}
 
-		for (int a = 0; a < routeList.getChildCount(); a++) {
+		boolean found = false;
+		
+		for (int a = 0; a < routeList.getChildCount() && !found; a++) {
 			if (routeList.getChildAt(a).getTag().equals(id)) {
+				Log.d("lol", "found! " + id);
 				currentActive = (ImageView) routeList.getChildAt(a);
+				
 				if (currentActive.getDrawable().equals(flag)) {
 					currentActive.setImageDrawable(flagActive);
-					return;
-				}
-				if (currentActive.getDrawable().equals(flagTarget)) {
-					currentActive.setImageDrawable(flagTargetActive);
-					return;
-				}
-				if (currentActive.getDrawable().equals(waypoint)) {
-					currentActive.setImageDrawable(waypointActive);
-					return;
+					Log.d("lol", "found1! " + id);
 
 				}
+
+				if (currentActive.getDrawable().equals(flagTarget)) {
+					currentActive.setImageDrawable(flagTargetActive);
+					Log.d("lol", "found2! " + id);
+
+				}
+
+				if (currentActive.getDrawable().equals(waypoint)) {
+					currentActive.setImageDrawable(waypointActive);
+					Log.d("lol", "found3! " + id);
+
+				}
+				found = true;
 			}
 		}
 	}
 
 	/**
 	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
-	 *
+	 * 
 	 * @param coor
 	 *            Zielkoordinate
 	 * @param degree
 	 *            Rotation
 	 * @return
 	 */
-	private void setUserPositionOverlayImage(DisplayCoordinate coor, float degree) {
+	private void setUserPositionOverlayImage(DisplayCoordinate coor,
+			float degree) {
 
-		//Log.d("wtf2",""+(coor == null));
+		// Log.d("wtf2",""+(coor == null));
 
 		AnimatorSet set = new AnimatorSet();
 
@@ -509,7 +520,6 @@ public class MapView extends Activity {
 		set.setStartDelay(startDelay);
 		startDelay += 1000;
 		set.start();
-
 
 	}
 
@@ -566,9 +576,9 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class MyGestureDetector implements OnGestureListener {
 
@@ -677,9 +687,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -702,7 +712,7 @@ public class MapView extends Activity {
 				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
 				 * startY = event.getY(); return
 				 * gestureDetector.onTouchEvent(event); }
-				 *
+				 * 
 				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
 				 * (Math.abs(startX-event.getX())) > 100 ||
 				 * (Math.abs(startY-event.getY())) > 100) &&
@@ -720,9 +730,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class RouteOverlayTouchEventListener implements OnTouchListener {
 
@@ -738,9 +748,9 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
@@ -764,6 +774,5 @@ public class MapView extends Activity {
 			return false;
 		}
 	}
-
 
 }

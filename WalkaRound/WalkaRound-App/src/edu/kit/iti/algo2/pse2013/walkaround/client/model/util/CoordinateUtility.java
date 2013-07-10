@@ -199,7 +199,7 @@ public final class CoordinateUtility {
 	 *            the required RouteInfo
 	 * @return DisplayWaypoints
 	 */
-	public List<DisplayCoordinate> extractCoordinatesOutOfRouteInfo(
+	public static List<DisplayCoordinate> extractDisplayCoordinatesOutOfRouteInfo(
 			RouteInfo currentRoute, Coordinate upperLeft, float levelOfDetail) {
 
 		LinkedList<DisplayCoordinate> dw = new LinkedList<DisplayCoordinate>();
@@ -207,7 +207,7 @@ public final class CoordinateUtility {
 		for (Coordinate value : currentRoute.getCoordinates()) {
 
 			float x = (float) (value.getLongitude() - upperLeft.getLongitude());
-			float y = (float) (value.getLatitude() - upperLeft.getLatitude());
+			float y = (float) (upperLeft.getLatitude() - value.getLatitude()) ;
 
 			dw.add(new DisplayCoordinate(
 
