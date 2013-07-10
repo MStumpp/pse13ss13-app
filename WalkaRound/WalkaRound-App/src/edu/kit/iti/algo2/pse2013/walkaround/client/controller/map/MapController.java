@@ -4,13 +4,10 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 import java.util.LinkedList;
 import java.util.List;
 
-//Android library
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
-
-//Walkaround library
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
@@ -23,12 +20,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+//Android library
+//Walkaround library
 
 /**
  * This Class controls the data flow between the System and the real View.
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapController implements RouteListener, PositionListener {
 
@@ -60,7 +59,7 @@ public class MapController implements RouteListener, PositionListener {
 	 * permanent class variables
 	 */
 	private boolean lockUserPosition = true;
-	
+
 	/**
 	 * DisplayWaypoints to display the Display Points
 	 */
@@ -72,14 +71,14 @@ public class MapController implements RouteListener, PositionListener {
 	//TODO Es gibt anscheinend zwei Methoden Wegpunkte zu bekommen es muss noch unterschieden werden welche zum Routen zeichnen welche zum Wegpunkt zeichnen benutzt werden.
 	@SuppressWarnings("unused")
 	private List<DisplayWaypoint> lines;
-	
+
 	/*
 	 * -----------------Initialization-----------------
 	 */
-	
+
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 * 
+	 *
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
@@ -93,7 +92,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 * 
+	 *
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
@@ -107,10 +106,10 @@ public class MapController implements RouteListener, PositionListener {
 	/*
 	 * -----------------Constructor-----------------
 	 */
-	
+
 	/**
 	 * private Constructor of the Map Controller
-	 * 
+	 *
 	 * @param mv
 	 *            the required MapView
 	 */
@@ -120,7 +119,7 @@ public class MapController implements RouteListener, PositionListener {
 
 		this.mapView = mv;
 		Point size = mv.getDisplaySize();
-		
+
 		Log.d(TAG_MAP_CONTROLLER, "Initialice List of Display Points!");
 		displayPoints = new LinkedList<DisplayWaypoint>();
 
@@ -143,7 +142,7 @@ public class MapController implements RouteListener, PositionListener {
 	/*
 	 * -----------------Getter Methods-----------------
 	 */
-	
+
 	/**
 	 * Gives the current Pull Up View back.
 	 */
@@ -153,7 +152,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Gives back the current Level of Detail.
-	 * 
+	 *
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -162,20 +161,20 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Gives the current Route back.
-	 * 
+	 *
 	 * @return current Route
 	 */
 	public List<DisplayWaypoint> getCurrentRoute() {
 		return this.displayPoints;
 	}
-	
+
 	/*
 	 * -----------------Forwarding To MapView-----------------
 	 */
-	
+
 	/**
 	 * Forward the Bitmap of the current Map
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
@@ -186,7 +185,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Forward the Bitmap of the Route
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
@@ -198,11 +197,11 @@ public class MapController implements RouteListener, PositionListener {
 	/*
 	 * -----------------Forwarding To MapModel-----------------
 	 */
-	
+
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 * 
+	 *
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
@@ -219,7 +218,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
@@ -233,7 +232,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Zoom by a delta.
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
@@ -247,7 +246,7 @@ public class MapController implements RouteListener, PositionListener {
 	/*
 	 * -----------------Calls to Map Controller-----------------
 	 */
-	
+
 	/**
 	 * Switch UserLock between true and false.
 	 */
@@ -264,7 +263,7 @@ public class MapController implements RouteListener, PositionListener {
 	/*
 	 * -----------------Forwarding To Route Controller-----------------
 	 */
-	
+
 	/**
 	 * Delete the Active Waypoint
 	 */
@@ -275,7 +274,7 @@ public class MapController implements RouteListener, PositionListener {
 
 	/**
 	 * Creates a new Point.
-	 * 
+	 *
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
@@ -291,7 +290,7 @@ public class MapController implements RouteListener, PositionListener {
 	/*
 	 * -----------------Implemented Listener-----------------
 	 */
-	
+
 	@Override
 	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
@@ -310,7 +309,7 @@ public class MapController implements RouteListener, PositionListener {
 
 		mapView.updateDisplayCoordinate(displayPoints);
 		mapModel.drawDisplayCoordinates(displayPoints);
-		
+
 		// TODO Auto-generated method stub
 		// mapView.setActive(activeWaypoint.getId());
 

@@ -14,11 +14,11 @@ import crosby.binary.Osmformat.Relation;
 import crosby.binary.Osmformat.Way;
 import crosby.binary.file.BlockReaderAdapter;
 import crosby.binary.file.FileBlockPosition;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMTagCategory;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
 	private static final short STATE_FIND_NEEDED_NODES = 0;
