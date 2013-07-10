@@ -16,7 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
-import sun.awt.X11.XErrorHandler;
+//import sun.awt.X11.XErrorHandler;
 
 /**
  * LocationDataIOTest.
