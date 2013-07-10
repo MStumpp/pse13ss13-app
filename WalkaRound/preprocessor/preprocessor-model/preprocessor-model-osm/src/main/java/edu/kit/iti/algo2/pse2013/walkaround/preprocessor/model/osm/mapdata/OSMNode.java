@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.graph.Vertex;
-
 
 public class OSMNode extends OSMElement {
 
