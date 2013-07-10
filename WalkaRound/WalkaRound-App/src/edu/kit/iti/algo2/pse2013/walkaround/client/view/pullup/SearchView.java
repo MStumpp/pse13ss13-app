@@ -21,13 +21,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenu
 
 public class SearchView extends Fragment {
 
-	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupSearchSwitcher;
 
-	SearchMenuController searchMenuController;
+	private SearchMenuController searchMenuController;
 
-	TabHost tabHost;
+	private TabHost tabHost;
 
 	private TextView postalCode;
 	private TextView city;

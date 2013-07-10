@@ -17,7 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 
 public class RoundTripView extends Fragment {
 
-	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private final int MAXIMUM_LENGTH_ROUNDTRIP = 5000;
 
@@ -29,7 +29,7 @@ public class RoundTripView extends Fragment {
 
 	private int switcher = R.id.pullupRoundtripSwitcher;
 
-	RouteController routeController;
+	private RouteController routeController;
 
 	private NumberPicker np;
 
