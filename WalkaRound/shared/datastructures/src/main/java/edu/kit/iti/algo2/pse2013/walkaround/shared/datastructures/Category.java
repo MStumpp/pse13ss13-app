@@ -49,8 +49,7 @@ public class Category {
 	/**
 	 * Constructs a new category.
 	 *
-	 * @param id
-	 *            id of the category
+	 * @param id id of the category
 	 */
 	public Category(int id) {
 		this.id = id;
