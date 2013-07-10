@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.GraphDataIO;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.TreeMultiset;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
-import java.util.*;
 
 /**
  * This class takes some graph and location data and provides an api to query some

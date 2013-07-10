@@ -10,6 +10,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -37,7 +38,6 @@ public class GeometryDataPreprocessorTest {
         idCounter.setAccessible(true);
         idCounter.setInt(null, 0);
     }
-
 
     @Test
     public void testPreprocessGraphDataIO() {
