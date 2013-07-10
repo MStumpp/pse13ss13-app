@@ -1,8 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,10 +40,11 @@ public class OptimizeRouteProcessor {
      * Instantiates and/or returns a singleton instance of OptimizeRouteProcessor.
      *
      * @return OptimizeRouteProcessor.
+     * @throws InstantiationException If not instantiated before.
      */
-    public static OptimizeRouteProcessor getInstance() {
+    public static OptimizeRouteProcessor getInstance() throws InstantiationException {
         if (instance == null)
-            throw new IllegalArgumentException("singleton must be initialized first");
+            throw new InstantiationException("singleton must be initialized first");
         return instance;
     }
 
@@ -69,18 +68,19 @@ public class OptimizeRouteProcessor {
     /**
      * Computes an optimized route based on a given route.
      *
-     * @param routeInfoTransfer The route to be optimized.
+     * @param vertices The route to be optimized.
      * @return RouteInfoTransfer.
      */
-    public RouteInfoTransfer computeOptimizedRoute(RouteInfoTransfer routeInfoTransfer) {
-        if (routeInfoTransfer == null)
-            throw new IllegalArgumentException("routeInfoTransfer must be provided");
-
-        List<Coordinate> coordinates = new LinkedList<Coordinate>();
-        coordinates.add(new Coordinate(12.12, 12.12));
-        coordinates.add(new Coordinate(13.13, 13.13));
-        coordinates.add(new Coordinate(14.14, 14.14));
-        return new RouteInfoTransfer(coordinates);
+    public List<Vertex> computeOptimizedRoute(List<Vertex> vertices) {
+        if (vertices == null)
+            throw new IllegalArgumentException("list of vertices must be provided");
+        if (vertices.size() < 2)
+            throw new IllegalArgumentException("number of vertices mist be equal to or greater than 2");
+        List<Vertex> route = new LinkedList<Vertex>();
+        route.add(new Vertex(12.12, 12.12));
+        route.add(new Vertex(13.13, 13.13));
+        route.add(new Vertex(14.14, 14.14));
+        return route;
     }
 
 }

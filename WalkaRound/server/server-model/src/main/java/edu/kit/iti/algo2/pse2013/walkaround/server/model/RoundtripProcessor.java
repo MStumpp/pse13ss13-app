@@ -1,9 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.RouteInfoTransfer;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,10 +43,11 @@ public class RoundtripProcessor {
      * Instantiates and/or returns a singleton instance of RoundtripProcessor.
      *
      * @return RoundtripProcessor.
+     * @throws InstantiationException If not instantiated before.
      */
-    public static RoundtripProcessor getInstance() {
+    public static RoundtripProcessor getInstance() throws InstantiationException {
         if (instance == null)
-            throw new IllegalArgumentException("singleton must be initialized first");
+            throw new InstantiationException("singleton must be initialized first");
         return instance;
     }
 
@@ -72,25 +72,24 @@ public class RoundtripProcessor {
      * Computes a roundtrip based on a starting Coordinate, Profile id
      * and a roundtrip length using the provided Graph.
      *
-     * @param coordinate The starting Coordinate of the roundtrip to be computed.
+     * @param source The starting Coordinate of the roundtrip to be computed.
      * @param profile The id of the Profile of the roundtrip to be computed.
      * @param length The length of the roundtrip in meter to be computed.
      * @return RouteInfoTransfer.
      */
-    public RouteInfoTransfer computeRoundtrip(Coordinate coordinate, int profile, int length) {
-        if (coordinate == null)
+    public List<Vertex> computeRoundtrip(Vertex source, int profile, int length) {
+        if (source == null)
             throw new IllegalArgumentException("coordinate must be provided");
         if (Profile.getByID(profile) == null)
             throw new IllegalArgumentException("profile for id unknown");
         if (length < 100)
             throw new IllegalArgumentException("length must be at least 100 meter");
 
-        List<Coordinate> coordinates = new LinkedList<Coordinate>();
-        coordinates.add(new Coordinate(12.12, 12.12));
-        coordinates.add(new Coordinate(13.13, 13.13));
-        coordinates.add(new Coordinate(14.14, 14.14));
-        // TODO: change constructor of route from LinkedList to List, then remove the cast
-        return new RouteInfoTransfer((LinkedList<Coordinate>) coordinates);
+        List<Vertex> route = new LinkedList<Vertex>();
+        route.add(new Vertex(12.12, 12.12));
+        route.add(new Vertex(13.13, 13.13));
+        route.add(new Vertex(14.14, 14.14));
+        return route;
     }
 
 }
