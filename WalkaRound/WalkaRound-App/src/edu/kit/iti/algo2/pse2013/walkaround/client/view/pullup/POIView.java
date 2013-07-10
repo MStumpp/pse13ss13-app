@@ -14,7 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 public class POIView extends Fragment {
 
-	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupPOISwitcher;
 

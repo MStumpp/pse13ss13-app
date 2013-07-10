@@ -234,18 +234,30 @@ public class MapModel implements TileListener {
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
+		
 		float lonDiff = (float) ((upperLeft.getLongitude() + 180) % (360 / Math
 				.pow(2, currentLevelOfDetail)));
+		
 		float latDiff = (float) ((upperLeft.getLatitude() + 90) % (180 / Math
 				.pow(2, currentLevelOfDetail)));
+		
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff,
 				currentLevelOfDetail, CoordinateUtility.DIRECTION_HORIZONTAL);
+		
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff,
 				currentLevelOfDetail, CoordinateUtility.DIRECTION_VERTICAL);
+		
+		//TODO beim nach oben schieben muss yDiff auf dem Display kleiner werden!
+		// ich denke hier ist möglicherweise auch ein RundungsFehler!
+		yDiff = CoordinateUtility.computeCurrentTileWidthInPixels(currentLevelOfDetail) - yDiff;
+		//yDiff = 256-yDiff;
+		
+		
 		Log.d(TAG_MAP_MODEL, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "UpperLeft: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
 				upperLeft, currentLevelOfDetail));
+		
 		return new DisplayCoordinate(xDiff, yDiff);
 	}
 
@@ -383,14 +395,15 @@ public class MapModel implements TileListener {
 				|| nextLevelOfDetail < mapStyle.getMinLevelOfDetail()) {
 			return false;
 		}
-
 		
 		this.currentLevelOfDetail = nextLevelOfDetail;
 
 		final double deltaX = c.getLongitude() - this.upperLeft.getLongitude();
-		final double deltaY = c.getLatitude() - this.upperLeft.getLatitude();
+		double deltaY = this.upperLeft.getLatitude() - c.getLatitude();
 
-		this.upperLeft = new Coordinate(c, -deltaX, -deltaY);
+		double y = upperLeft.getLatitude() + deltaY;
+		double x = upperLeft.getLongitude() - deltaX;
+		this.upperLeft = new Coordinate(y,x);
 		
 		this.computeAmountsOfTiles();
 		this.generateOverlayImages();

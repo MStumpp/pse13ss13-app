@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
@@ -185,8 +186,8 @@ public class POIManager {
 		}
 		return suggestions;
 	}
-
-	// aus list<Location> list<address> gemacht , context parameter dazu
+	
+	// context parameter dazu
 	// gemacht da auf
 	// android funktion zugegriffen wird
 	/**
@@ -198,9 +199,9 @@ public class POIManager {
 	 *            context of the current activity
 	 * @return a list of three suggestions of locations
 	 */
-	public List<Address> searchPOIsByAddress(Address address, Context context) {
+	public List<Location> searchPOIsByAddress(Address address, Context context) {
 
-		ArrayList<Address> suggestions = new ArrayList<Address>();
+		ArrayList<Location> suggestions = new ArrayList<Location>();
 		Geocoder geocoder = new Geocoder(context, Locale.GERMANY);
 		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
 		try {
@@ -212,9 +213,9 @@ public class POIManager {
 		for (Iterator<android.location.Address> iter = addresses.iterator(); iter
 				.hasNext();) {
 			android.location.Address current = iter.next();
-			suggestions.add(new Address(current.getThoroughfare(), current
+			suggestions.add(new Location(current.getLatitude(), current.getLongitude(), null, new Address(current.getThoroughfare(), current
 					.getSubThoroughfare(), current.getLocality(), Integer
-					.parseInt(current.getPostalCode())));
+					.parseInt(current.getPostalCode()))));
 		}
 		return suggestions;
 	}
