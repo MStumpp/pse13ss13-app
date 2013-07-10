@@ -11,11 +11,8 @@ import java.util.List;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.junit.Assert;
-<<<<<<< HEAD
-=======
 import org.junit.Before;
 import org.junit.Ignore;
->>>>>>> master
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.pbf.ProtobufConverter;

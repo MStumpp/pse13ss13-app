@@ -42,7 +42,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufIO;
 
 public class MapView extends Activity {
 
