@@ -402,18 +402,20 @@ public class Route implements RouteInfo {
 	 * @return
 	 */
 	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
-		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint)");
+		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD START");
 		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
 
 		Coordinate tempCoord = null;
 		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
 			tempCoord = routeCoordsIter.next();
 		}
+		tempCoord = routeCoordsIter.next();
 
 		while (routeCoordsIter.hasNext() && !two.equals(tempCoord)) {
 			routeCoordsIter.remove();
 			tempCoord = routeCoordsIter.next();
 		}
+		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: " + this.routeCoordinates.size());
 		return true;
 	}
 
