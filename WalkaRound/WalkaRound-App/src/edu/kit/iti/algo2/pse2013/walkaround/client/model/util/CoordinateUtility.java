@@ -3,15 +3,16 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 import java.util.LinkedList;
 import java.util.List;
 
+
 import android.app.Activity;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 public final class CoordinateUtility {
 
@@ -90,14 +91,11 @@ public final class CoordinateUtility {
 	 * @param levelOfDetail
 	 *            the current level of detail
 	 * @param one
-	 *            of the constants {@link CoordinateUtility#HORIZONTAL} or
-	 *            {@link CoordinateUtility#VERTICAL}
+	 *            of the constants {@link CoordinateUtility#HORIZONTAL} or {@link CoordinateUtility#VERTICAL}
 	 * @return the given length in degrees
 	 */
-	public static double convertPixelsToDegrees(float pixels,
-			float levelOfDetail, boolean isHorizontal) {
-		return (45 * pixels / Math.pow(2, levelOfDetail + 6))
-				* (isHorizontal ? 2 : 1);
+	public static double convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
+		return (45 * pixels / Math.pow(2, levelOfDetail + 6)) * (isHorizontal ? 2 : 1);
 	}
 
 	/**
@@ -110,10 +108,8 @@ public final class CoordinateUtility {
 	 *            the current level of detail
 	 * @return the given length in degrees
 	 */
-	public static float convertDegreesToPixels(double degree,
-			float levelOfDetail, boolean isHorizontal) {
-		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45)
-				/ (isHorizontal ? 2 : 1);
+	public static float convertDegreesToPixels(double degree, float levelOfDetail, boolean isHorizontal) {
+		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
 	}
 
 	/**

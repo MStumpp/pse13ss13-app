@@ -2,15 +2,16 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.LinkedList;
 
+
 import android.util.Log;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 public class RouteController {
 	

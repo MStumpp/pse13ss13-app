@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,20 +8,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 
 import android.content.Context;
 import android.location.Geocoder;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 /**
  * This class manages requests about POIs.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -48,13 +50,14 @@ public class POIManager {
 	 */
 	private int[] activeCategories;
 
-	public static void initialize(LocationDataIO locationDataIOToLoad) {
-		locationDataIO = locationDataIOToLoad;
+	public static void initialize(Context c) throws IOException {
+		String fileString = File.separatorChar + "walkaround" + File.separatorChar + "locationData.pbf";
+		locationDataIO = LocationDataIO.load(new File(c.getExternalFilesDir(null).getAbsolutePath() + fileString));
 	}
 
 	/**
 	 * Constructs a new manager for POIs.
-	 * 
+	 *
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 */
@@ -67,7 +70,7 @@ public class POIManager {
 
 	/**
 	 * Singleton getInstance method.
-	 * 
+	 *
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
@@ -81,7 +84,7 @@ public class POIManager {
 
 	/**
 	 * Returns the IDs of all active categories.
-	 * 
+	 *
 	 * @return int[] of IDs of all active categories
 	 */
 	public int[] getActiveCategories() {
@@ -91,7 +94,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying within a rectangle.
-	 * 
+	 *
 	 * @param upperLeft
 	 *            upperleft coordinate of the rectangle
 	 * @param bottomRight
@@ -129,7 +132,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying upon a route.
-	 * 
+	 *
 	 * @param routeInfo
 	 *            Route to search POIs in the near
 	 * @param levelOfDetail
@@ -160,7 +163,7 @@ public class POIManager {
 	// aus location poi gemacht
 	/**
 	 * Returns suggestions of locations searched by query.
-	 * 
+	 *
 	 * @param query
 	 *            query to search with
 	 * @return a list of three suggestions of locations
@@ -195,7 +198,7 @@ public class POIManager {
 	// android funktion zugegriffen wird
 	/**
 	 * Returns suggestions of locations searched by an address.
-	 * 
+	 *
 	 * @param address
 	 *            address to search with
 	 * @param context
@@ -229,7 +232,7 @@ public class POIManager {
 	// changed boolean return to void
 	/**
 	 * Adds the ID of an active category.
-	 * 
+	 *
 	 * @param id
 	 *            id of the category to activate
 	 */
@@ -242,7 +245,7 @@ public class POIManager {
 	// changed boolean return to void
 	/**
 	 * Removes the ID of an active category.
-	 * 
+	 *
 	 * @param id
 	 *            id of the category to deactivate
 	 */
@@ -254,7 +257,7 @@ public class POIManager {
 
 	/**
 	 * Computes the difference between two strings.
-	 * 
+	 *
 	 * @param first
 	 *            first string to compare
 	 * @param second
@@ -290,7 +293,7 @@ public class POIManager {
 
 	/**
 	 * Return whether the active poi list is empty
-	 * 
+	 *
 	 * @return true is empty
 	 */
 	public boolean isEmpty() {

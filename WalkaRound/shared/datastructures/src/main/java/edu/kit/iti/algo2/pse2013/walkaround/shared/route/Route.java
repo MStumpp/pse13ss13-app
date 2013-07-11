@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.route;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -401,7 +401,8 @@ public class Route implements RouteInfo {
 
 		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
 		int indexOfInsertion = this.routeCoordinates.indexOf(one);
-
+		Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size() + ", indexOfInsertion: " + indexOfInsertion + ", route contains one " + this.routeCoordinates.contains(one));
+		
 		for (Coordinate coord : bridgingCoords) {
 			this.routeCoordinates.add(indexOfInsertion, coord);
 			indexOfInsertion++;

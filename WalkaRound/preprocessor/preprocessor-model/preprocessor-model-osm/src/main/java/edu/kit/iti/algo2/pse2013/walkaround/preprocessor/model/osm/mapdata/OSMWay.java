@@ -13,6 +13,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 
 public class OSMWay extends OSMElement {
 	private ArrayList<OSMNode> nodes = new ArrayList<OSMNode>();
+	private Area area;
 
 	public OSMWay(final long id) {
 		super(id);
@@ -25,6 +26,7 @@ public class OSMWay extends OSMElement {
 		ArrayList<Edge> edges = new ArrayList<Edge>();
 		for (int i = 0; i < nodes.size() - 1; i++) {
 			edges.add(new Edge(nodes.get(i).getVertex(), nodes.get(i+1).getVertex()));
+			System.out.println(String.format("Add Edge from %d to %d", nodes.get(i).id, nodes.get(i+1).id));
 		}
 		return edges;
 	}
@@ -35,11 +37,11 @@ public class OSMWay extends OSMElement {
 		}
 		return coordinates;
 	}
-	public Area convertToArea() {
-		if (getAreaCategories().length == 0 || getCoordinates().size() < 3) {
-			return null;
+	public Area getArea() {
+		if (area == null && getAreaCategories().length != 0 && getCoordinates().size() >= 3) {
+			area = new Area(getAreaCategories(), getCoordinates());
 		}
-		return new Area(getAreaCategories(), getCoordinates());
+		return area;
 	}
 	public int[] getAreaCategories() {
 		ArrayList<Integer> fitting = new ArrayList<Integer>();
