@@ -25,9 +25,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
 
 /**
  * 
- * This class creates a variant of a pull down menu.
- * Instead of pulling down you can pull this menu up.
- * This Class enables us to integrate a different fragments to display different menus.
+ * This class creates a variant of a pull down menu. Instead of pulling down you
+ * can pull this menu up. This Class enables us to integrate a different
+ * fragments to display different menus.
  * 
  * @author Ludwig Biermann
  * 
@@ -38,11 +38,13 @@ public class PullUpView extends Fragment {
 	 * Debug Information
 	 */
 	private static final String TAG_PULLUP = PullUpView.class.getSimpleName();
-	private static final String TAG_PULLUP_ANIMATIOn = PullUpView.class.getSimpleName() + "_animate";
-	private static final String TAG_PULLUP_TOUCH = PullUpView.class.getSimpleName() + "_touch";
+	private static final String TAG_PULLUP_ANIMATIOn = PullUpView.class
+			.getSimpleName() + "_animate";
+	private static final String TAG_PULLUP_TOUCH = PullUpView.class
+			.getSimpleName() + "_touch";
 
 	/**
-	 * Content ID 
+	 * Content ID
 	 */
 	public static final int CONTENT_ROUTING = 0;
 	public static final int CONTENT_FAVORITE = 1;
@@ -80,7 +82,6 @@ public class PullUpView extends Fragment {
 	 * Gestik
 	 */
 	private GestureDetector gestureDetector;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class PullUpView extends Fragment {
 		Log.d(TAG_PULLUP, "Resize views");
 		menu.getLayoutParams().width = size.x;
 		menu.getLayoutParams().height = size.y / 10;
-		
+
 		routing.setX(size.x / 5 * 0);
 		routing.getLayoutParams().width = size.x / 5;
 
@@ -219,6 +220,19 @@ public class PullUpView extends Fragment {
 
 	Fragment pullUpContent;
 
+	public void changeView(String name, String url, String textInfo) {
+
+		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+		Log.d(TAG_PULLUP, "InfoView starts");
+		ft.remove(pullUpContent);
+		InfoView info = new InfoView();
+
+		info.showPOIInfo(name, url, textInfo);
+
+		pullUpContent = info;
+		ft.add(R.id.pullupContent, pullUpContent).commit();
+	}
+
 	/**
 	 * change the content of the pullup
 	 * 
@@ -230,7 +244,7 @@ public class PullUpView extends Fragment {
 
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
-			
+
 			if (!this.pullUpContent.equals(CONTENT_ROUTING)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
@@ -239,7 +253,7 @@ public class PullUpView extends Fragment {
 				pullUpContent = new RoutingView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		case PullUpView.CONTENT_FAVORITE:
 
@@ -251,10 +265,10 @@ public class PullUpView extends Fragment {
 				pullUpContent = new FavoriteView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		case PullUpView.CONTENT_ROUNDTRIP:
-			
+
 			if (!this.pullUpContent.equals(CONTENT_ROUNDTRIP)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
@@ -263,7 +277,7 @@ public class PullUpView extends Fragment {
 				pullUpContent = new RoundTripView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		case PullUpView.CONTENT_POI:
 
@@ -275,7 +289,7 @@ public class PullUpView extends Fragment {
 				pullUpContent = new POIView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		case PullUpView.CONTENT_SEARCH:
 
@@ -287,7 +301,7 @@ public class PullUpView extends Fragment {
 				pullUpContent = new SearchView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		case PullUpView.CONTENT_OPTION:
 
@@ -299,10 +313,10 @@ public class PullUpView extends Fragment {
 				pullUpContent = new OptionView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		default:
-			
+
 			if (!this.pullUpContent.equals(CONTENT_INFO)) {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
@@ -311,7 +325,7 @@ public class PullUpView extends Fragment {
 				pullUpContent = new InfoView();
 				ft.add(R.id.pullupContent, pullUpContent).commit();
 			}
-			
+
 			break;
 		}
 
@@ -416,6 +430,7 @@ public class PullUpView extends Fragment {
 			return true;
 		}
 	}
+
 	/**
 	 * Listener zur änderung des Content des Menüs.
 	 * 
@@ -441,7 +456,7 @@ public class PullUpView extends Fragment {
 	 * Implements the listener of height regulator button
 	 * 
 	 * @author ludwig Biermann
-	 *
+	 * 
 	 */
 	private class RegulatorListener implements OnTouchListener {
 
@@ -482,7 +497,7 @@ public class PullUpView extends Fragment {
 	 * Implements the Animation listener of the transaction of the pullupview
 	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class RegulatorAnimationListener implements AnimationListener {
 
@@ -509,13 +524,14 @@ public class PullUpView extends Fragment {
 			if (main.getY() > maxBorderHeight && main.getY() != maxHeight) {
 
 				float delta = (main.getY() - maxHeight) * -1;
-				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Max delta: "
-						+ delta);
+				Log.d(TAG_PULLUP_ANIMATIOn,
+						"Correct to Out of Bound Max delta: " + delta);
 				setHeight(delta, 1000);
 
 			} else if (main.getY() < minBorderHeight && main.getY() != 0.0F) {
 				float delta = main.getY() * -1;
-				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Min delta" + delta);
+				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Min delta"
+						+ delta);
 				setHeight(delta, 1000);
 			}
 
@@ -538,7 +554,7 @@ public class PullUpView extends Fragment {
 	 * Detect fling events on the pull up menu
 	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class FlingDetector extends SimpleOnGestureListener {
 		@Override
@@ -556,4 +572,5 @@ public class PullUpView extends Fragment {
 			return false;
 		}
 	}
+
 }
