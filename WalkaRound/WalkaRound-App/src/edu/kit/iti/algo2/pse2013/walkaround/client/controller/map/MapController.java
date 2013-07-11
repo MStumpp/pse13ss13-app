@@ -142,8 +142,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 				"Brauerstraße"));
 		routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
 
-		PositionManager.initialize(mapView);
-		CompassManager.getInstance().registerCompassListener(this);
+		//CompassManager.getInstance().registerCompassListener(this);
 	}
 
 	/*

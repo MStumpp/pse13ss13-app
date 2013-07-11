@@ -5,22 +5,43 @@ import java.util.LinkedList;
 import android.location.Location;
 import android.util.Log;
 
+/**
+ * This class hold and compare the last known orientation of the device
+ * 
+ * @author Lukas Müller, Ludwig Biermann
+ * 
+ */
 public class CompassManager implements PositionListener {
 
+	/*
+	 * 
+	 */
 	private static String TAG_COMPASS_MANAGER = CompassManager.class
 			.getSimpleName();
-	// Observers:
+
+	/*
+	 * 
+	 */
 	private LinkedList<CompassListener> compassListeners;
 
-	private static CompassManager compassManager;
-
+	/*
+	 * 
+	 */
 	private double lastKnownBearing;
 
-	private CompassManager() {
+	/**
+	 * 
+	 */
+	public CompassManager(PositionManager pm) {
 		lastKnownBearing = 0.0d;
 		compassListeners = new LinkedList<CompassListener>();
+		pm.registerPositionListener(this);
 	}
 
+	/**
+	 * 
+	 * @return
+	 *
 	public static CompassManager getInstance() {
 		Log.d(TAG_COMPASS_MANAGER, "CompassManager.getInstance()");
 		if (compassManager == null) {
@@ -29,9 +50,12 @@ public class CompassManager implements PositionListener {
 					compassManager);
 		}
 		return compassManager;
-	}
+	}/
 
-	// Observer Pattern:
+	/**
+	 * 
+	 * @param newCL
+	 */
 	public void registerCompassListener(CompassListener newCL) {
 		Log.d(TAG_COMPASS_MANAGER,
 				"CompassManager.registerCompassListener(CompassListener "
@@ -42,6 +66,9 @@ public class CompassManager implements PositionListener {
 		this.notifyAllCompassListeners();
 	}
 
+	/**
+	 * 
+	 */
 	private void notifyAllCompassListeners() {
 		Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners()");
 		for (CompassListener cl : this.compassListeners) {
@@ -51,14 +78,8 @@ public class CompassManager implements PositionListener {
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
-		//TODO Warum ist androidLocation null?
-		try {
-			lastKnownBearing = androidLocation.getBearing();
-			notifyAllCompassListeners();
-		} catch (NullPointerException e) {
-			Log.e(TAG_COMPASS_MANAGER,
-					"android Location ist null " + e.toString());
-		}
+		lastKnownBearing = androidLocation.getBearing();
+		notifyAllCompassListeners();
 	}
 
 }
