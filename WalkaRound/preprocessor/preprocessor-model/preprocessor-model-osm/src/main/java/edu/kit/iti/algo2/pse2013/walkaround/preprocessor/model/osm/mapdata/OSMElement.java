@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public abstract class OSMElement {
 	protected long id;
-	private HashMap<String, String> tags = new HashMap<String, String>();
+	protected HashMap<String, String> tags = new HashMap<String, String>();
 	public OSMElement(long id) {
 		this.id = id;
 	}

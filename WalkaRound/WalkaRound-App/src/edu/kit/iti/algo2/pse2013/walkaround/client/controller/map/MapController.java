@@ -33,7 +33,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  * @author Ludwig Biermann
  * 
  */
-public class MapController implements RouteListener, PositionListener, CompassListener {
+public class MapController implements RouteListener, PositionListener,
+		CompassListener {
 
 	// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
 	// 8.3858300); // Brauerstraße
@@ -142,7 +143,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 				"Brauerstraße"));
 		routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
 
-		//CompassManager.getInstance().registerCompassListener(this);
+		// CompassManager.getInstance().registerCompassListener(this);
 	}
 
 	/*
@@ -255,7 +256,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	/**
 	 * Switch UserLock between true and false.
 	 */
-	public void onLockUserPosition() {
+	public void toggleLockUserPosition() {
 		if (this.lockUserPosition) {
 			this.lockUserPosition = false;
 		} else {
@@ -353,31 +354,35 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
-		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
-		if(defaultUserLock){
+		if (defaultUserLock) {
 			Log.d(TAG_MAP_CONTROLLER, "Position Change!");
-			//TODO karte verschieben
-			//this.onShift(distanceX, distanceY)
+			mapModel.shift(CoordinateUtility
+					.convertDisplayCoordinateToCoordinate(
+							new Coordinate(androidLocation.getLatitude(),
+									androidLocation.getLongitude()), mapModel
+									.getUpperLeft(), mapModel
+									.getCurrentLevelOfDetail()));
 		}
-		//this.mapView.onPositionChange(x, y);
 	}
 
 	/**
 	 * forwards a set active action to route controller
-	 * @param id of the waypoint
+	 * 
+	 * @param id
+	 *            of the waypoint
 	 * 
 	 */
 	public void setActive(int id) {
-		//TODO route muss id als actove setzen lassen
-		//this.routeController.setActiveWaypoint(id);
-		
+		// TODO route muss id als actove setzen lassen
+		// this.routeController.setActiveWaypoint(id);
+
 	}
 
 	@Override
-	public void onCompassChange(double direction) {
-		//TODO weiterleitung zu View sollte klappen
-		//this.mapView.onPositionChange((float)direction);
-		//this.mapView.onPositionChange(0.0f);
+	public void onCompassChange(float direction) {
+		// TODO weiterleitung zu View sollte klappen
+		this.mapView.onPositionChange(direction);
+		// this.mapView.onPositionChange(0.0f);
 	}
 
 }
