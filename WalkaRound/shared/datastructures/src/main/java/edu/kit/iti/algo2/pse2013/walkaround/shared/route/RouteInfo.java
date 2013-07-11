@@ -24,4 +24,5 @@ public interface RouteInfo {
 	public boolean isFavorite();
 	
 	public RouteInfo clone();
+
 }
