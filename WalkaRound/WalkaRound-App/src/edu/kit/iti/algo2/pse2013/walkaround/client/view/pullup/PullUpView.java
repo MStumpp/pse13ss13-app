@@ -220,19 +220,6 @@ public class PullUpView extends Fragment {
 
 	Fragment pullUpContent;
 
-	public void changeView(String name, String url, String textInfo) {
-
-		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		Log.d(TAG_PULLUP, "InfoView starts");
-		ft.remove(pullUpContent);
-		InfoView info = new InfoView();
-
-		info.showPOIInfo(name, url, textInfo);
-
-		pullUpContent = info;
-		ft.add(R.id.pullupContent, pullUpContent).commit();
-	}
-
 	/**
 	 * change the content of the pullup
 	 * 
