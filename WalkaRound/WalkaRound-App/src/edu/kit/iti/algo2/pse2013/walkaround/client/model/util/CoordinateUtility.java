@@ -182,8 +182,7 @@ public final class CoordinateUtility {
 
 			dw.add(new DisplayWaypoint(
 
-			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
-					CoordinateUtility.DIRECTION_LONGTITUDE),
+			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE),
 
 			-CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
 					CoordinateUtility.DIRECTION_LATITUDE),
