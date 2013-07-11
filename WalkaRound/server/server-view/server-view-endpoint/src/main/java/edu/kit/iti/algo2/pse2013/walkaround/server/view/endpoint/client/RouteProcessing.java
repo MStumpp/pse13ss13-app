@@ -141,12 +141,6 @@ public class RouteProcessing {
         routeInfoTransfer.postProcess();
 
         return new Route(new LinkedList<Coordinate>(routeInfoTransfer.getCoordinates()));
-
-//        List<Coordinate> coordinates = new LinkedList<Coordinate>();
-//        coordinates.add(new Waypoint (coordinate1.getLatitude(), coordinate1.getLongitude(), "Wegpunkt"));
-//        coordinates.add(new Waypoint (coordinate2.getLatitude(), coordinate2.getLongitude(), "Wegpunkt"));
-//        RouteInfo computedShortestPath = new Route((LinkedList<Coordinate>) coordinates);
-//        return computedShortestPath;
     }
 
 
