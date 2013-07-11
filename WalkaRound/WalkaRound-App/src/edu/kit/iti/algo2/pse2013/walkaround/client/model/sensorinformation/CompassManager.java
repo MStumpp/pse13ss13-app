@@ -6,28 +6,31 @@ import android.location.Location;
 import android.util.Log;
 
 public class CompassManager implements PositionListener {
-	
-	private static String TAG_COMPASS_MANAGER = CompassManager.class.getSimpleName();
+
+	private static String TAG_COMPASS_MANAGER = CompassManager.class
+			.getSimpleName();
 	// Observers:
 	private LinkedList<CompassListener> compassListeners;
-	
+
 	private static CompassManager compassManager;
-	
-	private static double lastKnownBearing = 0;
-	
+
+	private double lastKnownBearing;
+
 	private CompassManager() {
+		lastKnownBearing = 0.0d;
+		compassListeners = new LinkedList<CompassListener>();
 	}
-	
+
 	public static CompassManager getInstance() {
 		Log.d(TAG_COMPASS_MANAGER, "CompassManager.getInstance()");
 		if (compassManager == null) {
 			compassManager = new CompassManager();
-			PositionManager.getInstance().registerPositionListener(compassManager);
+			PositionManager.getInstance().registerPositionListener(
+					compassManager);
 		}
 		return compassManager;
 	}
-	
-	
+
 	// Observer Pattern:
 	public void registerCompassListener(CompassListener newCL) {
 		Log.d(TAG_COMPASS_MANAGER,
@@ -45,15 +48,17 @@ public class CompassManager implements PositionListener {
 			cl.onCompassChange(lastKnownBearing);
 		}
 	}
-	
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
-		lastKnownBearing = androidLocation.getBearing();
-		notifyAllCompassListeners();
+		//TODO Warum ist androidLocation null?
+		try {
+			lastKnownBearing = androidLocation.getBearing();
+			notifyAllCompassListeners();
+		} catch (NullPointerException e) {
+			Log.e(TAG_COMPASS_MANAGER,
+					"android Location ist null " + e.toString());
+		}
 	}
-
-	
-	
 
 }

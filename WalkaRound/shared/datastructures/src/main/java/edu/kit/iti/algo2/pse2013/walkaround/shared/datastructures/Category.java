@@ -8,27 +8,27 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Category {
 
-	public static final Category BARS_AND_PUBS = new Category(1);
+	public static final int BARS_AND_PUBS = 1;
 
-	public static final Category CINEMA = new Category(2);
+	public static final int CINEMA = 2;
 
-	public static final Category CLUBS_AND_NIGHTCLUBS = new Category(3);
+	public static final int CLUBS_AND_NIGHTCLUBS = 3;
 
-	public static final Category FAST_FOOD = new Category(4);
+	public static final int FAST_FOOD = 4;
 
-	public static final Category FOOD = new Category(5);
+	public static final int FOOD = 5;
 
-	public static final Category MUSEUM = new Category(6);
+	public static final int MUSEUM = 6;
 
-	public static final Category PUBLIC_TRANSPORTATION = new Category(7);
+	public static final int PUBLIC_TRANSPORTATION = 7;
 
-	public static final Category SHOP = new Category(8);
+	public static final int SHOP = 8;
 
-	public static final Category SLEEPING_ACCOMODATIONS = new Category(9);
+	public static final int SLEEPING_ACCOMODATIONS = 9;
 
-	public static final Category SUPERMARKET = new Category(10);
+	public static final int SUPERMARKET = 10;
 
-	public static final Category THEATRE = new Category(11);
+	public static final int THEATRE = 11;
 
 	/**
 	 * IDs of all existing categories for areas.
@@ -38,18 +38,18 @@ public class Category {
 	/**
 	 * IDs of all existing categories for POIs.
 	 */
-	private static int[] allPOICategories = { FOOD.getID(), FAST_FOOD.getID(),
-			BARS_AND_PUBS.getID(), CLUBS_AND_NIGHTCLUBS.getID(),
-			SUPERMARKET.getID(), SHOP.getID(), PUBLIC_TRANSPORTATION.getID(),
-			MUSEUM.getID(), THEATRE.getID(), CINEMA.getID(),
-			SLEEPING_ACCOMODATIONS.getID() };
+	private static int[] allPOICategories = { FOOD, FAST_FOOD,
+			BARS_AND_PUBS, CLUBS_AND_NIGHTCLUBS,
+			SUPERMARKET, SHOP, PUBLIC_TRANSPORTATION,
+			MUSEUM, THEATRE, CINEMA,
+			SLEEPING_ACCOMODATIONS };
 
 	/**
 	 * Returns all existing categories of areas.
 	 *
 	 * @return all existing categories of areas.
 	 */
-	public static int[] getAllAreaCategories() {
+	public static final int[] getAllAreaCategories() {
 		return allAreaCategories;
 	}
 
@@ -58,7 +58,7 @@ public class Category {
 	 *
 	 * @return all existing categories of POIs
 	 */
-	public static int[] getAllPOICategories() {
+	public static final int[] getAllPOICategories() {
 		return allPOICategories;
 	}
 
