@@ -4,17 +4,15 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
-
 
 /**
  * GeometryDataPreprocessorTest.
@@ -38,6 +36,7 @@ public class GeometryDataPreprocessorTest {
         idCounter.setAccessible(true);
         idCounter.setInt(null, 0);
     }
+
 
     @Test
     public void testPreprocessGraphDataIO() {
@@ -150,6 +149,43 @@ public class GeometryDataPreprocessorTest {
         Assert.assertNotNull(geometryDataIO.getRoot());
     }
 
+
+    @Test
+    public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
+
+        File graphDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.io");
+        Assert.assertNotNull(graphDataio);
+        Assert.assertTrue(graphDataio.exists());
+
+        File locationDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/locationData.io");
+        Assert.assertNotNull(locationDataio);
+        Assert.assertTrue(locationDataio.exists());
+
+        GraphDataIO graphDataIO = null;
+        try {
+            graphDataIO = GraphDataIO.load(graphDataio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(graphDataIO);
+
+        LocationDataIO locationData = null;
+        try {
+            locationData = LocationDataIO.load(locationDataio);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(locationData);
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationData);
+
+        // check that root is not null
+        Assert.assertNotNull(geometryDataIO.getRoot());
+    }
+
+
     private GraphDataIO getGraphDataIO() {
         GraphDataIO graphDataIO = new GraphDataIO();
         graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
@@ -157,6 +193,7 @@ public class GeometryDataPreprocessorTest {
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
         return graphDataIO;
     }
+
 
     private GraphDataIO getGraphDataIO2() {
         GraphDataIO graphDataIO = new GraphDataIO();
@@ -201,6 +238,7 @@ public class GeometryDataPreprocessorTest {
 
         return graphDataIO;
     }
+
 
     private LocationDataIO getLocationDataIO() {
         LocationDataIO locationDataIO = new LocationDataIO();

@@ -92,6 +92,7 @@ public class ShortestPathProcessorTest {
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
         File file = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.io");
+        //File file = new File(getClass().getResource("/graphData.io").getFile());
         Assert.assertNotNull(file);
         Assert.assertTrue(file.exists());
 
