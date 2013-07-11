@@ -14,6 +14,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.spi.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -26,12 +30,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  * @version 1.0
  */
 public class RouteProcessing {
-
-    /**
-     * Logger.
-     */
-    private static final Logger logger = LoggerFactory.getLogger(RouteProcessing.class);
-
 
     /**
      * TAG for android debugging.
@@ -108,7 +106,6 @@ public class RouteProcessing {
             httpPost.setHeader("Content-Type", "application/json");
 
             String requestAsJSON = gson.toJson(new Coordinate[]{coordinate1, coordinate2});
-            logger.debug("requestAsJSON" + requestAsJSON);
             httpPost.setEntity(new StringEntity(requestAsJSON));
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -132,7 +129,6 @@ public class RouteProcessing {
                 sb.append(line + "\n");
             is.close();
             responseAsJSON = sb.toString();
-            logger.debug("responseAsJSON" + responseAsJSON);
         } catch (Exception e) {
             throw new RouteProcessingException("error converting result " + e.toString());
         }
@@ -184,7 +180,6 @@ public class RouteProcessing {
             httpPost.setHeader("Content-Type", "application/json");
 
             String requestAsJSON = gson.toJson(coordinate);
-            logger.debug("requestAsJSON" + requestAsJSON);
             httpPost.setEntity(new StringEntity(requestAsJSON));
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -208,7 +203,6 @@ public class RouteProcessing {
                 sb.append(line + "\n");
             is.close();
             responseAsJSON = sb.toString();
-            logger.debug("responseAsJSON" + responseAsJSON);
         } catch (Exception e) {
             throw new RouteProcessingException("error converting result " + e.toString());
         }
