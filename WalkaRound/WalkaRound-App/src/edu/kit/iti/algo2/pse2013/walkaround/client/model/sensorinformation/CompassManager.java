@@ -45,11 +45,15 @@ public class CompassManager implements SensorEventListener {
 	public CompassManager(Context context) {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
 		lastKnownBearing = 0.0f;
-		compassListeners = new LinkedList<CompassListener>();		
-		/*
-		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 1");
+		compassListeners = new LinkedList<CompassListener>();
 
+		this.sensorManager = (SensorManager) context.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 1");
+		
+		
+		Log.d(TAG_COMPASS_MANAGER, "" + sensorManager.getSensorList(Sensor.TYPE_ALL));
+		
+		
 		this.accellerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 2");
 
@@ -61,7 +65,6 @@ public class CompassManager implements SensorEventListener {
 
 		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 5");
-		*/
 	}
 
 
@@ -100,7 +103,7 @@ public class CompassManager implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
 		if (event.sensor.getType() == this.accellerometer.getType()) {
-			this.accellerometerReadout = event.values;
+			this.accellerometerReadout = event.values.clone();
 		}
 		if (event.sensor.getType() == this.magneticFieldSensor.getType()) {
 			this.magneticFieldSensorReadout = event.values;
@@ -113,7 +116,7 @@ public class CompassManager implements SensorEventListener {
 			if (processed) {
 				float[] orientation = new float[3];
 				SensorManager.getOrientation(R, orientation);
-				this.lastKnownBearing = orientation[0];
+				this.lastKnownBearing = (float) Math.toDegrees(orientation[0]);
 			}
 		}
 		this.notifyAllCompassListeners();

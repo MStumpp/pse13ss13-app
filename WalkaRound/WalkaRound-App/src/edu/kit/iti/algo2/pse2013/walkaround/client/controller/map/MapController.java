@@ -143,7 +143,8 @@ public class MapController implements RouteListener, PositionListener,
 		routeController.registerRouteListener(this);
 
 		PositionManager.getInstance().registerPositionListener(this);
-
+		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
+		
 		Log.d(TAG_MAP_CONTROLLER,
 				"Add three Example Waypoints to routeController!");
 		// routeController.addWaypoint(new Waypoint(49.01, 8.40333,
@@ -503,6 +504,7 @@ public class MapController implements RouteListener, PositionListener,
 		// TODO weiterleitung zu View sollte klappen
 		// this.mapView.onPositionChange(direction);
 		// this.mapView.onPositionChange(0.0f);
+		Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
 		this.mapView.setUserPositionOverlayImage(direction);
 	}
 
