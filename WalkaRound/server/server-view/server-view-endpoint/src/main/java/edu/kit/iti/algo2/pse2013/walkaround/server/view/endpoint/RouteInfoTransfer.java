@@ -1,6 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +20,14 @@ public final class RouteInfoTransfer {
     /**
      * list of coordinates.
      */
+    @JsonProperty("routeInfoTransfer")
     private final List<Coordinate> coordinates;
+
+
+    /**
+     * Error message.
+     */
+    private String error;
 
 
     /**
@@ -55,6 +66,26 @@ public final class RouteInfoTransfer {
      */
     public List<Coordinate> getCoordinates() {
         return coordinates;
+    }
+
+
+    /**
+     * Returns the error message.
+     *
+     * @return String Error message.
+     */
+    public String getError() {
+        return error;
+    }
+
+
+    /**
+     * Set the error message.
+     *
+     * @param error Error message.
+     */
+    public void setError(String error) {
+        this.error = error;
     }
 
 }
