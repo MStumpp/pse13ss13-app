@@ -375,8 +375,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 */
 	public void setActive(int id) {
 		// TODO route muss id als actove setzen lassen
-		// this.routeController.setActiveWaypoint(id);
-
+		this.routeController.setActiveWaypoint(id);
 	}
 
 	@Override

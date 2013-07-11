@@ -387,6 +387,7 @@ public class MapView extends Activity {
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
 					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setTag(value.getId());
 					iv.setOnTouchListener(new WaypointTouchListener(iv, value
 							.getId()));
 					routeList.addView(iv);
@@ -461,7 +462,8 @@ public class MapView extends Activity {
 		boolean found = false;
 
 		for (int a = 0; a < routeList.getChildCount() && !found; a++) {
-			if (routeList.getChildAt(a).getTag().equals(id)) {
+			int valueId = Integer.parseInt(routeList.getChildAt(a).getTag().toString());
+			if (valueId == id) {
 				currentActive = (ImageView) routeList.getChildAt(a);
 
 				if (currentActive.getDrawable().equals(flag)) {
@@ -763,6 +765,7 @@ public class MapView extends Activity {
 		 */
 		WaypointTouchListener(ImageView iv, int id) {
 			this.iv = iv;
+			this.id = id;
 		}
 
 		@Override

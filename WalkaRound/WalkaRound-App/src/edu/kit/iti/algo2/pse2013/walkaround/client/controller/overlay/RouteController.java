@@ -56,6 +56,21 @@ public class RouteController {
 		}
 	}
 
+	/**
+	 * Sets a Waypoint active by his id
+	 * 
+	 * @param id of the Waypoint
+	 */
+	public void setActiveWaypoint(int id) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(id)");
+		for(Waypoint value: this.currentRoute.getWaypoints()){
+			if(value.getId() == id){
+				this.setActiveWaypoint(value);
+				return;
+			}
+		}
+	}
+	
 	public void setActiveWaypoint(Waypoint wp) {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(Waypoint)");
 		this.currentRoute.setActiveWaypoint(wp);
@@ -143,5 +158,6 @@ public class RouteController {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addLocationToFavorites(Location, String)");
 		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}
+
 
 }
