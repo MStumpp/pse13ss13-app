@@ -469,6 +469,7 @@ public class MapModel implements TileListener {
 
 		Log.d(TAG_MAP_MODEL, "create Map Bitmap");
 		this.map.recycle();
+		System.gc();
 		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 		this.map.prepareToDraw();
 
