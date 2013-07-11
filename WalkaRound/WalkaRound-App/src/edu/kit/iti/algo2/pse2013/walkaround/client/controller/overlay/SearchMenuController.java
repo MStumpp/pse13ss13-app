@@ -21,9 +21,9 @@ public class SearchMenuController {
 	}
 	public List<Location> requestSuggestionsByAddress(int postalCode, String city, String street, String number, Context context) {
 		Address addr = new Address(street, number, city, postalCode);
-		return POIManager.getInstance(null/*TODO: replace with real LocationDataIO-Object*/).searchPOIsByAddress(addr, context);
+		return POIManager.getInstance().searchPOIsByAddress(addr, context);
 	}
 	public List<POI> requestSuggestionsByText(String text) {
-		return POIManager.getInstance(null/*TODO: replace with real LocationDataIO-Object*/).searchPOIsByQuery(text);
+		return POIManager.getInstance().searchPOIsByQuery(text);
 	}
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
 
 public class POIView extends Fragment {
 
@@ -30,11 +31,15 @@ public class POIView extends Fragment {
 	private TextView category9;
 	private TextView category10;
 	private TextView category11;
+	
+	POIMenuController poiController;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create POIView");
+		
+		poiController = POIMenuController.getInstance();
 
 		pois = (TextView) this.getActivity().findViewById(R.id.pois);
 		category1 = (TextView) this.getActivity().findViewById(R.id.category_1);
@@ -191,11 +196,13 @@ public class POIView extends Fragment {
 		private void setUnselected(TextView v) {
 			v.setSelected(false);
 			v.setTextColor(Color.WHITE);
+			poiController.removeActiveCategory(Integer.parseInt(v.getTag().toString()));
 		}
 
 		private void setSelected(TextView v) {
 			v.setSelected(true);
 			v.setTextColor(Color.YELLOW);
+			poiController.addActiveCategory(Integer.parseInt(v.getTag().toString()));
 		}
 	}
 }
