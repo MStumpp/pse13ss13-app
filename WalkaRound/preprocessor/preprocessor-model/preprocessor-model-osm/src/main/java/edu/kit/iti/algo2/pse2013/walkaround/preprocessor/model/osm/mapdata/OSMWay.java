@@ -26,7 +26,7 @@ public class OSMWay extends OSMElement {
 		ArrayList<Edge> edges = new ArrayList<Edge>();
 		for (int i = 0; i < nodes.size() - 1; i++) {
 			edges.add(new Edge(nodes.get(i).getVertex(), nodes.get(i+1).getVertex()));
-			System.out.println(String.format("Add Edge from %d (%d) to %d (%d)", nodes.get(i).id, nodes.get(i).getVertex().getID(), nodes.get(i+1).id, nodes.get(i+1).getVertex().getID()));
+			//System.out.println(String.format("Add Edge from %d (%d) to %d (%d)", nodes.get(i).id, nodes.get(i).getVertex().getID(), nodes.get(i+1).id, nodes.get(i+1).getVertex().getID()));
 		}
 		return edges;
 	}
