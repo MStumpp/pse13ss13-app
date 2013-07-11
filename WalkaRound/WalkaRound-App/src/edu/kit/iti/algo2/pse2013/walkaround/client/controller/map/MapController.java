@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
@@ -77,6 +78,8 @@ public class MapController implements RouteListener, PositionListener,
 	private List<DisplayCoordinate> lines;
 	private RouteInfo currentRoute;
 	private int currentActiveWaypoint;
+	
+	private Point size;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -126,7 +129,7 @@ public class MapController implements RouteListener, PositionListener,
 		this.user = defaultCoordinate;
 
 		this.mapView = mv;
-		Point size = mv.getDisplaySize();
+		size = mv.getDisplaySize();
 
 		Log.d(TAG_MAP_CONTROLLER, "Initialice List of Display Points!");
 		displayPoints = new LinkedList<DisplayWaypoint>();
@@ -205,7 +208,6 @@ public class MapController implements RouteListener, PositionListener,
 	public void onMapOverlayImageChange(Bitmap b) {
 		Log.d(TAG_MAP_CONTROLLER, "Bitmap Map Forwarding.");
 		this.mapView.updateMapImage(b);
-		this.updateUserPosition();
 	}
 
 	/**
@@ -245,8 +247,18 @@ public class MapController implements RouteListener, PositionListener,
 	public void onShift(float distanceX, float distanceY) {
 		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : "
 				+ distanceY);
+		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
+		
+		if(this.lockUserPosition){
+			Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
+			HeadUpController.getInstance().toggleUserPositionLock();
+			Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
+		}
 		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
 		this.updateRouteOverlay();
+		this.updateUserPosition();
+		
+	
 	}
 
 	/**
@@ -284,7 +296,7 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * Switch UserLock between true and false.
 	 */
-	public void toggleLockUserPosition() {
+	public boolean toggleLockUserPosition() {
 		if (this.lockUserPosition) {
 			this.lockUserPosition = false;
 		} else {
@@ -292,6 +304,7 @@ public class MapController implements RouteListener, PositionListener,
 		}
 		Log.d(TAG_MAP_CONTROLLER, "Lock User Position: "
 				+ this.lockUserPosition);
+		return this.lockUserPosition;
 	}
 
 	/**
@@ -437,10 +450,6 @@ public class MapController implements RouteListener, PositionListener,
 		user = new Coordinate(androidLocation.getLatitude(),
 				androidLocation.getLongitude());
 
-		if (this.lockUserPosition) {
-			Log.d(TAG_MAP_CONTROLLER, "Position Shift Change!");
-			// mapModel.shift(pos);
-		}
 		updateUserPosition();
 		// mapView.setUserPositionOverlayImage(200,200);
 	}
@@ -464,14 +473,16 @@ public class MapController implements RouteListener, PositionListener,
 					CoordinateUtility.convertDegreesToPixels(lat, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_LATITUDE)
 					);
 			
-			//DisplayCoordinate pos = CoordinateUtility
-			//		.convertCoordinateToDisplayCoordinate(
-			//				new Coordinate(user.getLatitude(), user
-			//						.getLongitude()), mapModel.getUpperLeft(),
-			//				mapModel.getCurrentLevelOfDetail());
-
 			Log.d(TAG_MAP_CONTROLLER, "User Posi ist:" + user.toString());
 			mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
+
+			if (this.lockUserPosition) {
+				Log.d(TAG_MAP_CONTROLLER, "Position Shift Change!");
+
+				this.mapModel.shift(new DisplayCoordinate(pos.getX(), pos.getY()));
+
+				this.mapModel.shift(new DisplayCoordinate(-size.x/2, -size.y/2));
+			}
 		}
 	}
 

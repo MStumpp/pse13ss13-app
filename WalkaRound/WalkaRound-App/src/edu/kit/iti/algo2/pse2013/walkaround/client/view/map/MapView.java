@@ -248,7 +248,7 @@ public class MapView extends Activity {
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
 		
-		//this.setUserPositionOverlayImage(200,200);
+		this.setUserPositionOverlayImage(size.x/2,size.y/2);
 	}
 
 	/**
