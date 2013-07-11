@@ -61,6 +61,7 @@ public class OSMWay extends OSMElement {
 
 	@Override
 	public Vertex getCenterVertex() {
-		return getEdges().size()>0?getEdges().get(0).getTail():null;
+		System.out.println("getName(): " + getName() + " edgeSize: " + getEdges().size());
+		return getEdges().size() > 0?getEdges().get(0).getTail():null;
 	}
 }

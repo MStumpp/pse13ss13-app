@@ -133,4 +133,19 @@ public class OSMCategoryFactory {
 		garden.addTag("residential", "garden");
 		return garden;
 	}
+	public static OSMCategory createAllPOICategory() {
+		OSMOrCategory cat =
+			new OSMOrCategory(createBarAndPubCategory(),
+			new OSMOrCategory(createCinemaCategory(),
+			new OSMOrCategory(createClubCategory(),
+			new OSMOrCategory(createFastFoodCategory(),
+			new OSMOrCategory(createFoodCategory(),
+			new OSMOrCategory(createMuseumCategory(),
+			new OSMOrCategory(createPublicTransportCategory(),
+			new OSMOrCategory(createShopCategory(),
+			new OSMOrCategory(createSleepingCategory(),
+			new OSMOrCategory(createSupermarketCategory(),
+			createTheatreCategory()))))))))));
+		return cat;
+	}
 }
