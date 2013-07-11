@@ -6,7 +6,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 public interface RouteListener {
 	
 	
-	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint);
+	public void onRouteChange(RouteInfo currentRoute);
 	
 	
 }

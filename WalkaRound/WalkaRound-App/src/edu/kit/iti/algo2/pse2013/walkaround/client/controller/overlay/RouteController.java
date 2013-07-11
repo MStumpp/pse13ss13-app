@@ -51,7 +51,7 @@ public class RouteController {
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if (this.currentRoute != null && activeWaypoint != null) {
 			for (RouteListener rl : this.routeListeners) {
-				rl.onRouteChange((RouteInfo)this.currentRoute, activeWaypoint);
+				rl.onRouteChange((RouteInfo)this.currentRoute);
 			}
 		}
 	}

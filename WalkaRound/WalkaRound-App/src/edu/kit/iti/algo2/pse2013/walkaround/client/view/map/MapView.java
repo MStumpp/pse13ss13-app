@@ -860,7 +860,7 @@ public class MapView extends Activity {
 
 	@Override
 	public void onLowMemory() {
-		super.onLowMemory();
-
+        super.onLowMemory();
+        System.gc();
 	}
 }
