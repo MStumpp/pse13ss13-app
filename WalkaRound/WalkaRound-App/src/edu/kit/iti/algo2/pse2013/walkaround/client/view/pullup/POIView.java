@@ -189,7 +189,6 @@ public class POIView extends Fragment {
 					setUnselected(category11);
 				}
 			}
-			// TODO: POIs der kategorie werden auf der karte angezeigt....
 			return false;
 		}
 

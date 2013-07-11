@@ -20,6 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.categ
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
 	private static final short STATE_FIND_NEEDED_NODES = 0;
@@ -31,6 +32,7 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 	private GraphDataIO graphData;
 	private LocationDataIO locationData;
 	private short state = STATE_FIND_NEEDED_NODES;
+	private static int area = 0;
 
 	public PBF_FileBlockParser(GraphDataIO graphData, LocationDataIO locationData) {
 		this.graphData = graphData;
@@ -39,6 +41,7 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	public void complete() {
+		System.out.println(area + " Areas");
 		state++;
 		Logger.getLogger(this.getClass().getSimpleName()).info("Finished parsing osm-file");
 		System.out.println(nodes.size());
@@ -144,10 +147,13 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 						graphData.addEdges(way.getEdges());
 					}
 				}
-				if (isValidWay) {
+				if (isValidWay && state != STATE_FIND_NEEDED_NODES && way.getEdges().size() > 1) {
 					for (int catID : Category.getAllAreaCategories()) {
+						Vertex start = way.getEdges().get(0).getTail();
+						Vertex end = way.getEdges().get(way.getEdges().size()-1).getHead();
 						if (OSMCategoryFactory.createAreaCategory(catID).accepts(way)) {
 							locationData.addArea(way.getArea());
+							area++;
 						}
 					}
 				}

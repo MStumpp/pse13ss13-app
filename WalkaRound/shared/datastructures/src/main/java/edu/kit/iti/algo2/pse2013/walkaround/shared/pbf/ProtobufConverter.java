@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -27,6 +29,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SavePOI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveVertex;
 
 public class ProtobufConverter {
+	private static Map<Integer, Vertex> tmp_vertices;
 	public static Address getAddress(SaveAddress saveAddress) {
 		if (saveAddress == null) {
 			return null;
@@ -81,7 +84,7 @@ public class ProtobufConverter {
 		return saveCoord;
 	}
 
-	public static Edge getEdge(SaveEdge saveEdge) {
+	private static Edge getEdge(SaveEdge saveEdge) {
 		if (saveEdge == null) {
 			return null;
 		}
@@ -119,6 +122,7 @@ public class ProtobufConverter {
 		if (saveGeometryData == null) {
 			return null;
 		}
+		tmp_vertices = new TreeMap<Integer, Vertex>();
 		return new GeometryDataIO(getGeometryNode(saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
@@ -176,6 +180,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		GraphDataIO graphData = new GraphDataIO();
+		tmp_vertices = new TreeMap<Integer, Vertex>();
 		for (SaveEdge se : saveGraphData.getEdgeList()) {
 			graphData.addEdge(getEdge(se));
 		}
@@ -265,17 +270,20 @@ public class ProtobufConverter {
 		}
 		return builder;
 	}
-	public static Vertex getVertex(SaveVertex saveVertex) {
+	private static Vertex getVertex(SaveVertex saveVertex) {
 		if (saveVertex == null) {
 			return null;
+		} else if (tmp_vertices.containsKey(saveVertex.getID())) {
+			return tmp_vertices.get(saveVertex.getID());
 		}
-		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getId());
+		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getID());
 		//v.setParent(getVertex(saveVertex.getParent())); // TODO: Aufpassen, dass das nicht zur Endlosschleife wird!
 		//v.setRun(saveVertex.getRun());
 		//v.setCurrentLength(saveVertex.getCurrentLength());
 		for (int i = 0; i < saveVertex.getOutgoingEdgeCount(); i++) {
 			v.addOutgoingEdge(getEdge(saveVertex.getOutgoingEdge(i)));
 		}
+		tmp_vertices.put(v.getID(), v);
 		return v;
 	}
 	public static SaveVertex.Builder getVertexBuilder(Vertex vertex) {
@@ -284,7 +292,7 @@ public class ProtobufConverter {
 		}
 		SaveVertex.Builder builder = SaveVertex.newBuilder()
 			.setCoordinate(getCoordinateBuilder(vertex))
-			.setId(vertex.getID());
+			.setID(vertex.getID());
 		for (Edge e : vertex.getOutgoingEdges()) {
 			builder.addOutgoingEdge(getEdgeBuilder(e));
 		}

@@ -13,11 +13,9 @@ public class POIImageFetcherTest {
 	@Test
 	public void testImageFetcher() {
 		Bitmap bitmap;
-		try {
-			bitmap = POIImageFetcher.fetchImage("http://commons.wikimedia.org/wiki/File:Gray_vacuum_cleaner.svg");
-			assertTrue(bitmap != null);
-		} catch (IOException e) {
-			assertTrue(e == null);
-		}
+		bitmap = POIImageFetcher
+				.fetchImage("http://commons.wikimedia.org/wiki/File:Gray_vacuum_cleaner.svg");
+		assertTrue(bitmap != null);
+
 	}
 }
