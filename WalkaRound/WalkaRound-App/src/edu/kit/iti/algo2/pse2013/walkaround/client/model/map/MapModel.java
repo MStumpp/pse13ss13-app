@@ -28,9 +28,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class compute the Bitmaps of map and route.
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapModel implements TileListener {
 
@@ -93,7 +93,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * initialize MapModel
-	 * 
+	 *
 	 * @param c
 	 *            the Coordinate of the mid
 	 * @param mapController
@@ -112,7 +112,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Gives back a Instance of MapView
-	 * 
+	 *
 	 * @return null if MapModel isn't initialize
 	 */
 	public static MapModel getInstance() {
@@ -125,7 +125,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Construct a new MapModel
-	 * 
+	 *
 	 * @param c
 	 *            the Coordinate of the mid
 	 * @param mapController
@@ -224,7 +224,7 @@ public class MapModel implements TileListener {
 				new DisplayCoordinate(size.x / 2, size.y / 2), upperLeft,
 				currentLevelOfDetail);
 	}
-	
+
 	/**
 	 * compute the amount tiles possible to show
 	 */
@@ -242,7 +242,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 * 
+	 *
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -262,8 +262,7 @@ public class MapModel implements TileListener {
 		// TODO beim nach oben schieben muss yDiff auf dem Display kleiner
 		// werden!
 		// ich denke hier ist möglicherweise auch ein RundungsFehler!
-		yDiff = CoordinateUtility
-				.computeCurrentTileWidthInPixels(currentLevelOfDetail) - yDiff;
+		yDiff = yDiff - CoordinateUtility.computeCurrentTileWidthInPixels(currentLevelOfDetail);
 		// yDiff = 256-yDiff;
 
 		Log.d(TAG_MAP_MODEL, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
@@ -280,7 +279,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * gives the upperLeft Coordinate back
-	 * 
+	 *
 	 * @return the upper left Coordinate
 	 */
 	public Coordinate getUpperLeft() {
@@ -289,7 +288,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Gives back the current Level Of Detail
-	 * 
+	 *
 	 * @return current Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -297,7 +296,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -307,7 +306,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dc
 	 * @param category
 	 * @param profile
@@ -338,7 +337,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Set a new current Level of Detail
-	 * 
+	 *
 	 */
 	public void setCurrentLevelOfDetail(float levelOfDetail) {
 		this.currentLevelOfDetail = levelOfDetail;
@@ -350,7 +349,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * shifts the map by a delta
-	 * 
+	 *
 	 * @param delta
 	 *            the shifting delta
 	 */
@@ -374,7 +373,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Zooms by a Delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta
 	 *            the zoom delta
 	 * @param c
@@ -388,7 +387,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Zooms by a delta to the middle of the Display
-	 * 
+	 *
 	 * @param delta
 	 *            the zoom delta
 	 */
@@ -399,7 +398,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Zooms by a Delta to a Coordinate
-	 * 
+	 *
 	 * @param delta
 	 *            the zoom delta
 	 * @param c
@@ -476,7 +475,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * recycle and creates a new map recycle and creates a new routeOverlay
-	 * 
+	 *
 	 * @param width
 	 *            of the map and routeOverlay
 	 * @param height
@@ -503,7 +502,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * asks the tile fetcher to send back the needed tiles
-	 * 
+	 *
 	 * @return true if it is possible to get the tiles
 	 */
 	private boolean fetchTiles() {
@@ -525,7 +524,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Draws the Route Overlay between DisplayWaypoints
-	 * 
+	 *
 	 * @param lines
 	 *            a list of Points
 	 */
@@ -547,7 +546,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Draw a Line between two points.
-	 * 
+	 *
 	 * @param fromX
 	 *            from x
 	 * @param fromY
