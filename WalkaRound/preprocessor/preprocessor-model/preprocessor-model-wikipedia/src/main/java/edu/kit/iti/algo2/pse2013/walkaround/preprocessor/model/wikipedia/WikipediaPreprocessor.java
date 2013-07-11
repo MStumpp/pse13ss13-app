@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -51,8 +52,7 @@ public class WikipediaPreprocessor {
 					.substring(wikipediaURL.lastIndexOf("/"));
 			wikipediaURL = partA + "/Spezial:Exportieren" + partB;
 			URL url = new URL(wikipediaURL);
-			URLConnection connection = url
-					.openConnection();
+			URLConnection connection = url.openConnection();
 			connection.connect();
 			InputStream input = connection.getInputStream();
 			XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -75,17 +75,32 @@ public class WikipediaPreprocessor {
 				}
 				parser.next();
 			}
-			
+			input.close();
+
 			// set image url
-			if(sb.indexOf("[[Datei:") != -1) {
-				String imageUrl = sb.substring(sb.indexOf("[[Datei:") + 8, sb.indexOf("|"));
+			if (sb.indexOf("[[Datei:") != -1) {
+				String imageUrl = sb.substring(sb.indexOf("[[Datei:") + 8,
+						sb.indexOf("|"));
 				imageUrl = imageUrl.replaceAll(" ", "_");
-				imageUrl = "http://commons.wikimedia.org/wiki/File:" + imageUrl;
-				URL javaImageUrl = new URL(imageUrl);
-				
-				System.out.println(imageUrl);
+				String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
+						+ imageUrl;
+				URL javaImageUrl = new URL(trueImageUrl);
+				Scanner scanner = new Scanner(javaImageUrl.openStream());
+				StringBuilder imageSb = new StringBuilder();
+				while (scanner.hasNextLine()) {
+					imageSb.append(scanner.nextLine());
+				}
+				scanner.close();
+				if (imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
+					imageSb = imageSb
+							.delete(0,
+									imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
+					trueImageUrl = imageSb.substring(0,
+							imageSb.indexOf(imageUrl) + imageUrl.length());
+					current.setURL(trueImageUrl);
+				}
 			}
-			
+
 			// continue parsing the text
 			sb = sb.delete(sb.indexOf("=="), sb.length());
 			while (sb.indexOf("<ref>") != -1) {
