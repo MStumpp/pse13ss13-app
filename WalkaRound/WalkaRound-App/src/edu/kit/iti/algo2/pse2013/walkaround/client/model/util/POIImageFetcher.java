@@ -7,26 +7,28 @@ import java.net.URLConnection;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public final class POIImageFetcher {
+
+	private static final String TAG_POIIMAGEFETCHER = POIImageFetcher.class
+			.getSimpleName();
 
 	private POIImageFetcher() {
 
 	}
 
-	public static Bitmap fetchImage(String url) throws IOException {
-		if(url.contains(".JPG")) {
-		URL imageUrl = new URL(url);
-		URLConnection connection = imageUrl
-				.openConnection();
-		connection.connect();
-		InputStream input = connection.getInputStream();
-		Bitmap bitmap = BitmapFactory.decodeStream(input);
-		return bitmap;
-		} else if(url.contains(".SVG")) {
-			return null;
-		} else {
-			return null;
+	public static Bitmap fetchImage(String url) {
+		try {
+			URL imageUrl = new URL(url);
+			URLConnection connection = imageUrl.openConnection();
+			connection.connect();
+			InputStream input = connection.getInputStream();
+			Bitmap bitmap = BitmapFactory.decodeStream(input);
+			return bitmap;
+		} catch (IOException e) {
+			Log.e(TAG_POIIMAGEFETCHER, e.toString());
 		}
+		return null;
 	}
 }

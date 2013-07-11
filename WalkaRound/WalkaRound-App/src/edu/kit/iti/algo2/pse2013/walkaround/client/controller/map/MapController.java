@@ -23,6 +23,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 //Android library
 //Walkaround library
@@ -284,6 +285,13 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 				+ this.lockUserPosition);
 	}
 
+	/**
+	 * 
+	 */
+	public void addPoiToView(){
+		this.mapModel.updatePOIofDisplay();
+	}
+	
 	/*
 	 * -----------------Forwarding To Route Controller-----------------
 	 */
@@ -442,5 +450,19 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.mapView.onPositionChange(direction);
 		// this.mapView.onPositionChange(0.0f);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public POI getPOIById(int id){
+		//Log.d(TAG_MAP_CONTROLLER, "CurrentPOI Name " + currentPOI.getName() + " id: " + currentPOI.getId());
+		return mapModel.getPOIInformationById(id);
+	}
+
+	public POI getPOI() {
+		return mapView.getCurrentPOI();
+	}
+	
 
 }

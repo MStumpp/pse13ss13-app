@@ -58,6 +58,7 @@ public final class Edge implements Geometrizable {
         id = idCounter;
         idCounter += 1;
         length = computeLength();
+        //System.out.println(String.format("Creates edge %d->%d", tail.getID(), head.getID()));
     }
 
 

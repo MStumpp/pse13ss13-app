@@ -39,7 +39,7 @@ message SaveLocationData {
 
 message SaveVertex {
 	optional SaveCoordinate coordinate = 1;
-	optional int32 id = 2;
+	optional int32 i_d = 2;
 	optional int64 o_s_m_i_d = 3;
 	repeated SaveEdge outgoing_edge = 4;
 	//optional SaveVertex parent = 5;
@@ -47,7 +47,7 @@ message SaveVertex {
 	//optional int32 run = 7;
 }
 message SaveEdge {
-	optional int32 id = 1;
+	optional int32 i_d = 1;
 	optional int64 o_s_m_i_d = 2;
 	optional SaveVertex tail = 3;
 	optional SaveVertex head = 4;
