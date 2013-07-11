@@ -1,10 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
-import java.util.LinkedList;
 import java.util.List;
 
-// Android Library
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -18,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.GpsStatus.Listener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,16 +28,16 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-// Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+// Android Library
+// Walkaround Library
 
 /**
  * 
@@ -50,7 +47,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * @author Ludwig Biermann
  * 
  */
-public class MapView extends Activity implements Listener{
+public class MapView extends Activity {
 
 	/**
 	 * Debug Information
@@ -108,50 +105,51 @@ public class MapView extends Activity implements Listener{
 	/**
 	 * Controller
 	 */
-	MapController mc;
+	private MapController mc;
 
 	/**
 	 * Animation
 	 */
-	long startDelay = 0;
+	private long startDelay = 0;
 
 	/**
 	 * Gestik
 	 */
-	GestureDetector gestureDetector;
-	GestureOverlayView mapGest;
+	private GestureDetector gestureDetector;
+	private GestureOverlayView mapGest;
 
 	/**
 	 * Routen
 	 */
-	ImageView currentActive;
-	RelativeLayout routeList;
-	RelativeLayout poiList;
-	float sizeOfPoints;
-	int sizeOfRoute = 6;
+	private ImageView currentActive;
+	private RelativeLayout routeList;
+	private RelativeLayout poiList;
+	private float sizeOfPoints;
+	private int sizeOfRoute = 6;
 
 	/**
 	 *
 	 */
+	private PullUpView pullUp;
 
-	PullUpView pullUp;
+	private Point size;
 
-	Point size;
+	private Canvas canvas;
+	private Bitmap routeOverlayBitmap;
 
-	Canvas canvas;
-	Bitmap routeOverlayBitmap;
-
-	float fromX;
-	float fromY;
+	private float fromX;
+	private float fromY;
 
 	/**
 	 * User orientation
 	 */
-	float userX;
-	float userY;
-	float delta;
-	
-	LocationManager locationManager ;
+	private float userX;
+	private float userY;
+	private float delta;
+
+	private LocationManager locationManager;
+
+	private GestureDetector waypointGestureDetector;
 
 	public Point getDisplaySize() {
 		return size;
@@ -160,6 +158,8 @@ public class MapView extends Activity implements Listener{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		PositionManager.initialize(this);
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 
@@ -240,10 +240,13 @@ public class MapView extends Activity implements Listener{
 		routeOverlayBitmap.prepareToDraw();
 
 		gestureDetector = new GestureDetector(this, new MapGestureDetector());
+		waypointGestureDetector = new GestureDetector(this,
+				new WaypointGestureDetector());
 
-		locationManager = (LocationManager) this.getApplicationContext().getSystemService(LocationManager.KEY_LOCATION_CHANGED);
+		locationManager = (LocationManager) this.getApplicationContext()
+				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-		locationManager.addGpsStatusListener(this);
+
 	}
 
 	/**
@@ -263,9 +266,15 @@ public class MapView extends Activity implements Listener{
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-				if (!b.isRecycled()) {
-					map.setImageBitmap(b);
-					map.setVisibility(View.VISIBLE);
+				synchronized (b) {
+					if (!b.isRecycled()) {
+						try {
+							map.setImageBitmap(b);
+							map.setVisibility(View.VISIBLE);
+						} catch (IllegalArgumentException e) {
+							Log.e(TAG_MAPVIEW, "" + e.toString());
+						}
+					}
 				}
 			}
 		});
@@ -282,12 +291,17 @@ public class MapView extends Activity implements Listener{
 		if (routeOverlay == null) {
 			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);
 		}
-
 		runOnUiThread(new Runnable() {
 			public void run() {
-				if (!b.isRecycled()) {
-					routeOverlay.setImageBitmap(b);
-					routeOverlay.setVisibility(View.VISIBLE);
+				synchronized (b) {
+					if (!b.isRecycled()) {
+						try {
+							routeOverlay.setImageBitmap(b);
+							routeOverlay.setVisibility(View.VISIBLE);
+						} catch (IllegalArgumentException e) {
+							Log.e(TAG_MAPVIEW, "" + e.toString());
+						}
+					}
 				}
 			}
 		});
@@ -310,9 +324,11 @@ public class MapView extends Activity implements Listener{
 	/**
 	 * Change the position and the orientation of the user
 	 * 
-	 * @param delta degree of the neew rotation
+	 * @param delta
+	 *            degree of the neew rotation
 	 */
-	public void onPositionChange(final float x, final float y, final float deltaDegree) {
+	public void onPositionChange(final float x, final float y,
+			final float deltaDegree) {
 		runOnUiThread(new Runnable() {
 			public void run() {
 				delta = deltaDegree;
@@ -320,10 +336,10 @@ public class MapView extends Activity implements Listener{
 				userY = y;
 			}
 		});
-		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY), this.delta);
+		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY),
+				this.delta);
 	}
-	
-	
+
 	/**
 	 * Change the position of the user
 	 * 
@@ -345,18 +361,19 @@ public class MapView extends Activity implements Listener{
 	/**
 	 * Change the orientation of the user
 	 * 
-	 * @param delta degree of the neew rotation
+	 * @param delta
+	 *            degree of the neew rotation
 	 */
 	public void onPositionChange(final float deltaDegree) {
 		runOnUiThread(new Runnable() {
 			public void run() {
 				delta = deltaDegree;
-				//.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
+				// .setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
 			}
 		});
-		//this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
+		// this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
 	}
-	
+
 	/**
 	 * updates the DisplayWaypoints
 	 * 
@@ -367,7 +384,7 @@ public class MapView extends Activity implements Listener{
 
 		final Context context = this;
 
-		if (displayPoints == null) {
+		if (displayPoints == null || displayPoints.size() == 0) {
 			return;
 		}
 
@@ -388,19 +405,20 @@ public class MapView extends Activity implements Listener{
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
 					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setTag(value.getId());
 					iv.setOnTouchListener(new WaypointTouchListener(iv, value
 							.getId()));
 					routeList.addView(iv);
 				}
 
 				if (routeList.getChildCount() > 0) {
-					ImageView iv = (ImageView) routeList.getChildAt(0);
-					iv.setImageDrawable(flag);
-					iv.setX(iv.getX() - (sizeOfPoints / 2));
-
-					iv = (ImageView) routeList.getChildAt((routeList
+					ImageView iv = (ImageView) routeList.getChildAt((routeList
 							.getChildCount() - 1));
 					iv.setImageDrawable(flagTarget);
+					iv.setX(iv.getX() - (sizeOfPoints / 2));
+
+					iv = (ImageView) routeList.getChildAt(0);
+					iv.setImageDrawable(flag);
 					iv.setX(iv.getX() - (sizeOfPoints / 2));
 				}
 			}
@@ -462,7 +480,9 @@ public class MapView extends Activity implements Listener{
 		boolean found = false;
 
 		for (int a = 0; a < routeList.getChildCount() && !found; a++) {
-			if (routeList.getChildAt(a).getTag().equals(id)) {
+			int valueId = Integer.parseInt(routeList.getChildAt(a).getTag()
+					.toString());
+			if (valueId == id) {
 				currentActive = (ImageView) routeList.getChildAt(a);
 
 				if (currentActive.getDrawable().equals(flag)) {
@@ -513,7 +533,7 @@ public class MapView extends Activity implements Listener{
 			}
 		});
 	}
-	
+
 	/**
 	 * shift the User Position arrow to an new position
 	 * 
@@ -736,7 +756,7 @@ public class MapView extends Activity implements Listener{
 
 		@Override
 		public boolean onTouch(View arg0, MotionEvent arg1) {
-			if(arg0.equals(user)) {
+			if (arg0.equals(user)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch on User Arrow");
 				return true;
 			}
@@ -764,6 +784,7 @@ public class MapView extends Activity implements Listener{
 		 */
 		WaypointTouchListener(ImageView iv, int id) {
 			this.iv = iv;
+			this.id = id;
 		}
 
 		@Override
@@ -777,20 +798,57 @@ public class MapView extends Activity implements Listener{
 		}
 	}
 
-	@Override
-	public void onGpsStatusChanged(int event) {
-		Log.d(TAG_MAPVIEW, "onGpsStatusChanged!");
-		try {
-			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-				//TODO Sensor Manger einbauen damit er auch bei keinen GPS oder nicht vorhanden "Weg" sich bewegt
-				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getBearing());
-			} else {
-				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getBearing());
-			}
-		} catch(NullPointerException e){
-			Log.e("GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) + " " +"GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) == null) ,e.toString());
+	/**
+	 * This is a Gesture Detector which listen to the map touches.
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
+	private class WaypointGestureDetector implements OnGestureListener {
+
+		@Override
+		public boolean onDown(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+			return false;
 		}
-		
+
+		@Override
+		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
+				float arg3) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onLongPress(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
+				float arg3) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onShowPress(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
 	}
 
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+
+	}
 }

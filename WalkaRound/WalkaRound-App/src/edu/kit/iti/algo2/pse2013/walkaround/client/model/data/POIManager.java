@@ -30,7 +30,7 @@ public class POIManager {
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
 
-	private final int NUMBER_OF_CATEGORIES = 20;
+	private final int NUMBER_OF_CATEGORIES = 11;
 
 	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 100;
 	/**
@@ -41,12 +41,16 @@ public class POIManager {
 	/**
 	 * LocationDataIO where all POIs are stored.
 	 */
-	private LocationDataIO locationDataIO;
+	private static LocationDataIO locationDataIO;
 
 	/**
 	 * IDs of categories that where activated in the POI menu.
 	 */
 	private int[] activeCategories;
+
+	public static void initialize(LocationDataIO locationDataIOToLoad) {
+		locationDataIO = locationDataIOToLoad;
+	}
 
 	/**
 	 * Constructs a new manager for POIs.
@@ -54,8 +58,7 @@ public class POIManager {
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 */
-	private POIManager(LocationDataIO locationDataIO) {
-		this.locationDataIO = locationDataIO;
+	private POIManager() {
 		activeCategories = new int[NUMBER_OF_CATEGORIES];
 		for (int i = 0; i < activeCategories.length; i++) {
 			activeCategories[i] = -1;
@@ -69,9 +72,9 @@ public class POIManager {
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
 	 */
-	public static POIManager getInstance(LocationDataIO locationDataIO) {
+	public static POIManager getInstance() {
 		if (instance == null) {
-			instance = new POIManager(locationDataIO);
+			instance = new POIManager();
 		}
 		return instance;
 	}
@@ -98,7 +101,7 @@ public class POIManager {
 	 * @return a list of all POIs laying within a rectangle
 	 */
 	public List<POI> getPOIsWithinRectangle(Coordinate upperLeft,
-			Coordinate bottomRight, int levelOfDetail) {
+			Coordinate bottomRight, float levelOfDetail) {
 		double minLat = bottomRight.getLatitude();
 		double maxLat = upperLeft.getLatitude();
 		double minLon = upperLeft.getLongitude();
@@ -118,7 +121,7 @@ public class POIManager {
 			}
 		}
 		return poiList;
-		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
+		// wï¿½re gut wenn POIs nach koordinaten geordnet wï¿½ren oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}
@@ -133,7 +136,7 @@ public class POIManager {
 	 *            level of detail
 	 * @return a list of all POIs laying upon a route
 	 */
-	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, int levelOfDetail) {
+	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, float levelOfDetail) {
 		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
 		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
@@ -149,7 +152,7 @@ public class POIManager {
 			}
 		}
 		return poiList;
-		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
+		// wï¿½re gut wenn POIs nach koordinaten geordnet wï¿½ren oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}
@@ -186,7 +189,7 @@ public class POIManager {
 		}
 		return suggestions;
 	}
-	
+
 	// context parameter dazu
 	// gemacht da auf
 	// android funktion zugegriffen wird
@@ -213,9 +216,12 @@ public class POIManager {
 		for (Iterator<android.location.Address> iter = addresses.iterator(); iter
 				.hasNext();) {
 			android.location.Address current = iter.next();
-			suggestions.add(new Location(current.getLatitude(), current.getLongitude(), null, new Address(current.getThoroughfare(), current
-					.getSubThoroughfare(), current.getLocality(), Integer
-					.parseInt(current.getPostalCode()))));
+			suggestions
+					.add(new Location(current.getLatitude(), current
+							.getLongitude(), null, new Address(current
+							.getThoroughfare(), current.getSubThoroughfare(),
+							current.getLocality(), Integer.parseInt(current
+									.getPostalCode()))));
 		}
 		return suggestions;
 	}
@@ -228,8 +234,8 @@ public class POIManager {
 	 *            id of the category to activate
 	 */
 	public void addActivePOICategory(int id) {
-		if (activeCategories[id] == -1) {
-			activeCategories[id] = id;
+		if (activeCategories[id - 1] == -1) {
+			activeCategories[id - 1] = id;
 		}
 	}
 
@@ -241,8 +247,8 @@ public class POIManager {
 	 *            id of the category to deactivate
 	 */
 	public void removeActivePOICategory(int id) {
-		if (activeCategories[id] == id) {
-			activeCategories[id] = -1;
+		if (activeCategories[id - 1] == id) {
+			activeCategories[id - 1] = -1;
 		}
 	}
 
@@ -280,5 +286,19 @@ public class POIManager {
 			}
 		}
 		return matrix[first.length()][second.length()];
+	}
+
+	/**
+	 * Return whether the active poi list is empty
+	 * 
+	 * @return true is empty
+	 */
+	public boolean isEmpty() {
+		for(int i = 0; i < activeCategories.length; i++) {
+			if(activeCategories[i] == -1) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

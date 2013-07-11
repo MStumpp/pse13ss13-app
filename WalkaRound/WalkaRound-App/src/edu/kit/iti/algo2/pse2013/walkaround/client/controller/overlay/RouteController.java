@@ -47,7 +47,7 @@ public class RouteController {
 
 	private void notifyAllRouteListeners() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners() - sending Route with " + this.currentRoute.getCoordinates().size() + " Coordinates and " + this.currentRoute.getWaypoints().size() + " Waypoints.");
-		Log.d((TAG_ROUTE_CONTROLLER), "Coordinates of Route: " + this.currentRoute);
+		Log.d(TAG_ROUTE_CONTROLLER, "Coordinates of Route: " + this.currentRoute);
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if (this.currentRoute != null && activeWaypoint != null) {
 			for (RouteListener rl : this.routeListeners) {
@@ -56,6 +56,21 @@ public class RouteController {
 		}
 	}
 
+	/**
+	 * Sets a Waypoint active by his id
+	 * 
+	 * @param id of the Waypoint
+	 */
+	public void setActiveWaypoint(int id) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(id)");
+		for(Waypoint value: this.currentRoute.getWaypoints()){
+			if(value.getId() == id){
+				this.setActiveWaypoint(value);
+				return;
+			}
+		}
+	}
+	
 	public void setActiveWaypoint(Waypoint wp) {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(Waypoint)");
 		this.currentRoute.setActiveWaypoint(wp);
@@ -143,5 +158,6 @@ public class RouteController {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addLocationToFavorites(Location, String)");
 		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}
+
 
 }

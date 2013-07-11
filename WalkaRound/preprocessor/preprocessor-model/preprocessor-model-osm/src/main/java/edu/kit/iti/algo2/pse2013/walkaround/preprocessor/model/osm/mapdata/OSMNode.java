@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategory;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -11,8 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class OSMNode extends OSMElement {
 
-	private double lat;
-	private double lon;
+	private Vertex vertex;
 
 	public OSMNode(long id) {
 		this(id, Double.NaN, Double.NaN);
@@ -20,33 +20,48 @@ public class OSMNode extends OSMElement {
 
 	public OSMNode(final long id, final double lat, final double lon) {
 		super(id);
-		this.lat = lat;
-		this.lon = lon;
+		vertex = new Vertex(lat, lon);
 	}
 	public double getLatitude() {
-		return lat;
+		return vertex.getLatitude();
 	}
-	public double getLongtitude() {
-		return lon;
+	public double getLongitude() {
+		return vertex.getLongitude();
 	}
 	public Vertex convertToVertex() {
-		return new Vertex(lat, lon);
+		return vertex;
 	}
 
 	public void setLatitude(double lat) {
-		this.lat = lat;
+		vertex.setLatitude(lat);
 	}
 
 	public void setLongitude(double lon) {
-		this.lon = lon;
+		vertex.setLongitude(lon);
 	}
 
 	public POI convertToPOI() {
 		if (getName() == null) {
 			throw new NullPointerException("Can't convert to POI, because name is null.");
 		}
-		return new POI(lat, lon, getName(), null, getWikipediaURL(), getPOICategories());
+		return new POI(vertex.getLatitude(), vertex.getLongitude(), getName(), null, getWikipediaURL(), getPOICategories(), getAddress());
 	}
+	private Address getAddress() {
+		Integer postcode;
+		try {
+			postcode = getTags().containsKey("addr:postcode")?Integer.parseInt(getTags().get("addr:postcode")):null;
+		} catch (NumberFormatException nfe) {
+			postcode = null;
+		}
+		Address addr = new Address(
+			getTags().containsKey("addr:street")?getTags().get("addr:street"):null,
+			getTags().containsKey("addr:housenumber")?getTags().get("addr:housenumber"):null,
+			getTags().containsKey("addr:city")?getTags().get("addr:city"):null,
+			postcode
+		);
+		return addr;
+	}
+
 	public String getWikipediaURL() {
 		if (getTags().get("wikipedia") == null || getTags().get("wikipedia").length() < 4) {
 			return null;

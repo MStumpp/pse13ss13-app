@@ -36,10 +36,10 @@ public class NaviModel implements NaviInfo {
 	
 	public NaviModel getInstance() {
 		Log.d(TAG_NAVI_MODEL, "getInstance()");
-		if (this.naviModel == null) {
-			this.naviModel = new NaviModel();
+		if (naviModel == null) {
+			naviModel = new NaviModel();
 		}
-		return this.naviModel;
+		return naviModel;
 	}
 	
 	
