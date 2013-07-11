@@ -1,10 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
-import java.util.LinkedList;
 import java.util.List;
 
-// Android Library
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -18,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.GpsStatus.Listener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,25 +28,24 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-// Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+// Android Library
+// Walkaround Library
 
 /**
- * 
+ *
  * This class is the main activity of the Walkaround app. This class organize
  * the whole view and shows the drawing map and route.
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapView extends Activity {
 
@@ -151,7 +147,7 @@ public class MapView extends Activity {
 	float userX;
 	float userY;
 	float delta;
-	
+
 	LocationManager locationManager ;
 
 	public Point getDisplaySize() {
@@ -161,7 +157,7 @@ public class MapView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		PositionManager.initialize(this);
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
@@ -246,7 +242,7 @@ public class MapView extends Activity {
 
 		locationManager = (LocationManager) this.getApplicationContext().getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-		
+
 	}
 
 	/**
@@ -258,7 +254,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updates the map
-	 * 
+	 *
 	 * @param b
 	 *            the new map bitmap
 	 */
@@ -276,7 +272,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the route
-	 * 
+	 *
 	 * @param b
 	 *            the new route bitmap
 	 */
@@ -297,22 +293,22 @@ public class MapView extends Activity {
 	}
 
 	/*
-	 * 
-	 * 
+	 *
+	 *
 	 * @param dip
-	 * 
+	 *
 	 * @return
-	 * 
+	 *
 	 * public int dipToPixel(float dip) { return (int)
 	 * (getResources().getDisplayMetrics().density * dip); }
-	 * 
+	 *
 	 * public float pixelToDip(int p) { return (p /
 	 * getResources().getDisplayMetrics().density); }
 	 */
 
 	/**
 	 * Change the position and the orientation of the user
-	 * 
+	 *
 	 * @param delta degree of the neew rotation
 	 */
 	public void onPositionChange(final float x, final float y, final float deltaDegree) {
@@ -325,11 +321,11 @@ public class MapView extends Activity {
 		});
 		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY), this.delta);
 	}
-	
-	
+
+
 	/**
 	 * Change the position of the user
-	 * 
+	 *
 	 * @param x
 	 *            coordinates
 	 * @param y
@@ -347,7 +343,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Change the orientation of the user
-	 * 
+	 *
 	 * @param delta degree of the neew rotation
 	 */
 	public void onPositionChange(final float deltaDegree) {
@@ -359,10 +355,10 @@ public class MapView extends Activity {
 		});
 		//this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
 	}
-	
+
 	/**
 	 * updates the DisplayWaypoints
-	 * 
+	 *
 	 * @param displayPoints
 	 *            the new DisplayWaypoints
 	 */
@@ -370,7 +366,7 @@ public class MapView extends Activity {
 
 		final Context context = this;
 
-		if (displayPoints == null) {
+		if (displayPoints == null || displayPoints.size() == 0) {
 			return;
 		}
 
@@ -391,6 +387,7 @@ public class MapView extends Activity {
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
 					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setTag(value.getId());
 					iv.setOnTouchListener(new WaypointTouchListener(iv, value
 							.getId()));
 					routeList.addView(iv);
@@ -412,7 +409,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the POI´s on the Display
-	 * 
+	 *
 	 * @param dp
 	 *            List of pois
 	 */
@@ -439,7 +436,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Set an new Waypoint as active
-	 * 
+	 *
 	 * @param id
 	 *            the id of the waypoint
 	 */
@@ -465,7 +462,8 @@ public class MapView extends Activity {
 		boolean found = false;
 
 		for (int a = 0; a < routeList.getChildCount() && !found; a++) {
-			if (routeList.getChildAt(a).getTag().equals(id)) {
+			int valueId = Integer.parseInt(routeList.getChildAt(a).getTag().toString());
+			if (valueId == id) {
 				currentActive = (ImageView) routeList.getChildAt(a);
 
 				if (currentActive.getDrawable().equals(flag)) {
@@ -486,7 +484,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -503,7 +501,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -516,10 +514,10 @@ public class MapView extends Activity {
 			}
 		});
 	}
-	
+
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -561,9 +559,9 @@ public class MapView extends Activity {
 
 	/**
 	 * A Listener who listen to the user position animation
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserAnimationListener implements AnimatorListener {
 
@@ -610,9 +608,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This is a Gesture Detector which listen to the map touches.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapGestureDetector implements OnGestureListener {
 
@@ -710,9 +708,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class forwards the touch events to the gesture detector
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -731,9 +729,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class intercept the touch events on the user arrow
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
@@ -750,9 +748,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class WaypointTouchListener implements OnTouchListener {
 
@@ -761,12 +759,13 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new Waypoint
-		 * 
+		 *
 		 * @param iv
 		 *            the new Imageview
 		 */
 		WaypointTouchListener(ImageView iv, int id) {
 			this.iv = iv;
+			this.id = id;
 		}
 
 		@Override

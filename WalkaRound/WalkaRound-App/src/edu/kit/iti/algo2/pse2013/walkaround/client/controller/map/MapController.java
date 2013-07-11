@@ -308,7 +308,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * Helper Method that updateRouteOverlay
 	 */
 	private void updateRouteOverlay() {
-		if (currentRoute == null) {
+		if (currentRoute == null || currentRoute.getActiveWaypoint() == null) {
 			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
 		} else {
 
@@ -375,8 +375,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 */
 	public void setActive(int id) {
 		// TODO route muss id als actove setzen lassen
-		// this.routeController.setActiveWaypoint(id);
-
+		this.routeController.setActiveWaypoint(id);
 	}
 
 	@Override

@@ -101,7 +101,7 @@ public class POIManager {
 	 * @return a list of all POIs laying within a rectangle
 	 */
 	public List<POI> getPOIsWithinRectangle(Coordinate upperLeft,
-			Coordinate bottomRight, int levelOfDetail) {
+			Coordinate bottomRight, float levelOfDetail) {
 		double minLat = bottomRight.getLatitude();
 		double maxLat = upperLeft.getLatitude();
 		double minLon = upperLeft.getLongitude();
@@ -136,7 +136,7 @@ public class POIManager {
 	 *            level of detail
 	 * @return a list of all POIs laying upon a route
 	 */
-	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, int levelOfDetail) {
+	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, float levelOfDetail) {
 		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
 		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
@@ -286,5 +286,19 @@ public class POIManager {
 			}
 		}
 		return matrix[first.length()][second.length()];
+	}
+
+	/**
+	 * Return whether the active poi list is empty
+	 * 
+	 * @return true is empty
+	 */
+	public boolean isEmpty() {
+		for(int i = 0; i < activeCategories.length; i++) {
+			if(activeCategories[i] == -1) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

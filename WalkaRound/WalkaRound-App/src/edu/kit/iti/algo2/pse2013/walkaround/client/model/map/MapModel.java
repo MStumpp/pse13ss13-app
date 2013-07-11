@@ -14,6 +14,7 @@ import android.util.Log;
 
 // Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
@@ -23,6 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class compute the Bitmaps of map and route.
@@ -215,6 +217,15 @@ public class MapModel implements TileListener {
 	}
 
 	/**
+	 * compute the middle of the map
+	 */
+	private Coordinate computeBottomRight() {
+		return CoordinateUtility.convertDisplayCoordinateToCoordinate(
+				new DisplayCoordinate(size.x / 2, size.y / 2), upperLeft,
+				currentLevelOfDetail);
+	}
+	
+	/**
 	 * compute the amount tiles possible to show
 	 */
 	private void computeAmountsOfTiles() {
@@ -305,7 +316,13 @@ public class MapModel implements TileListener {
 	public LinkedList<DisplayCoordinate> getPOIofDisplay(DisplayCoordinate dc,
 			int[] category, int profile) {
 		// TODO
-		return null;
+		if (!POIManager.getInstance().isEmpty()) {
+			Coordinate bottomRight = new Coordinate(0, 0);
+			List<POI> poi = POIManager.getInstance().getPOIsWithinRectangle(
+					upperLeft, bottomRight, currentLevelOfDetail);
+			return null;
+		}
+		return new LinkedList<DisplayCoordinate>();
 	}
 
 	/*
