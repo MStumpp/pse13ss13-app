@@ -1,5 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 
 public class OSMCategoryFactory {
@@ -14,30 +17,30 @@ public class OSMCategoryFactory {
 		return footway;
 	}
 	public static final OSMCategory createPOICategory(int catID) {
-		if (catID == Category.BARS_AND_PUBS) {
+		if (catID == Category.POI_BARS_AND_PUBS) {
 			return createBarAndPubCategory();
-		} else if (catID == Category.CINEMA) {
+		} else if (catID == Category.POI_CINEMA) {
 			return createCinemaCategory();
-		} else if (catID == Category.CLUBS_AND_NIGHTCLUBS) {
+		} else if (catID == Category.POI_CLUBS_AND_NIGHTCLUBS) {
 			return createClubCategory();
-		} else if (catID == Category.FAST_FOOD) {
+		} else if (catID == Category.POI_FAST_FOOD) {
 			return createFastFoodCategory();
-		} else if (catID == Category.FOOD) {
+		} else if (catID == Category.POI_FOOD) {
 			return createFoodCategory();
-		} else if (catID == Category.MUSEUM) {
+		} else if (catID == Category.POI_MUSEUM) {
 			return createMuseumCategory();
-		} else if (catID == Category.PUBLIC_TRANSPORTATION) {
+		} else if (catID == Category.POI_PUBLIC_TRANSPORTATION) {
 			return createPublicTransportCategory();
-		} else if (catID == Category.SHOP) {
+		} else if (catID == Category.POI_SHOP) {
 			return createShopCategory();
-		} else if (catID == Category.SLEEPING_ACCOMODATIONS) {
+		} else if (catID == Category.POI_SLEEPING_ACCOMODATIONS) {
 			return createSleepingCategory();
-		} else if (catID == Category.SUPERMARKET) {
+		} else if (catID == Category.POI_SUPERMARKET) {
 			return createSupermarketCategory();
-		} else if (catID == Category.THEATRE) {
+		} else if (catID == Category.POI_THEATRE) {
 			return createTheatreCategory();
 		}
-		System.out.println("No cat found");
+		Logger.getLogger(OSMCategoryFactory.class.getSimpleName()).log(Level.SEVERE, String.format("No poi-category for ID %d found!", catID));
 		return null;
 	}
 	private static final OSMCategory createBarAndPubCategory() {
@@ -67,6 +70,8 @@ public class OSMCategoryFactory {
 		food.addTag("amenity", "restaurant");
 		food.addTag("amenity", "cafe");
 		food.addTag("amenity", "cafeteria");
+		food.addTag("garden", "beergarden");
+		food.addTag("garden", "beer_garden");
 		return food;
 	}
 	private static final OSMCategory createMuseumCategory() {
@@ -76,7 +81,9 @@ public class OSMCategoryFactory {
 	}
 	private static final OSMCategory createPublicTransportCategory() {
 		OSMTagCategory pub_trans = new OSMTagCategory();
-		pub_trans.addTag("highway", "bus_stop"); // FIXME
+		pub_trans.addTag("highway", "bus_stop");
+		pub_trans.addTag("public_transport", "stop_position");
+		pub_trans.addTag("public_transport", "platform"); // FIXME
 		return new OSMTagCategory();
 	}
 	private static final OSMCategory createShopCategory() {
@@ -101,5 +108,25 @@ public class OSMCategoryFactory {
 		OSMTagCategory theatre = new OSMTagCategory();
 		theatre.addTag("amenity", "theatre");
 		return theatre;
+	}
+	public static OSMCategory createAreaCategory(int catID) {
+		if (catID == Category.AREA_FOREST) {
+			return createForestCategory();
+		} else if (catID == Category.AREA_GARDEN) {
+			return createGardenCategory();
+		}
+		Logger.getLogger(OSMCategoryFactory.class.getSimpleName()).log(Level.SEVERE, String.format("No area category for ID %d found!", catID));
+		return null;
+	}
+	private static final OSMCategory createForestCategory() {
+		OSMTagCategory forest = new OSMTagCategory();
+		forest.addTag("landuse", "forest");
+		return forest;
+	}
+	private static final OSMCategory createGardenCategory() {
+		OSMTagCategory garden = new OSMTagCategory();
+		garden.addTag("leisure", "garden");
+		garden.addTag("residential", "garden");
+		return garden;
 	}
 }
