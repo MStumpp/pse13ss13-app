@@ -1,10 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.TreeMultiset;
@@ -13,6 +9,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -23,6 +21,38 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
  * @version 1.0
  */
 public class GeometryDataPreprocessor {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessor.class);
+
+
+    private static final Multiset<Geometrizable> multiSetDimZero = TreeMultiset.create(new Comparator<Geometrizable>() {
+        @Override
+        public int compare(Geometrizable v1, Geometrizable v2) {
+            if (v1.valueForDimension(0) > v2.valueForDimension(0)) {
+                return 1;
+            } else if (v1.valueForDimension(0) < v2.valueForDimension(0)) {
+                return -1;
+            } else
+                return 0;
+        }
+    });
+
+    private static final Multiset<Geometrizable> multiSetDimOne = TreeMultiset.create(new Comparator<Geometrizable>() {
+        @Override
+        public int compare(Geometrizable v1, Geometrizable v2) {
+            if (v1.valueForDimension(1) > v2.valueForDimension(1)) {
+                return 1;
+            } else if (v1.valueForDimension(1) < v2.valueForDimension(1)) {
+                return -1;
+            } else
+                return 0;
+        }
+    });
+
+    private static final TreeSet<Geometrizable> treeSet = new TreeSet<Geometrizable>();
 
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
@@ -37,6 +67,10 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
 
         List<Geometrizable> geometrizables = new ArrayList<Geometrizable>(graphDataIO.getVertices());
+
+        logger.info(geometrizables.size()+"");
+        //for (Geometrizable geometrizable : geometrizables)
+        //        logger.info(geometrizable.toString());
 
         // get all POIs from locationDataIO
 //        for (POI poi : locationDataIO.getPOIs())
@@ -69,8 +103,8 @@ public class GeometryDataPreprocessor {
             data[i] = geometrizables.toArray(new Geometrizable[0]);
         }
 
-//        System.out.println(Arrays.toString(data[0]));
-//        System.out.println(Arrays.toString(data[1]));
+        //logger.info(Arrays.toString(data[0]));
+        //logger.info(Arrays.toString(data[1]));
 
         if (data[0].length != data[1].length)
             throw new IllegalArgumentException("both lists must be of same size");
@@ -119,35 +153,29 @@ public class GeometryDataPreprocessor {
 
             // to make sure all less or equal
             // points to median go to left tree
-            int tmpMedian = median+1;
-            while (tmpMedian <= end) {
-                if (data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim)) {
-                    if (tmpMedian == end) {
-                        median = tmpMedian;
-                        break;
-                    } else {
-                        tmpMedian += 1;
-                    }
-                } else {
-                    median = tmpMedian-1;
-                    break;
-                }
-            }
+//            int tmpMedian = median+1;
+//            while (tmpMedian <= end) {
+//                if (data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim)) {
+//                    if (tmpMedian == end) {
+//                        median = tmpMedian;
+//                        break;
+//                    } else {
+//                        tmpMedian += 1;
+//                    }
+//                } else {
+//                    median = tmpMedian-1;
+//                    break;
+//                }
+//            }
         }
 
-        Multiset<Geometrizable> geometrizablesForLeft = TreeMultiset.create(new Comparator<Geometrizable>() {
-            @Override
-            public int compare(Geometrizable v1, Geometrizable v2) {
-                if (v1.valueForDimension(dim) > v2.valueForDimension(dim)) {
-                    return 1;
-                } else if (v1.valueForDimension(dim) < v2.valueForDimension(dim)) {
-                    return -1;
-                } else
-                    return 0;
-            }
-        });
-        geometrizablesForLeft.clear();
-        Collections.addAll(geometrizablesForLeft, Arrays.copyOfRange(data[dim], start, median+1));
+//        reeSet<Geometrizable> multiSetDim;
+//        if (dim == 0)
+//            multiSetDim = multiSetDimZero;
+//        else
+//            multiSetDim = multiSetDimOne;
+        treeSet.clear();
+        treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
         //System.out.println("size: " + geometrizablesForLeft.size());
 
@@ -169,8 +197,8 @@ public class GeometryDataPreprocessor {
 //                System.out.println("new: bool: " + contains(data[dim], dim, geometrizable, start, median));
 //                System.out.println(Arrays.toString(data[dim]));
 //                if (contains(data[dim], dim, geometrizable, start, median)) {
-                if (geometrizablesForLeft.contains(geometrizable)) {
-                    geometrizablesForLeft.remove(geometrizable);
+                if (treeSet.contains(geometrizable)) {
+                    treeSet.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {
