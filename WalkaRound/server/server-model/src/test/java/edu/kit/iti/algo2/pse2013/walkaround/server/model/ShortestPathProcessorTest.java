@@ -5,8 +5,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Random;
 
 /**
  * ShortestPathProcessorTest.
@@ -85,6 +88,79 @@ public class ShortestPathProcessorTest {
     }
 
 
+    @Test
+    public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
+
+        File file = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.io");
+        Assert.assertNotNull(file);
+        Assert.assertTrue(file.exists());
+
+        GraphDataIO graphDataIO = null;
+        try {
+            graphDataIO = GraphDataIO.load(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(graphDataIO);
+
+        Graph graph = null;
+        try {
+            Graph.init(graphDataIO.getEdges());
+            graph = Graph.getInstance();
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(graph);
+
+        Random rand = new Random();
+        int min = 0;
+        int max = graphDataIO.getVertices().size()-1;
+
+        int minNumVertices = 2;
+        int maxNumVertices = 100;
+
+        int numVerticesOnRoute = 0;
+        Vertex source = null;
+        Vertex target = null;
+        try {
+            while (numVerticesOnRoute < minNumVertices) {
+                numVerticesOnRoute = 0;
+                source = graph.getVertexByID(rand.nextInt(max-min+1)+min);
+                System.out.print(source.getID());
+                numVerticesOnRoute++;
+                target = source;
+                while (target.getOutgoingEdges().size() > 0 &&
+                        numVerticesOnRoute <= maxNumVertices) {
+                    System.out.print(" out: " + target.getOutgoingEdges().size());
+                    if (numVerticesOnRoute > 1 && source == target)
+                        break;
+                    numVerticesOnRoute++;
+                    target = target.getOutgoingEdges().get(0).getHead();
+                    System.out.print(" -> head: " + target.getID());
+                }
+                System.out.println(" ");
+            }
+        } catch (NoVertexForIDExistsException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
+        List<Vertex> route = null;
+        try {
+            route = shortestPathProcessor.computeShortestPath(source, target);
+        } catch (NoShortestPathExistsException e) {
+            e.printStackTrace();
+        } catch (ShortestPathComputeException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertEquals(route.size(), numVerticesOnRoute);
+    }
+
+
     private Graph getGraph() {
 
         GraphDataIO graphDataIO = new GraphDataIO();
@@ -134,7 +210,7 @@ public class ShortestPathProcessorTest {
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
         return graph;
