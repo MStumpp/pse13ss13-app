@@ -294,7 +294,11 @@ public class POIManager {
 	 * @return true is empty
 	 */
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+		for(int i = 0; i < activeCategories.length; i++) {
+			if(activeCategories[i] == -1) {
+				return false;
+			}
+		}
 		return true;
 	}
 }
