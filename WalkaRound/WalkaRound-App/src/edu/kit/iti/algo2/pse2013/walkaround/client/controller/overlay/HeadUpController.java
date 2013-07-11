@@ -110,10 +110,9 @@ public class HeadUpController {
 	 */
 	public void toggleUserPositionLock(boolean b) {
 		Log.d(TAG_HEADUP_CONTROLLER ,"Toggle user position lock!");
-		this.headUpView.toggleUserPositionLock(b);
-		if (b == true) {
-			this.mapController.toggleLockUserPosition();
-		}
+		//this.headUpView.toggleUserPositionLock(b);
+		this.mapController.toggleLockUserPosition();
+		
 	}
 
 	/*
