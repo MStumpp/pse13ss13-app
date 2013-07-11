@@ -151,7 +151,7 @@ public final class CoordinateUtility {
 	 *            die zu konvertierende DisplayCoordinate
 	 * @return
 	 */
-	public static DisplayCoordinate convertDisplayCoordinateToCoordinate(
+	public static DisplayCoordinate convertCoordinateToDisplayCoordinate(
 			Coordinate c, Coordinate upperLeft, float levelOfDetail) {
 		double deltaX = CoordinateUtility.convertDegreesToPixels(
 				c.getLongitude() - upperLeft.getLongitude(), levelOfDetail,
@@ -182,8 +182,7 @@ public final class CoordinateUtility {
 
 			dw.add(new DisplayWaypoint(
 
-			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
-					CoordinateUtility.DIRECTION_LONGTITUDE),
+			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE),
 
 			-CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
 					CoordinateUtility.DIRECTION_LATITUDE),

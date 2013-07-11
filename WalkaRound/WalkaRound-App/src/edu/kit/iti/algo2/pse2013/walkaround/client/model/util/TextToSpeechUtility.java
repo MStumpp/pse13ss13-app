@@ -14,6 +14,8 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 public final class TextToSpeechUtility implements
 		OnInitListener {
 
+	private static String TAG_TTSUTIL = TextToSpeechUtility.class.getSimpleName();
+	
 	private static TextToSpeechUtility instance;
 
 	private TextToSpeech tts;
@@ -23,17 +25,21 @@ public final class TextToSpeechUtility implements
 	}
 	
 	private TextToSpeechUtility(Context context) {
-		
-		tts = new TextToSpeech();
-		
+		tts = new TextToSpeech(context.getApplicationContext(), this);
 		
 	}
-
+	
 	public static TextToSpeechUtility getInstance() {
 		if (instance == null) {
-			instance = new TextToSpeechUtility();
+			return null;
 		}
 		return instance;
+	}
+
+	@Override
+	public void onInit(int arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
