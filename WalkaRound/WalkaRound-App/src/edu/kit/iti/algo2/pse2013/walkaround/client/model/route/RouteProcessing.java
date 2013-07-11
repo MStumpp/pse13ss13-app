@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,222 +15,270 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
- * This class provides a set of delegation methods for computing a shortest path,
- * roundtrip and optimized route. The actual computation is done by an endpoint.
+ * This class provides a set of delegation methods for computing a shortest
+ * path, roundtrip and optimized route. The actual computation is done by an
+ * endpoint.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
 public class RouteProcessing {
 
-    /**
-     * TAG for android debugging.
-     */
-    private static String TAG_ROUTE_PROCESSING = RouteProcessing.class.getSimpleName();
+	/**
+	 * TAG for android debugging.
+	 */
+	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class
+			.getSimpleName();
 
+	/**
+	 * URL for shortest path computation.
+	 */
+	private static String URL_COMPUTESHORTESTPATH = "http://141.3.194.158:8080/walkaround/api/processor/computeShortestPath";
 
-    /**
-     * URL for shortest path computation.
-     */
-    private static String URL_COMPUTESHORTESTPATH =
-            "http://127.0.0.1:8080/walkaround/api/processor/computeShortestPath";
+	/**
+	 * URL for roundtrip computation.
+	 */
+	private static String URL_ROUNDTRIP = "http://141.3.194.158:8080/walkaround/api/processor/computeRoundtrip";
 
+	/**
+	 * RouteProcessing instance.
+	 */
+	private static RouteProcessing instance;
 
-    /**
-     * URL for roundtrip computation.
-     */
-    private static String URL_ROUNDTRIP =
-            "http://127.0.0.1:8080/walkaround/api/processor/computeRoundtrip";
+	/**
+	 * Creates a fresh instance of RouteProcessing.
+	 */
+	private RouteProcessing() {
+	}
 
+	/**
+	 * Instantiates and/or returns a singleton instance of RouteProcessing.
+	 *
+	 * @return RouteProcessing.
+	 */
+	public static RouteProcessing getInstance() {
+		Log.d(TAG_ROUTE_PROCESSING, "getInstance()");
+		if (instance == null)
+			instance = new RouteProcessing();
+		return instance;
+	}
 
-    /**
-     * RouteProcessing instance.
-     */
-    private static RouteProcessing instance;
+	private class JSONAnswerGetter implements Runnable {
+		private Gson gson;
+		private String json = "";
+		private Object objectToSend;
+		private HttpPost url;
+		private Exception exception;
 
+		public JSONAnswerGetter(Gson gson, Object objectToSend, HttpPost url) {
+			this.gson = gson;
+			this.objectToSend = objectToSend;
+			this.url = url;
+		}
 
-    /**
-     * Creates a fresh instance of RouteProcessing.
-     */
-    private RouteProcessing() {
-    }
+		@Override
+		public void run() {
+			InputStream is;
+			try {
+				DefaultHttpClient httpClient = new DefaultHttpClient();
+				HttpPost httpPost = url;
+				httpPost.setHeader("Accept", "application/json");
+				httpPost.setHeader("Content-Type", "application/json");
 
+				String requestAsJSON = gson.toJson(objectToSend);
+				httpPost.setEntity(new StringEntity(requestAsJSON));
 
-    /**
-     * Instantiates and/or returns a singleton instance of RouteProcessing.
-     *
-     * @return RouteProcessing.
-     */
-    public static RouteProcessing getInstance() {
-        Log.d(TAG_ROUTE_PROCESSING, "getInstance()");
-        if (instance == null)
-            instance = new RouteProcessing();
-        return instance;
-    }
+				HttpResponse httpResponse = httpClient.execute(httpPost);
+				HttpEntity httpEntity = httpResponse.getEntity();
+				is = httpEntity.getContent();
 
+				// ///
+				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + requestAsJSON);
 
-    /**
-     * Delegation method for computing a shortest path between any two Coordinates.
-     * The actual computation is done by an endpoint.
-     *
-     * @param coordinate1 One end of the route to be computed.
-     * @param coordinate2 One end of the route to be computed.
-     * @return RouteInfo.
-     * @throws RouteProcessingException If something goes wrong.
-     * @throws IllegalArgumentException if input parameter are null.
-     */
-    public RouteInfo computeShortestPath(Coordinate coordinate1,
-                                         Coordinate coordinate2)
-            throws RouteProcessingException {
-        Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate " + coordinate1 + ", Coordinate " + coordinate2 + ")");
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is, "iso-8859-1"), 8);
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = reader.readLine()) != null)
+					sb.append(line + "\n");
+				is.close();
+				json = sb.toString();
 
-        if (coordinate1 == null || coordinate2 == null)
-            throw new IllegalArgumentException("coordinate 1 and coordinate 2 must be provided");
+			} catch (UnsupportedEncodingException e) {
+				exception = new RouteProcessingException(
+						"UnsupportedEncodingException");
+			} catch (ClientProtocolException e) {
+				exception = new RouteProcessingException(
+						"ClientProtocolException");
+			} catch (IOException e) {
+				exception = new RouteProcessingException("IOException");
+			}
+		}
 
-        GsonBuilder gsonb = new GsonBuilder();
-        Gson gson = gsonb.create();
+		public Exception getException() {
+			return exception;
+		}
 
-        InputStream is;
-        try {
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(URL_COMPUTESHORTESTPATH);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-Type", "application/json");
+		public String getJSONAnswer() {
+			return json;
+		}
+	}
 
-            String requestAsJSON = gson.toJson(new Coordinate[]{coordinate1, coordinate2});
-            httpPost.setEntity(new StringEntity(requestAsJSON));
+	/**
+	 * Delegation method for computing a shortest path between any two
+	 * Coordinates. The actual computation is done by an endpoint.
+	 *
+	 * @param coordinate1
+	 *            One end of the route to be computed.
+	 * @param coordinate2
+	 *            One end of the route to be computed.
+	 * @return RouteInfo.
+	 * @throws RouteProcessingException
+	 *             If something goes wrong.
+	 * @throws InterruptedException
+	 * @throws IllegalArgumentException
+	 *             if input parameter are null.
+	 */
+	public RouteInfo computeShortestPath(Coordinate coordinate1,
+			Coordinate coordinate2) throws RouteProcessingException,
+			InterruptedException {
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate "
+				+ coordinate1 + ", Coordinate " + coordinate2 + ")");
 
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            is = httpEntity.getContent();
+		if (coordinate1 == null || coordinate2 == null)
+			throw new IllegalArgumentException(
+					"coordinate 1 and coordinate 2 must be provided");
 
-        } catch (UnsupportedEncodingException e) {
-            throw new RouteProcessingException("UnsupportedEncodingException");
-        } catch (ClientProtocolException e) {
-            throw new RouteProcessingException("ClientProtocolException");
-        } catch (IOException e) {
-            throw new RouteProcessingException("IOException");
-        }
+		GsonBuilder gsonb = new GsonBuilder();
+		Gson gson = gsonb.create();
 
-        String responseAsJSON;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null)
-                sb.append(line + "\n");
-            is.close();
-            responseAsJSON = sb.toString();
-        } catch (Exception e) {
-            throw new RouteProcessingException("error converting result " + e.toString());
-        }
+		RouteInfoTransfer routeInfoTransfer = null;
 
-        RouteInfoTransfer routeInfoTransfer = gson.fromJson(responseAsJSON, RouteInfoTransfer.class);
+		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
+				new Coordinate[] {
+						new Coordinate(coordinate1.getLatitude(),
+								coordinate1.getLongitude()),
+						new Coordinate(coordinate2.getLatitude(),
+								coordinate2.getLongitude()) }, new HttpPost(
+						URL_COMPUTESHORTESTPATH));
+		Thread thread = new Thread(gsonAnswerer);
+		thread.start();
+		thread.join();
 
-        if (routeInfoTransfer == null || routeInfoTransfer.getError() != null)
-            throw new RouteProcessingException(routeInfoTransfer.getError());
+		if (gsonAnswerer.getException() != null) {
+			gsonAnswerer.getException().printStackTrace();
+		} else {
+			Log.d(TAG_ROUTE_PROCESSING,
+					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
+			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),
+					RouteInfoTransfer.class);
+		}
+		// TODO
 
-        // replace first and last Coordinate with Waypoint
-        routeInfoTransfer.postProcess();
+		if (routeInfoTransfer == null || routeInfoTransfer.getError() != null)
+			throw new RouteProcessingException(routeInfoTransfer.getError());
 
-        RouteInfo route = new Route(new LinkedList<Coordinate>(routeInfoTransfer.getCoordinates()));
-        Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate, Coordinate) returning Route: " + route);
-        return route;
-    }
+		// replace first and last Coordinate with Waypoint
+		routeInfoTransfer.postProcess();
 
+		RouteInfo route = new Route(new LinkedList<Coordinate>(
+				routeInfoTransfer.getCoordinates()));
+		Log.d(TAG_ROUTE_PROCESSING,
+				"computeShortestPath(Coordinate, Coordinate) returning Route: "
+						+ route);
+		return route;
+	}
 
-    /**
-     * Delegation method for computing a roundtrip based on a starting Coordinate, Profile id
-     * and a roundtrip length. The actual computation is done by an endpoint.
-     *
-     * @param coordinate The starting Coordinate of the roundtrip to be computed.
-     * @param profile The id of the Profile of the roundtrip to be computed.
-     * @param length The length of the roundtrip to be computed.
-     * @return RouteInfo.
-     * @throws RouteProcessingException If something goes wrong.
-     * @throws IllegalArgumentException if input parameter are null.
-     */
-    public RouteInfo computeRoundtrip(Coordinate coordinate, int profile, int length)
-            throws RouteProcessingException {
-        Log.d(TAG_ROUTE_PROCESSING, "computeRoundtrip(Coordinate coordinate, int profile, int length)");
+	/**
+	 * Delegation method for computing a roundtrip based on a starting
+	 * Coordinate, Profile id and a roundtrip length. The actual computation is
+	 * done by an endpoint.
+	 *
+	 * @param coordinate
+	 *            The starting Coordinate of the roundtrip to be computed.
+	 * @param profile
+	 *            The id of the Profile of the roundtrip to be computed.
+	 * @param length
+	 *            The length of the roundtrip to be computed.
+	 * @return RouteInfo.
+	 * @throws RouteProcessingException
+	 *             If something goes wrong.
+	 * @throws InterruptedException
+	 * @throws IllegalArgumentException
+	 *             if input parameter are null.
+	 */
+	public RouteInfo computeRoundtrip(Coordinate coordinate, int profile,
+			int length) throws RouteProcessingException, InterruptedException {
+		Log.d(TAG_ROUTE_PROCESSING,
+				"computeRoundtrip(Coordinate coordinate, int profile, int length)");
 
-        if (coordinate == null)
-            throw new IllegalArgumentException("coordinate 1 and coordinate 2 must be provided");
-        if (profile < 0)
-            throw new IllegalArgumentException("profile id must be equal to or greater than 1");
-        if (length < 100)
-            throw new IllegalArgumentException("length must be at least 100 meter");
+		if (coordinate == null)
+			throw new IllegalArgumentException(
+					"coordinate 1 and coordinate 2 must be provided");
+		if (profile < 0)
+			throw new IllegalArgumentException(
+					"profile id must be equal to or greater than 1");
+		if (length < 100)
+			throw new IllegalArgumentException(
+					"length must be at least 100 meter");
 
-        GsonBuilder gsonb = new GsonBuilder();
-        Gson gson = gsonb.create();
+		GsonBuilder gsonb = new GsonBuilder();
+		Gson gson = gsonb.create();
 
-        InputStream is;
-        try {
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(URL_ROUNDTRIP + "/profile/" + profile + "/length/" + length);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-Type", "application/json");
+		RouteInfoTransfer routeInfoTransfer = null;
 
-            String requestAsJSON = gson.toJson(coordinate);
-            httpPost.setEntity(new StringEntity(requestAsJSON));
+		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
+				new Coordinate(coordinate.getLatitude(),
+						coordinate.getLongitude()), new HttpPost(URL_ROUNDTRIP
+						+ "/profile/" + profile + "/length/" + length));
+		Thread thread = new Thread(gsonAnswerer);
+		thread.start();
+		thread.join();
 
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            is = httpEntity.getContent();
+		if (gsonAnswerer.getException() != null) {
+			gsonAnswerer.getException().printStackTrace();
+		} else {
+			Log.d(TAG_ROUTE_PROCESSING,
+					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
+			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),
+					RouteInfoTransfer.class);
+		}
 
-        } catch (UnsupportedEncodingException e) {
-            throw new RouteProcessingException("UnsupportedEncodingException");
-        } catch (ClientProtocolException e) {
-            throw new RouteProcessingException("ClientProtocolException");
-        } catch (IOException e) {
-            throw new RouteProcessingException("IOException");
-        }
+		if (routeInfoTransfer == null || routeInfoTransfer.getError() != null)
+			throw new RouteProcessingException(routeInfoTransfer.getError());
 
-        String responseAsJSON;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null)
-                sb.append(line + "\n");
-            is.close();
-            responseAsJSON = sb.toString();
-        } catch (Exception e) {
-            throw new RouteProcessingException("error converting result " + e.toString());
-        }
+		// replace first and last Coordinate with Waypoint
+		routeInfoTransfer.postProcess();
 
-        RouteInfoTransfer routeInfoTransfer = gson.fromJson(responseAsJSON, RouteInfoTransfer.class);
+		RouteInfo routeInfo = new Route(new LinkedList<Coordinate>(
+				routeInfoTransfer.getCoordinates()));
+		Log.d(TAG_ROUTE_PROCESSING,
+				"computeRoundtrip(Coordinate coordinate, int profile, int length) returning Route: "
+				+ routeInfo);
+		return routeInfo;
+	}
 
-        if (routeInfoTransfer == null || routeInfoTransfer.getError() != null)
-            throw new RouteProcessingException(routeInfoTransfer.getError());
-
-        // replace first and last Coordinate with Waypoint
-        routeInfoTransfer.postProcess();
-
-        RouteInfo routeInfo = new Route(new LinkedList<Coordinate>(routeInfoTransfer.getCoordinates()));
-        Log.d(TAG_ROUTE_PROCESSING, "computeRoundtrip(Coordinate coordinate, int profile, int length) returning Route: " + routeInfo);
-        return routeInfo;
-    }
-
-
-    /**
-     * Delegation method for computing an optimized Route based on a given Route.
-     * The actual computation is done by an endpoint.
-     *
-     * @param routeInfo The Route to be optimized.
-     * @return RouteInfo.
-     * @throws RouteProcessingException If something goes wrong.
-     */
-    public RouteInfo computeOptimizedRoute(RouteInfo routeInfo)
-            throws RouteProcessingException {
-        throw new RouteProcessingException("not yet implemented");
-    }
+	/**
+	 * Delegation method for computing an optimized Route based on a given
+	 * Route. The actual computation is done by an endpoint.
+	 *
+	 * @param routeInfo
+	 *            The Route to be optimized.
+	 * @return RouteInfo.
+	 * @throws RouteProcessingException
+	 *             If something goes wrong.
+	 */
+	public RouteInfo computeOptimizedRoute(RouteInfo routeInfo)
+			throws RouteProcessingException {
+		throw new RouteProcessingException("not yet implemented");
+	}
 
 }

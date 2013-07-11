@@ -75,7 +75,7 @@ public class SearchView extends Fragment {
 				R.id.number_search);
 		query = (EditText) this.getActivity().findViewById(R.id.query);
 		goButton = (Button) this.getActivity().findViewById(R.id.go_button);
-		
+
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -103,7 +103,7 @@ public class SearchView extends Fragment {
 		query.getLayoutParams().width = size.x;
 		goButton.setX(size.x / 4);
 		goButton.getLayoutParams().width = size.x / 2;
-		
+
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugefï¿½gt");
 
 		goButton.setOnTouchListener(new GoListener());
@@ -132,20 +132,24 @@ public class SearchView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (v.equals(goButton)) {
-				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedrückt");
-				searchMenuController
-						.requestSuggestionsByAddress(
-								Integer.parseInt(postalCodeSearch.getText()
-										.toString()), citySearch.getText()
-										.toString(), streetSearch.getText()
-										.toString(), numberSearch.getText()
-										.toString(), getActivity());
-				//TODO: zur vorschlägen gehen
+			if (v.equals(goButton) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedrï¿½ckt");
+				if (postalCodeSearch.getText().toString().equals("")) {
+					searchMenuController.requestSuggestionsByAddress(0,
+							citySearch.getText().toString(), streetSearch
+									.getText().toString(), numberSearch
+									.getText().toString(), getActivity());
+				} else {
+					searchMenuController.requestSuggestionsByAddress(Integer
+							.parseInt(postalCodeSearch.getText().toString()),
+							citySearch.getText().toString(), streetSearch
+									.getText().toString(), numberSearch
+									.getText().toString(), getActivity());
+				}
+				// TODO: zur vorschlï¿½gen gehen
 			}
 			return false;
 		}
-
 	}
 
 	private class QueryActionListener implements OnEditorActionListener {
@@ -156,7 +160,7 @@ public class SearchView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
 				searchMenuController.requestSuggestionsByText(v.getText()
 						.toString());
-				//TODO: zur karte zurückkehren
+				// TODO: zur karte zurï¿½ckkehren
 			}
 			return false;
 		}

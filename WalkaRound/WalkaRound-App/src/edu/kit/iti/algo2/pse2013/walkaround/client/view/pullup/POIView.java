@@ -122,67 +122,67 @@ public class POIView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(category1)) {
+			if (v.equals(category1) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category1.isSelected()) {
 					setSelected(category1);
 				} else {
 					setUnselected(category1);
 				}
-			} else if (v.equals(category2)) {
+			} else if (v.equals(category2) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category2.isSelected()) {
 					setSelected(category2);
 				} else {
 					setUnselected(category2);
 				}
-			} else if (v.equals(category3)) {
+			} else if (v.equals(category3) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category3.isSelected()) {
 					setSelected(category3);
 				} else {
 					setUnselected(category3);
 				}
-			} else if (v.equals(category4)) {
+			} else if (v.equals(category4) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category4.isSelected()) {
 					setSelected(category4);
 				} else {
 					setUnselected(category4);
 				}
-			} else if (v.equals(category5)) {
+			} else if (v.equals(category5) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category5.isSelected()) {
 					setSelected(category5);
 				} else {
 					setUnselected(category5);
 				}
-			} else if (v.equals(category6)) {
+			} else if (v.equals(category6) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category6.isSelected()) {
 					setSelected(category6);
 				} else {
 					setUnselected(category6);
 				}
-			} else if (v.equals(category7)) {
+			} else if (v.equals(category7) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category7.isSelected()) {
 					setSelected(category7);
 				} else {
 					setUnselected(category7);
 				}
-			} else if (v.equals(category8)) {
+			} else if (v.equals(category8) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category8.isSelected()) {
 					setSelected(category8);
 				} else {
 					setUnselected(category8);
 				}
-			} else if (v.equals(category9)) {
+			} else if (v.equals(category9) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category9.isSelected()) {
 					setSelected(category9);
 				} else {
 					setUnselected(category9);
 				}
-			} else if (v.equals(category10)) {
+			} else if (v.equals(category10) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category10.isSelected()) {
 					setSelected(category10);
 				} else {
 					setUnselected(category10);
 				}
-			} else if (v.equals(category11)) {
+			} else if (v.equals(category11) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category11.isSelected()) {
 					setSelected(category11);
 				} else {

@@ -45,9 +45,16 @@ public class RouteController {
 		}
 		this.notifyAllRouteListeners();
 	}
+	
+	public void unregisterRouteListener(RouteListener formerRL) {
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.unregisterRouteListener(RouteListener " + formerRL.getClass().getSimpleName() + ")");
+		if (!this.routeListeners.contains(formerRL)) {
+			this.routeListeners.remove(formerRL);
+		}
+	}
 
 	private void notifyAllRouteListeners() {
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners() - sending Route with " + this.currentRoute.getCoordinates().size() + " Coordinates and " + this.currentRoute.getWaypoints().size() + " Waypoints.");
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners() - sending Route with " + this.currentRoute.getCoordinates().size() + " Coordinates and " + this.currentRoute.getWaypoints().size() + " Waypoints to " + this.routeListeners.size() + " listeners.");
 		Log.d(TAG_ROUTE_CONTROLLER, "Coordinates of Route: " + this.currentRoute);
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if (this.currentRoute != null && activeWaypoint != null) {
