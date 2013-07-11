@@ -279,10 +279,13 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Delete the Active Waypoint
+	 * @param currentId 
 	 */
-	public void onDeletePoint() {
+	public void onDeletePoint(int currentId) {
 		Log.d(TAG_MAP_CONTROLLER, "Delete active Waypoint");
-		this.routeController.deleteActiveWaypoint();
+		if(this.currentActiveWaypoint == currentId){
+			this.routeController.deleteActiveWaypoint();
+		}
 	}
 
 	/**
