@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -57,6 +58,12 @@ public class Initialization implements ServletContextListener {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
         GeometryProcessor.init(geometryDataIO);
+
+        try {
+            RoundtripProcessor.init(Graph.getInstance(), GeometryProcessor.getInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
     }
 
 

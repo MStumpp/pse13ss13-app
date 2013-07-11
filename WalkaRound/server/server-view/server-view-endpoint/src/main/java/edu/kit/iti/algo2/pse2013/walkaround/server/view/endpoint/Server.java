@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsException;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
@@ -27,29 +28,29 @@ public class Server {
      * Endpoint method for computation of a shortest path between any given two Coordinates.
      * The actual computation is done by an instance of ShortestPathProcessor.
      *
-//     * @param coordinate1 One end of the route to be computed.
-//     * @param coordinate2 One end of the route to be computed.
+     * @param coordinates List of coordinates.
      * @return RouteInfoTransfer.
      */
     @POST
     @Path("/computeShortestPath")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public RouteInfoTransfer computeShortestPath(Coordinate coordinate1,
-                                                 Coordinate coordinate2)
-            throws InstantiationException {
+    public RouteInfoTransfer computeShortestPath(List<Coordinate> coordinates) {
 
-        throw new IllegalArgumentException("blabla");
-            /*
+        RouteInfoTransfer transfer = new RouteInfoTransfer();
+
         // check input
-        if (coordinate1 == null || coordinate2 == null)
-            throw new IllegalArgumentException("coordinate1 and coordinate2 must not be null");
+        if (coordinates == null || coordinates.size() != 2) {
+            transfer.setError("coordinates must not be null and of size 2");
+            return transfer;
+        }
 
         Graph graph = null;
         try {
             graph = Graph.getInstance();
         } catch (InstantiationException e) {
-            return null;
+            transfer.setError("InstantiationException");
+            return transfer;
         }
 
         // project temporary
@@ -59,45 +60,49 @@ public class Server {
             source = graph.getVertexByID(0);
             target = graph.getVertexByID(4);
         } catch (NoVertexForIDExistsException e) {
-            e.printStackTrace();
-            return null;
+            transfer.setError("NoVertexForIDExistsException");
+            return transfer;
         }
 
         // project coordinate
 //        Vertex source = null;
 //        Vertex target = null;
 //        try {
-//            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(new C);
-//            target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate2);
+//            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(0));
+//            target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(1));
 //        } catch (GeometryProcessorException e) {
-//            e.printStackTrace();
-//            return null;
+//            transfer.setError("GeometryProcessorException");
+//            return transfer;
 //        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//            return null;
+//            transfer.setError("InstantiationException");
+//            return transfer;
 //        }
 
         List<Vertex> route = null;
         try {
             route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
         } catch (ShortestPathComputeException e) {
-            e.printStackTrace();
-            return null;
+            transfer.setError("ShortestPathComputeException");
+            return transfer;
         } catch (NoShortestPathExistsException e) {
-            e.printStackTrace();
-            return null;
+            transfer.setError("NoShortestPathExistsException");
+            return transfer;
         } catch (InstantiationException e) {
-            e.printStackTrace();
-            return null;
+            transfer.setError("InstantiationException");
+            return transfer;
         }
 
-        RouteInfoTransfer transfer = new RouteInfoTransfer();
+        if (route == null) {
+            transfer.setError("route is null");
+            return transfer;
+        }
+
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
                     new CrossingInformation(new float[]{50.f, 100.f})));
 
-        return transfer;     */
+        return transfer;
     }
 
 
@@ -117,10 +122,78 @@ public class Server {
     public RouteInfoTransfer computeRoundtrip(Coordinate coordinate,
                                               @PathParam("profile") String profile,
                                               @PathParam("length") String length) {
-//        int profileAsInt = Integer.parseInt(profile);
-//        int lengthAsInt = Integer.parseInt(length);
-//        return RoundtripProcessor.getInstance().computeRoundtrip(coordinate, profileAsInt, lengthAsInt);        RouteInfoTransfer transfer = new RouteInfoTransfer();
+
         RouteInfoTransfer transfer = new RouteInfoTransfer();
+
+        // check input
+        if (coordinate == null || profile == null || length == null) {
+            transfer.setError("coordinate, profile and length must not be null");
+            return transfer;
+        }
+
+        int profileAsInt;
+        int lengthAsInt;
+        try {
+            profileAsInt = Integer.parseInt(profile);
+            lengthAsInt = Integer.parseInt(length);
+        } catch (NumberFormatException e) {
+            transfer.setError("NumberFormatException");
+            return transfer;
+        }
+
+        Graph graph = null;
+        try {
+            graph = Graph.getInstance();
+        } catch (InstantiationException e) {
+            transfer.setError("InstantiationException");
+            return transfer;
+        }
+
+        // project temporary
+        Vertex source = null;
+        try {
+            source = graph.getVertexByID(0);
+        } catch (NoVertexForIDExistsException e) {
+            transfer.setError("NoVertexForIDExistsException");
+            return transfer;
+        }
+
+        // project coordinate
+//        Vertex source = null;
+//        try {
+//            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+//        } catch (GeometryProcessorException e) {
+//            transfer.setError("GeometryProcessorException");
+//            return transfer;
+//        } catch (InstantiationException e) {
+//            transfer.setError("InstantiationException");
+//            return transfer;
+//        }
+
+        List<Vertex> route = null;
+        try {
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source, profileAsInt, lengthAsInt);
+        } catch (ShortestPathComputeException e) {
+            transfer.setError("ShortestPathComputeException");
+            return transfer;
+        } catch (NoShortestPathExistsException e) {
+            transfer.setError("NoShortestPathExistsException");
+            return transfer;
+        } catch (InstantiationException e) {
+            transfer.setError("InstantiationException");
+            return transfer;
+        }
+
+        if (route == null) {
+            transfer.setError("route is null");
+            return transfer;
+        }
+
+        for (Vertex vertex : route)
+            transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
+                    vertex.getLongitude(),
+                    new CrossingInformation(new float[]{50.f, 100.f})));
+
         return transfer;
     }
 
@@ -129,16 +202,25 @@ public class Server {
      * Endpoint method for computation an optimized route based on a given route.
      * The actual computation is done by an instance of RoundtripProcessor.
      *
-     * @param routeInfoTransfer The route to be optimized.
+     * @param coordinates List of coordinates.
      * @return RouteInfoTransfer.
      */
     @POST
     @Path("computeOptimizedRoute")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public RouteInfoTransfer computeOptimizedRoute(RouteInfoTransfer routeInfoTransfer) {
-//        return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
+    public RouteInfoTransfer computeOptimizedRoute(List<Coordinate> coordinates) {
+
         RouteInfoTransfer transfer = new RouteInfoTransfer();
+
+        // check input
+        if (coordinates == null || coordinates.size() < 2) {
+            transfer.setError("coordinates must not be null and size equal to or greater than 2");
+            return transfer;
+        }
+
+//      return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
+        transfer.setError("computeOptimizedRoute not yet implemented");
         return transfer;
     }
 
