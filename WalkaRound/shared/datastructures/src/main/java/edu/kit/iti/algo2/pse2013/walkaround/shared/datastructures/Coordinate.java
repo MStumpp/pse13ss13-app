@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *
@@ -12,13 +11,13 @@ public class Coordinate implements Geometrizable {
 	/**
 	 * latitude of this Coordinate.
 	 */
-	private double lat;
+	private double latitude;
 
 
 	/**
 	 * longitude of this Coordinate.
 	 */
-	private double lon;
+	private double longitude;
 
 
 	/**
@@ -73,7 +72,7 @@ public class Coordinate implements Geometrizable {
 	 * @return double.
 	 */
 	public double getLatitude() {
-		return lat;
+		return latitude;
 	}
 
 
@@ -83,7 +82,7 @@ public class Coordinate implements Geometrizable {
 	 * @return double.
 	 */
 	public double getLongitude() {
-		return lon;
+		return longitude;
 	}
 
 
@@ -94,11 +93,11 @@ public class Coordinate implements Geometrizable {
 	 */
 	public void setLatitude(double lat) {
 		if (lat > 90) {
-			this.lat = -90 + lat % 90;
+			this.latitude = -90 + lat % 90;
 		} else if (lat < -90) {
-			this.lat = 90 + lat % 90;
+			this.latitude = 90 + lat % 90;
 		} else {
-			this.lat = lat;
+			this.latitude = lat;
 		}
 	}
 
@@ -110,11 +109,11 @@ public class Coordinate implements Geometrizable {
      */
 	public void setLongitude(double lon) {
 		if (lon > 180) {
-			this.lon = -180 + lon % 180;
+			this.longitude = -180 + lon % 180;
 		} else if (lon < -180) {
-			this.lon = 180 + lon % 180;
+			this.longitude = 180 + lon % 180;
 		} else {
-			this.lon = lon;
+			this.longitude = lon;
 		}
 	}
 
@@ -150,7 +149,7 @@ public class Coordinate implements Geometrizable {
 
 	@Override
 	public String toString() {
-		return String.format("Coordinate latitude: %.8f° longitude %.8f°", lat, lon);
+		return String.format("Coordinate latitude: %.8f° longitude %.8f°", latitude, longitude);
 	}
 
 
@@ -161,8 +160,8 @@ public class Coordinate implements Geometrizable {
 
         Coordinate that = (Coordinate) o;
 
-        if (Double.compare(that.lat, lat) != 0) return false;
-        if (Double.compare(that.lon, lon) != 0) return false;
+        if (Double.compare(that.latitude, latitude) != 0) return false;
+        if (Double.compare(that.longitude, longitude) != 0) return false;
 
         return true;
     }
@@ -172,22 +171,23 @@ public class Coordinate implements Geometrizable {
     public int hashCode() {
         int result;
         long temp;
-        temp = Double.doubleToLongBits(lat);
+        temp = Double.doubleToLongBits(latitude);
         result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(lon);
+        temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
+
+    @Override
     public Coordinate clone() {
     	Coordinate clonedCoordinate;
     	if (this.crossInfo == null) {
-    		clonedCoordinate = new Coordinate (this.lat, this.lon);
+    		clonedCoordinate = new Coordinate (this.latitude, this.longitude);
     	} else {
-    		clonedCoordinate = new Coordinate(this.lat, this.lon, this.crossInfo.clone());
+    		clonedCoordinate = new Coordinate(this.latitude, this.longitude, this.crossInfo.clone());
     	}
     	return clonedCoordinate;
     }
-    
-    
+
 }

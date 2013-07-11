@@ -120,8 +120,9 @@ public class RoundtripProcessor {
         throws NoShortestPathExistsException, ShortestPathComputeException {
         if (source == null)
             throw new IllegalArgumentException("coordinate must be provided");
-        if (Profile.getByID(profile) == null)
-            throw new IllegalArgumentException("profile for id unknown");
+        // TODO: Uncomment once Profile returned
+        /*if (Profile.getByID(profile) == null)
+            throw new IllegalArgumentException("profile for id unknown");  */
         if (length < 100)
             throw new IllegalArgumentException("length must be at least 100 meter");
 
