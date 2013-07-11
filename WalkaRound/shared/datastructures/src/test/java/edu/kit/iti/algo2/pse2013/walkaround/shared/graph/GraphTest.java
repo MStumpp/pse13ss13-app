@@ -93,7 +93,7 @@ public class GraphTest {
 
 
     @Test
-    public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
+    public void testComputeShortestPathWithRealDataSet() throws InstantiationException {
 
         File file = new File(getClass().getResource("/graphData.io").getFile());
         Assert.assertNotNull(file);

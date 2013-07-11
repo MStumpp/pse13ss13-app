@@ -23,9 +23,9 @@ public class InfoView extends Fragment {
 
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		Log.d(TAG_PULLUP_CONTENT,"Destroy InfoView");
 		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
+		super.onDestroy();
 	}
 	
 	public boolean equals(Fragment f){

@@ -39,7 +39,7 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 	@Override
 	public void complete() {
 		state++;
-		Logger.getLogger(this.getClass().getName()).info("Finished parsing osm-file");
+		Logger.getLogger(this.getClass().getSimpleName()).info("Finished parsing osm-file");
 		System.out.println(nodes.size());
 	}
 	public boolean skipBlock(FileBlockPosition blockPos) {
