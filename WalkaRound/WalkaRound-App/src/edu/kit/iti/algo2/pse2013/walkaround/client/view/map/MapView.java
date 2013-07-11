@@ -51,7 +51,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * @author Ludwig Biermann
  * 
  */
-public class MapView extends Activity implements Listener{
+public class MapView extends Activity {
 
 	/**
 	 * Debug Information
@@ -246,7 +246,7 @@ public class MapView extends Activity implements Listener{
 
 		locationManager = (LocationManager) this.getApplicationContext().getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-		locationManager.addGpsStatusListener(this);
+		
 	}
 
 	/**
@@ -779,21 +779,4 @@ public class MapView extends Activity implements Listener{
 			return false;
 		}
 	}
-
-	@Override
-	public void onGpsStatusChanged(int event) {
-		Log.d(TAG_MAPVIEW, "onGpsStatusChanged!");
-		try {
-			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-				//TODO Sensor Manger einbauen damit er auch bei keinen GPS oder nicht vorhanden "Weg" sich bewegt
-				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getBearing());
-			} else {
-				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getBearing());
-			}
-		} catch(NullPointerException e){
-			Log.e("GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) + " " +"GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) == null) ,e.toString());
-		}
-		
-	}
-
 }

@@ -27,13 +27,13 @@ public class CompassManager implements PositionListener {
 	/*
 	 * 
 	 */
-	private double lastKnownBearing;
+	private float lastKnownBearing;
 
 	/**
 	 * 
 	 */
 	public CompassManager(PositionManager pm) {
-		lastKnownBearing = 0.0d;
+		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
 		pm.registerPositionListener(this);
 	}
