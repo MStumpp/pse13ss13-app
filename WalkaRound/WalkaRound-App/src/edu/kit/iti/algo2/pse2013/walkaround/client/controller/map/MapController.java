@@ -72,6 +72,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 */
 	private List<DisplayCoordinate> lines;
 	private RouteInfo currentRoute;
+	private int currentActiveWaypoint;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -147,6 +148,15 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * -----------------Getter Methods-----------------
 	 */
 
+	/**
+	 * Gives the id of the current Active Waypoint back
+	 * 
+	 * @return id of active Waypoint
+	 */
+	public int getActiveWaypointId(){
+		return currentActiveWaypoint;
+	}
+	
 	/**
 	 * Gives the current Pull Up View back.
 	 */
@@ -300,6 +310,39 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 				.getLongitude(), "PLACEHOLDER"));
 	}
 
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void onMovePoint(float x, float y, int id){
+		
+		double xDelta = CoordinateUtility.convertPixelsToDegrees(x, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_X);
+		double yDelta = CoordinateUtility.convertPixelsToDegrees(y, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_Y);
+		
+		Coordinate c = this.getWaypointById(id);
+		c.setLatitude(c.getLatitude()-yDelta);
+		c.setLongitude(c.getLongitude()+xDelta);
+		
+		this.routeController.moveActiveWaypoint(c);
+	}
+	
+	/**
+	 * returns a Waypoint by his id
+	 * 
+	 * @param id of the Waypoint
+	 * @return null if no Waypoint is available
+	 */
+	private Coordinate getWaypointById(int id) {
+		
+		for(Waypoint value :currentRoute.getWaypoints()){
+			if(value.getId() == id){
+				return value;
+			}
+		}
+		return null;
+	}
+
 	/*
 	 * -----------------Implemented Listener-----------------
 	 */
@@ -347,6 +390,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
 
 		this.currentRoute = currentRoute;
+		this.currentActiveWaypoint = activeWaypoint.getId();
 		updateRouteOverlay();
 	}
 
