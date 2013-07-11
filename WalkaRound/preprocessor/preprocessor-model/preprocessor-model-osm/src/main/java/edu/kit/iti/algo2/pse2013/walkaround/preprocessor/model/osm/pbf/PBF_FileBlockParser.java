@@ -17,6 +17,7 @@ import crosby.binary.file.FileBlockPosition;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
@@ -141,6 +142,13 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 						}
 					} else {
 						graphData.addEdges(way.getEdges());
+					}
+				}
+				if (isValidWay) {
+					for (int catID : Category.getAllAreaCategories()) {
+						if (OSMCategoryFactory.createAreaCategory(catID).accepts(way)) {
+							locationData.addArea(way.getArea());
+						}
 					}
 				}
 			}

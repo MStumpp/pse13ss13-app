@@ -11,6 +11,7 @@ import android.location.Location;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
@@ -209,6 +210,15 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.mapView.updateRouteOverlayImage(b);
 	}
 
+	/**
+	 * Forward poi list to MapView
+	 * 
+	 * @param poiList the required list of pois
+	 */
+	public void onPOIChange(List<DisplayPOI> poiList){
+		//mapView.updateDisplayCoordinate(poiList);
+	}
+	
 	/*
 	 * -----------------Forwarding To MapModel-----------------
 	 */

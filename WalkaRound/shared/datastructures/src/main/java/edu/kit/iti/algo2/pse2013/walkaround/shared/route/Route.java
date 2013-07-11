@@ -164,6 +164,7 @@ public class Route implements RouteInfo {
 			Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
 
 			if (beforeActive != null) {
+				Log.d(TAG_ROUTE, "moveActiveWaypoint(coord) case beforeActive != null");
 				RouteInfo newRouteBeforeActiveWaypoint = this.routeProcessor
 						.computeShortestPath(beforeActive, coord);
 				this.deletePathBetweenTwoWaypoints(beforeActive,
@@ -173,6 +174,7 @@ public class Route implements RouteInfo {
 			}
 
 			if (afterActive != null) {
+				Log.d(TAG_ROUTE, "moveActiveWaypoint(coord) case afterActive != null");
 				RouteInfo newRoutePastActiveWaypoint = this.routeProcessor
 						.computeShortestPath(coord, afterActive);
 				this.deletePathBetweenTwoWaypoints(beforeActive,
@@ -332,7 +334,7 @@ public class Route implements RouteInfo {
 	 * @return
 	 */
 	private Waypoint getPreviousWaypoint(int waypointNr) {
-		Log.d(TAG_ROUTE, "getPreviousWaypoint(int)");
+		Log.d(TAG_ROUTE, "getPreviousWaypoint(int " + waypointNr + ")");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		if (waypointNr == 0) {
 			return null;
@@ -347,7 +349,7 @@ public class Route implements RouteInfo {
 	 * @return
 	 */
 	private Waypoint getNextWaypoint(int waypointNr) {
-		Log.d(TAG_ROUTE, "getNextNextWaypoint(int)");
+		Log.d(TAG_ROUTE, "getNextNextWaypoint(int " + waypointNr + ")");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		if (waypointNr == (waypoints.size() - 1)) {
 			return null;
@@ -388,7 +390,7 @@ public class Route implements RouteInfo {
 	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one,
 			Coordinate two) {
 		Log.d(TAG_ROUTE,
-				"addRouteBetweenTwoCoords(RouteInfo, Coordinate, Coordinate)");
+				"addRouteBetweenTwoCoords(RouteInfo, Coordinate : " + one + ", Coordinate: " + two + ")");
 		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates
 				.indexOf(two));
 		assert (route.getStart().equals(one) && route.getEnd().equals(two));
