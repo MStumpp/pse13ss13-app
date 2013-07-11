@@ -53,12 +53,9 @@ public class MapView extends Activity {
 	 * Debug Information
 	 */
 	private static final String TAG_MAPVIEW = MapView.class.getSimpleName();
-	private static final String TAG_MAPVIEW_ANIMATION = MapView.class
-			.getSimpleName() + "_ANIMATION";
-	private static final String TAG_MAPVIEW_GESTURE = MapView.class
-			.getSimpleName() + "_GESTURES";
-	private static final String TAG_MAPVIEW_TOUCH = MapView.class
-			.getSimpleName() + "_TOUCH";
+	private static final String TAG_MAPVIEW_ANIMATION = TAG_MAPVIEW + "_animation";
+	private static final String TAG_MAPVIEW_GESTURE = TAG_MAPVIEW + "_gestures";
+	private static final String TAG_MAPVIEW_TOUCH = TAG_MAPVIEW + "_touch";
 
 	/**
 	 * Fling defaults
@@ -791,56 +788,69 @@ public class MapView extends Activity {
 		public boolean onTouch(View view, MotionEvent event) {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
-				mc.setActive(id);
-				return true;
+				currentId = id;
+				return waypointGestureDetector.onTouchEvent(event)	;
 			}
 			return false;
 		}
 	}
+	int currentId;
 
 	/**
-	 * This is a Gesture Detector which listen to the map touches.
+	 * This is a Gesture Detector which listen to the Waypoint touches.
 	 * 
 	 * @author Ludwig Biermann
 	 * 
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
+		
+		
 
 		@Override
-		public boolean onDown(MotionEvent arg0) {
-			// TODO Auto-generated method stub
+		public boolean onDown(MotionEvent event) {
+			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onDown " + currentId);
+			mc.setActive(currentId);
+			//mc.getActiveWaypointId();
+			return true;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+
+			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY() + " " + currentId);
+			if (Math.abs(velocityY) > 100 || Math.abs(velocityY) > 100) {
+				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point" + currentId);
+				mc.onDeletePoint(currentId);
+			}
+			
 			return false;
 		}
 
 		@Override
-		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
-			// TODO Auto-generated method stub
-			return false;
+		public void onLongPress(MotionEvent event) {
+			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onLongPress " + currentId);
 		}
 
 		@Override
-		public void onLongPress(MotionEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
-			// TODO Auto-generated method stub
-			return false;
+		public boolean onScroll(MotionEvent event1, MotionEvent event2, float deltaX,
+				float deltaY) {
+			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
+			
+			mc.onMovePoint(deltaX, deltaY, currentId);
+			
+			return true;
 		}
 
 		@Override
 		public void onShowPress(MotionEvent arg0) {
-			// TODO Auto-generated method stub
+			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onShowPress " + currentId);
 
 		}
 
 		@Override
 		public boolean onSingleTapUp(MotionEvent arg0) {
-			// TODO Auto-generated method stub
+			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onSingleTapUp " + currentId);
 			return false;
 		}
 
@@ -848,7 +858,7 @@ public class MapView extends Activity {
 
 	@Override
 	public void onLowMemory() {
-		super.onLowMemory();
-
+        super.onLowMemory();
+        System.gc();
 	}
 }

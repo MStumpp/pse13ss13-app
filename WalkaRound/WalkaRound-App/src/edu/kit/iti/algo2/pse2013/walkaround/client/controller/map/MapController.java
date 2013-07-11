@@ -4,6 +4,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 import java.util.LinkedList;
 import java.util.List;
 
+
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
@@ -12,7 +13,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
@@ -24,6 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 //Android library
 //Walkaround library
+import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 /**
  * This Class controls the data flow between the System and the real View.
@@ -72,6 +73,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 */
 	private List<DisplayCoordinate> lines;
 	private RouteInfo currentRoute;
+	private int currentActiveWaypoint;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -147,6 +149,15 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * -----------------Getter Methods-----------------
 	 */
 
+	/**
+	 * Gives the id of the current Active Waypoint back
+	 * 
+	 * @return id of active Waypoint
+	 */
+	public int getActiveWaypointId(){
+		return currentActiveWaypoint;
+	}
+	
 	/**
 	 * Gives the current Pull Up View back.
 	 */
@@ -269,10 +280,13 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Delete the Active Waypoint
+	 * @param currentId 
 	 */
-	public void onDeletePoint() {
+	public void onDeletePoint(int currentId) {
 		Log.d(TAG_MAP_CONTROLLER, "Delete active Waypoint");
-		this.routeController.deleteActiveWaypoint();
+		if(this.currentActiveWaypoint == currentId){
+			this.routeController.deleteActiveWaypoint();
+		}
 	}
 
 	/**
@@ -298,6 +312,39 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		}
 		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next
 				.getLongitude(), "PLACEHOLDER"));
+	}
+
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void onMovePoint(float x, float y, int id){
+		
+		double xDelta = CoordinateUtility.convertPixelsToDegrees(x, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_X);
+		double yDelta = CoordinateUtility.convertPixelsToDegrees(y, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_Y);
+		
+		Coordinate c = this.getWaypointById(id);
+		c.setLatitude(c.getLatitude()-yDelta);
+		c.setLongitude(c.getLongitude()+xDelta);
+		
+		this.routeController.moveActiveWaypoint(c);
+	}
+	
+	/**
+	 * returns a Waypoint by his id
+	 * 
+	 * @param id of the Waypoint
+	 * @return null if no Waypoint is available
+	 */
+	private Coordinate getWaypointById(int id) {
+		
+		for(Waypoint value :currentRoute.getWaypoints()){
+			if(value.getId() == id){
+				return value;
+			}
+		}
+		return null;
 	}
 
 	/*
@@ -343,10 +390,11 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	}
 
 	@Override
-	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
+	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
 
 		this.currentRoute = currentRoute;
+		this.currentActiveWaypoint = currentRoute.getActiveWaypoint().getId();
 		updateRouteOverlay();
 	}
 

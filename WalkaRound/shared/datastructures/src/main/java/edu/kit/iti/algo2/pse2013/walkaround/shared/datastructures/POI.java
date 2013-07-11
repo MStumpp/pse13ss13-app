@@ -2,7 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 /**
  * This class represents a POI.
- *
+ * 
  * @author Matthias Stumpp
  * @version 1.0
  */
@@ -25,7 +25,7 @@ public class POI extends Location {
 
 	/**
 	 * Creates an instance of POI.
-	 *
+	 * 
 	 * @param lat
 	 *            Latitude of POI.
 	 * @param lon
@@ -39,14 +39,15 @@ public class POI extends Location {
 	 * @param categories
 	 *            Categories of POI.
 	 */
-	public POI(double lat, double lon, String name, String textInfo, String url, int[] categories) {
+	public POI(double lat, double lon, String name, String textInfo,
+			String url, int[] categories) {
 		this(lat, lon, name, textInfo, url, categories, null);
 	}
 
 	/**
 	 * Creates an instance of POI. This is for example useful when parsing from
 	 * a PBF-File.
-	 *
+	 * 
 	 * @param loc
 	 *            A prototype of the POI, which will be created. It contains all
 	 *            attributes, that are inherited by the superclass Location
@@ -57,13 +58,15 @@ public class POI extends Location {
 	 * @param poiCategories
 	 *            the POI-Categories, this POI belongs to
 	 */
-	public POI(Location loc, String textInfo, String imageURL, int[] poiCategories) {
-		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, imageURL, poiCategories);
+	public POI(Location loc, String textInfo, String imageURL,
+			int[] poiCategories) {
+		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo,
+				imageURL, poiCategories);
 	}
 
 	/**
 	 * Creates an instance of POI.
-	 *
+	 * 
 	 * @param lat
 	 *            Latitude of POI.
 	 * @param lon
@@ -89,7 +92,7 @@ public class POI extends Location {
 
 	/**
 	 * Sets the textual information of this POI.
-	 *
+	 * 
 	 * @param text
 	 *            text to set
 	 */
@@ -99,7 +102,7 @@ public class POI extends Location {
 
 	/**
 	 * Returns text info of POI.
-	 *
+	 * 
 	 * @return String.
 	 */
 	public String getTextInfo() {
@@ -107,8 +110,17 @@ public class POI extends Location {
 	}
 
 	/**
+	 * Sets the url of an image of this POI.
+	 * 
+	 * @param url String
+	 */
+	public void setURL(String url) {
+		this.url = url;
+	}
+
+	/**
 	 * Returns an url of the image for this POI.
-	 *
+	 * 
 	 * @return String
 	 */
 	public String getURL() {
@@ -117,7 +129,7 @@ public class POI extends Location {
 
 	/**
 	 * Returns all categories of POI.
-	 *
+	 * 
 	 * @return A list of category-IDs
 	 */
 	public int[] getPOICategories() {
@@ -137,7 +149,7 @@ public class POI extends Location {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -154,7 +166,7 @@ public class POI extends Location {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

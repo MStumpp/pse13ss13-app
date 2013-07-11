@@ -28,7 +28,7 @@ public class OSMNode extends OSMElement {
 	public double getLongitude() {
 		return vertex.getLongitude();
 	}
-	public Vertex convertToVertex() {
+	public Vertex getVertex() {
 		return vertex;
 	}
 
