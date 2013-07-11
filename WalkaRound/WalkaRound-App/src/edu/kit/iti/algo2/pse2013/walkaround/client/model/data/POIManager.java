@@ -214,6 +214,7 @@ public class POIManager {
 				int currentKey = keyIter.next();
 				suggestions.addAll(suggestionsMap.get(currentKey));
 			}
+			Log.d(TAG_POIMANAGER, "suggestions" + suggestions.get(0));
 			return suggestions;
 		}
 		return suggestions;
@@ -234,7 +235,7 @@ public class POIManager {
 	public List<Location> searchPOIsByAddress(Address address, Context context) {
 
 		ArrayList<Location> suggestions = new ArrayList<Location>();
-		Geocoder geocoder = new Geocoder(context, Locale.GERMANY);
+		Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.GERMANY);
 		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
 		try {
 			addresses = geocoder.getFromLocationName(address.toString(),

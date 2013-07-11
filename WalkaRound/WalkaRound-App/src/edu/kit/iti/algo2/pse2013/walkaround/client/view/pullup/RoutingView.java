@@ -43,7 +43,6 @@ public class RoutingView extends Fragment implements RouteListener {
 	private ImageView save;
 	private Button addFavorite;
 	private Button goToMap;
-	private EditText name;
 	private LinearLayout layout;
 
 	private static boolean isListener = false;
@@ -71,7 +70,6 @@ public class RoutingView extends Fragment implements RouteListener {
 		addFavorite = (Button) this.getActivity().findViewById(
 				R.id.add_favorite);
 		goToMap = (Button) this.getActivity().findViewById(R.id.go_to_map);
-		name = (EditText) this.getActivity().findViewById(R.id.name_favorites);
 		layout = (LinearLayout) getActivity().findViewById(R.id.waylist);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
@@ -100,8 +98,6 @@ public class RoutingView extends Fragment implements RouteListener {
 		addFavorite.getLayoutParams().width = size.x / 2;
 		goToMap.setX(size.x / 2);
 		goToMap.getLayoutParams().width = size.x / 2;
-		name.setX(size.x / 5);
-		name.setY(size.y / 8);
 
 		Log.d(TAG_PULLUP_CONTENT, "Zuweisung der Listener");
 		reset.setOnTouchListener(new resetListener());
@@ -111,7 +107,6 @@ public class RoutingView extends Fragment implements RouteListener {
 		save.setOnTouchListener(new saveListener());
 		addFavorite.setOnTouchListener(new favoriteListener());
 		goToMap.setOnTouchListener(new backToMapListener());
-		name.setOnEditorActionListener(new saveFavoriteListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
@@ -135,10 +130,7 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(reset)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(reset) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "reset wurde gedr�ckt");
 				routeController.resetRoute();
 			}
@@ -152,10 +144,8 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(invert)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(invert)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "invert wurde gedr�ckt");
 				routeController.revertRoute();
 			}
@@ -169,10 +159,7 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(tsp)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(tsp) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedr�ckt");
 				routeController.optimizeRoute();
 			}
@@ -185,10 +172,7 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(load)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(load) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "load wurde gedr�ckt");
 				// TODO: ansicht wechselt in die liste der favorisierten routen
 			}
@@ -201,14 +185,9 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(save)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
-				name.setVisibility(View.VISIBLE);
-				// TODO : routemenucontroller ruft save route auf, wie gibt man
-				// den namen mit!?
+				// TODO : favoritenansicht öffnet sich
 			}
 			return false;
 		}
@@ -219,10 +198,8 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(addFavorite)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(addFavorite)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "add favorite wurde gedr�ckt");
 				// TODO: ansicht wechselt in die liste der favorisierten orte
 			}
@@ -235,10 +212,8 @@ public class RoutingView extends Fragment implements RouteListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(goToMap)) {
-				if (name.getVisibility() == View.VISIBLE) {
-					name.setVisibility(View.INVISIBLE);
-				}
+			if (v.equals(goToMap)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "go to map wurde gedr�ckt");
 				// TODO:pullup muss sich schlie�en
 			}
@@ -247,23 +222,22 @@ public class RoutingView extends Fragment implements RouteListener {
 
 	}
 
-	private class saveFavoriteListener implements OnEditorActionListener {
-
-		@Override
-		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			if (v.equals(name)) {
-				Log.d(TAG_PULLUP_CONTENT,
-						"Ein name wurde eingegeben wurde eingegeben");
-				// routeController.addRouteToFavorites((name.toString());
-				name.setVisibility(View.INVISIBLE);
-				// TODO:fix problem wie die route angegeben wird
-			}
-			return false;
-		}
-	}
-
 	@Override
-	public void onRouteChange(RouteInfo currentRoute) {
-		lastKnownRoute = currentRoute;
+	public void onRouteChange(final RouteInfo currentRoute) {
+
+		/*
+		 * getActivity().runOnUiThread(new Runnable() { public void run() { if
+		 * (currentRoute != null) { lastKnownRoute = currentRoute;
+		 * 
+		 * for (Iterator<Waypoint> iter = lastKnownRoute
+		 * .getWaypoints().iterator(); iter.hasNext();) { Waypoint current =
+		 * iter.next(); TextView waypoint = new TextView(getActivity()
+		 * .getApplicationContext()); waypoint.setText("TEST " +
+		 * current.getName());
+		 * 
+		 * Log.d("wtf", ""+ (layout == null)); Log.d("wtf", ""+ (waypoint ==
+		 * null)); layout.addView(waypoint); } } } });
+		 */
+
 	}
 }
