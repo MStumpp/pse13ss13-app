@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="1"
+            android:text="@string/bars_and_pubs"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -29,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="2"
+            android:text="@string/cinema"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -37,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="3"
+            android:text="@string/clubs_and_nightclubs"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -45,7 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="4"
+            android:text="@string/fast_food"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -53,7 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="5"
+            android:text="@string/food"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -61,7 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="6"
+            android:text="@string/museum"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -69,7 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="7"
+            android:text="@string/public_transportation"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -77,7 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="8"
+            android:text="@string/shop"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -85,7 +93,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="9"
+            android:text="@string/sleeping_accomodation"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -93,7 +102,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="10"
+            android:text="@string/supermarket"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -101,7 +111,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:tag="11"
+            android:text="@string/theatre"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>

@@ -8,27 +8,31 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Category {
 
-	public static final int BARS_AND_PUBS = 1;
+	public static final int POI_BARS_AND_PUBS = 1;
 
-	public static final int CINEMA = 2;
+	public static final int POI_CINEMA = 2;
 
-	public static final int CLUBS_AND_NIGHTCLUBS = 3;
+	public static final int POI_CLUBS_AND_NIGHTCLUBS = 3;
 
-	public static final int FAST_FOOD = 4;
+	public static final int POI_FAST_FOOD = 4;
 
-	public static final int FOOD = 5;
+	public static final int POI_FOOD = 5;
 
-	public static final int MUSEUM = 6;
+	public static final int POI_MUSEUM = 6;
 
-	public static final int PUBLIC_TRANSPORTATION = 7;
+	public static final int POI_PUBLIC_TRANSPORTATION = 7;
 
-	public static final int SHOP = 8;
+	public static final int POI_SHOP = 8;
 
-	public static final int SLEEPING_ACCOMODATIONS = 9;
+	public static final int POI_SLEEPING_ACCOMODATIONS = 9;
 
-	public static final int SUPERMARKET = 10;
+	public static final int POI_SUPERMARKET = 10;
 
-	public static final int THEATRE = 11;
+	public static final int POI_THEATRE = 11;
+
+	public static final int AREA_FOREST = 100;
+
+	public static final int AREA_GARDEN = 101;
 
 	/**
 	 * IDs of all existing categories for areas.
@@ -38,11 +42,9 @@ public class Category {
 	/**
 	 * IDs of all existing categories for POIs.
 	 */
-	private static int[] allPOICategories = { FOOD, FAST_FOOD,
-			BARS_AND_PUBS, CLUBS_AND_NIGHTCLUBS,
-			SUPERMARKET, SHOP, PUBLIC_TRANSPORTATION,
-			MUSEUM, THEATRE, CINEMA,
-			SLEEPING_ACCOMODATIONS };
+	private static int[] allPOICategories = { POI_FOOD, POI_FAST_FOOD,POI_BARS_AND_PUBS, POI_CLUBS_AND_NIGHTCLUBS,
+			POI_SUPERMARKET, POI_SHOP, POI_PUBLIC_TRANSPORTATION, POI_MUSEUM, POI_THEATRE, POI_CINEMA,
+			POI_SLEEPING_ACCOMODATIONS };
 
 	/**
 	 * Returns all existing categories of areas.

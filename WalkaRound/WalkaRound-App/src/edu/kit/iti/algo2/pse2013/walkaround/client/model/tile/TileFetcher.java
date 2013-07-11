@@ -24,7 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class TileFetcher {
 	private static final String TAG = TileFetcher.class.getSimpleName();
-	private static final int MAX_CACHE_SIZE = 500;
+	private static final int MAX_CACHE_SIZE = 250;
 	private TreeMap<String, TimestampedBitmap> cache = new TreeMap<String, TimestampedBitmap>();
 	private FetchingQueue currentRunnable = new FetchingQueue();
 	private Thread currentThread = new Thread(currentRunnable);

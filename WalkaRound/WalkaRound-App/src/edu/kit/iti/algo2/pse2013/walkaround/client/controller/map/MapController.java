@@ -14,9 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
@@ -29,9 +27,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This Class controls the data flow between the System and the real View.
- * 
+ *
  * @author Ludwig Biermann
- * 
  */
 public class MapController implements RouteListener, PositionListener, CompassListener {
 
@@ -74,7 +71,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * DisplayCoordinats to draw he Lines
 	 */
 	private List<DisplayCoordinate> lines;
-	RouteInfo currentRoute;
+	private RouteInfo currentRoute;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -82,7 +79,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 * 
+	 *
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
@@ -96,7 +93,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 * 
+	 *
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
@@ -113,7 +110,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * private Constructor of the Map Controller
-	 * 
+	 *
 	 * @param mv
 	 *            the required MapView
 	 */
@@ -137,13 +134,13 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 		Log.d(TAG_MAP_CONTROLLER,
 				"Add three Example Waypoints to routeController!");
-		routeController.addWaypoint(new Waypoint(49.01, 8.40333, "Marktplatz"));
-		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,
-				"Brauerstraße"));
-		routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
+		// routeController.addWaypoint(new Waypoint(49.01, 8.40333,
+		// "Marktplatz"));
+		// routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,
+		// "Brauerstraße"));
+		// routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
 
-		PositionManager.initialize(mapView);
-		CompassManager.getInstance().registerCompassListener(this);
+		// CompassManager.getInstance().registerCompassListener(this);
 	}
 
 	/*
@@ -159,7 +156,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Gives back the current Level of Detail.
-	 * 
+	 *
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -168,7 +165,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Gives the current Route back.
-	 * 
+	 *
 	 * @return current Route
 	 */
 	public List<DisplayCoordinate> getCurrentRouteLines() {
@@ -181,7 +178,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Forward the Bitmap of the current Map
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
@@ -192,7 +189,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Forward the Bitmap of the Route
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
@@ -208,7 +205,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 * 
+	 *
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
@@ -223,7 +220,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
@@ -238,7 +235,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Zoom by a delta.
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
@@ -256,7 +253,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	/**
 	 * Switch UserLock between true and false.
 	 */
-	public void onLockUserPosition() {
+	public void toggleLockUserPosition() {
 		if (this.lockUserPosition) {
 			this.lockUserPosition = false;
 		} else {
@@ -280,7 +277,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Creates a new Point.
-	 * 
+	 *
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
@@ -311,8 +308,10 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * Helper Method that updateRouteOverlay
 	 */
 	private void updateRouteOverlay() {
+		if (currentRoute == null || currentRoute.getActiveWaypoint() == null) {
+			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
+		} else {
 
-		try {
 			this.lines = CoordinateUtility
 					.extractDisplayCoordinatesOutOfRouteInfo(currentRoute,
 							this.mapModel.getUpperLeft(),
@@ -336,11 +335,10 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 			 */
 
 			mapView.updateDisplayWaypoints(displayPoints);
+			mapModel.shift(new DisplayCoordinate(0,0));
 			// mapView.setActive(2);
-			mapModel.drawDisplayCoordinates(lines);
+			// mapModel.drawDisplayCoordinates(lines);
 			mapView.setActive(currentRoute.getActiveWaypoint().getId());
-		} catch (NullPointerException e) {
-			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
 		}
 	}
 
@@ -354,31 +352,37 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
-		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
-		if(defaultUserLock){
-			Log.d(TAG_MAP_CONTROLLER, "Position Change!");
-			//TODO karte verschieben
-			//this.onShift(distanceX, distanceY)
+		DisplayCoordinate pos = CoordinateUtility
+				.convertCoordinateToDisplayCoordinate(
+						new Coordinate(androidLocation.getLatitude(),
+								androidLocation.getLongitude()), mapModel
+								.getUpperLeft(), mapModel
+								.getCurrentLevelOfDetail());
+
+		if (this.lockUserPosition) {
+			Log.d(TAG_MAP_CONTROLLER, "Position Shift Change!");
+			mapModel.shift(pos);
 		}
-		//this.mapView.onPositionChange(x, y);
+		mapView.onPositionChange(pos.getX(), pos.getY());
 	}
 
 	/**
 	 * forwards a set active action to route controller
-	 * @param id of the waypoint
-	 * 
+	 *
+	 * @param id
+	 *            of the waypoint
+	 *
 	 */
 	public void setActive(int id) {
-		//TODO route muss id als actove setzen lassen
-		//this.routeController.setActiveWaypoint(id);
-		
+		// TODO route muss id als actove setzen lassen
+		this.routeController.setActiveWaypoint(id);
 	}
 
 	@Override
-	public void onCompassChange(double direction) {
-		//TODO weiterleitung zu View sollte klappen
-		//this.mapView.onPositionChange((float)direction);
-		//this.mapView.onPositionChange(0.0f);
+	public void onCompassChange(float direction) {
+		// TODO weiterleitung zu View sollte klappen
+		this.mapView.onPositionChange(direction);
+		// this.mapView.onPositionChange(0.0f);
 	}
 
 }
