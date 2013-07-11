@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+
 public class POIMenuController {
 	private static POIMenuController instance;
 
@@ -15,21 +17,17 @@ public class POIMenuController {
 	}
 
 
-	public int[] requestAllActiveCategories() {
+	/*	wird denke ich nicht benötigt (Thomas)
+	 * public int[] requestAllActiveCategories() {
 		return null;
 		// TODO: leite an eine Instanz des POI Managers weiter
-	}
+	}*/
 
 	public void addActiveCategory(int catIndex) {
-		// TODO: leite an eine Instanz des POI Managers weiter
+		POIManager.getInstance().addActivePOICategory(catIndex);
 	}
 
 	public void removeActiveCategory(int catIndex) {
-		// TODO: leite an eine Instanz des POI Managers weiter
-
+		POIManager.getInstance().removeActivePOICategory(catIndex);
 	}
-
-
-
-
 }
