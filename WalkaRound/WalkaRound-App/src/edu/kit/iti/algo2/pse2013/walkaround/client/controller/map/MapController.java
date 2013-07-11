@@ -71,7 +71,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * DisplayCoordinats to draw he Lines
 	 */
 	private List<DisplayCoordinate> lines;
-	RouteInfo currentRoute;
+	private RouteInfo currentRoute;
 
 	/*
 	 * -----------------Initialization-----------------
@@ -134,10 +134,11 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 		Log.d(TAG_MAP_CONTROLLER,
 				"Add three Example Waypoints to routeController!");
-		routeController.addWaypoint(new Waypoint(49.01, 8.40333, "Marktplatz"));
-		routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,
-				"Brauerstraße"));
-		routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
+		// routeController.addWaypoint(new Waypoint(49.01, 8.40333,
+		// "Marktplatz"));
+		// routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,
+		// "Brauerstraße"));
+		// routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
 
 		// CompassManager.getInstance().registerCompassListener(this);
 	}
@@ -350,15 +351,18 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
-		if (defaultUserLock) {
-			Log.d(TAG_MAP_CONTROLLER, "Position Change!");
-			mapModel.shift(CoordinateUtility
-					.convertDisplayCoordinateToCoordinate(
-							new Coordinate(androidLocation.getLatitude(),
-									androidLocation.getLongitude()), mapModel
-									.getUpperLeft(), mapModel
-									.getCurrentLevelOfDetail()));
+		DisplayCoordinate pos = CoordinateUtility
+				.convertCoordinateToDisplayCoordinate(
+						new Coordinate(androidLocation.getLatitude(),
+								androidLocation.getLongitude()), mapModel
+								.getUpperLeft(), mapModel
+								.getCurrentLevelOfDetail());
+
+		if (this.lockUserPosition) {
+			Log.d(TAG_MAP_CONTROLLER, "Position Shift Change!");
+			mapModel.shift(pos);
 		}
+		mapView.onPositionChange(pos.getX(), pos.getY());
 	}
 
 	/**

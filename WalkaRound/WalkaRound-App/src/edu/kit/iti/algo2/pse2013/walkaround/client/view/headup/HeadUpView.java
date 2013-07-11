@@ -25,8 +25,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpCont
  */
 public class HeadUpView extends Fragment {
 
-	private final static String HEADUP = "HEADUP";
-	private final static String HEADUP_TOUCH = "HEADUP_TOUCH";
+	private final static String TAG_HEADUP_VIEW = HeadUpView.class.getSimpleName();
+	private final static String TAG_HEADUP_VIEW_TOUCH = TAG_HEADUP_VIEW + "_touch";
 
 	private final static int user_lock = R.drawable.user_arrow_80x100_lock;
 	private final static int user_unlock = R.drawable.user_arrow_80x100_unlock;
@@ -70,9 +70,9 @@ public class HeadUpView extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		// -----------------------------------------------
-		Log.d(HEADUP, "Es wird mit dem headUpController verbunden");
+		Log.d(TAG_HEADUP_VIEW, "Es wird mit dem headUpController verbunden");
 		headUpController = HeadUpController.initializes(this);
-		Log.d(HEADUP, "Controller wurde initialisiert: " + (headUpController != null));
+		Log.d(TAG_HEADUP_VIEW, "Controller wurde initialisiert: " + (headUpController != null));
 
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -81,12 +81,12 @@ public class HeadUpView extends Fragment {
 
 		float height = (size.y - size.y / 10) - 50;
 
-		Log.d(HEADUP, "High of the HeadUP " + height);
+		Log.d(TAG_HEADUP_VIEW, "High of the HeadUP " + height);
 		this.getActivity().findViewById(R.id.headup_container)
 				.getLayoutParams().height = (int) height;
 
 		// -----------------------------------------------
-		Log.d(HEADUP,
+		Log.d(TAG_HEADUP_VIEW,
 				"Die Views werden den entsprechenden Variablen zugeteilt.");
 
 		plus = (ImageView) this.getActivity()
@@ -114,7 +114,7 @@ public class HeadUpView extends Fragment {
 		// -----------------------------------------------
 		pikto = (ImageView) this.getActivity().findViewById(R.id.headup_pikto);
 
-		Log.d(HEADUP, "View wird angepasst");
+		Log.d(TAG_HEADUP_VIEW, "View wird angepasst");
 
 		plus.getLayoutParams().width = size.x / 5;
 		plus.getLayoutParams().height = size.x / 10;
@@ -141,7 +141,7 @@ public class HeadUpView extends Fragment {
 		timeToGo.getLayoutParams().width = size.x / 5;
 
 		// -----------------------------------------------
-		Log.d(HEADUP, "Listener werden hinzugef�gt");
+		Log.d(TAG_HEADUP_VIEW, "Listener werden hinzugef�gt");
 
 		plus.setOnTouchListener(new ZoomPlusListener());
 		minus.setOnTouchListener(new ZoomMinusListener());
@@ -153,7 +153,7 @@ public class HeadUpView extends Fragment {
 		naviControll.setOnTouchListener(new NavigationControllListener());
 
 		// -----------------------------------------------
-		Log.d(HEADUP, "initialisiere die Lock Position");
+		Log.d(TAG_HEADUP_VIEW, "initialisiere die Lock Position");
 		lock = this.getActivity().getResources().getDrawable(user_lock);
 		unlock = this.getActivity().getResources().getDrawable(user_unlock);
 
@@ -162,7 +162,7 @@ public class HeadUpView extends Fragment {
 		headUpController.toggleUserPositionLock(lockPosition);
 
 		// -----------------------------------------------
-		Log.d(HEADUP, "initialisiere die Navigation Position");
+		Log.d(TAG_HEADUP_VIEW, "initialisiere die Navigation Position");
 		// TODO
 	}
 
@@ -307,7 +307,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(option)) {
-				Log.d(HEADUP_TOUCH, "Optionen werden gestartet");
+				Log.d(TAG_HEADUP_VIEW_TOUCH, "Optionen werden gestartet");
 				headUpController.startOption();
 			}
 			return false;
@@ -326,7 +326,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(plus)) {
-				Log.d(HEADUP_TOUCH, "plus i pressed");
+				Log.d(TAG_HEADUP_VIEW_TOUCH, "plus i pressed");
 				headUpController.zoomInOneLevel();
 			}
 			return false;
@@ -345,7 +345,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(minus)) {
-				Log.d(HEADUP_TOUCH, "Minus is pressed");
+				Log.d(TAG_HEADUP_VIEW_TOUCH, "Minus is pressed");
 				headUpController.zoomOutOneLevel();
 			}
 			return false;
@@ -364,7 +364,7 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(naviControll)) {
-				Log.d(HEADUP_TOUCH, "Navigation wird aktiviert/deaktiviert");
+				Log.d(TAG_HEADUP_VIEW_TOUCH, "Navigation wird aktiviert/deaktiviert");
 				headUpController.toggleNavigation();
 			}
 			return false;
@@ -384,8 +384,15 @@ public class HeadUpView extends Fragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(userLock)) {
-				Log.d(HEADUP_TOUCH, "UserLock wird ausgeführt");
+				Log.d(TAG_HEADUP_VIEW_TOUCH, "toggle UserLock");
 				headUpController.toggleUserPositionLock(true);
+				if(userLock.getDrawable().equals(lock)){
+					userLock.setImageDrawable(unlock);
+					Log.d(TAG_HEADUP_VIEW_TOUCH, "UNLOCK");
+				} else {
+					userLock.setImageDrawable(lock);
+					Log.d(TAG_HEADUP_VIEW_TOUCH, "LOCK");
+				}
 			}
 			return false;
 		}
