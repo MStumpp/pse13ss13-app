@@ -1,27 +1,23 @@
-package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
+package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint.client;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * RouteInfoTransfer for server only.
+ * RouteInfoTransfer for client only.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-@XmlRootElement //(name="routeInfoTransfer")
-public final class RouteInfoTransfer {
+public class RouteInfoTransfer {
 
     /**
      * list of coordinates.
      */
-    //@JsonProperty("routeInfoTransfer")
-    private final List<Coordinate> coordinates;
+    private List<Coordinate> coordinates;
 
 
     /**
@@ -34,7 +30,7 @@ public final class RouteInfoTransfer {
      * Creates an instance of RouteInfoTransfer.
      */
     public RouteInfoTransfer() {
-        coordinates = new ArrayList<Coordinate>();
+        coordinates = new LinkedList<Coordinate>();
     }
 
 
@@ -46,7 +42,7 @@ public final class RouteInfoTransfer {
     public RouteInfoTransfer(List<Coordinate> coordinates) {
         if (coordinates == null)
             throw new IllegalArgumentException("list of coordinates must be provided");
-        this.coordinates = new ArrayList<Coordinate>();
+        this.coordinates = new LinkedList<Coordinate>();
         this.coordinates.addAll(coordinates);
     }
 
@@ -70,6 +66,16 @@ public final class RouteInfoTransfer {
 
 
     /**
+     * Sets the Coordinates.
+     *
+     * @param coordinates List of Coordinates.
+     */
+    public void setCoordinates(List<Coordinate> coordinates) {
+        this.coordinates = coordinates;
+    }
+
+
+    /**
      * Returns the error message.
      *
      * @return String Error message.
@@ -86,6 +92,20 @@ public final class RouteInfoTransfer {
      */
     public void setError(String error) {
         this.error = error;
+    }
+
+
+    /**
+     * Post processes.
+     */
+    public void postProcess() {
+        if (coordinates.size() < 2)
+            return;
+
+        Coordinate source = coordinates.remove(0);
+        coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), "Source"));
+        Coordinate target = coordinates.remove(coordinates.size()-1);
+        coordinates.add(coordinates.size(), new Waypoint(target.getLatitude(), target.getLongitude(), "Target"));
     }
 
 }
