@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategory;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -26,7 +27,7 @@ public class OSMNode extends OSMElement {
 	public double getLatitude() {
 		return lat;
 	}
-	public double getLongtitude() {
+	public double getLongitude() {
 		return lon;
 	}
 	public Vertex convertToVertex() {
@@ -45,8 +46,24 @@ public class OSMNode extends OSMElement {
 		if (getName() == null) {
 			throw new NullPointerException("Can't convert to POI, because name is null.");
 		}
-		return new POI(lat, lon, getName(), null, getWikipediaURL(), getPOICategories());
+		return new POI(lat, lon, getName(), null, getWikipediaURL(), getPOICategories(), getAddress());
 	}
+	private Address getAddress() {
+		Integer postcode;
+		try {
+			postcode = getTags().containsKey("addr:postcode")?Integer.parseInt(getTags().get("addr:postcode")):null;
+		} catch (NumberFormatException nfe) {
+			postcode = null;
+		}
+		Address addr = new Address(
+			getTags().containsKey("addr:street")?getTags().get("addr:street"):null,
+			getTags().containsKey("addr:housenumber")?getTags().get("addr:housenumber"):null,
+			getTags().containsKey("addr:city")?getTags().get("addr:city"):null,
+			postcode
+		);
+		return addr;
+	}
+
 	public String getWikipediaURL() {
 		if (getTags().get("wikipedia") == null || getTags().get("wikipedia").length() < 4) {
 			return null;
