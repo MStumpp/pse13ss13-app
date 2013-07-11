@@ -71,7 +71,6 @@ public class RouteProcessing {
      * @return RouteProcessing.
      */
     public static RouteProcessing getInstance() {
-        Log.d(TAG_ROUTE_PROCESSING, "getInstance()");
         if (instance == null)
             instance = new RouteProcessing();
         return instance;
@@ -91,7 +90,6 @@ public class RouteProcessing {
     public RouteInfo computeShortestPath(Coordinate coordinate1,
                                          Coordinate coordinate2)
             throws RouteProcessingException {
-        Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate " + coordinate1 + ", Coordinate " + coordinate2 + ")");
 
         if (coordinate1 == null || coordinate2 == null)
             throw new IllegalArgumentException("coordinate 1 and coordinate 2 must be provided");
@@ -145,7 +143,6 @@ public class RouteProcessing {
         routeInfoTransfer.postProcess();
 
         RouteInfo route = new Route(new LinkedList<Coordinate>(routeInfoTransfer.getCoordinates()));
-        Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate, Coordinate) returning Route: " + route);
         return route;
     }
 
@@ -163,10 +160,9 @@ public class RouteProcessing {
      */
     public RouteInfo computeRoundtrip(Coordinate coordinate, int profile, int length)
             throws RouteProcessingException {
-        Log.d(TAG_ROUTE_PROCESSING, "computeRoundtrip(Coordinate coordinate, int profile, int length)");
 
         if (coordinate == null)
-            throw new IllegalArgumentException("coordinate 1 and coordinate 2 must be provided");
+            throw new IllegalArgumentException("coordinate must be provided");
         if (profile < 0)
             throw new IllegalArgumentException("profile id must be equal to or greater than 1");
         if (length < 100)
@@ -221,7 +217,6 @@ public class RouteProcessing {
         routeInfoTransfer.postProcess();
 
         RouteInfo routeInfo = new Route(new LinkedList<Coordinate>(routeInfoTransfer.getCoordinates()));
-        Log.d(TAG_ROUTE_PROCESSING, "computeRoundtrip(Coordinate coordinate, int profile, int length) returning Route: " + routeInfo);
         return routeInfo;
     }
 
