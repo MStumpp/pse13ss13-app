@@ -11,7 +11,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 public class SearchMenuController {
 	private static SearchMenuController me;
 
-	private SearchMenuController() { }
+	private SearchMenuController() {
+	}
 
 	public static SearchMenuController getInstance() {
 		if (me == null) {
@@ -19,10 +20,13 @@ public class SearchMenuController {
 		}
 		return me;
 	}
-	public List<Location> requestSuggestionsByAddress(int postalCode, String city, String street, String number, Context context) {
+
+	public List<Location> requestSuggestionsByAddress(int postalCode,
+			String city, String street, String number, Context context) {
 		Address addr = new Address(street, number, city, postalCode);
 		return POIManager.getInstance().searchPOIsByAddress(addr, context);
 	}
+
 	public List<POI> requestSuggestionsByText(String text) {
 		return POIManager.getInstance().searchPOIsByQuery(text);
 	}
