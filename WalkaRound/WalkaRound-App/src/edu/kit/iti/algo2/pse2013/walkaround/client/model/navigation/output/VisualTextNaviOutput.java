@@ -20,8 +20,9 @@ public class VisualTextNaviOutput implements NaviOutput {
 
 	@Override
 	public void deliverOutput(CrossingInformation crossingInfo, int distToTurn) {
-		// TODO Auto-generated method stub
 		
+		
+		this.headUpControllerInstance.setNavigationsText("");
 	}
 
 
