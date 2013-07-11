@@ -14,9 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
@@ -29,12 +27,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This Class controls the data flow between the System and the real View.
- * 
+ *
  * @author Ludwig Biermann
- * 
  */
-public class MapController implements RouteListener, PositionListener,
-		CompassListener {
+public class MapController implements RouteListener, PositionListener, CompassListener {
 
 	// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
 	// 8.3858300); // Brauerstraße
@@ -83,7 +79,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 * 
+	 *
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
@@ -97,7 +93,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 * 
+	 *
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
@@ -114,7 +110,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * private Constructor of the Map Controller
-	 * 
+	 *
 	 * @param mv
 	 *            the required MapView
 	 */
@@ -160,7 +156,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives back the current Level of Detail.
-	 * 
+	 *
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -169,7 +165,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives the current Route back.
-	 * 
+	 *
 	 * @return current Route
 	 */
 	public List<DisplayCoordinate> getCurrentRouteLines() {
@@ -182,7 +178,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Forward the Bitmap of the current Map
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
@@ -193,7 +189,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Forward the Bitmap of the Route
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
@@ -209,7 +205,7 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 * 
+	 *
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
@@ -224,7 +220,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
@@ -239,7 +235,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Zoom by a delta.
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
@@ -281,7 +277,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Creates a new Point.
-	 * 
+	 *
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
@@ -312,8 +308,10 @@ public class MapController implements RouteListener, PositionListener,
 	 * Helper Method that updateRouteOverlay
 	 */
 	private void updateRouteOverlay() {
+		if (currentRoute == null) {
+			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
+		} else {
 
-		try {
 			this.lines = CoordinateUtility
 					.extractDisplayCoordinatesOutOfRouteInfo(currentRoute,
 							this.mapModel.getUpperLeft(),
@@ -341,8 +339,6 @@ public class MapController implements RouteListener, PositionListener,
 			// mapView.setActive(2);
 			// mapModel.drawDisplayCoordinates(lines);
 			mapView.setActive(currentRoute.getActiveWaypoint().getId());
-		} catch (NullPointerException e) {
-			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
 		}
 	}
 
@@ -372,10 +368,10 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * forwards a set active action to route controller
-	 * 
+	 *
 	 * @param id
 	 *            of the waypoint
-	 * 
+	 *
 	 */
 	public void setActive(int id) {
 		// TODO route muss id als actove setzen lassen
