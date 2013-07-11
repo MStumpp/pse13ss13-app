@@ -815,25 +815,33 @@ public class MapView extends Activity {
 		}
 
 		@Override
-		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onFling " + currentId);
+
+			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY());
+			if (Math.abs(velocityY) > 1000) {
+				if (e2.getY() < 0) {
+				} else {
+				}
+			}
+			
 			return false;
 		}
 
 		@Override
-		public void onLongPress(MotionEvent arg0) {
+		public void onLongPress(MotionEvent event) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onLongPress " + currentId);
 		}
 
 		@Override
-		public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float deltaX,
+		public boolean onScroll(MotionEvent event1, MotionEvent event2, float deltaX,
 				float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
 			
 			mc.onMovePoint(deltaX, deltaY, currentId);
 			
-			return false;
+			return true;
 		}
 
 		@Override
