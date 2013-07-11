@@ -1,7 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
+// Java Library
+import java.util.LinkedList;
 import java.util.List;
 
+// Android Library
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -15,6 +18,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.location.GpsStatus.Listener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -26,17 +31,38 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+// Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
-public class MapView extends Activity {
+/**
+ * 
+ * This class is the main activity of the Walkaround app. This class organize
+ * the whole view and shows the drawing map and route.
+ * 
+ * @author Ludwig Biermann
+ * 
+ */
+public class MapView extends Activity implements Listener{
 
-	private static final String TAG_MAPVIEW = "MAP_VIEW";
+	/**
+	 * Debug Information
+	 */
+	private static final String TAG_MAPVIEW = MapView.class.getSimpleName();
+	private static final String TAG_MAPVIEW_ANIMATION = MapView.class
+			.getSimpleName() + "_ANIMATION";
+	private static final String TAG_MAPVIEW_GESTURE = MapView.class
+			.getSimpleName() + "_GESTURES";
+	private static final String TAG_MAPVIEW_TOUCH = MapView.class
+			.getSimpleName() + "_TOUCH";
 
 	/**
 	 * Fling defaults
@@ -59,7 +85,6 @@ public class MapView extends Activity {
 	public static final int DEFAULT_WAYPOINT_ACTIVE = R.drawable.waypoint_activ;
 
 	public static final int DEFAULT_POI = R.drawable.poi;
-	// public static final int DEFAULT_POI_ACTIVE = R.drawable.poi_active;
 
 	/**
 	 * Default Drawables
@@ -114,6 +139,21 @@ public class MapView extends Activity {
 
 	Point size;
 
+	Canvas canvas;
+	Bitmap routeOverlayBitmap;
+
+	float fromX;
+	float fromY;
+
+	/**
+	 * User orientation
+	 */
+	float userX;
+	float userY;
+	float delta;
+	
+	LocationManager locationManager ;
+
 	public Point getDisplaySize() {
 		return size;
 	}
@@ -121,12 +161,10 @@ public class MapView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		PositionManager.initialize(this);
 
-		// Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
-		// Debug.getMemoryInfo(memoryInfo);
-		// Log.d("wtf", memoryInfo.toString());
-
-		Log.d(TAG_MAPVIEW, "Rufe Display ab.");
+		Log.d(TAG_MAPVIEW, "Get Display size.");
 
 		Display display = this.getWindowManager().getDefaultDisplay();
 		size = new Point();
@@ -135,11 +173,6 @@ public class MapView extends Activity {
 		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
 		routeOverlayBitmap.prepareToDraw();
-
-		// ---------------------------------------------
-		Log.d(TAG_MAPVIEW, "RouteOverlay wird erstellt.");
-		// routeOverlay.setOnTouchListener(new
-		// RouteOverlayTouchEventListener());
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere Layout.");
@@ -156,7 +189,6 @@ public class MapView extends Activity {
 		waypointActive = this.getResources().getDrawable(
 				DEFAULT_WAYPOINT_ACTIVE);
 		poi = this.getResources().getDrawable(DEFAULT_POI);
-		// poiActive = this.getResources().getDrawable(DEFAULT_POI_ACTIVE);
 
 		// ---------------------------------------------
 
@@ -174,7 +206,6 @@ public class MapView extends Activity {
 		map.setMinimumWidth(size.x);
 		map.setMinimumHeight(size.y);
 		map.setOnTouchListener(new MapTouchEventListener());
-		// map.setImageBitmap(this.getDefaultFogScreen());
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
@@ -210,50 +241,26 @@ public class MapView extends Activity {
 		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
 		routeOverlayBitmap.prepareToDraw();
-		/*
-		 * Log.d(TAG_MAPVIEW, "ein paar DisplayCoordinaten werden hinzugef�gt");
-		 * DisplayWaypoint[] list = new DisplayWaypoint[4]; list[0] = new
-		 * DisplayWaypoint(-50, 550, 1); list[1] = new DisplayWaypoint(250, 700,
-		 * 2); list[2] = new DisplayWaypoint(500, 800, 3); list[3] = new
-		 * DisplayWaypoint(300, 900, 4);
-		 * 
-		 * this.updateDisplayCoordinate(list);
-		 */
-		/*
-		 * updateDisplayCoordinate(list);
-		 * 
-		 * /* Log.d(TAG_MAPVIEW,
-		 * "ein paar DisplayCoordinaten werden hinzugef�gt"); DisplayPOI[] list2
-		 * = new DisplayPOI[3]; list2[0] = new DisplayPOI(250, 350, 4); list2[1]
-		 * = new DisplayPOI(450, 400, 5); list2[2] = new DisplayPOI(700, 500,
-		 * 6);
-		 * 
-		 * 
-		 * updateDisplayCoordinate(list2);
-		 */
 
-		Log.d(TAG_MAPVIEW, "Ein Punkt wird aktiv gesetzt");
-		this.setActive(3);
+		gestureDetector = new GestureDetector(this, new MapGestureDetector());
 
-		gestureDetector = new GestureDetector(this, new MyGestureDetector());
-
-		// this.updateRouteOverlayImage();
-
-		// this.drawRoute(0, 0, 500, 500);
-
+		locationManager = (LocationManager) this.getApplicationContext().getSystemService(LocationManager.KEY_LOCATION_CHANGED);
+		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
+		locationManager.addGpsStatusListener(this);
 	}
 
 	/**
-	 *
+	 * gives the pullupview back
 	 */
 	public PullUpView getPullUpView() {
 		return pullUp;
 	}
 
 	/**
-	 * Updatet die Karte
+	 * Updates the map
 	 * 
 	 * @param b
+	 *            the new map bitmap
 	 */
 	public void updateMapImage(final Bitmap b) {
 
@@ -268,8 +275,10 @@ public class MapView extends Activity {
 	}
 
 	/**
+	 * updates the route
 	 * 
 	 * @param b
+	 *            the new route bitmap
 	 */
 	public void updateRouteOverlayImage(final Bitmap b) {
 
@@ -287,47 +296,46 @@ public class MapView extends Activity {
 		});
 	}
 
-	Canvas canvas;
-	Bitmap routeOverlayBitmap;
-
-	float fromX;
-	float fromY;
-
-	/**
+	/*
+	 * 
 	 * 
 	 * @param dip
+	 * 
 	 * @return
+	 * 
+	 * public int dipToPixel(float dip) { return (int)
+	 * (getResources().getDisplayMetrics().density * dip); }
+	 * 
+	 * public float pixelToDip(int p) { return (p /
+	 * getResources().getDisplayMetrics().density); }
 	 */
-	public int dipToPixel(float dip) {
-		return (int) (getResources().getDisplayMetrics().density * dip);
+
+	/**
+	 * Change the position and the orientation of the user
+	 * 
+	 * @param delta degree of the neew rotation
+	 */
+	public void onPositionChange(final float x, final float y, final float deltaDegree) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				delta = deltaDegree;
+				userX = x;
+				userY = y;
+			}
+		});
+		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY), this.delta);
 	}
-
-	public float pixelToDip(int p) {
-		return (p / getResources().getDisplayMetrics().density);
-	}
-
-	// DisplayWaypoint[] dw;
-
-	public void updateDisplayWaypoints(final List<DisplayWaypoint> displayPoints) {
-
-		// fromX = dw[0].getX();
-		updateDisplayWaypoint(displayPoints);
-		/*
-		 * DisplayWaypoint[] dw = new DisplayWaypoint[4]; dw[0] = new
-		 * DisplayWaypoint(-50, 550, 1); dw[1] = new DisplayWaypoint(250, 700,
-		 * 2); dw[2] = new DisplayWaypoint(500, 800, 3); dw[3] = new
-		 * DisplayWaypoint(300, 900, 4); updateDisplayWaypoint(dw); /*
-		 * runOnUiThread(new Runnable() { public void run() { dw = dw2;
-		 * updateDisplayWaypoint(dw); } });
-		 */
-
-	}
-
-	float userX;
-	float userY;
-
+	
+	
+	/**
+	 * Change the position of the user
+	 * 
+	 * @param x
+	 *            coordinates
+	 * @param y
+	 *            coordinates
+	 */
 	public void onPositionChange(final float x, final float y) {
-		// TODO Auto-generated method stub
 		runOnUiThread(new Runnable() {
 			public void run() {
 				userX = x;
@@ -338,11 +346,27 @@ public class MapView extends Activity {
 	}
 
 	/**
+	 * Change the orientation of the user
 	 * 
+	 * @param delta degree of the neew rotation
+	 */
+	public void onPositionChange(final float deltaDegree) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				delta = deltaDegree;
+				//.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
+			}
+		});
+		//this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
+	}
+	
+	/**
+	 * updates the DisplayWaypoints
 	 * 
 	 * @param displayPoints
+	 *            the new DisplayWaypoints
 	 */
-	private void updateDisplayWaypoint(final List<DisplayWaypoint> displayPoints) {
+	public void updateDisplayWaypoints(final List<DisplayWaypoint> displayPoints) {
 
 		final Context context = this;
 
@@ -357,38 +381,19 @@ public class MapView extends Activity {
 
 				fromX = displayPoints.get(0).getX();
 				fromY = displayPoints.get(0).getY();
-				Log.d("TAG_MAPVIEW_DRAW", "Anzahl " + displayPoints.size());
 
 				for (DisplayWaypoint value : displayPoints) {
-					Log.d("TAG_MAPVIEW_DRAW", "x " + value.getX());
-					Log.d("TAG_MAPVIEW_DRAW", "y " + value.getY());
 					ImageView iv = new ImageView(context);
 					iv.setImageDrawable(waypoint);
 					iv.setY(value.getY() - sizeOfPoints);
 					iv.setX(value.getX() - sizeOfPoints / 2);
-					iv.setTag(value.getId());
 					iv.setVisibility(View.VISIBLE);
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
-					// iv.setBackgroundColor(Color.rgb(0, 0, 0));
-					// iv.setX(sizeOfPoints);
-					// iv.setY(sizeOfPoints);
-
-					// iv.getLayoutParams().width = sizeOfPoints;
-					// iv.getLayoutParams().height = sizeOfPoints;
 					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setOnTouchListener(new WaypointTouchListener(iv, value
+							.getId()));
 					routeList.addView(iv);
-					Log.d(TAG_MAPVIEW + "_DRAW", " " + fromX);
-					Log.d(TAG_MAPVIEW + "_DRAW", " " + fromY);
-					Log.d(TAG_MAPVIEW + "_DRAW", " " + value.getX() + " : "
-							+ iv.getX());
-					Log.d(TAG_MAPVIEW + "_DRAW", " " + value.getY() + " : "
-							+ iv.getY());
-
-					// drawRoute(fromX, fromY, value.getX(), value.getY());
-
-					// fromX = value.getX();
-					// fromY = value.getY();
 				}
 
 				if (routeList.getChildCount() > 0) {
@@ -406,46 +411,51 @@ public class MapView extends Activity {
 	}
 
 	/**
+	 * updates the POI´s on the Display
 	 * 
 	 * @param dp
+	 *            List of pois
 	 */
-	public void updateDisplayCoordinate(DisplayPOI[] dp) {
-		currentActive = null;
+	public void updateDisplayCoordinate(final List<DisplayPOI> dp) {
 		poiList.removeAllViews();
+		final Context context = this;
 
-		for (DisplayPOI value : dp) {
-			ImageView iv = new ImageView(this);
-			iv.setImageDrawable(poi);
-			iv.setY(value.getY());
-			iv.setX(value.getX());
-			iv.setTag(value.getId());
-			iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
-					(int) sizeOfPoints));
-			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			poiList.addView(iv);
-		}
+		runOnUiThread(new Runnable() {
+			public void run() {
+				for (DisplayPOI value : dp) {
+					ImageView iv = new ImageView(context);
+					iv.setImageDrawable(poi);
+					iv.setY(value.getY());
+					iv.setX(value.getX());
+					iv.setTag(value.getId());
+					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
+							(int) sizeOfPoints));
+					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					poiList.addView(iv);
+				}
+			}
+		});
 	}
 
 	/**
-	 * Setzt einen neuen Punkt aktive
+	 * Set an new Waypoint as active
 	 * 
 	 * @param id
+	 *            the id of the waypoint
 	 */
 	public void setActive(int id) {
-		// TODO is equal von Location pr�fen
-		Log.d("lol", "jo " + id);
 
 		if (currentActive != null) {
 			if (currentActive.getDrawable().equals(flagActive)) {
 				currentActive.setImageDrawable(flag);
 
 			}
-			
+
 			if (currentActive.getDrawable().equals(flagTargetActive)) {
 				currentActive.setImageDrawable(flagTarget);
 
 			}
-			
+
 			if (currentActive.getDrawable().equals(waypointActive)) {
 				currentActive.setImageDrawable(waypoint);
 
@@ -453,28 +463,21 @@ public class MapView extends Activity {
 		}
 
 		boolean found = false;
-		
+
 		for (int a = 0; a < routeList.getChildCount() && !found; a++) {
 			if (routeList.getChildAt(a).getTag().equals(id)) {
-				Log.d("lol", "found! " + id);
 				currentActive = (ImageView) routeList.getChildAt(a);
-				
+
 				if (currentActive.getDrawable().equals(flag)) {
 					currentActive.setImageDrawable(flagActive);
-					Log.d("lol", "found1! " + id);
-
 				}
 
 				if (currentActive.getDrawable().equals(flagTarget)) {
 					currentActive.setImageDrawable(flagTargetActive);
-					Log.d("lol", "found2! " + id);
-
 				}
 
 				if (currentActive.getDrawable().equals(waypoint)) {
 					currentActive.setImageDrawable(waypointActive);
-					Log.d("lol", "found3! " + id);
-
 				}
 				found = true;
 			}
@@ -482,22 +485,54 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * verschiebt die User Pfeil zu der Koordinate innerhalb einer Sekunde
+	 * shift the User Position arrow to an new position
 	 * 
 	 * @param coor
-	 *            Zielkoordinate
+	 *            target coordinates
 	 * @param degree
-	 *            Rotation
-	 * @return
+	 *            rotation
+	 */
+	public void setUserPositionOverlayImage(final DisplayCoordinate coor) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				user.setX(coor.getX());
+				user.setY(coor.getY());
+			}
+		});
+	}
+
+	/**
+	 * shift the User Position arrow to an new position
+	 * 
+	 * @param coor
+	 *            target coordinates
+	 * @param degree
+	 *            rotation
+	 */
+	public void setUserPositionOverlayImage(final float degree) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				user.setRotation(degree);
+			}
+		});
+	}
+	
+	/**
+	 * shift the User Position arrow to an new position
+	 * 
+	 * @param coor
+	 *            target coordinates
+	 * @param degree
+	 *            rotation
 	 */
 	private void setUserPositionOverlayImage(DisplayCoordinate coor,
 			float degree) {
-
-		// Log.d("wtf2",""+(coor == null));
-
+		// TODO duration überdenken
 		AnimatorSet set = new AnimatorSet();
+		this.userX = coor.getX();
+		this.userY = coor.getY();
 
-		Log.d("MAP_THREAD", "Thread Animator Set UP");
+		Log.d(TAG_MAPVIEW, "Thread Animator Set UP");
 
 		ObjectAnimator transX = ObjectAnimator.ofFloat(user, "x", coor.getX()
 				- USER_X_DELTA);
@@ -506,7 +541,6 @@ public class MapView extends Activity {
 		ObjectAnimator rotate = ObjectAnimator
 				.ofFloat(user, "rotation", degree);
 
-		// duration relativieren!
 		transX.setDuration(1000);
 		transY.setDuration(1000);
 		rotate.setDuration(1000);
@@ -525,6 +559,12 @@ public class MapView extends Activity {
 
 	// ----------------Animation Listener ---------------------
 
+	/**
+	 * A Listener who listen to the user position animation
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
 	private class UserAnimationListener implements AnimatorListener {
 
 		private float degree;
@@ -537,7 +577,7 @@ public class MapView extends Activity {
 
 		@Override
 		public void onAnimationCancel(Animator animation) {
-			Log.d("MAP_ANIMATION", "Animation Cancel");
+			Log.d(TAG_MAPVIEW_ANIMATION, "Animation Cancel");
 		}
 
 		@Override
@@ -545,30 +585,23 @@ public class MapView extends Activity {
 			user.clearAnimation();
 			startDelay -= 1000;
 
-			Log.d("MAP_ANIMATION", "Setze User an die richtige Position. x: "
-					+ (coor.getX() - USER_X_DELTA) + " y: "
-					+ (coor.getY() - USER_Y_DELTA));
-
 			user.setX(coor.getX() - USER_X_DELTA);
 			user.setY(coor.getY() - USER_Y_DELTA);
 
-			Log.d("MAP_ANIMATION", "User hat die Position " + user.getX()
-					+ " * " + user.getY());
-			Log.d("MAP_ANIMATION", "User Rotation: " + user.getRotation());
-
 			user.setRotation(degree);
-			Log.d("MAP_ANIMATION", "Drehe den User um " + degree + " Grad");
+			Log.d(TAG_MAPVIEW_ANIMATION, "Drehe den User um " + degree
+					+ " Grad");
 		}
 
 		@Override
 		public void onAnimationRepeat(Animator animation) {
-			Log.d("MAP_ANIMATION", "Animation Repeat");
+			Log.d(TAG_MAPVIEW_ANIMATION, "Animation Repeat");
 
 		}
 
 		@Override
 		public void onAnimationStart(Animator animation) {
-			Log.d("MAP_ANIMATION", "Animation Start");
+			Log.d(TAG_MAPVIEW_ANIMATION, "Animation Start");
 		}
 
 	}
@@ -576,39 +609,33 @@ public class MapView extends Activity {
 	// ----------------Touch Listener ---------------------
 
 	/**
+	 * This is a Gesture Detector which listen to the map touches.
 	 * 
 	 * @author Ludwig Biermann
 	 * 
 	 */
-	private class MyGestureDetector implements OnGestureListener {
+	private class MapGestureDetector implements OnGestureListener {
 
+		@SuppressWarnings("unused")
 		float oldX;
+		@SuppressWarnings("unused")
 		float oldY;
+		@SuppressWarnings("unused")
 		float gesamt;
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			Log.d("MAP_TOUCH", "MapTouch Fling");
+			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Fling");
 			return false;
 		}
 
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
-			Log.d("MAP_TOUCH_ZOOM", "Counter1: " + e1.getPointerCount());
-
-			Log.d("MAP_TOUCH_ZOOM", "Counter2: " + e2.getPointerCount());
+			Log.d(TAG_MAPVIEW_GESTURE, "SCROLL EVENT");
 
 			if (e2.getPointerCount() >= 2) {
-				Log.d("MAP_TOUCH_ZOOM",
-						"event 1 " + e1.getX(0) + " " + e1.getY(0));
-				Log.d("MAP_TOUCH_ZOOM", "Distanc " + distanceX + " "
-						+ distanceY);
-				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 1" + e2.getX(0) + " "
-						+ e2.getY(0));
-				Log.d("MAP_TOUCH_ZOOM", "event 2 POINTER 2" + e2.getX(1) + " "
-						+ e2.getY(1));
 
 				float x = Math.abs(e2.getX(0) - e2.getX(1));
 				float y = Math.abs(e2.getY(0) - e2.getY(1));
@@ -625,13 +652,9 @@ public class MapView extends Activity {
 					x += e2.getY(1);
 				}
 
-				Log.d("MAP_TOUCH_ZOOM", "event Coor" + x + " " + y);
 				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / 10);
-				Log.d("MAP_TOUCH_ZOOM", "Zoom Faktor: " + z);
-				// float z = 1;
 
-				gesamt += z;
-				Log.d("MAP_TOUCH_ZOOM", "Gesamt Zoom Faktor: " + z);
+				this.gesamt += z;
 
 				this.oldX = e2.getX();
 				this.oldY = e2.getY();
@@ -639,18 +662,18 @@ public class MapView extends Activity {
 				mc.onZoom(z, new DisplayCoordinate(x, y));
 			} else {
 
-				Log.d("MAP_TOUCH", "MapTouch Scroll");
+				Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Scroll");
 				// distanceY *= -1;
 				if (e1.getY() > e2.getY()) {
-					Log.d("MAP_TOUCH_SCROLL", "Rauf " + distanceY);
+					Log.d(TAG_MAPVIEW_GESTURE, "Up " + distanceY);
 				} else {
-					Log.d("MAP_TOUCH_SCROLL", "Runter " + -distanceY);
+					Log.d(TAG_MAPVIEW_GESTURE, "Down " + -distanceY);
 				}
 
 				if (e1.getX() > e2.getX()) {
-					Log.d("MAP_TOUCH_SCROLL", "Links " + distanceX);
+					Log.d(TAG_MAPVIEW_GESTURE, "Left " + distanceX);
 				} else {
-					Log.d("MAP_TOUCH_SCROLL", "Rechts " + -distanceX);
+					Log.d(TAG_MAPVIEW_GESTURE, "Right " + -distanceX);
 				}
 
 				mc.onShift(distanceX, distanceY);
@@ -660,13 +683,13 @@ public class MapView extends Activity {
 
 		@Override
 		public void onLongPress(MotionEvent event) {
-			Log.d("MAP_TOUCH", "MapTouch Long Touch");
+			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Long Touch");
 			mc.onCreatePoint(new DisplayCoordinate(event.getX(), event.getY()));
 		}
 
 		@Override
 		public boolean onDown(MotionEvent e) {
-			Log.d("MAP_TOUCH", "MapTouch Down");
+			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Down");
 			this.oldX = e.getX();
 			this.oldY = e.getY();
 			return false;
@@ -674,54 +697,31 @@ public class MapView extends Activity {
 
 		@Override
 		public void onShowPress(MotionEvent e) {
-			Log.d("MAP_TOUCH", "MapTouch Show Press");
-
+			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Show Press");
 		}
 
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
-			Log.d("MAP_TOUCH", "MapTouch TapUp");
+			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch TapUp");
 			return false;
 		}
 
 	}
 
 	/**
+	 * This class forwards the touch events to the gesture detector
 	 * 
 	 * @author Ludwig Biermann
 	 * 
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
-		float startX;
-		float startY;
-
-		float deltaX;
-		float deltaY;
-
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (map.equals(view)) {
-				Log.d("MAP_TOUCH", "MapTouch " + view.toString());
+				Log.d(TAG_MAPVIEW_TOUCH, "TOUCH!" + view.toString());
 				gestureDetector.onTouchEvent(event);
 				return true;
-				// ziehen touch
-				// zoom
-				/*
-				 * if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				 * Log.d("MAP_TOUCH", "MapTouch Down"); startX = event.getX();
-				 * startY = event.getY(); return
-				 * gestureDetector.onTouchEvent(event); }
-				 * 
-				 * if (event.getAction() == MotionEvent.ACTION_MOVE &&(
-				 * (Math.abs(startX-event.getX())) > 100 ||
-				 * (Math.abs(startY-event.getY())) > 100) &&
-				 * !gestureDetector.isLongpressEnabled()) { Log.d("MAP_TOUCH",
-				 * "MapTouch Move"); mc.onShift(new
-				 * DisplayCoordinate(event.getX()-deltaX, event.getY()-deltaY));
-				 * deltaX = event.getX(); deltaY = event.getY(); return true; }
-				 * return false;
-				 */
 			}
 
 			return false;
@@ -730,24 +730,7 @@ public class MapView extends Activity {
 	}
 
 	/**
-	 * 
-	 * @author Ludwig Biermann
-	 * 
-	 */
-	private class RouteOverlayTouchEventListener implements OnTouchListener {
-
-		@Override
-		public boolean onTouch(View view, MotionEvent event) {
-			Log.d("MAP_TOUCH", "RouteOverlayTouch");
-			// TODO Auto-generated method stub
-			//
-
-			return false;
-		}
-
-	}
-
-	/**
+	 * This class intercept the touch events on the user arrow
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -756,23 +739,61 @@ public class MapView extends Activity {
 
 		@Override
 		public boolean onTouch(View arg0, MotionEvent arg1) {
-			Log.d("MAP_TOUCH", "UserTouch");
-			// TODO Auto-generated method stub
-			//
+			if(arg0.equals(user)) {
+				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch on User Arrow");
+				return true;
+			}
 			return false;
 		}
 
 	}
 
-	private class WaypointTouchlistener implements OnTouchListener {
+	/**
+	 * This Class intercept the touch to waypoints
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
+	private class WaypointTouchListener implements OnTouchListener {
+
+		private ImageView iv;
+		private int id;
+
+		/**
+		 * Create a new Waypoint
+		 * 
+		 * @param iv
+		 *            the new Imageview
+		 */
+		WaypointTouchListener(ImageView iv, int id) {
+			this.iv = iv;
+		}
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
-			Log.d("MAP_TOUCH", "UserTouch auf View ID:");
-			// TODO Auto-generated method stub
-			//
+			if (view.equals(iv)) {
+				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
+				mc.setActive(id);
+				return true;
+			}
 			return false;
 		}
+	}
+
+	@Override
+	public void onGpsStatusChanged(int event) {
+		Log.d(TAG_MAPVIEW, "onGpsStatusChanged!");
+		try {
+			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+				//TODO Sensor Manger einbauen damit er auch bei keinen GPS oder nicht vorhanden "Weg" sich bewegt
+				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getBearing());
+			} else {
+				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getBearing());
+			}
+		} catch(NullPointerException e){
+			Log.e("GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) + " " +"GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) == null) ,e.toString());
+		}
+		
 	}
 
 }

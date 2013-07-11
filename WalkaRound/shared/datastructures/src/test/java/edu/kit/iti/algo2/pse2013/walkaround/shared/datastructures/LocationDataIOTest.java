@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
@@ -73,6 +72,27 @@ public class LocationDataIOTest {
 			Assert.assertEquals(oldPOIs.get(i).getLongitude(), newPOIs.get(i).getLongitude(), 0.d);
 		}
 	}
+
+
+    @Test
+    public void testSaveAndLoadWithRealDataSet() {
+        File file = new File(getClass().getResource("/locationData.io").getFile());
+        Assert.assertNotNull(file);
+        Assert.assertTrue(file.exists());
+
+        LocationDataIO readLocationData = null;
+        try {
+            readLocationData = LocationDataIO.load(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Check, if something was read
+        Assert.assertNotNull(readLocationData);
+    }
+
 
 	private LocationDataIO getLocationDataIO() {
 

@@ -7,70 +7,152 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+/**
+ * This class hold and return the last known detected Position from the android
+ * file System
+ * 
+ * @author Lukas Müller, Ludwig Biermann
+ * 
+ */
 public class PositionManager implements Listener {
 
-	private static String TAG_POSITION_MANAGER = PositionManager.class.getSimpleName();
-	
-	// Observers:
+	/*
+	 * 
+	 */
+	private static String TAG_POSITION_MANAGER = PositionManager.class
+			.getSimpleName();
+
+	/*
+	 * 
+	 */
 	private LinkedList<PositionListener> positionListeners;
-	
-	// Singleton Pattern:
+
+	/*
+	 * 
+	 */
 	private static PositionManager positionManager;
+
+	/*
+	 * 
+	 */
+	private LocationManager locationManager;
+	private int lastGPSEvent;
+	private Location lastKnownLocation;
 	
-	private static LocationManager locationManager;
-	private static int lastGPSEvent;
-	private static Location lastKnownLocation;
-	
+	private CompassManager compass;
+	private SpeedManager speed;
+
+	/**
+	 * 
+	 * @param context
+	 */
 	private PositionManager(Context context) {
-		Log.d(TAG_POSITION_MANAGER, "Context da " + (context != null));
-		locationManager = (LocationManager) context.getApplicationContext().getSystemService("LOCATION_SERVICE");
-	}
-	
-	public static void initialize(Context context) {
-		positionManager = new PositionManager(context);
+		
+		locationManager = (LocationManager) context.getApplicationContext()
+				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
+		
+		positionListeners = new LinkedList<PositionListener>();
+		
+		
 		locationManager.addGpsStatusListener(positionManager);
+		this.getLastKnownPosition();
+		
+		//initialize other Sensors
+		compass = new CompassManager(this);
+		speed = new SpeedManager(this);
 	}
-	
+
+	/**
+	 * 
+	 * @param context
+	 */
+	public static void initialize(Context context) {
+		Log.d(TAG_POSITION_MANAGER, "Context is " + (context != null));
+		positionManager = new PositionManager(context);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	public static PositionManager getInstance() {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.getInstance()");
 		if (positionManager == null) {
-			Log.d(TAG_POSITION_MANAGER, "PositionManager not initialized");
+			Log.e(TAG_POSITION_MANAGER, "PositionManager not initialized");
 			return null;
 		}
 		return positionManager;
 	}
-
-
 	
-	// Observer Pattern:
+	/**
+	 * Return the SpeedManager
+	 * 
+	 * @return SpeedManager
+	 */
+	public SpeedManager getSpeedManager(){
+		return speed;
+	}
+	
+	/**
+	 * Returns the CompassManager
+	 * 
+	 * @return CompassManager
+	 */
+	public CompassManager getCompassManager(){
+		return compass;
+	}
+
+	/**
+	 * 
+	 * @param newPL
+	 */
 	public void registerPositionListener(PositionListener newPL) {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.registerPositionListener(PositionListener " + newPL.getClass().getSimpleName() + ")");
+		Log.d(TAG_POSITION_MANAGER,
+				"PositionManager.registerPositionListener(PositionListener "
+						+ newPL.getClass().getSimpleName() + ")");
 		if (!this.positionListeners.contains(newPL)) {
 			this.positionListeners.add(newPL);
 		}
-		this.notifyAllPositionListeners();
+		this.getLastKnownPosition();
 	}
 
+	/**
+	 * 
+	 */
 	private void notifyAllPositionListeners() {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.notifyAllPositionListeners()");		
+		Log.d(TAG_POSITION_MANAGER,
+				"PositionManager.notifyAllPositionListeners()");
 		for (PositionListener pl : this.positionListeners) {
 			pl.onPositionChange(lastKnownLocation);
 		}
-		
 	}
-	
-	
-	// Android GPS Listener method:
+
+	/**
+	 * 
+	 */
 	public void onGpsStatusChanged(int event) {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int " + event + ")");
+		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int "
+				+ event + ")");
 		lastGPSEvent = event;
-		lastKnownLocation = locationManager.getLastKnownLocation("GPS");
 		if (lastGPSEvent == 3 || lastGPSEvent == 4) {
+			this.getLastKnownPosition();
+		}
+	}
+
+	/**
+	 * the method return the last known position of the user if possible
+	 */
+	private void getLastKnownPosition() {
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			lastKnownLocation = locationManager
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			notifyAllPositionListeners();
+		} else if (locationManager
+				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			lastKnownLocation = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			notifyAllPositionListeners();
 		}
 	}
-	
-	
-	
-	
+
 }

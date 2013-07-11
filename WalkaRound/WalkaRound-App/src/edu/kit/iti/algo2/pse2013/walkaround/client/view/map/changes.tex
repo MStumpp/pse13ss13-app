@@ -1,0 +1,31 @@
+\subsubsection{data}
+add public PullUpView getPullUpView()
+
+wird benötigt um das PullUpMenu zu den Controllern zuzuweisen
+
+public void updateMapImage(final Bitmap b)
+public void updateRouteOverlayImage(final Bitmap b)
+
+android kennt BufferedImage nicht deswegen werden jetzt "Bitmaps" übergeben
+
+public void onPositionChange(final float x, final float y)
+
+ändert die Position des users. kapselt die Anfrage in einen Thread
+
+public void updateDisplayWaypoints(final List<DisplayWaypoint> displayPoints)
+
+Wegpunkte werden hinzugefügt und auf die Karte gezeichnet
+
+public void updateDisplayCoordinate(final List<DisplayPOI> dp)
+
+POI werden hinzugefügt und auf die Karte gezeichnet
+
+public void setActive(int id) 
+
+setzt einen Wegpunkt aktiv
+
+public void onPositionChange(final float deltaDegree)
+public void onPositionChange(final float x, final float y)
+public void onPositionChange(final float x, final float y, final float deltaDegree) 
+
+diese Methoden werden überladen, da die Sensor manager die Informationen nur zum Teil übergeben.

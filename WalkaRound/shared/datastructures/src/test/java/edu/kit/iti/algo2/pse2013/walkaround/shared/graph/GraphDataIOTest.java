@@ -1,18 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
 
 /**
  * GraphDataIOTest.
@@ -39,7 +33,7 @@ public class GraphDataIOTest {
 
 
     @Test
-    public void testSandAndLoad() {
+    public void testSaveAndLoad() {
         GraphDataIO graphDataIO = getGraphDataIO();
         int size = graphDataIO.getEdges().size();
 
@@ -60,6 +54,14 @@ public class GraphDataIOTest {
 
         Assert.assertNotNull(graphDataIO);
         Assert.assertEquals(graphDataIO.getEdges().size(), size);
+    }
+
+
+    @Test
+    public void testSaveAndLoadWithRealDataSet() {
+        File file = new File(getClass().getResource("/graphData.io").getFile());
+        Assert.assertNotNull(file);
+        Assert.assertTrue(file.exists());
     }
 
 

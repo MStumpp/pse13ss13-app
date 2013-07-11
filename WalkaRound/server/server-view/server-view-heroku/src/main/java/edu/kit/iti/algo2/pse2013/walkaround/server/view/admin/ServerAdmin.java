@@ -76,7 +76,11 @@ public class ServerAdmin {
             e.printStackTrace();
         }
 
-        ShortestPathProcessor.init(Graph.getInstance());
+        try {
+            ShortestPathProcessor.init(Graph.getInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
         GeometryProcessor.init(geometryDataIO);
@@ -126,6 +130,7 @@ public class ServerAdmin {
         graphDataIO.addEdge(edge10);
         return graphDataIO;
     }
+
 
     private static LocationDataIO getLocationDataIO() {
         LocationDataIO locationDataIO = new LocationDataIO();

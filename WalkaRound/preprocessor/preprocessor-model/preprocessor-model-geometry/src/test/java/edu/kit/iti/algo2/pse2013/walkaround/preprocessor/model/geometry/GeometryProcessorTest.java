@@ -54,7 +54,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testGetInstance() {
+    public void testGetInstance() throws InstantiationException {
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         Assert.assertNotNull(GeometryProcessor.getInstance());
@@ -62,7 +62,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testGetNearestVertex() {
+    public void testGetNearestVertex() throws InstantiationException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
