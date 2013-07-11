@@ -5,21 +5,20 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInform
 
 public class AudibleTextNaviOutput implements NaviOutput {
 	
-	private AudibleTextNaviOutput audibleTextNaviOutput;
+	private static AudibleTextNaviOutput audibleTextNaviOutput;
 	private HeadUpController headUpControllerInstance;
 	
 	private AudibleTextNaviOutput() {
 		this.headUpControllerInstance = HeadUpController.getInstance();
 	}
 	
-	@Override
-	public NaviOutput getInstance() {
-		this.audibleTextNaviOutput = new AudibleTextNaviOutput();
-		return this.audibleTextNaviOutput;
+	public static NaviOutput getInstance() {
+		audibleTextNaviOutput = new AudibleTextNaviOutput();
+		return audibleTextNaviOutput;
 	}
 
 	@Override
-	public void deliverOutput(CrossingInformation crossingInfo, int distToTurn) {
+	public void deliverOutput(double turnAngle, int distToTurn) {
 		// TODO Auto-generated method stub
 		
 	}
