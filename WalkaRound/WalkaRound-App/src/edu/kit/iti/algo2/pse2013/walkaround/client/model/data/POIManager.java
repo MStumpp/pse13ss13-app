@@ -142,7 +142,7 @@ public class POIManager {
 			}
 			return poiList;
 		}
-		return null;
+		return poiList;
 		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
@@ -176,7 +176,7 @@ public class POIManager {
 			}
 			return poiList;
 		}
-		return null;
+		return poiList;
 		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
@@ -215,7 +215,7 @@ public class POIManager {
 			}
 			return suggestions;
 		}
-		return null;
+		return suggestions;
 	}
 
 	// context parameter dazu
