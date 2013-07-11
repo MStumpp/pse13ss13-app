@@ -1,11 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 
-import java.util.ArrayList;
-
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategory;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 
@@ -40,7 +35,7 @@ public class OSMNode extends OSMElement {
 	}
 
 	@Override
-	public Vertex getCenterVertex() {
+	public Coordinate getCenterCoordinate() {
 		return vertex;
 	}
 }
