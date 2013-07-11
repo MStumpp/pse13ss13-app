@@ -130,7 +130,6 @@ public class MapView extends Activity {
 	/**
 	 *
 	 */
-
 	PullUpView pullUp;
 
 	Point size;
@@ -777,5 +776,11 @@ public class MapView extends Activity {
 			}
 			return false;
 		}
+	}
+	
+	@Override
+	public void onLowMemory() {
+        super.onLowMemory();
+		
 	}
 }
