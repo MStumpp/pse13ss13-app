@@ -44,6 +44,8 @@ public class POIManager {
 	 */
 	private static POIManager instance;
 
+	private static Context applicationContext;
+
 	/**
 	 * LocationDataIO where all POIs are stored.
 	 */
@@ -54,7 +56,8 @@ public class POIManager {
 	 */
 	private int[] activeCategories;
 
-	public static void initialize(Context c) {
+	public static void initialize(Context context) {
+		applicationContext = context.getApplicationContext();
 		String fileString = File.separatorChar + "walkaround"
 				+ File.separatorChar + "locationData.pbf";
 		try {
@@ -66,8 +69,7 @@ public class POIManager {
 			Log.d(TAG_POIMANAGER, "location data io!"
 					+ locationDataIO.getPOIs().size());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d(TAG_POIMANAGER, e.toString());
 		}
 	}
 
@@ -232,10 +234,10 @@ public class POIManager {
 	 *            context of the current activity
 	 * @return a list of three suggestions of locations
 	 */
-	public List<Location> searchPOIsByAddress(Address address, Context context) {
+	public List<Location> searchPOIsByAddress(Address address) {
 
 		ArrayList<Location> suggestions = new ArrayList<Location>();
-		Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.GERMANY);
+		Geocoder geocoder = new Geocoder(applicationContext, Locale.GERMANY);
 		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
 		try {
 			addresses = geocoder.getFromLocationName(address.toString(),
