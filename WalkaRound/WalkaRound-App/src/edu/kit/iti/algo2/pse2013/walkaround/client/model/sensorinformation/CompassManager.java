@@ -3,6 +3,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 import java.util.LinkedList;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.util.Log;
@@ -13,7 +16,7 @@ import android.util.Log;
  * @author Lukas M�ller, Ludwig Biermann
  * 
  */
-public class CompassManager implements PositionListener {
+public class CompassManager implements SensorEventListener {
 
 	/*
 	 * 
@@ -32,30 +35,22 @@ public class CompassManager implements PositionListener {
 	private float lastKnownBearing;
 	
 	private SensorManager sensorManager;
+	private Sensor aSensor;
+	private Sensor mSensor;
 
 	/**
 	 * 
 	 */
-	public CompassManager(PositionManager pm, Context context) {
+	public CompassManager(Context context) {
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
-		pm.registerPositionListener(this);
 		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
+		/*
+		this.sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);*/
 	}
 
-	/**
-	 * 
-	 * @return
-	 *
-	public static CompassManager getInstance() {
-		Log.d(TAG_COMPASS_MANAGER, "CompassManager.getInstance()");
-		if (compassManager == null) {
-			compassManager = new CompassManager();
-			PositionManager.getInstance().registerPositionListener(
-					compassManager);
-		}
-		return compassManager;
-	}/
 
 	/**
 	 * 
@@ -75,16 +70,26 @@ public class CompassManager implements PositionListener {
 	 * 
 	 */
 	private void notifyAllCompassListeners() {
-		Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners()");
+		Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners() sending onCompassChange(" + this.lastKnownBearing + ") to listeners");
 		for (CompassListener cl : this.compassListeners) {
-			cl.onCompassChange(lastKnownBearing);
+			cl.onCompassChange(this.lastKnownBearing);
 		}
 	}
 
+	
+	
+	
 	@Override
-	public void onPositionChange(Location androidLocation) {
-		lastKnownBearing = androidLocation.getBearing();
-		notifyAllCompassListeners();
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
+		this.lastKnownBearing = event.values[0];
+		this.notifyAllCompassListeners();
+	}
+
+	
 }

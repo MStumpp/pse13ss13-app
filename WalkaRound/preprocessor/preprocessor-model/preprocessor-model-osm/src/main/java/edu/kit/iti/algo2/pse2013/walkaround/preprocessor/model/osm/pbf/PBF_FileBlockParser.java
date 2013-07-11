@@ -16,6 +16,7 @@ import crosby.binary.file.BlockReaderAdapter;
 import crosby.binary.file.FileBlockPosition;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategory;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
@@ -137,24 +138,19 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				for (int i = 0; i < Math.min(w.getKeysCount(), w.getValsCount()); i++) {
 					way.addTag(getStringById(w.getKeys(i)), getStringById(w.getVals(i)));
 				}
-				if (isValidWay && OSMCategoryFactory.createFootwayCategory().accepts(way)) {
+				OSMCategory footCat = OSMCategoryFactory.createFootwayCategory();
+				OSMCategory allAreaCat = OSMCategoryFactory.createAllAreaCategory();
+				if (isValidWay && (footCat.accepts(way) || allAreaCat.accepts(way))) {
 					if (state == STATE_FIND_NEEDED_NODES) {
 						long curID = 0;
 						for (Long idDiff : w.getRefsList()) {
 							nodes.put(curID += idDiff, new OSMNode(curID));
 						}
-					} else {
+					} else if (footCat.accepts(way)) {
 						graphData.addEdges(way.getEdges());
-					}
-				}
-				if (isValidWay && state != STATE_FIND_NEEDED_NODES && way.getEdges().size() > 1) {
-					for (int catID : Category.getAllAreaCategories()) {
-						Vertex start = way.getEdges().get(0).getTail();
-						Vertex end = way.getEdges().get(way.getEdges().size()-1).getHead();
-						if (OSMCategoryFactory.createAreaCategory(catID).accepts(way)) {
-							locationData.addArea(way.getArea());
-							area++;
-						}
+					} else if (allAreaCat.accepts(way)) {
+						locationData.addArea(way.getArea());
+						area++;
 					}
 				}
 			}

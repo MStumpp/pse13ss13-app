@@ -59,7 +59,7 @@ public class PositionManager implements Listener {
 		this.getLastKnownPosition();
 		
 		//initialize other Sensors
-		compass = new CompassManager(this, context.getApplicationContext());
+		compass = new CompassManager(context.getApplicationContext());
 		speed = new SpeedManager(this);
 	}
 

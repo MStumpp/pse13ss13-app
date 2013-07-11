@@ -134,7 +134,8 @@ public class POIManager {
 						&& (current.getLongitude() >= minLon && current
 								.getLongitude() <= maxLon)) {
 					for (int i = 0; i < current.getPOICategories().length; i++) {
-						if (activeCategories[current.getPOICategories()[i]] != -1) {
+						// pois vlt doppelt geaddet!? (performance)
+						if (activeCategories[current.getPOICategories()[i] - 1] != -1) {
 							poiList.add(current);
 						}
 					}
