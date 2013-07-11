@@ -6,8 +6,8 @@ import java.util.List;
 import android.content.Context;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 public class FavoriteMenuController {
 	private static FavoriteMenuController me;

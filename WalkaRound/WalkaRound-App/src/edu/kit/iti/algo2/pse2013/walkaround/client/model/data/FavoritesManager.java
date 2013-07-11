@@ -15,8 +15,8 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 /**
  * This class manages all saved locations and routes.
@@ -171,12 +171,13 @@ public class FavoritesManager implements Serializable {
 			try {
 				save(this);
 			} catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, e.toString());
 			}
 			return true;
 		} catch (IndexOutOfBoundsException e) {
+			Log.d(TAG_FAVORITE_MANAGER, e.toString());
 			return false;
 		}
 	}
@@ -196,12 +197,13 @@ public class FavoritesManager implements Serializable {
 			try {
 				save(this);
 			} catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, e.toString());
 			}
 			return true;
 		} catch (IndexOutOfBoundsException e) {
+			Log.d(TAG_FAVORITE_MANAGER, e.toString());
 			return false;
 		}
 	}
@@ -222,9 +224,9 @@ public class FavoritesManager implements Serializable {
 			try {
 				save(this);
 			} catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, e.toString());
 			}
 			return true;
 		}
@@ -247,9 +249,9 @@ public class FavoritesManager implements Serializable {
 			try {
 				save(this);
 			} catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.d(TAG_FAVORITE_MANAGER, e.toString());
 			}
 			return true;
 		}

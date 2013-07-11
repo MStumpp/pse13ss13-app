@@ -159,11 +159,7 @@ public class MapView extends Activity {
 		super.onCreate(savedInstanceState);
 
 		PositionManager.initialize(this);
-		//try {
-			//POIManager.initialize(this);
-		//} catch (IOException e) {
-			//e.printStackTrace();
-		//}
+		POIManager.initialize(this);
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 

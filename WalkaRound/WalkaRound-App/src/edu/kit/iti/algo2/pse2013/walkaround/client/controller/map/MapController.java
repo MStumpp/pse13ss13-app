@@ -14,6 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListe
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
@@ -25,7 +26,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 //Android library
 //Walkaround library
-import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 /**
  * This Class controls the data flow between the System and the real View.
@@ -216,7 +216,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * @param poiList the required list of pois
 	 */
 	public void onPOIChange(List<DisplayPOI> poiList){
-		//mapView.updateDisplayCoordinate(poiList);
+		mapView.updateDisplayCoordinate(poiList);
 	}
 	
 	/*

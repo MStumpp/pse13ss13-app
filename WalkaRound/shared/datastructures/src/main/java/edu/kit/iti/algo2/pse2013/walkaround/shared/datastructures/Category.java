@@ -37,7 +37,7 @@ public class Category {
 	/**
 	 * IDs of all existing categories for areas.
 	 */
-	private static int[] allAreaCategories;
+	private static int[] allAreaCategories = {AREA_FOREST, AREA_GARDEN};
 
 	/**
 	 * IDs of all existing categories for POIs.
