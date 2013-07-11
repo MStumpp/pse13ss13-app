@@ -46,7 +46,7 @@ public class CompassManager implements SensorEventListener {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();		
-		
+		/*
 		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 1");
 
@@ -61,6 +61,7 @@ public class CompassManager implements SensorEventListener {
 
 		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 5");
+		*/
 	}
 
 
