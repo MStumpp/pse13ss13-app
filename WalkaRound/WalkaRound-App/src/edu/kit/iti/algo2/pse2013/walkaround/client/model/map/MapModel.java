@@ -120,7 +120,7 @@ public class MapModel implements TileListener {
 	 * @return null if MapModel isn't initialize
 	 */
 	public static MapModel getInstance() {
-		if (mapModel != null) {
+		if (mapModel == null) {
 			Log.d(TAG_MAP_MODEL, "initialice MapView first");
 			return null;
 		}
@@ -328,13 +328,20 @@ public class MapModel implements TileListener {
 			poiList = POIManager.getInstance().getPOIsWithinRectangle(
 					upperLeft, bottomRight, currentLevelOfDetail);
 			
+			Log.d(TAG_MAP_MODEL,"POI Anzahl" + poiList.size());
+			
 			LinkedList<DisplayPOI> poi = new LinkedList<DisplayPOI>();
 			
 			for(POI value: poiList){
 				poi.add(new DisplayPOI(
-						CoordinateUtility.convertDegreesToPixels(value.getLongitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_X),
-						CoordinateUtility.convertDegreesToPixels(value.getLatitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
+						CoordinateUtility.convertDegreesToPixels(value.getLongitude() - this.upperLeft.getLongitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_X),
+						CoordinateUtility.convertDegreesToPixels(this.upperLeft.getLatitude() - value.getLatitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
 						value.getId()));
+			}
+			
+			Log.d(TAG_MAP_MODEL,"POI Display Anzahl" + poi.size());
+			if(poi.size()>0){
+				Log.d(TAG_MAP_MODEL,"POI Display " + poi.get(0).getX());
 			}
 			mapController.onPOIChange(poi);
 		}
@@ -637,5 +644,19 @@ public class MapModel implements TileListener {
 
 		}
 
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public POI getPOIInformationById(int id) {
+		for(POI value :this.poiList){
+			if(value.getId() == id){
+				return value;
+			}
+		}
+		return null;
 	}
 }

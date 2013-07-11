@@ -38,6 +38,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 // Android Library
 // Walkaround Library
 
@@ -446,6 +447,7 @@ public class MapView extends Activity {
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
 					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setOnTouchListener(new POITouchListener(iv, value.getId()));
 					poiList.addView(iv);
 				}
 			}
@@ -858,7 +860,40 @@ public class MapView extends Activity {
 		}
 
 	}
+	/**
+	 * This Class intercept the touch to waypoints
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
+	private class POITouchListener implements OnTouchListener {
 
+		private ImageView iv;
+		private int id;
+
+		/**
+		 * Create a new POITouchListener
+		 * 
+		 * @param iv
+		 *            the new Imageview
+		 */
+		POITouchListener(ImageView iv, int id) {
+			this.iv = iv;
+			this.id = id;
+		}
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			if (view.equals(iv)) {
+				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf POI ID:" + id);
+				POI poi = mc.getPOIById(id);
+				pullUp.changeView(poi.getName(),poi.getURL(),poi.getTextInfo());
+				pullUp.setFullSizeHeight();
+			}
+			return false;
+		}
+	}
+	
 	@Override
 	public void onLowMemory() {
         super.onLowMemory();

@@ -85,7 +85,7 @@ public class OSMDataPreprocessor {
 		fis2.close();
 		System.out.println(location.getPOIs().size() + " POIs are written to the file");
 		for (POI p : location.getPOIs()) {
-			System.out.println("POI: " + p);
+			//System.out.println("POI: " + p);
 		}
 	}
 
