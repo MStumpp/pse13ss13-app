@@ -1,12 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.route;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint.client.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint.client.RouteProcessing;
-import edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint.client.RouteProcessingException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import org.junit.Assert;
 import org.junit.Test;
-
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
  * RouteProcessingTest.
