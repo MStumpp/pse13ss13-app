@@ -90,14 +90,11 @@ public final class CoordinateUtility {
 	 * @param levelOfDetail
 	 *            the current level of detail
 	 * @param one
-	 *            of the constants {@link CoordinateUtility#HORIZONTAL} or
-	 *            {@link CoordinateUtility#VERTICAL}
+	 *            of the constants {@link CoordinateUtility#HORIZONTAL} or {@link CoordinateUtility#VERTICAL}
 	 * @return the given length in degrees
 	 */
-	public static double convertPixelsToDegrees(float pixels,
-			float levelOfDetail, boolean isHorizontal) {
-		return (45 * pixels / Math.pow(2, levelOfDetail + 6))
-				* (isHorizontal ? 2 : 1);
+	public static double convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
+		return (45 * pixels / Math.pow(2, levelOfDetail + 6)) * (isHorizontal ? 2 : 1);
 	}
 
 	/**
@@ -110,10 +107,8 @@ public final class CoordinateUtility {
 	 *            the current level of detail
 	 * @return the given length in degrees
 	 */
-	public static float convertDegreesToPixels(double degree,
-			float levelOfDetail, boolean isHorizontal) {
-		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45)
-				/ (isHorizontal ? 2 : 1);
+	public static float convertDegreesToPixels(double degree, float levelOfDetail, boolean isHorizontal) {
+		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);
 	}
 
 	/**

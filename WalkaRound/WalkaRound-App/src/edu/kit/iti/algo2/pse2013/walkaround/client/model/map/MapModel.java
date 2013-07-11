@@ -212,7 +212,7 @@ public class MapModel implements TileListener {
 	 */
 	private void computeMid() {
 		this.mid = CoordinateUtility.convertDisplayCoordinateToCoordinate(
-				new DisplayCoordinate(size.x / 2, size.y / 2), upperLeft,
+				new DisplayCoordinate(size.x / 2f, size.y / 2f), upperLeft,
 				currentLevelOfDetail);
 	}
 
@@ -262,9 +262,9 @@ public class MapModel implements TileListener {
 		// TODO beim nach oben schieben muss yDiff auf dem Display kleiner
 		// werden!
 		// ich denke hier ist möglicherweise auch ein RundungsFehler!
-		yDiff = yDiff - CoordinateUtility.computeCurrentTileWidthInPixels(currentLevelOfDetail);
-		// yDiff = 256-yDiff;
+		yDiff = - yDiff + CoordinateUtility.computeCurrentTileWidthInPixels(currentLevelOfDetail);
 
+		Log.d(TAG_MAP_MODEL, String.format("TileOffset:: %f", yDiff));
 		Log.d(TAG_MAP_MODEL, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "UpperLeft: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
@@ -484,21 +484,15 @@ public class MapModel implements TileListener {
 	private void createBitmap(int width, int height) {
 
 		Log.d(TAG_MAP_MODEL, "create Map Bitmap");
-		synchronized (this.map) {
-			this.map.recycle();
-			System.gc();
-			this.map = Bitmap.createBitmap(size.x, size.y,
-					Bitmap.Config.ARGB_8888);
-			this.map.prepareToDraw();
-		}
+		this.map.recycle();
+		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.map.prepareToDraw();
 
 		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
-		synchronized (this.routeOverlayBitmap) {
-			this.routeOverlayBitmap.recycle();
-			this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
-					Bitmap.Config.ARGB_8888);
-			this.routeOverlayBitmap.prepareToDraw();
-		}
+		this.routeOverlayBitmap.recycle();
+		this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
+				Bitmap.Config.ARGB_8888);
+		this.routeOverlayBitmap.prepareToDraw();
 
 		Log.d(TAG_MAP_MODEL, "call drawing");
 		this.fetchTiles();
@@ -566,55 +560,47 @@ public class MapModel implements TileListener {
 			final float toX, final float toY) {
 
 		if (!routeOverlayBitmap.isRecycled()) {
-			synchronized (routeOverlayBitmap) {
-				if(!routeOverlayBitmap.isRecycled()){
-				Canvas canvas = new Canvas(routeOverlayBitmap);
+			Canvas canvas = new Canvas(routeOverlayBitmap);
 
-				Paint pinsel = new Paint();
-				pinsel.setColor(Color.rgb(64, 64, 255));
-				pinsel.setStrokeWidth(this.strokeWidth);
+			Paint pinsel = new Paint();
+			pinsel.setColor(Color.rgb(64, 64, 255));
+			pinsel.setStrokeWidth(this.strokeWidth);
 
-				// if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
-				// if (fromX < size.x || fromY < size.y || toX < size.x
-				// || toY < size.y) {
-				Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-				canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
-				// }
-				// }
+			// if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
+			// if (fromX < size.x || fromY < size.y || toX < size.x
+			// || toY < size.y) {
+			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+			canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
+			// }
+			// }
 
-				mapController.onRouteOverlayImageChange(routeOverlayBitmap);
-				}
-			}
+			mapController.onRouteOverlayImageChange(routeOverlayBitmap);
 		}
 	}
 
 	@Override
-	public void receiveTile(final Bitmap tile, final int x, final int y,
-			final int levelOfDetail) {
+	public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail) {
 		Log.d(TAG_MAP_MODEL, "Receive Tile!");
 
 		if (!map.isRecycled()) {
 
-			int[] xy = TileUtility.getXYTileIndex(upperLeft,
-					Math.round(currentLevelOfDetail));
+			int[] xy = TileUtility.getXYTileIndex(upperLeft, Math.round(currentLevelOfDetail));
 
 			int localX = x - xy[0];
 			int localY = y - xy[1];
-			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y "
-					+ localY);
+			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y " + localY);
 
-			synchronized (map) {
-				if(!map.isRecycled()){
-				Canvas canvas = new Canvas(map);
-				Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-				canvas.drawBitmap(tile,
-						(localX * tile.getWidth()) - mapOffset.getX(),
-						(localY * tile.getHeight()) - mapOffset.getY(), null);
-				}
-			}
+			Canvas canvas = new Canvas(map);
+
+			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+			canvas.drawBitmap(
+				tile,
+				(localX * CoordinateUtility.computeCurrentTileWidthInPixels(levelOfDetail)) - mapOffset.getX(),
+				(localY * CoordinateUtility.computeCurrentTileWidthInPixels(levelOfDetail)) - mapOffset.getY(),
+				null
+			);
+
 			this.mapController.onMapOverlayImageChange(map);
-
 		}
-
 	}
 }
