@@ -1,10 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +10,12 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-@XmlRootElement //(name="routeInfoTransfer")
+@XmlRootElement
 public final class RouteInfoTransfer {
 
     /**
      * list of coordinates.
      */
-    //@JsonProperty("routeInfoTransfer")
     private final List<Coordinate> coordinates;
 
 
