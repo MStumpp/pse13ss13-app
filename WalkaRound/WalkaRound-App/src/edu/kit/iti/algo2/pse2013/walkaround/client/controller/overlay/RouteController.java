@@ -47,9 +47,9 @@ public class RouteController {
 
 	private void notifyAllRouteListeners() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners() - sending Route with " + this.currentRoute.getCoordinates().size() + " Coordinates and " + this.currentRoute.getWaypoints().size() + " Waypoints.");
-		Log.d((TAG_ROUTE_CONTROLLER), "Coordinates of Route: " + this.currentRoute);
+		Log.d(TAG_ROUTE_CONTROLLER, "Coordinates of Route: " + this.currentRoute);
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
-		if (this.currentRoute != null) {
+		if (this.currentRoute != null && activeWaypoint != null) {
 			for (RouteListener rl : this.routeListeners) {
 				rl.onRouteChange((RouteInfo)this.currentRoute, activeWaypoint);
 			}
