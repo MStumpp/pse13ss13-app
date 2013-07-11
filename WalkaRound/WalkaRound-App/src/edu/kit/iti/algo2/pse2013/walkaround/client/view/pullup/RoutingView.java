@@ -42,6 +42,7 @@ public class RoutingView extends Fragment implements RouteListener {
 	private Button addFavorite;
 	private Button goToMap;
 	private EditText name;
+	private LinearLayout layout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,8 @@ public class RoutingView extends Fragment implements RouteListener {
 				R.id.add_favorite);
 		goToMap = (Button) this.getActivity().findViewById(R.id.go_to_map);
 		name = (EditText) this.getActivity().findViewById(R.id.name_favorites);
+		layout = (LinearLayout) getActivity().findViewById(
+				R.id.waylist);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -255,14 +258,12 @@ public class RoutingView extends Fragment implements RouteListener {
 
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
-		LinearLayout layout = (LinearLayout) getActivity().findViewById(
-				R.id.waylist);
 		for (Iterator<Waypoint> iter = currentRoute.getWaypoints().iterator(); iter
 				.hasNext();) {
 			Waypoint current = iter.next();
-			TextView tv = new TextView(getActivity());
-			tv.setText(current.getName());
-			layout.addView(tv);
+			//TextView tv = new TextView(getActivity());
+			//tv.setText("aaa");
+			//layout.addView(tv);
 		}
 	}
 }
