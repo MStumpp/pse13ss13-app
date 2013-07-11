@@ -4,9 +4,22 @@ import java.util.LinkedList;
 
 import android.util.Log;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutput;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedListener;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.location.Location;
+import android.preference.PreferenceManager;
 
-public class NaviModel implements NaviInfo {
+public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
+	
+	private SharedPreferences sharedPrefs;
+	private Context applicationContext;
 	
 	private static String TAG_NAVI_MODEL = NaviModel.class.getSimpleName();
 	
@@ -16,22 +29,30 @@ public class NaviModel implements NaviInfo {
 	
 	private boolean naviIsActive;
 	
-	private NaviInfo naviInfo;
-	
 	
 	private int distOnRouteInMeters;
 	private int distLeftOnRouteInMeter;
 	private int timeOnRouteInSec;
 	private int timeLeftOnRouteInSec;
+	
+	public void initialize(Context context) {
+		Log.d(TAG_NAVI_MODEL, "NavigationModel initialize(Context)");
+		this.applicationContext = context.getApplicationContext();
+	}
 
 	private NaviModel() {
 		Log.d(TAG_NAVI_MODEL, "NavigationModel Contructor");
-		this.naviOutputs = new LinkedList<NaviOutput>();
-		this.naviIsActive = false;
-		this.distLeftOnRouteInMeter = 0;
-		this.distOnRouteInMeters = 0;
-		this.timeOnRouteInSec = 0;
-		this.timeLeftOnRouteInSec = 0;
+		if (this.applicationContext != null) {
+			this.naviOutputs = new LinkedList<NaviOutput>();
+			this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext);
+			this.naviIsActive = false;
+			this.distLeftOnRouteInMeter = 0;
+			this.distOnRouteInMeters = 0;
+			this.timeOnRouteInSec = 0;
+			this.timeLeftOnRouteInSec = 0;
+		} else {
+			Log.e(TAG_NAVI_MODEL, "Navigtaion Model has to be initialized first.");
+		}
 	}
 	
 	public NaviModel getInstance() {
@@ -39,26 +60,33 @@ public class NaviModel implements NaviInfo {
 		if (naviModel == null) {
 			naviModel = new NaviModel();
 		}
+		naviModel.sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 		return naviModel;
 	}
 	
 	
-	public boolean addOutputStrategy(NaviOutput naviOutput) {
+	
+	
+	
+	
+	private boolean addOutputStrategy(NaviOutput naviOutput) {
 		Log.d(TAG_NAVI_MODEL, "addOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.add(naviOutput);
 		return true;
 	}
 	
-	public boolean removeOutputStrategy(NaviOutput naviOutput) {
+	private boolean removeOutputStrategy(NaviOutput naviOutput) {
 		Log.d(TAG_NAVI_MODEL, "removeOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.remove(naviOutput);
 		return true;
 	}
 	
-	public LinkedList<NaviOutput> getOutputStrategies() {
+	private LinkedList<NaviOutput> getOutputStrategies() {
 		Log.d(TAG_NAVI_MODEL, "getOutputStrategies()");
 		return this.naviOutputs;
 	}
+	
+	
 	
 	public boolean isRunning() {
 		Log.d(TAG_NAVI_MODEL, "isRunning()");
@@ -74,34 +102,41 @@ public class NaviModel implements NaviInfo {
 		}
 		return this.naviIsActive;
 	}
-
-	public NaviInfo getNavigationInfo() {
-		Log.d(TAG_NAVI_MODEL, "getNavigationInfo()");
-		return this.naviInfo;
+	
+	
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		this.sharedPrefs = sharedPreferences;
+		//TODO: Strategien an / abmelden, je nach dem, welche Prefs aktiv sind.
 	}
 
 	@Override
-	public int getDistOnRouteInMeters() {
-		Log.d(TAG_NAVI_MODEL, "getDistOnRouteInMeters()");
-		return this.distOnRouteInMeters;
+	public void onSpeedChange(double speed) {
+		// TODO HeadUp updaten, evtl. StereoTöne
+		
 	}
 
 	@Override
-	public int getDistLeftOnRouteInMeter() {
-		Log.d(TAG_NAVI_MODEL, "getDistLeftOnRouteInMeter()");
-		return this.distLeftOnRouteInMeter;
+	public void onCompassChange(float direction) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public int getTimeOnRouteInSec() {
-		Log.d(TAG_NAVI_MODEL, "getTimeOnRouteInSec()");
-		return this.timeOnRouteInSec;
+	public void onPositionChange(Location androidLocation) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public int getTimeLeftOnRoute() {
-		Log.d(TAG_NAVI_MODEL, "getTimeLeftOnRoute()");
-		return this.timeLeftOnRouteInSec;
+	public void onRouteChange(RouteInfo currentRoute) {
+		// TODO Auto-generated method stub
+		
 	}
+	
+	// TODO: nächsten turnAngle berechnen.
+	
+	
 	
 }
