@@ -103,6 +103,8 @@ public class Route implements RouteInfo {
 				this.addRoute(routeExtension);
 			} catch (RouteProcessingException e) {
 				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		} else {
 			this.routeCoordinates.add(new Waypoint(c.getLatitude(), c
@@ -127,6 +129,9 @@ public class Route implements RouteInfo {
 			this.addRoute(newRoundtrip);
 		} catch (RouteProcessingException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -149,9 +154,11 @@ public class Route implements RouteInfo {
 							+ newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
 			try {
-				this.routeProcessor.computeShortestPath(this.getEnd(),
-						newRoute.getStart());
+				this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
 			} catch (RouteProcessingException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -189,6 +196,8 @@ public class Route implements RouteInfo {
 							beforeActive, this.activeWaypoint);
 				} catch (RouteProcessingException e) {
 					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 
@@ -204,6 +213,8 @@ public class Route implements RouteInfo {
 					this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint,
 							beforeActive, this.activeWaypoint);
 				} catch (RouteProcessingException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -243,6 +254,9 @@ public class Route implements RouteInfo {
 						beforeActive, afterActive);
 				this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);
 			} catch (RouteProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -366,7 +380,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param waypointNr
 	 * @return
 	 */
@@ -381,7 +395,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param waypointNr
 	 * @return
 	 */
@@ -396,7 +410,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param one
 	 * @param two
 	 * @return
@@ -420,7 +434,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param route
 	 * @param one
 	 * @param two

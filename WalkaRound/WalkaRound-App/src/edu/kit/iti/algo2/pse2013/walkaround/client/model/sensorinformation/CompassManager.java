@@ -3,8 +3,10 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 import java.util.LinkedList;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.util.Log;
 
 /**
@@ -13,7 +15,7 @@ import android.util.Log;
  * @author Lukas M�ller, Ludwig Biermann
  * 
  */
-public class CompassManager implements PositionListener {
+public class CompassManager implements SensorEventListener {
 
 	/*
 	 * 
@@ -32,30 +34,39 @@ public class CompassManager implements PositionListener {
 	private float lastKnownBearing;
 	
 	private SensorManager sensorManager;
+	private Sensor accellerometer;
+	private Sensor magneticFieldSensor;
+	private float[] accellerometerReadout;
+	private float[] magneticFieldSensorReadout;
 
 	/**
 	 * 
 	 */
-	public CompassManager(PositionManager pm, Context context) {
+	public CompassManager(Context context) {
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
-		pm.registerPositionListener(this);
-		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
+
+		this.sensorManager = (SensorManager) context.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 1");
+		
+		
+		Log.d(TAG_COMPASS_MANAGER, "" + sensorManager.getSensorList(Sensor.TYPE_ALL));
+		
+		
+		this.accellerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 2");
+
+		this.magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 3");
+
+		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_NORMAL);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 4");
+
+		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 5");
 	}
 
-	/**
-	 * 
-	 * @return
-	 *
-	public static CompassManager getInstance() {
-		Log.d(TAG_COMPASS_MANAGER, "CompassManager.getInstance()");
-		if (compassManager == null) {
-			compassManager = new CompassManager();
-			PositionManager.getInstance().registerPositionListener(
-					compassManager);
-		}
-		return compassManager;
-	}/
 
 	/**
 	 * 
@@ -75,16 +86,43 @@ public class CompassManager implements PositionListener {
 	 * 
 	 */
 	private void notifyAllCompassListeners() {
-		Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners()");
+		Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners() sending onCompassChange(" + this.lastKnownBearing + ") to listeners");
 		for (CompassListener cl : this.compassListeners) {
-			cl.onCompassChange(lastKnownBearing);
+			cl.onCompassChange(this.lastKnownBearing);
 		}
 	}
 
+	
+	
 	@Override
-	public void onPositionChange(Location androidLocation) {
-		lastKnownBearing = androidLocation.getBearing();
-		notifyAllCompassListeners();
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
+		if (event.sensor.getType() == this.accellerometer.getType()) {
+			this.accellerometerReadout = event.values.clone();
+		}
+		if (event.sensor.getType() == this.magneticFieldSensor.getType()) {
+			this.magneticFieldSensorReadout = event.values;
+		}
+		
+		if (this.accellerometerReadout != null && this.magneticFieldSensorReadout != null) {
+			float[] R = new float[9];
+			float[] I = new float[9];
+			boolean processed = SensorManager.getRotationMatrix(R, I, this.accellerometerReadout, this.magneticFieldSensorReadout);
+			if (processed) {
+				float[] orientation = new float[3];
+				SensorManager.getOrientation(R, orientation);
+				this.lastKnownBearing = (float) Math.toDegrees(orientation[0]);
+			}
+		}
+		this.notifyAllCompassListeners();
+	}
+	
+	
+
+	
 }

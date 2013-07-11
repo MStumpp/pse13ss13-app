@@ -47,18 +47,19 @@ public class PositionManager implements Listener {
 	 * @param context
 	 */
 	private PositionManager(Context context) {
+
+		positionListeners = new LinkedList<PositionListener>();
 		
 		locationManager = (LocationManager) context.getApplicationContext()
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		
-		positionListeners = new LinkedList<PositionListener>();
 		
 		
 		locationManager.addGpsStatusListener(positionManager);
 		this.getLastKnownPosition();
 		
 		//initialize other Sensors
-		compass = new CompassManager(this, context.getApplicationContext());
+		compass = new CompassManager(context.getApplicationContext());
 		speed = new SpeedManager(this);
 	}
 
@@ -121,8 +122,13 @@ public class PositionManager implements Listener {
 	 */
 	private void notifyAllPositionListeners() {
 		Log.d(TAG_POSITION_MANAGER,
-				"PositionManager.notifyAllPositionListeners()");
+				"PositionManager.notifyAllPositionListeners() " + (lastKnownLocation != null));
+		Log.d(TAG_POSITION_MANAGER,
+				"notify " + (positionListeners != null));
 		for (PositionListener pl : this.positionListeners) {
+
+			Log.d(TAG_POSITION_MANAGER,
+					"notify " + (pl != null));
 			pl.onPositionChange(lastKnownLocation);
 		}
 	}
@@ -143,14 +149,17 @@ public class PositionManager implements Listener {
 	 * the method return the last known position of the user if possible
 	 */
 	private void getLastKnownPosition() {
+		Log.d(TAG_POSITION_MANAGER, "getLastKnownPosition");
 		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			lastKnownLocation = locationManager
 					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Log.d(TAG_POSITION_MANAGER, "GPS");
 			notifyAllPositionListeners();
 		} else if (locationManager
 				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 			lastKnownLocation = locationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			Log.d(TAG_POSITION_MANAGER, "GPS");
 			notifyAllPositionListeners();
 		}
 	}

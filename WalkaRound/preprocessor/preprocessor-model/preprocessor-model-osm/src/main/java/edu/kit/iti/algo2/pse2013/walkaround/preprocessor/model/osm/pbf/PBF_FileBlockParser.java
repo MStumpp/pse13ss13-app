@@ -16,11 +16,11 @@ import crosby.binary.file.BlockReaderAdapter;
 import crosby.binary.file.FileBlockPosition;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategory;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
 	private static final short STATE_FIND_NEEDED_NODES = 0;
@@ -85,8 +85,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
 					currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
 				}
-				if (currentNode.getName() != null && currentNode.getPOICategories().length > 0) {
-					locationData.addPOI(currentNode.convertToPOI());
+				POI poi = currentNode.getPOI();
+				if (poi != null) {
+					locationData.addPOI(poi);
 				}
 			}
 		}
@@ -137,23 +138,29 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				for (int i = 0; i < Math.min(w.getKeysCount(), w.getValsCount()); i++) {
 					way.addTag(getStringById(w.getKeys(i)), getStringById(w.getVals(i)));
 				}
-				if (isValidWay && OSMCategoryFactory.createFootwayCategory().accepts(way)) {
-					if (state == STATE_FIND_NEEDED_NODES) {
-						long curID = 0;
-						for (Long idDiff : w.getRefsList()) {
-							nodes.put(curID += idDiff, new OSMNode(curID));
-						}
-					} else {
-						graphData.addEdges(way.getEdges());
-					}
-				}
-				if (isValidWay && state != STATE_FIND_NEEDED_NODES && way.getEdges().size() > 1) {
-					for (int catID : Category.getAllAreaCategories()) {
-						Vertex start = way.getEdges().get(0).getTail();
-						Vertex end = way.getEdges().get(way.getEdges().size()-1).getHead();
-						if (OSMCategoryFactory.createAreaCategory(catID).accepts(way)) {
-							locationData.addArea(way.getArea());
-							area++;
+				OSMCategory footCat = OSMCategoryFactory.createFootwayCategory();
+				OSMCategory allAreaCat = OSMCategoryFactory.createAllAreaCategory();
+				OSMCategory allPOICat = OSMCategoryFactory.createAllPOICategory();
+				if (isValidWay) {
+					if (footCat.accepts(way) || allAreaCat.accepts(way) || allPOICat.accepts(way)) {
+						if (state == STATE_FIND_NEEDED_NODES) {
+							long curID = 0;
+							for (Long idDiff : w.getRefsList()) {
+								nodes.put(curID += idDiff, new OSMNode(curID));
+							}
+						} else {
+							if (footCat.accepts(way)) {
+								graphData.addEdges(way.getEdges());
+							}
+							if (allAreaCat.accepts(way)) {
+								locationData.addArea(way.getArea());
+								area++;
+							}
+							POI poi = way.getPOI();
+							if (poi != null) {
+								System.out.println("Added Way-POI");
+								locationData.addPOI(poi);
+							}
 						}
 					}
 				}

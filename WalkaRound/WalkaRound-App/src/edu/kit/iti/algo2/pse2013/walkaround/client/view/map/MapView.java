@@ -206,10 +206,6 @@ public class MapView extends Activity {
 		map.setOnTouchListener(new MapTouchEventListener());
 
 		// ---------------------------------------------
-		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
-		mc = MapController.initialize(this);
-
-		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "User wird erstellt.");
 		user = (ImageView) this.findViewById(R.id.mapview_user);
 		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));
@@ -217,6 +213,10 @@ public class MapView extends Activity {
 		user.getLayoutParams().height = USER_Y_DELTA * 4;
 		user.setOnTouchListener(new UserTouchEventListener());
 
+		// ---------------------------------------------
+		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
+		mc = MapController.initialize(this);
+		
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
@@ -233,8 +233,8 @@ public class MapView extends Activity {
 
 		// -----------------------TEST---------------------
 		Log.d(TAG_MAPVIEW, "User wird in die Mitte gestellt.");
-		this.setUserPositionOverlayImage(new DisplayCoordinate(
-				(float) size.x / 2, (float) size.y / 2), 180);
+		//this.setUserPositionOverlayImage(new DisplayCoordinate(
+		//		(float) size.x / 2, (float) size.y / 2), 180);
 
 		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
@@ -247,7 +247,8 @@ public class MapView extends Activity {
 		locationManager = (LocationManager) this.getApplicationContext()
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-
+		
+		this.setUserPositionOverlayImage(size.x/2,size.y/2);
 	}
 
 	/**
@@ -337,42 +338,8 @@ public class MapView extends Activity {
 				userY = y;
 			}
 		});
-		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY),
-				this.delta);
-	}
-
-	/**
-	 * Change the position of the user
-	 * 
-	 * @param x
-	 *            coordinates
-	 * @param y
-	 *            coordinates
-	 */
-	public void onPositionChange(final float x, final float y) {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				userX = x;
-				userY = y;
-			}
-		});
-		this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY), 0);
-	}
-
-	/**
-	 * Change the orientation of the user
-	 * 
-	 * @param delta
-	 *            degree of the neew rotation
-	 */
-	public void onPositionChange(final float deltaDegree) {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				delta = deltaDegree;
-				// .setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
-			}
-		});
-		// this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
+		//this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY),
+		//		this.delta);
 	}
 
 	/**
@@ -506,16 +473,12 @@ public class MapView extends Activity {
 	/**
 	 * shift the User Position arrow to an new position
 	 * 
-	 * @param coor
-	 *            target coordinates
-	 * @param degree
-	 *            rotation
 	 */
-	public void setUserPositionOverlayImage(final DisplayCoordinate coor) {
+	public void setUserPositionOverlayImage(final float x, final float y) {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				user.setX(coor.getX());
-				user.setY(coor.getY());
+				user.setX(x);
+				user.setY(y);
 			}
 		});
 	}
@@ -800,6 +763,7 @@ public class MapView extends Activity {
 		}
 	}
 	int currentId;
+	private POI currentPOI;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
@@ -824,8 +788,8 @@ public class MapView extends Activity {
 				float velocityY) {
 
 			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY() + " " + currentId);
-			if (Math.abs(velocityY) > 100 || Math.abs(velocityY) > 100) {
-				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point" + currentId);
+			if (Math.abs(velocityY) > 1000 || Math.abs(velocityY) > 1000) {
+				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point " + currentId);
 				mc.onDeletePoint(currentId);
 			}
 			
@@ -842,7 +806,7 @@ public class MapView extends Activity {
 				float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
 			
-			mc.onMovePoint(deltaX, deltaY, currentId);
+			mc.onMovePoint(-deltaX, -deltaY, currentId);
 			
 			return true;
 		}
@@ -886,8 +850,8 @@ public class MapView extends Activity {
 		public boolean onTouch(View view, MotionEvent event) {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf POI ID:" + id);
-				POI poi = mc.getPOIById(id);
-				pullUp.changeView(poi.getName(),poi.getURL(),poi.getTextInfo());
+				currentPOI = mc.getPOIById(id);
+				pullUp.changeView(PullUpView.CONTENT_INFO);
 				pullUp.setFullSizeHeight();
 			}
 			return false;
@@ -898,5 +862,9 @@ public class MapView extends Activity {
 	public void onLowMemory() {
         super.onLowMemory();
         System.gc();
+	}
+
+	public POI getCurrentPOI() {
+		return currentPOI;
 	}
 }

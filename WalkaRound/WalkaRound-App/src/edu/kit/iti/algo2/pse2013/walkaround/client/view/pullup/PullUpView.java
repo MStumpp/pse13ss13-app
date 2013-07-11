@@ -220,19 +220,6 @@ public class PullUpView extends Fragment {
 
 	Fragment pullUpContent;
 
-	public void changeView(String name, String url, String textInfo) {
-
-		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		Log.d(TAG_PULLUP, "InfoView starts");
-		ft.remove(pullUpContent);
-		InfoView info = new InfoView();
-
-		info.showPOIInfo(name, url, textInfo);
-
-		pullUpContent = info;
-		ft.add(R.id.pullupContent, pullUpContent).commit();
-	}
-
 	/**
 	 * change the content of the pullup
 	 * 
@@ -340,12 +327,12 @@ public class PullUpView extends Fragment {
 	private class RoutingListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (!v.equals(routing)) {
+			if (v.equals(routing) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_TOUCH, "routing starts");
+				changeView(PullUpView.CONTENT_ROUTING);
+				setFullSizeHeight();
 				return false;
 			}
-			Log.d(TAG_PULLUP_TOUCH, "routing starts");
-			changeView(PullUpView.CONTENT_ROUTING);
-			setFullSizeHeight();
 			return true;
 		}
 	}
@@ -359,13 +346,12 @@ public class PullUpView extends Fragment {
 	private class FavoriteListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (!v.equals(favorite)) {
+			if (v.equals(favorite) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_TOUCH, "Favorite starts");
+				changeView(PullUpView.CONTENT_FAVORITE);
+				setFullSizeHeight();
 				return false;
 			}
-
-			Log.d(TAG_PULLUP_TOUCH, "Favorite starts");
-			changeView(PullUpView.CONTENT_FAVORITE);
-			setFullSizeHeight();
 			return true;
 		}
 	}
@@ -380,13 +366,12 @@ public class PullUpView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (!v.equals(roundtrip)) {
+			if (v.equals(roundtrip) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_TOUCH, "roundtrip starts");
+				changeView(PullUpView.CONTENT_ROUNDTRIP);
+				setFullSizeHeight();
 				return false;
 			}
-
-			Log.d(TAG_PULLUP_TOUCH, "roundtrip starts");
-			changeView(PullUpView.CONTENT_ROUNDTRIP);
-			setFullSizeHeight();
 			return true;
 		}
 	}
@@ -401,13 +386,12 @@ public class PullUpView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (!v.equals(poi)) {
+			if (v.equals(poi) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_TOUCH, "poi starts");
+				changeView(PullUpView.CONTENT_POI);
+				setHalfSizeHeight();
 				return false;
 			}
-
-			Log.d(TAG_PULLUP_TOUCH, "poi starts");
-			changeView(PullUpView.CONTENT_POI);
-			setHalfSizeHeight();
 			return true;
 		}
 	}
@@ -422,7 +406,7 @@ public class PullUpView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (!v.equals(main)) {
+			if (!v.equals(main) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				return false;
 			}
 
@@ -441,13 +425,12 @@ public class PullUpView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (!v.equals(search)) {
+			if (v.equals(search) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_TOUCH, "search starts");
+				changeView(PullUpView.CONTENT_SEARCH);
+				setFullSizeHeight();
 				return false;
 			}
-
-			Log.d(TAG_PULLUP_TOUCH, "search starts");
-			changeView(PullUpView.CONTENT_SEARCH);
-			setFullSizeHeight();
 			return true;
 		}
 	}
