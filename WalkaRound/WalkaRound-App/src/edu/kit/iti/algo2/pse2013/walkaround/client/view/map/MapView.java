@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
+import java.io.IOException;
 import java.util.List;
 
 import android.animation.Animator;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
@@ -157,6 +159,11 @@ public class MapView extends Activity {
 		super.onCreate(savedInstanceState);
 
 		PositionManager.initialize(this);
+		//try {
+			//POIManager.initialize(this);
+		//} catch (IOException e) {
+			//e.printStackTrace();
+		//}
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 

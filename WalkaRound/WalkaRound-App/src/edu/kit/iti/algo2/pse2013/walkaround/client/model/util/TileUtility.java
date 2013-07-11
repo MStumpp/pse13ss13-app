@@ -42,16 +42,4 @@ public final class TileUtility {
 						/ Math.cos(Math.toRadians(c.getLatitude()))) / Math.PI)
 						/ 2 * (1 << levelOfDetail)) };
 	}
-
-	/**
-	 *
-	 * @param x
-	 * @param y
-	 * @param levelOfDetail
-	 * @return
-	 */
-	public static Coordinate getUpperLeftCoordinate(int x, int y,
-			int levelOfDetail) {
-		return null;
-	}
 }

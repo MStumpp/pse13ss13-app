@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +13,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 
 import android.content.Context;
 import android.location.Geocoder;
+import android.os.Environment;
+import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -27,6 +30,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
  */
 public class POIManager {
 
+	private static final String TAG_POIMANAGER = POIManager.class.getSimpleName();
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
@@ -49,8 +53,16 @@ public class POIManager {
 	 */
 	private int[] activeCategories;
 
-	public static void initialize(LocationDataIO locationDataIOToLoad) {
-		locationDataIO = locationDataIOToLoad;
+	public static void initialize(Context c) {
+		String fileString = File.separatorChar + "walkaround" + File.separatorChar + "locationData.pbf";
+		try {
+			Log.d(TAG_POIMANAGER, "ExtFile: " + Environment.getExternalStorageDirectory());
+			locationDataIO = LocationDataIO.load(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + fileString));
+			Log.d(TAG_POIMANAGER, "location data io!" + locationDataIO.getPOIs().size());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -295,8 +307,8 @@ public class POIManager {
 	 * @return true is empty
 	 */
 	public boolean isEmpty() {
-		for(int i = 0; i < activeCategories.length; i++) {
-			if(activeCategories[i] == -1) {
+		for (int i = 0; i < activeCategories.length; i++) {
+			if (activeCategories[i] == -1) {
 				return false;
 			}
 		}

@@ -38,6 +38,7 @@ public class GraphDataIO {
 	 */
 	public void addEdge(Edge edge) {
 	    edges.add(edge);
+	    System.out.println(String.format("\tAdd edge from %d to %d.", edge.getTail().getID(), edge.getHead().getID()));
 	}
 
 
