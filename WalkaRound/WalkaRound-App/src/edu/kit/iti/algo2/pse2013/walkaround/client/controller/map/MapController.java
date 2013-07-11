@@ -337,8 +337,9 @@ public class MapController implements RouteListener, PositionListener,
 			 */
 
 			mapView.updateDisplayWaypoints(displayPoints);
+			mapModel.shift(new DisplayCoordinate(0,0));
 			// mapView.setActive(2);
-			mapModel.drawDisplayCoordinates(lines);
+			// mapModel.drawDisplayCoordinates(lines);
 			mapView.setActive(currentRoute.getActiveWaypoint().getId());
 		} catch (NullPointerException e) {
 			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
