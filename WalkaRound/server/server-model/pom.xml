@@ -9,6 +9,7 @@
     <artifactId>server-model</artifactId>
     <packaging>jar</packaging>
     <name>server-model</name>
+    <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -22,4 +23,26 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <!--<build>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-remote-resources-plugin</artifactId>-->
+                <!--<version>1.4</version>-->
+                <!--<configuration>-->
+                    <!--<resourceBundles>-->
+                        <!--<resourceBundle>org.test:shared-datastructures:${project.version}</resourceBundle>-->
+                    <!--</resourceBundles>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>process</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
 </project>

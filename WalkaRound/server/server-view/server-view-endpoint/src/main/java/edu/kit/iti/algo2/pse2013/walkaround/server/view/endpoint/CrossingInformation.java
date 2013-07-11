@@ -9,22 +9,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement
-
-public final class CrossingInformation {
+public class CrossingInformation {
 
     /**
-     * list of crossroad angles.
+     * list of crossing angles.
      */
-    private final float[] crossroadAngles;
+    private float[] crossingAngles;
+
+
+    public CrossingInformation() {}
 
 
     /**
      * Creates an instance of CrossingInformation.
      *
-     * @param crossroadAngles An array of crossroad angles.
+     * @param crossingAngles An array of crossroad angles.
      */
-    public CrossingInformation(float[] crossroadAngles) {
-        this.crossroadAngles = crossroadAngles;
+    public CrossingInformation(float[] crossingAngles) {
+        this.crossingAngles = crossingAngles;
 	}
 
 
@@ -34,7 +36,7 @@ public final class CrossingInformation {
      * @return array of float.
      */
     public float[] getCrossingAngles() {
-        return crossroadAngles;
+        return crossingAngles;
     }
 
 }

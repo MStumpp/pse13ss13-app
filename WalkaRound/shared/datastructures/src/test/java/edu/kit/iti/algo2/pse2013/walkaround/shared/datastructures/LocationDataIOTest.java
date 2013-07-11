@@ -73,6 +73,27 @@ public class LocationDataIOTest {
 		}
 	}
 
+
+    @Test
+    public void testSaveAndLoadWithRealDataSet() {
+        File file = new File(getClass().getResource("/locationData.io").getFile());
+        Assert.assertNotNull(file);
+        Assert.assertTrue(file.exists());
+
+        LocationDataIO readLocationData = null;
+        try {
+            readLocationData = LocationDataIO.load(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Check, if something was read
+        Assert.assertNotNull(readLocationData);
+    }
+
+
 	private LocationDataIO getLocationDataIO() {
 
 		LocationDataIO locationDataIO = new LocationDataIO();

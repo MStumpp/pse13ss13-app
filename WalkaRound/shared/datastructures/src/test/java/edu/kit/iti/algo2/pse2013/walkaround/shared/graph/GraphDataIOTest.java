@@ -57,6 +57,14 @@ public class GraphDataIOTest {
     }
 
 
+    @Test
+    public void testSaveAndLoadWithRealDataSet() {
+        File file = new File(getClass().getResource("/graphData.io").getFile());
+        Assert.assertNotNull(file);
+        Assert.assertTrue(file.exists());
+    }
+
+
     private GraphDataIO getGraphDataIO() {
 
         GraphDataIO graphDataIO = new GraphDataIO();
