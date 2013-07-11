@@ -216,7 +216,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * @param poiList the required list of pois
 	 */
 	public void onPOIChange(List<DisplayPOI> poiList){
-		//mapView.updateDisplayCoordinate(poiList);
+		mapView.updateDisplayCoordinate(poiList);
 	}
 	
 	/*

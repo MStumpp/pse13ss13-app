@@ -514,6 +514,7 @@ public class MapModel implements TileListener {
 		synchronized (this.routeOverlayBitmap) {
 			mapController.onRouteOverlayImageChange(empty);
 			this.routeOverlayBitmap.recycle();
+			System.gc();
 			this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
 					Bitmap.Config.ARGB_8888);
 			this.routeOverlayBitmap.prepareToDraw();
@@ -523,7 +524,7 @@ public class MapModel implements TileListener {
 		this.fetchTiles();
 		this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
 		//TODO
-		//this.updatePOIofDisplay();
+		this.updatePOIofDisplay();
 	}
 
 	/**
