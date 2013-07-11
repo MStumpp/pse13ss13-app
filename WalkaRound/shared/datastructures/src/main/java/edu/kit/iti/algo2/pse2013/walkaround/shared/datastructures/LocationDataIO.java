@@ -117,5 +117,4 @@ public class LocationDataIO {
 		in.close();
 		return geom;
 	}
-
 }
