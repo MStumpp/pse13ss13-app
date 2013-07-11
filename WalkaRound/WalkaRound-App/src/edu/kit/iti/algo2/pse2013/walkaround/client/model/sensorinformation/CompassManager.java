@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 import java.util.LinkedList;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.util.Log;
 
@@ -30,7 +31,7 @@ public class CompassManager implements PositionListener {
 	 */
 	private float lastKnownBearing;
 	
-	private SensorManager sensorService;
+	private SensorManager sensorManager;
 
 	/**
 	 * 
@@ -39,7 +40,7 @@ public class CompassManager implements PositionListener {
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
 		pm.registerPositionListener(this);
-		this.sensorService = context.getSystemService("SENSOR_SERVICE");
+		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
 	}
 
 	/**
