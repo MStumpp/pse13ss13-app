@@ -393,13 +393,13 @@ public class MapView extends Activity {
 				}
 
 				if (routeList.getChildCount() > 0) {
-					ImageView iv = (ImageView) routeList.getChildAt(0);
-					iv.setImageDrawable(flag);
-					iv.setX(iv.getX() - (sizeOfPoints / 2));
-
-					iv = (ImageView) routeList.getChildAt((routeList
+					ImageView iv = (ImageView) routeList.getChildAt((routeList
 							.getChildCount() - 1));
 					iv.setImageDrawable(flagTarget);
+					iv.setX(iv.getX() - (sizeOfPoints / 2));
+					
+					iv = (ImageView) routeList.getChildAt(0);
+					iv.setImageDrawable(flag);
 					iv.setX(iv.getX() - (sizeOfPoints / 2));
 				}
 			}
