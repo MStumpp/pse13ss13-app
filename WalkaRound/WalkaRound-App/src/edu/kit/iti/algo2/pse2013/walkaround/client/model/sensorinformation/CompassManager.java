@@ -2,13 +2,14 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
 
+import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
 /**
  * This class hold and compare the last known orientation of the device
  * 
- * @author Lukas Müller, Ludwig Biermann
+ * @author Lukas Mï¿½ller, Ludwig Biermann
  * 
  */
 public class CompassManager implements PositionListener {
@@ -28,14 +29,17 @@ public class CompassManager implements PositionListener {
 	 * 
 	 */
 	private float lastKnownBearing;
+	
+	private SensorManager sensorService;
 
 	/**
 	 * 
 	 */
-	public CompassManager(PositionManager pm) {
+	public CompassManager(PositionManager pm, Context context) {
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
 		pm.registerPositionListener(this);
+		this.sensorService = context.getSystemService("SENSOR_SERVICE");
 	}
 
 	/**

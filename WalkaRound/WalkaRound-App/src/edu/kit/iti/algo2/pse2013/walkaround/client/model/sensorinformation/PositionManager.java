@@ -11,7 +11,7 @@ import android.util.Log;
  * This class hold and return the last known detected Position from the android
  * file System
  * 
- * @author Lukas Müller, Ludwig Biermann
+ * @author Lukas Mï¿½ller, Ludwig Biermann
  * 
  */
 public class PositionManager implements Listener {
@@ -58,7 +58,7 @@ public class PositionManager implements Listener {
 		this.getLastKnownPosition();
 		
 		//initialize other Sensors
-		compass = new CompassManager(this);
+		compass = new CompassManager(this, context.getApplicationContext());
 		speed = new SpeedManager(this);
 	}
 
