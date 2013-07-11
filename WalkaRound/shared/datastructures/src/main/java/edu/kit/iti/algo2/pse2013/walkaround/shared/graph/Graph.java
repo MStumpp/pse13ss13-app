@@ -112,7 +112,7 @@ public final class Graph {
             throw new NoVertexForIDExistsException("id must not be greater than "
                     + (vertices.length-1));
         if (vertices[id] == null)
-            throw new NoVertexForIDExistsException("no vertex exists for id: " + id);
+            return null;
         return vertices[id];
     }
 
