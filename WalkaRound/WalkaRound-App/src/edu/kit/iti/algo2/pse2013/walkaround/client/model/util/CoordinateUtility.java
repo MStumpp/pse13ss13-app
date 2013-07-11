@@ -62,7 +62,7 @@ public final class CoordinateUtility {
 
 	/**
 	 * Calculates the distance between two coordinates
-	 * 
+	 *
 	 * @param c1
 	 *            the first coordinate
 	 * @param c2
@@ -84,7 +84,7 @@ public final class CoordinateUtility {
 	/**
 	 * Converts a given length in display-pixels into the corresponding
 	 * geographical degrees.
-	 * 
+	 *
 	 * @param pixels
 	 *            the given length in pixels
 	 * @param levelOfDetail
@@ -103,7 +103,7 @@ public final class CoordinateUtility {
 	/**
 	 * Converts given geographical degrees into the corresponding length in
 	 * display-pixel
-	 * 
+	 *
 	 * @param degree
 	 *            the given geographical degrees
 	 * @param levelOfDetail
@@ -118,7 +118,7 @@ public final class CoordinateUtility {
 
 	/**
 	 * Converts a given Display Coordinate to a geographical Coordinate
-	 * 
+	 *
 	 * @param dc
 	 *            the given DisplayCoordinate
 	 * @param upperLeft
@@ -146,7 +146,7 @@ public final class CoordinateUtility {
 	/**
 	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer
 	 * Koordinate
-	 * 
+	 *
 	 * @param dc
 	 *            die zu konvertierende DisplayCoordinate
 	 * @return
@@ -164,7 +164,7 @@ public final class CoordinateUtility {
 
 	/**
 	 * Extract Display Waypoints out of the given Route Info
-	 * 
+	 *
 	 * @param currentRoute
 	 *            the required RouteInfo
 	 * @return DisplayWaypoints
@@ -185,7 +185,7 @@ public final class CoordinateUtility {
 			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
 					CoordinateUtility.DIRECTION_LONGTITUDE),
 
-			CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
+			-CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
 					CoordinateUtility.DIRECTION_LATITUDE),
 
 			value.getId()));
@@ -200,7 +200,7 @@ public final class CoordinateUtility {
 
 	/**
 	 * Extract Display Coordinates out of the given Route Info
-	 * 
+	 *
 	 * @param currentRoute
 	 *            the required RouteInfo
 	 * @return DisplayWaypoints
@@ -209,7 +209,7 @@ public final class CoordinateUtility {
 			RouteInfo currentRoute, Coordinate upperLeft, float levelOfDetail) {
 
 		LinkedList<DisplayCoordinate> dw = new LinkedList<DisplayCoordinate>();
-		
+
 		for (Coordinate value : currentRoute.getCoordinates()) {
 
 			float x = (float) (value.getLongitude() - upperLeft.getLongitude());
@@ -231,7 +231,7 @@ public final class CoordinateUtility {
 
 	/**
 	 * compute and returns the current Tile size
-	 * 
+	 *
 	 * @return the current tile size in pixel
 	 */
 	public static float computeCurrentTileWidthInPixels(float levelOfDetail) {

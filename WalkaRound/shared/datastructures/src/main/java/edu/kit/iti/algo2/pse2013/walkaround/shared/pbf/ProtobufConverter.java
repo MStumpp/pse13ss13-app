@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
+import java.sql.Savepoint;
 import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
@@ -37,11 +38,20 @@ public class ProtobufConverter {
 		if (addr == null) {
 			return null;
 		}
-		return SaveAddress.newBuilder()
-				.setCity(addr.getCity())
-				.setHouseNumber(addr.getHouseNumber())
-				.setPostalCode(addr.getPostalCode())
-				.setStreet(addr.getStreet());
+		SaveAddress.Builder builder = SaveAddress.newBuilder();
+		if (addr.getCity() != null) {
+			builder.setCity(addr.getCity());
+		}
+		if (addr.getHouseNumber() != null) {
+			builder.setHouseNumber(addr.getHouseNumber());
+		}
+		if (addr.getPostalCode() != Address.NO_POSTAL_CODE) {
+			builder.setPostalCode(addr.getPostalCode());
+		}
+		if (addr.getStreet() != null) {
+			builder.setPostalCode(addr.getPostalCode());
+		}
+		return null;
 	}
 	public static Coordinate getCoordinate(SaveCoordinate saveCoord) {
 		if (saveCoord == null) {
@@ -200,8 +210,9 @@ public class ProtobufConverter {
 				.setParent(getCoordinateBuilder(loc))
 				.setID(loc.getId())
 				.setName(loc.getName());
-		if (loc.getAddress() != null) {
-			builder.setAddress(getAddressBuilder(loc.getAddress()));
+		SaveAddress.Builder addr = getAddressBuilder(loc.getAddress());
+		if (addr != null) {
+			builder.setAddress(addr);
 		}
 		return builder;
 	}

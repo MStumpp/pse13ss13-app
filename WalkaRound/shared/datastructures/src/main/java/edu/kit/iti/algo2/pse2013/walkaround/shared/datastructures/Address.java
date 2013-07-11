@@ -8,6 +8,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Address {
 
+	public static final int NO_POSTAL_CODE = -1;
+
 	/**
 	 * Name of the street.
 	 */
@@ -46,6 +48,8 @@ public class Address {
 		this.city = city;
 		if (postalCode != null) {
 			this.postalCode = postalCode;
+		} else {
+			this.postalCode = NO_POSTAL_CODE;
 		}
 	}
 

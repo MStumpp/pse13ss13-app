@@ -12,8 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class OSMNode extends OSMElement {
 
-	private double lat;
-	private double lon;
+	private Vertex vertex;
 
 	public OSMNode(long id) {
 		this(id, Double.NaN, Double.NaN);
@@ -21,32 +20,31 @@ public class OSMNode extends OSMElement {
 
 	public OSMNode(final long id, final double lat, final double lon) {
 		super(id);
-		this.lat = lat;
-		this.lon = lon;
+		vertex = new Vertex(lat, lon);
 	}
 	public double getLatitude() {
-		return lat;
+		return vertex.getLatitude();
 	}
 	public double getLongitude() {
-		return lon;
+		return vertex.getLongitude();
 	}
 	public Vertex convertToVertex() {
-		return new Vertex(lat, lon);
+		return vertex;
 	}
 
 	public void setLatitude(double lat) {
-		this.lat = lat;
+		vertex.setLatitude(lat);
 	}
 
 	public void setLongitude(double lon) {
-		this.lon = lon;
+		vertex.setLongitude(lon);
 	}
 
 	public POI convertToPOI() {
 		if (getName() == null) {
 			throw new NullPointerException("Can't convert to POI, because name is null.");
 		}
-		return new POI(lat, lon, getName(), null, getWikipediaURL(), getPOICategories(), getAddress());
+		return new POI(vertex.getLatitude(), vertex.getLongitude(), getName(), null, getWikipediaURL(), getPOICategories(), getAddress());
 	}
 	private Address getAddress() {
 		Integer postcode;
