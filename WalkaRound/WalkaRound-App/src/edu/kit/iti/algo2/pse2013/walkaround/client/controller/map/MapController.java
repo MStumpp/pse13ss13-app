@@ -459,6 +459,10 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		//Log.d(TAG_MAP_CONTROLLER, "CurrentPOI Name " + currentPOI.getName() + " id: " + currentPOI.getId());
 		return mapModel.getPOIInformationById(id);
 	}
+
+	public POI getPOI() {
+		return mapView.getCurrentPOI();
+	}
 	
 
 }

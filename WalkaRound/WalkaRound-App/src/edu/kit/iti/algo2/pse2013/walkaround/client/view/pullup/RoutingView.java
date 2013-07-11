@@ -119,7 +119,7 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "reset wurde gedrückt");
+				Log.d(TAG_PULLUP_CONTENT, "reset wurde gedrï¿½ckt");
 				routeController.resetRoute();
 			}
 			//TODO: refresh activity?
@@ -136,7 +136,7 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "invert wurde gedrückt");
+				Log.d(TAG_PULLUP_CONTENT, "invert wurde gedrï¿½ckt");
 				routeController.revertRoute();
 			}
 			//TODO: refresh activity?
@@ -153,7 +153,7 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedrückt");
+				Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedrï¿½ckt");
 				routeController.optimizeRoute();
 			}
 			return false;
@@ -169,7 +169,7 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "load wurde gedrückt");
+				Log.d(TAG_PULLUP_CONTENT, "load wurde gedrï¿½ckt");
 				//TODO: ansicht wechselt in die liste der favorisierten routen
 			}
 			return false;
@@ -185,7 +185,7 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "save wurde gedrückt");
+				Log.d(TAG_PULLUP_CONTENT, "save wurde gedrï¿½ckt");
 				name.setVisibility(View.VISIBLE);
 				//TODO : routemenucontroller ruft save route auf, wie gibt man den namen mit!?
 			}
@@ -202,7 +202,7 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "add favorite wurde gedrückt");
+				Log.d(TAG_PULLUP_CONTENT, "add favorite wurde gedrï¿½ckt");
 				//TODO: ansicht wechselt in die liste der favorisierten orte
 			}
 			return false;
@@ -218,8 +218,8 @@ public class RoutingView extends Fragment {
 				if(name.getVisibility() == View.VISIBLE) {
 					name.setVisibility(View.INVISIBLE);
 				}
-				Log.d(TAG_PULLUP_CONTENT, "go to map wurde gedrückt");
-				// TODO:pullup muss sich schließen
+				Log.d(TAG_PULLUP_CONTENT, "go to map wurde gedrï¿½ckt");
+				// TODO:pullup muss sich schlieï¿½en
 			}
 			return false;
 		}

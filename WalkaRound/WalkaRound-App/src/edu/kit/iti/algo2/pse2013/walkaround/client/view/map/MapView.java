@@ -800,6 +800,7 @@ public class MapView extends Activity {
 		}
 	}
 	int currentId;
+	private POI currentPOI;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
@@ -886,8 +887,8 @@ public class MapView extends Activity {
 		public boolean onTouch(View view, MotionEvent event) {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf POI ID:" + id);
-				POI poi = mc.getPOIById(id);
-				pullUp.changeView(poi.getName(),poi.getURL(),poi.getTextInfo());
+				currentPOI = mc.getPOIById(id);
+				pullUp.changeView(PullUpView.CONTENT_INFO);
 				pullUp.setFullSizeHeight();
 			}
 			return false;
@@ -898,5 +899,9 @@ public class MapView extends Activity {
 	public void onLowMemory() {
         super.onLowMemory();
         System.gc();
+	}
+
+	public POI getCurrentPOI() {
+		return currentPOI;
 	}
 }
