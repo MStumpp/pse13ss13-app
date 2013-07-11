@@ -38,19 +38,28 @@ public class PositionManager implements Listener {
 	private LocationManager locationManager;
 	private int lastGPSEvent;
 	private Location lastKnownLocation;
+	
+	private CompassManager compass;
+	private SpeedManager speed;
 
 	/**
 	 * 
 	 * @param context
 	 */
 	private PositionManager(Context context) {
+		
 		locationManager = (LocationManager) context.getApplicationContext()
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
+		
 		positionListeners = new LinkedList<PositionListener>();
-		Log.d(TAG_POSITION_MANAGER, "locationManager is "
-				+ (locationManager != null));
+		
+		
 		locationManager.addGpsStatusListener(positionManager);
 		this.getLastKnownPosition();
+		
+		//initialize other Sensors
+		compass = new CompassManager(this);
+		speed = new SpeedManager(this);
 	}
 
 	/**
@@ -69,10 +78,28 @@ public class PositionManager implements Listener {
 	public static PositionManager getInstance() {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.getInstance()");
 		if (positionManager == null) {
-			Log.d(TAG_POSITION_MANAGER, "PositionManager not initialized");
+			Log.e(TAG_POSITION_MANAGER, "PositionManager not initialized");
 			return null;
 		}
 		return positionManager;
+	}
+	
+	/**
+	 * Return the SpeedManager
+	 * 
+	 * @return SpeedManager
+	 */
+	public SpeedManager getSpeedManager(){
+		return speed;
+	}
+	
+	/**
+	 * Returns the CompassManager
+	 * 
+	 * @return CompassManager
+	 */
+	public CompassManager getCompassManager(){
+		return compass;
 	}
 
 	/**

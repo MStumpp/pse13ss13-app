@@ -27,37 +27,30 @@ public class CompassManager implements PositionListener {
 	/*
 	 * 
 	 */
-	private static CompassManager compassManager;
-
-	/*
-	 * 
-	 */
 	private double lastKnownBearing;
 
 	/**
 	 * 
 	 */
-	private CompassManager() {
+	public CompassManager(PositionManager pm) {
 		lastKnownBearing = 0.0d;
 		compassListeners = new LinkedList<CompassListener>();
+		pm.registerPositionListener(this);
 	}
 
 	/**
 	 * 
 	 * @return
-	 */
+	 *
 	public static CompassManager getInstance() {
 		Log.d(TAG_COMPASS_MANAGER, "CompassManager.getInstance()");
-		if(PositionManager.getInstance() == null){
-			Log.e(TAG_COMPASS_MANAGER, "Position Manager is not initalized");
-		}
 		if (compassManager == null) {
 			compassManager = new CompassManager();
 			PositionManager.getInstance().registerPositionListener(
 					compassManager);
 		}
 		return compassManager;
-	}
+	}/
 
 	/**
 	 * 

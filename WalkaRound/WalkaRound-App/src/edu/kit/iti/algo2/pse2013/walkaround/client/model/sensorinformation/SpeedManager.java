@@ -26,26 +26,27 @@ public class SpeedManager implements PositionListener {
 	/*
 	 * 
 	 */
-	private static SpeedManager speedManager;
+	//private static SpeedManager speedManager;
 
 	/*
 	 * 
 	 */
-	private static double lastKnownSpeed;
+	private double lastKnownSpeed;
 
 	/**
 	 * 
 	 */
-	private SpeedManager() {
+	public SpeedManager(PositionManager pm) {
 		speedListeners = new LinkedList<SpeedListener>();
-		PositionManager.getInstance().registerPositionListener(speedManager);
+		lastKnownSpeed = 0.0d;
+		pm.registerPositionListener(this);
 	}
 
 	/**
 	 * 
 	 * @return
-	 */
-	public SpeedManager getInstance() {
+	 *
+	public static SpeedManager getInstance() {
 		if(PositionManager.getInstance() == null){
 			Log.e(TAG_SPEED_MANAGER, "Position Manger is not initialiced");
 		}
@@ -54,6 +55,7 @@ public class SpeedManager implements PositionListener {
 		}
 		return speedManager;
 	}
+	/
 
 	/**
 	 * 
