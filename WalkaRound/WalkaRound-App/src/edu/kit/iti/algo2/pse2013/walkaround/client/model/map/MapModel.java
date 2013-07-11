@@ -224,7 +224,7 @@ public class MapModel implements TileListener {
 				new DisplayCoordinate(size.x / 2, size.y / 2), upperLeft,
 				currentLevelOfDetail);
 	}
-	
+
 	/**
 	 * compute the amount tiles possible to show
 	 */
@@ -485,16 +485,21 @@ public class MapModel implements TileListener {
 	private void createBitmap(int width, int height) {
 
 		Log.d(TAG_MAP_MODEL, "create Map Bitmap");
-		this.map.recycle();
-		System.gc();
-		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
-		this.map.prepareToDraw();
+		synchronized (this.map) {
+			this.map.recycle();
+			System.gc();
+			this.map = Bitmap.createBitmap(size.x, size.y,
+					Bitmap.Config.ARGB_8888);
+			this.map.prepareToDraw();
+		}
 
 		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
-		this.routeOverlayBitmap.recycle();
-		this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_8888);
-		this.routeOverlayBitmap.prepareToDraw();
+		synchronized (this.routeOverlayBitmap) {
+			this.routeOverlayBitmap.recycle();
+			this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
+					Bitmap.Config.ARGB_8888);
+			this.routeOverlayBitmap.prepareToDraw();
+		}
 
 		Log.d(TAG_MAP_MODEL, "call drawing");
 		this.fetchTiles();
@@ -562,21 +567,25 @@ public class MapModel implements TileListener {
 			final float toX, final float toY) {
 
 		if (!routeOverlayBitmap.isRecycled()) {
-			Canvas canvas = new Canvas(routeOverlayBitmap);
+			synchronized (routeOverlayBitmap) {
+				if(!routeOverlayBitmap.isRecycled()){
+				Canvas canvas = new Canvas(routeOverlayBitmap);
 
-			Paint pinsel = new Paint();
-			pinsel.setColor(Color.rgb(64, 64, 255));
-			pinsel.setStrokeWidth(this.strokeWidth);
+				Paint pinsel = new Paint();
+				pinsel.setColor(Color.rgb(64, 64, 255));
+				pinsel.setStrokeWidth(this.strokeWidth);
 
-			// if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
-			// if (fromX < size.x || fromY < size.y || toX < size.x
-			// || toY < size.y) {
-			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-			canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
-			// }
-			// }
+				// if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
+				// if (fromX < size.x || fromY < size.y || toX < size.x
+				// || toY < size.y) {
+				Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+				canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
+				// }
+				// }
 
-			mapController.onRouteOverlayImageChange(routeOverlayBitmap);
+				mapController.onRouteOverlayImageChange(routeOverlayBitmap);
+				}
+			}
 		}
 	}
 
@@ -595,14 +604,17 @@ public class MapModel implements TileListener {
 			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y "
 					+ localY);
 
-			Canvas canvas = new Canvas(map);
-
-			Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-			canvas.drawBitmap(tile,
-					(localX * tile.getWidth()) - mapOffset.getX(),
-					(localY * tile.getHeight()) - mapOffset.getY(), null);
-
+			synchronized (map) {
+				if(!map.isRecycled()){
+				Canvas canvas = new Canvas(map);
+				Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+				canvas.drawBitmap(tile,
+						(localX * tile.getWidth()) - mapOffset.getX(),
+						(localY * tile.getHeight()) - mapOffset.getY(), null);
+				}
+			}
 			this.mapController.onMapOverlayImageChange(map);
+
 		}
 
 	}
