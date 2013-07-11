@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.route;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
 import java.util.LinkedList;
 

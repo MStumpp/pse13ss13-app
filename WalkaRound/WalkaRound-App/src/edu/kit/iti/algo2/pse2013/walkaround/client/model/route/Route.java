@@ -1,10 +1,9 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.route;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
-
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -329,7 +328,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param waypointNr
 	 * @return
 	 */
@@ -344,7 +343,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param waypointNr
 	 * @return
 	 */
@@ -359,7 +358,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param one
 	 * @param two
 	 * @return
@@ -381,7 +380,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param route
 	 * @param one
 	 * @param two
@@ -404,7 +403,7 @@ public class Route implements RouteInfo {
 		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
 		int indexOfInsertion = this.routeCoordinates.indexOf(one);
 		Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size() + ", indexOfInsertion: " + indexOfInsertion + ", route contains one " + this.routeCoordinates.contains(one));
-		
+
 		for (Coordinate coord : bridgingCoords) {
 			this.routeCoordinates.add(indexOfInsertion, coord);
 			indexOfInsertion++;
@@ -414,7 +413,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void cleanRouteOfDuplicateCoordinatePairs() {
 		Log.d(TAG_ROUTE, "cleanRouteOfDuplicateCoordinatePairs()");
@@ -436,7 +435,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public String toString() {
 		Log.d(TAG_ROUTE, "toString()");
