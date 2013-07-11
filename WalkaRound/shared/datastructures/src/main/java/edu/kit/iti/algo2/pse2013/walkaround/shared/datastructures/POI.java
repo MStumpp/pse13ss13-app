@@ -8,120 +8,136 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class POI extends Location {
 
-    /**
-     * text info of POI.
-     */
-    private String textInfo;
+	/**
+	 * text info of POI.
+	 */
+	private String textInfo;
 
+	/**
+	 * url of image of POI.
+	 */
+	private String url;
 
-    /**
-     * url of image of POI.
-     */
-    private String url;
+	/**
+	 * poi categories of POI.
+	 */
+	private int[] poiCategories;
 
+	/**
+	 * Creates an instance of POI.
+	 *
+	 * @param lat
+	 *            Latitude of POI.
+	 * @param lon
+	 *            Longitude of POI.
+	 * @param name
+	 *            Name of POI.
+	 * @param textInfo
+	 *            Text info of POI.
+	 * @param url
+	 *            URL of an image of POI.
+	 * @param categories
+	 *            Categories of POI.
+	 */
+	public POI(double lat, double lon, String name, String textInfo, String url, int[] categories) {
+		this(lat, lon, name, textInfo, url, categories, null);
+	}
 
-    /**
-     * poi categories of POI.
-     */
-    private int[] poiCategories;
+	/**
+	 * Creates an instance of POI. This is for example useful when parsing from
+	 * a PBF-File.
+	 *
+	 * @param loc
+	 *            A prototype of the POI, which will be created. It contains all
+	 *            attributes, that are inherited by the superclass Location
+	 * @param textInfo
+	 *            Textinfo of POI
+	 * @param imageURL
+	 *            an URL to an image of the POI
+	 * @param poiCategories
+	 *            the POI-Categories, this POI belongs to
+	 */
+	public POI(Location loc, String textInfo, String imageURL, int[] poiCategories) {
+		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, imageURL, poiCategories);
+	}
 
+	/**
+	 * Creates an instance of POI.
+	 *
+	 * @param lat
+	 *            Latitude of POI.
+	 * @param lon
+	 *            Longitude of POI.
+	 * @param name
+	 *            Name of POI.
+	 * @param textInfo
+	 *            Text info of POI.
+	 * @param url
+	 *            URL of an image of POI.
+	 * @param poiCategories
+	 *            Categories of POI.
+	 * @param address
+	 *            Address of POI.
+	 */
+	public POI(double lat, double lon, String name, String textInfo,
+			String url, int[] poiCategories, Address address) {
+		super(lat, lon, name, address);
+		this.textInfo = textInfo;
+		this.url = url;
+		this.poiCategories = poiCategories;
+	}
 
-    /**
-     * Creates an instance of POI.
-     *
-     * @param lat Latitude of POI.
-     * @param lon Longitude of POI.
-     * @param name Name of POI.
-     * @param textInfo Text info of POI.
-     * @param url URL of an image of POI.
-     * @param poiCategories Categories of POI.
-     */
-    public POI(double lat, double lon, String name, String textInfo, String url, int[] poiCategories) {
-        this(lat, lon, name, textInfo, url, poiCategories, null);
-    }
+	/**
+	 * Sets the textual information of this POI.
+	 *
+	 * @param text
+	 *            text to set
+	 */
+	public void setTextInfo(String text) {
+		this.textInfo = text;
+	}
 
+	/**
+	 * Returns text info of POI.
+	 *
+	 * @return String.
+	 */
+	public String getTextInfo() {
+		return textInfo;
+	}
 
-    /**
-     * Creates an instance of POI. This is for example useful when parsing from a PBF-File.
-     *
-     * @param loc A prototype of the POI, which will be created. It contains all attributes, that are inherited by the superclass Location
-     * @param textInfo Textinfo of POI
-     * @param imageURL an URL to an image of the POI
-     * @param poiCategories the POI-Categories, this POI belongs to
-     */
-    public POI(Location loc, String textInfo, String imageURL, int[] poiCategories) {
-    	this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, imageURL, poiCategories);
-    }
+	/**
+	 * Returns an url of the image for this POI.
+	 *
+	 * @return String
+	 */
+	public String getURL() {
+		return url;
+	}
 
+	/**
+	 * Returns all categories of POI.
+	 *
+	 * @return A list of category-IDs
+	 */
+	public int[] getPOICategories() {
+		return poiCategories;
+	}
 
-    /**
-     * Creates an instance of POI.
-     *
-     * @param lat Latitude of POI.
-     * @param lon Longitude of POI.
-     * @param name Name of POI.
-     * @param textInfo Text info of POI.
-     * @param url URL of an image of POI.
-     * @param poiCategories Categories of POI.
-     * @param address Address of POI.
-     */
-    public POI(double lat, double lon, String name, String textInfo, String url, int[] poiCategories, Address address) {
-        super(lat, lon, name, address);
-        this.textInfo = textInfo;
-        this.url = url;
-        this.poiCategories = poiCategories;
-    }
+	public String toString() {
+		String result = "POI:\n\tCoordinate: (" + getLatitude() + "|"
+				+ getLongitude() + ")\n\t" + "Name: " + getName() + "\n\t"
+				+ "TextInfo: " + getTextInfo() + "\n\t" + "URL: " + getURL()
+				+ "\n\t" + "POI-Categories: ";
+		for (int i : getPOICategories()) {
+			result += " " + i;
+		}
+		return result;
+	}
 
-
-    /**
-     * Sets the textual information of this POI.
-     *
-     * @param text text to set
-     */
-    public void setTextInfo(String text) {
-    	this.textInfo = text;
-    }
-
-
-    /**
-     * Returns text info of POI.
-     *
-     * @return String.
-     */
-    public String getTextInfo() {
-	    return textInfo;
-    }
-
-
-    /**
-     * Returns an url of the image for this POI.
-     *
-     * @return String
-     */
-    public String getURL() {
-    	return url;
-    }
-
-
-    /**
-     * Returns all categories of POI.
-     *
-     * @return A list of category-IDs
-     */
-    public int[] getPOICategories() {
-        return poiCategories;
-    }
-
-    public String toString() {
-    	return "POI:\n\tCoordinate: (" + getLatitude() + "|" + getLongitude() + ")\n\t"
-    		+ "Name: " + getName() + "\n\t"
-    	    + "TextInfo: " + getTextInfo() + "\n\t"
-    	    + "URL: " + getURL() + "\n\t"
-    	    + "POI-Categories: " + getURL() + "\n\t";
-    }
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -136,8 +152,9 @@ public class POI extends Location {
 		return result;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -175,12 +192,13 @@ public class POI extends Location {
 		}
 		return true;
 	}
-	
+
 	public POI clone() {
-		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this.getName().toString(), this.getTextInfo().toString(), this.getURL().toString(), this.getPOICategories(), this.getAddress().clone());
+		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this
+				.getName().toString(), this.getTextInfo().toString(), this
+				.getURL().toString(), this.getPOICategories(), this
+				.getAddress().clone());
 		return clonedPOI;
 	}
-	
-	
 
 }
