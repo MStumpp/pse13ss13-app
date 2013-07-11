@@ -249,7 +249,7 @@ public class Route implements RouteInfo {
 	public void optimizeRoute() {
 		Log.d(TAG_ROUTE, "optimizeRoute()");
 		RouteInfo optimizedRoute = this.routeProcessor
-				.computeOptimizedRoute(this.clone());
+				.computeOptimizedRoute((RouteInfo) this);
 		this.routeCoordinates = optimizedRoute.getCoordinates();
 	}
 
