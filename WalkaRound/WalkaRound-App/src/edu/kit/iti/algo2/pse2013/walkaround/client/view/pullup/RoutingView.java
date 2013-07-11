@@ -34,6 +34,8 @@ public class RoutingView extends Fragment implements RouteListener {
 	private FavoriteMenuController favController;
 	private RouteController routeController;
 
+	private RouteInfo lastKnownRoute;
+
 	private Button reset;
 	private ImageView invert;
 	private ImageView tsp;
@@ -42,6 +44,9 @@ public class RoutingView extends Fragment implements RouteListener {
 	private Button addFavorite;
 	private Button goToMap;
 	private EditText name;
+	private LinearLayout layout;
+
+	private static boolean isListener = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,10 @@ public class RoutingView extends Fragment implements RouteListener {
 		routeController = RouteController.getInstance();
 
 		Log.d(TAG_PULLUP_CONTENT, "Register on route controller");
-		routeController.registerRouteListener(this);
+		if (!isListener) {
+			routeController.registerRouteListener(this);
+			isListener = true;
+		}
 
 		reset = (Button) this.getActivity().findViewById(R.id.reset);
 		invert = (ImageView) this.getActivity().findViewById(R.id.invert);
@@ -64,6 +72,7 @@ public class RoutingView extends Fragment implements RouteListener {
 				R.id.add_favorite);
 		goToMap = (Button) this.getActivity().findViewById(R.id.go_to_map);
 		name = (EditText) this.getActivity().findViewById(R.id.name_favorites);
+		layout = (LinearLayout) getActivity().findViewById(R.id.waylist);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -255,14 +264,6 @@ public class RoutingView extends Fragment implements RouteListener {
 
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
-		LinearLayout layout = (LinearLayout) getActivity().findViewById(
-				R.id.waylist);
-		for (Iterator<Waypoint> iter = currentRoute.getWaypoints().iterator(); iter
-				.hasNext();) {
-			Waypoint current = iter.next();
-			TextView tv = new TextView(getActivity());
-			tv.setText(current.getName());
-			layout.addView(tv);
-		}
+		lastKnownRoute = currentRoute;
 	}
 }
