@@ -817,13 +817,11 @@ public class MapView extends Activity {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onFling " + currentId);
 
-			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY());
-			if (Math.abs(velocityY) > 1000) {
-				if (e2.getY() < 0) {
-				} else {
-				}
+			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY() + " " + currentId);
+			if (Math.abs(velocityY) > 100 || Math.abs(velocityY) > 100) {
+				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point" + currentId);
+				mc.onDeletePoint(currentId);
 			}
 			
 			return false;
