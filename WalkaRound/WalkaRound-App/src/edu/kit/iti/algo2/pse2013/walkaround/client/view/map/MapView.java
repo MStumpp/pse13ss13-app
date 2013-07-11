@@ -248,7 +248,7 @@ public class MapView extends Activity {
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
 		
-		//this.setUserPositionOverlayImage(200,200);
+		this.setUserPositionOverlayImage(size.x/2,size.y/2);
 	}
 
 	/**
@@ -788,8 +788,8 @@ public class MapView extends Activity {
 				float velocityY) {
 
 			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY() + " " + currentId);
-			if (Math.abs(velocityY) > 100 || Math.abs(velocityY) > 100) {
-				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point" + currentId);
+			if (Math.abs(velocityY) > 1000 || Math.abs(velocityY) > 1000) {
+				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point " + currentId);
 				mc.onDeletePoint(currentId);
 			}
 			

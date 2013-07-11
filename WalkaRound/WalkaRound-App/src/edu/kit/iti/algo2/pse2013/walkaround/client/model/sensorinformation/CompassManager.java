@@ -7,7 +7,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.util.Log;
 
 /**
@@ -35,8 +34,10 @@ public class CompassManager implements SensorEventListener {
 	private float lastKnownBearing;
 	
 	private SensorManager sensorManager;
-	private Sensor aSensor;
-	private Sensor mSensor;
+	private Sensor accellerometer;
+	private Sensor magneticFieldSensor;
+	private float[] accellerometerReadout;
+	private float[] magneticFieldSensorReadout;
 
 	/**
 	 * 
@@ -44,11 +45,23 @@ public class CompassManager implements SensorEventListener {
 	public CompassManager(Context context) {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
 		lastKnownBearing = 0.0f;
-		compassListeners = new LinkedList<CompassListener>();
-		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
+		compassListeners = new LinkedList<CompassListener>();		
 		/*
-		this.sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);*/
+		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 1");
+
+		this.accellerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 2");
+
+		this.magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 3");
+
+		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_NORMAL);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 4");
+
+		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 5");
+		*/
 	}
 
 
@@ -78,7 +91,6 @@ public class CompassManager implements SensorEventListener {
 
 	
 	
-	
 	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
 		// TODO Auto-generated method stub
@@ -87,9 +99,27 @@ public class CompassManager implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
-		this.lastKnownBearing = event.values[0];
+		if (event.sensor.getType() == this.accellerometer.getType()) {
+			this.accellerometerReadout = event.values;
+		}
+		if (event.sensor.getType() == this.magneticFieldSensor.getType()) {
+			this.magneticFieldSensorReadout = event.values;
+		}
+		
+		if (this.accellerometerReadout != null && this.magneticFieldSensorReadout != null) {
+			float[] R = new float[9];
+			float[] I = new float[9];
+			boolean processed = SensorManager.getRotationMatrix(R, I, this.accellerometerReadout, this.magneticFieldSensorReadout);
+			if (processed) {
+				float[] orientation = new float[3];
+				SensorManager.getOrientation(R, orientation);
+				this.lastKnownBearing = orientation[0];
+			}
+		}
 		this.notifyAllCompassListeners();
 	}
+	
+	
 
 	
 }
