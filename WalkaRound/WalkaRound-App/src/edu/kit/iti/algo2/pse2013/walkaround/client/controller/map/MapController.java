@@ -386,11 +386,11 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	}
 
 	@Override
-	public void onRouteChange(RouteInfo currentRoute, Waypoint activeWaypoint) {
+	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
 
 		this.currentRoute = currentRoute;
-		this.currentActiveWaypoint = activeWaypoint.getId();
+		this.currentActiveWaypoint = currentRoute.getActiveWaypoint().getId();
 		updateRouteOverlay();
 	}
 
