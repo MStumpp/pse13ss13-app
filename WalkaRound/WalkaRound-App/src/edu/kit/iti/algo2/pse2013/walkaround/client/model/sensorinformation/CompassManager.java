@@ -41,27 +41,14 @@ public class CompassManager implements SensorEventListener {
 	 * 
 	 */
 	public CompassManager(Context context) {
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
+		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");/*
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
 		this.sensorManager = (SensorManager) context.getSystemService("SENSOR_SERVICE");
 		this.sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-		this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);
+		this.sensorManager.registerListener(this, this.sensor, SensorManager.SENSOR_DELAY_NORMAL);*/
 	}
 
-	/**
-	 * 
-	 * @return
-	 *
-	public static CompassManager getInstance() {
-		Log.d(TAG_COMPASS_MANAGER, "CompassManager.getInstance()");
-		if (compassManager == null) {
-			compassManager = new CompassManager();
-			PositionManager.getInstance().registerPositionListener(
-					compassManager);
-		}
-		return compassManager;
-	}/
 
 	/**
 	 * 
