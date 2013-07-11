@@ -18,8 +18,10 @@ import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 
-public class RoutingView extends Fragment {
+public class RoutingView extends Fragment implements RouteListener{
 
 	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
@@ -238,6 +240,11 @@ public class RoutingView extends Fragment {
 			}
 			return false;
 		}
+		
+	}
+
+	@Override
+	public void onRouteChange(RouteInfo currentRoute) {
 		
 	}
 }
