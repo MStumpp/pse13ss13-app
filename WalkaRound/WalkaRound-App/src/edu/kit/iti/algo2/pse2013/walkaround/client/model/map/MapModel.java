@@ -28,9 +28,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class compute the Bitmaps of map and route.
- *
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class MapModel implements TileListener {
 
@@ -87,13 +87,15 @@ public class MapModel implements TileListener {
 	private int xZoomBorder;
 	private int yZoomBorder;
 
+	List<POI> poiList;
+	
 	/*
 	 * -----------------Initialization-----------------
 	 */
 
 	/**
 	 * initialize MapModel
-	 *
+	 * 
 	 * @param c
 	 *            the Coordinate of the mid
 	 * @param mapController
@@ -112,7 +114,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Gives back a Instance of MapView
-	 *
+	 * 
 	 * @return null if MapModel isn't initialize
 	 */
 	public static MapModel getInstance() {
@@ -125,7 +127,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Construct a new MapModel
-	 *
+	 * 
 	 * @param c
 	 *            the Coordinate of the mid
 	 * @param mapController
@@ -136,6 +138,7 @@ public class MapModel implements TileListener {
 	private MapModel(Coordinate c, MapController mapController, Point size) {
 		Log.d(TAG_MAP_MODEL, "Display-Size: " + size.x + " * " + size.y);
 		Log.d(TAG_MAP_MODEL, "Map Model will initialice");
+		poiList = new LinkedList<POI>();
 
 		Log.d(TAG_MAP_MODEL, "Referenzen will initialice");
 		this.mapController = mapController;
@@ -242,7 +245,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 *
+	 * 
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -262,7 +265,9 @@ public class MapModel implements TileListener {
 		// TODO beim nach oben schieben muss yDiff auf dem Display kleiner
 		// werden!
 		// ich denke hier ist möglicherweise auch ein RundungsFehler!
-		yDiff = yDiff - CoordinateUtility.computeCurrentTileWidthInPixels(currentLevelOfDetail);
+		yDiff = yDiff
+				- CoordinateUtility
+						.computeCurrentTileWidthInPixels(currentLevelOfDetail);
 		// yDiff = 256-yDiff;
 
 		Log.d(TAG_MAP_MODEL, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
@@ -279,7 +284,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * gives the upperLeft Coordinate back
-	 *
+	 * 
 	 * @return the upper left Coordinate
 	 */
 	public Coordinate getUpperLeft() {
@@ -288,7 +293,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Gives back the current Level Of Detail
-	 *
+	 * 
 	 * @return current Level ofDetail
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -296,7 +301,7 @@ public class MapModel implements TileListener {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -305,23 +310,31 @@ public class MapModel implements TileListener {
 		return null;
 	}
 
+	
 	/**
-	 *
-	 * @param dc
-	 * @param category
-	 * @param profile
-	 * @return
+	 * update the POI of the Display
 	 */
-	public LinkedList<DisplayCoordinate> getPOIofDisplay(DisplayCoordinate dc,
-			int[] category, int profile) {
-		// TODO
+	public void updatePOIofDisplay() {
 		if (!POIManager.getInstance().isEmpty()) {
-			Coordinate bottomRight = new Coordinate(0, 0);
-			List<POI> poi = POIManager.getInstance().getPOIsWithinRectangle(
+
+			Coordinate bottomRight = CoordinateUtility
+					.convertDisplayCoordinateToCoordinate(
+							new DisplayCoordinate(size.x, size.y), upperLeft,
+							currentLevelOfDetail);
+
+			poiList = POIManager.getInstance().getPOIsWithinRectangle(
 					upperLeft, bottomRight, currentLevelOfDetail);
-			return null;
+			
+			LinkedList<DisplayPOI> poi = new LinkedList<DisplayPOI>();
+			
+			for(POI value: poiList){
+				poi.add(new DisplayPOI(
+						CoordinateUtility.convertDegreesToPixels(value.getLongitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_X),
+						CoordinateUtility.convertDegreesToPixels(value.getLatitude(), currentLevelOfDetail, CoordinateUtility.DIRECTION_Y),
+						value.getId()));
+			}
+			mapController.onPOIChange(poi);
 		}
-		return new LinkedList<DisplayCoordinate>();
 	}
 
 	/*
@@ -337,7 +350,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Set a new current Level of Detail
-	 *
+	 * 
 	 */
 	public void setCurrentLevelOfDetail(float levelOfDetail) {
 		this.currentLevelOfDetail = levelOfDetail;
@@ -349,7 +362,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * shifts the map by a delta
-	 *
+	 * 
 	 * @param delta
 	 *            the shifting delta
 	 */
@@ -373,7 +386,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Zooms by a Delta to a DisplayCoordinate
-	 *
+	 * 
 	 * @param delta
 	 *            the zoom delta
 	 * @param c
@@ -387,7 +400,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Zooms by a delta to the middle of the Display
-	 *
+	 * 
 	 * @param delta
 	 *            the zoom delta
 	 */
@@ -398,7 +411,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Zooms by a Delta to a Coordinate
-	 *
+	 * 
 	 * @param delta
 	 *            the zoom delta
 	 * @param c
@@ -475,7 +488,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * recycle and creates a new map recycle and creates a new routeOverlay
-	 *
+	 * 
 	 * @param width
 	 *            of the map and routeOverlay
 	 * @param height
@@ -499,16 +512,16 @@ public class MapModel implements TileListener {
 					Bitmap.Config.ARGB_8888);
 			this.routeOverlayBitmap.prepareToDraw();
 		}
-
+		
 		Log.d(TAG_MAP_MODEL, "call drawing");
 		this.fetchTiles();
 		this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
-
+		this.updatePOIofDisplay();
 	}
 
 	/**
 	 * asks the tile fetcher to send back the needed tiles
-	 *
+	 * 
 	 * @return true if it is possible to get the tiles
 	 */
 	private boolean fetchTiles() {
@@ -530,7 +543,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Draws the Route Overlay between DisplayWaypoints
-	 *
+	 * 
 	 * @param lines
 	 *            a list of Points
 	 */
@@ -552,7 +565,7 @@ public class MapModel implements TileListener {
 
 	/**
 	 * Draw a Line between two points.
-	 *
+	 * 
 	 * @param fromX
 	 *            from x
 	 * @param fromY
@@ -567,22 +580,22 @@ public class MapModel implements TileListener {
 
 		if (!routeOverlayBitmap.isRecycled()) {
 			synchronized (routeOverlayBitmap) {
-				if(!routeOverlayBitmap.isRecycled()){
-				Canvas canvas = new Canvas(routeOverlayBitmap);
+				if (!routeOverlayBitmap.isRecycled()) {
+					Canvas canvas = new Canvas(routeOverlayBitmap);
 
-				Paint pinsel = new Paint();
-				pinsel.setColor(Color.rgb(64, 64, 255));
-				pinsel.setStrokeWidth(this.strokeWidth);
+					Paint pinsel = new Paint();
+					pinsel.setColor(Color.rgb(64, 64, 255));
+					pinsel.setStrokeWidth(this.strokeWidth);
 
-				// if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
-				// if (fromX < size.x || fromY < size.y || toX < size.x
-				// || toY < size.y) {
-				Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-				canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
-				// }
-				// }
+					// if (fromX > 0 || fromY > 0 || toX > 0 || toY > 0) {
+					// if (fromX < size.x || fromY < size.y || toX < size.x
+					// || toY < size.y) {
+					Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+					canvas.drawLine(fromX, fromY + 22, toX, toY + 22, pinsel);
+					// }
+					// }
 
-				mapController.onRouteOverlayImageChange(routeOverlayBitmap);
+					mapController.onRouteOverlayImageChange(routeOverlayBitmap);
 				}
 			}
 		}
@@ -604,12 +617,12 @@ public class MapModel implements TileListener {
 					+ localY);
 
 			synchronized (map) {
-				if(!map.isRecycled()){
-				Canvas canvas = new Canvas(map);
-				Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-				canvas.drawBitmap(tile,
-						(localX * tile.getWidth()) - mapOffset.getX(),
-						(localY * tile.getHeight()) - mapOffset.getY(), null);
+				if (!map.isRecycled()) {
+					Canvas canvas = new Canvas(map);
+					Log.d(TAG_MAP_MODEL, "ZEICHNE!");
+					canvas.drawBitmap(tile, (localX * tile.getWidth())
+							- mapOffset.getX(), (localY * tile.getHeight())
+							- mapOffset.getY(), null);
 				}
 			}
 			this.mapController.onMapOverlayImageChange(map);
