@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.route;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,7 +59,7 @@ public class Route implements RouteInfo {
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Waypoint activeWaypoint = this.activeWaypoint;
 
-		// TODO: bestimme vorherigen und nächsten WP an neuer Position
+		// TODO: bestimme vorherigen und nï¿½chsten WP an neuer Position
 
 		assert (newPos >= 0 && newPos <= waypoints.size());
 
@@ -400,11 +400,12 @@ public class Route implements RouteInfo {
 		}
 
 		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
-		int indexOfInstertion = this.routeCoordinates.indexOf(one);
-
+		int indexOfInsertion = this.routeCoordinates.indexOf(one);
+		Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size() + ", indexOfInsertion: " + indexOfInsertion + ", route contains one " + this.routeCoordinates.contains(one));
+		
 		for (Coordinate coord : bridgingCoords) {
-			this.routeCoordinates.add(indexOfInstertion, coord);
-			indexOfInstertion++;
+			this.routeCoordinates.add(indexOfInsertion, coord);
+			indexOfInsertion++;
 		}
 
 		return true;
