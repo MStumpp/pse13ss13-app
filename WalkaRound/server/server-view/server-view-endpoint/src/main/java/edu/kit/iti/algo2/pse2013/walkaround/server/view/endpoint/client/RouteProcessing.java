@@ -1,4 +1,5 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.route;
+package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint.client;
+
 
 import android.util.Log;
 import com.google.gson.Gson;
