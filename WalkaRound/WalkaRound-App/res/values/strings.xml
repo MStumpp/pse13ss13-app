@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WalkAround</string>
+    <string name="app_name">WalkaRound</string>
     <string name="address">Address</string>
     <string name="poi">POI</string>
     <string name="current">current</string>

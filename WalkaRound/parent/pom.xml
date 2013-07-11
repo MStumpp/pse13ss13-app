@@ -4,7 +4,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<github.global.server>github</github.global.server>
-	</properties>
+        <slf4jVersion>1.6.1</slf4jVersion>
+    </properties>
 
 	<!-- Project properties -->
 	<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
@@ -107,5 +108,43 @@
 			<artifactId>android</artifactId>
 			<version>4.1.1.4</version>
 		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <!-- CHOOSE BETWEEN ONE OF THESE DIFFERENT BINDINGS -->
+        <!-- Binding for NOP, silently discarding all logging. -->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-nop</artifactId>-->
+            <!--<version>${slf4jVersion}</version>-->
+        <!--</dependency>-->
+        <!-- Binding for System.out -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <!--Binding for log4j version 1.2.x You also need to
+        place log4j.jar on your class path. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!--Binding for commons logging over slf4j -->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>jcl-over-slf4j</artifactId>-->
+            <!--<version>${slf4jVersion}</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
 	</dependencies>
 </project>

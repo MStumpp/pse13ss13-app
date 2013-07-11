@@ -11,7 +11,7 @@ import android.util.Log;
 public class Location extends Coordinate {
 
 	private static String TAG_LOCATION = Location.class.getSimpleName();
-	
+
     /**
      * id of Location.
      */
@@ -70,7 +70,7 @@ public class Location extends Coordinate {
      */
     public Location(double lat, double lon, String name, Address address) {
     	super(lat, lon);
-    	Log.d(TAG_LOCATION, "Location Constructor: lat: " + lat + ", lon: " + lon + ", name: " + name + ", used id: " + idCounter + "");
+		//Log.d(TAG_LOCATION, "Location Constructor: lat: " + lat + ", lon: " + lon + ", name: " + name + ", used id: " + idCounter + "");
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("name must not be null and not be empty");
         this.name = name;
@@ -181,18 +181,18 @@ public class Location extends Coordinate {
 		return true;
 	}
 
-	
+
 	public Location clone() {
 		Location clonedLocation = new Location(this.getLatitude(), this.getLongitude(), this.name.toString(), this.address.clone());
 		clonedLocation.setMoveability(this.isMoveable());
 		clonedLocation.setIsFavorite(this.isFavorite());
 		return clonedLocation;
 	}
-	
+
 	protected void setMoveability(boolean moveable) {
 		this.isMoveable = moveable;
 	}
-	
+
 	public void setIsFavorite(boolean isFavorite) {
 		this.isFavorite = isFavorite;
 	}

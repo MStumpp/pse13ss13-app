@@ -192,7 +192,7 @@ public class Server {
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
-                    new CrossingInformation(new float[]{50.f, 100.f})));
+                    computeCrossingInformation(vertex)));
 
         return transfer;
     }
@@ -222,6 +222,22 @@ public class Server {
 //      return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
         transfer.setError("computeOptimizedRoute not yet implemented");
         return transfer;
+    }
+
+
+    /**
+     * Computes the CrossingInformation for a given Vertex.
+     *
+     * @param vertex Vertex CrossingInformation to be computed for.
+     * @return CrossingInformation for the given Vertex.
+     */
+    private CrossingInformation computeCrossingInformation(Vertex vertex) {
+//        double angle1 = Math.atan2(line1.getY1() - line1.getY2(),
+//                line1.getX1() - line1.getX2());
+//        double angle2 = Math.atan2(line2.getY1() - line2.getY2(),
+//                line2.getX1() - line2.getX2());
+//        return angle1-angle2;
+        return new CrossingInformation(new float[]{50.f, 100.f});
     }
 
 }
