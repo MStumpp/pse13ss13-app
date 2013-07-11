@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
+import java.io.IOException;
 import java.util.List;
 
 import android.animation.Animator;
