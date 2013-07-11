@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
@@ -17,6 +18,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveAddress;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveArea;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveEdge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizable;
@@ -54,6 +56,27 @@ public class ProtobufConverter {
 			builder.setPostalCode(addr.getPostalCode());
 		}
 		return null;
+	}
+	public static Area getArea(SaveArea saveArea) {
+		int[] areaCats = new int[saveArea.getCategoryCount()];
+		for (int i = 0; i < areaCats.length; i++) {
+			areaCats[i] = saveArea.getCategory(i);
+		}
+		ArrayList<Coordinate> areaCoords = new ArrayList<Coordinate>();
+		for (SaveCoordinate c : saveArea.getCoordinateList()) {
+			areaCoords.add(getCoordinate(c));
+		}
+		return new Area(areaCats, areaCoords);
+	}
+	public static SaveArea.Builder getAreaBuilder(Area area) {
+		SaveArea.Builder builder = SaveArea.newBuilder();
+		for (int cat : area.getAreaCategories()) {
+			builder.addCategory(cat);
+		}
+		for (Coordinate c : area.getAreaCoordinates()) {
+			builder.addCoordinate(getCoordinateBuilder(c));
+		}
+		return builder;
 	}
 	public static Coordinate getCoordinate(SaveCoordinate saveCoord) {
 		if (saveCoord == null) {
@@ -228,6 +251,9 @@ public class ProtobufConverter {
 		for (SavePOI savePOI : saveLocationData.getPOIList()) {
 			locationData.addPOI(getPOI(savePOI));
 		}
+		for (SaveArea saveArea : saveLocationData.getAreaList()) {
+			locationData.addArea(getArea(saveArea));
+		}
 		return locationData;
 	}
 	public static SaveLocationData.Builder getLocationDataBuilder(LocationDataIO locData) {
@@ -237,6 +263,9 @@ public class ProtobufConverter {
 		SaveLocationData.Builder builder = SaveLocationData.newBuilder();
 		for (POI p : locData.getPOIs()) {
 			builder.addPOI(getPOIBuilder(p));
+		}
+		for (Area a : locData.getAreas()) {
+			builder.addArea(getAreaBuilder(a));
 		}
 		return builder;
 	}
