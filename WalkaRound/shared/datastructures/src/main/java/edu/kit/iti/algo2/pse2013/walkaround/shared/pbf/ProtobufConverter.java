@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
-import java.sql.Savepoint;
 import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
@@ -270,7 +269,7 @@ public class ProtobufConverter {
 		if (saveVertex == null) {
 			return null;
 		}
-		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude());
+		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getId());
 		//v.setParent(getVertex(saveVertex.getParent())); // TODO: Aufpassen, dass das nicht zur Endlosschleife wird!
 		//v.setRun(saveVertex.getRun());
 		//v.setCurrentLength(saveVertex.getCurrentLength());

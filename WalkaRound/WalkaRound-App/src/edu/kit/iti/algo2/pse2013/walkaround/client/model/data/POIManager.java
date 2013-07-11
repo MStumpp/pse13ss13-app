@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 
 import android.content.Context;
@@ -20,7 +21,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
 
 /**
  * This class manages requests about POIs.
@@ -30,7 +30,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.route.RouteInfo;
  */
 public class POIManager {
 
-	private static final String TAG_POIMANAGER = POIManager.class.getSimpleName();
+	private static final String TAG_POIMANAGER = POIManager.class
+			.getSimpleName();
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
@@ -54,11 +55,16 @@ public class POIManager {
 	private int[] activeCategories;
 
 	public static void initialize(Context c) {
-		String fileString = File.separatorChar + "walkaround" + File.separatorChar + "locationData.pbf";
+		String fileString = File.separatorChar + "walkaround"
+				+ File.separatorChar + "locationData.pbf";
 		try {
-			Log.d(TAG_POIMANAGER, "ExtFile: " + Environment.getExternalStorageDirectory());
-			locationDataIO = LocationDataIO.load(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + fileString));
-			Log.d(TAG_POIMANAGER, "location data io!" + locationDataIO.getPOIs().size());
+			Log.d(TAG_POIMANAGER,
+					"ExtFile: " + Environment.getExternalStorageDirectory());
+			locationDataIO = LocationDataIO.load(new File(Environment
+					.getExternalStorageDirectory().getAbsolutePath()
+					+ fileString));
+			Log.d(TAG_POIMANAGER, "location data io!"
+					+ locationDataIO.getPOIs().size());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,18 +126,21 @@ public class POIManager {
 		double minLon = upperLeft.getLongitude();
 		double maxLon = bottomRight.getLongitude();
 		ArrayList<POI> poiList = new ArrayList<POI>();
-		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
-				.hasNext();) {
-			POI current = iter.next();
-			if ((current.getLatitude() >= minLat && current.getLatitude() <= maxLat)
-					&& (current.getLongitude() >= minLon && current
-							.getLongitude() <= maxLon)) {
-				for (int i = 0; i < current.getPOICategories().length; i++) {
-					if (activeCategories[current.getPOICategories()[i]] != -1) {
-						poiList.add(current);
+		if (locationDataIO != null) {
+			for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
+					.hasNext();) {
+				POI current = iter.next();
+				if ((current.getLatitude() >= minLat && current.getLatitude() <= maxLat)
+						&& (current.getLongitude() >= minLon && current
+								.getLongitude() <= maxLon)) {
+					for (int i = 0; i < current.getPOICategories().length; i++) {
+						if (activeCategories[current.getPOICategories()[i]] != -1) {
+							poiList.add(current);
+						}
 					}
 				}
 			}
+			return poiList;
 		}
 		return poiList;
 		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
@@ -152,17 +161,20 @@ public class POIManager {
 	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, float levelOfDetail) {
 		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
-		for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
-				.hasNext();) {
-			POI currentPOI = iter.next();
-			for (Iterator<Coordinate> coordIter = coords.iterator(); coordIter
+		if (locationDataIO != null) {
+			for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 					.hasNext();) {
-				Coordinate currentCoordinate = coordIter.next();
-				if (CoordinateUtility.calculateDifferenceInMeters(
-						currentCoordinate, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES_IN_METER) {
-					poiList.add(currentPOI);
+				POI currentPOI = iter.next();
+				for (Iterator<Coordinate> coordIter = coords.iterator(); coordIter
+						.hasNext();) {
+					Coordinate currentCoordinate = coordIter.next();
+					if (CoordinateUtility.calculateDifferenceInMeters(
+							currentCoordinate, currentPOI) <= MAX_DIFFERENCE_OF_COORDINATES_IN_METER) {
+						poiList.add(currentPOI);
+					}
 				}
 			}
+			return poiList;
 		}
 		return poiList;
 		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
@@ -181,24 +193,27 @@ public class POIManager {
 	public List<POI> searchPOIsByQuery(String query) {
 		TreeMap<Integer, ArrayList<POI>> suggestionsMap = new TreeMap<Integer, ArrayList<POI>>();
 		ArrayList<POI> suggestions = new ArrayList<POI>();
-		for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
-				.hasNext();) {
-			POI currentPOI = poiIter.next();
-			int difference = computeLevenstheinDistance(query,
-					currentPOI.getName());
-			if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
-				if (suggestionsMap.containsKey(difference)) {
-					suggestionsMap.get(difference).add(currentPOI);
-				} else {
-					suggestionsMap.put(difference, new ArrayList<POI>());
-					suggestionsMap.get(difference).add(currentPOI);
+		if (locationDataIO != null) {
+			for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
+					.hasNext();) {
+				POI currentPOI = poiIter.next();
+				int difference = computeLevenstheinDistance(query,
+						currentPOI.getName());
+				if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
+					if (suggestionsMap.containsKey(difference)) {
+						suggestionsMap.get(difference).add(currentPOI);
+					} else {
+						suggestionsMap.put(difference, new ArrayList<POI>());
+						suggestionsMap.get(difference).add(currentPOI);
+					}
 				}
 			}
-		}
-		for (Iterator<Integer> keyIter = suggestionsMap.keySet().iterator(); keyIter
-				.hasNext();) {
-			int currentKey = keyIter.next();
-			suggestions.addAll(suggestionsMap.get(currentKey));
+			for (Iterator<Integer> keyIter = suggestionsMap.keySet().iterator(); keyIter
+					.hasNext();) {
+				int currentKey = keyIter.next();
+				suggestions.addAll(suggestionsMap.get(currentKey));
+			}
+			return suggestions;
 		}
 		return suggestions;
 	}

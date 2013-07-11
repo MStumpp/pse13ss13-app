@@ -67,7 +67,13 @@ public class Vertex extends Coordinate {
     }
 
 
-    /**
+    public Vertex(double latitude, double longitude, int id) {
+		this(latitude, longitude);
+		this.id = id;
+	}
+
+
+	/**
      * Returns id of this Vertex.
      *
      * @return int.
