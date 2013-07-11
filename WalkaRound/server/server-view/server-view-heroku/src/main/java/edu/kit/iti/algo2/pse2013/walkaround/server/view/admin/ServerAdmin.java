@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -84,6 +85,12 @@ public class ServerAdmin {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
         GeometryProcessor.init(geometryDataIO);
+
+        try {
+            RoundtripProcessor.init(Graph.getInstance(), GeometryProcessor.getInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
     }
 
 
