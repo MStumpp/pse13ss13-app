@@ -150,9 +150,6 @@ public class ShortestPathProcessor {
                 break;
 
             for (Edge edge : current.getOutgoingEdges()) {
-                if (edge.getHead() == current)
-                    continue;
-
                 currentHead = edge.getHead();
                 distance = current.getCurrentLength() + edge.getLength();
 
