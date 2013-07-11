@@ -4,33 +4,61 @@ import java.util.LinkedList;
 
 import android.location.Location;
 import android.util.Log;
-
+/**
+ * This class hold and return the last known Speed.
+ * 
+ * @author Lukas Müller, Ludwig Biermann
+ *
+ */
 public class SpeedManager implements PositionListener {
 
+	/*
+	 * 
+	 */
 	private static String TAG_SPEED_MANAGER = SpeedManager.class
 			.getSimpleName();
 
-	// Observers:
+	/*
+	 * 
+	 */
 	private LinkedList<SpeedListener> speedListeners;
 
+	/*
+	 * 
+	 */
 	private static SpeedManager speedManager;
 
+	/*
+	 * 
+	 */
 	private static double lastKnownSpeed;
 
+	/**
+	 * 
+	 */
 	private SpeedManager() {
+		speedListeners = new LinkedList<SpeedListener>();
+		PositionManager.getInstance().registerPositionListener(speedManager);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public SpeedManager getInstance() {
+		if(PositionManager.getInstance() == null){
+			Log.e(TAG_SPEED_MANAGER, "Position Manger is not initialiced");
+		}
 		if (speedManager == null) {
 			speedManager = new SpeedManager();
-			// TODO
-			//PositionManager.getInstance().registerPositionListener(speedManager);
 		}
 		return speedManager;
 	}
-	
 
-	// Observer Pattern:
+	/**
+	 * 
+	 * @param newSL
+	 */
 	public void registerSpeedListener(SpeedListener newSL) {
 		Log.d(TAG_SPEED_MANAGER,
 				"Speedmanager.registerSpeedListener(SpeedListener "
@@ -41,6 +69,9 @@ public class SpeedManager implements PositionListener {
 		this.notifyAllSpeedListeners();
 	}
 
+	/**
+	 * 
+	 */
 	private void notifyAllSpeedListeners() {
 		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllCompassListeners()");
 		for (SpeedListener sl : this.speedListeners) {
@@ -52,5 +83,6 @@ public class SpeedManager implements PositionListener {
 	@Override
 	public void onPositionChange(Location androidLocation) {
 		lastKnownSpeed = androidLocation.getSpeed();
+		this.notifyAllSpeedListeners();
 	}
 }
