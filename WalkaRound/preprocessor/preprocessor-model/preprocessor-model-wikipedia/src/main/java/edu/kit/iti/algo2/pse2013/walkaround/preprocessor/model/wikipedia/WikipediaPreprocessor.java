@@ -2,8 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLInputFactory;
@@ -51,7 +51,7 @@ public class WikipediaPreprocessor {
 					.substring(wikipediaURL.lastIndexOf("/"));
 			wikipediaURL = partA + "/Spezial:Exportieren" + partB;
 			URL url = new URL(wikipediaURL);
-			HttpURLConnection connection = (HttpURLConnection) url
+			URLConnection connection = url
 					.openConnection();
 			connection.connect();
 			InputStream input = connection.getInputStream();
@@ -75,12 +75,18 @@ public class WikipediaPreprocessor {
 				}
 				parser.next();
 			}
+			
+			// set image url
 			if(sb.indexOf("[[Datei:") != -1) {
 				String imageUrl = sb.substring(sb.indexOf("[[Datei:") + 8, sb.indexOf("|"));
 				imageUrl = imageUrl.replaceAll(" ", "_");
 				imageUrl = "http://commons.wikimedia.org/wiki/File:" + imageUrl;
+				URL javaImageUrl = new URL(imageUrl);
+				
 				System.out.println(imageUrl);
 			}
+			
+			// continue parsing the text
 			sb = sb.delete(sb.indexOf("=="), sb.length());
 			while (sb.indexOf("<ref>") != -1) {
 				sb = sb.delete(sb.indexOf("<ref>"), sb.indexOf("</ref>") + 6);
