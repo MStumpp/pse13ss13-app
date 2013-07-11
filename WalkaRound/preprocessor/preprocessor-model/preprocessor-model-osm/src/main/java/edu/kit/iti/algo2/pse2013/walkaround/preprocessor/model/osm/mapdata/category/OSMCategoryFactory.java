@@ -14,6 +14,7 @@ public class OSMCategoryFactory {
 		footway.addTag("sidewalk", "right");
 		footway.addTag("highway", "footway");
 		footway.addTag("sidewalk", "both");
+		footway.addTag("foot", "yes");
 		return footway;
 	}
 	public static final OSMCategory createPOICategory(int catID) {
@@ -108,6 +109,9 @@ public class OSMCategoryFactory {
 		OSMTagCategory theatre = new OSMTagCategory();
 		theatre.addTag("amenity", "theatre");
 		return theatre;
+	}
+	public static OSMCategory createAllAreaCategory() {
+		return new OSMOrCategory(createForestCategory(), createGardenCategory());
 	}
 	public static OSMCategory createAreaCategory(int catID) {
 		if (catID == Category.AREA_FOREST) {
