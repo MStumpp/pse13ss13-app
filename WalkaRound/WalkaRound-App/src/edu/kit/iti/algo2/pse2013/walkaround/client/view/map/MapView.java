@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
+import java.io.IOException;
 import java.util.List;
 
 import android.animation.Animator;
@@ -158,7 +159,11 @@ public class MapView extends Activity {
 		super.onCreate(savedInstanceState);
 
 		PositionManager.initialize(this);
-		POIManager.initialize(this);
+		//try {
+			//POIManager.initialize(this);
+		//} catch (IOException e) {
+			//e.printStackTrace();
+		//}
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 

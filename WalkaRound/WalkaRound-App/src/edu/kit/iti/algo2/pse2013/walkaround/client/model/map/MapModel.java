@@ -72,6 +72,7 @@ public class MapModel implements TileListener {
 	 */
 	private Bitmap map;
 	private Bitmap routeOverlayBitmap;
+	Bitmap empty;
 
 	private int strokeWidth = 8;
 
@@ -88,6 +89,7 @@ public class MapModel implements TileListener {
 	private int yZoomBorder;
 
 	List<POI> poiList;
+	
 	
 	/*
 	 * -----------------Initialization-----------------
@@ -139,14 +141,15 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Display-Size: " + size.x + " * " + size.y);
 		Log.d(TAG_MAP_MODEL, "Map Model will initialice");
 		poiList = new LinkedList<POI>();
-
+		this.size = size;
+		empty = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		
 		Log.d(TAG_MAP_MODEL, "Referenzen will initialice");
 		this.mapController = mapController;
 		this.tileFetcher = new TileFetcher();
 		this.tileFetcher.setTileListener(this);
 
 		Log.d(TAG_MAP_MODEL, "compute important Points");
-		this.size = size;
 		this.upperLeft = c;
 
 		Log.d(TAG_MAP_MODEL, "get default Level of Detail");
@@ -497,7 +500,9 @@ public class MapModel implements TileListener {
 	private void createBitmap(int width, int height) {
 
 		Log.d(TAG_MAP_MODEL, "create Map Bitmap");
+		
 		synchronized (this.map) {
+			mapController.onMapOverlayImageChange(empty);
 			this.map.recycle();
 			System.gc();
 			this.map = Bitmap.createBitmap(size.x, size.y,
@@ -507,6 +512,7 @@ public class MapModel implements TileListener {
 
 		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
 		synchronized (this.routeOverlayBitmap) {
+			mapController.onRouteOverlayImageChange(empty);
 			this.routeOverlayBitmap.recycle();
 			this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
 					Bitmap.Config.ARGB_8888);
@@ -516,7 +522,8 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "call drawing");
 		this.fetchTiles();
 		this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
-		this.updatePOIofDisplay();
+		//TODO
+		//this.updatePOIofDisplay();
 	}
 
 	/**
