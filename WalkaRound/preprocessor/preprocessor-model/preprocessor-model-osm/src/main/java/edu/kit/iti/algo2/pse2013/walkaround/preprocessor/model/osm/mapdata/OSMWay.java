@@ -9,6 +9,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 
 public class OSMWay extends OSMElement {
@@ -56,5 +57,10 @@ public class OSMWay extends OSMElement {
 			fittingArray[i] = fitting.get(i);
 		}
 		return fittingArray;
+	}
+
+	@Override
+	public Vertex getCenterVertex() {
+		return getEdges().size()>0?getEdges().get(0).getTail():null;
 	}
 }

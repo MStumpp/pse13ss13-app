@@ -20,6 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.categ
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
@@ -86,8 +87,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
 					currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
 				}
-				if (currentNode.getName() != null && currentNode.getPOICategories().length > 0) {
-					locationData.addPOI(currentNode.convertToPOI());
+				POI poi = currentNode.getPOI();
+				if (poi != null) {
+					locationData.addPOI(poi);
 				}
 			}
 		}
@@ -140,19 +142,26 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				}
 				OSMCategory footCat = OSMCategoryFactory.createFootwayCategory();
 				OSMCategory allAreaCat = OSMCategoryFactory.createAllAreaCategory();
-				if (isValidWay && (footCat.accepts(way) || allAreaCat.accepts(way))) {
-					if (state == STATE_FIND_NEEDED_NODES) {
-						long curID = 0;
-						for (Long idDiff : w.getRefsList()) {
-							nodes.put(curID += idDiff, new OSMNode(curID));
+				if (isValidWay) {
+					if (footCat.accepts(way) || allAreaCat.accepts(way)) {
+						if (state == STATE_FIND_NEEDED_NODES) {
+							long curID = 0;
+							for (Long idDiff : w.getRefsList()) {
+								nodes.put(curID += idDiff, new OSMNode(curID));
+							}
+						} else if (footCat.accepts(way)) {
+							graphData.addEdges(way.getEdges());
+						} else if (allAreaCat.accepts(way)) {
+							locationData.addArea(way.getArea());
+							area++;
 						}
-					} else if (footCat.accepts(way)) {
-						graphData.addEdges(way.getEdges());
-					} else if (allAreaCat.accepts(way)) {
-						locationData.addArea(way.getArea());
-						area++;
+					}
+					POI poi = way.getPOI();
+					if (poi != null) {
+						locationData.addPOI(poi);
 					}
 				}
+
 			}
 		}
 	}
