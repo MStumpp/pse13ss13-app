@@ -132,9 +132,6 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 				}
 				for (int i = 0; i < Math.min(w.getKeysCount(), w.getValsCount()); i++) {
 					way.addTag(getStringById(w.getKeys(i)), getStringById(w.getVals(i)));
-					if (getStringById(i).equals("sidewalk")) {
-						System.out.println("Sidewalk");
-					}
 				}
 				if (isValidWay && OSMCategoryFactory.createFootwayCategory().accepts(way)) {
 					if (state == STATE_FIND_NEEDED_NODES) {

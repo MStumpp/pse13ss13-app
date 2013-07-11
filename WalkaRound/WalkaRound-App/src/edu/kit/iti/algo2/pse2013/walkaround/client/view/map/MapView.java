@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
+import java.util.LinkedList;
 import java.util.List;
 
 // Android Library
@@ -17,6 +18,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.location.GpsStatus.Listener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -34,6 +37,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -46,7 +50,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * @author Ludwig Biermann
  * 
  */
-public class MapView extends Activity {
+public class MapView extends Activity implements Listener{
 
 	/**
 	 * Debug Information
@@ -146,6 +150,8 @@ public class MapView extends Activity {
 	float userX;
 	float userY;
 	float delta;
+	
+	LocationManager locationManager ;
 
 	public Point getDisplaySize() {
 		return size;
@@ -234,6 +240,10 @@ public class MapView extends Activity {
 		routeOverlayBitmap.prepareToDraw();
 
 		gestureDetector = new GestureDetector(this, new MapGestureDetector());
+
+		locationManager = (LocationManager) this.getApplicationContext().getSystemService(LocationManager.KEY_LOCATION_CHANGED);
+		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
+		locationManager.addGpsStatusListener(this);
 	}
 
 	/**
@@ -341,9 +351,10 @@ public class MapView extends Activity {
 		runOnUiThread(new Runnable() {
 			public void run() {
 				delta = deltaDegree;
+				//.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
 			}
 		});
-		this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), this.delta);
+		//this.setUserPositionOverlayImage(new DisplayCoordinate(0, 0), 0);
 	}
 	
 	/**
@@ -478,10 +489,45 @@ public class MapView extends Activity {
 	 * @param degree
 	 *            rotation
 	 */
+	public void setUserPositionOverlayImage(final DisplayCoordinate coor) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				user.setX(coor.getX());
+				user.setY(coor.getY());
+			}
+		});
+	}
+
+	/**
+	 * shift the User Position arrow to an new position
+	 * 
+	 * @param coor
+	 *            target coordinates
+	 * @param degree
+	 *            rotation
+	 */
+	public void setUserPositionOverlayImage(final float degree) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				user.setRotation(degree);
+			}
+		});
+	}
+	
+	/**
+	 * shift the User Position arrow to an new position
+	 * 
+	 * @param coor
+	 *            target coordinates
+	 * @param degree
+	 *            rotation
+	 */
 	private void setUserPositionOverlayImage(DisplayCoordinate coor,
 			float degree) {
 		// TODO duration überdenken
 		AnimatorSet set = new AnimatorSet();
+		this.userX = coor.getX();
+		this.userY = coor.getY();
 
 		Log.d(TAG_MAPVIEW, "Thread Animator Set UP");
 
@@ -723,12 +769,28 @@ public class MapView extends Activity {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (view.equals(iv)) {
-				Log.d("MAP_TOUCH", "UserTouch auf View ID:" + id);
+				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
 				mc.setActive(id);
 				return true;
 			}
 			return false;
 		}
+	}
+
+	@Override
+	public void onGpsStatusChanged(int event) {
+		Log.d(TAG_MAPVIEW, "onGpsStatusChanged!");
+		try {
+			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+				//TODO Sensor Manger einbauen damit er auch bei keinen GPS oder nicht vorhanden "Weg" sich bewegt
+				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getBearing());
+			} else {
+				this.setUserPositionOverlayImage(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getBearing());
+			}
+		} catch(NullPointerException e){
+			Log.e("GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) + " " +"GPS ist: " + (locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) == null) ,e.toString());
+		}
+		
 	}
 
 }

@@ -13,7 +13,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListe
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
@@ -30,7 +33,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  * @author Ludwig Biermann
  * 
  */
-public class MapController implements RouteListener, PositionListener {
+public class MapController implements RouteListener, PositionListener, CompassListener {
 
 	// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
 	// 8.3858300); // Brauerstraße
@@ -43,6 +46,7 @@ public class MapController implements RouteListener, PositionListener {
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
 	public static String TAG_MAP_CONTROLLER = MapController.class
 			.getSimpleName();
+	public static boolean defaultUserLock = true;
 
 	/**
 	 * The Controller
@@ -59,7 +63,7 @@ public class MapController implements RouteListener, PositionListener {
 	/**
 	 * permanent class variables
 	 */
-	private boolean lockUserPosition = true;
+	private boolean lockUserPosition = defaultUserLock;
 
 	/**
 	 * DisplayWaypoints to display the Display Points
@@ -138,6 +142,8 @@ public class MapController implements RouteListener, PositionListener {
 				"Brauerstraße"));
 		routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
 
+		PositionManager.initialize(mapView);
+		CompassManager.getInstance().registerCompassListener(this);
 	}
 
 	/*
@@ -349,8 +355,12 @@ public class MapController implements RouteListener, PositionListener {
 	@Override
 	public void onPositionChange(Location androidLocation) {
 		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
-		// TODO Auto-generated method stub
-
+		if(defaultUserLock){
+			Log.d(TAG_MAP_CONTROLLER, "Position Change!");
+			//TODO karte verschieben
+			//this.onShift(distanceX, distanceY)
+		}
+		//this.mapView.onPositionChange(x, y);
 	}
 
 	/**
@@ -362,6 +372,13 @@ public class MapController implements RouteListener, PositionListener {
 		//TODO route muss id als actove setzen lassen
 		//this.routeController.setActiveWaypoint(id);
 		
+	}
+
+	@Override
+	public void onCompassChange(double direction) {
+		//TODO weiterleitung zu View sollte klappen
+		//this.mapView.onPositionChange((float)direction);
+		//this.mapView.onPositionChange(0.0f);
 	}
 
 }

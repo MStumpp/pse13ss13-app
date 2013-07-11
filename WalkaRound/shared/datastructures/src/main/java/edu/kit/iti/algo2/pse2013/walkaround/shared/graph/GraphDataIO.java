@@ -32,6 +32,36 @@ public class GraphDataIO {
 
 
     /**
+	 * Adds an Edge to the list of all Edges.
+	 *
+	 * @param edge Edge to be added.
+	 */
+	public void addEdge(Edge edge) {
+	    edges.add(edge);
+	}
+
+
+	/**
+	 * Adds a list of Edges to the list of all Edges.
+	 *
+	 * @param edges List of Edges to be added.
+	 */
+	public void addEdges(List<Edge> edges) {
+	    this.edges.addAll(edges);
+	}
+
+
+	/**
+	 * Returns the set of all Edges.
+	 *
+	 * @return Set<Edge>.
+	 */
+	public Set<Edge> getEdges() {
+	    return edges;
+	}
+
+
+	/**
      * Returns a set of all Vertex objects contained in all edges.
      *
      * @return Set<Vertex> List of all egdes.
@@ -42,36 +72,6 @@ public class GraphDataIO {
             for (Vertex vertex : edge.getVertices())
                 vertices.add(vertex);
         return vertices;
-    }
-
-
-    /**
-     * Adds an Edge to the list of all Edges.
-     *
-     * @param edge Edge to be added.
-     */
-    public void addEdge(Edge edge) {
-        edges.add(edge);
-    }
-
-
-    /**
-     * Adds a list of Edges to the list of all Edges.
-     *
-     * @param edges List of Edges to be added.
-     */
-    public void addEdges(List<Edge> edges) {
-        this.edges.addAll(edges);
-    }
-
-
-    /**
-     * Returns the set of all Edges.
-     *
-     * @return Set<Edge>.
-     */
-    public Set<Edge> getEdges() {
-        return edges;
     }
 
 

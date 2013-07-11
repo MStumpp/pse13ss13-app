@@ -17,18 +17,20 @@ public class PositionManager implements Listener {
 	// Singleton Pattern:
 	private static PositionManager positionManager;
 	
-	private static LocationManager locationManager;
+	private LocationManager locationManager;
 	private static int lastGPSEvent;
 	private static Location lastKnownLocation;
 	
 	private PositionManager(Context context) {
-		Log.d(TAG_POSITION_MANAGER, "Context da " + (context != null));
-		locationManager = (LocationManager) context.getApplicationContext().getSystemService("LOCATION_SERVICE");
+		locationManager = (LocationManager) context.getApplicationContext().getSystemService(LocationManager.KEY_LOCATION_CHANGED);
+		positionListeners = new LinkedList<PositionListener>();
+		Log.d(TAG_POSITION_MANAGER, "locationManager is " + (locationManager != null));
+		locationManager.addGpsStatusListener(positionManager);
 	}
 	
 	public static void initialize(Context context) {
+		Log.d(TAG_POSITION_MANAGER, "Context is " + (context != null));
 		positionManager = new PositionManager(context);
-		locationManager.addGpsStatusListener(positionManager);
 	}
 	
 	public static PositionManager getInstance() {
