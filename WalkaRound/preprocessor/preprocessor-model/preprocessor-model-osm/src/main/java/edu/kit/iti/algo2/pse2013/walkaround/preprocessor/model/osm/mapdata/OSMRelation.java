@@ -2,7 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 
 import java.util.HashMap;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class OSMRelation extends OSMElement {
 	private HashMap<OSMElement, String> members = new HashMap<OSMElement, String>();
@@ -13,7 +13,7 @@ public class OSMRelation extends OSMElement {
 		members.put(ele, role);
 	}
 	@Override
-	public Vertex getCenterVertex() {
+	public Coordinate getCenterCoordinate() {
 		return null;// TODO Auto-generated method stub
 	}
 }

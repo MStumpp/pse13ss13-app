@@ -60,8 +60,14 @@ public class OSMWay extends OSMElement {
 	}
 
 	@Override
-	public Vertex getCenterVertex() {
-		System.out.println("getName(): " + getName() + " edgeSize: " + getEdges().size());
-		return getEdges().size() > 0?getEdges().get(0).getTail():null;
+	public Coordinate getCenterCoordinate() {
+		double lat = 0, lon = 0;
+		for (Coordinate c : getCoordinates()) {
+			lat += c.getLatitude();
+			lon += c.getLongitude();
+		}
+		lat /= getCoordinates().size();
+		lon /= getCoordinates().size();
+		return new Vertex(lat, lon);
 	}
 }

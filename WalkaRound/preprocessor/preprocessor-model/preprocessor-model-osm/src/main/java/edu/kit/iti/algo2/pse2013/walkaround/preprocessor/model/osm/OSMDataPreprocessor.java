@@ -3,20 +3,18 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import crosby.binary.file.BlockInputStream;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 
 public class OSMDataPreprocessor {
+
+	private static final Logger logger = Logger.getLogger(OSMDataPreprocessor.class.getSimpleName());
+
 	private File graphDestination;
 	private File locationDestination;
 	private File osmSource;
@@ -62,31 +60,29 @@ public class OSMDataPreprocessor {
 			blockStream.close();
 		} while (parser.needsFurtherRun());
 
-		FileOutputStream graphOutput = new FileOutputStream(graphDestination);
-		ProtobufConverter.getGraphDataBuilder(graphData).build().writeTo(graphOutput);
-		graphOutput.flush();
-		graphOutput.close();
+		logger.info(String.format("Try writing %d edges (%d vertices) to GraphDataIO-file...", graphData.getEdges().size(), graphData.getVertices().size()));
 
-		FileOutputStream locationOutput = new FileOutputStream(locationDestination);
-		ProtobufConverter.getLocationDataBuilder(locationData).build().writeTo(locationOutput);
-		locationOutput.flush();
-		locationOutput.close();
+		GraphDataIO.save(graphData, graphDestination);
 
-		FileInputStream fis = new FileInputStream(graphDestination);
-		GraphDataIO graph = ProtobufConverter.getGraphData(SaveGraphData.parseFrom(fis));
-		fis.close();
-		System.out.println(graph.getEdges().size() + " Edges are written to the file");
-		for (Edge e : graph.getEdges()) {
-			//System.out.println("Edge: " + e);
-		}
+		logger.info("Writing GraphDataIO finished (written data not yet validated).");
 
-		FileInputStream fis2 = new FileInputStream(locationDestination);
-		LocationDataIO location = ProtobufConverter.getLocationData(SaveLocationData.parseFrom(fis2));
-		fis2.close();
-		System.out.println(location.getPOIs().size() + " POIs are written to the file");
-		for (POI p : location.getPOIs()) {
-			//System.out.println("POI: " + p);
-		}
+		logger.info(String.format("Try writing %d POIs and %d Areas to LocationDataIO-file...", locationData.getPOIs().size(), locationData.getAreas().size()));
+
+		LocationDataIO.save(locationData, locationDestination);
+
+		logger.info("Writing LocationDataIO finished (written data not yet validated).");
+
+		logger.info("Start reading GraphDataIO...");
+
+		GraphDataIO graph = GraphDataIO.load(graphDestination);
+
+		logger.info(String.format("Read %d edges with %d vertices from file.", graph.getEdges().size(), graph.getVertices().size()));
+
+		logger.info("Start reading LocationDataIO...");
+
+		LocationDataIO location = LocationDataIO.load(locationDestination);
+
+		logger.info(String.format("Read %d POI and %d areas from file.", location.getPOIs().size(), location.getAreas().size()));
 	}
 
 	public static void main(String[] args) throws IOException {
