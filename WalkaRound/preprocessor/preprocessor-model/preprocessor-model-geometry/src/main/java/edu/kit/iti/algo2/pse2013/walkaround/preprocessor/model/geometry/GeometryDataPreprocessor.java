@@ -2,8 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import java.util.*;
 
-import com.google.common.collect.Multiset;
-import com.google.common.collect.TreeMultiset;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
@@ -28,31 +26,11 @@ public class GeometryDataPreprocessor {
     private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessor.class);
 
 
-    private static final Multiset<Geometrizable> multiSetDimZero = TreeMultiset.create(new Comparator<Geometrizable>() {
-        @Override
-        public int compare(Geometrizable v1, Geometrizable v2) {
-            if (v1.valueForDimension(0) > v2.valueForDimension(0)) {
-                return 1;
-            } else if (v1.valueForDimension(0) < v2.valueForDimension(0)) {
-                return -1;
-            } else
-                return 0;
-        }
-    });
-
-    private static final Multiset<Geometrizable> multiSetDimOne = TreeMultiset.create(new Comparator<Geometrizable>() {
-        @Override
-        public int compare(Geometrizable v1, Geometrizable v2) {
-            if (v1.valueForDimension(1) > v2.valueForDimension(1)) {
-                return 1;
-            } else if (v1.valueForDimension(1) < v2.valueForDimension(1)) {
-                return -1;
-            } else
-                return 0;
-        }
-    });
-
+    /**
+     * TreeSet.
+     */
     private static final TreeSet<Geometrizable> treeSet = new TreeSet<Geometrizable>();
+
 
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
@@ -67,10 +45,6 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
 
         List<Geometrizable> geometrizables = new ArrayList<Geometrizable>(graphDataIO.getVertices());
-
-        logger.info(geometrizables.size()+"");
-        //for (Geometrizable geometrizable : geometrizables)
-        //        logger.info(geometrizable.toString());
 
         // get all POIs from locationDataIO
 //        for (POI poi : locationDataIO.getPOIs())
@@ -102,9 +76,6 @@ public class GeometryDataPreprocessor {
             });
             data[i] = geometrizables.toArray(new Geometrizable[0]);
         }
-
-        //logger.info(Arrays.toString(data[0]));
-        //logger.info(Arrays.toString(data[1]));
 
         if (data[0].length != data[1].length)
             throw new IllegalArgumentException("both lists must be of same size");
@@ -169,15 +140,8 @@ public class GeometryDataPreprocessor {
 //            }
         }
 
-//        reeSet<Geometrizable> multiSetDim;
-//        if (dim == 0)
-//            multiSetDim = multiSetDimZero;
-//        else
-//            multiSetDim = multiSetDimOne;
         treeSet.clear();
         treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
-
-        //System.out.println("size: " + geometrizablesForLeft.size());
 
         Geometrizable[] currentBackupArray;
         int leftIndex;
@@ -190,13 +154,6 @@ public class GeometryDataPreprocessor {
             leftIndex = start;
             rightIndex = median+1;
             for (Geometrizable geometrizable : currentBackupArray) {
-//                System.out.println("------");
-//                System.out.println("geometrizable: " + geometrizable + " dim: " + dim + " start: " + start + " median: " + median);
-//                System.out.println("old: bool: " + geometrizableForLeft.contains(geometrizable));
-//                System.out.println(geometrizableForLeft);
-//                System.out.println("new: bool: " + contains(data[dim], dim, geometrizable, start, median));
-//                System.out.println(Arrays.toString(data[dim]));
-//                if (contains(data[dim], dim, geometrizable, start, median)) {
                 if (treeSet.contains(geometrizable)) {
                     treeSet.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
@@ -214,14 +171,18 @@ public class GeometryDataPreprocessor {
         return node;
     }
 
+
+    /**
+     * Checks whether a certain Geometrizable is within an array of Geometrizables.
+     *
+     * @param array Array containing Geometrizables.
+     * @param geometrizable Geometrizable to checks.
+     * @param dim Current dimension.
+     * @param start Start index for current processing.
+     * @param end End index for current processing.
+     * @return boolean Whether a certain Geometrizable is within an array of Geometrizables.
+     */
     private static boolean contains(Geometrizable[] array, int dim, Geometrizable geometrizable, int start, int end) {
-//        System.out.println("------>");
-//        System.out.println(Arrays.toString(array));
-//        System.out.println(dim);
-//        System.out.println(geometrizable.toString());
-//        System.out.println(start);
-//        System.out.println(end);
-//        System.out.println("------>");
         final int i = dim;
         int idx = Arrays.binarySearch(array, start, end+1, geometrizable, new Comparator<Geometrizable>() {
             @Override
@@ -235,7 +196,6 @@ public class GeometryDataPreprocessor {
                     return 0;
             }
         });
-        System.out.println("idx " + idx);
         boolean result = false;
         if (idx >= start && idx <= end)
             result = true;

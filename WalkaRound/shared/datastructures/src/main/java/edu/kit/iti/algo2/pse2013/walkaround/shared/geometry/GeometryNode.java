@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
@@ -9,6 +11,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
  * @version 1.0
  */
 public class GeometryNode {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GeometryNode.class);
 
 	/**
 	 * Geometrizable.
@@ -125,6 +132,8 @@ public class GeometryNode {
 	 * @return int depth.
 	 */
 	public int getDepth() {
+//        if (depth < 0)
+//            logger.info("depth: " + depth);
 		return depth;
 	}
 
