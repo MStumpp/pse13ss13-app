@@ -248,7 +248,7 @@ public class Server {
         float[] floatArray = new float[angles.size()];
         for (int i = 0; i < angles.size(); i++) {
             Float f = angles.get(i);
-            floatArray[i] = (f != null ? f : Float.NaN);
+            floatArray[i] = f;
         }
         Arrays.sort(floatArray);
         return new CrossingInformation(floatArray);
