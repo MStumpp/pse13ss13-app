@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
@@ -31,14 +32,16 @@ public class POIView extends Fragment {
 	private TextView category9;
 	private TextView category10;
 	private TextView category11;
+
+	private POIMenuController poiController;
 	
-	POIMenuController poiController;
+	private ScrollView sc;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create POIView");
-		
+
 		poiController = POIMenuController.getInstance();
 
 		pois = (TextView) this.getActivity().findViewById(R.id.pois);
@@ -62,31 +65,6 @@ public class POIView extends Fragment {
 		Point size = new Point();
 		display.getSize(size);
 
-		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		pois.setX(size.x / 2.3f);
-		pois.getLayoutParams().width = size.x;
-		category1.setX(size.x / 6);
-		category1.getLayoutParams().width = size.x / 2;
-		category2.setX((size.x / 6));
-		category2.getLayoutParams().width = size.x / 2;
-		category3.setX(size.x / 6);
-		category3.getLayoutParams().width = size.x / 2;
-		category4.setX(size.x / 6);
-		category4.getLayoutParams().width = size.x / 2;
-		category5.setX(size.x / 6);
-		category5.getLayoutParams().width = size.x / 2;
-		category6.setX((size.x / 6));
-		category6.getLayoutParams().width = size.x / 2;
-		category7.setX(size.x / 6);
-		category7.getLayoutParams().width = size.x / 2;
-		category8.setX(size.x / 6);
-		category8.getLayoutParams().width = size.x / 2;
-		category9.setX(size.x / 6);
-		category9.getLayoutParams().width = size.x / 2;
-		category10.setX((size.x / 6));
-		category10.getLayoutParams().width = size.x / 2;
-		category11.setX((size.x / 6));
-		category11.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 		category1.setOnTouchListener(new onCategoryTouch());
@@ -100,6 +78,7 @@ public class POIView extends Fragment {
 		category9.setOnTouchListener(new onCategoryTouch());
 		category10.setOnTouchListener(new onCategoryTouch());
 		category11.setOnTouchListener(new onCategoryTouch());
+		sc = (ScrollView) this.getActivity().findViewById(R.id.poi_menu_scroll);
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
@@ -118,71 +97,88 @@ public class POIView extends Fragment {
 		return false;
 	}
 
+	public void setHeight(int height) {
+		if(sc != null){
+			sc.getLayoutParams().height = height;
+		}
+	}
+
 	private class onCategoryTouch implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(category1) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(category1)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category1.isSelected()) {
 					setSelected(category1);
 				} else {
 					setUnselected(category1);
 				}
-			} else if (v.equals(category2) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category2)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category2.isSelected()) {
 					setSelected(category2);
 				} else {
 					setUnselected(category2);
 				}
-			} else if (v.equals(category3) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category3)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category3.isSelected()) {
 					setSelected(category3);
 				} else {
 					setUnselected(category3);
 				}
-			} else if (v.equals(category4) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category4)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category4.isSelected()) {
 					setSelected(category4);
 				} else {
 					setUnselected(category4);
 				}
-			} else if (v.equals(category5) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category5)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category5.isSelected()) {
 					setSelected(category5);
 				} else {
 					setUnselected(category5);
 				}
-			} else if (v.equals(category6) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category6)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category6.isSelected()) {
 					setSelected(category6);
 				} else {
 					setUnselected(category6);
 				}
-			} else if (v.equals(category7) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category7)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category7.isSelected()) {
 					setSelected(category7);
 				} else {
 					setUnselected(category7);
 				}
-			} else if (v.equals(category8) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category8)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category8.isSelected()) {
 					setSelected(category8);
 				} else {
 					setUnselected(category8);
 				}
-			} else if (v.equals(category9) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category9)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category9.isSelected()) {
 					setSelected(category9);
 				} else {
 					setUnselected(category9);
 				}
-			} else if (v.equals(category10) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category10)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category10.isSelected()) {
 					setSelected(category10);
 				} else {
 					setUnselected(category10);
 				}
-			} else if (v.equals(category11) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(category11)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!category11.isSelected()) {
 					setSelected(category11);
 				} else {
@@ -195,13 +191,15 @@ public class POIView extends Fragment {
 		private void setUnselected(TextView v) {
 			v.setSelected(false);
 			v.setTextColor(Color.WHITE);
-			poiController.removeActiveCategory(Integer.parseInt(v.getTag().toString()));
+			poiController.removeActiveCategory(Integer.parseInt(v.getTag()
+					.toString()));
 		}
 
 		private void setSelected(TextView v) {
 			v.setSelected(true);
 			v.setTextColor(Color.YELLOW);
-			poiController.addActiveCategory(Integer.parseInt(v.getTag().toString()));
+			poiController.addActiveCategory(Integer.parseInt(v.getTag()
+					.toString()));
 		}
 	}
 }
