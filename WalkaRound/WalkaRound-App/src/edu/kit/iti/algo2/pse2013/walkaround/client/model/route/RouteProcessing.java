@@ -47,12 +47,12 @@ public class RouteProcessing {
 	/**
 	 * URL for shortest path computation.
 	 */
-	private static String URL_COMPUTESHORTESTPATH = "http://141.3.194.158:8080/walkaround/api/processor/computeShortestPath";
+	private static String URL_COMPUTESHORTESTPATH = "http://walkaround.herokuapp.com/api/processor/computeShortestPath";
 
 	/**
 	 * URL for roundtrip computation.
 	 */
-	private static String URL_ROUNDTRIP = "http://141.3.194.158:8080/walkaround/api/processor/computeRoundtrip";
+	private static String URL_ROUNDTRIP = "http://walkaround.herokuapp.com/api/processor/computeRoundtrip";
 
 	/**
 	 * RouteProcessing instance.
