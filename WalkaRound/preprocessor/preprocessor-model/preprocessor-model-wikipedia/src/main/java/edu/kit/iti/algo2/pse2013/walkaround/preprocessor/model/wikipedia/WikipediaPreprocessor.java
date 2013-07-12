@@ -46,110 +46,193 @@ public class WikipediaPreprocessor {
 			// wird aber w�hrend dem preprocessing als url vom image
 			// �berschrieben...
 			// k�nnte eleganter gel�st werden.
-			String wikipediaURL = current.getURL();
-			String partA = wikipediaURL.substring(0,
-					wikipediaURL.lastIndexOf("/"));
-			String partB = wikipediaURL
-					.substring(wikipediaURL.lastIndexOf("/"));
-			wikipediaURL = partA + "/Spezial:Exportieren" + partB;
-			URL url;
-			try {
-				url = new URL(wikipediaURL);
-				URLConnection connection;
-				connection = url.openConnection();
-				connection.connect();
-				InputStream input = connection.getInputStream();
-				XMLInputFactory factory = XMLInputFactory.newInstance();
-				XMLStreamReader parser;
-				parser = factory.createXMLStreamReader(input);
+			if (!(current.getURL() == null)) {
+				String wikipediaURL = current.getURL();
+				String partA = wikipediaURL.substring(0,
+						wikipediaURL.lastIndexOf("/"));
+				String partB = wikipediaURL.substring(wikipediaURL
+						.lastIndexOf("/"));
+				wikipediaURL = partA + "/Spezial:Exportieren" + partB;
+				URL url;
+				try {
+					url = new URL(wikipediaURL);
+					URLConnection connection;
+					connection = url.openConnection();
+					connection.connect();
+					InputStream input = connection.getInputStream();
+					XMLInputFactory factory = XMLInputFactory.newInstance();
+					XMLStreamReader parser;
+					parser = factory.createXMLStreamReader(input);
 
-				// Parse
-				StringBuilder sb = new StringBuilder();
-				while (parser.hasNext()) {
-					if (parser.getEventType() == XMLStreamConstants.START_ELEMENT
-							&& parser.getLocalName().equals("text")) {
-						parser.next();
-						while (parser.getEventType() == XMLStreamConstants.CHARACTERS
-								&& !parser.getText().endsWith("==")) {
-							// TODO: Einschr�nkung verbessern da m�glicherweise
-							// zu
-							// viel unn�tiger text mitgenommen wird!
-							sb.append(parser.getText());
+					// Parse
+					StringBuilder sb = new StringBuilder();
+					while (parser.hasNext()) {
+						if (parser.getEventType() == XMLStreamConstants.START_ELEMENT
+								&& parser.getLocalName().equals("text")) {
 							parser.next();
+							while (parser.getEventType() == XMLStreamConstants.CHARACTERS
+									&& !parser.getText().endsWith("==")) {
+								// TODO: Einschr�nkung verbessern da
+								// m�glicherweise
+								// zu
+								// viel unn�tiger text mitgenommen wird!
+								sb.append(parser.getText());
+								parser.next();
+							}
+							sb.append(parser.getText());
 						}
-						sb.append(parser.getText());
+						parser.next();
 					}
-					parser.next();
-				}
-				input.close();
+					input.close();
 
-				// set image url
-				if (sb.indexOf("[[Datei:") != -1) {
-					String imageUrl = sb.substring(sb.indexOf("[[Datei:") + 8,
-							sb.indexOf("|"));
-					imageUrl = imageUrl.replaceAll(" ", "_");
-					String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
-							+ imageUrl;
-					URL javaImageUrl = new URL(trueImageUrl);
-					Scanner scanner = new Scanner(javaImageUrl.openStream());
-					StringBuilder imageSb = new StringBuilder();
-					while (scanner.hasNextLine()) {
-						imageSb.append(scanner.nextLine());
+					// set image url
+					if (sb.indexOf("[[Datei:") != -1) {
+						String imageUrl = sb.substring(
+								sb.indexOf("[[Datei:") + 8, sb.indexOf("|"));
+						imageUrl = imageUrl.replaceAll(" ", "_");
+						String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
+								+ imageUrl;
+						URL javaImageUrl = new URL(trueImageUrl);
+						Scanner scanner = new Scanner(javaImageUrl.openStream());
+						StringBuilder imageSb = new StringBuilder();
+						while (scanner.hasNextLine()) {
+							imageSb.append(scanner.nextLine());
+						}
+						scanner.close();
+						if (imageSb
+								.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
+							imageSb = imageSb
+									.delete(0,
+											imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
+							trueImageUrl = imageSb.substring(
+									0,
+									imageSb.indexOf(imageUrl)
+											+ imageUrl.length());
+							current.setURL(trueImageUrl);
+						}
+					} else if (sb.indexOf("[[Bild:") != -1) {
+						String imageUrl = sb.substring(
+								sb.indexOf("[[Bild:") + 7, sb.indexOf("|"));
+						imageUrl = imageUrl.replaceAll(" ", "_");
+						String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
+								+ imageUrl;
+						URL javaImageUrl = new URL(trueImageUrl);
+						Scanner scanner = new Scanner(javaImageUrl.openStream());
+						StringBuilder imageSb = new StringBuilder();
+						while (scanner.hasNextLine()) {
+							imageSb.append(scanner.nextLine());
+						}
+						scanner.close();
+						if (imageSb
+								.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
+							imageSb = imageSb
+									.delete(0,
+											imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
+							trueImageUrl = imageSb.substring(
+									0,
+									imageSb.indexOf(imageUrl)
+											+ imageUrl.length());
+							current.setURL(trueImageUrl);
+						}
 					}
-					scanner.close();
-					if (imageSb
-							.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
-						imageSb = imageSb
-								.delete(0,
-										imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
-						trueImageUrl = imageSb.substring(0,
-								imageSb.indexOf(imageUrl) + imageUrl.length());
-						current.setURL(trueImageUrl);
+
+					// continue parsing the text
+					sb = sb.delete(sb.indexOf("=="), sb.length());
+
+					while (sb.indexOf("<ref>") != -1) {
+						sb = sb.delete(sb.indexOf("<ref>"),
+								sb.indexOf("</ref>") + 6);
 					}
-				}
+					while (sb.indexOf("{{") != -1) {
+						sb = sb.delete(sb.indexOf("{{"), sb.indexOf("}}") + 1);
+					}
+					while (sb.indexOf("[[Datei:") != -1) {
+						int counter = 1;
+						int beginChars = sb.indexOf("[[Datei:") + 8;
+						int endChars = beginChars + 2;
+						while (counter != 0) {
+							if (sb.substring(beginChars, endChars).contains(
+									"[[")) {
+								counter += 1;
+							}
+							if (sb.substring(beginChars, endChars).equals("]]")) {
+								counter -= 1;
+								if (counter == 0) {
+									sb.delete(sb.indexOf("[[Datei:"), endChars);
+								}
+							}
+							beginChars += 1;
+							endChars += 1;
+						}
+					}
 
-				// continue parsing the text
-				sb = sb.delete(sb.indexOf("=="), sb.length());
-				while (sb.indexOf("<ref>") != -1) {
-					sb = sb.delete(sb.indexOf("<ref>"),
-							sb.indexOf("</ref>") + 6);
-				}
-				while (sb.indexOf("{") != -1) {
-					sb = sb.delete(sb.indexOf("{"), sb.indexOf("}") + 1);
-				}
-				while (sb.indexOf("[[Datei:") != -1) {
-					sb = sb.delete(sb.indexOf("[[Datei:"), sb.indexOf("]]") + 2);
-				}
-				String textInfo = sb.toString();
-				textInfo = textInfo.replaceAll("\\'", "");
-				textInfo = textInfo.replaceAll("\n\n", " ");
-				/*
-				 * textInfo = textInfo.replaceAll("\\[", ""); textInfo =
-				 * textInfo.replaceAll("\\]", ""); textInfo =
-				 * textInfo.replaceAll("\\#", ""); textInfo =
-				 * textInfo.replaceAll("\\|", ""); textInfo =
-				 * textInfo.replaceAll("\\}", ""); textInfo =
-				 * textInfo.replaceAll("\\{", "");
-				 */
-				textInfo = textInfo.trim();
-				current.setTextInfo(textInfo);
+					while (sb.indexOf("[[Bild:") != -1) {
+						int counter = 1;
+						int beginChars = sb.indexOf("[[Bild:") + 7;
+						int endChars = beginChars + 2;
+						while (counter != 0) {
+							if (sb.substring(beginChars, endChars).contains(
+									"[[")) {
+								counter += 1;
+							}
+							if (sb.substring(beginChars, endChars).equals("]]")) {
+								counter -= 1;
+								if (counter == 0) {
+									sb.delete(sb.indexOf("[Bild:"), endChars);
+								}
+							}
+							beginChars += 1;
+							endChars += 1;
+						}
+					}
 
-				// Seitenquelltext(HTML) durchgehen suchen nach erstem auftreten
-				// von
-				// upload.wikimedia.org/wikipedia/commons/ (in <body> suchen
-				// Link: http://commons.wikimedia.org/wiki/File: + was nach
-				// Datei:
-				// steht dabei werden " " zu "_"
-				// Link mit view-source: anreichern
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (XMLStreamException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					while (sb.indexOf("<!--") != -1) {
+						sb.delete(sb.indexOf("!--"), sb.indexOf("-->"));
+					}
+
+					while (sb.indexOf("<br />") != -1) {
+						sb.delete(sb.indexOf("<br />"), 6);
+					}
+
+					while (sb.indexOf("|") != -1) {
+						int endChar = sb.indexOf("|") + 2;
+						while (!sb.substring(endChar - 2, endChar).equals("]]")) {
+							endChar += 1;
+						}
+						sb.delete(sb.indexOf("|"), endChar);
+					}
+
+					String textInfo = sb.toString();
+					textInfo = textInfo.replaceAll("\\'", "");
+					textInfo = textInfo.replaceAll("\n\n", " ");
+
+					textInfo = textInfo.replaceAll("\\[", "");
+					textInfo = textInfo.replaceAll("\\]", "");
+					// textInfo = textInfo.replaceAll("\\#", "");
+					// textInfo = textInfo.replaceAll("\\}", "");
+					// textInfo = textInfo.replaceAll("\\{", "");
+
+					textInfo = textInfo.trim();
+					current.setTextInfo(textInfo);
+
+					// Seitenquelltext(HTML) durchgehen suchen nach erstem
+					// auftreten
+					// von
+					// upload.wikimedia.org/wikipedia/commons/ (in <body> suchen
+					// Link: http://commons.wikimedia.org/wiki/File: + was nach
+					// Datei:
+					// steht dabei werden " " zu "_"
+					// Link mit view-source: anreichern
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (XMLStreamException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
