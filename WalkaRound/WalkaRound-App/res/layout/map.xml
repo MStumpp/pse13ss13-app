@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </RelativeLayout>
-    
+
     <RelativeLayout
         android:id="@+id/poiList"
         android:layout_width="match_parent"
@@ -55,14 +55,12 @@
     <RelativeLayout
         android:id="@+id/headup_container"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        >
+        android:layout_height="300dp" >
 
         <include
             android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:layout_height="match_parent"
             layout="@layout/headup" />
-
     </RelativeLayout>
 
     <include
