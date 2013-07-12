@@ -113,6 +113,7 @@ public class HeadUpController {
 		this.headUpView.setUserPositionLock(this.mapController.toggleLockUserPosition());
 		
 	}
+	
 
 	/*
 	 * -----------------Option Forwarding-----------------

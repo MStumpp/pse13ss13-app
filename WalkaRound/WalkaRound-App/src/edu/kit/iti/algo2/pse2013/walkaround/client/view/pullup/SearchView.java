@@ -20,8 +20,12 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -65,8 +69,7 @@ public class SearchView extends Fragment {
 		TabSpec spec2 = tabHost.newTabSpec("poi_tab");
 		spec2.setContent(R.id.poi_search);
 		spec2.setIndicator("POI");
-		
-		
+
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
 
@@ -86,10 +89,11 @@ public class SearchView extends Fragment {
 		query = (EditText) this.getActivity().findViewById(R.id.query);
 		goButton = (Button) this.getActivity().findViewById(R.id.go_button);
 
-		result = (LinearLayout) this.getActivity().findViewById(R.id.search_result);
+		result = (LinearLayout) this.getActivity().findViewById(
+				R.id.search_result);
 		result.setVisibility(View.GONE);
 		tabHost.setVisibility(View.VISIBLE);
-		
+
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -97,26 +101,22 @@ public class SearchView extends Fragment {
 		display.getSize(size);
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		/*city.setX(size.x / 18);
-		city.getLayoutParams().width = size.x / 12;
-		street.setX(size.x / 18);
-		street.getLayoutParams().width = size.x / 12;
-		number.setX(size.x / 18);
-		number.getLayoutParams().width = size.x / 12;
-		postalCode.setX(size.x / 18);
-		postalCode.getLayoutParams().width = size.x / 12;
-		postalCodeSearch.setX(size.x / 4);
-		postalCodeSearch.getLayoutParams().width = size.x / 3 * 2;
-		citySearch.setX(size.x / 4);
-		citySearch.getLayoutParams().width = size.x / 3 * 2;
-		streetSearch.setX(size.x / 4);
-		streetSearch.getLayoutParams().width = size.x / 3 * 2;
-		numberSearch.setX(size.x / 4);
-		numberSearch.getLayoutParams().width = size.x / 3 * 2;
-		query.setX(0);
-		query.getLayoutParams().width = size.x;
-		goButton.setX(size.x / 4);
-		goButton.getLayoutParams().width = size.x / 2;*/
+		/*
+		 * city.setX(size.x / 18); city.getLayoutParams().width = size.x / 12;
+		 * street.setX(size.x / 18); street.getLayoutParams().width = size.x /
+		 * 12; number.setX(size.x / 18); number.getLayoutParams().width = size.x
+		 * / 12; postalCode.setX(size.x / 18);
+		 * postalCode.getLayoutParams().width = size.x / 12;
+		 * postalCodeSearch.setX(size.x / 4);
+		 * postalCodeSearch.getLayoutParams().width = size.x / 3 * 2;
+		 * citySearch.setX(size.x / 4); citySearch.getLayoutParams().width =
+		 * size.x / 3 * 2; streetSearch.setX(size.x / 4);
+		 * streetSearch.getLayoutParams().width = size.x / 3 * 2;
+		 * numberSearch.setX(size.x / 4); numberSearch.getLayoutParams().width =
+		 * size.x / 3 * 2; query.setX(0); query.getLayoutParams().width =
+		 * size.x; goButton.setX(size.x / 4); goButton.getLayoutParams().width =
+		 * size.x / 2;
+		 */
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 
@@ -149,7 +149,8 @@ public class SearchView extends Fragment {
 			if (v.equals(goButton)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedr�ckt");
-				Log.d(TAG_PULLUP_CONTENT, "" + postalCodeSearch.getText().toString());
+				Log.d(TAG_PULLUP_CONTENT, ""
+						+ postalCodeSearch.getText().toString());
 				if (postalCodeSearch.getText().toString().trim().equals("")) {
 					searchMenuController.requestSuggestionsByAddress(0,
 							citySearch.getText().toString(), streetSearch
@@ -175,25 +176,49 @@ public class SearchView extends Fragment {
 			if (v.equals(query)) {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
 
-				List<POI> poiS = searchMenuController.requestSuggestionsByText(v.getText()
-						.toString());
+				List<POI> poiS = searchMenuController
+						.requestSuggestionsByText(v.getText().toString());
 
 				result.setVisibility(View.VISIBLE);
 				tabHost.setVisibility(View.GONE);
 
 				for (POI value : poiS) {
-					TextView waypoint = new TextView(getActivity());
-					Log.d("routingView: ", " " + value.getName() + " " + value.getId());
-					waypoint.setText("TEST " + value.getName() + " " + value.getId());
-					//TODO TextSize relativieren
-					waypoint.setTextSize(40);
-					waypoint.setPadding(10, 20, 10, 20);
-					waypoint.setBackgroundColor(MapModel.defaultBackground);
-					result.addView(waypoint);
+					TextView poi = new TextView(getActivity());
+					Log.d("routingView: ",
+							" " + value.getName() + " " + value.getId());
+					poi.setText(value.getName());
+					poi.setOnTouchListener(new poiTouch(value, poi));
+					// TODO TextSize relativieren
+					poi.setTextSize(40);
+					poi.setPadding(10, 20, 10, 20);
+					poi.setBackgroundColor(MapModel.defaultBackground);
+					result.addView(poi);
 				}
-				
-				
+
 				// TODO: zur karte zur�ckkehren
+			}
+			return false;
+		}
+
+	}
+
+	private class poiTouch implements OnTouchListener {
+
+		private POI poi;
+		private View view;
+
+		public poiTouch(POI p, View view) {
+			this.poi = p;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				RouteController.getInstance().addWaypoint(new Waypoint(poi.getLatitude(), poi.getLongitude(), poi.getName()));
+
+				MapController.getInstance().getPullUpView().setNullSizeHeight();
+				
 			}
 			return false;
 		}
