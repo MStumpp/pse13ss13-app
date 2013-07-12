@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
-import java.util.logging.Logger;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,24 +34,26 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class RouteProcessing {
 
-	private static int timeout = 100;
-	
+	private static int timeout = 3000;
+
 	/**
 	 * TAG for android debugging.
 	 */
 	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class
 			.getSimpleName();
-	
-	
+
+
 	/**
 	 * URL for shortest path computation.
-	 */
-	private static String URL_COMPUTESHORTESTPATH = "http://walkaround.herokuapp.com/api/processor/computeShortestPath";
+	 *//**/
+	/*private static final String host = "walkaround.herokuapp.com";*/
+	private static final String host = "141.3.192.190:8080/walkaround";
+	private static String URL_COMPUTESHORTESTPATH = "http://"+host+"/api/processor/computeShortestPath";
 
 	/**
 	 * URL for roundtrip computation.
 	 */
-	private static String URL_ROUNDTRIP = "http://walkaround.herokuapp.com/api/processor/computeRoundtrip";
+	private static String URL_ROUNDTRIP = "http://"+host+"/api/processor/computeRoundtrip";
 
 	/**
 	 * RouteProcessing instance.
@@ -185,7 +186,7 @@ public class RouteProcessing {
 		thread.start();
 		thread.join();
 		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread");
-		
+
 		if (gsonAnswerer.getException() != null) {
 			throw new RouteProcessingException(gsonAnswerer.getException().toString());
 		} else {
