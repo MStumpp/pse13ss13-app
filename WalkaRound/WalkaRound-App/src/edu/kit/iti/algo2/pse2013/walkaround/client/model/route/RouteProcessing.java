@@ -14,6 +14,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.util.Log;
 
@@ -32,12 +35,15 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class RouteProcessing {
 
+	private static int timeout = 500;
+	
 	/**
 	 * TAG for android debugging.
 	 */
 	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class
 			.getSimpleName();
-
+	
+	
 	/**
 	 * URL for shortest path computation.
 	 */
@@ -88,20 +94,21 @@ public class RouteProcessing {
 		public void run() {
 			InputStream is;
 			try {
-				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 1);
-				DefaultHttpClient httpClient = new DefaultHttpClient();
-				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 2);
+				HttpParams httpParameters = new BasicHttpParams();
+				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
+				HttpConnectionParams.setSoTimeout(httpParameters, timeout);
+
+				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 				HttpPost httpPost = url;
-				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 3);
 				httpPost.setHeader("Accept", "application/json");
-				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 4);
 				httpPost.setHeader("Content-Type", "application/json");
-				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 5);
 
 				String requestAsJSON = gson.toJson(objectToSend);
+
 				httpPost.setEntity(new StringEntity(requestAsJSON));
 
 				HttpResponse httpResponse = httpClient.execute(httpPost);
+
 				HttpEntity httpEntity = httpResponse.getEntity();
 				is = httpEntity.getContent();
 
