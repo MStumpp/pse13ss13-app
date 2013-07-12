@@ -18,6 +18,9 @@ public class GeometryProcessor {
     private final static int MAX_NUMBER_CALLS = 300;
 
 
+    /**
+     * TAG.
+     */
 	private static final String TAG = "GeometryProcessor";
 
 
