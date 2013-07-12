@@ -160,11 +160,11 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
-        File graphDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.io");
+        File graphDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf");
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.io");
+        File locationDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.pbf");
         Assert.assertNotNull(locationDataio);
         Assert.assertTrue(locationDataio.exists());
 
@@ -191,7 +191,7 @@ public class GeometryDataPreprocessorTest {
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
 
-        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.io");
+        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
 
         try {
             GeometryDataIO.save(geometryDataIO, geometryDataio);

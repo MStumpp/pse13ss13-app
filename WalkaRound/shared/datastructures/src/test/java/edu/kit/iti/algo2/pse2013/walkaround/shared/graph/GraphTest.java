@@ -69,7 +69,7 @@ public class GraphTest {
     @Test
     public void testInitGraphWithRealDataSet() {
 
-        File file = new File(getClass().getResource("/graphData.io").getFile());
+        File file = new File(System.getProperty("java.io.tmpdir") + "/graphData.pbf");
         Assert.assertNotNull(file);
         Assert.assertTrue(file.exists());
 

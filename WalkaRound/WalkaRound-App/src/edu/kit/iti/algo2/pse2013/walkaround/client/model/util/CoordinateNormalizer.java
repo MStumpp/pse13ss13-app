@@ -14,8 +14,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorExc
  */
 public final class CoordinateNormalizer {
 
-	private static final String TAG_COORDINATENORMALIZER = CoordinateNormalizer.class.getSimpleName();
-	
+	private static final String TAG = CoordinateNormalizer.class.getSimpleName();
+
 	/**
 	 * This class is an utility class which is not instantiated.
 	 */
@@ -34,11 +34,13 @@ public final class CoordinateNormalizer {
 	 */
 	public static Coordinate normalizeCoordinate(Coordinate coord, float levelOfDetail) {
 		try {
-			return (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coord);
+			Coordinate next = (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coord);
+			Log.d(TAG, coord +" => "+next);
+			return next;
 		} catch (GeometryProcessorException e) {
-			Log.d(TAG_COORDINATENORMALIZER, e.toString());
+			Log.d(TAG, e.toString());
 		} catch (InstantiationException e) {
-			Log.d(TAG_COORDINATENORMALIZER, e.toString());
+			Log.d(TAG, e.toString());
 		}
 		return null;
 	}
