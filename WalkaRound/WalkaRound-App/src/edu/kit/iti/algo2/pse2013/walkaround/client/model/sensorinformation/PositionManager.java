@@ -125,11 +125,12 @@ public class PositionManager implements Listener {
 				"PositionManager.notifyAllPositionListeners() " + (lastKnownLocation != null));
 		Log.d(TAG_POSITION_MANAGER,
 				"notify " + (positionListeners != null));
-		for (PositionListener pl : this.positionListeners) {
-
-			Log.d(TAG_POSITION_MANAGER,
-					"notify " + (pl != null));
-			pl.onPositionChange(lastKnownLocation);
+		if (this.lastKnownLocation != null) {
+			for (PositionListener pl : this.positionListeners) {
+				Log.d(TAG_POSITION_MANAGER,
+						"notify " + (pl != null));
+				pl.onPositionChange(lastKnownLocation);
+			}
 		}
 	}
 
