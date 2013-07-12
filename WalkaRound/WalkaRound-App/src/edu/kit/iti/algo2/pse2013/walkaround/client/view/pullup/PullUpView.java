@@ -300,7 +300,7 @@ public class PullUpView extends Fragment implements RouteListener {
 				Log.d(TAG_PULLUP, "roundtrip starts");
 				//ft.remove(pullUpContent);
 				//pullUpContent = new RoundTripView();
-				ft.replace(R.id.pullupContent, routingView).commit();
+				ft.replace(R.id.pullupContent, this.roundtripView).commit();
 			}
 
 			break;
