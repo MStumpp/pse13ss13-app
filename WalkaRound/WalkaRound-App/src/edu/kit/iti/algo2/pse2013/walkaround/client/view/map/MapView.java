@@ -169,14 +169,14 @@ public class MapView extends Activity {
 				+ File.separatorChar + "geometryData.pbf";
 		
 		GeometryDataIO geometryDataIO;
-		try {
-			geometryDataIO = GeometryDataIO.load(new File(Environment
-					.getExternalStorageDirectory().getAbsolutePath()
-					+ fileString));
-			GeometryProcessor.init(geometryDataIO);
-		} catch (IOException e) {
-			Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden.");
-		}
+		//try {
+			//geometryDataIO = GeometryDataIO.load(new File(Environment
+			//		.getExternalStorageDirectory().getAbsolutePath()
+			//		+ fileString));
+			//GeometryProcessor.init(geometryDataIO);
+		//} catch (IOException e) {
+		//	Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden.");
+		//}
 		
 		PositionManager.initialize(this);
 		POIManager.initialize(this);

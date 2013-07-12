@@ -350,7 +350,7 @@ public class MapController implements RouteListener, PositionListener,
 						mapModel.getUpperLeft(),
 						mapModel.getCurrentLevelOfDetail());
 		try {
-			next = CoordinateNormalizer.normalizeCoordinate(next,
+			CoordinateNormalizer.normalizeCoordinate(next,
 					(int) this.getCurrentLevelOfDetail());
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG_MAP_CONTROLLER,
