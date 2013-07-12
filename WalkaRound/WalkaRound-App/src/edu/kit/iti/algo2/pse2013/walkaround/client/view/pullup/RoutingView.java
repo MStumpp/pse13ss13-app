@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -73,25 +75,31 @@ public class RoutingView extends Fragment {
 		Point size = new Point();
 		display.getSize(size);
 
-		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		reset.setX(size.x / 5 * 0);
+		Log.d(TAG_PULLUP_CONTENT, "Einstellen der sizes");
+		//reset.setX(size.x / 5 * 0);
 		reset.getLayoutParams().width = size.x / 5;
 		reset.getLayoutParams().height = size.y / 8;
-		invert.setX(size.x / 5 * 1);
+		
+		//invert.setX(size.x / 5 * 1);
 		invert.getLayoutParams().width = size.x / 5;
 		invert.getLayoutParams().height = size.y / 8;
-		tsp.setX(size.x / 5 * 2);
+		
+		//tsp.setX(size.x / 5 * 2);
 		tsp.getLayoutParams().width = size.x / 5;
 		tsp.getLayoutParams().height = size.y / 8;
-		load.setX(size.x / 5 * 3);
+		
+		//load.setX(size.x / 5 * 3);
 		load.getLayoutParams().width = size.x / 5;
 		load.getLayoutParams().height = size.y / 8;
-		save.setX(size.x / 5 * 4);
+		
+		//save.setX(size.x / 5 * 4);
 		save.getLayoutParams().width = size.x / 5;
 		save.getLayoutParams().height = size.y / 8;
-		addFavorite.setX(size.x * 0);
+		
+		//addFavorite.setX(size.x * 0);
 		addFavorite.getLayoutParams().width = size.x / 2;
-		goToMap.setX(size.x / 2);
+		
+		//goToMap.setX(size.x / 2);
 		goToMap.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Zuweisung der Listener");
@@ -104,9 +112,8 @@ public class RoutingView extends Fragment {
 		goToMap.setOnTouchListener(new backToMapListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
-
 	}
-
+	
 	public void onDestroyView() {
 		super.onDestroyView();
 		// routeController.unregisterRouteListener(this);
@@ -146,8 +153,8 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(invert)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_CONTENT, "invert wurde gedr�ckt");
-				routeController.revertRoute();
+				Log.d(TAG_PULLUP_CONTENT, "invert was pressed");
+				RouteController.getInstance().revertRoute();
 			}
 			// TODO: refresh activity?
 			return false;
@@ -222,6 +229,7 @@ public class RoutingView extends Fragment {
 
 	}
 
+	
 	public void onRouteChange(final RouteInfo currentRoute, Context context) {
 		
 		if (currentRoute != null) {
@@ -233,6 +241,10 @@ public class RoutingView extends Fragment {
 					TextView waypoint = new TextView(context);
 					Log.d("routingView: ", " " + value.getName() + " " + value.getId());
 					waypoint.setText("TEST " + value.getName() + " " + value.getId());
+					//TODO TextSize relativieren
+					waypoint.setTextSize(40);
+					waypoint.setPadding(10, 20, 10, 20);
+					waypoint.setBackgroundColor(MapModel.defaultBackground);
 					layout.addView(waypoint);
 				}
 			}
