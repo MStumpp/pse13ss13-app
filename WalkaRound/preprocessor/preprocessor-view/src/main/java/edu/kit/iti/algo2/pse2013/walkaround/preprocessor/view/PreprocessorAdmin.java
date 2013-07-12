@@ -39,14 +39,15 @@ public class PreprocessorAdmin {
 				System.out.println("Please enter the destination-path where the location-data should be written:");
 				String locPath = inReader.readLine();
 				locFile = new File(locPath);
-				success = locFile.mkdirs();
+				success = locFile.getParentFile().exists() || locFile.getParentFile().mkdirs();
 				isQuit = locPath.equals(CMD_QUIT) || locPath.length() == 0;
 			}
+			success = false;
 			while (!success || isQuit) {
 				System.out.println("Please enter the destination-path where the graph-data should be written:");
 				String graphPath = inReader.readLine();
 				graphFile = new File(graphPath);
-				success = graphFile.mkdirs();
+				success = graphFile.getParentFile().exists() || graphFile.getParentFile().mkdirs();
 				isQuit = graphPath.equals(CMD_QUIT) || graphPath.length() == 0;
 			}
 			if (success && !isQuit) {

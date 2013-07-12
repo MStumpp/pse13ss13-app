@@ -1,19 +1,22 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * GeometryDataPreprocessorTest.
@@ -155,11 +158,11 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
-        File graphDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.io");
+        File graphDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.io");
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/locationData.io");
+        File locationDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.io");
         Assert.assertNotNull(locationDataio);
         Assert.assertTrue(locationDataio.exists());
 
@@ -186,7 +189,7 @@ public class GeometryDataPreprocessorTest {
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
 
-        File geometryDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/geometryData.io");
+        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.io");
 
         try {
             GeometryDataIO.save(geometryDataIO, geometryDataio);
