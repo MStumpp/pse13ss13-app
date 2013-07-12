@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 // Android Library
+import java.util.LinkedList;
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Point;
@@ -21,7 +23,12 @@ import android.widget.RelativeLayout;
 
 // Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
  * 
@@ -32,7 +39,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
  * @author Ludwig Biermann
  * 
  */
-public class PullUpView extends Fragment {
+public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Debug Information
@@ -53,6 +60,14 @@ public class PullUpView extends Fragment {
 	public static final int CONTENT_SEARCH = 4;
 	public static final int CONTENT_INFO = 5;
 	public static final int CONTENT_OPTION = 6;
+
+	private RoutingView routingView;
+	private FavoriteView favoriteView;
+	private RoundTripView roundtripView;
+	private POIView poiView;
+	private SearchView searchView;
+	private InfoView infoView;
+	private OptionView optionView;
 
 	/**
 	 * Views
@@ -77,7 +92,14 @@ public class PullUpView extends Fragment {
 	private float maxBorderHeight;
 	private float maxHeight;
 	private boolean animationRun = false;
+	
+	/**
+	 * 
+	 */
 
+	private RouteInfo route;
+	private boolean routingViewRun = false;
+	
 	/**
 	 * Gestik
 	 */
@@ -86,7 +108,9 @@ public class PullUpView extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		route = new Route(new LinkedList<Coordinate>());
+		
 		Log.d(TAG_PULLUP, "allocate views");
 		main = (RelativeLayout) this.getActivity()
 				.findViewById(R.id.pullUpMain);
@@ -153,10 +177,21 @@ public class PullUpView extends Fragment {
 		main.setY(maxHeight);
 
 		Log.d(TAG_PULLUP, "allocate fragments");
+
+		routingView = new RoutingView();
+		favoriteView = new FavoriteView();
+		roundtripView = new RoundTripView();
+		poiView = new POIView();
+		searchView = new SearchView();
+		infoView = new InfoView();
+		optionView = new OptionView();
+
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 		pullUpContent = new InfoView();
 		ft.add(R.id.pullupContent, pullUpContent).commit();
 		main.setOnTouchListener(new MainListener());
+		
+		RouteController.getInstance().registerRouteListener(this);
 
 	}
 
@@ -172,7 +207,7 @@ public class PullUpView extends Fragment {
 	 * Set the height to HalfSize
 	 */
 	public void setHalfSizeHeight() {
-		this.setHeight(halfHeight - main.getY(), 1000);
+		this.setHeight(halfHeight - main.getY(), 500);
 		// this.duration = 0;
 	}
 
@@ -180,7 +215,7 @@ public class PullUpView extends Fragment {
 	 * Set the height to minimum
 	 */
 	public void setNullSizeHeight() {
-		this.setHeight(maxHeight - main.getY(), 1000);
+		this.setHeight(maxHeight - main.getY(), 800);
 	}
 
 	/**
@@ -228,7 +263,7 @@ public class PullUpView extends Fragment {
 	 */
 	public void changeView(int id) {
 		Log.d(TAG_PULLUP, "Content Change");
-
+		routingViewRun = false;
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
 
@@ -236,11 +271,14 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "routing starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new RoutingView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new RoutingView();
+				ft.replace(R.id.pullupContent, routingView).commit();
+				if(routingView != null && route != null){
+					routingView.onRouteChange(route, this.getActivity());
+				}
+				routingViewRun = true;
 			}
-
 			break;
 		case PullUpView.CONTENT_FAVORITE:
 
@@ -248,9 +286,9 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "favorite starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new FavoriteView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new FavoriteView();
+				ft.replace(R.id.pullupContent, favoriteView).commit();
 			}
 
 			break;
@@ -260,9 +298,9 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "roundtrip starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new RoundTripView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new RoundTripView();
+				ft.replace(R.id.pullupContent, routingView).commit();
 			}
 
 			break;
@@ -272,9 +310,9 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "poi starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new POIView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new POIView();
+				ft.replace(R.id.pullupContent, poiView).commit();
 			}
 
 			break;
@@ -284,9 +322,9 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "search starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new SearchView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new SearchView();
+				ft.replace(R.id.pullupContent, searchView).commit();
 			}
 
 			break;
@@ -296,9 +334,9 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "optionen starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new OptionView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new OptionView();
+				ft.replace(R.id.pullupContent, optionView).commit();
 			}
 
 			break;
@@ -308,9 +346,9 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "InfoView starts");
-				ft.remove(pullUpContent);
-				pullUpContent = new InfoView();
-				ft.add(R.id.pullupContent, pullUpContent).commit();
+				//ft.remove(pullUpContent);
+				//pullUpContent = new InfoView();
+				ft.replace(R.id.pullupContent, infoView).commit();
 			}
 
 			break;
@@ -327,7 +365,8 @@ public class PullUpView extends Fragment {
 	private class RoutingListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(routing) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(routing)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_TOUCH, "routing starts");
 				changeView(PullUpView.CONTENT_ROUTING);
 				setFullSizeHeight();
@@ -346,7 +385,8 @@ public class PullUpView extends Fragment {
 	private class FavoriteListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(favorite) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(favorite)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_TOUCH, "Favorite starts");
 				changeView(PullUpView.CONTENT_FAVORITE);
 				setFullSizeHeight();
@@ -366,7 +406,8 @@ public class PullUpView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (v.equals(roundtrip) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(roundtrip)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_TOUCH, "roundtrip starts");
 				changeView(PullUpView.CONTENT_ROUNDTRIP);
 				setFullSizeHeight();
@@ -425,7 +466,8 @@ public class PullUpView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (v.equals(search) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(search)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_TOUCH, "search starts");
 				changeView(PullUpView.CONTENT_SEARCH);
 				setFullSizeHeight();
@@ -554,6 +596,20 @@ public class PullUpView extends Fragment {
 			}
 			return false;
 		}
+	}
+
+	@Override
+	public void onRouteChange(final RouteInfo currentRoute) {
+		
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				route = currentRoute;
+				if(routingViewRun){
+					Log.d(TAG_PULLUP_TOUCH, "Route Change: " + currentRoute.getWaypoints().size());
+					routingView.onRouteChange(route,  getActivity());
+				}
+			}
+		});
 	}
 
 }
