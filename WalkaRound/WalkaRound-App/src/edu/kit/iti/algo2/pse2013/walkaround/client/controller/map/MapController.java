@@ -329,6 +329,7 @@ public class MapController implements RouteListener, PositionListener,
 	public void onDeletePoint(int currentId) {
 		Log.d(TAG_MAP_CONTROLLER, "Delete active Waypoint");
 		if (this.currentActiveWaypoint == currentId) {
+			this.lines.clear();
 			this.displayPoints.clear();
 			this.routeController.deleteActiveWaypoint();
 			this.updateRouteOverlay();
@@ -432,7 +433,7 @@ public class MapController implements RouteListener, PositionListener,
 		mapView.updateDisplayWaypoints(displayPoints);
 		//mapModel.shift(new DisplayCoordinate(0, 0));
 		// mapView.setActive(2);
-		// mapModel.drawDisplayCoordinates(lines);
+		mapModel.drawDisplayCoordinates(lines);
 
 		if (this.currentRoute.getActiveWaypoint() == null) {
 			return;

@@ -354,14 +354,14 @@ public class MapView extends Activity {
 		final Context context = this;
 
 		if (displayPoints.size() == 0) {
-			
+
 			runOnUiThread(new Runnable() {
 				public void run() {
 					currentActive = null;
 					routeList.removeAllViews();
 				}
 			});
-			
+
 		} else {
 
 			runOnUiThread(new Runnable() {
@@ -615,6 +615,11 @@ public class MapView extends Activity {
 		@SuppressWarnings("unused")
 		float gesamt;
 
+		public MapGestureDetector() {
+			oldX = 0.0F;
+			oldY = 0.0F;
+		}
+
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
@@ -643,15 +648,19 @@ public class MapView extends Activity {
 				} else {
 					x += e2.getY(1);
 				}
+				int twoFingerZoomOffset = 1000;
 
-				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / 10);
+				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / twoFingerZoomOffset);
 
-				this.gesamt += z;
-
-				this.oldX = e2.getX();
-				this.oldY = e2.getY();
-
-				mc.onZoom(z, new DisplayCoordinate(x, y));
+				float diff = (float) Math.sqrt(Math.pow(
+						(double) Math.abs(e2.getX(0) - e2.getX(1)), 2)
+						* Math.pow((double) Math.abs(e2.getY(1) - e2.getY(1)),
+								2));
+				if(diff < gesamt){
+					mc.onZoom(z, new DisplayCoordinate(x, y));
+				} else {
+					mc.onZoom(-z, new DisplayCoordinate(x, y));
+				}
 			} else {
 
 				Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Scroll");
