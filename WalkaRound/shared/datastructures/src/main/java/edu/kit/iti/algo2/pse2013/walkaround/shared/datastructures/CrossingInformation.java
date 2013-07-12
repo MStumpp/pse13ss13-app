@@ -12,9 +12,9 @@ public final class CrossingInformation {
     /**
      * list of crossroad angles.
      */
-    private final float[] crossroadAngles;
-
-
+    private float[] crossroadAngles;
+    private int nextCrossingAngleOnRoute;
+    
     /**
      * Creates an instance of CrossingInformation.
      *
@@ -61,6 +61,14 @@ public final class CrossingInformation {
 
     public CrossingInformation clone() {
     	return new CrossingInformation(this.crossroadAngles);
+    }
+    
+    public boolean setNextCrossingAngleOnRoute(int index) {
+    	if (index >= this.crossroadAngles.length) {
+    		return false;
+    	}
+    	this.nextCrossingAngleOnRoute = index;
+    	return true;
     }
     
 }

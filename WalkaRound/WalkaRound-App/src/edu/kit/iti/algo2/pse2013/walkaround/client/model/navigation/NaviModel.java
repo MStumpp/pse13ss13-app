@@ -17,6 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -42,7 +43,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	private Location lastKnownUserLocation;
 	private Coordinate nextCrossing;
 	private RouteInfo lastKnownRoute;
-	private Coordinate nextTurnOnRoute;
 	
 	// Navigation information for NaviOutput-Classes
 	private double turnAngle;
@@ -89,7 +89,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		naviModel.sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 		return naviModel;
 	}
-	
 	
 	
 	private void notifyAllNaviOutputs() {
@@ -175,45 +174,78 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_NAVI, "onRouteCHange(RouteInfo)");
-		this.getNearestCoordinateWithRelevantCrossingOnLastKnownRoute(this.lastKnownUserLocation);
-		
-		
+		this.computeNavi();
 	}
 	
 	private void computeNavi() {
-		this.nextCrossing = this.getNearestCoordinateWithRelevantCrossingOnLastKnownRoute(this.lastKnownUserLocation);
+		this.nextCrossing = this.getNearestCoordinateWithRelevantCrossingInfo(this.lastKnownUserLocation);
+		// TODO: Berechne TURN ANGLE
 		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 		this.notifyAllNaviOutputs();
 	}
 	
-	private Coordinate getNearestCoordinateWithRelevantCrossingOnLastKnownRoute(Location androidLocation) {
-		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD START input Coordinate: " + androidLocation.toString());
+	private Coordinate getNearestCoordinateWithRelevantCrossingInfo(Location androidLocation) {
+		Log.d(TAG_NAVI, "getNearestCoordinateWithRelevantCrossingInfo(Location) METHOD START input Coordinate: " + androidLocation.toString());
 		float smallestDifference = Float.POSITIVE_INFINITY;
 		Coordinate closestCoordinate = new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude());
 		float[] results = new float[3];
 		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
-			//TODO zweites Argument in if einbauen für relevante Crossings Prüfung
+			//TODO zweites Argument in if einbauen für relevante Crossings Prüfung, PRÜFUNG nach Reihenfolge
 			if (coord.getCrossingInformation().getNumCrossroads() > 2) {
+				
+				Log.d(TAG_NAVI, "getNearestCoordinateWithRelevantCrossingInfo(Location) setting new nearest Coordinate");
+				
 				Location.distanceBetween(androidLocation.getLatitude(), androidLocation.getLongitude(), coord.getLatitude(), coord.getLongitude(), results);
+				
 				if (results[0] < smallestDifference) {
 					closestCoordinate = coord;
 				}
 			}
+			
+			
 		}
 		
 		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD END return Coordinate: " + closestCoordinate.toString());
 		return closestCoordinate;
 	}
+	/*
+	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
+		Coordinate closestCoordinate = null;
+		float smallestDifference = Float.POSITIVE_INFINITY;
+		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
+			
+		}
+	}
+	*/
 	
 	
+	
+	
+	
+	
+	/*
 	private void flagRelevantCrossingAngle(RouteInfo ri) {
+		// TODO: Gehe alle Knoten durch, berechne 
+		CrossingInformation[] crossingAngleOfRouteCoordinates = new CrossingInformation[ri.getCoordinates().size()];
+		for (int i = 0; i < crossingAngleOfRouteCoordinates.length; i++) {
+			crossingAngleOfRouteCoordinates[i] = ri.getCoordinates().get(i).getCrossingInformation();
+		}
+		
+		for (int i = 0; i < crossingAngleOfRouteCoordinates.length; i++) {
+			
+		}
+		
 		
 		
 	}
 	
+	*/
 	
 	
-	// TODO: nächsten turnAngle berechnen.
+	
+	
+	
+	// TODO: (OLD!?) nächsten turnAngle berechnen.
 	// Dazu nächstliegenden Coord zur GPS Pos aus Route bestimmen(, dieser muss aber vor dem User auf der Route liegen), danach von dort die Route abgehen bis Coord mit CrossingInfo != null vorhanden.
 	// 
 	
