@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -38,9 +40,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 // Android Library
 // Walkaround Library
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 
 /**
  * 
@@ -160,6 +165,19 @@ public class MapView extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		String fileString = File.separatorChar + "walkaround"
+				+ File.separatorChar + "geometryData.pbf";
+		
+		GeometryDataIO geometryDataIO;
+		try {
+			geometryDataIO = GeometryDataIO.load(new File(Environment
+					.getExternalStorageDirectory().getAbsolutePath()
+					+ fileString));
+			GeometryProcessor.init(geometryDataIO);
+		} catch (IOException e) {
+			Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden.");
+		}
+		
 		PositionManager.initialize(this);
 		POIManager.initialize(this);
 
