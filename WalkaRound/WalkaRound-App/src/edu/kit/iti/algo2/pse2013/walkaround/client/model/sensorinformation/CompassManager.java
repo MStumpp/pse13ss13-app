@@ -12,7 +12,7 @@ import android.util.Log;
 /**
  * This class hold and compare the last known orientation of the device
  * 
- * @author Lukas M�ller, Ludwig Biermann
+ * @author Lukas Müller, Ludwig Biermann
  * 
  */
 public class CompassManager implements SensorEventListener {
@@ -38,8 +38,8 @@ public class CompassManager implements SensorEventListener {
 	private Sensor magneticFieldSensor;
 	private float[] accellerometerReadout;
 	private float[] magneticFieldSensorReadout;
-	private int messagesPosted = 0;
-	private int messagePostingInterval = 1000;
+	private static int messagesPosted = 0;
+	private static int messagePostingInterval = 1000;
 
 	/**
 	 * 
@@ -97,7 +97,9 @@ public class CompassManager implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
+		if (this.messagesPosted % this.messagePostingInterval == 0) {
+			Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
+		}
 		if (event.sensor.getType() == this.accellerometer.getType()) {
 			this.accellerometerReadout = event.values.clone();
 		}
