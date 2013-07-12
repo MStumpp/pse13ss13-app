@@ -47,14 +47,14 @@ public class WikipediaPreprocessor {
 			// �berschrieben...
 			// k�nnte eleganter gel�st werden.
 			if (!(current.getURL() == null)) {
-				String wikipediaURL = current.getURL();
-				String partA = wikipediaURL.substring(0,
-						wikipediaURL.lastIndexOf("/"));
-				String partB = wikipediaURL.substring(wikipediaURL
-						.lastIndexOf("/"));
-				wikipediaURL = partA + "/Spezial:Exportieren" + partB;
-				URL url;
 				try {
+					String wikipediaURL = current.getURL();
+					String partA = wikipediaURL.substring(0,
+							wikipediaURL.lastIndexOf("/"));
+					String partB = wikipediaURL.substring(wikipediaURL
+							.lastIndexOf("/"));
+					wikipediaURL = partA + "/Spezial:Exportieren" + partB;
+					URL url;
 					url = new URL(wikipediaURL);
 					URLConnection connection;
 					connection = url.openConnection();
@@ -87,52 +87,71 @@ public class WikipediaPreprocessor {
 
 					// set image url
 					if (sb.indexOf("[[Datei:") != -1) {
-						String imageUrl = sb.substring(
-								sb.indexOf("[[Datei:") + 8, sb.indexOf("|"));
-						imageUrl = imageUrl.replaceAll(" ", "_");
-						String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
-								+ imageUrl;
-						URL javaImageUrl = new URL(trueImageUrl);
-						Scanner scanner = new Scanner(javaImageUrl.openStream());
-						StringBuilder imageSb = new StringBuilder();
-						while (scanner.hasNextLine()) {
-							imageSb.append(scanner.nextLine());
-						}
-						scanner.close();
-						if (imageSb
-								.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
-							imageSb = imageSb
-									.delete(0,
-											imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
-							trueImageUrl = imageSb.substring(
-									0,
-									imageSb.indexOf(imageUrl)
-											+ imageUrl.length());
-							current.setURL(trueImageUrl);
+						try {
+							String imageUrl = sb
+									.substring(sb.indexOf("[[Datei:") + 8,
+											sb.indexOf("|"));
+							imageUrl = imageUrl.replaceAll(" ", "_");
+							String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
+									+ imageUrl;
+							URL javaImageUrl = new URL(trueImageUrl);
+							Scanner scanner = new Scanner(
+									javaImageUrl.openStream());
+							StringBuilder imageSb = new StringBuilder();
+							while (scanner.hasNextLine()) {
+								imageSb.append(scanner.nextLine());
+							}
+							scanner.close();
+							if (imageSb
+									.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
+								imageSb = imageSb
+										.delete(0,
+												imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
+								trueImageUrl = imageSb.substring(
+										0,
+										imageSb.indexOf(imageUrl)
+												+ imageUrl.length());
+								current.setURL(trueImageUrl);
+							}
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					} else if (sb.indexOf("[[Bild:") != -1) {
-						String imageUrl = sb.substring(
-								sb.indexOf("[[Bild:") + 7, sb.indexOf("|"));
-						imageUrl = imageUrl.replaceAll(" ", "_");
-						String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
-								+ imageUrl;
-						URL javaImageUrl = new URL(trueImageUrl);
-						Scanner scanner = new Scanner(javaImageUrl.openStream());
-						StringBuilder imageSb = new StringBuilder();
-						while (scanner.hasNextLine()) {
-							imageSb.append(scanner.nextLine());
-						}
-						scanner.close();
-						if (imageSb
-								.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
-							imageSb = imageSb
-									.delete(0,
-											imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
-							trueImageUrl = imageSb.substring(
-									0,
-									imageSb.indexOf(imageUrl)
-											+ imageUrl.length());
-							current.setURL(trueImageUrl);
+						try {
+							String imageUrl = sb.substring(
+									sb.indexOf("[[Bild:") + 7, sb.indexOf("|"));
+							imageUrl = imageUrl.replaceAll(" ", "_");
+							String trueImageUrl = "http://commons.wikimedia.org/wiki/File:"
+									+ imageUrl;
+							URL javaImageUrl = new URL(trueImageUrl);
+							Scanner scanner = new Scanner(
+									javaImageUrl.openStream());
+							StringBuilder imageSb = new StringBuilder();
+							while (scanner.hasNextLine()) {
+								imageSb.append(scanner.nextLine());
+							}
+							scanner.close();
+							if (imageSb
+									.indexOf("upload.wikimedia.org/wikipedia/commons/") != -1) {
+								imageSb = imageSb
+										.delete(0,
+												imageSb.indexOf("upload.wikimedia.org/wikipedia/commons/"));
+								trueImageUrl = imageSb.substring(
+										0,
+										imageSb.indexOf(imageUrl)
+												+ imageUrl.length());
+								current.setURL(trueImageUrl);
+							}
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
 
