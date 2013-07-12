@@ -130,6 +130,7 @@ public class TileFetcher {
 					if (cache.size() > MAX_CACHE_SIZE) {
 						cache.pollFirstEntry();
 						cache.pollFirstEntry();
+						System.gc();
 					}
 				} catch (MalformedURLException e) {
 					Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url));

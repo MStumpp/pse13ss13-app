@@ -38,6 +38,8 @@ public class CompassManager implements SensorEventListener {
 	private Sensor magneticFieldSensor;
 	private float[] accellerometerReadout;
 	private float[] magneticFieldSensorReadout;
+	private int messagesPosted = 0;
+	private int messagePostingInterval = 1000;
 
 	/**
 	 * 
@@ -47,24 +49,15 @@ public class CompassManager implements SensorEventListener {
 		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
 
-		this.sensorManager = (SensorManager) context.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 1");
-		
+		this.sensorManager = (SensorManager) context.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);		
 		
 		Log.d(TAG_COMPASS_MANAGER, "" + sensorManager.getSensorList(Sensor.TYPE_ALL));
 		
-		
 		this.accellerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 2");
-
 		this.magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 3");
 
-		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_NORMAL);
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 4");
-
-		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 5");
+		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_GAME);
+		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_GAME);
 	}
 
 
@@ -86,10 +79,13 @@ public class CompassManager implements SensorEventListener {
 	 * 
 	 */
 	private void notifyAllCompassListeners() {
-		Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners() sending onCompassChange(" + this.lastKnownBearing + ") to listeners");
+		if (this.messagesPosted % this.messagePostingInterval == 0) {
+			Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners() sending onCompassChange(" + this.lastKnownBearing + ") to listeners");
+		}
 		for (CompassListener cl : this.compassListeners) {
 			cl.onCompassChange(this.lastKnownBearing);
 		}
+		this.messagesPosted++;
 	}
 
 	

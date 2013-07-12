@@ -14,6 +14,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.util.Log;
 
@@ -32,12 +35,15 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class RouteProcessing {
 
+	private static int timeout = 100;
+	
 	/**
 	 * TAG for android debugging.
 	 */
 	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class
 			.getSimpleName();
-
+	
+	
 	/**
 	 * URL for shortest path computation.
 	 */
@@ -88,19 +94,24 @@ public class RouteProcessing {
 		public void run() {
 			InputStream is;
 			try {
-				DefaultHttpClient httpClient = new DefaultHttpClient();
+				HttpParams httpParameters = new BasicHttpParams();
+				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
+				HttpConnectionParams.setSoTimeout(httpParameters, timeout);
+
+				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 				HttpPost httpPost = url;
 				httpPost.setHeader("Accept", "application/json");
 				httpPost.setHeader("Content-Type", "application/json");
 
 				String requestAsJSON = gson.toJson(objectToSend);
+
 				httpPost.setEntity(new StringEntity(requestAsJSON));
 
 				HttpResponse httpResponse = httpClient.execute(httpPost);
+
 				HttpEntity httpEntity = httpResponse.getEntity();
 				is = httpEntity.getContent();
 
-				// ///
 				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + requestAsJSON);
 
 				BufferedReader reader = new BufferedReader(
@@ -169,12 +180,14 @@ public class RouteProcessing {
 						new Coordinate(coordinate2.getLatitude(),
 								coordinate2.getLongitude()) }, new HttpPost(
 						URL_COMPUTESHORTESTPATH));
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - pre Thread");
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
 		thread.join();
-
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread");
+		
 		if (gsonAnswerer.getException() != null) {
-			gsonAnswerer.getException().printStackTrace();
+			throw new RouteProcessingException(gsonAnswerer.getException().toString());
 		} else {
 			Log.d(TAG_ROUTE_PROCESSING,
 					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
