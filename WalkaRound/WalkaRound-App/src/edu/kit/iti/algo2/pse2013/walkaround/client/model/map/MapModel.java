@@ -528,20 +528,6 @@ public class MapModel implements TileListener {
 			this.map.prepareToDraw();
 		}
 
-		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
-		synchronized (this.routeOverlayBitmap) {
-			mapController.onRouteOverlayImageChange(empty);
-			// this.routeOverlayBitmap.recycle();
-			// System.gc();
-			this.routeOverlayBitmap.eraseColor(defaultBackgroundEmpty);
-			// this.routeOverlayBitmap =
-			// Bitmap.createScaledBitmap(this.routeOverlayBitmap, width, height,
-			// false);
-			// this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
-			// Bitmap.Config.ARGB_8888);
-			this.routeOverlayBitmap.prepareToDraw();
-		}
-
 		Log.d(TAG_MAP_MODEL, "call drawing");
 		this.fetchTiles();
 		// if(this.fetchTiles()) {
@@ -593,7 +579,7 @@ public class MapModel implements TileListener {
 	 * @param lines
 	 *            a list of Points
 	 */
-	public void drawDisplayCoordinates(final List<DisplayCoordinate> lines) {
+	private void drawDisplayCoordinates(final List<DisplayCoordinate> lines) {
 		if (!lines.isEmpty()) {
 			Log.d("CANVAS_DRAW_LINE", "Länge" + lines.size());
 			for (int a = 0; a < (lines.size() - 1); a++) {

@@ -825,7 +825,10 @@ public class MapView extends Activity {
 
 			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY()
 					+ " " + currentId);
-			if (Math.abs(velocityY) > 800 || Math.abs(velocityY) > 800) {
+			
+			float velocity = (float) Math.sqrt((double) Math.pow(Math.abs(velocityX), 2) + (double) Math.pow(Math.abs(velocityY), 2));
+			
+			if (velocity > 400) {
 				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point " + currentId);
 				mc.onDeletePoint(currentId);
 			}
