@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 // Android Library
+import java.util.LinkedList;
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Point;
@@ -21,7 +23,12 @@ import android.widget.RelativeLayout;
 
 // Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
  * 
@@ -32,7 +39,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
  * @author Ludwig Biermann
  * 
  */
-public class PullUpView extends Fragment {
+public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Debug Information
@@ -85,7 +92,14 @@ public class PullUpView extends Fragment {
 	private float maxBorderHeight;
 	private float maxHeight;
 	private boolean animationRun = false;
+	
+	/**
+	 * 
+	 */
 
+	private RouteInfo route;
+	private boolean routingViewRun = false;
+	
 	/**
 	 * Gestik
 	 */
@@ -94,7 +108,9 @@ public class PullUpView extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		route = new Route(new LinkedList<Coordinate>());
+		
 		Log.d(TAG_PULLUP, "allocate views");
 		main = (RelativeLayout) this.getActivity()
 				.findViewById(R.id.pullUpMain);
@@ -174,6 +190,8 @@ public class PullUpView extends Fragment {
 		pullUpContent = new InfoView();
 		ft.add(R.id.pullupContent, pullUpContent).commit();
 		main.setOnTouchListener(new MainListener());
+		
+		RouteController.getInstance().registerRouteListener(this);
 
 	}
 
@@ -245,7 +263,7 @@ public class PullUpView extends Fragment {
 	 */
 	public void changeView(int id) {
 		Log.d(TAG_PULLUP, "Content Change");
-
+		routingViewRun = false;
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
 
@@ -253,11 +271,14 @@ public class PullUpView extends Fragment {
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "routing starts");
-				ft.remove(pullUpContent);
+				//ft.remove(pullUpContent);
 				//pullUpContent = new RoutingView();
 				ft.replace(R.id.pullupContent, routingView).commit();
+				if(routingView != null && route != null){
+					routingView.onRouteChange(route, this.getActivity());
+				}
+				routingViewRun = true;
 			}
-
 			break;
 		case PullUpView.CONTENT_FAVORITE:
 
@@ -575,6 +596,20 @@ public class PullUpView extends Fragment {
 			}
 			return false;
 		}
+	}
+
+	@Override
+	public void onRouteChange(final RouteInfo currentRoute) {
+		
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				route = currentRoute;
+				if(routingViewRun){
+					Log.d(TAG_PULLUP_TOUCH, "Route Change: " + currentRoute.getWaypoints().size());
+					routingView.onRouteChange(route,  getActivity());
+				}
+			}
+		});
 	}
 
 }
