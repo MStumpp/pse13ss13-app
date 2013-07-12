@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import android.util.Log;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.AudibleTextNaviOutput;
@@ -14,6 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedListener;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -22,33 +24,43 @@ import android.preference.PreferenceManager;
 
 public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
 	
-	private static String TAG_NAVI_MODEL = NaviModel.class.getSimpleName();
+	private static String TAG_NAVI = NaviModel.class.getSimpleName();
 
 	private SharedPreferences sharedPrefs;
 	private Context applicationContext;
 	
 	private static NaviModel naviModel;
 	
+	// References to listeners and HeadUpController:
 	private LinkedList<NaviOutput> naviOutputs;
+	private HeadUpController headUpControllerInstance;
 	
 	private boolean naviIsActive;
 	
-	// TODO:
+	// Current information, used as input for navi-calculations:
+	private Location lastKnownUserLocation;
+	private Coordinate closestCoordinateOnLastKnownRouteToUserPosition;
+	private RouteInfo lastKnownRoute;
+	private Coordinate nextTurnOnRoute;
+
+	// Navigation information for NaviOutput-Classes
+	private double turnAngle;
+	private int distToTurn;
+	
+	// additional information for head up display.
 	private int distOnRouteInMeters;
 	private int distLeftOnRouteInMeter;
 	private int timeOnRouteInSec;
 	private int timeLeftOnRouteInSec;
 	private double speed;
 	
-	private Location lastKnownUserLocation;
-	
 	public void initialize(Context context) {
-		Log.d(TAG_NAVI_MODEL, "NavigationModel initialize(Context)");
+		Log.d(TAG_NAVI, "NavigationModel initialize(Context)");
 		this.applicationContext = context.getApplicationContext();
 	}
 
 	private NaviModel() {
-		Log.d(TAG_NAVI_MODEL, "NavigationModel Contructor");
+		Log.d(TAG_NAVI, "NavigationModel Contructor");
 		if (this.applicationContext != null) {
 			this.naviOutputs = new LinkedList<NaviOutput>();
 			this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext);
@@ -64,12 +76,12 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			this.addOutputStrategy(VisualTextNaviOutput.getInstance());
 			this.addOutputStrategy(StereoNaviOutput.getInstance());
 		} else {
-			Log.e(TAG_NAVI_MODEL, "Navigtaion Model has to be initialized first.");
+			Log.e(TAG_NAVI, "Navigtaion Model has to be initialized first.");
 		}
 	}
 	
 	public NaviModel getInstance() {
-		Log.d(TAG_NAVI_MODEL, "getInstance()");
+		Log.d(TAG_NAVI, "getInstance()");
 		if (naviModel == null) {
 			naviModel = new NaviModel();
 		}
@@ -79,16 +91,29 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	
 	
+	private void notifyAllNaviOutputs() {
+		// Sending information to headUp display:
+		this.headUpControllerInstance.setSpeed(this.speed);
+		this.headUpControllerInstance.setTimePassed(this.timeOnRouteInSec);
+		this.headUpControllerInstance.setTimeToGo(this.timeLeftOnRouteInSec);
+		this.headUpControllerInstance.setWayPassed(this.distOnRouteInMeters);
+		this.headUpControllerInstance.setWayToGo(this.distLeftOnRouteInMeter);
+		// notifying all Navi Outputs:
+		for (NaviOutput naviOutput : this.naviOutputs) {
+			naviOutput.deliverOutput(this.turnAngle, this.distToTurn);
+		}
+	}
 	
-	// Strategy-Pattern methods
+	
+	// 2 Strategy-Pattern methods:
 	private boolean addOutputStrategy(NaviOutput naviOutput) {
-		Log.d(TAG_NAVI_MODEL, "addOutputStrategy(NaviOutput naviOutput)");
+		Log.d(TAG_NAVI, "addOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.add(naviOutput);
 		return true;
 	}
 	
 	private boolean removeOutputStrategy(NaviOutput naviOutput) {
-		Log.d(TAG_NAVI_MODEL, "removeOutputStrategy(NaviOutput naviOutput)");
+		Log.d(TAG_NAVI, "removeOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.remove(naviOutput);
 		return true;
 	}
@@ -96,13 +121,14 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	
 	
+	
 	public boolean isRunning() {
-		Log.d(TAG_NAVI_MODEL, "isRunning()");
+		Log.d(TAG_NAVI, "isRunning()");
 		return this.naviIsActive;
 	}
 	
 	public boolean toggleNavigation() {
-		Log.d(TAG_NAVI_MODEL, "toggleNavigation()");
+		Log.d(TAG_NAVI, "toggleNavigation()");
 		if (this.naviIsActive == false) {
 			this.naviIsActive = true;
 		} else {
@@ -112,39 +138,74 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	}
 	
 	
+	
+	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
+		Log.d(TAG_NAVI, "onSharedPreferenceChanged(SharedPreferences, String)");
 		this.sharedPrefs = sharedPreferences;
 		//TODO: Strategien an / abmelden, je nach dem, welche Prefs aktiv sind.
 	}
 
 	@Override
 	public void onSpeedChange(double speed) {
+		Log.d(TAG_NAVI, "onSpeedChange(double)");
 		this.speed = speed;
 		
 	}
 
 	@Override
 	public void onCompassChange(float direction) {
-		// TODO Auto-generated method stub
+		Log.d(TAG_NAVI, "onCompassChange(float)");
+		// TODO: Vor allem für Stereo Navi relevant
+		// this.lastKnownUserLocation.setBearing(direction);
 		
 	}
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
+		Log.d(TAG_NAVI, "onPositionChange(Location)");
 		this.lastKnownUserLocation = androidLocation;
+		// Coordinate nextCrossing = 
 		
 	}
 
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
-		// TODO Auto-generated method stub
+		Log.d(TAG_NAVI, "onRouteCHange(RouteInfo)");
+		this.getNearestCoordinateOnLastKnownRoute(this.lastKnownUserLocation);
+		
 		
 	}
 	
-	// TODO: nächsten turnAngle berechnen. Dazu nächstliegenden Coord zur GPS Pos aus Route bestimmen(, dieser muss aber vor dem User auf der Route liegen), danach von dort die Route abgehen bis Coord mit CrossingInfo != null vorhanden.
+	private void computeNavi() {
+		// 
+		
+		this.getNearestCoordinateOnLastKnownRoute(this.lastKnownUserLocation);
+		
+		this.notifyAllNaviOutputs();
+	}
 	
+	private Coordinate getNearestCoordinateOnLastKnownRoute(Location androidLocation) {
+		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD START input Coordinate: " + androidLocation.toString());
+		float smallestDifference = Float.POSITIVE_INFINITY;
+		Coordinate closestCoordinate = new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude());
+		float[] results = new float[3];
+		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
+			Location.distanceBetween(androidLocation.getLatitude(), androidLocation.getLongitude(), coord.getLatitude(), coord.getLongitude(), results);
+			if (results[0] < smallestDifference) {
+				closestCoordinate = coord;
+			}
+		}
+		
+		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD END return Coordinate: " + closestCoordinate.toString());
+		return closestCoordinate;
+	}
+	
+	// TODO: nächsten turnAngle berechnen.
+	// Dazu nächstliegenden Coord zur GPS Pos aus Route bestimmen(, dieser muss aber vor dem User auf der Route liegen), danach von dort die Route abgehen bis Coord mit CrossingInfo != null vorhanden.
+	// 
 	
 	
 }
