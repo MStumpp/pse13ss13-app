@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
+import java.util.logging.Logger;
+
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
 /**
@@ -125,6 +127,8 @@ public class GeometryNode {
 	 * @return int depth.
 	 */
 	public int getDepth() {
+//        if (depth < 0)
+//            logger.info("depth: " + depth);
 		return depth;
 	}
 

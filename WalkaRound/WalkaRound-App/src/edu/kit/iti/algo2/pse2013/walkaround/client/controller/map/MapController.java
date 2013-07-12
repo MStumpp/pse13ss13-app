@@ -14,6 +14,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListe
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
@@ -78,7 +79,7 @@ public class MapController implements RouteListener, PositionListener,
 	private List<DisplayCoordinate> lines;
 	private RouteInfo currentRoute;
 	private int currentActiveWaypoint;
-	
+
 	private Point size;
 
 	/*
@@ -127,6 +128,7 @@ public class MapController implements RouteListener, PositionListener,
 		Log.d(TAG_MAP_CONTROLLER, "Map Controller will be initialice!");
 
 		this.user = defaultCoordinate;
+		this.currentRoute = new Route(new LinkedList<Coordinate>());
 
 		this.mapView = mv;
 		size = mv.getDisplaySize();
@@ -143,8 +145,9 @@ public class MapController implements RouteListener, PositionListener,
 		routeController.registerRouteListener(this);
 
 		PositionManager.getInstance().registerPositionListener(this);
-		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
-		
+		PositionManager.getInstance().getCompassManager()
+				.registerCompassListener(this);
+
 		Log.d(TAG_MAP_CONTROLLER,
 				"Add three Example Waypoints to routeController!");
 		// routeController.addWaypoint(new Waypoint(49.01, 8.40333,
@@ -249,8 +252,8 @@ public class MapController implements RouteListener, PositionListener,
 		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : "
 				+ distanceY);
 		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
-		
-		if(this.lockUserPosition){
+
+		if (this.lockUserPosition) {
 			Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
 			HeadUpController.getInstance().toggleUserPositionLock();
 			Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
@@ -258,8 +261,7 @@ public class MapController implements RouteListener, PositionListener,
 		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
 		this.updateRouteOverlay();
 		this.updateUserPosition();
-		
-	
+
 	}
 
 	/**
@@ -327,7 +329,10 @@ public class MapController implements RouteListener, PositionListener,
 	public void onDeletePoint(int currentId) {
 		Log.d(TAG_MAP_CONTROLLER, "Delete active Waypoint");
 		if (this.currentActiveWaypoint == currentId) {
+			this.lines.clear();
+			this.displayPoints.clear();
 			this.routeController.deleteActiveWaypoint();
+			this.updateRouteOverlay();
 		}
 	}
 
@@ -345,7 +350,6 @@ public class MapController implements RouteListener, PositionListener,
 						mapModel.getUpperLeft(),
 						mapModel.getCurrentLevelOfDetail());
 		try {
-			// TODO lösche int wenn der normelizer korreckt ist
 			CoordinateNormalizer.normalizeCoordinate(next,
 					(int) this.getCurrentLevelOfDetail());
 		} catch (IllegalArgumentException e) {
@@ -400,46 +404,52 @@ public class MapController implements RouteListener, PositionListener,
 	 * Helper Method that updateRouteOverlay
 	 */
 	private void updateRouteOverlay() {
-		if (currentRoute == null || currentRoute.getActiveWaypoint() == null) {
-			Log.e(TAG_MAP_CONTROLLER, "routeInfo wurde noch nicht übergeben");
-		} else {
 
-			this.lines = CoordinateUtility
-					.extractDisplayCoordinatesOutOfRouteInfo(currentRoute,
-							this.mapModel.getUpperLeft(),
-							this.mapModel.getCurrentLevelOfDetail());
+		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
+				currentRoute, this.mapModel.getUpperLeft(),
+				this.mapModel.getCurrentLevelOfDetail());
 
-			this.displayPoints = CoordinateUtility
-					.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
-							this.mapModel.getUpperLeft(),
-							this.mapModel.getCurrentLevelOfDetail());
+		this.displayPoints = CoordinateUtility
+				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
+						this.mapModel.getUpperLeft(),
+						this.mapModel.getCurrentLevelOfDetail());
 
-			/*
-			 * this.lines.clear(); this.displayPoints.clear();
-			 * this.lines.add(new DisplayCoordinate( 100, 100));
-			 * this.lines.add(new DisplayCoordinate( 150, 150));
-			 * this.lines.add(new DisplayCoordinate( 300, 600));
-			 * this.lines.add(new DisplayCoordinate( 350, 700));
-			 * this.lines.add(new DisplayCoordinate( 800, 400));
-			 * this.displayPoints.add(new DisplayWaypoint(100,100,1));
-			 * this.displayPoints.add(new DisplayWaypoint(300,600,2));
-			 * this.displayPoints.add(new DisplayWaypoint(800,400,3));
-			 */
+		/*
+		 * this.lines.clear(); this.displayPoints.clear(); this.lines.add(new
+		 * DisplayCoordinate( 100, 100)); this.lines.add(new DisplayCoordinate(
+		 * 150, 150)); this.lines.add(new DisplayCoordinate( 300, 600));
+		 * this.lines.add(new DisplayCoordinate( 350, 700)); this.lines.add(new
+		 * DisplayCoordinate( 800, 400)); this.displayPoints.add(new
+		 * DisplayWaypoint(100,100,1)); this.displayPoints.add(new
+		 * DisplayWaypoint(300,600,2)); this.displayPoints.add(new
+		 * DisplayWaypoint(800,400,3));
+		 */
 
-			mapView.updateDisplayWaypoints(displayPoints);
-			mapModel.shift(new DisplayCoordinate(0, 0));
-			// mapView.setActive(2);
-			// mapModel.drawDisplayCoordinates(lines);
-			mapView.setActive(currentRoute.getActiveWaypoint().getId());
+		Log.d("test3","Amount " + currentRoute.getWaypoints().size());
+		Log.d("test3","Amount " + displayPoints.size());
+
+		
+		mapView.updateDisplayWaypoints(displayPoints);
+		//mapModel.shift(new DisplayCoordinate(0, 0));
+		// mapView.setActive(2);
+		mapModel.drawDisplayCoordinates(lines);
+
+		if (this.currentRoute.getActiveWaypoint() == null) {
+			return;
 		}
+		
+		mapView.setActive(currentRoute.getActiveWaypoint().getId());
+
 	}
 
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
-		Log.d(TAG_MAP_CONTROLLER, "Route Change!");
-
-		this.currentRoute = currentRoute;
-		this.currentActiveWaypoint = currentRoute.getActiveWaypoint().getId();
+		Log.d(TAG_MAP_CONTROLLER, "Route Change! " + currentRoute.getWaypoints().size());
+		if (currentRoute != null) {
+			this.currentRoute = currentRoute;
+			this.currentActiveWaypoint = currentRoute.getActiveWaypoint()
+					.getId();
+		}
 		updateRouteOverlay();
 	}
 
@@ -463,26 +473,31 @@ public class MapController implements RouteListener, PositionListener,
 		Log.d(TAG_MAP_CONTROLLER, "MapModel is " + (mapModel != null));
 
 		if (mapModel != null) {
-			
-			double lon = - this.mapModel.getUpperLeft().getLongitude() + user.getLongitude();
-			double lat = - user.getLatitude() + this.mapModel.getUpperLeft().getLatitude();
 
-			
-			DisplayCoordinate pos = new DisplayCoordinate (
-					CoordinateUtility.convertDegreesToPixels(lon, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_LONGTITUDE)
-					,
-					CoordinateUtility.convertDegreesToPixels(lat, getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_LATITUDE)
-					);
-			
+			double lon = -this.mapModel.getUpperLeft().getLongitude()
+					+ user.getLongitude();
+			double lat = -user.getLatitude()
+					+ this.mapModel.getUpperLeft().getLatitude();
+
+			DisplayCoordinate pos = new DisplayCoordinate(
+					CoordinateUtility.convertDegreesToPixels(lon,
+							getCurrentLevelOfDetail(),
+							CoordinateUtility.DIRECTION_LONGTITUDE),
+					CoordinateUtility.convertDegreesToPixels(lat,
+							getCurrentLevelOfDetail(),
+							CoordinateUtility.DIRECTION_LATITUDE));
+
 			Log.d(TAG_MAP_CONTROLLER, "User Posi ist:" + user.toString());
 			mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
 
 			if (this.lockUserPosition) {
 				Log.d(TAG_MAP_CONTROLLER, "Position Shift Change!");
 
-				this.mapModel.shift(new DisplayCoordinate(pos.getX(), pos.getY()));
+				this.mapModel.shift(new DisplayCoordinate(pos.getX(), pos
+						.getY()));
 
-				this.mapModel.shift(new DisplayCoordinate(-size.x/2, -size.y/2));
+				this.mapModel.shift(new DisplayCoordinate(-size.x / 2,
+						-size.y / 2));
 			}
 		}
 	}
@@ -504,7 +519,7 @@ public class MapController implements RouteListener, PositionListener,
 		// TODO weiterleitung zu View sollte klappen
 		// this.mapView.onPositionChange(direction);
 		// this.mapView.onPositionChange(0.0f);
-		Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
+		//Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
 		this.mapView.setUserPositionOverlayImage(direction);
 	}
 

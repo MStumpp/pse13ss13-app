@@ -10,6 +10,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
  */
 public class GeometryProcessor {
 
+
+    /**
+     * MAX_NUMBER_CALLS.
+     */
+    private final static int MAX_NUMBER_CALLS = 1000;
+
+
     /**
      * GeometryProcessor instance.
      */
@@ -20,6 +27,24 @@ public class GeometryProcessor {
      * GeometryDataIO instance.
      */
     private GeometryDataIO geometryDataIO;
+
+
+    /**
+     * NumberMethodCalls.
+     */
+    private int numberMethodCalls = 0;
+
+
+    /**
+     * Running flag.
+     */
+    private boolean running = false;
+
+
+    /**
+     * Stop flag.
+     */
+    private boolean stop = false;
 
 
     /**
@@ -72,6 +97,8 @@ public class GeometryProcessor {
             throws GeometryProcessorException {
         if (geometrizable == null)
             throw new IllegalArgumentException("geometrizable must not be null");
+        if (running)
+            throw new GeometryProcessorException("currently running");
         return search(geometryDataIO.getRoot(), geometrizable);
     }
 
@@ -88,6 +115,8 @@ public class GeometryProcessor {
             throws GeometryProcessorException {
         if (geometrizable == null)
             throw new IllegalArgumentException("geometrizable must not be null");
+        if (running)
+            throw new GeometryProcessorException("currently running");
         return search(geometryDataIO.getRoot(), geometrizable);
     }
 
@@ -126,8 +155,12 @@ public class GeometryProcessor {
      */
     private Geometrizable search(GeometryNode root, Geometrizable search)
             throws GeometryProcessorException {
+        numberMethodCalls = 0;
+        running = true;
+        stop = false;
         GeometrizableWrapper wrapper = new GeometrizableWrapper(null);
         searchTreeDown(root, search, wrapper);
+        running = false;
         return wrapper.getGeometrizable();
     }
 
@@ -144,8 +177,16 @@ public class GeometryProcessor {
                                 GeometrizableWrapper geometrizable)
             throws GeometryProcessorException {
 
+        if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
+            stop = true;
+            return;
+        }
+        numberMethodCalls++;
+
         // compute dim
+        //logger.info("geometryDataIO.getNumDimensions(): " + geometryDataIO.getNumDimensions());
         int dim = node.getDepth() % geometryDataIO.getNumDimensions();
+        //logger.info("dim: " + dim);
 
         // if leaf, then check whether vertex of this node is better then current best
         // traverse up the tree
@@ -187,6 +228,12 @@ public class GeometryProcessor {
     private void searchTreeUp(GeometryNode node, Geometrizable search,
                               GeometrizableWrapper geometrizable, GeometryNode child)
             throws GeometryProcessorException {
+
+        if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
+            stop = true;
+            return;
+        }
+        numberMethodCalls++;
 
         // compute dim
         int dim = node.getDepth() % geometryDataIO.getNumDimensions();

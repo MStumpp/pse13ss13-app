@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,6 +24,9 @@ import java.lang.reflect.Field;
  * @version 1.0
  */
 public class GeometryDataPreprocessorTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessorTest.class);
+
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -155,11 +160,11 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
-        File graphDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.io");
+        File graphDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.io");
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/locationData.io");
+        File locationDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.io");
         Assert.assertNotNull(locationDataio);
         Assert.assertTrue(locationDataio.exists());
 
@@ -186,7 +191,7 @@ public class GeometryDataPreprocessorTest {
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
 
-        File geometryDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/geometryData.io");
+        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.io");
 
         try {
             GeometryDataIO.save(geometryDataIO, geometryDataio);
