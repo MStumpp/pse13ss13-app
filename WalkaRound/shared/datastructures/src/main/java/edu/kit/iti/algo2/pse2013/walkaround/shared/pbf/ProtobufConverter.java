@@ -146,7 +146,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		tmp_vertices = new TreeMap<Integer, Vertex>();
-		return new GeometryDataIO(getGeometryNode(saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
+		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
 		if (geometryData == null || geometryData.getRoot() == null) {
@@ -156,21 +156,21 @@ public class ProtobufConverter {
 			.setRoot(getGeometryNodeBuilder(geometryData.getRoot()))
 			.setNumDimensions(geometryData.getNumDimensions());
 	}
-	public static GeometryNode getGeometryNode(SaveGeometryNode saveNode) {
+	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode) {
 		if (saveNode == null) {
 			return null;
 		}
 		GeometryNode node;
-		//if (!saveNode.hasParent()) {
-			SaveGeometryNode parent = saveNode.hasParent()?saveNode.getParent():null;
-		//} else {
-			node = new GeometryNode(getGeometryNode(parent), saveNode.getDepth(), saveNode.getSplitValue());
-		//}
+		if (parent == null) {
+			node = new GeometryNode(saveNode.getSplitValue());
+		} else {
+			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
+		}
 		if (saveNode.hasLeft()) {
-			node.setLeftNode(getGeometryNode(saveNode.getLeft()));
+			node.setLeftNode(getGeometryNode(node, saveNode.getLeft()));
 		}
 		if (saveNode.hasRight()) {
-			node.setRightNode(getGeometryNode(saveNode.getRight()));
+			node.setRightNode(getGeometryNode(node, saveNode.getRight()));
 		}
 		if (saveNode.hasGeometrizable()) {
 			node.setGeometrizable(getGeometrizable(saveNode.getGeometrizable()));
@@ -184,9 +184,6 @@ public class ProtobufConverter {
 		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()
 			.setDepth(node.getDepth())
 			.setSplitValue(node.getSplitValue());
-		if (node.getParent() != null) {
-			builder.setParent(getGeometryNodeBuilder(node.getParent()));
-		}
 		if (node.getLeftNode() != null) {
 			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));
 		}
