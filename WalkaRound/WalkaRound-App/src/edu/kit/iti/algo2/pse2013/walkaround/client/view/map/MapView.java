@@ -248,7 +248,7 @@ public class MapView extends Activity {
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
 		
-		//this.setUserPositionOverlayImage(size.x/2,size.y/2);
+		this.setUserPositionOverlayImage(size.x/2,size.y/2);
 	}
 
 	/**
@@ -867,5 +867,21 @@ public class MapView extends Activity {
 	public POI getCurrentPOI() {
 		return currentPOI;
 	}
+
+
+	public void onCreateView(){
+		super.onDestroy();
+		Log.d(TAG_MAPVIEW, "Create View MapView");
+	}
 	
+	public void onDestroyView(){
+		super.onDestroy();
+		Log.d(TAG_MAPVIEW, "Destroy View MapView");
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG_MAPVIEW, "Destroy MapView");
+	}
 }

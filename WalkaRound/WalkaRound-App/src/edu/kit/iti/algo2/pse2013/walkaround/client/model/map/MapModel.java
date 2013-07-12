@@ -44,6 +44,9 @@ public class MapModel implements TileListener {
 	 */
 	private static MapModel mapModel;
 	private final static int DEFAULT_TILE_SIZE = 256;
+	
+	private static int defaultBackground = Color.rgb(227, 227, 227);
+	//private static int defaultBackground = Color.rgb(252, 89, 171); // violetter touch
 
 	/**
 	 * the require references
@@ -143,6 +146,8 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Map Model will initialice");
 		poiList = new LinkedList<POI>();
 		this.size = size;
+
+		//Bitmap.createScaledBitmap(empty, 1, 1, false);
 		empty = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 
 		Log.d(TAG_MAP_MODEL, "Referenzen will initialice");
@@ -200,11 +205,12 @@ public class MapModel implements TileListener {
 
 		Log.d(TAG_MAP_MODEL, "initialice map");
 
-		this.map = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		this.map = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 		this.map.prepareToDraw();
 
-		this.routeOverlayBitmap = Bitmap.createBitmap(1, 1,
+		this.routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
+		this.routeOverlayBitmap.prepareToDraw();
 
 		this.generateOverlayImages();
 
@@ -513,20 +519,24 @@ public class MapModel implements TileListener {
 
 		synchronized (this.map) {
 			mapController.onMapOverlayImageChange(empty);
-			this.map.recycle();
-			System.gc();
-			this.map = Bitmap.createBitmap(width, height,
-					Bitmap.Config.ARGB_8888);
+			//this.map.recycle();
+			//System.gc();
+			this.map.eraseColor(defaultBackground);
+			//this.map = Bitmap.createScaledBitmap(this.map, width, height, false);
+			//this.map = Bitmap.createBitmap(width, height,
+			//		Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
 		}
 
 		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
 		synchronized (this.routeOverlayBitmap) {
 			mapController.onRouteOverlayImageChange(empty);
-			this.routeOverlayBitmap.recycle();
-			System.gc();
-			this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
-					Bitmap.Config.ARGB_8888);
+			//this.routeOverlayBitmap.recycle();
+			//System.gc();
+			this.routeOverlayBitmap.eraseColor(defaultBackground);
+			//this.routeOverlayBitmap = Bitmap.createScaledBitmap(this.routeOverlayBitmap, width, height, false);
+			//this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
+			//		Bitmap.Config.ARGB_8888);
 			this.routeOverlayBitmap.prepareToDraw();
 		}
 
