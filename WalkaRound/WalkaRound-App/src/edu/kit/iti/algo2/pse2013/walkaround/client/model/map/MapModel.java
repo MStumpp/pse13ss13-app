@@ -44,10 +44,11 @@ public class MapModel implements TileListener {
 	 */
 	private static MapModel mapModel;
 	private final static int DEFAULT_TILE_SIZE = 256;
-	
+
 	private static int defaultBackground = Color.rgb(227, 227, 227);
-	private static int defaultBackgroundEmpty = Color.argb(0,0,0,0);
-	//private static int defaultBackground = Color.rgb(252, 89, 171); // violetter touch
+	private static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
+	// private static int defaultBackground = Color.rgb(252, 89, 171); //
+	// violetter touch
 
 	/**
 	 * the require references
@@ -148,7 +149,7 @@ public class MapModel implements TileListener {
 		poiList = new LinkedList<POI>();
 		this.size = size;
 
-		//Bitmap.createScaledBitmap(empty, 1, 1, false);
+		// Bitmap.createScaledBitmap(empty, 1, 1, false);
 		empty = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 
 		Log.d(TAG_MAP_MODEL, "Referenzen will initialice");
@@ -517,35 +518,24 @@ public class MapModel implements TileListener {
 
 		synchronized (this.map) {
 			mapController.onMapOverlayImageChange(empty);
-			//this.map.recycle();
-			//System.gc();
+			// this.map.recycle();
+			// System.gc();
 			this.map.eraseColor(defaultBackground);
-			//this.map = Bitmap.createScaledBitmap(this.map, width, height, false);
-			//this.map = Bitmap.createBitmap(width, height,
-			//		Bitmap.Config.ARGB_8888);
+			// this.map = Bitmap.createScaledBitmap(this.map, width, height,
+			// false);
+			// this.map = Bitmap.createBitmap(width, height,
+			// Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
-		}
-
-		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
-		synchronized (this.routeOverlayBitmap) {
-			mapController.onRouteOverlayImageChange(empty);
-			//this.routeOverlayBitmap.recycle();
-			//System.gc();
-			this.routeOverlayBitmap.eraseColor(defaultBackgroundEmpty);
-			//this.routeOverlayBitmap = Bitmap.createScaledBitmap(this.routeOverlayBitmap, width, height, false);
-			//this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
-			//		Bitmap.Config.ARGB_8888);
-			this.routeOverlayBitmap.prepareToDraw();
 		}
 
 		Log.d(TAG_MAP_MODEL, "call drawing");
 		this.fetchTiles();
 		// if(this.fetchTiles()) {
-			//this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
-			this.updatePOIofDisplay();
-			// } else {
-			Log.e(TAG_MAP_MODEL, "Could´nt fetch Tiles");
-			// }
+		// this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
+		this.updatePOIofDisplay();
+		// } else {
+		Log.e(TAG_MAP_MODEL, "Could´nt fetch Tiles");
+		// }
 	}
 
 	/**
@@ -589,7 +579,7 @@ public class MapModel implements TileListener {
 	 * @param lines
 	 *            a list of Points
 	 */
-	public void drawDisplayCoordinates(final List<DisplayCoordinate> lines) {
+	private void drawDisplayCoordinates(final List<DisplayCoordinate> lines) {
 		if (!lines.isEmpty()) {
 			Log.d("CANVAS_DRAW_LINE", "LÃ¤nge" + lines.size());
 			for (int a = 0; a < (lines.size() - 1); a++) {
@@ -647,7 +637,7 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Receive Tile!");
 
 		int tileX = x - xy[0];
-		//TODO hmm
+		// TODO hmm
 		int tileY = (y - xy[1]);
 
 		Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + tileX + " y " + tileY);
@@ -665,7 +655,10 @@ public class MapModel implements TileListener {
 									+ ((tileY * currentTileWidth) - mapOffset
 											.getY()));
 				}
-				canvas.drawBitmap(Bitmap.createScaledBitmap(tile, Math.round(currentTileWidth), Math.round(currentTileWidth), false),
+				canvas.drawBitmap(
+						Bitmap.createScaledBitmap(tile,
+								Math.round(currentTileWidth),
+								Math.round(currentTileWidth), false),
 						(tileX * currentTileWidth) - mapOffset.getX(),
 						(tileY * currentTileWidth) - mapOffset.getY(), null);
 			}
@@ -686,5 +679,23 @@ public class MapModel implements TileListener {
 			}
 		}
 		return null;
+	}
+
+	public void notifyMoveWaypoint(List<DisplayCoordinate> lines) {
+
+		Log.d(TAG_MAP_MODEL, "create Route Bitmap");
+		synchronized (this.routeOverlayBitmap) {
+			mapController.onRouteOverlayImageChange(empty);
+			// this.routeOverlayBitmap.recycle();
+			// System.gc();
+			this.routeOverlayBitmap.eraseColor(defaultBackgroundEmpty);
+			// this.routeOverlayBitmap =
+			// Bitmap.createScaledBitmap(this.routeOverlayBitmap, width, height,
+			// false);
+			// this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
+			// Bitmap.Config.ARGB_8888);
+			this.routeOverlayBitmap.prepareToDraw();
+		}
+		this.drawDisplayCoordinates(lines);
 	}
 }

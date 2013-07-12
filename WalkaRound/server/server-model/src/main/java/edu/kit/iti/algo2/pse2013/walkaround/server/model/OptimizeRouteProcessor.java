@@ -1,8 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -89,20 +89,80 @@ public class OptimizeRouteProcessor {
 		if (vertices.size() < 2)
 			throw new IllegalArgumentException(
 					"number of vertices mist be equal to or greater than 2");
-		LinkedList<Vertex> route = new LinkedList<Vertex>();
+		LinkedList<Vertex> resultRoute = new LinkedList<Vertex>();
 		Vertex start = vertices.get(0);
 		Vertex end = vertices.get(vertices.size() - 1);
+
+		List<List<Vertex>> permutations = getPermutations(vertices);
 		double lengthOfRoute = 0;
 
-		for (int i = 0; i < vertices.size() - 1; i++) {
-			route.addAll(shortestPathProcessor.computeShortestPath(
-					vertices.get(i), vertices.get(i + 1)));
+		for (int i = 0; i < permutations.size(); i++) {
+			LinkedList<Vertex> currentRoute = new LinkedList<Vertex>();
+			permutations.get(i).add(0, start);
+			permutations.get(i).add(end);
+			for (int j = 0; j < permutations.get(i).size() - 1; j++) {
+				currentRoute.addAll(shortestPathProcessor.computeShortestPath(
+						permutations.get(i).get(j),
+						permutations.get(i).get(j + 1)));
+			}
+
+			int currentLength = 0;
+			for (Iterator<Vertex> iter = currentRoute.iterator(); iter
+					.hasNext();) {
+				Vertex current = iter.next();
+				currentLength += current.getCurrentLength();
+			}
+
+			if (lengthOfRoute < currentLength) {
+				resultRoute = currentRoute;
+			}
+		}
+		return resultRoute;
+	}
+
+	private List<List<Vertex>> getPermutations(List<Vertex> listToPermutate) {
+
+		List<List<Vertex>> result = new ArrayList<List<Vertex>>();
+
+		listToPermutate.remove(0);
+		listToPermutate.remove(listToPermutate.size() - 1);
+
+		if (listToPermutate.size() == 0) {
+			return null;
 		}
 
-		for (Iterator<Vertex> iter = route.iterator(); iter.hasNext();) {
-			Vertex current = iter.next();
-			lengthOfRoute += current.getCurrentLength();
-		}
-		return route;
+		computePermutations(new ArrayList<Vertex>(), listToPermutate, result);
+
+		return result;
+
 	}
+
+	private void computePermutations(List<Vertex> beginningStrings,
+			List<Vertex> listToPermutate, List<List<Vertex>> result) {
+
+		if (listToPermutate.size() <= 1) {
+
+			List<Vertex> list = new ArrayList<Vertex>();
+			list.addAll(beginningStrings);
+			list.addAll(listToPermutate);
+
+			result.add(list);
+
+		} else {
+			for (int i = 0; i < listToPermutate.size(); i++) {
+				List<Vertex> newStrings = new ArrayList<Vertex>();
+				for (int j = 0; j < i; j++)
+					newStrings.add(listToPermutate.get(j));
+				for (int j = i + 1; j < listToPermutate.size(); j++)
+					newStrings.add(listToPermutate.get(j));
+
+				List<Vertex> newStrings2 = new ArrayList<Vertex>();
+				newStrings2.addAll(beginningStrings);
+				newStrings2.add(listToPermutate.get(i));
+
+				computePermutations(newStrings2, newStrings, result);
+			}
+		}
+	}
+
 }

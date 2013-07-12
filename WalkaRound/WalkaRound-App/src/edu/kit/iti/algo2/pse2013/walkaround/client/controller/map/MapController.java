@@ -261,6 +261,7 @@ public class MapController implements RouteListener, PositionListener,
 		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
 		this.updateRouteOverlay();
 		this.updateUserPosition();
+		this.mapModel.notifyMoveWaypoint(lines);
 
 	}
 
@@ -333,6 +334,7 @@ public class MapController implements RouteListener, PositionListener,
 			this.displayPoints.clear();
 			this.routeController.deleteActiveWaypoint();
 			this.updateRouteOverlay();
+			this.mapModel.notifyMoveWaypoint(lines);
 		}
 	}
 
@@ -350,7 +352,7 @@ public class MapController implements RouteListener, PositionListener,
 						mapModel.getUpperLeft(),
 						mapModel.getCurrentLevelOfDetail());
 		try {
-			next = CoordinateNormalizer.normalizeCoordinate(next,
+			CoordinateNormalizer.normalizeCoordinate(next,
 					(int) this.getCurrentLevelOfDetail());
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG_MAP_CONTROLLER,
@@ -377,6 +379,7 @@ public class MapController implements RouteListener, PositionListener,
 		c.setLongitude(c.getLongitude() + xDelta);
 
 		this.routeController.moveActiveWaypoint(c);
+		//this.mapModel.notifyMoveWaypoint(lines);
 	}
 
 	/**
@@ -432,7 +435,7 @@ public class MapController implements RouteListener, PositionListener,
 		mapView.updateDisplayWaypoints(displayPoints);
 		//mapModel.shift(new DisplayCoordinate(0, 0));
 		// mapView.setActive(2);
-		mapModel.drawDisplayCoordinates(lines);
+		//mapModel.drawDisplayCoordinates(lines);
 
 		if (this.currentRoute.getActiveWaypoint() == null) {
 			return;
@@ -450,7 +453,9 @@ public class MapController implements RouteListener, PositionListener,
 			this.currentActiveWaypoint = currentRoute.getActiveWaypoint()
 					.getId();
 		}
+		Log.d("ztr","LOL");
 		updateRouteOverlay();
+		mapModel.notifyMoveWaypoint(lines);
 	}
 
 	Coordinate user;
