@@ -528,9 +528,12 @@ public class MapModel implements TileListener {
 		}
 
 		Log.d(TAG_MAP_MODEL, "call drawing");
-		this.fetchTiles();
-		this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
-		this.updatePOIofDisplay();
+		if(this.fetchTiles()) {
+			this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
+			this.updatePOIofDisplay();
+		} else {
+			Log.e(TAG_MAP_MODEL, "Could´nt fetch Tiles");
+		}
 	}
 
 	/**
@@ -632,7 +635,8 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Receive Tile!");
 
 		int tileX = x - xy[0];
-		int tileY = y - xy[1];
+		//TODO hmm
+		int tileY = (y - xy[1]);
 
 		Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + tileX + " y " + tileY);
 
