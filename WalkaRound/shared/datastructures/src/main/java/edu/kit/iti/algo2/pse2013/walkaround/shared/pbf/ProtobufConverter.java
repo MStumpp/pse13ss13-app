@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
@@ -17,6 +18,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveAddress;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveArea;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveEdge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizable;
@@ -54,6 +56,27 @@ public class ProtobufConverter {
 			builder.setPostalCode(addr.getPostalCode());
 		}
 		return null;
+	}
+	public static Area getArea(SaveArea saveArea) {
+		int[] areaCats = new int[saveArea.getCategoryCount()];
+		for (int i = 0; i < areaCats.length; i++) {
+			areaCats[i] = saveArea.getCategory(i);
+		}
+		ArrayList<Coordinate> areaCoords = new ArrayList<Coordinate>();
+		for (SaveCoordinate c : saveArea.getCoordinateList()) {
+			areaCoords.add(getCoordinate(c));
+		}
+		return new Area(areaCats, areaCoords);
+	}
+	public static SaveArea.Builder getAreaBuilder(Area area) {
+		SaveArea.Builder builder = SaveArea.newBuilder();
+		for (int cat : area.getAreaCategories()) {
+			builder.addCategory(cat);
+		}
+		for (Coordinate c : area.getAreaCoordinates()) {
+			builder.addCoordinate(getCoordinateBuilder(c));
+		}
+		return builder;
 	}
 	public static Coordinate getCoordinate(SaveCoordinate saveCoord) {
 		if (saveCoord == null) {
@@ -123,7 +146,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		tmp_vertices = new TreeMap<Integer, Vertex>();
-		return new GeometryDataIO(getGeometryNode(saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
+		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
 		if (geometryData == null || geometryData.getRoot() == null) {
@@ -133,21 +156,21 @@ public class ProtobufConverter {
 			.setRoot(getGeometryNodeBuilder(geometryData.getRoot()))
 			.setNumDimensions(geometryData.getNumDimensions());
 	}
-	public static GeometryNode getGeometryNode(SaveGeometryNode saveNode) {
+	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode) {
 		if (saveNode == null) {
 			return null;
 		}
 		GeometryNode node;
-		//if (!saveNode.hasParent()) {
-			SaveGeometryNode parent = saveNode.hasParent()?saveNode.getParent():null;
-		//} else {
-			node = new GeometryNode(getGeometryNode(parent), saveNode.getDepth(), saveNode.getSplitValue());
-		//}
+		if (parent == null) {
+			node = new GeometryNode(saveNode.getSplitValue());
+		} else {
+			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
+		}
 		if (saveNode.hasLeft()) {
-			node.setLeftNode(getGeometryNode(saveNode.getLeft()));
+			node.setLeftNode(getGeometryNode(node, saveNode.getLeft()));
 		}
 		if (saveNode.hasRight()) {
-			node.setRightNode(getGeometryNode(saveNode.getRight()));
+			node.setRightNode(getGeometryNode(node, saveNode.getRight()));
 		}
 		if (saveNode.hasGeometrizable()) {
 			node.setGeometrizable(getGeometrizable(saveNode.getGeometrizable()));
@@ -161,9 +184,6 @@ public class ProtobufConverter {
 		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()
 			.setDepth(node.getDepth())
 			.setSplitValue(node.getSplitValue());
-		if (node.getParent() != null) {
-			builder.setParent(getGeometryNodeBuilder(node.getParent()));
-		}
 		if (node.getLeftNode() != null) {
 			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));
 		}
@@ -228,6 +248,9 @@ public class ProtobufConverter {
 		for (SavePOI savePOI : saveLocationData.getPOIList()) {
 			locationData.addPOI(getPOI(savePOI));
 		}
+		for (SaveArea saveArea : saveLocationData.getAreaList()) {
+			locationData.addArea(getArea(saveArea));
+		}
 		return locationData;
 	}
 	public static SaveLocationData.Builder getLocationDataBuilder(LocationDataIO locData) {
@@ -237,6 +260,9 @@ public class ProtobufConverter {
 		SaveLocationData.Builder builder = SaveLocationData.newBuilder();
 		for (POI p : locData.getPOIs()) {
 			builder.addPOI(getPOIBuilder(p));
+		}
+		for (Area a : locData.getAreas()) {
+			builder.addArea(getAreaBuilder(a));
 		}
 		return builder;
 	}

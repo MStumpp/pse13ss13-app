@@ -12,7 +12,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Vertex extends Coordinate {
+public class Vertex extends Coordinate implements Comparable {
 
     /**
      * Internally used ID of that Vertex.
@@ -186,4 +186,14 @@ public class Vertex extends Coordinate {
         return result;
     }
 
+
+    @Override
+    public int compareTo(Object o) {
+        if (this.getID() > ((Vertex)o).getID()) {
+            return 1;
+        } else if (this.getID() < ((Vertex)o).getID()) {
+            return -1;
+        } else
+            return 0;
+    }
 }

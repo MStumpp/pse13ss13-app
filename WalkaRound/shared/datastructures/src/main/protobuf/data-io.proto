@@ -30,7 +30,11 @@ message SavePOI {
 }
 message SaveLocationData {
 	repeated SavePOI p_o_i = 1;
-	//repeated Area area = 2;
+	repeated SaveArea area = 2;
+}
+message SaveArea {
+	repeated int32 category = 1;
+	repeated SaveCoordinate coordinate = 2;
 }
 
 ////////////////////////////////
@@ -66,12 +70,11 @@ message SaveGeometrizable {
 	optional SaveCoordinate coordinate = 2;
 }
 message SaveGeometryNode {
-	optional SaveGeometryNode parent = 1;
-	optional SaveGeometryNode left = 2;
-	optional SaveGeometryNode right = 3;
-	optional SaveGeometrizable geometrizable = 4;
-	optional int32 depth = 5;
-	optional double split_value = 6;
+	optional SaveGeometryNode left = 1;
+	optional SaveGeometryNode right = 2;
+	optional SaveGeometrizable geometrizable = 3;
+	optional int32 depth = 4;
+	optional double split_value = 5;
 }
 message SaveGeometryData {
 	optional SaveGeometryNode root = 1;

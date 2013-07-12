@@ -53,6 +53,12 @@ public class RoundtripProcessor {
 
 
     /**
+     * Epsilon.
+     */
+    private final static double epsilon = 0.05;
+
+
+    /**
      * Creates an instance of RoundtripProcessor.
      *
      * @param graph Graph used for shortest path computation.
@@ -150,13 +156,17 @@ public class RoundtripProcessor {
         while (!queue.isEmpty()) {
             current = queue.poll();
 
+//            if (current.getRun() == runCounter &&
+//                 current.getCurrentLength() > (1+epsilon)*length/3)
+//                continue;
+
             // stop criteria
             if (current.equals(targetVertex))
                 break;
 
             for (Edge edge : current.getOutgoingEdges()) {
+                distance = current.getCurrentLength() + edgeWeight(edge);
                 currentHead = edge.getHead();
-                distance = current.getCurrentLength() + edge.getLength();
 
                 // not yet visited during current run
                 if (currentHead.getRun() != runCounter) {
@@ -197,6 +207,21 @@ public class RoundtripProcessor {
                     + targetVertex.getID());
 
         return route;
+    }
+
+
+    /**
+     * Computes weight for a given Edge considering its length and some badness
+     * value. Badness value is based on distance to certain types of locations
+     * and can take value between 0 and 1. In case of areas, badness is either
+     * 0 or 1.
+     *
+     * @param edge Edge weight to be computed for.
+     * @return double Weight for edge considering its length and badness.
+     */
+    private double edgeWeight(Edge edge) {
+        double badness = 0.5;
+        return edge.getLength()*badness;
     }
 
 }

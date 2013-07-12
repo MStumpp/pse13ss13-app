@@ -132,19 +132,20 @@ public class SearchView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (v.equals(goButton) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(goButton)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedr�ckt");
 				if (postalCodeSearch.getText().toString().equals("")) {
 					searchMenuController.requestSuggestionsByAddress(0,
 							citySearch.getText().toString(), streetSearch
 									.getText().toString(), numberSearch
-									.getText().toString(), getActivity());
+									.getText().toString());
 				} else {
 					searchMenuController.requestSuggestionsByAddress(Integer
 							.parseInt(postalCodeSearch.getText().toString()),
 							citySearch.getText().toString(), streetSearch
 									.getText().toString(), numberSearch
-									.getText().toString(), getActivity());
+									.getText().toString());
 				}
 				// TODO: zur vorschl�gen gehen
 			}
