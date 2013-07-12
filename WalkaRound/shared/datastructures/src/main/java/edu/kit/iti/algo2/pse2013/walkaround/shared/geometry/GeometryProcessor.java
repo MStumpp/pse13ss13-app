@@ -16,12 +16,12 @@ public class GeometryProcessor {
      * MAX_NUMBER_CALLS.
      */
     private final static int MAX_NUMBER_CALLS = 300;
-<<<<<<< HEAD
 
 
+    /**
+     * TAG.
+     */
 	private static final String TAG = "GeometryProcessor";
-=======
->>>>>>> matthias-master
 
 
     /**
