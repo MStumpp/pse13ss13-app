@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.List;
 
+import android.util.Log;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;

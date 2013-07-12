@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
@@ -135,7 +136,8 @@ public class SearchView extends Fragment {
 			if (v.equals(goButton)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedr�ckt");
-				if (postalCodeSearch.getText().toString().equals("")) {
+				Log.d(TAG_PULLUP_CONTENT, "" + postalCodeSearch.getText().toString());
+				if (postalCodeSearch.getText().toString().trim().equals("")) {
 					searchMenuController.requestSuggestionsByAddress(0,
 							citySearch.getText().toString(), streetSearch
 									.getText().toString(), numberSearch
@@ -157,7 +159,8 @@ public class SearchView extends Fragment {
 
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			if (v.equals(query)) {
+			if (v.equals(query) && event.getAction() == KeyEvent.ACTION_DOWN
+					&& actionId == EditorInfo.IME_ACTION_DONE) {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
 				searchMenuController.requestSuggestionsByText(v.getText()
 						.toString());
