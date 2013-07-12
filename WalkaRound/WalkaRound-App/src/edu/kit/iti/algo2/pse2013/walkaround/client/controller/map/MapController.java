@@ -377,6 +377,7 @@ public class MapController implements RouteListener, PositionListener,
 		c.setLongitude(c.getLongitude() + xDelta);
 
 		this.routeController.moveActiveWaypoint(c);
+		this.mapModel.notifyMoveWaypoint(lines);
 	}
 
 	/**
