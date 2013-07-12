@@ -128,7 +128,7 @@ public class RoundTripView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(computeRoundtrip)) {
+			if (v.equals(computeRoundtrip) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (jogging.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(jogging.getTag().toString()),
@@ -158,7 +158,7 @@ public class RoundTripView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(jogging)) {
+			if (v.equals(jogging) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!jogging.isSelected()) {
 					setSelected(jogging);
 					setUnselected(sightseeing);
@@ -168,7 +168,7 @@ public class RoundTripView extends Fragment {
 				} else {
 					setUnselected(jogging);
 				}
-			} else if (v.equals(shopping)) {
+			} else if (v.equals(shopping) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!shopping.isSelected()) {
 					setSelected(shopping);
 					setUnselected(sightseeing);
@@ -177,7 +177,7 @@ public class RoundTripView extends Fragment {
 				} else {
 					setUnselected(shopping);
 				}
-			} else if (v.equals(sightseeing)) {
+			} else if (v.equals(sightseeing) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!sightseeing.isSelected()) {
 					setSelected(sightseeing);
 					setUnselected(jogging);
@@ -186,7 +186,7 @@ public class RoundTripView extends Fragment {
 				} else {
 					setUnselected(sightseeing);
 				}
-			} else if (v.equals(clubbing)) {
+			} else if (v.equals(clubbing) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!clubbing.isSelected()) {
 					setSelected(clubbing);
 					setUnselected(sightseeing);

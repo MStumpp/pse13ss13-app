@@ -4,6 +4,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -17,6 +19,12 @@ import java.util.*;
  * @version 1.0
  */
 public class ShortestPathProcessor {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ShortestPathProcessor.class);
+
 
     /**
      * ShortestPathProcessor instance.
@@ -110,6 +118,9 @@ public class ShortestPathProcessor {
         if (source == null || target == null)
             throw new IllegalArgumentException("source and target must be provided");
 
+        logger.info("computeShortestPath -> Start");
+        long startTime = System.currentTimeMillis();
+
         Vertex sourceVertex;
         Vertex targetVertex;
         try {
@@ -179,6 +190,13 @@ public class ShortestPathProcessor {
                     + "between source vertex with id: "
                     + sourceVertex.getID() + " and target vertex with id: "
                     + targetVertex.getID());
+
+        logger.info("computeShortestPath -> End: " + route.size());
+        long stopTime = System.currentTimeMillis();
+        long runTime = stopTime - startTime;
+        logger.info("Run time: " + runTime);
+        for (Vertex vertex : route)
+            logger.info(vertex.toString() + "\n");
 
         return route;
     }

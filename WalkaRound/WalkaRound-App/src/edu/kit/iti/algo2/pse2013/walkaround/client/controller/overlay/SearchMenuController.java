@@ -2,7 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import java.util.List;
 
-import android.content.Context;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -22,9 +21,9 @@ public class SearchMenuController {
 	}
 
 	public List<Location> requestSuggestionsByAddress(int postalCode,
-			String city, String street, String number, Context context) {
+			String city, String street, String number) {
 		Address addr = new Address(street, number, city, postalCode);
-		return POIManager.getInstance().searchPOIsByAddress(addr, context);
+		return POIManager.getInstance().searchPOIsByAddress(addr);
 	}
 
 	public List<POI> requestSuggestionsByText(String text) {

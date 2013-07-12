@@ -28,20 +28,27 @@ public final class Graph {
      * @param edges Set of Edges to build a Graph.
      */
     private Graph(Set<Edge> edges) {
-        vertices = new Vertex[5000000];
-        int currentID;
+        vertices = new Vertex[edges.size()*2];
+        Vertex currentForTail;
+        Vertex currentForHead;
         for (Edge edge : edges) {
-            currentID = edge.getTail().getID();
-            if (vertices.length <= currentID)
-                vertices = increaseArray(vertices, 1000000);
-            if (vertices[currentID] == null)
-                vertices[currentID] = edge.getTail();
-            currentID = edge.getHead().getID();
-            if (vertices.length <= currentID)
-                vertices = increaseArray(vertices, 1000000);
-            if (vertices[currentID] == null)
-                vertices[currentID] = edge.getHead();
+            currentForTail = edge.getTail();
+            if (vertices.length <= currentForTail.getID())
+                vertices = increaseArray(vertices, 100000);
+            if (vertices[currentForTail.getID()] == null)
+                vertices[currentForTail.getID()] = edge.getTail();
+            currentForHead = edge.getHead();
+            if (vertices.length <= currentForHead.getID())
+                vertices = increaseArray(vertices, 100000);
+            if (vertices[currentForHead.getID()] == null)
+                vertices[currentForHead.getID()] = edge.getHead();
+
+            // for tail, reuse current edge object
             edge.getTail().addOutgoingEdge(edge);
+            // instantiate new Edge object for reverse egde
+            Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
+            inverseEdge.setLength(edge.getLength());
+            edge.getHead().addOutgoingEdge(inverseEdge);
         }
     }
 
@@ -105,7 +112,7 @@ public final class Graph {
             throw new NoVertexForIDExistsException("id must not be greater than "
                     + (vertices.length-1));
         if (vertices[id] == null)
-            throw new NoVertexForIDExistsException("no vertex exists for id: " + id);
+            return null;
         return vertices[id];
     }
 
