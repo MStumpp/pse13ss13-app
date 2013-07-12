@@ -58,7 +58,7 @@ public class Route implements RouteInfo {
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Waypoint activeWaypoint = this.activeWaypoint;
 
-		// TODO: bestimme vorherigen und n�chsten WP an neuer Position
+		// TODO: bestimme vorherigen und nächsten WP an neuer Position
 
 		assert (newPos >= 0 && newPos <= waypoints.size());
 
@@ -365,6 +365,7 @@ public class Route implements RouteInfo {
 	 */
 	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
 		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint " + one + ", Waypoint " + two + ") METHOD START");
+		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: " + this.routeCoordinates.size());
 		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
 
 		Coordinate tempCoord = null;
@@ -390,8 +391,8 @@ public class Route implements RouteInfo {
 	 */
 	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one,
 			Coordinate two) {
-		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coordinate : "
-				+ one + ", Coordinate: " + two + ")");
+		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coordinate : " + one + ", Coordinate: " + two + ")");
+		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size " + this.routeCoordinates.size() + ", adding route size: " + route.getCoordinates().size());
 		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates
 				.indexOf(two));
 		assert (route.getStart().equals(one) && route.getEnd().equals(two));
@@ -401,8 +402,10 @@ public class Route implements RouteInfo {
 		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
 			tempCoord = routeCoordsIter.next();
 		}
-
+		
 		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
+		bridgingCoords.removeFirst();
+		bridgingCoords.removeLast();
 		int indexOfInsertion = this.routeCoordinates.indexOf(one);
 		Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size()
 				+ ", indexOfInsertion: " + indexOfInsertion
@@ -412,6 +415,7 @@ public class Route implements RouteInfo {
 			this.routeCoordinates.add(indexOfInsertion, coord);
 			indexOfInsertion++;
 		}
+		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: " + this.routeCoordinates.size());
 
 		return true;
 	}
