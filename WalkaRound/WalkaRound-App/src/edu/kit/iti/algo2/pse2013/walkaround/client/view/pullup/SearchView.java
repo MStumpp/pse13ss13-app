@@ -84,7 +84,7 @@ public class SearchView extends Fragment {
 		display.getSize(size);
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		city.setX(size.x / 18);
+		/*city.setX(size.x / 18);
 		city.getLayoutParams().width = size.x / 12;
 		street.setX(size.x / 18);
 		street.getLayoutParams().width = size.x / 12;
@@ -103,7 +103,7 @@ public class SearchView extends Fragment {
 		query.setX(0);
 		query.getLayoutParams().width = size.x;
 		goButton.setX(size.x / 4);
-		goButton.getLayoutParams().width = size.x / 2;
+		goButton.getLayoutParams().width = size.x / 2;*/
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 

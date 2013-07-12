@@ -49,10 +49,10 @@ public class FavoriteView extends Fragment {
 		display.getSize(size);
 		
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		favorite.setX((float) (size.x / 2.5));
-		favorite.getLayoutParams().width = size.x;
-		tabHost.setX(size.x * 0);
-		tabHost.getLayoutParams().width = size.x;
+		// favorite.setX((float) (size.x / 2.5));
+		//favorite.getLayoutParams().width = size.x;
+		//tabHost.setX(size.x * 0);
+		//tabHost.getLayoutParams().width = size.x;
 		tabHost.getLayoutParams().height = size.y / 5;
 		
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
