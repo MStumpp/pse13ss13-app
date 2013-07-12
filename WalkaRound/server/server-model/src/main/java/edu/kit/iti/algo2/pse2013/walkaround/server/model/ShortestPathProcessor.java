@@ -57,18 +57,6 @@ public class ShortestPathProcessor {
      */
     private ShortestPathProcessor(Graph graph) {
         this.graph = graph;
-        // set up the priority queue
-        queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
-            @Override
-            public int compare(Vertex v1, Vertex v2) {
-                if (v1.getCurrentLength() >  v2.getCurrentLength()){
-                    return 1;
-                } else if (v1.getCurrentLength() < v2.getCurrentLength()){
-                    return -1;
-                } else
-                    return 0;
-            }
-        });
         runCounter = 0;
     }
 
@@ -117,6 +105,19 @@ public class ShortestPathProcessor {
             throws NoShortestPathExistsException, ShortestPathComputeException {
         if (source == null || target == null)
             throw new IllegalArgumentException("source and target must be provided");
+
+        // set up the priority queue
+        queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
+            @Override
+            public int compare(Vertex v1, Vertex v2) {
+                if (v1.getCurrentLength() >  v2.getCurrentLength()){
+                    return 1;
+                } else if (v1.getCurrentLength() < v2.getCurrentLength()){
+                    return -1;
+                } else
+                    return 0;
+            }
+        });
 
         logger.info("computeShortestPath -> Start");
         long startTime = System.currentTimeMillis();
@@ -172,6 +173,10 @@ public class ShortestPathProcessor {
                 }
             }
         }
+
+        // free queue from memory
+        queue = null;
+        System.gc();
 
         // get the list of coordinates
         LinkedList<Vertex> route = new LinkedList<Vertex>();

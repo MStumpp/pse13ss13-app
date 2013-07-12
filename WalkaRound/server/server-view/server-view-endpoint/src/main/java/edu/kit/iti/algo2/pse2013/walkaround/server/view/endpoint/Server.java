@@ -60,6 +60,9 @@ public class Server {
             return transfer;
         }
 
+        System.out.println("source: " + source.toString());
+        System.out.println("target: " + target.toString());
+
         List<Vertex> route;
         try {
             route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
@@ -78,6 +81,8 @@ public class Server {
             transfer.setError("route is null");
             return transfer;
         }
+
+        System.out.println("number nodes in route: " + route.size());
 
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
@@ -135,6 +140,8 @@ public class Server {
             return transfer;
         }
 
+        System.out.println("source: " + source.toString());
+
         List<Vertex> route;
         try {
             route = RoundtripProcessor.getInstance().computeRoundtrip(source, profileAsInt, lengthAsInt);
@@ -153,6 +160,8 @@ public class Server {
             transfer.setError("route is null");
             return transfer;
         }
+
+        System.out.println("number nodes in route: " + route.size());
 
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
