@@ -32,7 +32,7 @@ public final class CoordinateNormalizer {
 	 *            the "tile zoom level" for which the calculation should be made
 	 * @return a normalized coordinate on a graph
 	 */
-	public static Coordinate normalizeCoordinate(Coordinate coord, int levelOfDetail) {
+	public static Coordinate normalizeCoordinate(Coordinate coord, float levelOfDetail) {
 		try {
 			return (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coord);
 		} catch (GeometryProcessorException e) {

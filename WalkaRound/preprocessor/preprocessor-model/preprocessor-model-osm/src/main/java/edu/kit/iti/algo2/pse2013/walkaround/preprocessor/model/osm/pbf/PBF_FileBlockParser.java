@@ -29,10 +29,13 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	private Map<Long, OSMNode> nodes = new TreeMap<Long, OSMNode>();
 
+	private static final Logger logger = Logger.getLogger(PBF_FileBlockParser.class.getSimpleName());
+
 	private GraphDataIO graphData;
 	private LocationDataIO locationData;
+
 	private short state = STATE_FIND_NEEDED_NODES;
-	private static int area = 0;
+	private static int readBlocks = 0;
 
 	public PBF_FileBlockParser(GraphDataIO graphData, LocationDataIO locationData) {
 		this.graphData = graphData;
@@ -41,18 +44,31 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	public void complete() {
-		System.out.println(area + " Areas");
+		System.out.println();
+		readBlocks = 0;
+		if (state == STATE_FIND_NEEDED_NODES) {
+			logger.info(String.format("Finished first run\n\t%d interesting nodes found.", nodes.size()));
+		} else if (state == STATE_PARSE_WAYS_N_POIS) {
+			logger.info(String.format("Finished second run:\n\t%d Edges found.\n\t%d POIs found.", graphData.getEdges().size(), locationData.getPOIs().size()));
+		} else if (state == STATE_FINISH) {
+			logger.info("Finished parsing!");
+		}
 		state++;
-		Logger.getLogger(this.getClass().getSimpleName()).info("Finished parsing osm-file");
-		System.out.println(nodes.size());
 	}
 	public boolean skipBlock(FileBlockPosition blockPos) {
+		if (readBlocks > 0) {
+			System.out.print('.');
+		}
+		readBlocks++;
+		if (readBlocks % 120 == 0) {
+			System.out.println();
+		}
 		return false;
 	}
 
 	@Override
 	protected void parse(HeaderBlock block) {
-		// TODO Auto-generated method stub
+		logger.info("Started parsing of file (each dot represents roundabout 8000 osm-elements):");
 	}
 
 	@Override
@@ -154,11 +170,9 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 							}
 							if (allAreaCat.accepts(way)) {
 								locationData.addArea(way.getArea());
-								area++;
 							}
 							POI poi = way.getPOI();
 							if (poi != null) {
-								System.out.println("Added Way-POI");
 								locationData.addPOI(poi);
 							}
 						}

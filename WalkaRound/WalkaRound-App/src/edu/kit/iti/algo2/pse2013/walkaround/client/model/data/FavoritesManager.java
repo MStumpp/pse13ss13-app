@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 import android.content.Context;
 import android.util.Log;
 
@@ -278,6 +277,19 @@ public class FavoritesManager implements Serializable {
 	 */
 	public boolean containsLocation(Location location) {
 		return savedLocations.containsValue(location);
+	}
+
+	/**
+	 * Returns whether the given name already exists.
+	 * @param name name to check
+	 * @return true if it exists, false otherwise
+	 */
+	public boolean containsName(String name) {
+		if (savedRoutes.keySet().contains(name)
+				|| savedLocations.keySet().contains(name)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

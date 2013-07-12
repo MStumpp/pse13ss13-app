@@ -7,8 +7,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.categ
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.category.OSMCategoryFactory;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public abstract class OSMElement {
 	protected long id;
@@ -45,15 +45,15 @@ public abstract class OSMElement {
 		}
 		return false;
 	}
-	public abstract Vertex getCenterVertex();
+	public abstract Coordinate getCenterCoordinate();
 	public String getName() {
 		return getTags().get("name");
 	}
 	public POI getPOI() {
-		Vertex v = getCenterVertex();
+		Coordinate c = getCenterCoordinate();
 		int[] poiCats = getPOICategories();
-		if (getName() != null && v != null && poiCats.length != 0) {
-			return new POI(v.getLatitude(), v.getLongitude(), getName(), null, getWikipediaURL(), poiCats, getAddress());
+		if (getName() != null && c != null && poiCats.length != 0) {
+			return new POI(c.getLatitude(), c.getLongitude(), getName(), null, getWikipediaURL(), poiCats, getAddress());
 		}
 		return null;
 	}
