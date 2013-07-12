@@ -635,7 +635,8 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Receive Tile!");
 
 		int tileX = x - xy[0];
-		int tileY = y - xy[1];
+		//TODO hmm
+		int tileY = (y - xy[1]);
 
 		Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + tileX + " y " + tileY);
 
