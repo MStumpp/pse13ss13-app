@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListe
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
-public class RoutingView extends Fragment implements RouteListener {
+public class RoutingView extends Fragment {
 
 	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
@@ -54,13 +55,7 @@ public class RoutingView extends Fragment implements RouteListener {
 		Log.d(TAG_PULLUP_CONTENT, "Create RoutingView");
 
 		favController = FavoriteMenuController.getInstance();
-		routeController = RouteController.getInstance();
-
-		Log.d(TAG_PULLUP_CONTENT, "Register on route controller");
-		if (!isListener) {
-			routeController.registerRouteListener(this);
-			isListener = true;
-		}
+		// RouteController.getInstance().registerRouteListener(this);
 
 		reset = (Button) this.getActivity().findViewById(R.id.reset);
 		invert = (ImageView) this.getActivity().findViewById(R.id.invert);
@@ -109,13 +104,18 @@ public class RoutingView extends Fragment implements RouteListener {
 		goToMap.setOnTouchListener(new backToMapListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
+
+	}
+
+	public void onDestroyView() {
+		super.onDestroyView();
+		// routeController.unregisterRouteListener(this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG_PULLUP_CONTENT, "Destroy RoutingView");
-		routeController.unregisterRouteListener(this);
+		// Log.d(TAG_PULLUP_CONTENT, "Destroy RoutingView");
 		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
 	}
 
@@ -222,22 +222,20 @@ public class RoutingView extends Fragment implements RouteListener {
 
 	}
 
-	@Override
-	public void onRouteChange(final RouteInfo currentRoute) {
+	public void onRouteChange(final RouteInfo currentRoute, Context context) {
+		
+		if (currentRoute != null) {
+			if (layout != null) {
+				// lastKnownRoute = currentRoute;
+				layout.removeAllViews();
 
-		/*
-		 * getActivity().runOnUiThread(new Runnable() { public void run() { if
-		 * (currentRoute != null) { lastKnownRoute = currentRoute;
-		 * 
-		 * for (Iterator<Waypoint> iter = lastKnownRoute
-		 * .getWaypoints().iterator(); iter.hasNext();) { Waypoint current =
-		 * iter.next(); TextView waypoint = new TextView(getActivity()
-		 * .getApplicationContext()); waypoint.setText("TEST " +
-		 * current.getName());
-		 * 
-		 * Log.d("wtf", ""+ (layout == null)); Log.d("wtf", ""+ (waypoint ==
-		 * null)); layout.addView(waypoint); } } } });
-		 */
-
+				for (Waypoint value : currentRoute.getWaypoints()) {
+					TextView waypoint = new TextView(context);
+					Log.d("routingView: ", " " + value.getName() + " " + value.getId());
+					waypoint.setText("TEST " + value.getName() + " " + value.getId());
+					layout.addView(waypoint);
+				}
+			}
+		}
 	}
 }
