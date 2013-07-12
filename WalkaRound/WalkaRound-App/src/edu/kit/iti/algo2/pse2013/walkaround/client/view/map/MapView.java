@@ -48,12 +48,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 
 /**
- * 
+ *
  * This class is the main activity of the Walkaround app. This class organize
  * the whole view and shows the drawing map and route.
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapView extends Activity {
 
@@ -167,17 +167,17 @@ public class MapView extends Activity {
 
 		String fileString = File.separatorChar + "walkaround"
 				+ File.separatorChar + "geometryData.pbf";
-		
+
 		GeometryDataIO geometryDataIO;
-		//try {
-			//geometryDataIO = GeometryDataIO.load(new File(Environment
-			//		.getExternalStorageDirectory().getAbsolutePath()
-			//		+ fileString));
-			//GeometryProcessor.init(geometryDataIO);
-		//} catch (IOException e) {
-		//	Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden.");
-		//}
-		
+		try {
+			geometryDataIO = GeometryDataIO.load(new File(Environment
+					.getExternalStorageDirectory().getAbsolutePath()
+					+ fileString));
+			GeometryProcessor.init(geometryDataIO);
+		} catch (IOException e) {
+			Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden.");
+		}
+
 		PositionManager.initialize(this);
 		POIManager.initialize(this);
 
@@ -279,7 +279,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updates the map
-	 * 
+	 *
 	 * @param b
 	 *            the new map bitmap
 	 */
@@ -303,7 +303,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the route
-	 * 
+	 *
 	 * @param b
 	 *            the new route bitmap
 	 */
@@ -329,22 +329,22 @@ public class MapView extends Activity {
 	}
 
 	/*
-	 * 
-	 * 
+	 *
+	 *
 	 * @param dip
-	 * 
+	 *
 	 * @return
-	 * 
+	 *
 	 * public int dipToPixel(float dip) { return (int)
 	 * (getResources().getDisplayMetrics().density * dip); }
-	 * 
+	 *
 	 * public float pixelToDip(int p) { return (p /
 	 * getResources().getDisplayMetrics().density); }
 	 */
 
 	/**
 	 * Change the position and the orientation of the user
-	 * 
+	 *
 	 * @param delta
 	 *            degree of the neew rotation
 	 */
@@ -363,7 +363,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the DisplayWaypoints
-	 * 
+	 *
 	 * @param displayPoints
 	 *            the new DisplayWaypoints
 	 */
@@ -422,7 +422,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the POI´s on the Display
-	 * 
+	 *
 	 * @param dp
 	 *            List of pois
 	 */
@@ -451,7 +451,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Set an new Waypoint as active
-	 * 
+	 *
 	 * @param id
 	 *            the id of the waypoint
 	 */
@@ -500,7 +500,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 */
 	public void setUserPositionOverlayImage(final float x, final float y) {
 		runOnUiThread(new Runnable() {
@@ -513,7 +513,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -529,7 +529,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -571,9 +571,9 @@ public class MapView extends Activity {
 
 	/**
 	 * A Listener who listen to the user position animation
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserAnimationListener implements AnimatorListener {
 
@@ -620,9 +620,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This is a Gesture Detector which listen to the map touches.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapGestureDetector implements OnGestureListener {
 
@@ -729,9 +729,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class forwards the touch events to the gesture detector
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -750,9 +750,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class intercept the touch events on the user arrow
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
@@ -769,9 +769,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class WaypointTouchListener implements OnTouchListener {
 
@@ -780,7 +780,7 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new Waypoint
-		 * 
+		 *
 		 * @param iv
 		 *            the new Imageview
 		 */
@@ -805,9 +805,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
 
@@ -825,9 +825,9 @@ public class MapView extends Activity {
 
 			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY()
 					+ " " + currentId);
-			
+
 			float velocity = (float) Math.sqrt((double) Math.pow(Math.abs(velocityX), 2) + (double) Math.pow(Math.abs(velocityY), 2));
-			
+
 			if (velocity > 400) {
 				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point " + currentId);
 				mc.onDeletePoint(currentId);
@@ -867,9 +867,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class POITouchListener implements OnTouchListener {
 
@@ -878,7 +878,7 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new POITouchListener
-		 * 
+		 *
 		 * @param iv
 		 *            the new Imageview
 		 */
