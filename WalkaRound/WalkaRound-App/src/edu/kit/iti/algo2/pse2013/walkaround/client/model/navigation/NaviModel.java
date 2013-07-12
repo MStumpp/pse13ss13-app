@@ -179,7 +179,8 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	private void computeNavi() {
 		this.nextCrossing = this.getNearestCoordinateWithRelevantCrossingInfo(this.lastKnownUserLocation);
-		// TODO: Berechne TURN ANGLE
+		// TODO: Berechne TURN ANGLE, BRAUCHT METHODE
+		
 		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 		this.notifyAllNaviOutputs();
 	}
@@ -201,22 +202,32 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 					closestCoordinate = coord;
 				}
 			}
-			
-			
 		}
 		
 		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD END return Coordinate: " + closestCoordinate.toString());
 		return closestCoordinate;
 	}
-	/*
+	
+	
+	
+	
+	
+	
 	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
-		Coordinate closestCoordinate = null;
+		Coordinate nearestCoordinate = null;
 		float smallestDifference = Float.POSITIVE_INFINITY;
+		double tempDifference;
+		
 		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
-			
+			 tempDifference = CoordinateUtility.calculateDifferenceInMeters(new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude()), coord);
+			 if (tempDifference < smallestDifference) {
+				 smallestDifference = (float) tempDifference;
+				 nearestCoordinate = coord;
+			 }
 		}
+		return nearestCoordinate;
 	}
-	*/
+	
 	
 	
 	
