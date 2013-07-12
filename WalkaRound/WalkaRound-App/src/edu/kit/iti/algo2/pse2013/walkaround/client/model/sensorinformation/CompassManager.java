@@ -60,7 +60,7 @@ public class CompassManager implements SensorEventListener {
 		this.magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 3");
 
-		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_NORMAL);
+		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_GAME);
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager 4");
 
 		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
