@@ -182,8 +182,8 @@ public class Route implements RouteInfo {
 				Log.d(TAG_ROUTE, "moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. " + (waypoints.indexOf(afterActive) + 1) + " / " + waypoints.size() + " in route");
 				RouteInfo newRoutePastActiveWaypoint;
 				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
-				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
-				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, beforeActive, this.activeWaypoint);
+				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, this.activeWaypoint, afterActive);
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());
