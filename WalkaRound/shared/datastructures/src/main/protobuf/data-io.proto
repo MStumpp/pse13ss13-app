@@ -70,7 +70,6 @@ message SaveGeometrizable {
 	optional SaveCoordinate coordinate = 2;
 }
 message SaveGeometryNode {
-	optional SaveGeometryNode parent = 1;
 	optional SaveGeometryNode left = 2;
 	optional SaveGeometryNode right = 3;
 	optional SaveGeometrizable geometrizable = 4;
