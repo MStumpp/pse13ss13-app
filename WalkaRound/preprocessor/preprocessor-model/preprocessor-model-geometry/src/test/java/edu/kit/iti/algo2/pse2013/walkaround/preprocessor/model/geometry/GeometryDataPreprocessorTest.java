@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,6 +24,9 @@ import java.lang.reflect.Field;
  * @version 1.0
  */
 public class GeometryDataPreprocessorTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessorTest.class);
+
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {

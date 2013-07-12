@@ -7,15 +7,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,40 +46,21 @@ public class Server {
             return transfer;
         }
 
-        Graph graph = null;
+        // project coordinate
+        Vertex source;
+        Vertex target;
         try {
-            graph = Graph.getInstance();
+            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(0));
+            target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(1));
+        } catch (GeometryProcessorException e) {
+            transfer.setError("GeometryProcessorException");
+            return transfer;
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
             return transfer;
         }
 
-        // project temporary
-        Vertex source = null;
-        Vertex target = null;
-        try {
-            source = graph.getVertexByID(0);
-            target = graph.getVertexByID(4);
-        } catch (NoVertexForIDExistsException e) {
-            transfer.setError("NoVertexForIDExistsException");
-            return transfer;
-        }
-
-        // project coordinate
-//        Vertex source = null;
-//        Vertex target = null;
-//        try {
-//            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(0));
-//            target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(1));
-//        } catch (GeometryProcessorException e) {
-//            transfer.setError("GeometryProcessorException");
-//            return transfer;
-//        } catch (InstantiationException e) {
-//            transfer.setError("InstantiationException");
-//            return transfer;
-//        }
-
-        List<Vertex> route = null;
+        List<Vertex> route;
         try {
             route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
         } catch (ShortestPathComputeException e) {
@@ -145,36 +123,19 @@ public class Server {
             return transfer;
         }
 
-        Graph graph = null;
+        // project coordinate
+        Vertex source;
         try {
-            graph = Graph.getInstance();
+            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+        } catch (GeometryProcessorException e) {
+            transfer.setError("GeometryProcessorException");
+            return transfer;
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
             return transfer;
         }
 
-        // project temporary
-        Vertex source = null;
-        try {
-            source = graph.getVertexByID(0);
-        } catch (NoVertexForIDExistsException e) {
-            transfer.setError("NoVertexForIDExistsException");
-            return transfer;
-        }
-
-        // project coordinate
-//        Vertex source = null;
-//        try {
-//            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
-//        } catch (GeometryProcessorException e) {
-//            transfer.setError("GeometryProcessorException");
-//            return transfer;
-//        } catch (InstantiationException e) {
-//            transfer.setError("InstantiationException");
-//            return transfer;
-//        }
-
-        List<Vertex> route = null;
+        List<Vertex> route;
         try {
             route = RoundtripProcessor.getInstance().computeRoundtrip(source, profileAsInt, lengthAsInt);
         } catch (ShortestPathComputeException e) {

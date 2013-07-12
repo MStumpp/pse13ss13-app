@@ -17,6 +17,9 @@ public class CrossingInformation {
     private float[] crossingAngles;
 
 
+    /**
+     * Default constructor.
+     */
     public CrossingInformation() {}
 
 
