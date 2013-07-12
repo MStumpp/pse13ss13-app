@@ -70,6 +70,7 @@ public class RouteController {
 	 * @param id of the Waypoint
 	 */
 	public void setActiveWaypoint(int id) {
+		//TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(id)");
 		for(Waypoint value: this.currentRoute.getWaypoints()){
 			if(value.getId() == id){
@@ -80,18 +81,20 @@ public class RouteController {
 	}
 	
 	public void setActiveWaypoint(Waypoint wp) {
+		//TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(Waypoint)");
 		this.currentRoute.setActiveWaypoint(wp);
 		this.notifyAllRouteListeners();
 	}
 
-	public void resetAvticeWaypoint() {
+	public void resetActiveWaypoint() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.resetActiveWaypoint()");
 		this.currentRoute.resetActiveWaypoint();
 		this.notifyAllRouteListeners();
 	}
 
 	public void moveActiveWaypointInOrder(int i) {
+		//TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.moveActiveWaypointInOrder(int)");
 		this.currentRoute.moveActiveWaypointInOrder(i);
 		this.notifyAllRouteListeners();
@@ -105,6 +108,7 @@ public class RouteController {
 	}
 
 	public void addRoundtrip(int profileID, int length) {
+		//TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(int-profile " + profileID + ", int-length " + length + ")");
 		this.currentRoute.addRoundtripAtActiveWaypoint(profileID, length);
 		this.notifyAllRouteListeners();
@@ -117,6 +121,7 @@ public class RouteController {
 	}
 
 	public void moveActiveWaypoint(Coordinate c) {
+		//TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.moveActiveWaypoint(Coordinate)");
 		this.currentRoute.moveActiveWaypoint(c);
 		this.notifyAllRouteListeners();
@@ -146,9 +151,9 @@ public class RouteController {
 		this.notifyAllRouteListeners();
 	}
 
-	public void replaceFullRoute(Route r) {
+	public void replaceFullRoute(RouteInfo r) {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.replaceFullRoute(Route)");
-		this.currentRoute = r;
+		this.currentRoute = (Route) r;
 		this.notifyAllRouteListeners();
 	}
 
@@ -158,11 +163,13 @@ public class RouteController {
 	}
 
 	public void addRouteToFavorites(RouteInfo ri, String name) {
+		//TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen, favoriten manager containsName())
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRouteToFavorites(RouteInfo, String)");
 		FavoritesManager.getInstance().addRouteToFavorites(ri, name);
 	}
 
 	public void addLocationToFavorites(Location ri, String name) {
+		//TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen, favoriten manager containsName())
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addLocationToFavorites(Location, String)");
 		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}

@@ -88,8 +88,9 @@ public class MapModel implements TileListener {
 	private int xZoomBorder;
 	private int yZoomBorder;
 
-	List<POI> poiList;
+	private List<POI> poiList;
 
+	private int[] xy = new int[2];
 
 	/*
 	 * -----------------Initialization-----------------
@@ -469,6 +470,7 @@ public class MapModel implements TileListener {
 	 */
 	public boolean generateOverlayImages() {
 
+		/*
 		if (this.currentLevelOfDetail < this.xZoomBorder
 				&& this.currentLevelOfDetail < this.yZoomBorder) {
 			Log.d(TAG_MAP_MODEL, "generiere Bitmap kleiner display ");
@@ -488,7 +490,7 @@ public class MapModel implements TileListener {
 					* DEFAULT_TILE_SIZE;
 			this.createBitmap(size.x, sizeY);
 			return true;
-		}
+		}*/
 		Log.d(TAG_MAP_MODEL, "create Bitmap greater than Display ");
 		this.createBitmap(size.x, size.y);
 		return true;
@@ -510,7 +512,7 @@ public class MapModel implements TileListener {
 			mapController.onMapOverlayImageChange(empty);
 			this.map.recycle();
 			System.gc();
-			this.map = Bitmap.createBitmap(size.x, size.y,
+			this.map = Bitmap.createBitmap(width, height,
 					Bitmap.Config.ARGB_8888);
 			this.map.prepareToDraw();
 		}
@@ -539,7 +541,14 @@ public class MapModel implements TileListener {
 	 */
 	private boolean fetchTiles() {
 
+
+		xy = TileUtility.getXYTileIndex(upperLeft,
+				Math.round(currentLevelOfDetail));
+		
 		this.mapOffset = this.computeTileOffset();
+		
+		Log.d("test","x: " + this.mapOffset.getX() + " y: " + this.mapOffset.getY());
+		Log.d("test","x: " + TileUtility.getXYTileIndex(upperLeft, (int) this.currentLevelOfDetail)[1]);
 
 		final boolean result = tileFetcher.requestTiles(
 				Math.round(currentLevelOfDetail), upperLeft, xAmount, yAmount);
@@ -619,22 +628,20 @@ public class MapModel implements TileListener {
 			final int levelOfDetail) {
 		Log.d(TAG_MAP_MODEL, "Receive Tile!");
 
+		int tileX = x - xy[0];
+		int tileY = y - xy[1];
+
+		Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + tileX + " y "
+				+ tileY);
+		
 		if (!map.isRecycled()) {
-
-			int[] xy = TileUtility.getXYTileIndex(upperLeft,
-					Math.round(currentLevelOfDetail));
-
-			int localX = x - xy[0];
-			int localY = y - xy[1];
-			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + localX + " y "
-					+ localY);
 
 			synchronized (map) {
 				if (!map.isRecycled()) {
 					Canvas canvas = new Canvas(map);
 					Log.d(TAG_MAP_MODEL, "ZEICHNE!");
-					canvas.drawBitmap(tile, (localX * tile.getWidth())
-							- mapOffset.getX(), (localY * tile.getHeight())
+					canvas.drawBitmap(tile, (tileX * tile.getWidth())
+							- mapOffset.getX(), (tileY * tile.getHeight())
 							- mapOffset.getY(), null);
 				}
 			}
