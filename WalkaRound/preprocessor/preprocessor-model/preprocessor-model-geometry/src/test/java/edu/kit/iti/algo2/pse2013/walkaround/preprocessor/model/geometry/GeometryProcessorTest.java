@@ -159,7 +159,12 @@ public class GeometryProcessorTest {
         Coordinate search6 = new Coordinate(49.1312, 8.2424);
         Coordinate search7 = new Coordinate(49.324524, 8.456456);
         Coordinate search8 = new Coordinate(100.24223434, 9.234234);
+<<<<<<< HEAD
         Coordinate search9 = new Coordinate(49.00936, 8.42705);
+=======
+        Coordinate search9 = new Coordinate(10.234324, 7.3434324);
+        Coordinate search10 = new Coordinate(49.00936, 8.42705);             // 48.659722 8.0823974
+>>>>>>> matthias-master
 
         Geometrizable geometrizable = null;
         try {
@@ -234,6 +239,14 @@ public class GeometryProcessorTest {
             logger.info("Run time: " + runTime);
             Assert.assertNotNull(geometrizable);
             logger.info("project: " + search9 + " to: " + geometrizable.toString());
+
+            startTime = System.currentTimeMillis();
+            geometrizable = geometryProcessor.getNearestVertex(search10);
+            stopTime = System.currentTimeMillis();
+            runTime = stopTime - startTime;
+            logger.info("Run time: " + runTime);
+            Assert.assertNotNull(geometrizable);
+            logger.info("project: " + search10 + " to: " + geometrizable.toString());
 
         } catch (GeometryProcessorException e) {
             e.printStackTrace();

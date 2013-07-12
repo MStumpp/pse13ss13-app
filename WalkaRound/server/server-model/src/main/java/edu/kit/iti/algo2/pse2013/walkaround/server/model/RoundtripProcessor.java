@@ -132,6 +132,9 @@ public class RoundtripProcessor {
         if (length < 100)
             throw new IllegalArgumentException("length must be at least 100 meter");
 
+        throw new ShortestPathComputeException("implementation ot finished");
+
+        /*
         Vertex sourceVertex;
         Vertex targetVertex;
         try {
@@ -188,6 +191,10 @@ public class RoundtripProcessor {
             }
         }
 
+        // free queue from memory
+        queue = null;
+        System.gc();
+
         // get the list of coordinates
         LinkedList<Vertex> route = new LinkedList<Vertex>();
         route.add(targetVertex);
@@ -206,7 +213,7 @@ public class RoundtripProcessor {
                     + sourceVertex.getID() + " and target vertex with id: "
                     + targetVertex.getID());
 
-        return route;
+        return route;*/
     }
 
 
