@@ -54,6 +54,7 @@ public class WikipediaPreprocessor {
 					String partB = wikipediaURL.substring(wikipediaURL
 							.lastIndexOf("/"));
 					wikipediaURL = partA + "/Spezial:Exportieren" + partB;
+					wikipediaURL = wikipediaURL.replaceAll(" ", "_");
 					URL url;
 					url = new URL(wikipediaURL);
 					URLConnection connection;
