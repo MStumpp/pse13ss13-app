@@ -99,8 +99,7 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
-			this.routeCoordinates.add(new Waypoint(c.getLatitude(), c
-					.getLongitude(), "Wegpunkt"));
+			this.routeCoordinates.add(c);
 		}
 		this.setActiveWaypoint(this.getEnd());
 		this.cleanRouteOfDuplicateCoordinatePairs();
@@ -195,20 +194,26 @@ public class Route implements RouteInfo {
 	}
 
 	public void deleteActiveWaypoint() {
-		Log.d(TAG_ROUTE, "deleteActiveWaypoint()");
-
+		Log.d(TAG_ROUTE, "deleteActiveWaypoint() METHOD START");
 		int indexOfActiveWaypoint = this.getWaypoints().indexOf(this.getActiveWaypoint());
 		Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
 		Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
-
+		Log.d(TAG_ROUTE, "deleteActiveWaypoint(coord) Active Waypoint is Nr. " + (indexOfActiveWaypoint + 1) + " of " + this.getWaypoints().size() + " Waypoints in route.");
+		Log.d(TAG_ROUTE, "deleteActiveWaypoint() beforeActive is " + beforeActive + ", afterActive is " + afterActive);
+		
 		if (beforeActive == null && afterActive == null) {
+		Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive == null && afterActive == null");
 			this.resetRoute();
 		} else if (beforeActive == null && afterActive != null) {
+			Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive == null && afterActive != null");
 			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+			this.routeCoordinates.remove(this.activeWaypoint);
 		} else if (beforeActive != null && afterActive == null) {
-			this.deletePathBetweenTwoWaypoints(beforeActive,
-					this.activeWaypoint);
+			Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive != null && afterActive == null");
+			this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+			this.routeCoordinates.remove(this.activeWaypoint);
 		} else if (beforeActive != null && afterActive != null) {
+			Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive != null && afterActive != null");
 			this.deletePathBetweenTwoWaypoints(beforeActive,
 					this.activeWaypoint);
 			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
