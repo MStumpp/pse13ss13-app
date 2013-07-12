@@ -531,9 +531,12 @@ public class MapModel implements TileListener {
 		}
 
 		Log.d(TAG_MAP_MODEL, "call drawing");
-		this.fetchTiles();
-		this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
-		this.updatePOIofDisplay();
+		if(this.fetchTiles()) {
+			this.drawDisplayCoordinates(this.mapController.getCurrentRouteLines());
+			this.updatePOIofDisplay();
+		} else {
+			Log.e(TAG_MAP_MODEL, "Could´nt fetch Tiles");
+		}
 	}
 
 	/**
