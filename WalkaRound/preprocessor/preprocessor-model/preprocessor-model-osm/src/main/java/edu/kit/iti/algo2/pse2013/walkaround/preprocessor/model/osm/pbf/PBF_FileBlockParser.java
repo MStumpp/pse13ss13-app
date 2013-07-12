@@ -68,7 +68,7 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 	@Override
 	protected void parse(HeaderBlock block) {
-		logger.info("Started parsing of file (each dot represents roundabout 8000 osm-elements):");
+		logger.info("Started parsing of file (each dot represents roughly 8000 osm-elements):");
 	}
 
 	@Override

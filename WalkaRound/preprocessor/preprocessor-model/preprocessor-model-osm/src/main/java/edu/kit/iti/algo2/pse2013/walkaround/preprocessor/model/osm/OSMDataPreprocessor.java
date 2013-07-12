@@ -86,7 +86,7 @@ public class OSMDataPreprocessor {
 	}
 
 	public static void main(String[] args) throws IOException {
-		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File("/home/florian/Arbeitsfläche/locationData.io"), new File("/home/florian/Arbeitsfläche/graphData.io"));
+		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.io"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.io"));
 		prep.parse();
 	}
 }
