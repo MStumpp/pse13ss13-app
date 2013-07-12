@@ -19,7 +19,9 @@ public class StereoNaviOutput implements NaviOutput {
 
 	@Override
 	public void deliverOutput(double turnAngle, double distToTurn) {
-		// TODO Auto-generated method stub
+		// TODO Android Sound dingens holen, je nach Turn Angle und Distance Töne ausgeben.
+		// TODO: Parameter, von denen Töne abhängen sind Lautstärke, Frequenz des Abspielens, Tonart, Ausgabe links/rechts
+		
 		
 	}
 

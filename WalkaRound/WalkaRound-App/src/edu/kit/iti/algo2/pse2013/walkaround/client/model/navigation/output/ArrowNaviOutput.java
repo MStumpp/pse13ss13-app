@@ -20,8 +20,7 @@ public class ArrowNaviOutput implements NaviOutput {
 
 	@Override
 	public void deliverOutput(double turnAngle, double distToTurn) {
-		// TODO Auto-generated method stub
-		
+		// TODO 
 		// HeadUpView.ARROW_RIGHT
 	}
 

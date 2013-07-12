@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.util.Log;
 
 /**
  * This class provides text-to-speech.
@@ -16,12 +17,14 @@ public final class TextToSpeechUtility implements
 
 	private static String TAG_TTSUTIL = TextToSpeechUtility.class.getSimpleName();
 	
-	private static TextToSpeechUtility instance;
-
-	private TextToSpeech tts;
-
-	public void initialize(Context context) {
-		
+	private static TextToSpeechUtility ttsUtilInstance;
+	
+	private static TextToSpeech tts;
+	private static boolean isReady;
+	
+	public static void initialize(Context context) {
+		Log.d(TAG_TTSUTIL, "initialize(Context)");
+		ttsUtilInstance = new TextToSpeechUtility(context.getApplicationContext());
 	}
 	
 	private TextToSpeechUtility(Context context) {
@@ -30,16 +33,23 @@ public final class TextToSpeechUtility implements
 	}
 	
 	public static TextToSpeechUtility getInstance() {
-		if (instance == null) {
+		if (ttsUtilInstance == null || !isReady) {
 			return null;
 		}
-		return instance;
+		return ttsUtilInstance;
 	}
-
+	
+	
 	@Override
-	public void onInit(int arg0) {
-		// TODO Auto-generated method stub
-		
+	public void onInit(int status) {
+		if (status == TextToSpeech.SUCCESS) {
+			isReady = true;
+		} else if (status == TextToSpeech.ERROR) {
+			isReady = false;
+		}
 	}
+	
+	
+	
 
 }
