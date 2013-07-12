@@ -106,6 +106,8 @@ public class RouteProcessing {
 
 				String requestAsJSON = gson.toJson(objectToSend);
 
+				Log.d(TAG_ROUTE_PROCESSING, "Built JSON: " + requestAsJSON);
+
 				httpPost.setEntity(new StringEntity(requestAsJSON));
 
 				HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -176,10 +178,8 @@ public class RouteProcessing {
 
 		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
 				new Coordinate[] {
-						new Coordinate(coordinate1.getLatitude(),
-								coordinate1.getLongitude()),
-						new Coordinate(coordinate2.getLatitude(),
-								coordinate2.getLongitude()) }, new HttpPost(
+						new Coordinate(coordinate1.getLatitude(), coordinate1.getLongitude()),
+						new Coordinate(coordinate2.getLatitude(), coordinate2.getLongitude()) }, new HttpPost(
 						URL_COMPUTESHORTESTPATH));
 		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - pre Thread");
 		Thread thread = new Thread(gsonAnswerer);
@@ -188,6 +188,7 @@ public class RouteProcessing {
 		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread");
 
 		if (gsonAnswerer.getException() != null) {
+			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", gsonAnswerer.getException());
 			throw new RouteProcessingException(gsonAnswerer.getException().toString());
 		} else {
 			Log.d(TAG_ROUTE_PROCESSING,

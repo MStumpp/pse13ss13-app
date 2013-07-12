@@ -99,6 +99,7 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	private RouteInfo route;
 	private boolean routingViewRun = false;
+	private boolean poiViewRun = false;
 	
 	/**
 	 * Gestik
@@ -237,6 +238,9 @@ public class PullUpView extends Fragment implements RouteListener {
 	 *            of the animation
 	 */
 	private void setHeight(float delta, long duration) {
+		if(poiViewRun){
+			poiView.setHeight((int)(maxHeight - main.getY() + delta));
+		}
 		TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delta);
 		anim.setDuration(duration);
 		anim.setAnimationListener(new RegulatorAnimationListener(delta
@@ -264,6 +268,7 @@ public class PullUpView extends Fragment implements RouteListener {
 	public void changeView(int id) {
 		Log.d(TAG_PULLUP, "Content Change");
 		routingViewRun = false;
+		this.poiViewRun = false;
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
 
@@ -313,6 +318,8 @@ public class PullUpView extends Fragment implements RouteListener {
 				//ft.remove(pullUpContent);
 				//pullUpContent = new POIView();
 				ft.replace(R.id.pullupContent, poiView).commit();
+				poiView.setHeight((int)halfHeight);
+				this.poiViewRun = true;
 			}
 
 			break;
@@ -558,6 +565,9 @@ public class PullUpView extends Fragment implements RouteListener {
 				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Min delta"
 						+ delta);
 				setHeight(delta, 1000);
+			}
+			if(poiViewRun){
+				poiView.setHeight((int)(maxHeight - main.getY()));
 			}
 
 		}

@@ -152,7 +152,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	public void onSpeedChange(double speed) {
 		Log.d(TAG_NAVI, "onSpeedChange(double)");
 		this.speed = speed;
-		
 	}
 
 	@Override
@@ -212,12 +211,11 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	
 	
-	
 	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
+		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + androidLocation.toString());
 		Coordinate nearestCoordinate = null;
 		float smallestDifference = Float.POSITIVE_INFINITY;
 		double tempDifference;
-		
 		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
 			 tempDifference = CoordinateUtility.calculateDifferenceInMeters(new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude()), coord);
 			 if (tempDifference < smallestDifference) {

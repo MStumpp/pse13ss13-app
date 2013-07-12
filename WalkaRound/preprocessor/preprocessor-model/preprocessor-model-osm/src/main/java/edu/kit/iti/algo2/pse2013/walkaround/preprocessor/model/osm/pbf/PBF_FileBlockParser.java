@@ -91,19 +91,17 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 
 				if (nodes.containsKey(id)) {
 					currentNode = nodes.get(id);
-				} else {
-					currentNode = new OSMNode(id, lat, lon);
-				}
-				currentNode.setLatitude(lat * granularity * .000000001);
-				currentNode.setLongitude(lon * granularity * .000000001);
+					currentNode.setLatitude(lat * granularity * .000000001);
+					currentNode.setLongitude(lon * granularity * .000000001);
 
-				int j;
-				while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
-					currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
-				}
-				POI poi = currentNode.getPOI();
-				if (poi != null) {
-					locationData.addPOI(poi);
+					int j;
+					while (keysVals.hasNext() && (j = keysVals.next()) != 0 && keysVals.hasNext()) {
+						currentNode.addTag(getStringById(j), getStringById(keysVals.next()));
+					}
+					POI poi = currentNode.getPOI();
+					if (poi != null) {
+						locationData.addPOI(poi);
+					}
 				}
 			}
 		}

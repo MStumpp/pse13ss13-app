@@ -10,6 +10,7 @@ import crosby.binary.file.BlockInputStream;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class OSMDataPreprocessor {
 
@@ -86,7 +87,7 @@ public class OSMDataPreprocessor {
 	}
 
 	public static void main(String[] args) throws IOException {
-		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.io"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.io"));
+		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.pbf"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf"));
 		prep.parse();
 	}
 }

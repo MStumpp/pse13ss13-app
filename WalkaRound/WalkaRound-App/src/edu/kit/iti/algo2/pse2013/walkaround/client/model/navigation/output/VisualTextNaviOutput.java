@@ -19,10 +19,7 @@ public class VisualTextNaviOutput implements NaviOutput {
 
 	@Override
 	public void deliverOutput(double turnAngle, double distToTurn) {
-		
-		
-		// TODO Text setzen
-		this.headUpControllerInstance.setNavigationsText("");
+		this.headUpControllerInstance.setNavigationsText("in " + distToTurn + "m ");
 	}
 
 

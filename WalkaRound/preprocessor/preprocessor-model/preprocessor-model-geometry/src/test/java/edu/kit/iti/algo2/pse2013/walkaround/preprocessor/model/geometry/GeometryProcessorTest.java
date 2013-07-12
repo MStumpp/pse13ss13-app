@@ -140,7 +140,15 @@ public class GeometryProcessorTest {
         Assert.assertNotNull(locationData);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationData);
-
+        
+        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
+        try {
+			GeometryDataIO.save(geometryDataIO, geometryDataio);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
