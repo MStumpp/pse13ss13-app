@@ -6,12 +6,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeExce
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -232,12 +236,22 @@ public class Server {
      * @return CrossingInformation for the given Vertex.
      */
     private CrossingInformation computeCrossingInformation(Vertex vertex) {
-//        double angle1 = Math.atan2(line1.getY1() - line1.getY2(),
-//                line1.getX1() - line1.getX2());
-//        double angle2 = Math.atan2(line2.getY1() - line2.getY2(),
-//                line2.getX1() - line2.getX2());
-//        return angle1-angle2;
-        return new CrossingInformation(new float[]{50.f, 100.f});
+
+        List<Float> angles = new ArrayList<Float>();
+        for (Edge edge : vertex.getOutgoingEdges()) {
+            double angle1 = Math.atan2(vertex.getParent().getLongitude() - vertex.getLongitude(),
+                vertex.getParent().getLatitude() - vertex.getLatitude());
+            double angle2 = Math.atan2(vertex.getLongitude() - edge.getHead().getLongitude(),
+                vertex.getLatitude() - edge.getHead().getLatitude());
+            angles.add(new Float(angle1-angle2));
+        }
+        float[] floatArray = new float[angles.size()];
+        for (int i = 0; i < angles.size(); i++) {
+            Float f = angles.get(i);
+            floatArray[i] = f;
+        }
+        Arrays.sort(floatArray);
+        return new CrossingInformation(floatArray);
     }
 
 }

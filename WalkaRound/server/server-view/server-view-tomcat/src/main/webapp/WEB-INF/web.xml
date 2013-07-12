@@ -9,10 +9,6 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
-    <listener>
-        <listener-class>edu.kit.iti.algo2.pse2013.walkaround.server.view.admin.Initialization</listener-class>
-    </listener>
-
     <servlet>
         <servlet-name>jersey-services</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>

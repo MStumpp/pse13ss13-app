@@ -867,4 +867,21 @@ public class MapView extends Activity {
 	public POI getCurrentPOI() {
 		return currentPOI;
 	}
+
+
+	public void onCreateView(){
+		super.onDestroy();
+		Log.d(TAG_MAPVIEW, "Create View MapView");
+	}
+	
+	public void onDestroyView(){
+		super.onDestroy();
+		Log.d(TAG_MAPVIEW, "Destroy View MapView");
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG_MAPVIEW, "Destroy MapView");
+	}
 }
