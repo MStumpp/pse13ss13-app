@@ -457,7 +457,7 @@ public class MapView extends Activity {
 	 * @param id
 	 *            the id of the waypoint
 	 */
-	public void setActive(int id) {
+	public void setActiveWaypoint(int id) {
 
 		if (currentActive != null) {
 			if (currentActive.getDrawable().equals(flagActive)) {

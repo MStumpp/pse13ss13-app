@@ -441,7 +441,7 @@ public class MapController implements RouteListener, PositionListener,
 			return;
 		}
 		
-		mapView.setActive(currentRoute.getActiveWaypoint().getId());
+		mapView.setActiveWaypoint(currentRoute.getActiveWaypoint().getId());
 
 	}
 
