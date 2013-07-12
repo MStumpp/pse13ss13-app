@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
+import java.util.List;
+
 import android.app.Fragment;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -12,12 +14,16 @@ import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class SearchView extends Fragment {
 
@@ -39,6 +45,7 @@ public class SearchView extends Fragment {
 	private EditText numberSearch;
 	private EditText query;
 	private Button goButton;
+	LinearLayout result;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public class SearchView extends Fragment {
 		TabSpec spec2 = tabHost.newTabSpec("poi_tab");
 		spec2.setContent(R.id.poi_search);
 		spec2.setIndicator("POI");
+		
+		
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
 
@@ -77,6 +86,10 @@ public class SearchView extends Fragment {
 		query = (EditText) this.getActivity().findViewById(R.id.query);
 		goButton = (Button) this.getActivity().findViewById(R.id.go_button);
 
+		result = (LinearLayout) this.getActivity().findViewById(R.id.search_result);
+		result.setVisibility(View.GONE);
+		tabHost.setVisibility(View.VISIBLE);
+		
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -161,8 +174,25 @@ public class SearchView extends Fragment {
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (v.equals(query)) {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
-				searchMenuController.requestSuggestionsByText(v.getText()
+
+				List<POI> poiS = searchMenuController.requestSuggestionsByText(v.getText()
 						.toString());
+
+				result.setVisibility(View.VISIBLE);
+				tabHost.setVisibility(View.GONE);
+
+				for (POI value : poiS) {
+					TextView waypoint = new TextView(getActivity());
+					Log.d("routingView: ", " " + value.getName() + " " + value.getId());
+					waypoint.setText("TEST " + value.getName() + " " + value.getId());
+					//TODO TextSize relativieren
+					waypoint.setTextSize(40);
+					waypoint.setPadding(10, 20, 10, 20);
+					waypoint.setBackgroundColor(MapModel.defaultBackground);
+					result.addView(waypoint);
+				}
+				
+				
 				// TODO: zur karte zur�ckkehren
 			}
 			return false;

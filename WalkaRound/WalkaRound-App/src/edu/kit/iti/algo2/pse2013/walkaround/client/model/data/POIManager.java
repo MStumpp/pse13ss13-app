@@ -253,7 +253,7 @@ public class POIManager {
 					current.getThoroughfare(), current.getSubThoroughfare(),
 					current.getLocality(), address.getPostalCode())));
 		}
-		Log.d(TAG_POIMANAGER, suggestions.get(0).toString());
+		//Log.d(TAG_POIMANAGER, suggestions.get(0).toString());
 		return suggestions;
 	}
 
