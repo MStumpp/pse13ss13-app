@@ -30,7 +30,12 @@ public class Coordinate implements Geometrizable {
      */
     private CrossingInformation crossingInformation;
 
+
+    /**
+     * Default constructor.
+     */
     public Coordinate() {}
+
 
     /**
      * Creates an instance of Coordinate.
@@ -78,21 +83,26 @@ public class Coordinate implements Geometrizable {
         return longitude;
     }
 
+
     public CrossingInformation getCrossingInformation() {
         return crossingInformation;
     }
+
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+
     public void setCrossingInformation(CrossingInformation crossingInformation) {
         this.crossingInformation = crossingInformation;
     }
+
 
     /* (non-Javadoc)
      * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
@@ -111,4 +121,5 @@ public class Coordinate implements Geometrizable {
         else
             return getLongitude();
     }
+
 }
