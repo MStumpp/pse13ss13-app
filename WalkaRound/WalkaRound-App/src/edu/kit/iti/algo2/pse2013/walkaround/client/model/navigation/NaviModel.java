@@ -15,6 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,13 +40,13 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	// Current information, used as input for navi-calculations:
 	private Location lastKnownUserLocation;
-	private Coordinate closestCoordinateOnLastKnownRouteToUserPosition;
+	private Coordinate nextCrossing;
 	private RouteInfo lastKnownRoute;
 	private Coordinate nextTurnOnRoute;
-
+	
 	// Navigation information for NaviOutput-Classes
 	private double turnAngle;
-	private int distToTurn;
+	private double distToTurn;
 	
 	// additional information for head up display.
 	private int distOnRouteInMeters;
@@ -58,7 +59,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		Log.d(TAG_NAVI, "NavigationModel initialize(Context)");
 		this.applicationContext = context.getApplicationContext();
 	}
-
+	
 	private NaviModel() {
 		Log.d(TAG_NAVI, "NavigationModel Contructor");
 		if (this.applicationContext != null) {
@@ -174,34 +175,43 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_NAVI, "onRouteCHange(RouteInfo)");
-		this.getNearestCoordinateOnLastKnownRoute(this.lastKnownUserLocation);
+		this.getNearestCoordinateWithRelevantCrossingOnLastKnownRoute(this.lastKnownUserLocation);
 		
 		
 	}
 	
 	private void computeNavi() {
-		// 
-		
-		this.getNearestCoordinateOnLastKnownRoute(this.lastKnownUserLocation);
-		
+		this.nextCrossing = this.getNearestCoordinateWithRelevantCrossingOnLastKnownRoute(this.lastKnownUserLocation);
+		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 		this.notifyAllNaviOutputs();
 	}
 	
-	private Coordinate getNearestCoordinateOnLastKnownRoute(Location androidLocation) {
+	private Coordinate getNearestCoordinateWithRelevantCrossingOnLastKnownRoute(Location androidLocation) {
 		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD START input Coordinate: " + androidLocation.toString());
 		float smallestDifference = Float.POSITIVE_INFINITY;
 		Coordinate closestCoordinate = new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude());
 		float[] results = new float[3];
 		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
-			Location.distanceBetween(androidLocation.getLatitude(), androidLocation.getLongitude(), coord.getLatitude(), coord.getLongitude(), results);
-			if (results[0] < smallestDifference) {
-				closestCoordinate = coord;
+			//TODO zweites Argument in if einbauen für relevante Crossings Prüfung
+			if (coord.getCrossingInformation().getNumCrossroads() > 2) {
+				Location.distanceBetween(androidLocation.getLatitude(), androidLocation.getLongitude(), coord.getLatitude(), coord.getLongitude(), results);
+				if (results[0] < smallestDifference) {
+					closestCoordinate = coord;
+				}
 			}
 		}
 		
 		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD END return Coordinate: " + closestCoordinate.toString());
 		return closestCoordinate;
 	}
+	
+	
+	private void flagRelevantCrossingAngle(RouteInfo ri) {
+		
+		
+	}
+	
+	
 	
 	// TODO: nächsten turnAngle berechnen.
 	// Dazu nächstliegenden Coord zur GPS Pos aus Route bestimmen(, dieser muss aber vor dem User auf der Route liegen), danach von dort die Route abgehen bis Coord mit CrossingInfo != null vorhanden.

@@ -18,7 +18,7 @@ public class StereoNaviOutput implements NaviOutput {
 	}
 
 	@Override
-	public void deliverOutput(double turnAngle, int distToTurn) {
+	public void deliverOutput(double turnAngle, double distToTurn) {
 		// TODO Auto-generated method stub
 		
 	}

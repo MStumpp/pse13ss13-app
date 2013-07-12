@@ -1,6 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
@@ -12,14 +24,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.Field;
 
 /**
  * GeometryProcessorTest.
@@ -109,11 +113,11 @@ public class GeometryProcessorTest {
     @Test
     public void testGetNearestVertexWithRealDataSet() throws InstantiationException {
 
-        File graphDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.io");
+        File graphDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf");
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/locationData.io");
+        File locationDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.pbf");
         Assert.assertNotNull(locationDataio);
         Assert.assertTrue(locationDataio.exists());
 
@@ -147,7 +151,7 @@ public class GeometryProcessorTest {
         Coordinate search6 = new Coordinate(49.1312, 8.2424);
         Coordinate search7 = new Coordinate(49.324524, 8.456456);
         Coordinate search8 = new Coordinate(100.24223434, 9.234234);
-        Coordinate search9 = new Coordinate(10.234324, 7.3434324);
+        Coordinate search9 = new Coordinate(49.00936, 8.42705);
 
         Geometrizable geometrizable = null;
         try {
