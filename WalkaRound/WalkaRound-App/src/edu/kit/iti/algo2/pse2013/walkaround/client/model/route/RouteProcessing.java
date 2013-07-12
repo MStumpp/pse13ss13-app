@@ -88,10 +88,15 @@ public class RouteProcessing {
 		public void run() {
 			InputStream is;
 			try {
+				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 1);
 				DefaultHttpClient httpClient = new DefaultHttpClient();
+				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 2);
 				HttpPost httpPost = url;
+				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 3);
 				httpPost.setHeader("Accept", "application/json");
+				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 4);
 				httpPost.setHeader("Content-Type", "application/json");
+				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + 5);
 
 				String requestAsJSON = gson.toJson(objectToSend);
 				httpPost.setEntity(new StringEntity(requestAsJSON));
@@ -100,7 +105,6 @@ public class RouteProcessing {
 				HttpEntity httpEntity = httpResponse.getEntity();
 				is = httpEntity.getContent();
 
-				// ///
 				Log.d(TAG_ROUTE_PROCESSING, "Sent JSON: " + requestAsJSON);
 
 				BufferedReader reader = new BufferedReader(
@@ -169,12 +173,14 @@ public class RouteProcessing {
 						new Coordinate(coordinate2.getLatitude(),
 								coordinate2.getLongitude()) }, new HttpPost(
 						URL_COMPUTESHORTESTPATH));
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - pre Thread");
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
 		thread.join();
-
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread");
+		
 		if (gsonAnswerer.getException() != null) {
-			gsonAnswerer.getException().printStackTrace();
+			throw new RouteProcessingException(gsonAnswerer.getException().toString());
 		} else {
 			Log.d(TAG_ROUTE_PROCESSING,
 					"Answered JSON: " + gsonAnswerer.getJSONAnswer());

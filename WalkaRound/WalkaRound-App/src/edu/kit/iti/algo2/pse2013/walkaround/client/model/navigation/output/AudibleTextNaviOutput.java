@@ -6,10 +6,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInform
 public class AudibleTextNaviOutput implements NaviOutput {
 	
 	private static AudibleTextNaviOutput audibleTextNaviOutput;
-	private HeadUpController headUpControllerInstance;
 	
 	private AudibleTextNaviOutput() {
-		this.headUpControllerInstance = HeadUpController.getInstance();
 	}
 	
 	public static NaviOutput getInstance() {
