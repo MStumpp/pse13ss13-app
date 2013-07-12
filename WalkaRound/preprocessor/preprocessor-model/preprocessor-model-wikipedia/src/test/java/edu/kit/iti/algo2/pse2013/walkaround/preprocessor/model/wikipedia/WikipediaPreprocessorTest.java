@@ -14,7 +14,7 @@ public class WikipediaPreprocessorTest {
 	@Test
 	public void testTextFetsching() throws IOException, XMLStreamException {
 		LocationDataIO locData = new LocationDataIO();
-		locData.addPOI(new POI(0, 0, "Test", null, "http://de.wikipedia.org/wiki/Badisches_Staatstheater_Karlsruhe", null));
+		locData.addPOI(new POI(0, 0, "Test", null, null, null));
 
 		WikipediaPreprocessor.preprocessWikipediaInformation(locData);
 
