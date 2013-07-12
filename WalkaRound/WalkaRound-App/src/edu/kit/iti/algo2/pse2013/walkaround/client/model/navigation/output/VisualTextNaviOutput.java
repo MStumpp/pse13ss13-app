@@ -21,6 +21,7 @@ public class VisualTextNaviOutput implements NaviOutput {
 	public void deliverOutput(double turnAngle, int distToTurn) {
 		
 		
+		// TODO Text setzen
 		this.headUpControllerInstance.setNavigationsText("");
 	}
 

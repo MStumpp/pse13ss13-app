@@ -73,7 +73,7 @@ public class Route implements RouteInfo {
 
 		this.deleteActiveWaypoint();
 
-		// this.routeProcessor.computeShortestPath(coordinate1, coordinate2)
+		// this.computeShortestPath(coordinate1, coordinate2)
 
 		// this.addRouteBetweenTwoCoords(route, one, two)
 
@@ -94,18 +94,10 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE,
 					"addWaypoint(Coordinate c) -> computing shortest path");
 			RouteInfo routeExtension;
-			try {
-				routeExtension = this.routeProcessor.computeShortestPath(
-						this.getEnd(), c);
+			routeExtension = this.computeShortestPath(this.getEnd(), c);
 
-				Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with "
-						+ routeExtension.getCoordinates().size() + " Coordinates");
-				this.addRoute(routeExtension);
-			} catch (RouteProcessingException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
+			this.addRoute(routeExtension);
 		} else {
 			this.routeCoordinates.add(new Waypoint(c.getLatitude(), c
 					.getLongitude(), "Wegpunkt"));
@@ -153,14 +145,7 @@ public class Route implements RouteInfo {
 							+ this.getEnd() + ", new Route start"
 							+ newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
-			try {
-				this.routeProcessor.computeShortestPath(this.getEnd(), newRoute.getStart());
-			} catch (RouteProcessingException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.computeShortestPath(this.getEnd(), newRoute.getStart());
 		}
 
 		newRouteCoordsIter.next();
@@ -187,36 +172,18 @@ public class Route implements RouteInfo {
 				Log.d(TAG_ROUTE,
 						"moveActiveWaypoint(coord) case beforeActive != null");
 				RouteInfo newRouteBeforeActiveWaypoint;
-				try {
-					newRouteBeforeActiveWaypoint = this.routeProcessor
-							.computeShortestPath(beforeActive, coord);
-					this.deletePathBetweenTwoWaypoints(beforeActive,
-							this.activeWaypoint);
-					this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint,
-							beforeActive, this.activeWaypoint);
-				} catch (RouteProcessingException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+					newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
+					this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+					this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, this.activeWaypoint);
 			}
 
 			if (afterActive != null) {
 				Log.d(TAG_ROUTE,
 						"moveActiveWaypoint(coord) case afterActive != null");
 				RouteInfo newRoutePastActiveWaypoint;
-				try {
-					newRoutePastActiveWaypoint = this.routeProcessor
-							.computeShortestPath(coord, afterActive);
-					this.deletePathBetweenTwoWaypoints(beforeActive,
-							this.activeWaypoint);
-					this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint,
-							beforeActive, this.activeWaypoint);
-				} catch (RouteProcessingException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, beforeActive, this.activeWaypoint);
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());
@@ -249,17 +216,9 @@ public class Route implements RouteInfo {
 			this.routeCoordinates.remove(this.activeWaypoint);
 
 			RouteInfo route;
-			try {
-				route = this.routeProcessor.computeShortestPath(
-						beforeActive, afterActive);
-				this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);
-			} catch (RouteProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			route = this.computeShortestPath(beforeActive, afterActive);
+			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);
 		}
 		this.resetActiveWaypoint();
 		this.cleanRouteOfDuplicateCoordinatePairs();
@@ -304,16 +263,6 @@ public class Route implements RouteInfo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public RouteInfo clone() {
-		Log.d(TAG_ROUTE, "clone()");
-		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
-		for (Coordinate coord : this.routeCoordinates) {
-			clonedCoords.add(coord.clone());
-		}
-		return new Route(clonedCoords);
 	}
 
 	@Override
@@ -502,8 +451,40 @@ public class Route implements RouteInfo {
 		return output;
 	}
 
-	/*
-	 * private int getNextID() { this.idCounter++; return this.idCounter; }
-	 */
+	@Override
+	public RouteInfo clone() {
+		Log.d(TAG_ROUTE, "clone()");
+		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
+		for (Coordinate coord : this.routeCoordinates) {
+			clonedCoords.add(coord.clone());
+		}
+		return new Route(clonedCoords);
+	}
+
+	
+	
+	private RouteInfo computeShortestPath(Coordinate start, Coordinate end) {
+		RouteInfo output = null;
+		try {
+			output = this.routeProcessor.computeShortestPath(start, end);
+		} catch (Exception e) {
+			Log.d(TAG_ROUTE, "computeShortestPath() - RETURN TO SENDER, ADDRESS UNKNOWN.");
+			if (output == null) {
+				LinkedList<Coordinate> coordinatesOfOutputRoute = new LinkedList<Coordinate>();
+				coordinatesOfOutputRoute.add(start);
+				coordinatesOfOutputRoute.add(end);
+				output = (RouteInfo) new Route(coordinatesOfOutputRoute);
+			}
+			e.printStackTrace();
+		}
+		return output;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }
