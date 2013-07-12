@@ -71,8 +71,8 @@ public class Location extends Coordinate {
     public Location(double lat, double lon, String name, Address address) {
     	super(lat, lon);
 		//Log.d(TAG_LOCATION, "Location Constructor: lat: " + lat + ", lon: " + lon + ", name: " + name + ", used id: " + idCounter + "");
-        if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("name must not be null and not be empty");
+        /*if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("name must not be null and not be empty");*/
         this.name = name;
         this.address = address;
         isMoveable = false;

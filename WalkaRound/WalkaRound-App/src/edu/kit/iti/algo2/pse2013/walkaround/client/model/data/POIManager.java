@@ -200,8 +200,8 @@ public class POIManager {
 			for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
 					.hasNext();) {
 				POI currentPOI = poiIter.next();
-				int difference = computeLevenstheinDistance(query.toLowerCase().trim(),
-						currentPOI.getName().toLowerCase().trim());
+				int difference = computeLevenstheinDistance(query.toLowerCase()
+						.trim(), currentPOI.getName().toLowerCase().trim());
 				if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
 					if (suggestionsMap.containsKey(difference)) {
 						suggestionsMap.get(difference).add(currentPOI);
@@ -243,18 +243,17 @@ public class POIManager {
 			addresses = geocoder.getFromLocationName(address.toString(),
 					MAX_NUMBER_OF_SUGGESTIONS);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.d(TAG_POIMANAGER, e.toString());
 		}
 		for (Iterator<android.location.Address> iter = addresses.iterator(); iter
 				.hasNext();) {
 			android.location.Address current = iter.next();
-			suggestions
-					.add(new Location(current.getLatitude(), current
-							.getLongitude(), null, new Address(current
-							.getThoroughfare(), current.getSubThoroughfare(),
-							current.getLocality(), Integer.parseInt(current
-									.getPostalCode()))));
+			suggestions.add(new Location(current.getLatitude(), current
+					.getLongitude(), current.getFeatureName(), new Address(
+					current.getThoroughfare(), current.getSubThoroughfare(),
+					current.getLocality(), address.getPostalCode())));
 		}
+		Log.d(TAG_POIMANAGER, suggestions.get(0).toString());
 		return suggestions;
 	}
 
