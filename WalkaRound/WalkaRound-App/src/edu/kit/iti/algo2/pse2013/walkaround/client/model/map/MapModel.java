@@ -228,7 +228,7 @@ public class MapModel implements TileListener {
 	 */
 	private Coordinate computeBottomRight() {
 		return CoordinateUtility.convertDisplayCoordinateToCoordinate(
-				new DisplayCoordinate(size.x / 2, size.y / 2), upperLeft,
+				new DisplayCoordinate(size.x, size.y), upperLeft,
 				currentLevelOfDetail);
 	}
 
@@ -320,10 +320,7 @@ public class MapModel implements TileListener {
 	public void updatePOIofDisplay() {
 		if (!POIManager.getInstance().isEmpty()) {
 
-			Coordinate bottomRight = CoordinateUtility
-					.convertDisplayCoordinateToCoordinate(
-							new DisplayCoordinate(size.x, size.y), upperLeft,
-							currentLevelOfDetail);
+			Coordinate bottomRight = computeBottomRight();
 
 			poiList = POIManager.getInstance().getPOIsWithinRectangle(
 					upperLeft, bottomRight, currentLevelOfDetail);
