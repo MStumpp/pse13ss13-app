@@ -56,7 +56,8 @@ public class MapView extends Activity {
 	 * Debug Information
 	 */
 	private static final String TAG_MAPVIEW = MapView.class.getSimpleName();
-	private static final String TAG_MAPVIEW_ANIMATION = TAG_MAPVIEW + "_animation";
+	private static final String TAG_MAPVIEW_ANIMATION = TAG_MAPVIEW
+			+ "_animation";
 	private static final String TAG_MAPVIEW_GESTURE = TAG_MAPVIEW + "_gestures";
 	private static final String TAG_MAPVIEW_TOUCH = TAG_MAPVIEW + "_touch";
 
@@ -216,7 +217,7 @@ public class MapView extends Activity {
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
 		mc = MapController.initialize(this);
-		
+
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
@@ -233,8 +234,8 @@ public class MapView extends Activity {
 
 		// -----------------------TEST---------------------
 		Log.d(TAG_MAPVIEW, "User wird in die Mitte gestellt.");
-		//this.setUserPositionOverlayImage(new DisplayCoordinate(
-		//		(float) size.x / 2, (float) size.y / 2), 180);
+		// this.setUserPositionOverlayImage(new DisplayCoordinate(
+		// (float) size.x / 2, (float) size.y / 2), 180);
 
 		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
@@ -247,8 +248,8 @@ public class MapView extends Activity {
 		locationManager = (LocationManager) this.getApplicationContext()
 				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
 		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-		
-		this.setUserPositionOverlayImage(size.x/2,size.y/2);
+
+		this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
 	}
 
 	/**
@@ -338,8 +339,8 @@ public class MapView extends Activity {
 				userY = y;
 			}
 		});
-		//this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY),
-		//		this.delta);
+		// this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY),
+		// this.delta);
 	}
 
 	/**
@@ -352,45 +353,53 @@ public class MapView extends Activity {
 
 		final Context context = this;
 
-		if (displayPoints == null || displayPoints.size() == 0) {
-			return;
+		if (displayPoints.size() == 0) {
+			
+			runOnUiThread(new Runnable() {
+				public void run() {
+					currentActive = null;
+					routeList.removeAllViews();
+				}
+			});
+			
+		} else {
+
+			runOnUiThread(new Runnable() {
+				public void run() {
+					currentActive = null;
+					routeList.removeAllViews();
+
+					fromX = displayPoints.get(0).getX();
+					fromY = displayPoints.get(0).getY();
+
+					for (DisplayWaypoint value : displayPoints) {
+						ImageView iv = new ImageView(context);
+						iv.setImageDrawable(waypoint);
+						iv.setY(value.getY() - sizeOfPoints);
+						iv.setX(value.getX() - sizeOfPoints / 2);
+						iv.setVisibility(View.VISIBLE);
+						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
+								(int) sizeOfPoints));
+						iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+						iv.setTag(value.getId());
+						iv.setOnTouchListener(new WaypointTouchListener(iv,
+								value.getId()));
+						routeList.addView(iv);
+					}
+
+					if (routeList.getChildCount() > 0) {
+						ImageView iv = (ImageView) routeList
+								.getChildAt((routeList.getChildCount() - 1));
+						iv.setImageDrawable(flagTarget);
+						iv.setX(iv.getX() - (sizeOfPoints / 2));
+
+						iv = (ImageView) routeList.getChildAt(0);
+						iv.setImageDrawable(flag);
+						iv.setX(iv.getX() - (sizeOfPoints / 2));
+					}
+				}
+			});
 		}
-
-		runOnUiThread(new Runnable() {
-			public void run() {
-				currentActive = null;
-				routeList.removeAllViews();
-
-				fromX = displayPoints.get(0).getX();
-				fromY = displayPoints.get(0).getY();
-
-				for (DisplayWaypoint value : displayPoints) {
-					ImageView iv = new ImageView(context);
-					iv.setImageDrawable(waypoint);
-					iv.setY(value.getY() - sizeOfPoints);
-					iv.setX(value.getX() - sizeOfPoints / 2);
-					iv.setVisibility(View.VISIBLE);
-					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
-							(int) sizeOfPoints));
-					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-					iv.setTag(value.getId());
-					iv.setOnTouchListener(new WaypointTouchListener(iv, value
-							.getId()));
-					routeList.addView(iv);
-				}
-
-				if (routeList.getChildCount() > 0) {
-					ImageView iv = (ImageView) routeList.getChildAt((routeList
-							.getChildCount() - 1));
-					iv.setImageDrawable(flagTarget);
-					iv.setX(iv.getX() - (sizeOfPoints / 2));
-
-					iv = (ImageView) routeList.getChildAt(0);
-					iv.setImageDrawable(flag);
-					iv.setX(iv.getX() - (sizeOfPoints / 2));
-				}
-			}
-		});
 	}
 
 	/**
@@ -414,7 +423,8 @@ public class MapView extends Activity {
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
 					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-					iv.setOnTouchListener(new POITouchListener(iv, value.getId()));
+					iv.setOnTouchListener(new POITouchListener(iv, value
+							.getId()));
 					poiList.addView(iv);
 				}
 			}
@@ -757,11 +767,12 @@ public class MapView extends Activity {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
 				currentId = id;
-				return waypointGestureDetector.onTouchEvent(event)	;
+				return waypointGestureDetector.onTouchEvent(event);
 			}
 			return false;
 		}
 	}
+
 	int currentId;
 	private POI currentPOI;
 
@@ -772,14 +783,12 @@ public class MapView extends Activity {
 	 * 
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
-		
-		
 
 		@Override
 		public boolean onDown(MotionEvent event) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onDown " + currentId);
 			mc.setActive(currentId);
-			//mc.getActiveWaypointId();
+			// mc.getActiveWaypointId();
 			return true;
 		}
 
@@ -787,12 +796,13 @@ public class MapView extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 
-			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY() + " " + currentId);
-			if (Math.abs(velocityY) > 1000 || Math.abs(velocityY) > 1000) {
+			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY()
+					+ " " + currentId);
+			if (Math.abs(velocityY) > 800 || Math.abs(velocityY) > 800) {
 				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point " + currentId);
 				mc.onDeletePoint(currentId);
 			}
-			
+
 			return false;
 		}
 
@@ -802,12 +812,12 @@ public class MapView extends Activity {
 		}
 
 		@Override
-		public boolean onScroll(MotionEvent event1, MotionEvent event2, float deltaX,
-				float deltaY) {
+		public boolean onScroll(MotionEvent event1, MotionEvent event2,
+				float deltaX, float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
-			
+
 			mc.onMovePoint(-deltaX, -deltaY, currentId);
-			
+
 			return true;
 		}
 
@@ -824,6 +834,7 @@ public class MapView extends Activity {
 		}
 
 	}
+
 	/**
 	 * This Class intercept the touch to waypoints
 	 * 
@@ -857,28 +868,27 @@ public class MapView extends Activity {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void onLowMemory() {
-        super.onLowMemory();
-        System.gc();
+		super.onLowMemory();
+		System.gc();
 	}
 
 	public POI getCurrentPOI() {
 		return currentPOI;
 	}
 
-
-	public void onCreateView(){
+	public void onCreateView() {
 		super.onDestroy();
 		Log.d(TAG_MAPVIEW, "Create View MapView");
 	}
-	
-	public void onDestroyView(){
+
+	public void onDestroyView() {
 		super.onDestroy();
 		Log.d(TAG_MAPVIEW, "Destroy View MapView");
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

@@ -651,7 +651,7 @@ public class MapModel implements TileListener {
 		Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + tileX + " y " + tileY);
 
 		synchronized (map) {
-			if (!map.isRecycled() && mapOff) {
+			if (!map.isRecycled() && mapOff && tile != null) {
 				Canvas canvas = new Canvas(map);
 				Log.d(TAG_MAP_MODEL, "ZEICHNE! ");
 				if (tileY == 0 && tileX == 0) {
@@ -663,7 +663,7 @@ public class MapModel implements TileListener {
 									+ ((tileY * currentTileWidth) - mapOffset
 											.getY()));
 				}
-				canvas.drawBitmap(tile,
+				canvas.drawBitmap(Bitmap.createScaledBitmap(tile, Math.round(currentTileWidth), Math.round(currentTileWidth), false),
 						(tileX * currentTileWidth) - mapOffset.getX(),
 						(tileY * currentTileWidth) - mapOffset.getY(), null);
 			}
