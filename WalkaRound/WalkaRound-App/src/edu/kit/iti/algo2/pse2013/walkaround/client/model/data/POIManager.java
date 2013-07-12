@@ -38,7 +38,7 @@ public class POIManager {
 
 	private final int NUMBER_OF_CATEGORIES = 11;
 
-	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 100;
+	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 10;
 	/**
 	 * Instance of the POIManager.
 	 */
@@ -200,8 +200,8 @@ public class POIManager {
 			for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
 					.hasNext();) {
 				POI currentPOI = poiIter.next();
-				int difference = computeLevenstheinDistance(query,
-						currentPOI.getName());
+				int difference = computeLevenstheinDistance(query.toLowerCase().trim(),
+						currentPOI.getName().toLowerCase().trim());
 				if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
 					if (suggestionsMap.containsKey(difference)) {
 						suggestionsMap.get(difference).add(currentPOI);
@@ -216,7 +216,7 @@ public class POIManager {
 				int currentKey = keyIter.next();
 				suggestions.addAll(suggestionsMap.get(currentKey));
 			}
-			Log.d(TAG_POIMANAGER, "suggestions" + suggestions.get(0));
+			// Log.d(TAG_POIMANAGER, "suggestions" + suggestions.get(0));
 			return suggestions;
 		}
 		return suggestions;
