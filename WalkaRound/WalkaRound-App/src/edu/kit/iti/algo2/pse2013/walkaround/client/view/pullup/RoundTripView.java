@@ -81,23 +81,23 @@ public class RoundTripView extends Fragment {
 		display.getSize(size);
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		meter.setX(size.x / 3 * 2);
+		//meter.setX(size.x / 3 * 2);
 		meter.getLayoutParams().width = size.x;
-		np.setX(size.x / 3);
+		//np.setX(size.x / 3);
 		np.getLayoutParams().width = size.x / 3;
-		length.setX(size.x / 10);
+		//length.setX(size.x / 10);
 		length.getLayoutParams().width = size.x / 5;
-		profiles.setX((size.x / 2.6f));
+		//profiles.setX((size.x / 2.6f));
 		profiles.getLayoutParams().width = size.x / 2;
-		jogging.setX(size.x / 6);
+		//jogging.setX(size.x / 6);
 		jogging.getLayoutParams().width = size.x / 2;
-		sightseeing.setX((size.x / 6));
+		//sightseeing.setX((size.x / 6));
 		sightseeing.getLayoutParams().width = size.x / 2;
-		shopping.setX(size.x / 6);
+		//shopping.setX(size.x / 6);
 		shopping.getLayoutParams().width = size.x / 2;
-		clubbing.setX(size.x / 6);
+		//clubbing.setX(size.x / 6);
 		clubbing.getLayoutParams().width = size.x / 2;
-		computeRoundtrip.setX(size.x / 4);
+		//computeRoundtrip.setX(size.x / 4);
 		computeRoundtrip.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");

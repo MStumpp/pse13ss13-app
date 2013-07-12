@@ -45,7 +45,7 @@ public class MapModel implements TileListener {
 	private static MapModel mapModel;
 	private final static int DEFAULT_TILE_SIZE = 256;
 
-	private static int defaultBackground = Color.rgb(227, 227, 227);
+	public static int defaultBackground = Color.rgb(227, 227, 227);
 	private static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 	// private static int defaultBackground = Color.rgb(252, 89, 171); //
 	// violetter touch
