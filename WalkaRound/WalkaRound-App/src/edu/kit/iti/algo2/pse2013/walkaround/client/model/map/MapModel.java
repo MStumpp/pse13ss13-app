@@ -46,6 +46,7 @@ public class MapModel implements TileListener {
 	private final static int DEFAULT_TILE_SIZE = 256;
 	
 	private static int defaultBackground = Color.rgb(227, 227, 227);
+	private static int defaultBackgroundEmpty = Color.argb(0,0,0,0);
 	//private static int defaultBackground = Color.rgb(252, 89, 171); // violetter touch
 
 	/**
@@ -530,7 +531,7 @@ public class MapModel implements TileListener {
 			mapController.onRouteOverlayImageChange(empty);
 			//this.routeOverlayBitmap.recycle();
 			//System.gc();
-			this.routeOverlayBitmap.eraseColor(defaultBackground);
+			this.routeOverlayBitmap.eraseColor(defaultBackgroundEmpty);
 			//this.routeOverlayBitmap = Bitmap.createScaledBitmap(this.routeOverlayBitmap, width, height, false);
 			//this.routeOverlayBitmap = Bitmap.createBitmap(width, height,
 			//		Bitmap.Config.ARGB_8888);
