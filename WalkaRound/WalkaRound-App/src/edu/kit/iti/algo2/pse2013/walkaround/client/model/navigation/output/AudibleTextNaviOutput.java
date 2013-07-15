@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 
 public class AudibleTextNaviOutput implements NaviOutput {
 	
