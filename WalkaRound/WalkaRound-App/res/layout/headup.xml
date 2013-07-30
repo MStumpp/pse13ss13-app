@@ -11,7 +11,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/user_arrow_80x100_lock" />
+        android:src="@drawable/user_arrow_lock" />
 
     <ImageView
         android:id="@+id/headup_option"
@@ -20,7 +20,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/options_100x100" />
+        android:src="@drawable/options" />
 
     <ImageView
         android:id="@+id/headup_controll"
@@ -29,7 +29,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/play_100x100" />
+        android:src="@drawable/play" />
 
     <ImageView
         android:id="@+id/headup_pikto"
@@ -39,7 +39,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/headup_navitext"
         android:scaleType="fitCenter"
-        android:src="@drawable/pikto_rechts_100x100"
+        android:src="@drawable/pikto_rechts"
         android:visibility="gone" />
 
     <TextView

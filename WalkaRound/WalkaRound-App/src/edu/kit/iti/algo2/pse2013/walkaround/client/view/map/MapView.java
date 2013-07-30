@@ -75,7 +75,7 @@ public class MapView extends Activity {
 	/**
 	 * Default Pictures
 	 */
-	public static final int USER_ARROW_IMAGE = R.drawable.user_arrow_30x38;
+	public static final int USER_ARROW_IMAGE = R.drawable.user_arrow;
 	public static final int DEFAULT_PATTERN = R.drawable.fog;
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;

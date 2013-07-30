@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="TODO"
         android:scaleType="center"
-        android:src="@drawable/user_arrow_30x38" />
+        android:src="@drawable/user_arrow" />
 
     <RelativeLayout
         android:id="@+id/headup_container"
