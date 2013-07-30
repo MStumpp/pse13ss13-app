@@ -13,9 +13,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -40,12 +38,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 // Android Library
 // Walkaround Library
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 
 /**
  *
@@ -122,7 +119,7 @@ public class MapView extends Activity {
 	 * Gestik
 	 */
 	private GestureDetector gestureDetector;
-	private GestureOverlayView mapGest;
+//	private GestureOverlayView mapGest;
 
 	/**
 	 * Routen
@@ -131,7 +128,7 @@ public class MapView extends Activity {
 	private RelativeLayout routeList;
 	private RelativeLayout poiList;
 	private float sizeOfPoints;
-	private int sizeOfRoute = 6;
+//	private int sizeOfRoute = 6;
 
 	/**
 	 *
@@ -140,7 +137,7 @@ public class MapView extends Activity {
 
 	private Point size;
 
-	private Canvas canvas;
+//	private Canvas canvas;
 	private Bitmap routeOverlayBitmap;
 
 	private float fromX;

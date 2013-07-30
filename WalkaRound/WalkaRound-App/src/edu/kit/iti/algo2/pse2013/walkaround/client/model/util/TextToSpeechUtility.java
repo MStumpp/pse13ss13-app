@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
