@@ -349,7 +349,7 @@ public class MapController implements RouteListener, PositionListener,
 
 		Coordinate next = CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
-						mapModel.getUpperLeft(),
+						mapModel.getTopLeft(),
 						mapModel.getCurrentLevelOfDetail());
 		try {
 			CoordinateNormalizer.normalizeCoordinate(next,
@@ -409,12 +409,12 @@ public class MapController implements RouteListener, PositionListener,
 	private void updateRouteOverlay() {
 
 		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
-				currentRoute, this.mapModel.getUpperLeft(),
+				currentRoute, this.mapModel.getTopLeft(),
 				this.mapModel.getCurrentLevelOfDetail());
 
 		this.displayPoints = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
-						this.mapModel.getUpperLeft(),
+						this.mapModel.getTopLeft(),
 						this.mapModel.getCurrentLevelOfDetail());
 
 		/*
@@ -479,15 +479,15 @@ public class MapController implements RouteListener, PositionListener,
 
 		if (mapModel != null) {
 
-			double lon = -this.mapModel.getUpperLeft().getLongitude()
+			double lon = -this.mapModel.getTopLeft().getLongitude()
 					+ user.getLongitude();
 			double lat = -user.getLatitude()
-					+ this.mapModel.getUpperLeft().getLatitude();
+					+ this.mapModel.getTopLeft().getLatitude();
 
 			DisplayCoordinate pos = new DisplayCoordinate(
 					CoordinateUtility.convertDegreesToPixels(lon,
 							getCurrentLevelOfDetail(),
-							CoordinateUtility.DIRECTION_LONGTITUDE),
+							CoordinateUtility.DIRECTION_LONGITUDE),
 					CoordinateUtility.convertDegreesToPixels(lat,
 							getCurrentLevelOfDetail(),
 							CoordinateUtility.DIRECTION_LATITUDE));
