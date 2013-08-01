@@ -6,7 +6,7 @@ import android.test.suitebuilder.TestSuiteBuilder;
 
 
 /**
- * A test suite containing all tests for my application.
+ * A test suite containing all tests for the application.
  */
 public class AllTests extends TestSuite {
     public static Test suite() {

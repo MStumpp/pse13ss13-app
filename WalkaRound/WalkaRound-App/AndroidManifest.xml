@@ -48,6 +48,6 @@
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:label="Tests for WalkAround"
-        android:targetPackage="edu.kit.iti.algo2.pse2013.walkaround.client.view.test" />
+        android:targetPackage="edu.kit.iti.algo2.pse2013.walkaround.test" />
 
 </manifest>

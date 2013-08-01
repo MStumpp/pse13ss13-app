@@ -138,6 +138,11 @@ public class TileFetcher {
 				} catch (IOException e) {
 					Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, url));
 					Log.e(TAG, e.getLocalizedMessage());
+				} catch (OutOfMemoryError e) {
+					Log.e(TAG, "Out of Memory!");
+					Log.e(TAG, e.toString());
+					cache.clear();
+					System.gc();
 				}
 			}
 		}
