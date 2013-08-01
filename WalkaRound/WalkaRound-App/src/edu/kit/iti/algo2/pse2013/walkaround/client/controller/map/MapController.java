@@ -220,7 +220,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
-		return this.mapModel.getCurrentLevelOfDetail();
+		return this.lod;
 	}
 
 	/**
@@ -318,8 +318,15 @@ public class MapController implements RouteListener, PositionListener,
 	public void onZoom(float delta, DisplayCoordinate dc) {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
 				+ dc.toString() + " will be forwarding to MapModel");
-		this.mapModel.zoom(delta, dc);
-		this.updateRouteOverlay();
+		if(lod + delta <= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() &&
+				lod + delta >= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail()) {
+			lod += delta;
+			center = new Coordinate(center,
+					CoordinateUtility.convertPixelsToDegrees(dc.getY(), lod, CoordinateUtility.DIRECTION_LONGITUDE),
+					CoordinateUtility.convertPixelsToDegrees(dc.getX(), lod, CoordinateUtility.DIRECTION_LONGITUDE)		
+					);
+			map.generateMap(center, lod);
+		}
 	}
 
 	/**
@@ -331,8 +338,13 @@ public class MapController implements RouteListener, PositionListener,
 	public void onZoom(float delta) {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
 				+ " will be forwarding to MapModel");
-		this.mapModel.zoom(delta);
-		this.updateRouteOverlay();
+		
+		if(lod + delta <= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() &&
+				lod + delta >= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail()) {
+			lod += delta;
+			map.generateMap(center, lod);
+		}
+		
 	}
 
 	/*

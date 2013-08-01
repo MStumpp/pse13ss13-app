@@ -159,7 +159,7 @@ public class Map extends Thread implements TileListener {
 
 		Log.d("latDiff", "" + (yDiff - 255 - 100));
 		Log.d("lonDiff", "" + (xDiff - 10));
-		return new DisplayCoordinate(xDiff, yDiff - 255 - 100);
+		return new DisplayCoordinate(xDiff, yDiff);
 	}
 
 	/**
