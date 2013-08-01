@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import android.content.Context;
 import android.location.GpsStatus.Listener;
 import android.location.Location;
@@ -126,6 +128,12 @@ public class PositionManager implements Listener {
 		Log.d(TAG_POSITION_MANAGER,
 				"notify " + (positionListeners != null));
 		if (this.lastKnownLocation != null) {
+			Log.d(TAG_POSITION_MANAGER, lastKnownLocation.toString());
+			try{
+				Log.d(TAG_POSITION_MANAGER, MapController.getInstance().getCenter().toString());
+			} catch(NullPointerException e) {
+				
+			}
 			for (PositionListener pl : this.positionListeners) {
 				Log.d(TAG_POSITION_MANAGER,
 						"notify " + (pl != null));

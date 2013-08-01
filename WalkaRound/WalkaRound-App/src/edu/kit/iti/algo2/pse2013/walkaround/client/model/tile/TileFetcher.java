@@ -24,7 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class TileFetcher {
 	private static final String TAG = TileFetcher.class.getSimpleName();
-	private static final int MAX_CACHE_SIZE = 250;
+	private static final int MAX_CACHE_SIZE = 150;
 	private TreeMap<String, TimestampedBitmap> cache = new TreeMap<String, TimestampedBitmap>();
 	private FetchingQueue currentRunnable = new FetchingQueue();
 	private Thread currentThread = new Thread(currentRunnable);
@@ -75,15 +75,24 @@ public class TileFetcher {
 
 				final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
 				if (cache.containsKey(urlString)) {
-					Log.d(TAG, String.format("Fetched tile from cache: %s (%s/%s/%s.png)", cache.get(urlString).getBitmap(), levelOfDetail, x, y));
-					listener.receiveTile(cache.get(urlString).getBitmap(), x, y, levelOfDetail);
-					cache.get(urlString).updateTimestamp();
+					
+					try{
+						Log.d(TAG, String.format("Fetched tile from cache: %s (%s/%s/%s.png)", cache.get(urlString).getBitmap(), levelOfDetail, x, y));
+						listener.receiveTile(cache.get(urlString).getBitmap(), x, y, levelOfDetail);
+						cache.get(urlString).updateTimestamp();
+					} catch(NullPointerException e) {
+						Log.e(TAG, "Memory BUG");
+						Log.e(TAG, e.toString());
+					}
+					
 				} else {
+					
 					currentRunnable.offerQueue(urlString, x, y, levelOfDetail);
 					if (!currentThread.isAlive()) {
 						currentThread = new Thread(currentRunnable);
 						currentThread.start();
 					}
+					
 				}
 			}
 		}
