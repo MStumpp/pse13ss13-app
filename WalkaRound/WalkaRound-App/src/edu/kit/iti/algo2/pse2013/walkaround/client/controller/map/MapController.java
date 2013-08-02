@@ -14,7 +14,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListe
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapGen;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.POIGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.RouteGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;

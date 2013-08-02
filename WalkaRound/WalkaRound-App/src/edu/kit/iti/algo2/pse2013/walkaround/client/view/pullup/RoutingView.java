@@ -16,7 +16,7 @@ import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -236,7 +236,7 @@ public class RoutingView extends Fragment {
 					//TODO TextSize relativieren
 					waypoint.setTextSize(40);
 					waypoint.setPadding(10, 20, 10, 20);
-					waypoint.setBackgroundColor(MapModel.defaultBackground);
+					waypoint.setBackgroundColor(MapGen.defaultBackground);
 					layout.addView(waypoint);
 				}
 			}

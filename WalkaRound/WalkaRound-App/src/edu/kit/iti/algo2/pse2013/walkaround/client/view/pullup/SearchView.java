@@ -22,7 +22,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -188,7 +188,7 @@ public class SearchView extends Fragment {
 					// TODO TextSize relativieren
 					poi.setTextSize(40);
 					poi.setPadding(10, 20, 10, 20);
-					poi.setBackgroundColor(MapModel.defaultBackground);
+					poi.setBackgroundColor(MapGen.defaultBackground);
 					result.addView(poi);
 				}
 

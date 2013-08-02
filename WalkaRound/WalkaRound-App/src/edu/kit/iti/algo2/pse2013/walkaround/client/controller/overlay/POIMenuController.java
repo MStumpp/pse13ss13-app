@@ -2,7 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 
 public class POIMenuController {
 	private static POIMenuController instance;

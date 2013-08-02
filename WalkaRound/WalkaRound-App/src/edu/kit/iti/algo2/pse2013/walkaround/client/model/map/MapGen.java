@@ -20,7 +20,7 @@ public class MapGen extends Thread implements TileListener {
 	/**
 	 * Debug Tag
 	 */
-	private static String TAG_MAP_MODEL = MapModel.class.getSimpleName();
+	private static String TAG_MAP_MODEL = MapGen.class.getSimpleName();
 
 	/**
 	 * 
