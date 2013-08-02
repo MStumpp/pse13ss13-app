@@ -11,7 +11,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class RouteController {
-	
+
+	public class Routelistener {
+
+	}
+
 	private static String TAG_ROUTE_CONTROLLER = "RouteController";
 
 	private static final String TAG = RouteController.class.getSimpleName();
@@ -36,27 +40,38 @@ public class RouteController {
 	}
 
 	public void registerRouteListener(RouteListener newRL) {
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.registerRouteListener(RouteListener " + newRL.getClass().getSimpleName() + ")");
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.registerRouteListener(RouteListener "
+						+ newRL.getClass().getSimpleName() + ")");
 		if (!this.routeListeners.contains(newRL)) {
 			this.routeListeners.add(newRL);
 		}
 		this.notifyAllRouteListeners();
 	}
-	
+
 	public void unregisterRouteListener(RouteListener formerRL) {
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.unregisterRouteListener(RouteListener " + formerRL.getClass().getSimpleName() + ")");
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.unregisterRouteListener(RouteListener "
+						+ formerRL.getClass().getSimpleName() + ")");
 		if (!this.routeListeners.contains(formerRL)) {
 			this.routeListeners.remove(formerRL);
 		}
 	}
 
 	private void notifyAllRouteListeners() {
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.notifyAllRouteListeners() - sending Route with " + this.currentRoute.getCoordinates().size() + " Coordinates and " + this.currentRoute.getWaypoints().size() + " Waypoints to " + this.routeListeners.size() + " listeners.");
-		Log.d(TAG_ROUTE_CONTROLLER, "Coordinates of Route: " + this.currentRoute);
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.notifyAllRouteListeners() - sending Route with "
+						+ this.currentRoute.getCoordinates().size()
+						+ " Coordinates and "
+						+ this.currentRoute.getWaypoints().size()
+						+ " Waypoints to " + this.routeListeners.size()
+						+ " listeners.");
+		Log.d(TAG_ROUTE_CONTROLLER, "Coordinates of Route: "
+				+ this.currentRoute);
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if (this.currentRoute != null && activeWaypoint != null) {
 			for (RouteListener rl : this.routeListeners) {
-				rl.onRouteChange((RouteInfo)this.currentRoute);
+				rl.onRouteChange((RouteInfo) this.currentRoute);
 			}
 		}
 	}
@@ -64,22 +79,24 @@ public class RouteController {
 	/**
 	 * Sets a Waypoint active by his id
 	 * 
-	 * @param id of the Waypoint
+	 * @param id
+	 *            of the Waypoint
 	 */
 	public void setActiveWaypoint(int id) {
-		//TODO: in boolean ändern
+		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(id)");
-		for(Waypoint value: this.currentRoute.getWaypoints()){
-			if(value.getId() == id){
+		for (Waypoint value : this.currentRoute.getWaypoints()) {
+			if (value.getId() == id) {
 				this.setActiveWaypoint(value);
 				return;
 			}
 		}
 	}
-	
+
 	public void setActiveWaypoint(Waypoint wp) {
-		//TODO: in boolean ändern
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(Waypoint)");
+		// TODO: in boolean ändern
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.setActiveWaypoint(Waypoint)");
 		this.currentRoute.setActiveWaypoint(wp);
 		this.notifyAllRouteListeners();
 	}
@@ -91,8 +108,9 @@ public class RouteController {
 	}
 
 	public void moveActiveWaypointInOrder(int i) {
-		//TODO: in boolean ändern
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.moveActiveWaypointInOrder(int)");
+		// TODO: in boolean ändern
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.moveActiveWaypointInOrder(int)");
 		this.currentRoute.moveActiveWaypointInOrder(i);
 		this.notifyAllRouteListeners();
 	}
@@ -105,8 +123,9 @@ public class RouteController {
 	}
 
 	public void addRoundtrip(int profileID, int length) {
-		//TODO: in boolean ändern
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(int-profile " + profileID + ", int-length " + length + ")");
+		// TODO: in boolean ändern
+		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(int-profile "
+				+ profileID + ", int-length " + length + ")");
 		this.currentRoute.addRoundtripAtActiveWaypoint(profileID, length);
 		this.notifyAllRouteListeners();
 	}
@@ -118,8 +137,9 @@ public class RouteController {
 	}
 
 	public void moveActiveWaypoint(Coordinate c) {
-		//TODO: in boolean ändern
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.moveActiveWaypoint(Coordinate)");
+		// TODO: in boolean ändern
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.moveActiveWaypoint(Coordinate)");
 		this.currentRoute.moveActiveWaypoint(c);
 		this.notifyAllRouteListeners();
 	}
@@ -155,21 +175,25 @@ public class RouteController {
 	}
 
 	public boolean containsWaypoint(Waypoint w) {
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.containsWaypoint(Waypoint)");
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.containsWaypoint(Waypoint)");
 		return this.currentRoute.containsWaypoint(w);
 	}
 
 	public void addRouteToFavorites(RouteInfo ri, String name) {
-		//TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen, favoriten manager containsName())
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRouteToFavorites(RouteInfo, String)");
+		// TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen,
+		// favoriten manager containsName())
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.addRouteToFavorites(RouteInfo, String)");
 		FavoritesManager.getInstance().addRouteToFavorites(ri, name);
 	}
 
 	public void addLocationToFavorites(Location ri, String name) {
-		//TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen, favoriten manager containsName())
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addLocationToFavorites(Location, String)");
+		// TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen,
+		// favoriten manager containsName())
+		Log.d(TAG_ROUTE_CONTROLLER,
+				"RouteController.addLocationToFavorites(Location, String)");
 		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}
-
 
 }

@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator;
 
 import java.util.List;
 
@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;

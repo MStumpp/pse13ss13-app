@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
