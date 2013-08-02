@@ -13,7 +13,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
-public class Map extends Thread implements TileListener {
+public class MapGen extends Thread implements TileListener {
 
 	// static
 
@@ -98,7 +98,7 @@ public class Map extends Thread implements TileListener {
 	/**
 	 * 
 	 */
-	public Map(Point size, MapController mc, Coordinate center, float lod) {
+	public MapGen(Point size, MapController mc, Coordinate center, float lod) {
 		Log.d("bash", "" + (center == null) + " " + (size == null) + " "
 				+ (mc == null));
 

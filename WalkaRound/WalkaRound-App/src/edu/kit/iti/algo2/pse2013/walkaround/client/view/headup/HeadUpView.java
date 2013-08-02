@@ -290,10 +290,10 @@ public class HeadUpView extends Fragment {
 	 */
 	public void setUserPositionLock(boolean status) {
 		if(status){
-			userLock.setImageDrawable(unlock);
+			userLock.setImageDrawable(lock);
 			Log.d(TAG_HEADUP_VIEW_TOUCH, "UNLOCK");
 		} else {
-			userLock.setImageDrawable(lock);
+			userLock.setImageDrawable(unlock);
 			Log.d(TAG_HEADUP_VIEW_TOUCH, "LOCK");
 		}
 	}

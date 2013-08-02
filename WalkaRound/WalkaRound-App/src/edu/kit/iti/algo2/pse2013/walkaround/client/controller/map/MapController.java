@@ -13,7 +13,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.Map;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -84,29 +84,29 @@ public class MapController implements RouteListener, PositionListener,
 
 	private Point size;
 
-	private Map map;
-	
-	//Mutli fixes
-	
+	private MapGen map;
+
+	// Mutli fixes
+
 	private Coordinate center;
 	private float lod;
-	
-	public float getLoD(){
+
+	public float getLoD() {
 		return lod;
 	}
-	
+
 	public void setLoD(float lod) {
 		this.lod = lod;
 	}
-	
-	public Coordinate getCenter(){
+
+	public Coordinate getCenter() {
 		return center;
 	}
-	
+
 	public void setCenter(Coordinate center) {
 		this.center = center;
 	}
-	
+
 	/*
 	 * -----------------Initialization-----------------
 	 */
@@ -164,15 +164,16 @@ public class MapController implements RouteListener, PositionListener,
 		lines = new LinkedList<DisplayCoordinate>();
 
 		Log.d(TAG_MAP_CONTROLLER, "Initialice MapModel!");
-		//this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
-		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail();
+		// this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
+		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
+				.getDefaultLevelOfDetail();
 
-		map = new Map(size, this, center, lod);
+		map = new MapGen(size, this, center, lod);
 		map.setName("KartenGenerator");
 		map.setPriority(1);
-		//map.start();
+		// map.start();
 		map.generateMap(center, lod);
-		
+
 		Log.d(TAG_MAP_CONTROLLER, "Initialice and register routeController!");
 		routeController = RouteController.getInstance();
 		routeController.registerRouteListener(this);
@@ -282,29 +283,21 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the y delta distance
 	 */
 	public void onShift(float distanceX, float distanceY) {
-		
-		double deltaLongitude = CoordinateUtility.convertPixelsToDegrees(distanceX, this.lod, CoordinateUtility.DIRECTION_LONGITUDE);
-		double deltaLatitude = -1 * CoordinateUtility.convertPixelsToDegrees(distanceY, this.lod, CoordinateUtility.DIRECTION_LATITUDE);
-		
-		center = new Coordinate(center, deltaLatitude, deltaLongitude);
-		
-		this.map.generateMap(center, lod);
-		
-		/*
-		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + distanceX + " : "
-				+ distanceY);
-		Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
 
-		if (this.lockUserPosition) {
-			Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
-			HeadUpController.getInstance().toggleUserPositionLock();
-			Log.d(TAG_MAP_CONTROLLER, "Shift Map by: " + this.lockUserPosition);
+		if(this.lockUserPosition) {
+			this.toggleLockUserPosition();
 		}
-		this.mapModel.shift(new DisplayCoordinate(distanceX, distanceY));
-		this.updateRouteOverlay();
+		
+		double deltaLongitude = CoordinateUtility.convertPixelsToDegrees(
+				distanceX, this.lod, CoordinateUtility.DIRECTION_LONGITUDE);
+		double deltaLatitude = -1
+				* CoordinateUtility.convertPixelsToDegrees(distanceY, this.lod,
+						CoordinateUtility.DIRECTION_LATITUDE);
+
+		center = new Coordinate(center, deltaLatitude, deltaLongitude);
+
 		this.updateUserPosition();
-		this.mapModel.notifyMoveWaypoint(lines);
-		 */
+		this.map.generateMap(center, lod);
 	}
 
 	/**
@@ -318,14 +311,18 @@ public class MapController implements RouteListener, PositionListener,
 	public void onZoom(float delta, DisplayCoordinate dc) {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
 				+ dc.toString() + " will be forwarding to MapModel");
-		if(lod + delta <= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() &&
-				lod + delta >= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail()) {
+		if (lod + delta <= CurrentMapStyleModel.getInstance()
+				.getCurrentMapStyle().getMaxLevelOfDetail()
+				&& lod + delta >= CurrentMapStyleModel.getInstance()
+						.getCurrentMapStyle().getMinLevelOfDetail()) {
 			lod += delta;
 			center = new Coordinate(center,
-					CoordinateUtility.convertPixelsToDegrees(dc.getY(), lod, CoordinateUtility.DIRECTION_LONGITUDE),
-					CoordinateUtility.convertPixelsToDegrees(dc.getX(), lod, CoordinateUtility.DIRECTION_LONGITUDE)		
-					);
+					CoordinateUtility.convertPixelsToDegrees(dc.getY(), lod,
+							CoordinateUtility.DIRECTION_LONGITUDE),
+					CoordinateUtility.convertPixelsToDegrees(dc.getX(), lod,
+							CoordinateUtility.DIRECTION_LONGITUDE));
 			map.generateMap(center, lod);
+			this.updateUserPosition();
 		}
 	}
 
@@ -338,13 +335,16 @@ public class MapController implements RouteListener, PositionListener,
 	public void onZoom(float delta) {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
 				+ " will be forwarding to MapModel");
-		
-		if(lod + delta <= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() &&
-				lod + delta >= CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail()) {
+
+		if (lod + delta <= CurrentMapStyleModel.getInstance()
+				.getCurrentMapStyle().getMaxLevelOfDetail()
+				&& lod + delta >= CurrentMapStyleModel.getInstance()
+						.getCurrentMapStyle().getMinLevelOfDetail()) {
 			lod += delta;
 			map.generateMap(center, lod);
+			this.updateUserPosition();
 		}
-		
+
 	}
 
 	/*
@@ -354,15 +354,18 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * Switch UserLock between true and false.
 	 */
-	public boolean toggleLockUserPosition() {
+	public void toggleLockUserPosition() {
 		if (this.lockUserPosition) {
 			this.lockUserPosition = false;
 		} else {
 			this.lockUserPosition = true;
+			this.center = user;
+			this.updateUserPosition();
+			this.map.generateMap(center, lod);
 		}
+		HeadUpController.getInstance().setUserPoisitionLock(this.lockUserPosition);
 		Log.d(TAG_MAP_CONTROLLER, "Lock User Position: "
 				+ this.lockUserPosition);
-		return this.lockUserPosition;
 	}
 
 	/**
@@ -400,22 +403,18 @@ public class MapController implements RouteListener, PositionListener,
 	 */
 	public void onCreatePoint(DisplayCoordinate dc) {
 		/*
-		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
-
-		Coordinate next = CoordinateUtility
-				.convertDisplayCoordinateToCoordinate(dc,
-						mapModel.getTopLeft(),
-						mapModel.getCurrentLevelOfDetail());
-		try {
-			CoordinateNormalizer.normalizeCoordinate(next,
-					(int) this.getCurrentLevelOfDetail());
-		} catch (IllegalArgumentException e) {
-			Log.e(TAG_MAP_CONTROLLER,
-					"Coordinate konnte nicht normalisiert werden!");
-		}
-		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next
-				.getLongitude(), "PLACEHOLDER"));
-				*/
+		 * Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
+		 * 
+		 * Coordinate next = CoordinateUtility
+		 * .convertDisplayCoordinateToCoordinate(dc, mapModel.getTopLeft(),
+		 * mapModel.getCurrentLevelOfDetail()); try {
+		 * CoordinateNormalizer.normalizeCoordinate(next, (int)
+		 * this.getCurrentLevelOfDetail()); } catch (IllegalArgumentException e)
+		 * { Log.e(TAG_MAP_CONTROLLER,
+		 * "Coordinate konnte nicht normalisiert werden!"); }
+		 * this.routeController.addWaypoint(new Waypoint(next.getLatitude(),
+		 * next .getLongitude(), "PLACEHOLDER"));
+		 */
 	}
 
 	/**
@@ -435,7 +434,7 @@ public class MapController implements RouteListener, PositionListener,
 		c.setLongitude(c.getLongitude() + xDelta);
 
 		this.routeController.moveActiveWaypoint(c);
-		//this.mapModel.notifyMoveWaypoint(lines);
+		// this.mapModel.notifyMoveWaypoint(lines);
 	}
 
 	/**
@@ -484,68 +483,93 @@ public class MapController implements RouteListener, PositionListener,
 		 * DisplayWaypoint(800,400,3));
 		 */
 
-		Log.d("test3","Amount " + currentRoute.getWaypoints().size());
-		Log.d("test3","Amount " + displayPoints.size());
+		Log.d("test3", "Amount " + currentRoute.getWaypoints().size());
+		Log.d("test3", "Amount " + displayPoints.size());
 
-		
 		mapView.updateDisplayWaypoints(displayPoints);
-		//mapModel.shift(new DisplayCoordinate(0, 0));
+		// mapModel.shift(new DisplayCoordinate(0, 0));
 		// mapView.setActive(2);
-		//mapModel.drawDisplayCoordinates(lines);
+		// mapModel.drawDisplayCoordinates(lines);
 
 		if (this.currentRoute.getActiveWaypoint() == null) {
 			return;
 		}
-		
+
 		mapView.setActiveWaypoint(currentRoute.getActiveWaypoint().getId());
 
 	}
 
 	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
-		Log.d(TAG_MAP_CONTROLLER, "Route Change! " + currentRoute.getWaypoints().size());
+		Log.d(TAG_MAP_CONTROLLER, "Route Change! "
+				+ currentRoute.getWaypoints().size());
 		if (currentRoute != null) {
 			this.currentRoute = currentRoute;
 			this.currentActiveWaypoint = currentRoute.getActiveWaypoint()
 					.getId();
 		}
-		Log.d("ztr","LOL");
+		Log.d("ztr", "LOL");
 		updateRouteOverlay();
 		mapModel.notifyMoveWaypoint(lines);
 	}
 
-	Coordinate user;
+	private Coordinate user;
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
 		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
+
+		if (lockUserPosition){
+		center = new Coordinate(androidLocation.getLatitude(),
+				androidLocation.getLongitude());
+		}
 		
-		center  = new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude());
-		map.generateMap(center, lod);
-		
-		
-		/*
 		user = new Coordinate(androidLocation.getLatitude(),
 				androidLocation.getLongitude());
 
-		updateUserPosition();
-		*/
-		// mapView.setUserPositionOverlayImage(200,200);
+		this.updateUserPosition();
+		this.map.generateMap(center, lod);
 	}
 
 	/**
 	 * 
 	 */
 	public void updateUserPosition() {
-		Log.d(TAG_MAP_CONTROLLER, "User Position is " + (user != null));
-		Log.d(TAG_MAP_CONTROLLER, "MapModel is " + (mapModel != null));
+		Thread t = new Thread(new UserPos(center));
+		t.start();
+	}
 
-		if (mapModel != null) {
+	/**
+	 * 
+	 * @author Ludwig Biermann
+	 * 
+	 */
+	private class UserPos implements Runnable {
 
-			double lon = -this.mapModel.getTopLeft().getLongitude()
-					+ user.getLongitude();
-			double lat = -user.getLatitude()
-					+ this.mapModel.getTopLeft().getLatitude();
+		private Coordinate topLeft;
+
+		/**
+		 * Returns the upperLeft Coordinate
+		 * 
+		 * @return the top left geo-oordinate
+		 */
+		private Coordinate getTopLeft(Coordinate center) {
+			return new Coordinate(center,
+					CoordinateUtility.convertPixelsToDegrees(size.y / 2f, lod,
+							CoordinateUtility.DIRECTION_LATITUDE),
+					-CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
+							CoordinateUtility.DIRECTION_LONGITUDE));
+		}
+
+		public UserPos(Coordinate center) {
+			this.topLeft = this.getTopLeft(center);
+		}
+
+		@Override
+		public void run() {
+
+			double lon = -topLeft.getLongitude() + user.getLongitude();
+			double lat = -user.getLatitude() + topLeft.getLatitude();
 
 			DisplayCoordinate pos = new DisplayCoordinate(
 					CoordinateUtility.convertDegreesToPixels(lon,
@@ -557,17 +581,8 @@ public class MapController implements RouteListener, PositionListener,
 
 			Log.d(TAG_MAP_CONTROLLER, "User Posi ist:" + user.toString());
 			mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
-
-			if (this.lockUserPosition) {
-				Log.d(TAG_MAP_CONTROLLER, "Position Shift Change!");
-
-				this.mapModel.shift(new DisplayCoordinate(pos.getX(), pos
-						.getY()));
-
-				this.mapModel.shift(new DisplayCoordinate(-size.x / 2,
-						-size.y / 2));
-			}
 		}
+
 	}
 
 	/**
@@ -587,7 +602,7 @@ public class MapController implements RouteListener, PositionListener,
 		// TODO weiterleitung zu View sollte klappen
 		// this.mapView.onPositionChange(direction);
 		// this.mapView.onPositionChange(0.0f);
-		//Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
+		// Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
 		this.mapView.setUserPositionOverlayImage(direction);
 	}
 
