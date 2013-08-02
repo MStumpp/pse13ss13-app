@@ -12,25 +12,48 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
-public class POIGen implements Runnable{
+/**
+ * This Class compute and generate the POI Points on the map
+ * 
+ * @author Ludwig Biermann
+ * 
+ */
+public class POIGen implements Runnable {
 
-	private static String TAG_MAP_MODEL = POIGen.class.getSimpleName();
-	
+	/**
+	 * Debug Tag
+	 */
+	private static String TAG_POIGen = POIGen.class.getSimpleName();
+
+	/**
+	 * The List of POI´s on the map
+	 */
 	private List<POI> poiList = new LinkedList<POI>();
-	
+
+	/**
+	 * Bottom right Coordinate
+	 */
 	private Coordinate bottomRight;
+
+	/**
+	 * Top Left Coordinate
+	 */
 	private Coordinate topLeft;
-	
-	
-	public POIGen(){
-		
+
+	/**
+	 * Construckts a new POIGen
+	 */
+	public POIGen() {
+
 	}
-	
+
 	@Override
 	public void run() {
-		while(true);
+		// running endless
+		while (true)
+			;
 	}
-	
+
 	/**
 	 * Returns the upperLeft Coordinate
 	 * 
@@ -49,18 +72,20 @@ public class POIGen implements Runnable{
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate getBottomRight(Coordinate center, Point size, float lod) {
-		return new Coordinate(center, 
-				-CoordinateUtility.convertPixelsToDegrees(
-				size.y / 2f, lod, CoordinateUtility.DIRECTION_LATITUDE),
-				
+		return new Coordinate(center,
+				-CoordinateUtility.convertPixelsToDegrees(size.y / 2f, lod,
+						CoordinateUtility.DIRECTION_LATITUDE),
+
 				CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
 						CoordinateUtility.DIRECTION_LONGITUDE));
 	}
 
 	/**
-	 *
+	 * Gives the POI Information by their ids back
+	 * 
 	 * @param id
-	 * @return
+	 *            id of the POI
+	 * @return the POI and its Informations
 	 */
 	public POI getPOIInformationById(int id) {
 		for (POI value : this.poiList) {
@@ -71,39 +96,35 @@ public class POIGen implements Runnable{
 		return null;
 	}
 
-	
 	/**
 	 * update the POI of the Display
 	 */
 	public void generatePOIView(Coordinate center, float lod, Point size) {
 		if (!POIManager.getInstance().isEmpty()) {
-			
+
 			this.topLeft = this.getTopLeft(center, size, lod);
 			this.bottomRight = this.getBottomRight(center, size, lod);
 
-			poiList = POIManager.getInstance().getPOIsWithinRectangle(
-					topLeft, bottomRight, lod);
+			poiList = POIManager.getInstance().getPOIsWithinRectangle(topLeft,
+					bottomRight, lod);
 
-			Log.d(TAG_MAP_MODEL, "POI Anzahl" + poiList.size());
+			Log.d(TAG_POIGen, "POI Anzahl" + poiList.size());
 
 			LinkedList<DisplayPOI> poi = new LinkedList<DisplayPOI>();
 
 			for (POI value : poiList) {
 				poi.add(new DisplayPOI(CoordinateUtility
-						.convertDegreesToPixels(value.getLongitude()
-								- topLeft.getLongitude(),
-								lod,
-								CoordinateUtility.DIRECTION_X),
+						.convertDegreesToPixels(
+								value.getLongitude() - topLeft.getLongitude(),
+								lod, CoordinateUtility.DIRECTION_X),
 						CoordinateUtility.convertDegreesToPixels(
-								topLeft.getLatitude()
-										- value.getLatitude(),
-								lod,
-								CoordinateUtility.DIRECTION_Y), value.getId()));
+								topLeft.getLatitude() - value.getLatitude(),
+								lod, CoordinateUtility.DIRECTION_Y), value
+								.getId()));
 			}
-			if(MapController.getInstance() != null){
+			if (MapController.getInstance() != null) {
 				MapController.getInstance().onPOIChange(poi);
 			}
 		}
 	}
-	
 }

@@ -93,18 +93,38 @@ public class MapController implements RouteListener, PositionListener,
 	private Coordinate center;
 	private float lod;
 
+	/**
+	 * gives the Level of Detail back
+	 * 
+	 * @return Level of Detail
+	 */
 	public float getLoD() {
 		return lod;
 	}
 
+	/**
+	 * sets a new Level of Detail
+	 * 
+	 * @param lod Level of Detail
+	 */
 	public void setLoD(float lod) {
 		this.lod = lod;
 	}
 
+	/**
+	 * gets the center Coordinate
+	 * 
+	 * @return the Coordinate of the center
+	 */
 	public Coordinate getCenter() {
 		return center;
 	}
 
+	/**
+	 * sets the Center Coordinate
+	 * 
+	 * @param center Coordinate
+	 */
 	public void setCenter(Coordinate center) {
 		this.center = center;
 	}
@@ -172,12 +192,13 @@ public class MapController implements RouteListener, PositionListener,
 		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 				.getDefaultLevelOfDetail();
 
-		map = new MapGen(size, this, center, lod);
+		map = new MapGen(size, center, lod);
 		map.setName("KartenGenerator");
 		map.setPriority(1);
 		// map.start();
 		map.generateMap(center, lod);
 		poiGen = new POIGen();
+		//TODO poi Gen doesnt run as Thread ... why?
 		Thread t = new Thread(poiGen);
 		t.setName("POI Generator");
 		t.setPriority(5);

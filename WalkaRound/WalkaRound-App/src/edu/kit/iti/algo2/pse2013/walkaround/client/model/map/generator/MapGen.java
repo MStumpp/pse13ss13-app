@@ -13,96 +13,92 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
+/**
+ * This Class generate a Bitmap that represent a part of the OSM-Map.
+ * A Coordinate is the fix Point of the map at the center. Out of this Coordinate
+ * this Class build a bounding box between the top left corner and the bottom
+ * right corner.   
+ * 
+ * @author Ludwig Biermann
+ *
+ */
 public class MapGen extends Thread implements TileListener {
-
-	// static
 
 	/**
 	 * Debug Tag
 	 */
-	private static String TAG_MAP_MODEL = MapGen.class.getSimpleName();
+	private static String TAG_MapGen = MapGen.class.getSimpleName();
 
 	/**
-	 * 
+	 * The default Background Color
 	 */
 	public static int defaultBackground = Color.rgb(227, 227, 227);
 
 	/**
-	 * 
+	 * The default empty Background Color
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 
-	// non Static
-
 	/**
-	 * 
-	 */
-	private MapController mapController;
-
-	/**
-	 * 
+	 * The Tile Fetcher. This is the location to get the tile parts of the map
 	 */
 	private TileFetcher tileFetcher;
 
 	/**
-	 * 
+	 * The Bitmap that represent the map on the display.
+	 * Its essential that the Map is created on time.
 	 */
 	private Bitmap map;
 
 	/**
-	 * 
+	 * the size of the Display
 	 */
 	private Point size;
 
 	/**
-	 * 
+	 * the amount of tile parts which fit in the display
 	 */
 	private Point amount;
 
 	/**
-	 * 
+	 * the current fix center Coordinate 
 	 */
 	private Coordinate center;
 
 	/**
-	 * 
+	 * the current topLeft Coordinate
 	 */
 	private Coordinate topLeft;
 
 	/**
-	 * 
+	 * the Level of Detail
 	 */
 	private float lod;
 
 	/**
-	 * 
+	 * the current Tile Width
 	 */
 	private float currentTileWidth;
 
 	/**
-	 * 
+	 * the Offset of the tile parts
 	 */
 	private DisplayCoordinate mapOffset;
 
 	/**
-	 * 
+	 * the index of the tile on the top Left corner
 	 */
+	//TODO maybe it should be the center tile
 	private int[] indexXY;
 
 	/**
-	 * 
+	 * COntstructs a new MapGenerator
+	 * @param size the display size
+	 * @param mc the MapController
+	 * @param center the start center Coordinate
+	 * @param lod the start Level of Detail
 	 */
-	private Bitmap empty = Bitmap.createBitmap(new int[] { 0x00000000 }, 1, 1,
-			Bitmap.Config.ARGB_8888);
-
-	/**
-	 * 
-	 */
-	public MapGen(Point size, MapController mc, Coordinate center, float lod) {
-		Log.d("bash", "" + (center == null) + " " + (size == null) + " "
-				+ (mc == null));
-
-		// initialisiere Vars
+	public MapGen(Point size, Coordinate center, float lod) {
 		this.center = center;
 
 		this.lod = lod;
@@ -115,7 +111,6 @@ public class MapGen extends Thread implements TileListener {
 
 		this.amount = new Point();
 
-		this.mapController = mc;
 
 		this.topLeft = this.getTopLeft(center);
 
@@ -146,19 +141,13 @@ public class MapGen extends Thread implements TileListener {
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, lod,
 				CoordinateUtility.DIRECTION_VERTICAL);
 
-		// TODO beim nach oben schieben muss yDiff auf dem Display kleiner
-		// werden!
-		// ich denke hier ist möglicherweise auch ein RundungsFehler!
 		yDiff = (currentTileWidth - 1) - yDiff;
-		// yDiff = 256-yDiff;
 
-		Log.d(TAG_MAP_MODEL, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
+		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
 				center, lod));
 
-		Log.d("latDiff", "" + (yDiff - 255 - 100));
-		Log.d("lonDiff", "" + (xDiff - 10));
 		return new DisplayCoordinate(xDiff, yDiff);
 	}
 
@@ -166,10 +155,10 @@ public class MapGen extends Thread implements TileListener {
 	 * compute the amount tiles needed to fill the display
 	 */
 	private void computeAmountOfTiles() {
-		currentTileWidth = CoordinateUtility
+		this.currentTileWidth = CoordinateUtility
 				.computeCurrentTileWidthInPixels(this.lod);
 
-		amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
+		this.amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
 				(int) Math.ceil(size.y / currentTileWidth) + 1);
 	}
 
@@ -186,10 +175,12 @@ public class MapGen extends Thread implements TileListener {
 	}
 
 	/**
-	 * Returns the upperLeft Coordinate
+	 * Returns the bottomRight Coordinate
 	 * 
 	 * @return the top left geo-oordinate
 	 */
+	//TODO bounding box is missing
+	@SuppressWarnings("unused")
 	private Coordinate getBottomRight(Coordinate center) {
 		return new Coordinate(center, CoordinateUtility.convertPixelsToDegrees(
 				size.y / 2f, lod, CoordinateUtility.DIRECTION_LATITUDE),
@@ -198,14 +189,13 @@ public class MapGen extends Thread implements TileListener {
 	}
 
 	/**
-	 * This should be the only Method to get a new Map
+	 * This Method starts the compute of a new Map.
 	 * 
-	 * @param center
-	 * @param load
+	 * @param center the new center Coordinate
+	 * @param lod the Level of Detail
 	 */
 	public void generateMap(final Coordinate center, final float lod) {
 
-		// n�tige Daten aufbauen
 		this.lod = lod;
 		this.center = center;
 		this.topLeft = this.getTopLeft(this.center);
@@ -233,44 +223,66 @@ public class MapGen extends Thread implements TileListener {
 	 *            of the map and routeOverlay
 	 */
 	private void clearBitmap() {
+		Log.d(TAG_MapGen, "clear Map Bitmap");
 
-		Log.d(TAG_MAP_MODEL, "clear Map Bitmap");
-
-		// mapController.onMapOverlayImageChange(empty);
 		this.map.eraseColor(defaultBackground);
 		this.pushMap();
 		this.map.prepareToDraw();
 	}
 
 	/**
-	 * 
+	 *  push the map to the View
 	 */
 	private void pushMap() {
-		this.mapController.onMapOverlayImageChange(map);
+		MapController.getInstance().onMapOverlayImageChange(map);
 	}
 
-	// Schnittstelle
+	//TODO no need anymore pls delete Threading
 	@Override
 	public void run() {
-		// generate the first View
-		this.generateMap(mapController.getCenter(), mapController.getLoD());
+		this.generateMap(MapController.getInstance().getCenter(), MapController.getInstance().getLoD());
 		while (true)
 			;
 	}
 
 	@Override
 	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-		Thread t = new Thread(new DrawingQueue(tile, x, y));
+		// starts a new Thread to draw the map
+		Thread t = new Thread(new TileDrawer(tile, x, y));
 		t.start();
 	}
 
-	private class DrawingQueue implements Runnable {
+	/**
+	 * This class draws a part of the map
+	 * 
+	 * @author Ludwig Biermann
+	 *
+	 */
+	private class TileDrawer implements Runnable {
 
+		/**
+		 * the new Tile to draw
+		 */
 		final Bitmap tile;
+		
+		/**
+		 * x position
+		 */
 		int x;
+		
+		/**
+		 * Y position
+		 */
 		int y;
 
-		public DrawingQueue(final Bitmap tile, int x, int y) {
+		/**
+		 * Constructs a new Tile Drawer
+		 * 
+		 * @param tile the new tile to draw
+		 * @param x x-Position
+		 * @param y y Position
+		 */
+		public TileDrawer(final Bitmap tile, int x, int y) {
 			this.tile = tile;
 			this.x = x;
 			this.y = y;
@@ -278,25 +290,25 @@ public class MapGen extends Thread implements TileListener {
 
 		@Override
 		public void run() {
-			Log.d(TAG_MAP_MODEL, "Receive Tile!");
+			Log.d(TAG_MapGen, "Receive Tile!");
 
 			int tileX = x - indexXY[0];
 			int tileY = (y - indexXY[1]);
 
-			Log.d(TAG_MAP_MODEL, "Normalise Tile:  x " + tileX + " y " + tileY);
+			Log.d(TAG_MapGen, "Normalise Tile:  x " + tileX + " y " + tileY);
 
 			if (!map.isRecycled() && tile != null) {
 				Canvas canvas = new Canvas(map);
-				Log.d(TAG_MAP_MODEL, "ZEICHNE! ");
+				Log.d(TAG_MapGen, "ZEICHNE! ");
 				if (tileY == 0 && tileX == 0) {
-					Log.d(TAG_MAP_MODEL,
+					Log.d(TAG_MapGen,
 							"ZEICHNE OFF! "
 									+ ((tileX * currentTileWidth) - mapOffset
 											.getX())
 									+ " : "
 									+ ((tileY * currentTileWidth) - mapOffset
 											.getY()));
-					Log.d(TAG_MAP_MODEL, "ZEICHNE OFF! " + tileX + " " + tileY);
+					Log.d(TAG_MapGen, "ZEICHNE OFF! " + tileX + " " + tileY);
 				}
 				// synchronized (map) {
 				canvas.drawBitmap(
@@ -310,6 +322,5 @@ public class MapGen extends Thread implements TileListener {
 
 			pushMap();
 		}
-
 	}
 }
