@@ -15,6 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.POIGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.RouteGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -86,6 +87,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	private MapGen map;
 	private Bitmap route;
+	private POIGen poiGen;
 
 	// Mutli fixes
 
@@ -150,7 +152,6 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the required MapView
 	 */
 	private MapController(MapView mv) {
-
 		Log.d(TAG_MAP_CONTROLLER, "Map Controller will be initialice!");
 
 		this.user = defaultCoordinate;
@@ -177,7 +178,12 @@ public class MapController implements RouteListener, PositionListener,
 		map.setPriority(1);
 		// map.start();
 		map.generateMap(center, lod);
-
+		poiGen = new POIGen();
+		Thread t = new Thread(poiGen);
+		t.setName("POI Generator");
+		t.setPriority(5);
+		//t.run();
+		
 		Log.d(TAG_MAP_CONTROLLER, "Initialice and register routeController!");
 		routeController = RouteController.getInstance();
 		routeController.registerRouteListener(this);
@@ -374,7 +380,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * 
 	 */
 	public void addPoiToView() {
-		this.mapModel.updatePOIofDisplay();
+		this.poiGen.generatePOIView(center, lod, size);
 	}
 
 	/*
@@ -537,12 +543,22 @@ public class MapController implements RouteListener, PositionListener,
 		this.updateAll();
 	}
 
+	/**
+	 * 
+	 */
 	public void updateAll(){
 		this.updateUserPosition();
 		this.updateRouteOverlay();
+		this.updatePOIView();
 		this.map.generateMap(center, lod);
 	}
-	
+
+	/**
+	 * 
+	 */
+	public void updatePOIView(){
+		this.poiGen.generatePOIView(center, lod, size);
+	}
 	/**
 	 * 
 	 */
@@ -617,17 +633,13 @@ public class MapController implements RouteListener, PositionListener,
 		// Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
 		this.mapView.setUserPositionOverlayImage(direction);
 	}
-
-	MapModel mapModel;
 	
 	/**
 	 * 
 	 * @return
 	 */
 	public POI getPOIById(int id) {
-		// Log.d(TAG_MAP_CONTROLLER, "CurrentPOI Name " + currentPOI.getName() +
-		// " id: " + currentPOI.getId());
-		return mapModel.getPOIInformationById(id);
+		return poiGen.getPOIInformationById(id);
 	}
 
 	public POI getPOI() {

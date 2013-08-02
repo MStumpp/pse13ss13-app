@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.MapModel;
 
@@ -26,11 +27,11 @@ public class POIMenuController {
 
 	public void addActiveCategory(int catIndex) {
 		POIManager.getInstance().addActivePOICategory(catIndex);
-		MapModel.getInstance().updatePOIofDisplay();
+		MapController.getInstance().updatePOIView();
 	}
 
 	public void removeActiveCategory(int catIndex) {
 		POIManager.getInstance().removeActivePOICategory(catIndex);
-		MapModel.getInstance().updatePOIofDisplay();
+		MapController.getInstance().updatePOIView();
 	}
 }
