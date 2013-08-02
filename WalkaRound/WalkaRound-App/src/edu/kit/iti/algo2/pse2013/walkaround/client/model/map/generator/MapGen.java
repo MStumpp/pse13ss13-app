@@ -23,80 +23,80 @@ public class MapGen extends Thread implements TileListener {
 	private static String TAG_MAP_MODEL = MapGen.class.getSimpleName();
 
 	/**
-	 * 
+	 *
 	 */
 	public static int defaultBackground = Color.rgb(227, 227, 227);
 
 	/**
-	 * 
+	 *
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 
 	// non Static
 
 	/**
-	 * 
+	 *
 	 */
 	private MapController mapController;
 
 	/**
-	 * 
+	 *
 	 */
 	private TileFetcher tileFetcher;
 
 	/**
-	 * 
+	 *
 	 */
 	private Bitmap map;
 
 	/**
-	 * 
+	 *
 	 */
 	private Point size;
 
 	/**
-	 * 
+	 *
 	 */
 	private Point amount;
 
 	/**
-	 * 
+	 *
 	 */
 	private Coordinate center;
 
 	/**
-	 * 
+	 *
 	 */
 	private Coordinate topLeft;
 
 	/**
-	 * 
+	 *
 	 */
 	private float lod;
 
 	/**
-	 * 
+	 *
 	 */
 	private float currentTileWidth;
 
 	/**
-	 * 
+	 *
 	 */
 	private DisplayCoordinate mapOffset;
 
 	/**
-	 * 
+	 *
 	 */
 	private int[] indexXY;
 
 	/**
-	 * 
+	 *
 	 */
 	private Bitmap empty = Bitmap.createBitmap(new int[] { 0x00000000 }, 1, 1,
 			Bitmap.Config.ARGB_8888);
 
 	/**
-	 * 
+	 *
 	 */
 	public MapGen(Point size, MapController mc, Coordinate center, float lod) {
 		Log.d("bash", "" + (center == null) + " " + (size == null) + " "
@@ -120,7 +120,6 @@ public class MapGen extends Thread implements TileListener {
 		this.topLeft = this.getTopLeft(center);
 
 		this.tileFetcher = new TileFetcher();
-		this.tileFetcher.setTileListener(this);
 
 		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
 				Bitmap.Config.ARGB_8888);
@@ -129,7 +128,7 @@ public class MapGen extends Thread implements TileListener {
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 * 
+	 *
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -175,7 +174,7 @@ public class MapGen extends Thread implements TileListener {
 
 	/**
 	 * Returns the upperLeft Coordinate
-	 * 
+	 *
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate getTopLeft(Coordinate center) {
@@ -187,7 +186,7 @@ public class MapGen extends Thread implements TileListener {
 
 	/**
 	 * Returns the upperLeft Coordinate
-	 * 
+	 *
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate getBottomRight(Coordinate center) {
@@ -199,7 +198,7 @@ public class MapGen extends Thread implements TileListener {
 
 	/**
 	 * This should be the only Method to get a new Map
-	 * 
+	 *
 	 * @param center
 	 * @param load
 	 */
@@ -221,12 +220,12 @@ public class MapGen extends Thread implements TileListener {
 						+ CoordinateUtility.convertPixelsToDegrees(
 								currentTileWidth, lod,
 								CoordinateUtility.DIRECTION_LATITUDE),
-						this.topLeft.getLongitude()), amount.x, amount.y);
+						this.topLeft.getLongitude()), amount.x, amount.y, this);
 	}
 
 	/**
 	 * recycle and creates a new map recycle and creates a new routeOverlay
-	 * 
+	 *
 	 * @param width
 	 *            of the map and routeOverlay
 	 * @param height
@@ -243,7 +242,7 @@ public class MapGen extends Thread implements TileListener {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void pushMap() {
 		this.mapController.onMapOverlayImageChange(map);
