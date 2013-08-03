@@ -5,11 +5,11 @@ import java.util.List;
 
 import android.graphics.Point;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
@@ -33,12 +33,7 @@ public class POIGen implements Runnable {
 	/**
 	 * Bottom right Coordinate
 	 */
-	private Coordinate bottomRight;
-
-	/**
-	 * Top Left Coordinate
-	 */
-	private Coordinate topLeft;
+	private BoundingBox coorBox;
 
 	/**
 	 * Construckts a new POIGen
@@ -52,32 +47,6 @@ public class POIGen implements Runnable {
 		// running endless
 		while (true)
 			;
-	}
-
-	/**
-	 * Returns the upperLeft Coordinate
-	 * 
-	 * @return the top left geo-oordinate
-	 */
-	private Coordinate getTopLeft(Coordinate center, Point size, float lod) {
-		return new Coordinate(center, CoordinateUtility.convertPixelsToDegrees(
-				size.y / 2f, lod, CoordinateUtility.DIRECTION_LATITUDE),
-				-CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
-						CoordinateUtility.DIRECTION_LONGITUDE));
-	}
-
-	/**
-	 * Returns the upperLeft Coordinate
-	 * 
-	 * @return the top left geo-oordinate
-	 */
-	private Coordinate getBottomRight(Coordinate center, Point size, float lod) {
-		return new Coordinate(center,
-				-CoordinateUtility.convertPixelsToDegrees(size.y / 2f, lod,
-						CoordinateUtility.DIRECTION_LATITUDE),
-
-				CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
-						CoordinateUtility.DIRECTION_LONGITUDE));
 	}
 
 	/**
@@ -99,14 +68,11 @@ public class POIGen implements Runnable {
 	/**
 	 * update the POI of the Display
 	 */
-	public void generatePOIView(Coordinate center, float lod, Point size) {
+	public void generatePOIView(BoundingBox coorBox, float lod, Point size) {
 		if (!POIManager.getInstance().isEmpty()) {
 
-			this.topLeft = this.getTopLeft(center, size, lod);
-			this.bottomRight = this.getBottomRight(center, size, lod);
-
-			poiList = POIManager.getInstance().getPOIsWithinRectangle(topLeft,
-					bottomRight, lod);
+			poiList = POIManager.getInstance().getPOIsWithinRectangle(this.coorBox.getTopLeft(),
+					this.coorBox.getBottomRight(), lod);
 
 			Log.d(TAG_POIGen, "POI Anzahl" + poiList.size());
 
@@ -115,10 +81,10 @@ public class POIGen implements Runnable {
 			for (POI value : poiList) {
 				poi.add(new DisplayPOI(CoordinateUtility
 						.convertDegreesToPixels(
-								value.getLongitude() - topLeft.getLongitude(),
+								value.getLongitude() - this.coorBox.getTopLeft().getLongitude(),
 								lod, CoordinateUtility.DIRECTION_X),
 						CoordinateUtility.convertDegreesToPixels(
-								topLeft.getLatitude() - value.getLatitude(),
+								this.coorBox.getTopLeft().getLatitude() - value.getLatitude(),
 								lod, CoordinateUtility.DIRECTION_Y), value
 								.getId()));
 			}

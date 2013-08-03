@@ -90,7 +90,8 @@ public class MapController implements RouteListener, PositionListener,
 
 	// Mutli fixes
 
-	private Coordinate center;
+	private BoundingBox coorBox;
+	//private Coordinate center;
 	private float lod;
 
 	/**
@@ -117,7 +118,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * @return the Coordinate of the center
 	 */
 	public Coordinate getCenter() {
-		return center;
+		return coorBox.getCenter();
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * @param center Coordinate
 	 */
 	public void setCenter(Coordinate center) {
-		this.center = center;
+		this.coorBox.setCenter(center, lod);;
 	}
 
 	/*
@@ -172,14 +173,14 @@ public class MapController implements RouteListener, PositionListener,
 	 */
 	private MapController(MapView mv) {
 		Log.d(TAG_MAP_CONTROLLER, "Map Controller will be initialice!");
-
 		this.user = defaultCoordinate;
-		this.center = defaultCoordinate;
+		//this.center = defaultCoordinate;
 		this.currentRoute = new Route(new LinkedList<Coordinate>());
 		this.routeGen = new Thread();
-		
 		this.mapView = mv;
-		size = mv.getDisplaySize();
+		size = mv.getDisplaySize();	
+		
+		this.coorBox = new BoundingBox(defaultCoordinate,size,lod);
 		
 		this.route = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
 
@@ -192,8 +193,8 @@ public class MapController implements RouteListener, PositionListener,
 		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 				.getDefaultLevelOfDetail();
 
-		map = new MapGen(size, center, lod);
-		map.generateMap(center, lod);
+		map = new MapGen(size, coorBox, lod);
+		map.generateMap(coorBox, lod);
 		poiGen = new POIGen();
 		//TODO poi Gen doesnt run as Thread ... why?
 		Thread t = new Thread(poiGen);
@@ -321,8 +322,10 @@ public class MapController implements RouteListener, PositionListener,
 				* CoordinateUtility.convertPixelsToDegrees(distanceY, this.lod,
 						CoordinateUtility.DIRECTION_LATITUDE);
 
-		center = new Coordinate(center, deltaLatitude, deltaLongitude);
-
+		
+		Coordinate center = new Coordinate(coorBox.getCenter(), deltaLatitude, deltaLongitude);
+		this.setCenter(center);
+		
 		this.updateAll();
 	}
 
@@ -342,11 +345,12 @@ public class MapController implements RouteListener, PositionListener,
 				&& lod + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
 			lod += delta;
-			center = new Coordinate(center,
+			Coordinate center = new Coordinate(coorBox.getCenter(),
 					CoordinateUtility.convertPixelsToDegrees(dc.getY(), lod,
 							CoordinateUtility.DIRECTION_LONGITUDE),
 					CoordinateUtility.convertPixelsToDegrees(dc.getX(), lod,
 							CoordinateUtility.DIRECTION_LONGITUDE));
+			this.setCenter(center);
 			this.updateAll();
 		}
 	}
@@ -383,9 +387,8 @@ public class MapController implements RouteListener, PositionListener,
 			this.lockUserPosition = false;
 		} else {
 			this.lockUserPosition = true;
-			this.center = user;
-			this.updateUserPosition();
-			this.map.generateMap(center, lod);
+			this.setCenter(user);
+			this.updateAll();
 		}
 		HeadUpController.getInstance().setUserPoisitionLock(
 				this.lockUserPosition);
@@ -397,7 +400,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * 
 	 */
 	public void addPoiToView() {
-		this.poiGen.generatePOIView(center, lod, size);
+		this.poiGen.generatePOIView(coorBox, lod, size);
 	}
 
 	/*
@@ -431,7 +434,7 @@ public class MapController implements RouteListener, PositionListener,
 
 		Coordinate next = CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
-						this.getTopLeft(center),
+						coorBox.getTopLeft(),
 						lod);
 		
 		try {
@@ -488,18 +491,6 @@ public class MapController implements RouteListener, PositionListener,
 	 * -----------------Implemented Listener-----------------
 	 */
 
-	/**
-	 * Returns the upperLeft Coordinate
-	 * 
-	 * @return the top left geo-oordinate
-	 */
-	private Coordinate getTopLeft(Coordinate center) {
-		return new Coordinate(center, CoordinateUtility.convertPixelsToDegrees(
-				size.y / 2f, lod, CoordinateUtility.DIRECTION_LATITUDE),
-				-CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
-						CoordinateUtility.DIRECTION_LONGITUDE));
-	}
-
 	private Thread routeGen;
 
 	/**
@@ -508,11 +499,11 @@ public class MapController implements RouteListener, PositionListener,
 	private void updateRouteOverlay() {
 
 		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
-				currentRoute, this.getTopLeft(center), lod);
+				currentRoute, coorBox.getTopLeft(), lod);
 
 		this.displayPoints = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
-						this.getTopLeft(center), lod);
+						coorBox.getTopLeft(), lod);
 
 		mapView.updateDisplayWaypoints(displayPoints);
 
@@ -550,8 +541,9 @@ public class MapController implements RouteListener, PositionListener,
 		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
 
 		if (lockUserPosition) {
-			center = new Coordinate(androidLocation.getLatitude(),
+			Coordinate center = new Coordinate(androidLocation.getLatitude(),
 					androidLocation.getLongitude());
+			this.setCenter(center);
 		}
 
 		user = new Coordinate(androidLocation.getLatitude(),
@@ -567,20 +559,20 @@ public class MapController implements RouteListener, PositionListener,
 		this.updateUserPosition();
 		this.updateRouteOverlay();
 		this.updatePOIView();
-		this.map.generateMap(center, lod);
+		this.map.generateMap(coorBox, lod);
 	}
 
 	/**
 	 * 
 	 */
 	public void updatePOIView(){
-		this.poiGen.generatePOIView(center, lod, size);
+		this.poiGen.generatePOIView(coorBox, lod, size);
 	}
 	/**
 	 * 
 	 */
 	public void updateUserPosition() {
-		Thread t = new Thread(new UserPos(center));
+		Thread t = new Thread(new UserPos());
 		t.start();
 	}
 
@@ -591,30 +583,17 @@ public class MapController implements RouteListener, PositionListener,
 	 */
 	private class UserPos implements Runnable {
 
-		private Coordinate topLeft;
-
 		/**
-		 * Returns the upperLeft Coordinate
 		 * 
-		 * @return the top left geo-oordinate
 		 */
-		private Coordinate getTopLeft(Coordinate center) {
-			return new Coordinate(center,
-					CoordinateUtility.convertPixelsToDegrees(size.y / 2f, lod,
-							CoordinateUtility.DIRECTION_LATITUDE),
-					-CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
-							CoordinateUtility.DIRECTION_LONGITUDE));
-		}
-
-		public UserPos(Coordinate center) {
-			this.topLeft = this.getTopLeft(center);
+		public UserPos() {
 		}
 
 		@Override
 		public void run() {
 
-			double lon = -topLeft.getLongitude() + user.getLongitude();
-			double lat = -user.getLatitude() + topLeft.getLatitude();
+			double lon = -coorBox.getTopLeft().getLongitude() + user.getLongitude();
+			double lat = -user.getLatitude() + coorBox.getTopLeft().getLatitude();
 
 			DisplayCoordinate pos = new DisplayCoordinate(
 					CoordinateUtility.convertDegreesToPixels(lon,
@@ -624,7 +603,7 @@ public class MapController implements RouteListener, PositionListener,
 							getCurrentLevelOfDetail(),
 							CoordinateUtility.DIRECTION_LATITUDE));
 
-			Log.d(TAG_MAP_CONTROLLER, "User Posi ist:" + user.toString());
+			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(), "User Posi ist:" + user.toString());
 			mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
 		}
 

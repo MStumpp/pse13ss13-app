@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
@@ -71,16 +72,11 @@ public class MapGen implements TileListener {
 	private Point amount;
 
 	/**
-	 * the current fix center Coordinate
+	 * the current Coordinates
 	 * 
 	 */
-	private Coordinate center;
+	private BoundingBox coorBox;
 
-	/**
-	 * the current topLeft Coordinate
-	 * 
-	 */
-	private Coordinate topLeft;
 
 	/**
 	 * the Level of Detail
@@ -120,8 +116,8 @@ public class MapGen implements TileListener {
 	 * @param lod
 	 *            the start Level of Detail
 	 */
-	public MapGen(Point size, Coordinate center, float lod) {
-		this.center = center;
+	public MapGen(Point size, BoundingBox coorBox, float lod) {
+		this.coorBox = coorBox;
 
 		this.lod = lod;
 
@@ -132,8 +128,6 @@ public class MapGen implements TileListener {
 		this.size = size;
 
 		this.amount = new Point();
-
-		this.topLeft = this.getTopLeft(center);
 
 		this.tileFetcher = new TileFetcher();
 
@@ -149,10 +143,10 @@ public class MapGen implements TileListener {
 	 */
 	private DisplayCoordinate computeTileOffset() {
 
-		double lonDiff = ((topLeft.getLongitude() + 180) % (360 / Math.pow(2,
+		double lonDiff = ((coorBox.getTopLeft().getLongitude() + 180) % (360 / Math.pow(2,
 				lod)));
 
-		double latDiff = ((topLeft.getLatitude() + 90) % (180 / Math
+		double latDiff = ((coorBox.getTopLeft().getLatitude() + 90) % (180 / Math
 				.pow(2, lod)));
 
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, lod,
@@ -166,7 +160,7 @@ public class MapGen implements TileListener {
 		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
-				center, lod));
+				coorBox.getCenter(), lod));
 
 		return new DisplayCoordinate(xDiff, yDiff);
 	}
@@ -180,18 +174,6 @@ public class MapGen implements TileListener {
 
 		this.amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
 				(int) Math.ceil(size.y / currentTileWidth) + 1);
-	}
-
-	/**
-	 * Returns the upperLeft Coordinate
-	 * 
-	 * @return the top left geo-oordinate
-	 */
-	private Coordinate getTopLeft(Coordinate center) {
-		return new Coordinate(center, CoordinateUtility.convertPixelsToDegrees(
-				size.y / 2f, lod, CoordinateUtility.DIRECTION_LATITUDE),
-				-CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
-						CoordinateUtility.DIRECTION_LONGITUDE));
 	}
 
 	/**
@@ -217,24 +199,23 @@ public class MapGen implements TileListener {
 	 * @param lod
 	 *            the Level of Detail
 	 */
-	public void generateMap(final Coordinate center, final float lod) {
+	public void generateMap(final BoundingBox coorBox, final float lod) {
 
 		this.lod = lod;
-		this.center = center;
-		this.topLeft = this.getTopLeft(this.center);
+		this.coorBox = coorBox;
 		this.mapOffset = this.computeTileOffset();
-		this.indexXY = TileUtility.getXYTileIndex(this.topLeft,
+		this.indexXY = TileUtility.getXYTileIndex(coorBox.getTopLeft(),
 				Math.round(this.lod));
 		clearBitmap();
 		this.computeAmountOfTiles();
 		// Tiles requesten
 		tileFetcher.requestTiles(
 				(int) this.lod,
-				new Coordinate(this.topLeft.getLatitude()
+				new Coordinate(this.coorBox.getTopLeft().getLatitude()
 						+ CoordinateUtility.convertPixelsToDegrees(
 								currentTileWidth, lod,
 								CoordinateUtility.DIRECTION_LATITUDE),
-						this.topLeft.getLongitude()), amount.x, amount.y, this);
+						this.coorBox.getTopLeft().getLongitude()), amount.x, amount.y, this);
 	}
 
 	/**
