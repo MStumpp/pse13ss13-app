@@ -30,73 +30,139 @@ public class MapGen extends Thread implements TileListener {
 	private static String TAG_MapGen = MapGen.class.getSimpleName();
 
 	/**
+<<<<<<< HEAD
 	 * The default Background Color
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	public static int defaultBackground = Color.rgb(227, 227, 227);
 
 	/**
+<<<<<<< HEAD
 	 * The default empty Background Color
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 
 	/**
 	 * The Tile Fetcher. This is the location to get the tile parts of the map
+=======
+	 *
+	 */
+	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
+
+	// non Static
+
+	/**
+	 *
+	 */
+	private MapController mapController;
+
+	/**
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private TileFetcher tileFetcher;
 
 	/**
+<<<<<<< HEAD
 	 * The Bitmap that represent the map on the display.
 	 * Its essential that the Map is created on time.
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private Bitmap map;
 
 	/**
+<<<<<<< HEAD
 	 * the size of the Display
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private Point size;
 
 	/**
+<<<<<<< HEAD
 	 * the amount of tile parts which fit in the display
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private Point amount;
 
 	/**
+<<<<<<< HEAD
 	 * the current fix center Coordinate 
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private Coordinate center;
 
 	/**
+<<<<<<< HEAD
 	 * the current topLeft Coordinate
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private Coordinate topLeft;
 
 	/**
+<<<<<<< HEAD
 	 * the Level of Detail
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private float lod;
 
 	/**
+<<<<<<< HEAD
 	 * the current Tile Width
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private float currentTileWidth;
 
 	/**
+<<<<<<< HEAD
 	 * the Offset of the tile parts
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private DisplayCoordinate mapOffset;
 
 	/**
+<<<<<<< HEAD
 	 * the index of the tile on the top Left corner
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	//TODO maybe it should be the center tile
 	private int[] indexXY;
 
 	/**
+<<<<<<< HEAD
 	 * COntstructs a new MapGenerator
 	 * @param size the display size
 	 * @param mc the MapController
 	 * @param center the start center Coordinate
 	 * @param lod the start Level of Detail
+=======
+	 *
+	 */
+	private Bitmap empty = Bitmap.createBitmap(new int[] { 0x00000000 }, 1, 1,
+			Bitmap.Config.ARGB_8888);
+
+	/**
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	public MapGen(Point size, Coordinate center, float lod) {
 		this.center = center;
@@ -115,7 +181,6 @@ public class MapGen extends Thread implements TileListener {
 		this.topLeft = this.getTopLeft(center);
 
 		this.tileFetcher = new TileFetcher();
-		this.tileFetcher.setTileListener(this);
 
 		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
 				Bitmap.Config.ARGB_8888);
@@ -124,7 +189,7 @@ public class MapGen extends Thread implements TileListener {
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 * 
+	 *
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -164,7 +229,7 @@ public class MapGen extends Thread implements TileListener {
 
 	/**
 	 * Returns the upperLeft Coordinate
-	 * 
+	 *
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate getTopLeft(Coordinate center) {
@@ -175,8 +240,13 @@ public class MapGen extends Thread implements TileListener {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns the bottomRight Coordinate
 	 * 
+=======
+	 * Returns the upperLeft Coordinate
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 * @return the top left geo-oordinate
 	 */
 	//TODO bounding box is missing
@@ -189,10 +259,17 @@ public class MapGen extends Thread implements TileListener {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * This Method starts the compute of a new Map.
 	 * 
 	 * @param center the new center Coordinate
 	 * @param lod the Level of Detail
+=======
+	 * This should be the only Method to get a new Map
+	 *
+	 * @param center
+	 * @param load
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	public void generateMap(final Coordinate center, final float lod) {
 
@@ -211,12 +288,12 @@ public class MapGen extends Thread implements TileListener {
 						+ CoordinateUtility.convertPixelsToDegrees(
 								currentTileWidth, lod,
 								CoordinateUtility.DIRECTION_LATITUDE),
-						this.topLeft.getLongitude()), amount.x, amount.y);
+						this.topLeft.getLongitude()), amount.x, amount.y, this);
 	}
 
 	/**
 	 * recycle and creates a new map recycle and creates a new routeOverlay
-	 * 
+	 *
 	 * @param width
 	 *            of the map and routeOverlay
 	 * @param height
@@ -231,7 +308,11 @@ public class MapGen extends Thread implements TileListener {
 	}
 
 	/**
+<<<<<<< HEAD
 	 *  push the map to the View
+=======
+	 *
+>>>>>>> 2c44cbad8a3839e1980d3278d27893f3775d3493
 	 */
 	private void pushMap() {
 		MapController.getInstance().onMapOverlayImageChange(map);
