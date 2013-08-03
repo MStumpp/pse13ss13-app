@@ -467,7 +467,6 @@ public class MapController implements RouteListener, PositionListener,
 		c.setLongitude(c.getLongitude() + xDelta);
 
 		this.routeController.moveActiveWaypoint(c);
-		// this.mapModel.notifyMoveWaypoint(lines);
 	}
 
 	/**
@@ -530,7 +529,6 @@ public class MapController implements RouteListener, PositionListener,
 			this.currentActiveWaypoint = currentRoute.getActiveWaypoint()
 					.getId();
 		}
-		Log.d("ztr", "LOL");
 		updateRouteOverlay();
 	}
 
