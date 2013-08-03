@@ -617,16 +617,11 @@ public class MapController implements RouteListener, PositionListener,
 	 * 
 	 */
 	public void setActive(int id) {
-		// TODO route muss id als actove setzen lassen
 		this.routeController.setActiveWaypoint(id);
 	}
 
 	@Override
 	public void onCompassChange(float direction) {
-		// TODO weiterleitung zu View sollte klappen
-		// this.mapView.onPositionChange(direction);
-		// this.mapView.onPositionChange(0.0f);
-		// Log.d(TAG_MAP_CONTROLLER, "Grad: " + direction);
 		this.mapView.setUserPositionOverlayImage(direction);
 	}
 	
