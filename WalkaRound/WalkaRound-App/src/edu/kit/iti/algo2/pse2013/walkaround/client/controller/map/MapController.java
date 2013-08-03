@@ -193,9 +193,6 @@ public class MapController implements RouteListener, PositionListener,
 				.getDefaultLevelOfDetail();
 
 		map = new MapGen(size, center, lod);
-		map.setName("KartenGenerator");
-		map.setPriority(1);
-		// map.start();
 		map.generateMap(center, lod);
 		poiGen = new POIGen();
 		//TODO poi Gen doesnt run as Thread ... why?
