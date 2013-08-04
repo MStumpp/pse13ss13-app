@@ -70,7 +70,8 @@ public class POIGen implements Runnable {
 	 */
 	public void generatePOIView(BoundingBox coorBox, float lod, Point size) {
 		if (!POIManager.getInstance().isEmpty()) {
-
+			this.coorBox = coorBox;
+			
 			poiList = POIManager.getInstance().getPOIsWithinRectangle(this.coorBox.getTopLeft(),
 					this.coorBox.getBottomRight(), lod);
 

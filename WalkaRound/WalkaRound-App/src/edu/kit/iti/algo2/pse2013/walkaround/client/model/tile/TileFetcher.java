@@ -156,6 +156,9 @@ public class TileFetcher {
 					Log.e(TAG, e.toString());
 					cache.evictAll();
 					System.gc();
+				} catch (NullPointerException e){
+					Log.e(TAG, "Try to cache Null Pointer!");
+					Log.e(TAG, e.toString());
 				}
 			}
 		}

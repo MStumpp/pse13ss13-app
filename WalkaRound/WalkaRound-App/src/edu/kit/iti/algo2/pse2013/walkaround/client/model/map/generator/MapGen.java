@@ -239,7 +239,11 @@ public class MapGen implements TileListener {
 	 * 
 	 */
 	private void pushMap() {
-		MapController.getInstance().onMapOverlayImageChange(map);
+		try  {
+			MapController.getInstance().onMapOverlayImageChange(map);
+		} catch(NullPointerException e) {
+			Log.e(TAG_MapGen, "MapController existiert noch nicht");
+		}
 	}
 
 	@Override
