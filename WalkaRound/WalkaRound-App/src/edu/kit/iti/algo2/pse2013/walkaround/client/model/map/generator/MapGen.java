@@ -177,20 +177,6 @@ public class MapGen implements TileListener {
 	}
 
 	/**
-	 * Returns the bottomRight Coordinate
-	 * 
-	 * @return the top left geo-oordinate
-	 */
-	// TODO bounding box is missing
-	@SuppressWarnings("unused")
-	private Coordinate getBottomRight(Coordinate center) {
-		return new Coordinate(center, CoordinateUtility.convertPixelsToDegrees(
-				size.y / 2f, lod, CoordinateUtility.DIRECTION_LATITUDE),
-				CoordinateUtility.convertPixelsToDegrees(size.x / 2f, lod,
-						CoordinateUtility.DIRECTION_LONGITUDE));
-	}
-
-	/**
 	 * 
 	 * This Method starts the compute of a new Map.
 	 * 

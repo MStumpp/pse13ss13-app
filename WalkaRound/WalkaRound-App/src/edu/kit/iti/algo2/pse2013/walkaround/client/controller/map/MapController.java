@@ -178,6 +178,8 @@ public class MapController implements RouteListener, PositionListener,
 		this.currentRoute = new Route(new LinkedList<Coordinate>());
 		this.routeGen = new Thread();
 		this.mapView = mv;
+		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
+				.getDefaultLevelOfDetail();
 		size = mv.getDisplaySize();	
 		
 		this.coorBox = new BoundingBox(defaultCoordinate,size,lod);
@@ -190,8 +192,6 @@ public class MapController implements RouteListener, PositionListener,
 
 		Log.d(TAG_MAP_CONTROLLER, "Initialice MapModel!");
 		// this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
-		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
-				.getDefaultLevelOfDetail();
 
 		map = new MapGen(size, coorBox, lod);
 		map.generateMap(coorBox, lod);
