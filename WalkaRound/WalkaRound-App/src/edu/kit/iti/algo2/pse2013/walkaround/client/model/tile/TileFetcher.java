@@ -51,7 +51,7 @@ public class TileFetcher {
 		final int[] endTileIndex = TileUtility.getXYTileIndex(bottomRight, levelOfDetail);
 		//Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
 
-		requestTiles(levelOfDetail, startTileIndex[0], startTileIndex[1], endTileIndex[0], endTileIndex[1], listener);
+		requestTiles(levelOfDetail, startTileIndex[0]- 1, startTileIndex[1] -1, endTileIndex[0] + 1, endTileIndex[1] + 1, listener);
 		//requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 1, startTileIndex[0] + numTilesX + 1, startTileIndex[1] + numTilesY + 1, null);
 	}
 
