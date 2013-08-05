@@ -199,7 +199,7 @@ public class MapGen implements TileListener {
 		clearBitmap();
 		this.computeAmountOfTiles();
 		// Tiles requesten
-		tileFetcher.requestTiles((int) this.lod, this.coorBox.getCenter(),
+		tileFetcher.requestTiles((int) this.lod, this.coorBox.getTopLeft(),
 				this.coorBox.getBottomRight(), this);
 		fix = false;
 
