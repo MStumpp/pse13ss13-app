@@ -167,7 +167,7 @@ public class BoundingBox {
 	 * @return the bottom right geo-oordinate
 	 */
 	private Coordinate computeBottomRight(float lod) {
-		return new Coordinate(center, size.height / 2f, size.width / 2f);
+		return new Coordinate(center, -size.height / 2f, size.width / 2f);
 	}
 
 	/**

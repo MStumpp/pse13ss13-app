@@ -181,6 +181,7 @@ public class MapController implements RouteListener, PositionListener,
 		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 				.getDefaultLevelOfDetail();
 		size = mv.getDisplaySize();	
+		userPos = new Thread();
 		
 		this.coorBox = new BoundingBox(defaultCoordinate,size,lod);
 		
@@ -566,15 +567,22 @@ public class MapController implements RouteListener, PositionListener,
 	public void updatePOIView(){
 		this.poiGen.generatePOIView(coorBox, lod, size);
 	}
+	
+	Thread userPos;
+	
 	/**
 	 * 
 	 */
 	public void updateUserPosition() {
-		Thread t = new Thread(new UserPos());
-		t.start();
+		if(userPos.isAlive()){
+			userPos.interrupt();
+		}
+		userPos = new Thread(new UserPos());
+		userPos.start();
 	}
 
 	/**
+	 * This class sets the USer Arrwow
 	 * 
 	 * @author Ludwig Biermann
 	 * 
@@ -595,10 +603,10 @@ public class MapController implements RouteListener, PositionListener,
 
 			DisplayCoordinate pos = new DisplayCoordinate(
 					CoordinateUtility.convertDegreesToPixels(lon,
-							getCurrentLevelOfDetail(),
+							lod,
 							CoordinateUtility.DIRECTION_LONGITUDE),
 					CoordinateUtility.convertDegreesToPixels(lat,
-							getCurrentLevelOfDetail(),
+							lod,
 							CoordinateUtility.DIRECTION_LATITUDE));
 
 			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(), "User Posi ist:" + user.toString());

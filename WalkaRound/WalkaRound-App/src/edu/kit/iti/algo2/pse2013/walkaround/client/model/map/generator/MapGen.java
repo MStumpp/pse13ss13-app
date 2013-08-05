@@ -77,7 +77,6 @@ public class MapGen implements TileListener {
 	 */
 	private BoundingBox coorBox;
 
-
 	/**
 	 * the Level of Detail
 	 * 
@@ -143,10 +142,10 @@ public class MapGen implements TileListener {
 	 */
 	private DisplayCoordinate computeTileOffset() {
 
-		double lonDiff = ((coorBox.getTopLeft().getLongitude() + 180) % (360 / Math.pow(2,
-				lod)));
+		double lonDiff = ((coorBox.getCenter().getLongitude() + 180) % (360 / Math
+				.pow(2, lod)));
 
-		double latDiff = ((coorBox.getTopLeft().getLatitude() + 90) % (180 / Math
+		double latDiff = ((coorBox.getCenter().getLatitude() + 90) % (180 / Math
 				.pow(2, lod)));
 
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, lod,
@@ -156,6 +155,9 @@ public class MapGen implements TileListener {
 				CoordinateUtility.DIRECTION_VERTICAL);
 
 		yDiff = (currentTileWidth - 1) - yDiff;
+
+		xDiff = size.x / 2 - currentTileWidth / 2 - Math.abs(xDiff);
+		yDiff = size.y / 2 - currentTileWidth / 2 - Math.abs(yDiff);
 
 		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
@@ -176,6 +178,8 @@ public class MapGen implements TileListener {
 				(int) Math.ceil(size.y / currentTileWidth) + 1);
 	}
 
+	boolean fix = false;
+
 	/**
 	 * 
 	 * This Method starts the compute of a new Map.
@@ -190,18 +194,15 @@ public class MapGen implements TileListener {
 		this.lod = lod;
 		this.coorBox = coorBox;
 		this.mapOffset = this.computeTileOffset();
-		this.indexXY = TileUtility.getXYTileIndex(coorBox.getTopLeft(),
+		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.lod));
 		clearBitmap();
 		this.computeAmountOfTiles();
 		// Tiles requesten
-		tileFetcher.requestTiles(
-				(int) this.lod,
-				new Coordinate(this.coorBox.getTopLeft().getLatitude()
-						+ CoordinateUtility.convertPixelsToDegrees(
-								currentTileWidth, lod,
-								CoordinateUtility.DIRECTION_LATITUDE),
-						this.coorBox.getTopLeft().getLongitude()), amount.x, amount.y, this);
+		tileFetcher.requestTiles((int) this.lod, this.coorBox.getCenter(),
+				this.coorBox.getBottomRight(), this);
+		fix = false;
+
 	}
 
 	/**
@@ -225,9 +226,9 @@ public class MapGen implements TileListener {
 	 * 
 	 */
 	private void pushMap() {
-		try  {
+		try {
 			MapController.getInstance().onMapOverlayImageChange(map);
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			Log.e(TAG_MapGen, "MapController existiert noch nicht");
 		}
 	}
@@ -272,10 +273,13 @@ public class MapGen implements TileListener {
 		 * @param y
 		 *            y Position
 		 */
-		public TileDrawer(final Bitmap tile, int x, int y) {
+		public TileDrawer(Bitmap tile, int x, int y) {
 			this.tile = tile;
 			this.x = x;
 			this.y = y;
+			// this.tile = Bitmap.createBitmap(t.getWidth(), t.getHeight(),
+			// t.getConfig());
+			// Log.d("tt2", ""+ tile.isMutable());
 		}
 
 		@Override
@@ -289,27 +293,13 @@ public class MapGen implements TileListener {
 
 			if (!map.isRecycled() && tile != null) {
 				Canvas canvas = new Canvas(map);
-				Log.d(TAG_MapGen, "ZEICHNE! ");
-				if (tileY == 0 && tileX == 0) {
-					Log.d(TAG_MapGen,
-							"ZEICHNE OFF! "
-									+ ((tileX * currentTileWidth) - mapOffset
-											.getX())
-									+ " : "
-									+ ((tileY * currentTileWidth) - mapOffset
-											.getY()));
-					Log.d(TAG_MapGen, "ZEICHNE OFF! " + tileX + " " + tileY);
-				}
-				// synchronized (map) {
 				canvas.drawBitmap(
 						Bitmap.createScaledBitmap(tile,
 								Math.round(currentTileWidth),
 								Math.round(currentTileWidth), false),
-						(tileX * currentTileWidth) - mapOffset.getX(),
-						(tileY * currentTileWidth) - mapOffset.getY(), null);
-				// }
+						(tileX * currentTileWidth) + mapOffset.getX(),
+						(tileY * currentTileWidth) + mapOffset.getY(), null);
 			}
-
 			pushMap();
 		}
 	}

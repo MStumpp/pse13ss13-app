@@ -43,15 +43,16 @@ public class TileFetcher {
 	 * @param numTilesX the number of tile-columns in the requested rectangle
 	 * @param numTilesY the number of tile-rows in the requested rectangle
 	 */
-	public void requestTiles(final int levelOfDetail, final Coordinate topLeft, final int numTilesX, final int numTilesY, TileListener listener) {
-		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d, %s)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongitude(), numTilesX, numTilesY, listener));
+	public void requestTiles(final int levelOfDetail, final Coordinate topLeft, final Coordinate bottomRight, TileListener listener) {
+		//Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d, %s)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongitude(), numTilesX, numTilesY, listener));
 
-		Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
+		//Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
 		final int[] startTileIndex = TileUtility.getXYTileIndex(topLeft, levelOfDetail);
-		Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
+		final int[] endTileIndex = TileUtility.getXYTileIndex(bottomRight, levelOfDetail);
+		//Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
 
-		requestTiles(levelOfDetail, startTileIndex[0], startTileIndex[1], startTileIndex[0] + numTilesX, startTileIndex[1] + numTilesY, listener);
-		requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 1, startTileIndex[0] + numTilesX + 1, startTileIndex[1] + numTilesY + 1, null);
+		requestTiles(levelOfDetail, startTileIndex[0], startTileIndex[1], endTileIndex[0], endTileIndex[1], listener);
+		//requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 1, startTileIndex[0] + numTilesX + 1, startTileIndex[1] + numTilesY + 1, null);
 	}
 
 	public void requestTiles(final int levelOfDetail, final int minX, final int minY, final int maxX, final int maxY, TileListener listener) {
@@ -73,12 +74,12 @@ public class TileFetcher {
 		}
 
 
-		int tileGridWith = (int) Math.pow(2, levelOfDetail);
+		int tileGridWidth = (int) Math.pow(2, levelOfDetail);
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
-				x = x % tileGridWith;
-				y = y % tileGridWith;
+				x = x % tileGridWidth;
+				y = y % tileGridWidth;
 
 				final String urlString = String.format(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getTileURL(), x, y, levelOfDetail);
 				Bitmap bmpFromCache;
