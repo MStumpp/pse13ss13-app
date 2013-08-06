@@ -10,6 +10,7 @@ import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class InfoView extends Fragment {
@@ -71,6 +72,7 @@ public class InfoView extends Fragment {
 			if (poi.getTextInfo() != null) {
 				text.setText(poi.getTextInfo());
 				text.setVisibility(View.VISIBLE);
+				TextToSpeechUtility.getInstance().speak(poi.getTextInfo());
 			}
 		}
 
