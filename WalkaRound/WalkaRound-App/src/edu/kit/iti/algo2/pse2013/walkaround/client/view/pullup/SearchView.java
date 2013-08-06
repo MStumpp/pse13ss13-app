@@ -23,6 +23,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -66,7 +68,6 @@ public class SearchView extends Fragment {
 		TabSpec spec2 = tabHost.newTabSpec("poi_tab");
 		spec2.setContent(R.id.poi_search);
 		spec2.setIndicator("POI");
-
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
 
@@ -88,6 +89,7 @@ public class SearchView extends Fragment {
 
 		result = (LinearLayout) this.getActivity().findViewById(
 				R.id.search_result);
+
 		result.setVisibility(View.GONE);
 		tabHost.setVisibility(View.VISIBLE);
 
@@ -114,6 +116,7 @@ public class SearchView extends Fragment {
 		 * size.x; goButton.setX(size.x / 4); goButton.getLayoutParams().width =
 		 * size.x / 2;
 		 */
+		goButton.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 
@@ -128,6 +131,7 @@ public class SearchView extends Fragment {
 		super.onDestroy();
 		Log.d(TAG_PULLUP_CONTENT, "Destroy SearchView");
 		tabHost.getTabWidget().removeAllViews();
+		result.removeAllViews();
 		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
 	}
 
@@ -145,22 +149,44 @@ public class SearchView extends Fragment {
 
 			if (v.equals(goButton)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
+				List<Location> locations;
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedr�ckt");
 				Log.d(TAG_PULLUP_CONTENT, ""
 						+ postalCodeSearch.getText().toString());
 				if (postalCodeSearch.getText().toString().trim().equals("")) {
-					searchMenuController.requestSuggestionsByAddress(0,
-							citySearch.getText().toString(), streetSearch
+					locations = searchMenuController
+							.requestSuggestionsByAddress(0, citySearch
+									.getText().toString(), streetSearch
 									.getText().toString(), numberSearch
 									.getText().toString());
 				} else {
-					searchMenuController.requestSuggestionsByAddress(Integer
-							.parseInt(postalCodeSearch.getText().toString()),
-							citySearch.getText().toString(), streetSearch
-									.getText().toString(), numberSearch
-									.getText().toString());
+					locations = searchMenuController
+							.requestSuggestionsByAddress(Integer
+									.parseInt(postalCodeSearch.getText()
+											.toString()), citySearch.getText()
+									.toString(), streetSearch.getText()
+									.toString(), numberSearch.getText()
+									.toString());
 				}
-				// TODO: zur vorschl�gen gehen
+				// TODO: bei keinem ergebnis meldung anzeigen
+				// TODO: bei ergebnis ort anzeigen
+
+				result.setVisibility(View.VISIBLE);
+				tabHost.setVisibility(View.GONE);
+
+				for (Location value : locations) {
+					TextView location = new TextView(getActivity());
+					Log.d("routingView: ",
+							" " + value.getName() + " " + value.getId());
+					location.setText(value.getAddress().toString());
+					location.setOnTouchListener(new locationTouch(value,
+							location));
+					// TODO TextSize relativieren
+					location.setTextSize(40);
+					location.setPadding(10, 20, 10, 20);
+					location.setBackgroundColor(MapGen.defaultBackground);
+					result.addView(location);
+				}
 			}
 			return false;
 		}
@@ -191,8 +217,6 @@ public class SearchView extends Fragment {
 					poi.setBackgroundColor(MapGen.defaultBackground);
 					result.addView(poi);
 				}
-
-				// TODO: zur karte zur�ckkehren
 			}
 			return false;
 		}
@@ -212,10 +236,44 @@ public class SearchView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				RouteController.getInstance().addWaypoint(new Waypoint(poi.getLatitude(), poi.getLongitude(), poi.getName()));
+				RouteController.getInstance().addWaypoint(
+						new Waypoint(poi.getLatitude(), poi.getLongitude(), poi
+								.getName()));
 
 				MapController.getInstance().getPullUpView().setNullSizeHeight();
-				
+				MapController.getInstance().setCenter(
+						new Coordinate(poi.getLatitude(), poi.getLongitude()));
+				MapController.getInstance().updateAll();
+
+			}
+			return false;
+		}
+
+	}
+
+	private class locationTouch implements OnTouchListener {
+
+		private Location location;
+		private View view;
+
+		public locationTouch(Location p, View view) {
+			this.location = p;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				RouteController.getInstance().addWaypoint(
+						new Waypoint(location.getLatitude(), location
+								.getLongitude(), location.getName()));
+
+				MapController.getInstance().getPullUpView().setNullSizeHeight();
+				MapController.getInstance().setCenter(
+						new Coordinate(location.getLatitude(), location
+								.getLongitude()));
+				MapController.getInstance().updateAll();
+
 			}
 			return false;
 		}

@@ -1,23 +1,31 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
+import java.util.List;
+
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class RoutingView extends Fragment {
@@ -27,7 +35,6 @@ public class RoutingView extends Fragment {
 	private int switcher = R.id.pullupRoutingSwitcher;
 
 	private FavoriteMenuController favController;
-	private RouteController routeController;
 
 	private RouteInfo lastKnownRoute;
 
@@ -39,6 +46,7 @@ public class RoutingView extends Fragment {
 	private Button addFavorite;
 	private Button goToMap;
 	private LinearLayout layout;
+	private EditText favoriteName;
 
 	private static boolean isListener = false;
 
@@ -61,6 +69,9 @@ public class RoutingView extends Fragment {
 		goToMap = (Button) this.getActivity().findViewById(R.id.go_to_map);
 		layout = (LinearLayout) getActivity().findViewById(R.id.waylist);
 
+		favoriteName = (EditText) this.getActivity().findViewById(
+				R.id.favoritename);
+
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -68,30 +79,30 @@ public class RoutingView extends Fragment {
 		display.getSize(size);
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der sizes");
-		//reset.setX(size.x / 5 * 0);
+		// reset.setX(size.x / 5 * 0);
 		reset.getLayoutParams().width = size.x / 5;
 		reset.getLayoutParams().height = size.y / 8;
-		
-		//invert.setX(size.x / 5 * 1);
+
+		// invert.setX(size.x / 5 * 1);
 		invert.getLayoutParams().width = size.x / 5;
 		invert.getLayoutParams().height = size.y / 8;
-		
-		//tsp.setX(size.x / 5 * 2);
+
+		// tsp.setX(size.x / 5 * 2);
 		tsp.getLayoutParams().width = size.x / 5;
 		tsp.getLayoutParams().height = size.y / 8;
-		
-		//load.setX(size.x / 5 * 3);
+
+		// load.setX(size.x / 5 * 3);
 		load.getLayoutParams().width = size.x / 5;
 		load.getLayoutParams().height = size.y / 8;
-		
-		//save.setX(size.x / 5 * 4);
+
+		// save.setX(size.x / 5 * 4);
 		save.getLayoutParams().width = size.x / 5;
 		save.getLayoutParams().height = size.y / 8;
-		
-		//addFavorite.setX(size.x * 0);
+
+		// addFavorite.setX(size.x * 0);
 		addFavorite.getLayoutParams().width = size.x / 2;
-		
-		//goToMap.setX(size.x / 2);
+
+		// goToMap.setX(size.x / 2);
 		goToMap.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Zuweisung der Listener");
@@ -102,10 +113,12 @@ public class RoutingView extends Fragment {
 		save.setOnTouchListener(new saveListener());
 		addFavorite.setOnTouchListener(new favoriteListener());
 		goToMap.setOnTouchListener(new backToMapListener());
+		favoriteName
+				.setOnEditorActionListener(new FavoriteNameActionListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
-	
+
 	public void onDestroyView() {
 		super.onDestroyView();
 		// routeController.unregisterRouteListener(this);
@@ -131,7 +144,7 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(reset) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "reset wurde gedr�ckt");
-				routeController.resetRoute();
+				RouteController.getInstance().resetRoute();
 			}
 			// TODO: refresh activity?
 			return false;
@@ -160,7 +173,7 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(tsp) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedr�ckt");
-				routeController.optimizeRoute();
+				RouteController.getInstance().optimizeRoute();
 			}
 			return false;
 		}
@@ -173,7 +186,10 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(load) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "load wurde gedr�ckt");
-				// TODO: ansicht wechselt in die liste der favorisierten routen
+				// TODO: ansicht wechselt in die liste der !!!!favorisierten
+				// routen!!!!
+				MapController.getInstance().getPullUpView()
+						.changeView(PullUpView.CONTENT_FAVORITE);
 			}
 			return false;
 		}
@@ -186,11 +202,12 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
-				// TODO : favoritenansicht öffnet sich
+				if (layout.getChildCount() != 0) {
+					favoriteName.setVisibility(View.VISIBLE);
+				}
 			}
 			return false;
 		}
-
 	}
 
 	private class favoriteListener implements OnTouchListener {
@@ -200,7 +217,10 @@ public class RoutingView extends Fragment {
 			if (v.equals(addFavorite)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "add favorite wurde gedr�ckt");
-				// TODO: ansicht wechselt in die liste der favorisierten orte
+				// TODO: ansicht wechselt in die liste der !!!favorisierten
+				// orte!!!!
+				MapController.getInstance().getPullUpView()
+						.changeView(PullUpView.CONTENT_FAVORITE);
 			}
 			return false;
 		}
@@ -214,16 +234,15 @@ public class RoutingView extends Fragment {
 			if (v.equals(goToMap)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "go to map wurde gedr�ckt");
-				// TODO:pullup muss sich schlie�en
+				MapController.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;
 		}
 
 	}
 
-	
 	public void onRouteChange(final RouteInfo currentRoute, Context context) {
-		
+
 		if (currentRoute != null) {
 			if (layout != null) {
 				// lastKnownRoute = currentRoute;
@@ -231,9 +250,11 @@ public class RoutingView extends Fragment {
 
 				for (Waypoint value : currentRoute.getWaypoints()) {
 					TextView waypoint = new TextView(context);
-					Log.d("routingView: ", " " + value.getName() + " " + value.getId());
-					waypoint.setText("TEST " + value.getName() + " " + value.getId());
-					//TODO TextSize relativieren
+					Log.d("routingView: ",
+							" " + value.getName() + " " + value.getId());
+					waypoint.setText("TEST " + value.getName() + " "
+							+ value.getId());
+					// TODO TextSize relativieren
 					waypoint.setTextSize(40);
 					waypoint.setPadding(10, 20, 10, 20);
 					waypoint.setBackgroundColor(MapGen.defaultBackground);
@@ -241,5 +262,22 @@ public class RoutingView extends Fragment {
 				}
 			}
 		}
+	}
+
+	private class FavoriteNameActionListener implements OnEditorActionListener {
+
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (v.equals(favoriteName)) {
+				Log.d(TAG_PULLUP_CONTENT, "Ein name wurde eingegeben");
+				// TODO: ansicht wechselt in die liste der !!!!favorisierten
+				// routen!!!!
+				favoriteName.setVisibility(View.GONE);
+				MapController.getInstance().getPullUpView()
+						.changeView(PullUpView.CONTENT_FAVORITE);
+			}
+			return false;
+		}
+
 	}
 }
