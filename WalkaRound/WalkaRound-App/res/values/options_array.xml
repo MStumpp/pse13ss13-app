@@ -8,4 +8,14 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="options_map_entries">
+        <item>Mapnik</item>
+        <item>Wanderkarte</item>
+        <item>MapQuest</item>
+    </string-array>
+    <string-array name="options_map_typ_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>    
 </resources>

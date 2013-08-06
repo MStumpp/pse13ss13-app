@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
@@ -19,6 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -120,19 +122,26 @@ public class BootActivity extends Activity {
 				RouteProcessing.getInstance();
 				Looper.prepare();
 				PositionManager.initialize(getApplicationContext());
-
+				TextToSpeechUtility.initialize(getApplicationContext());
+				
+				while (!TextToSpeechUtility.getInstance().isReady()) {
+					Log.d(TAG, "TextToSpeech ist noch nicht ready");
+					sleep(50);
+				}
+				
 				// 20%
 				progress = 200;
 				updateProgress(progress);
 
 				System.gc();
 
-				String fileString = File.separatorChar + "walkaround"
-						+ File.separatorChar + "geometryData.pbf";
 
 				updateProgress(progress);
-
-				/*GeometryDataIO geometryDataIO;
+				/*
+				 * 
+				String fileString = File.separatorChar + "walkaround"
+						+ File.separatorChar + "geometryData.pbf";
+				GeometryDataIO geometryDataIO;
 				try {
 					geometryDataIO = GeometryDataIO.load(new File(Environment
 							.getExternalStorageDirectory().getAbsolutePath()
@@ -206,6 +215,8 @@ public class BootActivity extends Activity {
 				progress=1000;
 				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
+				TextToSpeechUtility.getInstance().speak("Wilkommen bei !");
+				TextToSpeechUtility.getInstance().speak("WalkaRound!", Locale.ENGLISH);
 
 			} catch (InterruptedException e) {
 			} finally {

@@ -52,6 +52,15 @@
         android:key="string/options_map"
         android:persistent="false"
         android:title="@string/options_map" >
+        
+            <ListPreference
+                android:defaultValue="1"
+                android:dialogTitle="@string/options_map_typ"
+                android:entries="@array/options_map_entries"
+                android:entryValues="@array/options_map_typ_values"
+                android:key="@string/options_map_typ"
+                android:title="@string/options_map_typ" />
+        
     </PreferenceScreen>
     <PreferenceScreen
         android:key="@string/options_poi"

@@ -35,6 +35,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -902,6 +903,7 @@ public class MapView extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		TextToSpeechUtility.getInstance().shutdown();
 		Log.d(TAG_MAPVIEW, "Destroy MapView");
 	}
 }
