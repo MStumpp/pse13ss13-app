@@ -7,6 +7,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
@@ -185,6 +186,8 @@ public class MapController implements RouteListener, PositionListener,
 		
 		PositionManager.getInstance().registerPositionListener(this);
 		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
+		
+		PreferenceManager.getDefaultSharedPreferences(mv).registerOnSharedPreferenceChangeListener(map);
 	}
 
 	private MapController(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox) {

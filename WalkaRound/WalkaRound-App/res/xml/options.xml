@@ -54,7 +54,7 @@
         android:title="@string/options_map" >
         
             <ListPreference
-                android:defaultValue="1"
+                android:defaultValue="3"
                 android:dialogTitle="@string/options_map_typ"
                 android:entries="@array/options_map_entries"
                 android:entryValues="@array/options_map_typ_values"

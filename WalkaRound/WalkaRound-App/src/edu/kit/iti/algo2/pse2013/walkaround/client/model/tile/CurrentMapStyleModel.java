@@ -2,13 +2,15 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
 
 /**
  * Diese Klasse hält den derzeitigen MapStyle vor
- *
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class CurrentMapStyleModel {
 
 	private final static MapStyle defaultMapStyle = MapStyle.MAPSTYLE_MAPQUEST;
+	private static final String MAPNIK = "Mapnik";
+	private static final String WANDERKARTE = "Wanderkarte";
 	private static CurrentMapStyleModel currentMapModel;
 	private MapStyle style;
 
@@ -17,26 +19,28 @@ public class CurrentMapStyleModel {
 	}
 
 	/**
-	 * Gibt das CurrentMapStyleModel zurück. Falls dieses Objekt noch nicht initialisiert ist, wird Mapnik als
-	 * Kartenstil verwendet.
-	 *
+	 * Gibt das CurrentMapStyleModel zurück. Falls dieses Objekt noch nicht
+	 * initialisiert ist, wird Mapnik als Kartenstil verwendet.
+	 * 
 	 * @return CurrentMapStyleModel Objekt
 	 */
 	public static CurrentMapStyleModel getInstance() {
-		if(currentMapModel == null){
+		if (currentMapModel == null) {
 			return getInstance(defaultMapStyle);
 		}
 		return currentMapModel;
 	}
 
 	/**
-	 * Gibt das CurrentMapStyleModel zurück. Falls diesen Objekt noch nicht initialisiert ist wird ein spezieller Kartenstil als Standart definiert.
-	 *
-	 * @param style der bei der initialisierung zu verwendener Kartenstil
+	 * Gibt das CurrentMapStyleModel zurück. Falls diesen Objekt noch nicht
+	 * initialisiert ist wird ein spezieller Kartenstil als Standart definiert.
+	 * 
+	 * @param style
+	 *            der bei der initialisierung zu verwendener Kartenstil
 	 * @return CurrentMapStyleModel Objekt
 	 */
 	public static CurrentMapStyleModel getInstance(MapStyle style) {
-		if(currentMapModel == null){
+		if (currentMapModel == null) {
 			currentMapModel = new CurrentMapStyleModel(style);
 		}
 		return currentMapModel;
@@ -44,6 +48,7 @@ public class CurrentMapStyleModel {
 
 	/**
 	 * Gibt den aktuellen Kartenstil zurück
+	 * 
 	 * @return MapStyle
 	 */
 	public MapStyle getCurrentMapStyle() {
@@ -52,9 +57,21 @@ public class CurrentMapStyleModel {
 
 	/**
 	 * Setzt einen neuen Kartenstil.
-	 * @param style der neue KArtenstil.
+	 * 
+	 * @param mapStyle
+	 *            der neue KArtenstil.
 	 */
-	public void setCurrentMapStyle(MapStyle style) {
-		this.style = style;
+	public void setCurrentMapStyle(MapStyle mapStyle) {
+		this.style = mapStyle;
+	}
+
+	public void setCurrentMapStyle(String mapStyle) {
+		if(mapStyle.equals(MAPNIK)) {
+			style = MapStyle.MAPSTYLE_MAPNIK;
+		} else if(mapStyle.equals(WANDERKARTE)) {
+			style = MapStyle.MAPSTYLE_WANDERKARTE;
+		} else {
+			style = defaultMapStyle;
+		}
 	}
 }

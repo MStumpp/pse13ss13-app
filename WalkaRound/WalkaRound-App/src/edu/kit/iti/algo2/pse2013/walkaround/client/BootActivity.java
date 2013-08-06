@@ -36,6 +36,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.widget.ProgressBar;
@@ -54,6 +55,7 @@ public class BootActivity extends Activity {
 		setContentView(R.layout.progress_bar);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 
+		PreferenceManager.setDefaultValues(this, R.xml.options, true);
 		final Thread timerThread = new BootHelper();
 		timerThread.start();
 	}
@@ -110,7 +112,9 @@ public class BootActivity extends Activity {
 				POIMenuController.getInstance();
 				RouteController.getInstance();
 				SearchMenuController.getInstance();
-
+				CurrentMapStyleModel.getInstance();
+				String mapStyle = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.options_map_typ), "MapQuest");
+				CurrentMapStyleModel.getInstance().setCurrentMapStyle(mapStyle);
 				// 10 %
 				progress = 100;
 				updateProgress(progress);
