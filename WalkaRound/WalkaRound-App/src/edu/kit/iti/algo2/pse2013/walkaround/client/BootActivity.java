@@ -18,6 +18,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -29,7 +31,7 @@ import android.view.Display;
 import android.widget.ProgressBar;
 
 public class BootActivity extends Activity {
-	protected static final int TIMER_RUNTIME = 10000; // in ms --> 10s
+	protected static final int TOTALSTEPS = 1000;
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419);
 	public static String TAG = BootActivity.class.getSimpleName();
 
@@ -55,22 +57,36 @@ public class BootActivity extends Activity {
 		if (null != mProgressBar) {
 			// Ignore rounding error here
 			final int progress = mProgressBar.getMax() * timePassed
-					/ TIMER_RUNTIME;
+					/ TOTALSTEPS;
 			mProgressBar.setProgress(progress);
 		}
 	}
 
 	public void onContinue() {
-	    Intent intent = new Intent(this, MapView.class);
-	    this.startActivity(intent);
+		Intent intent = new Intent(this, MapView.class);
+		this.startActivity(intent);
+	}
+
+	public void alert() {
+
+		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		alertDialog.setTitle("Unknown Error");
+		alertDialog.setMessage("Close?");
+		alertDialog.setButton(1, "OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		});
+		alertDialog.setIcon(R.drawable.ic_launcher);
+		alertDialog.show();
 	}
 
 	private class BootHelper extends Thread implements TileListener {
 
 		private int tiles = 0;
 		private int progress = 0;
-		
-		
+		private int stepSize;
+
 		@Override
 		public void run() {
 			mbActive = true;
@@ -78,7 +94,8 @@ public class BootActivity extends Activity {
 
 				// Controller initialisierung
 
-				//TODO MapController initialisieren ohne MapView und Tile Fetcher übergeben
+				// TODO MapController initialisieren ohne MapView und Tile
+				// Fetcher übergeben
 				// MapController
 				FavoriteMenuController.getInstance();
 				// HeadUpController.initializes(headUpView);
@@ -88,7 +105,8 @@ public class BootActivity extends Activity {
 				RouteController.getInstance();
 				SearchMenuController.getInstance();
 
-				progress += 200;
+				// 10 %
+				progress = 100;
 				updateProgress(progress);
 
 				// Model initialisierung
@@ -98,9 +116,9 @@ public class BootActivity extends Activity {
 				RouteProcessing.getInstance();
 				Looper.prepare();
 				PositionManager.initialize(getApplicationContext());
-				
-				
-				progress += 200;
+
+				// 20%
+				progress = 200;
 				updateProgress(progress);
 
 				// TileFetcher
@@ -122,23 +140,35 @@ public class BootActivity extends Activity {
 				}
 
 				TileFetcher tileFetcher = new TileFetcher();
-				int[] amountTop = TileUtility.getXYTileIndex(coorBox.getTopLeft(),(int) lod);
-				int[] amountBottom = TileUtility.getXYTileIndex(coorBox.getBottomRight(),(int) lod);
-				
-				int amount = (amountBottom[0] - amountTop[0]) * (amountBottom[1] - amountTop[1]);
-				
-				tileFetcher.requestTiles((int) lod, amountTop[0], amountTop[1], amountBottom[0], amountBottom[1], this);
+
+				// 50 %
+				progress = 500;
+				updateProgress(progress);
+
+				int[] amountTop = TileUtility.getXYTileIndex(
+						coorBox.getTopLeft(), (int) lod);
+				int[] amountBottom = TileUtility.getXYTileIndex(
+						coorBox.getBottomRight(), (int) lod);
+
+				int amount = (amountBottom[0] - amountTop[0])
+						* (amountBottom[1] - amountTop[1]);
+
+				stepSize = (int) (500 / amount);
+
+				tileFetcher.requestTiles((int) lod, amountTop[0], amountTop[1],
+						amountBottom[0], amountBottom[1], this);
 
 				updateProgress(progress);
-				while (amount>tiles) {
-					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > " + tiles);
+				while (amount > tiles) {
+					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
+							+ tiles);
 					updateProgress(progress);
 					sleep(50);
 				}
+				updateProgress(1000);
 				Log.d(TAG, "alles geladen!!");
 
 			} catch (InterruptedException e) {
-				// do nothing
 			} finally {
 				onContinue();
 			}
@@ -146,7 +176,7 @@ public class BootActivity extends Activity {
 
 		@Override
 		public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-			progress+=200;
+			progress += stepSize;
 			tiles++;
 		}
 
