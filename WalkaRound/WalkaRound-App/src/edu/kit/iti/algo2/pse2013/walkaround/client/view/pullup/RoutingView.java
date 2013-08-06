@@ -250,10 +250,10 @@ public class RoutingView extends Fragment {
 					TextView waypoint = new TextView(context);
 					Log.d("routingView: ",
 							" " + value.getName() + " " + value.getId());
-					waypoint.setText("TEST " + value.getName() + " "
+					waypoint.setText(value.getName() + " "
 							+ value.getId());
 					// TODO TextSize relativieren
-					waypoint.setTextSize(40);
+					waypoint.setTextSize(20);
 					waypoint.setPadding(10, 20, 10, 20);
 					waypoint.setBackgroundColor(MapGen.defaultBackground);
 					layout.addView(waypoint);

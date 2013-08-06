@@ -105,7 +105,7 @@ public class FavoriteView extends Fragment {
 			tv.setText(current);
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favLocationTouch(current, tv));
-			tv.setTextSize(40);
+			tv.setTextSize(30);
 			tv.setPadding(10, 20, 10, 20);
 			tv.setBackgroundColor(MapGen.defaultBackground);
 			favPois.addView(tv);
@@ -119,7 +119,7 @@ public class FavoriteView extends Fragment {
 			tv.setText(current);
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favRouteTouch(current, tv));
-			tv.setTextSize(40);
+			tv.setTextSize(30);
 			tv.setPadding(10, 20, 10, 20);
 			tv.setBackgroundColor(MapGen.defaultBackground);
 			favRoutes.addView(tv);
