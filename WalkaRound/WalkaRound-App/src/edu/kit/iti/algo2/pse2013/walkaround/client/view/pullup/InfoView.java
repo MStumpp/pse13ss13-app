@@ -46,12 +46,12 @@ public class InfoView extends Fragment {
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
 
 		POI poi = MapController.getInstance().getPOI();
+		save.setOnTouchListener(new saveListener(poi, save));
 
 		if (poi != null) {
 			Log.d("wtf", "" + (poi.getName() == null) + (title == null));
 
 			if (poi.getName() != null) {
-				save.setOnTouchListener(new saveListener(poi.getName(), save));
 				title.setText(poi.getName());
 				title.setVisibility(View.VISIBLE);
 			}
@@ -142,11 +142,11 @@ public class InfoView extends Fragment {
 
 	private class saveListener implements OnTouchListener {
 
-		private String name;
+		private POI poi;
 		private View view;
 
-		public saveListener(String name, View view) {
-			this.name = name;
+		public saveListener(POI poi, View view) {
+			this.poi = poi;
 			this.view = view;
 		}
 
@@ -155,7 +155,8 @@ public class InfoView extends Fragment {
 			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
 				RouteController.getInstance().addLocationToFavorites(
-						new Location(0 /* lat */, 0 /* lon */, name), name);
+						new Location(poi.getLatitude(), poi.getLongitude(),
+								poi.getName()), poi.getName());
 			}
 			return false;
 		}
