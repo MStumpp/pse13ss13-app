@@ -66,8 +66,8 @@ public class FavoriteMenuController {
 	 *         .
 	 * @see FavoritesManager#deleteRoute(int)
 	 */
-	public boolean deleteRoute(int index) {
-		return FavoritesManager.getInstance().deleteRoute(index);
+	public boolean deleteRoute(String name) {
+		return FavoritesManager.getInstance().deleteRoute(name);
 	}
 
 	/**
@@ -77,8 +77,8 @@ public class FavoriteMenuController {
 	 *         {@link FavoritesManager#deleteLocation(int)}.
 	 * @see FavoritesManager#deleteLocation(int)
 	 */
-	public boolean deleteLocation(int index) {
-		return FavoritesManager.getInstance().deleteLocation(index);
+	public boolean deleteLocation(String name) {
+		return FavoritesManager.getInstance().deleteLocation(name);
 	}
 
 	/**
@@ -88,9 +88,9 @@ public class FavoriteMenuController {
 	 * @param index
 	 *            the index of the route to add
 	 */
-	public void appendFavoriteRouteToRoute(int index) {
+	public void appendFavoriteRouteToRoute(String name) {
 		RouteController.getInstance().addRoute(
-				FavoritesManager.getInstance().getFavoriteRoute(index));
+				FavoritesManager.getInstance().getFavoriteRoute(name));
 	}
 
 	/**
@@ -100,8 +100,8 @@ public class FavoriteMenuController {
 	 * @param index
 	 *            the index of the route to add
 	 */
-	public void appendFavoriteLocationToRoute(int index) {
+	public void appendFavoriteLocationToRoute(String name) {
 		RouteController.getInstance().addWaypoint(
-				FavoritesManager.getInstance().getFavoriteLocation(index));
+				FavoritesManager.getInstance().getFavoriteLocation(name));
 	}
 }

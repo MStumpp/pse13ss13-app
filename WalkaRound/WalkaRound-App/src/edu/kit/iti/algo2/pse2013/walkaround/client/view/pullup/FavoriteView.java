@@ -7,16 +7,18 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class FavoriteView extends Fragment {
 
@@ -93,30 +95,77 @@ public class FavoriteView extends Fragment {
 		return false;
 	}
 
-	public boolean updateFavorties() {
+	private boolean updateFavorties() {
+
+		// locations
 		for (Iterator<String> iter = FavoriteMenuController.getInstance()
 				.getNamesOfFavoriteLocations().iterator(); iter.hasNext();) {
 			String current = iter.next();
 			TextView tv = new TextView(getActivity());
 			tv.setText(current);
 			// TODO TextSize relativieren
+			tv.setOnTouchListener(new favLocationTouch(current, tv));
 			tv.setTextSize(40);
 			tv.setPadding(10, 20, 10, 20);
 			tv.setBackgroundColor(MapGen.defaultBackground);
 			favPois.addView(tv);
 		}
 
+		// routes
 		for (Iterator<String> iter = FavoriteMenuController.getInstance()
 				.getNamesOfFavoriteRoutes().iterator(); iter.hasNext();) {
 			String current = iter.next();
 			TextView tv = new TextView(getActivity());
 			tv.setText(current);
 			// TODO TextSize relativieren
+			tv.setOnTouchListener(new favRouteTouch(current, tv));
 			tv.setTextSize(40);
 			tv.setPadding(10, 20, 10, 20);
 			tv.setBackgroundColor(MapGen.defaultBackground);
 			favRoutes.addView(tv);
 		}
 		return false;
+	}
+
+	private class favRouteTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+		public favRouteTouch(String name, View view) {
+			this.name = name;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				FavoriteMenuController.getInstance()
+						.appendFavoriteRouteToRoute(name);
+				MapController.getInstance().getPullUpView().setNullSizeHeight();
+			}
+			return false;
+		}
+	}
+
+	private class favLocationTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+		public favLocationTouch(String name, View view) {
+			this.name = name;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				FavoriteMenuController.getInstance()
+						.appendFavoriteLocationToRoute(name);
+				MapController.getInstance().getPullUpView().setNullSizeHeight();
+			}
+			return false;
+		}
 	}
 }
