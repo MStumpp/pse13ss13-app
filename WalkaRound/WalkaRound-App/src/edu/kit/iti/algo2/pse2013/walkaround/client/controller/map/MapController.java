@@ -143,9 +143,9 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the mapView
 	 * @return the mapController
 	 */
-	public static MapController initialize(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox) {
+	public static MapController initialize(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox, Coordinate user) {
 		if (mapController == null) {
-			mapController = new MapController(tileFetcher, size, lod, coorBox);
+			mapController = new MapController(tileFetcher, size, lod, coorBox, user);
 		}
 		return mapController;
 	}
@@ -181,16 +181,22 @@ public class MapController implements RouteListener, PositionListener,
 	 * -----------------Constructor-----------------
 	 */
 	
-	public void setMapView(MapView mv) {
+	public void startController(MapView mv) {
 		this.mapView = mv;
 		
 		PositionManager.getInstance().registerPositionListener(this);
 		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
 		
+		this.routeController.registerRouteListener(this);
+		
 		PreferenceManager.getDefaultSharedPreferences(mv).registerOnSharedPreferenceChangeListener(map);
+		
+		this.map.generateMap(coorBox, lod);
+		this.updateUserPosition();
 	}
 
-	private MapController(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox) {
+	private MapController(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox, Coordinate user) {
+		this.user = user;
 
 		// initialize Vars
 		this.currentRoute = new Route(new LinkedList<Coordinate>());
@@ -209,7 +215,6 @@ public class MapController implements RouteListener, PositionListener,
 		// initialize Threads
 
 		this.map = new MapGen(size, coorBox, lod, tileFetcher);
-		this.map.generateMap(coorBox, lod);
 		
 		this.poiGen = new POIGen();
 		//TODO poi Gen doesnt run as Thread ... why?
@@ -221,8 +226,6 @@ public class MapController implements RouteListener, PositionListener,
 		// Controller
 		
 		this.routeController = RouteController.getInstance();
-		this.routeController.registerRouteListener(this);
-		
 	}
 	
 	/**

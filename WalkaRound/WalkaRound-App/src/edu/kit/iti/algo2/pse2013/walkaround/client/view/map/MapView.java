@@ -217,7 +217,7 @@ public class MapView extends Activity {
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
-		MapController.getInstance().setMapView(this);
+		MapController.getInstance().startController(this);
 		mc = MapController.getInstance();
 		
 		// ---------------------------------------------
