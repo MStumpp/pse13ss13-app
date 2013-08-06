@@ -48,7 +48,7 @@ public class RouteProcessing {
 	 *//**/
 	/*private static final String host = "walkaround.herokuapp.com";*/
 	private static final String host = "141.3.192.190:8080/walkaround";
-	private static String URL_COMPUTESHORTESTPATH = "http://"+host+"/api/processor/computeShortestPath";
+	private static String URL_COMPUTESHORTESTPATH = "http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath";
 
 	/**
 	 * URL for roundtrip computation.
