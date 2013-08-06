@@ -34,7 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class RouteProcessing {
 
-	private static int timeout = 150;
+	private static int timeout = 300;
 
 	/**
 	 * TAG for android debugging.
