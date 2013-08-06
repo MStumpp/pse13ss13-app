@@ -35,6 +35,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -150,7 +151,6 @@ public class MapView extends Activity {
 	private float userY;
 	private float delta;
 
-	private LocationManager locationManager;
 
 	private GestureDetector waypointGestureDetector;
 
@@ -163,19 +163,6 @@ public class MapView extends Activity {
 		super.onCreate(savedInstanceState);
 		System.gc();
 		
-		String fileString = File.separatorChar + "walkaround"
-				+ File.separatorChar + "geometryData.pbf";
-
-		/*
-		 * GeometryDataIO geometryDataIO; try { geometryDataIO =
-		 * GeometryDataIO.load(new File(Environment
-		 * .getExternalStorageDirectory().getAbsolutePath() + fileString));
-		 * GeometryProcessor.init(geometryDataIO); } catch (IOException e) {
-		 * Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden."); }
-		 */
-
-		PositionManager.initialize(this);
-		POIManager.initialize(this);
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 
@@ -230,8 +217,9 @@ public class MapView extends Activity {
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
-		mc = MapController.initialize(this);
-
+		MapController.getInstance().setMapView(this);
+		mc = MapController.getInstance();
+		
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
@@ -259,11 +247,7 @@ public class MapView extends Activity {
 		waypointGestureDetector = new GestureDetector(this,
 				new WaypointGestureDetector());
 
-		locationManager = (LocationManager) this.getApplicationContext()
-				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
-		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-
-		this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
+		//this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
 	}
 
 	/**
@@ -919,6 +903,7 @@ public class MapView extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		TextToSpeechUtility.getInstance().shutdown();
 		Log.d(TAG_MAPVIEW, "Destroy MapView");
 	}
 }

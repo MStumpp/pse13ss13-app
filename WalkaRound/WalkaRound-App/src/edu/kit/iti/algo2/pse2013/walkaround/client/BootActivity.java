@@ -1,7 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.OverlayController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIInfoController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
@@ -14,9 +20,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,6 +34,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
@@ -94,11 +104,7 @@ public class BootActivity extends Activity {
 
 				// Controller initialisierung
 
-				// TODO MapController initialisieren ohne MapView und Tile
-				// Fetcher übergeben
-				// MapController
 				FavoriteMenuController.getInstance();
-				// HeadUpController.initializes(headUpView);
 				OverlayController.getInstance();
 				POIInfoController.getInstance();
 				POIMenuController.getInstance();
@@ -116,9 +122,37 @@ public class BootActivity extends Activity {
 				RouteProcessing.getInstance();
 				Looper.prepare();
 				PositionManager.initialize(getApplicationContext());
-
+				TextToSpeechUtility.initialize(getApplicationContext());
+				
+				while (!TextToSpeechUtility.getInstance().isReady()) {
+					Log.d(TAG, "TextToSpeech ist noch nicht ready");
+					sleep(50);
+				}
+				
 				// 20%
 				progress = 200;
+				updateProgress(progress);
+
+				System.gc();
+
+
+				updateProgress(progress);
+				/*
+				 * 
+				String fileString = File.separatorChar + "walkaround"
+						+ File.separatorChar + "geometryData.pbf";
+				GeometryDataIO geometryDataIO;
+				try {
+					geometryDataIO = GeometryDataIO.load(new File(Environment
+							.getExternalStorageDirectory().getAbsolutePath()
+							+ fileString));
+					GeometryProcessor.init(geometryDataIO);
+				} catch (IOException e) {
+					Log.e(TAG, "geometry konnte nicht initialisiert werden.");
+				}*/
+
+				// 35%
+				progress = 350;
 				updateProgress(progress);
 
 				// TileFetcher
@@ -145,15 +179,22 @@ public class BootActivity extends Activity {
 				progress = 500;
 				updateProgress(progress);
 
+				// TODO Offset löschen
 				int[] amountTop = TileUtility.getXYTileIndex(
 						coorBox.getTopLeft(), (int) lod);
+				amountTop[0]--;
+				amountTop[1]--;
+
 				int[] amountBottom = TileUtility.getXYTileIndex(
 						coorBox.getBottomRight(), (int) lod);
+
+				amountBottom[0]++;
+				amountBottom[1]++;
 
 				int amount = (amountBottom[0] - amountTop[0])
 						* (amountBottom[1] - amountTop[1]);
 
-				stepSize = (int) (500 / amount);
+				stepSize = (int) (400 / amount);
 
 				tileFetcher.requestTiles((int) lod, amountTop[0], amountTop[1],
 						amountBottom[0], amountBottom[1], this);
@@ -165,8 +206,17 @@ public class BootActivity extends Activity {
 					updateProgress(progress);
 					sleep(50);
 				}
-				updateProgress(1000);
+
+				MapController.initialize(tileFetcher, size, lod, coorBox);
+				progress+=50;
+				updateProgress(progress);
+				HeadUpController.initializes();
+				
+				progress=1000;
+				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
+				TextToSpeechUtility.getInstance().speak("Wilkommen bei !");
+				TextToSpeechUtility.getInstance().speak("WalkaRound!", Locale.ENGLISH);
 
 			} catch (InterruptedException e) {
 			} finally {
