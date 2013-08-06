@@ -1,12 +1,17 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -23,7 +28,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * @author Ludwig Biermann
  * 
  */
-public class MapGen implements TileListener {
+public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 	/**
 	 * Debug Tag
@@ -102,6 +107,12 @@ public class MapGen implements TileListener {
 	// TODO maybe it should be the center tile
 	private int[] indexXY;
 
+	public MapGen(Point size, BoundingBox coorBox, float lod, TileFetcher t) {
+		constructorHelper(size, coorBox, lod);
+
+		this.tileFetcher = t;
+	}
+
 	/**
 	 * 
 	 * COntstructs a new MapGenerator
@@ -116,6 +127,13 @@ public class MapGen implements TileListener {
 	 *            the start Level of Detail
 	 */
 	public MapGen(Point size, BoundingBox coorBox, float lod) {
+		constructorHelper(size, coorBox, lod);
+
+		this.tileFetcher = new TileFetcher();
+	}
+
+	private void constructorHelper(Point size, BoundingBox coorBox, float lod) {
+
 		this.coorBox = coorBox;
 
 		this.lod = lod;
@@ -128,11 +146,8 @@ public class MapGen implements TileListener {
 
 		this.amount = new Point();
 
-		this.tileFetcher = new TileFetcher();
-
 		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
 				Bitmap.Config.ARGB_8888);
-
 	}
 
 	/**
@@ -301,6 +316,17 @@ public class MapGen implements TileListener {
 						(tileY * currentTileWidth) + mapOffset.getY(), null);
 			}
 			pushMap();
+		}
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
+		Log.d("debugFu", "pref änderung " + key);
+		if(key.equals("map type")){
+			Log.d("debugFu", "pref change " + pref.getString(key,"3"));
+			CurrentMapStyleModel.getInstance().setCurrentMapStyle(pref.getString(key,"3"));
+			this.tileFetcher.clearCache();
+			this.generateMap(coorBox, lod);
 		}
 	}
 }

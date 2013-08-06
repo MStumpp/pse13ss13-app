@@ -38,17 +38,40 @@ public class HeadUpController {
 	 * -----------------Initialization-----------------
 	 */
 	
+	
 	/**
 	 * constructor of the HeadUpController
 	 *
 	 * @param headUpView the required HeadUpView
 	 */
 	private HeadUpController(HeadUpView headUpView) {
+		this();
 		this.headUpView = headUpView;
-		this.mapController = MapController.getInstance();
-		navi = false;
 	}
 
+	private HeadUpController(){
+		this.mapController = MapController.getInstance();
+		navi = false;		
+	}
+	
+	public void setHeadUpView(HeadUpView headUpView) {
+		this.headUpView = headUpView;
+	}
+	
+	/**
+	 * Initialize the unique HeadUpController
+	 *
+	 * @param headUpView the required HeadUpView
+	 * @return Instance of headUpControllers
+	 */
+	public static HeadUpController initializes() {
+		if (headUpController == null) {
+			headUpController = new HeadUpController();
+		}
+		return headUpController;
+	}
+	
+	
 	/**
 	 * Initialize the unique HeadUpController
 	 *

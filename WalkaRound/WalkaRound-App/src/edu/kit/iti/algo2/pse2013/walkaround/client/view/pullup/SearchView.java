@@ -212,7 +212,7 @@ public class SearchView extends Fragment {
 					poi.setText(value.getName());
 					poi.setOnTouchListener(new poiTouch(value, poi));
 					// TODO TextSize relativieren
-					poi.setTextSize(40);
+					poi.setTextSize(30);
 					poi.setPadding(10, 20, 10, 20);
 					poi.setBackgroundColor(MapGen.defaultBackground);
 					result.addView(poi);

@@ -52,7 +52,6 @@ public class OptionView extends PreferenceFragment {
 		PreferenceManager.setDefaultValues(getActivity(), R.xml.options, false);
 		Log.d("Options", "Optionen werden gestartet.");
 		addPreferencesFromResource(R.xml.options);
-
 	}
 
 	@Override

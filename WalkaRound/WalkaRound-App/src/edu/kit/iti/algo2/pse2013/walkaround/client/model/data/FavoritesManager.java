@@ -143,8 +143,11 @@ public class FavoritesManager implements Serializable {
 	 *            index of the favorite route.
 	 * @return RouteInfo
 	 */
-	public RouteInfo getFavoriteRoute(int index) {
-		return savedRoutes.get(index).clone();
+	public RouteInfo getFavoriteRoute(String name) {
+		if(savedRoutes.get(name).clone() == null) {
+			Log.d(TAG_FAVORITE_MANAGER, "Klon ist null");
+		}
+		return savedRoutes.get(name).clone();
 	}
 
 	/**
@@ -154,8 +157,8 @@ public class FavoritesManager implements Serializable {
 	 *            index of the favorite location.
 	 * @return Location
 	 */
-	public Location getFavoriteLocation(int index) {
-		return savedLocations.get(index).clone();
+	public Location getFavoriteLocation(String name) {
+		return savedLocations.get(name).clone();
 	}
 
 	/**
@@ -167,9 +170,9 @@ public class FavoritesManager implements Serializable {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public boolean deleteRoute(int index) {
+	public boolean deleteRoute(String name) {
 		try {
-			savedRoutes.remove(index);
+			savedRoutes.remove(name);
 			try {
 				save(this);
 			} catch (FileNotFoundException fnfe) {
@@ -193,9 +196,9 @@ public class FavoritesManager implements Serializable {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public boolean deleteLocation(int index) {
+	public boolean deleteLocation(String name) {
 		try {
-			savedLocations.remove(index);
+			savedLocations.remove(name);
 			try {
 				save(this);
 			} catch (FileNotFoundException fnfe) {

@@ -11,8 +11,10 @@ import java.util.Queue;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -29,7 +31,7 @@ public class TileFetcher {
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private FetchingQueue currentRunnable = new FetchingQueue();
 	private Thread currentThread = new Thread(currentRunnable);
-
+	
 	/**
 	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
 	 * <ul>
@@ -54,10 +56,14 @@ public class TileFetcher {
 		requestTiles(levelOfDetail, startTileIndex[0]- 1, startTileIndex[1] -1, endTileIndex[0] + 1, endTileIndex[1] + 1, listener);
 		//requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 1, startTileIndex[0] + numTilesX + 1, startTileIndex[1] + numTilesY + 1, null);
 	}
+	public void clearCache(){
+		Log.d(TAG, "Clearing cache...");
+		cache.evictAll();
+	}
 
 	public void requestTiles(final int levelOfDetail, final int minX, final int minY, final int maxX, final int maxY, TileListener listener) {
 		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, %d, %d, %d, %d, %s)", levelOfDetail, minX, minY, maxX, maxY, listener));
-
+		
 		int minLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
 		int maxLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();
 

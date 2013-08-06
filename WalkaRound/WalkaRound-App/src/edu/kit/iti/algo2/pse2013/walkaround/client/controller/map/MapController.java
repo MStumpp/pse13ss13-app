@@ -7,6 +7,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
@@ -22,6 +23,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Compa
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
@@ -141,6 +143,20 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the mapView
 	 * @return the mapController
 	 */
+	public static MapController initialize(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox) {
+		if (mapController == null) {
+			mapController = new MapController(tileFetcher, size, lod, coorBox);
+		}
+		return mapController;
+	}
+	
+	/**
+	 * Initializes the MapController. Needs the current mapView
+	 * 
+	 * @param mapView
+	 *            the mapView
+	 * @return the mapController
+	 */
 	public static MapController initialize(MapView mapView) {
 		if (mapController == null) {
 			mapController = new MapController(mapView);
@@ -164,7 +180,51 @@ public class MapController implements RouteListener, PositionListener,
 	/*
 	 * -----------------Constructor-----------------
 	 */
+	
+	public void setMapView(MapView mv) {
+		this.mapView = mv;
+		
+		PositionManager.getInstance().registerPositionListener(this);
+		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
+		
+		PreferenceManager.getDefaultSharedPreferences(mv).registerOnSharedPreferenceChangeListener(map);
+	}
 
+	private MapController(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox) {
+
+		// initialize Vars
+		this.currentRoute = new Route(new LinkedList<Coordinate>());
+		this.displayPoints = new LinkedList<DisplayWaypoint>();
+		this.lines = new LinkedList<DisplayCoordinate>();
+		
+		this.routeGen = new Thread();
+		this.userPos = new Thread();
+		
+		this.lod = lod;
+		this.size = size;
+		this.coorBox = coorBox;
+
+		this.route = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		
+		// initialize Threads
+
+		this.map = new MapGen(size, coorBox, lod, tileFetcher);
+		this.map.generateMap(coorBox, lod);
+		
+		this.poiGen = new POIGen();
+		//TODO poi Gen doesnt run as Thread ... why?
+		Thread t = new Thread(poiGen);
+		t.setName("POI Generator");
+		t.setPriority(5);
+		//t.run();
+		
+		// Controller
+		
+		this.routeController = RouteController.getInstance();
+		this.routeController.registerRouteListener(this);
+		
+	}
+	
 	/**
 	 * private Constructor of the Map Controller
 	 * 
@@ -610,7 +670,11 @@ public class MapController implements RouteListener, PositionListener,
 							CoordinateUtility.DIRECTION_LATITUDE));
 
 			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(), "User Posi ist:" + user.toString());
-			mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
+			try {
+				mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
+			} catch(NullPointerException e) {
+				Log.d(TAG_MAP_CONTROLLER, "mapView wurde noch nicht initialisiert");
+			}
 		}
 
 	}
