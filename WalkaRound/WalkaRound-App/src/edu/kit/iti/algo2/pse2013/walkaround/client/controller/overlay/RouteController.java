@@ -6,6 +6,7 @@ import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.FavoriteView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -180,12 +181,12 @@ public class RouteController {
 		return this.currentRoute.containsWaypoint(w);
 	}
 
-	public void addRouteToFavorites(RouteInfo ri, String name) {
+	public void addRouteToFavorites(String name) {
 		// TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen,
 		// favoriten manager containsName())
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.addRouteToFavorites(RouteInfo, String)");
-		FavoritesManager.getInstance().addRouteToFavorites(ri, name);
+		FavoritesManager.getInstance().addRouteToFavorites(currentRoute, name);
 	}
 
 	public void addLocationToFavorites(Location ri, String name) {
