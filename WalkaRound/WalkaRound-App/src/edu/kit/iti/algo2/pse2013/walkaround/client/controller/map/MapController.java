@@ -181,13 +181,17 @@ public class MapController implements RouteListener, PositionListener,
 	 * -----------------Constructor-----------------
 	 */
 	
-	public void setMapView(MapView mv) {
+	public void startController(MapView mv) {
 		this.mapView = mv;
 		
 		PositionManager.getInstance().registerPositionListener(this);
 		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
 		
+		this.routeController.registerRouteListener(this);
+		
 		PreferenceManager.getDefaultSharedPreferences(mv).registerOnSharedPreferenceChangeListener(map);
+		
+		this.map.generateMap(coorBox, lod);
 	}
 
 	private MapController(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox) {
@@ -209,7 +213,6 @@ public class MapController implements RouteListener, PositionListener,
 		// initialize Threads
 
 		this.map = new MapGen(size, coorBox, lod, tileFetcher);
-		this.map.generateMap(coorBox, lod);
 		
 		this.poiGen = new POIGen();
 		//TODO poi Gen doesnt run as Thread ... why?
@@ -221,8 +224,6 @@ public class MapController implements RouteListener, PositionListener,
 		// Controller
 		
 		this.routeController = RouteController.getInstance();
-		this.routeController.registerRouteListener(this);
-		
 	}
 	
 	/**
