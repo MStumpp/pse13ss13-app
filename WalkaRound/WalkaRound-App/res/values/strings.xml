@@ -25,7 +25,7 @@
     <string name="jogging" translatable="false">Jogging</string>
     <string name="length" translatable="false">Length:</string>
     <string name="pois" translatable="false">POIs</string>
-    <string name="favorite_name" translatable="false">Name...</string>
+    <string name="favorite_name" translatable="false">Name for this favorite...</string>
     <string name="search" translatable="false">Search</string>
     <string name="bars_and_pubs" translatable="false">Bars and Pubs</string>
     <string name="cinema" translatable="false">Cinemas</string>

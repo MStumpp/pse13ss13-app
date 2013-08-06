@@ -19,6 +19,7 @@ public class InfoView extends Fragment {
 	private int switcher = R.id.pullupInfoViewSwitcher;
 	TextView title;
 	ImageView iv;
+	TextView category;
 	TextView text;
 
 	@Override
@@ -32,6 +33,8 @@ public class InfoView extends Fragment {
 		Log.d("wtf", "title: " + (this.title == null));
 		this.iv = (ImageView) this.getActivity().findViewById(
 				R.id.poiinfoview_image);
+		this.category = (TextView) this.getActivity().findViewById(
+				R.id.poiinfoview_category);
 		this.text = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
 
@@ -51,12 +54,67 @@ public class InfoView extends Fragment {
 				iv.setVisibility(View.VISIBLE);
 			}
 
+			if (poi.getPOICategories().length != 0) {
+				category.setText("Category: ");
+				for (int i = 0; i < poi.getPOICategories().length; i++) {
+					if (i == 0) {
+						category.setText(category.getText()
+								+ getCategoryName(poi.getPOICategories()[i]));
+					} else {
+						category.setText(category.getText() + ", "
+								+ getCategoryName(poi.getPOICategories()[i]));
+					}
+				}
+				category.setVisibility(View.VISIBLE);
+			}
+
 			if (poi.getTextInfo() != null) {
 				text.setText(poi.getTextInfo());
 				text.setVisibility(View.VISIBLE);
 			}
 		}
 
+	}
+
+	private String getCategoryName(int id) {
+		TextView tv;
+		switch (id) {
+		case 1:
+			tv = (TextView) getActivity().findViewById(R.id.category_1);
+			return tv.getText().toString();
+		case 2:
+			tv = (TextView) getActivity().findViewById(R.id.category_2);
+			return tv.getText().toString();
+		case 3:
+			tv = (TextView) getActivity().findViewById(R.id.category_3);
+			return tv.getText().toString();
+		case 4:
+			tv = (TextView) getActivity().findViewById(R.id.category_4);
+			return tv.getText().toString();
+		case 5:
+			tv = (TextView) getActivity().findViewById(R.id.category_5);
+			return tv.getText().toString();
+		case 6:
+			tv = (TextView) getActivity().findViewById(R.id.category_6);
+			return tv.getText().toString();
+		case 7:
+			tv = (TextView) getActivity().findViewById(R.id.category_7);
+			return tv.getText().toString();
+		case 8:
+			tv = (TextView) getActivity().findViewById(R.id.category_8);
+			return tv.getText().toString();
+		case 9:
+			tv = (TextView) getActivity().findViewById(R.id.category_9);
+			return tv.getText().toString();
+		case 10:
+			tv = (TextView) getActivity().findViewById(R.id.category_10);
+			return tv.getText().toString();
+		case 11:
+			tv = (TextView) getActivity().findViewById(R.id.category_11);
+			return tv.getText().toString();
+		default:
+			return "";
+		}
 	}
 
 	@Override

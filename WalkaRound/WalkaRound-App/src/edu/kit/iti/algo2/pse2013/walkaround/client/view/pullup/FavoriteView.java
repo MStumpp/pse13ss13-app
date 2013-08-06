@@ -27,7 +27,7 @@ public class FavoriteView extends Fragment {
 		Log.d(TAG_PULLUP_CONTENT,"Create FavoriteView");
 		
 		Log.d(TAG_PULLUP_CONTENT, "Create Tabs");
-		tabHost = (TabHost) this.getActivity().findViewById(R.id.tabhost_favorites);
+		tabHost = (TabHost) this.getActivity().findViewById(R.id.tabhost_favs);
 		tabHost.setup();
 		
 		TabSpec spec1 = tabHost.newTabSpec("route_favorites_tab");
@@ -41,6 +41,8 @@ public class FavoriteView extends Fragment {
 		
 		favorite = (TextView) this.getActivity().findViewById(R.id.favorite);
 		
+		tabHost.setVisibility(View.VISIBLE);
+		
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -53,7 +55,7 @@ public class FavoriteView extends Fragment {
 		//favorite.getLayoutParams().width = size.x;
 		//tabHost.setX(size.x * 0);
 		//tabHost.getLayoutParams().width = size.x;
-		tabHost.getLayoutParams().height = size.y / 5;
+		//tabHost.getLayoutParams().height = size.y / 5;
 		
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
