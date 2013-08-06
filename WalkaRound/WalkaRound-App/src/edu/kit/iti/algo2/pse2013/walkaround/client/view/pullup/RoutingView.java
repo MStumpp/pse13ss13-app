@@ -272,6 +272,8 @@ public class RoutingView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "Ein name wurde eingegeben");
 				// TODO: ansicht wechselt in die liste der !!!!favorisierten
 				// routen!!!!
+				RouteController.getInstance().addRouteToFavorites(
+						v.getText().toString());
 				favoriteName.setVisibility(View.GONE);
 				MapController.getInstance().getPullUpView()
 						.changeView(PullUpView.CONTENT_FAVORITE);

@@ -277,6 +277,5 @@ public class SearchView extends Fragment {
 			}
 			return false;
 		}
-
 	}
 }
