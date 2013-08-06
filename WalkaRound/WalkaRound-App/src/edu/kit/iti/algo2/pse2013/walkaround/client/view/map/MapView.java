@@ -150,7 +150,6 @@ public class MapView extends Activity {
 	private float userY;
 	private float delta;
 
-	private LocationManager locationManager;
 
 	private GestureDetector waypointGestureDetector;
 
@@ -163,19 +162,6 @@ public class MapView extends Activity {
 		super.onCreate(savedInstanceState);
 		System.gc();
 		
-		String fileString = File.separatorChar + "walkaround"
-				+ File.separatorChar + "geometryData.pbf";
-
-		/*
-		 * GeometryDataIO geometryDataIO; try { geometryDataIO =
-		 * GeometryDataIO.load(new File(Environment
-		 * .getExternalStorageDirectory().getAbsolutePath() + fileString));
-		 * GeometryProcessor.init(geometryDataIO); } catch (IOException e) {
-		 * Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden."); }
-		 */
-
-		PositionManager.initialize(this);
-		POIManager.initialize(this);
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 
@@ -230,8 +216,9 @@ public class MapView extends Activity {
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
-		mc = MapController.initialize(this);
-
+		MapController.getInstance().setMapView(this);
+		mc = MapController.getInstance();
+		
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
@@ -259,11 +246,7 @@ public class MapView extends Activity {
 		waypointGestureDetector = new GestureDetector(this,
 				new WaypointGestureDetector());
 
-		locationManager = (LocationManager) this.getApplicationContext()
-				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
-		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-
-		this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
+		//this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
 	}
 
 	/**

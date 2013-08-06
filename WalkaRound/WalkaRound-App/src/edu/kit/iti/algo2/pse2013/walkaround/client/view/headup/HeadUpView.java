@@ -71,7 +71,8 @@ public class HeadUpView extends Fragment {
 
 		// -----------------------------------------------
 		Log.d(TAG_HEADUP_VIEW, "Es wird mit dem headUpController verbunden");
-		headUpController = HeadUpController.initializes(this);
+		HeadUpController.getInstance().setHeadUpView(this);
+		headUpController = HeadUpController.getInstance();
 		Log.d(TAG_HEADUP_VIEW, "Controller wurde initialisiert: " + (headUpController != null));
 
 		Display display = this.getActivity().getWindowManager()

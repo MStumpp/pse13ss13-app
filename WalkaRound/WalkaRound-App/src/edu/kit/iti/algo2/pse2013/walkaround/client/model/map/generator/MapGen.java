@@ -102,6 +102,12 @@ public class MapGen implements TileListener {
 	// TODO maybe it should be the center tile
 	private int[] indexXY;
 
+	public MapGen(Point size, BoundingBox coorBox, float lod, TileFetcher t) {
+		constructorHelper(size, coorBox, lod);
+
+		this.tileFetcher = t;
+	}
+
 	/**
 	 * 
 	 * COntstructs a new MapGenerator
@@ -116,6 +122,13 @@ public class MapGen implements TileListener {
 	 *            the start Level of Detail
 	 */
 	public MapGen(Point size, BoundingBox coorBox, float lod) {
+		constructorHelper(size, coorBox, lod);
+
+		this.tileFetcher = new TileFetcher();
+	}
+
+	private void constructorHelper(Point size, BoundingBox coorBox, float lod) {
+
 		this.coorBox = coorBox;
 
 		this.lod = lod;
@@ -128,11 +141,8 @@ public class MapGen implements TileListener {
 
 		this.amount = new Point();
 
-		this.tileFetcher = new TileFetcher();
-
 		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
 				Bitmap.Config.ARGB_8888);
-
 	}
 
 	/**
