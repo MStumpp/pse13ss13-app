@@ -15,6 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleMod
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -322,7 +323,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
 		Log.d("debugFu", "pref änderung " + key);
-		if(key.equals("map type")){
+		if(key.equals(PreferenceUtility.OPTION_MAP_TYP)){
 			Log.d("debugFu", "pref change " + pref.getString(key,"3"));
 			CurrentMapStyleModel.getInstance().setCurrentMapStyle(pref.getString(key,"3"));
 			this.tileFetcher.clearCache();

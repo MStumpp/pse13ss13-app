@@ -13,7 +13,6 @@
     <string name="options_map">map</string>
     <string name="options_poi">POI information</string>
     <string name="options_poi_text_output">text output</string>
-    <string name="options_poi_speech_output">speech output</string>
-    
+    <string name="options_poi_speech_output">titel output</string>    
     <string name="options_map_typ">map type</string>
 </resources>
