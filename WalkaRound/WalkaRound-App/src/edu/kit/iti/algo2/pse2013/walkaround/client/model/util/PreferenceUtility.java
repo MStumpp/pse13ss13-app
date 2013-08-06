@@ -6,7 +6,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 
 public class PreferenceUtility {
 

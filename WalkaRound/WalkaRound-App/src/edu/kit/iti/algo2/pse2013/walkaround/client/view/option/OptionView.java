@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.option;
 
 // Android Library
 import android.app.Fragment;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -10,6 +12,7 @@ import android.view.View;
 
 // Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 /**
@@ -33,7 +36,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
  * @author Ludwig Biermann
  * 
  */
-public class OptionView extends PreferenceFragment {
+public class OptionView extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
@@ -50,6 +53,7 @@ public class OptionView extends PreferenceFragment {
 				"Optionen.xml wird als default Preference Manager ausgef�hrt.");
 
 		PreferenceManager.setDefaultValues(getActivity(), R.xml.options, false);
+		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		Log.d("Options", "Optionen werden gestartet.");
 		addPreferencesFromResource(R.xml.options);
 	}
@@ -71,6 +75,11 @@ public class OptionView extends PreferenceFragment {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
+		
 	}
 
 }
