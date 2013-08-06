@@ -117,7 +117,9 @@ public class Route implements RouteInfo {
 		try {
 			newRoundtrip = this.routeProcessor.computeRoundtrip(
 					this.getActiveWaypoint(), profile, length);
-			this.addRoute(newRoundtrip);
+			if(newRoundtrip != null) {
+				this.addRoute(newRoundtrip);
+			}
 		} catch (RouteProcessingException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
