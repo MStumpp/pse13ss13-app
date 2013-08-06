@@ -18,6 +18,13 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:visibility="gone" />
 
+        <ImageButton
+            android:id="@+id/savepoi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@drawable/favorite" />
+
         <ImageView
             android:id="@+id/poiinfoview_image"
             android:layout_width="match_parent"
