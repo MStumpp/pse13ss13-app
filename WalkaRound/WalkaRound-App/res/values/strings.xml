@@ -38,4 +38,5 @@
     <string name="sleeping_accomodation" translatable="false">Sleepin Accomodations</string>
     <string name="supermarket" translatable="false">Supermarkets</string>
     <string name="theatre" translatable="false">Theatres</string>
+    <string name="loading" translatable="false">Loading...</string>
 </resources>
