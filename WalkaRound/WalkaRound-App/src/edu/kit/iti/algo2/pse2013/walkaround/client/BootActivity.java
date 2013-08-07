@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
@@ -57,7 +58,8 @@ public class BootActivity extends Activity {
 		setContentView(R.layout.progress_bar);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 
-		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.options, true);
+		PreferenceManager.setDefaultValues(getApplicationContext(),
+				R.xml.options, true);
 		PreferenceUtility.initialize(getApplicationContext());
 		final Thread timerThread = new BootHelper();
 		timerThread.start();
@@ -129,25 +131,28 @@ public class BootActivity extends Activity {
 				RouteProcessing.getInstance();
 				Looper.prepare();
 				PositionManager.initialize(getApplicationContext());
-				
-				Log.d("debugFu", " " + (PreferenceUtility.getInstance().isSoundOn() == true));
-				TextToSpeechUtility.initialize(getApplicationContext(), PreferenceUtility.getInstance().isSoundOn());
-				PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(TextToSpeechUtility.getInstance());
-				
+
+				Log.d("debugFu", " "
+						+ (PreferenceUtility.getInstance().isSoundOn() == true));
+				TextToSpeechUtility.initialize(getApplicationContext(),
+						PreferenceUtility.getInstance().isSoundOn());
+				PreferenceUtility.getInstance()
+						.registerOnSharedPreferenceChangeListener(
+								TextToSpeechUtility.getInstance());
+
 				while (!TextToSpeechUtility.getInstance().isReady()) {
 					Log.d(TAG, "TextToSpeech ist noch nicht ready");
 					sleep(50);
 				}
-				
+
 				// 20%
 				progress = 200;
 				updateProgress(progress);
 
 				System.gc();
 
-
 				updateProgress(progress);
-				
+
 				/*
 				String fileString = File.separatorChar + "walkaround"
 						+ File.separatorChar + "geometryData.pbf";
@@ -210,23 +215,32 @@ public class BootActivity extends Activity {
 						amountBottom[0], amountBottom[1], this);
 
 				updateProgress(progress);
-				while ((amount-4) > tiles) {
+				while ((amount - 4) > tiles) {
 					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
 							+ tiles);
 					updateProgress(progress);
 					sleep(50);
 				}
 
-				MapController.initialize(tileFetcher, size, lod, coorBox, coorBox.getCenter());
-				progress+=50;
+				MapController.initialize(tileFetcher, size, lod, coorBox,
+						coorBox.getCenter());
+				progress += 50;
 				updateProgress(progress);
 				HeadUpController.initializes();
-				
-				progress=1000;
+
+				progress = 1000;
 				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
-				TextToSpeechUtility.getInstance().speak("Wilkommen bei !");
-				TextToSpeechUtility.getInstance().speak("WalkaRound!", Locale.ENGLISH);
+				if (TextToSpeechUtility.getInstance().speak("Wilkommen bei !")) {
+					TextToSpeechUtility.getInstance().speak("WalkaRound!",
+							Locale.ENGLISH);
+				} else {
+					MediaPlayer mp = MediaPlayer.create(getBaseContext(),
+							R.raw.hangout_dingtone);
+					mp.setVolume(100, 100);
+					mp.start();
+					// mp.pause();
+				}
 
 			} catch (InterruptedException e) {
 			} finally {

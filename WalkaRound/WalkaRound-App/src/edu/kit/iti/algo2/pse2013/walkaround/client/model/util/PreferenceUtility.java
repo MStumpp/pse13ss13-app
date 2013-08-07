@@ -11,10 +11,10 @@ public class PreferenceUtility {
 
 	private static PreferenceUtility manager;
 	private static String TAG = PreferenceUtility.class.getSimpleName();
-	
-	public static String OPTION_SOUND; 
-	public static String OPTION_MAP_TYP; 
-	
+
+	public static String OPTION_SOUND;
+	public static String OPTION_MAP_TYP;
+
 	private SharedPreferences sh;
 	private Context context;
 
@@ -27,16 +27,16 @@ public class PreferenceUtility {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param context
 	 */
 	public static void initialize(Context context) {
 		Log.d(TAG, "Context is " + (context != null));
 		manager = new PreferenceUtility(context);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static PreferenceUtility getInstance() {
@@ -47,17 +47,25 @@ public class PreferenceUtility {
 		}
 		return manager;
 	}
-	
-	
+
+
 	public boolean isSoundOn(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_audio_output_all), true);
 	}
-	
+
 	public String getMapStyle(){
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.options_map_typ), "MapQuest");
+		return sh.getString(context.getResources().getString(R.string.options_map_typ), "Mapnik");
 	}
-	
+
+	public boolean isPOITitleSoundOn(){
+		return  sh.getBoolean(context.getString(R.string.options_poi_speech_output), true);
+	}
+
+	public boolean isPOITextSoundOn(){
+		return  sh.getBoolean(context.getString(R.string.options_poi_text_output), true);
+	}
+
 	public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener){
-		PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(listener);
+		sh.registerOnSharedPreferenceChangeListener(listener);
 	}
 }

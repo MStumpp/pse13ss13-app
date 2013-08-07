@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">WalkaRound</string>
-    <string name="address" translatable="false">Address</string>
+    <string name="address" translatable="true">Address</string>
     <string name="poi" translatable="false">POI</string>
-    <string name="current" translatable="false">current</string>
-    <string name="Route" translatable="false">Route</string>
-    <string name="current_route" translatable="false">Current Route</string>
-    <string name="reset" translatable="false">Reset</string>
-    <string name="add_favorite" translatable="false">add Favorite</string>
-    <string name="go_to_map" translatable="false">go to map</string>
-    <string name="query" translatable="false">Query...</string>
-    <string name="zip_code" translatable="false">ZIP</string>
-    <string name="city" translatable="false">City</string>
-    <string name="street" translatable="false">Street</string>
-    <string name="number" translatable="false">Number</string>
-    <string name="start_search" translatable="false">Go</string>
-    <string name="favorite" translatable="false">Favorites</string>
-    <string name="meter" translatable="false">Meter</string>
-    <string name="compute_roundtrip" translatable="false">Compute roundtrip</string>
-    <string name="profiles" translatable="false">Profiles</string>
-    <string name="clubbing" translatable="false">Clubbing</string>
-    <string name="shopping" translatable="false">Shopping</string>
-    <string name="sightseeing" translatable="false">Sightseeing</string>
-    <string name="jogging" translatable="false">Jogging</string>
-    <string name="length" translatable="false">Length:</string>
-    <string name="pois" translatable="false">POIs</string>
-    <string name="favorite_name" translatable="false">Name for this favorite...</string>
-    <string name="search" translatable="false">Search</string>
-    <string name="bars_and_pubs" translatable="false">Bars and Pubs</string>
-    <string name="cinema" translatable="false">Cinemas</string>
-    <string name="clubs_and_nightclubs" translatable="false">Clubs and Nightclubs</string>
-    <string name="fast_food" translatable="false">Fast Food</string>
-    <string name="food" translatable="false">Food</string>
-    <string name="museum" translatable="false">Museums</string>
-    <string name="public_transportation" translatable="false">Public Transportation</string>
-    <string name="shop" translatable="false">Shops</string>
-    <string name="sleeping_accomodation" translatable="false">Sleepin Accomodations</string>
-    <string name="supermarket" translatable="false">Supermarkets</string>
-    <string name="theatre" translatable="false">Theatres</string>
-    <string name="loading" translatable="false">Loading...</string>
+    <string name="current" translatable="true">current</string>
+    <string name="Route" translatable="true">route</string>
+    <string name="current_route" translatable="true">Current Route</string>
+    <string name="reset" translatable="true">reset</string>
+    <string name="add_favorite" translatable="true">add Favorite</string>
+    <string name="go_to_map" translatable="true">go to map</string>
+    <string name="query" translatable="true">Query</string>
+    <string name="zip_code" translatable="true">ZIP</string>
+    <string name="city" translatable="true">City</string>
+    <string name="street" translatable="true">Street</string>
+    <string name="number" translatable="true">Number</string>
+    <string name="start_search" translatable="true">Go</string>
+    <string name="favorite" translatable="true">Favorites</string>
+    <string name="meter" translatable="true">Meter</string>
+    <string name="compute_roundtrip" translatable="true">Compute roundtrip</string>
+    <string name="profiles" translatable="true">Profiles</string>
+    <string name="clubbing" translatable="true">Clubbing</string>
+    <string name="shopping" translatable="true">Shopping</string>
+    <string name="sightseeing" translatable="true">Sightseeing</string>
+    <string name="jogging" translatable="true">Jogging</string>
+    <string name="length" translatable="true">Length:</string>
+    <string name="pois" translatable="true">POIs</string>
+    <string name="favorite_name" translatable="true">Name for this favorite</string>
+    <string name="search" translatable="true">Search</string>
+    <string name="bars_and_pubs" translatable="true">Bars and Pubs</string>
+    <string name="cinema" translatable="true">Cinemas</string>
+    <string name="clubs_and_nightclubs" translatable="true">Clubs and Nightclubs</string>
+    <string name="fast_food" translatable="true">Fast Food</string>
+    <string name="food" translatable="true">Food</string>
+    <string name="museum" translatable="true">Museums</string>
+    <string name="public_transportation" translatable="true">Public Transportation</string>
+    <string name="shop" translatable="true">Shops</string>
+    <string name="sleeping_accomodation" translatable="true">Sleepin Accommodations</string>
+    <string name="supermarket" translatable="true">Supermarkets</string>
+    <string name="theatre" translatable="true">Theatres</string>
+    <string name="loading" translatable="true">Loading</string>
 </resources>

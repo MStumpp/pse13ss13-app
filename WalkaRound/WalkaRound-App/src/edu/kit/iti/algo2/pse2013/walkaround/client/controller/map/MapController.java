@@ -482,7 +482,8 @@ public class MapController implements RouteListener, PositionListener,
 			this.lines.clear();
 			this.displayPoints.clear();
 			this.routeController.deleteActiveWaypoint();
-			this.updateRouteOverlay();
+			this.updateAll();
+			
 		}
 	}
 

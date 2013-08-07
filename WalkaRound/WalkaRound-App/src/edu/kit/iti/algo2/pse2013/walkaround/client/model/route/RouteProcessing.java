@@ -45,15 +45,13 @@ public class RouteProcessing {
 
 	/**
 	 * URL for shortest path computation.
-	 *//**/
-	/*private static final String host = "walkaround.herokuapp.com";*/
-	private static final String host = "141.3.192.190:8080/walkaround";
+	 */
 	private static String URL_COMPUTESHORTESTPATH = "http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath";
 
 	/**
 	 * URL for roundtrip computation.
 	 */
-	private static String URL_ROUNDTRIP = "http://"+host+"/api/processor/computeRoundtrip";
+	private static String URL_ROUNDTRIP = "http://54.213.123.61:8080/walkaround/api/processor/computeRoundtrip";
 
 	/**
 	 * RouteProcessing instance.
@@ -270,15 +268,15 @@ public class RouteProcessing {
 					RouteInfoTransfer.class);
 		}
 
-		if (routeInfoTransfer == null) { 
+		if (routeInfoTransfer == null) {
 			Log.e(TAG_ROUTE_PROCESSING, "Rundkurs konnte nicht berechnet werden");
 			return new Route(new LinkedList<Coordinate>());
 		}
-		
-		
-				
+
+
+
 		if(routeInfoTransfer.getError() != null) throw new RouteProcessingException(routeInfoTransfer.getError());
-		
+
 
 		// replace first and last Coordinate with Waypoint
 		routeInfoTransfer.postProcess();
