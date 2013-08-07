@@ -86,6 +86,7 @@ public class BoundingBox {
 		this.center = center;
 		if(this.levelOfDetail != levelOfDetail) {
 			this.levelOfDetail = levelOfDetail;
+			this.computeSize();
 		}
 		this.setCenter(center);
 	}
@@ -96,7 +97,6 @@ public class BoundingBox {
 	 */
 	public void setCenter(Coordinate center) {
 		this.center = center;
-		this.computeSize();
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();
 	}
