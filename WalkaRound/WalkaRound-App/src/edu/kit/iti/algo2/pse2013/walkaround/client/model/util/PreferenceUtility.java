@@ -54,7 +54,7 @@ public class PreferenceUtility {
 	}
 	
 	public String getMapStyle(){
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.options_map_typ), "MapQuest");
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.options_map_typ), "Mapnik");
 	}
 	
 	public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener){
