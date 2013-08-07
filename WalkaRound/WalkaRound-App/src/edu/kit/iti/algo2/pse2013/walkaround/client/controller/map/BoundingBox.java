@@ -16,10 +16,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class BoundingBox {
 
+	// static --------------------------Variables-------------------------- //
+
 	/**
 	 * The Debug Tag of Bounding Box
 	 */
 	private static String TAG = BoundingBox.class.getSimpleName();
+
+	// class --------------------------Variables-------------------------- //
 
 	/**
 	 * Center Coordinate
@@ -51,6 +55,8 @@ public class BoundingBox {
 	 */
 	private float levelOfDetail;
 
+	// --------------------------Constructor-------------------------- //
+
 	/**
 	 * Constructs a new Bounding Box
 	 * 
@@ -69,20 +75,7 @@ public class BoundingBox {
 		this.setCenter(center, levelOfDetail);
 	}
 
-	/**
-	 * Compute the Size of the Display
-	 * 
-	 * @param levelOfDetail
-	 */
-	private void computeSize() {
-		Log.d(TAG,
-				"compute size of the display depending on the Level of Detail");
-		this.size = new DoublePairing(
-				CoordinateUtility.convertPixelsToDegrees(display.y,
-						levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
-				CoordinateUtility.convertPixelsToDegrees(display.x,
-						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE));
-	}
+	// --------------------------Setter-------------------------- //
 
 	/**
 	 * Sets a new Center by a new center and a new Level of detail
@@ -113,6 +106,8 @@ public class BoundingBox {
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();
 	}
+
+	// --------------------------Getter-------------------------- //
 
 	/**
 	 * Gives back the Coordinate of the upper left corner
@@ -177,7 +172,22 @@ public class BoundingBox {
 		return levelOfDetail;
 	}
 
-	// --------------------------Computing-------------------//
+	// --------------------------Computing-------------------------- //
+
+	/**
+	 * Compute the Size of the Display
+	 * 
+	 * @param levelOfDetail
+	 */
+	private void computeSize() {
+		Log.d(TAG,
+				"compute size of the display depending on the Level of Detail");
+		this.size = new DoublePairing(
+				CoordinateUtility.convertPixelsToDegrees(display.y,
+						levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
+				CoordinateUtility.convertPixelsToDegrees(display.x,
+						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE));
+	}
 
 	/**
 	 * Returns the upperLeft Coordinate
@@ -224,9 +234,11 @@ public class BoundingBox {
 		return "BoundingBox: TopLeft: " + topLeft.toString() + " , TopRight: "
 				+ this.getTopRight().toString() + " , BottomLeft: "
 				+ this.getBottomLeft().toString() + " , Bottom Right: "
-				+ bottomRight + " | Display Größe: " + display.toString() + " | Abstand zwischen den Coordinaten: "
-				+ size.toString();
+				+ bottomRight + " | Display Größe: " + display.toString()
+				+ " | Abstand zwischen den Coordinaten: " + size.toString();
 	}
+
+	// --------------------------Helper Classes-------------------------- //
 
 	/**
 	 * A simple Helper Class to pair two doubles. In this Case the make
@@ -262,7 +274,7 @@ public class BoundingBox {
 
 		@Override
 		public String toString() {
-			return "Double Paring: width: " + width + ", height: " + height; 
+			return "Double Paring: width: " + width + ", height: " + height;
 		}
 	}
 }
