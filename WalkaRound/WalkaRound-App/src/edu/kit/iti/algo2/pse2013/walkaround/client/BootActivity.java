@@ -153,6 +153,7 @@ public class BootActivity extends Activity {
 
 				updateProgress(progress);
 
+				/*
 				String fileString = File.separatorChar + "walkaround"
 						+ File.separatorChar + "geometryData.pbf";
 				GeometryDataIO geometryDataIO;
@@ -163,7 +164,7 @@ public class BootActivity extends Activity {
 					GeometryProcessor.init(geometryDataIO);
 				} catch (IOException e) {
 					Log.e(TAG, "geometry konnte nicht initialisiert werden.");
-				}
+				}*/
 
 				// 35%
 				progress = 350;
