@@ -154,8 +154,15 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		double lonDiff = ((coorBox.getCenter().getLongitude() + 180) % (360 / Math
 				.pow(2, this.coorBox.getLevelOfDetail())));
 
-		double latDiff = ((coorBox.getCenter().getLatitude() + 90) % (180 / Math
-				.pow(2, this.coorBox.getLevelOfDetail())));
+		//double latDiff = ((coorBox.getCenter().getLatitude() + 90) % (180 / Math
+		//		.pow(2, this.coorBox.getLevelOfDetail())));
+		int[] index  = TileUtility.getXYTileIndex(coorBox.getCenter(),(int) coorBox.getLevelOfDetail());
+		
+		double n = Math.PI - (2.0 * Math.PI * index[1]) / Math.pow(2.0, this.coorBox.getLevelOfDetail());
+		n = Math.toDegrees(Math.atan(Math.sinh(n)));
+		 
+		Log.d("wrong", "Tile Lat " + n);;
+		double latDiff = Math.abs(coorBox.getCenter().getLatitude() - n);
 
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_HORIZONTAL);
@@ -163,11 +170,13 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_VERTICAL);
 
-		yDiff = (currentTileWidth - 1) - yDiff;
+		//yDiff = (currentTileWidth - 1) - yDiff;
 
 		xDiff = size.x / 2 - Math.abs(xDiff);
 		yDiff = size.y / 2 - Math.abs(yDiff);
 
+		Log.d("wrong", " " + coorBox.getCenter().getLatitude() + " |x " + index[0] + " |y " + index[1]);
+		
 		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
@@ -207,9 +216,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		clearBitmap();
 		this.computeAmountOfTiles();
 		// Tiles requesten
-		//tileFetcher.requestTiles((int) this.lod, this.coorBox.getTopLeft(),
-		//		this.coorBox.getBottomRight(), this);
-		tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), indexXY[0], indexXY[1], indexXY[0], indexXY[1], this);
+		tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), this.coorBox.getTopLeft(),
+				this.coorBox.getBottomRight(), this);
+		//tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), indexXY[0], indexXY[1], indexXY[0], indexXY[1], this);
 		fix = false;
 
 	}
