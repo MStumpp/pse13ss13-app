@@ -34,6 +34,8 @@ public class BoundingBox {
 	 * Display Size
 	 */
 	private DoublePairing size;
+	
+	private Point displaySize;
 
 	/**
 	 * Constructs a new Bounding Box
@@ -45,10 +47,11 @@ public class BoundingBox {
 	 * @param levelOfDetail
 	 *            Level of Detail
 	 */
-	public BoundingBox(Coordinate center, Point size, float levelOfDetail) {
+	public BoundingBox(Coordinate center, Point displaySize, float levelOfDetail) {
+		this.displaySize = displaySize;
 		this.size = new DoublePairing(CoordinateUtility.convertPixelsToDegrees(
-				size.y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
-				CoordinateUtility.convertPixelsToDegrees(size.x, levelOfDetail,
+				displaySize.y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
+				CoordinateUtility.convertPixelsToDegrees(displaySize.x, levelOfDetail,
 						CoordinateUtility.DIRECTION_LONGITUDE));
 		this.setCenter(center, levelOfDetail);
 	}
@@ -63,6 +66,10 @@ public class BoundingBox {
 	 */
 	public void setCenter(Coordinate center, float levelOfDetail) {
 		this.center = center;
+		this.size = new DoublePairing(CoordinateUtility.convertPixelsToDegrees(
+				this.displaySize.y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
+				CoordinateUtility.convertPixelsToDegrees(this.displaySize.x, levelOfDetail,
+						CoordinateUtility.DIRECTION_LONGITUDE));
 		this.topLeft = this.computeTopLeft(levelOfDetail);
 		this.bottomRight = this.computeBottomRight(levelOfDetail);
 	}
