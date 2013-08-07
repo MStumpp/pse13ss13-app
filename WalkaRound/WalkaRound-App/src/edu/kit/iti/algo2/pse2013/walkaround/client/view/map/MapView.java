@@ -368,14 +368,17 @@ public class MapView extends Activity {
 					fromY = displayPoints.get(0).getY();
 
 					for (DisplayWaypoint value : displayPoints) {
+						
 						ImageView iv = new ImageView(context);
 						iv.setImageDrawable(waypoint);
 						iv.setY(value.getY() - sizeOfPoints);
 						iv.setX(value.getX() - sizeOfPoints / 2);
+						
+						
 						iv.setVisibility(View.VISIBLE);
 						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 								(int) sizeOfPoints));
-						iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+						iv.setScaleType(ImageView.ScaleType.FIT_XY);
 						iv.setTag(value.getId());
 						iv.setOnTouchListener(new WaypointTouchListener(iv,
 								value.getId()));
@@ -383,6 +386,7 @@ public class MapView extends Activity {
 					}
 
 					if (routeList.getChildCount() > 0) {
+						
 						ImageView iv = (ImageView) routeList
 								.getChildAt((routeList.getChildCount() - 1));
 						iv.setImageDrawable(flagTarget);
@@ -390,6 +394,8 @@ public class MapView extends Activity {
 
 						iv = (ImageView) routeList.getChildAt(0);
 						iv.setImageDrawable(flag);
+
+						
 						if ((routeList.getChildCount() != 1)) {
 							iv.setX(iv.getX() - (sizeOfPoints / 2));
 						}
@@ -419,7 +425,7 @@ public class MapView extends Activity {
 					iv.setTag(value.getId());
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
-					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setScaleType(ImageView.ScaleType.FIT_XY);
 					iv.setOnTouchListener(new POITouchListener(iv, value
 							.getId()));
 					poiList.addView(iv);
@@ -514,6 +520,7 @@ public class MapView extends Activity {
 	 * @param degree
 	 *            rotation
 	 */
+	@SuppressWarnings("unused")
 	private void setUserPositionOverlayImage(DisplayCoordinate coor,
 			float degree) {
 		// TODO duration überdenken
@@ -609,7 +616,6 @@ public class MapView extends Activity {
 		float oldX;
 		@SuppressWarnings("unused")
 		float oldY;
-		@SuppressWarnings("unused")
 		float gesamt;
 
 		public MapGestureDetector() {
