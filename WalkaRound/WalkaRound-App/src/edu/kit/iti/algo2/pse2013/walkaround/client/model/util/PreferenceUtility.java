@@ -54,10 +54,18 @@ public class PreferenceUtility {
 	}
 	
 	public String getMapStyle(){
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getResources().getString(R.string.options_map_typ), "MapQuest");
+		return sh.getString(context.getResources().getString(R.string.options_map_typ), "MapQuest");
+	}
+	
+	public boolean isPOITitleSoundOn(){
+		return  sh.getBoolean(context.getString(R.string.options_poi_speech_output), true);
+	}
+
+	public boolean isPOITextSoundOn(){
+		return  sh.getBoolean(context.getString(R.string.options_poi_text_output), true);
 	}
 	
 	public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener){
-		PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(listener);
+		sh.registerOnSharedPreferenceChangeListener(listener);
 	}
 }
