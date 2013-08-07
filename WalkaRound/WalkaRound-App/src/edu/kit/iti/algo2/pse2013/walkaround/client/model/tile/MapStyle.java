@@ -16,7 +16,9 @@ public class MapStyle {
 	/**
 	 *  Wanderkarten Kartenstil
 	 */
-	public static MapStyle MAPSTYLE_WANDERKARTE = new MapStyle(0,18,"Wanderkarte", "http://www.wanderreitkarte.de/topo/%3$s/%1$s/%2$s.png", 16);
+	public static MapStyle MAPSTYLE_WANDERKARTE = new MapStyle(0, 18, "Hike & Bike", "http://toolserver.org/~cmarqu/hill/%3$s/%1$s/%2$s.png", 16);
+
+	public static MapStyle MAPSTYLE_WANDERREIT = new MapStyle(0,18,"Wanderkarte", "http://www.wanderreitkarte.de/topo/%3$s/%1$s/%2$s.png", 16);
 
 	/**
 	 *  Mapquest KArtenstil.
