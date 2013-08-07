@@ -83,18 +83,26 @@ public class RouteController {
 	 * @param id
 	 *            of the Waypoint
 	 */
-	public boolean setActiveWaypoint(int id) {
-		// TODO: in boolean ändern
-		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(id)");
+	public boolean setActiveWaypoint(final int id) {
+		Log.d(TAG_ROUTE_CONTROLLER, "Routecontroller.setActiveWaypoint(id)");
 		
-		for (Waypoint value : this.currentRoute.getWaypoints()) {
-			if (value.getId() == id) {
-				this.setActiveWaypoint(value);
-				return true;
-			}
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(id)");
+					newCurrentRoute.setActiveWaypoint(id);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
 		}
 		return false;
 	}
+	
 
 	public boolean setActiveWaypoint(final Waypoint wp) {
 		Log.d(TAG_ROUTE_CONTROLLER,
@@ -105,6 +113,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(wp)");
 					newCurrentRoute.setActiveWaypoint(wp);
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -124,6 +133,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in resetActiveWaypoint()");
 					newCurrentRoute.resetActiveWaypoint();
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -145,6 +155,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in moveActiveWaypointInOrder(int)");
 					newCurrentRoute.moveActiveWaypointInOrder(i);
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -165,6 +176,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in addWaypoint(Coordinate)");
 					newCurrentRoute.addWaypoint(c);
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -186,6 +198,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in addRoundtrip(int profile, int length)");
 					newCurrentRoute.addRoundtripAtActiveWaypoint(profileID, length);
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -205,6 +218,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in addRoute(RouteInfo)");
 					newCurrentRoute.addRoute(ri);
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -226,6 +240,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in moveActiveWaypoint(Coordinate)");
 					newCurrentRoute.moveActiveWaypoint(c);
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -245,6 +260,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in deleteActiveWaypoint()");
 					newCurrentRoute.deleteActiveWaypoint();
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -264,6 +280,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in revertRoute()");
 					newCurrentRoute.revertRoute();
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -282,6 +299,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in resetRoute()");
 					newCurrentRoute.resetRoute();
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
@@ -301,6 +319,7 @@ public class RouteController {
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
+					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in optimizeRoute()");
 					newCurrentRoute.optimizeRoute();
 					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					RouteController.getInstance().notifyAllRouteListeners();
