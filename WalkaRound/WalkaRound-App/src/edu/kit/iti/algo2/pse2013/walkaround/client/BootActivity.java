@@ -154,15 +154,17 @@ public class BootActivity extends Activity {
 				updateProgress(progress);
 
 				/*
-				 * String fileString = File.separatorChar + "walkaround" +
-				 * File.separatorChar + "geometryData.pbf"; GeometryDataIO
-				 * geometryDataIO; try { geometryDataIO =
-				 * GeometryDataIO.load(new File(Environment
-				 * .getExternalStorageDirectory().getAbsolutePath() +
-				 * fileString)); GeometryProcessor.init(geometryDataIO); } catch
-				 * (IOException e) { Log.e(TAG,
-				 * "geometry konnte nicht initialisiert werden."); }
-				 */
+				String fileString = File.separatorChar + "walkaround"
+						+ File.separatorChar + "geometryData.pbf";
+				GeometryDataIO geometryDataIO;
+				try {
+					geometryDataIO = GeometryDataIO.load(new File(Environment
+							.getExternalStorageDirectory().getAbsolutePath()
+							+ fileString));
+					GeometryProcessor.init(geometryDataIO);
+				} catch (IOException e) {
+					Log.e(TAG, "geometry konnte nicht initialisiert werden.");
+				}*/
 
 				// 35%
 				progress = 350;
@@ -237,7 +239,7 @@ public class BootActivity extends Activity {
 							R.raw.hangout_dingtone);
 					mp.setVolume(100, 100);
 					mp.start();
-					//mp.pause();
+					// mp.pause();
 				}
 
 			} catch (InterruptedException e) {
