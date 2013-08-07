@@ -6,7 +6,6 @@ import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.FavoriteView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -18,11 +17,12 @@ public class RouteController {
 	}
 
 	private static String TAG_ROUTE_CONTROLLER = "RouteController";
-
+	
 	private static final String TAG = RouteController.class.getSimpleName();
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
-
+	private static Thread routeChanger;
+	
 	private static RouteController routeMC;
 
 	private RouteController() {
@@ -83,90 +83,233 @@ public class RouteController {
 	 * @param id
 	 *            of the Waypoint
 	 */
-	public void setActiveWaypoint(int id) {
+	public boolean setActiveWaypoint(int id) {
 		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.setActiveWaypoint(id)");
+		
 		for (Waypoint value : this.currentRoute.getWaypoints()) {
 			if (value.getId() == id) {
 				this.setActiveWaypoint(value);
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 
-	public void setActiveWaypoint(Waypoint wp) {
-		// TODO: in boolean ändern
+	public boolean setActiveWaypoint(final Waypoint wp) {
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.setActiveWaypoint(Waypoint)");
-		this.currentRoute.setActiveWaypoint(wp);
-		this.notifyAllRouteListeners();
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.setActiveWaypoint(wp);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void resetActiveWaypoint() {
+	public boolean resetActiveWaypoint() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.resetActiveWaypoint()");
-		this.currentRoute.resetActiveWaypoint();
-		this.notifyAllRouteListeners();
+
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.resetActiveWaypoint();
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
+		
 	}
 
-	public void moveActiveWaypointInOrder(int i) {
+	public boolean moveActiveWaypointInOrder(final int i) {
 		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.moveActiveWaypointInOrder(int)");
-		this.currentRoute.moveActiveWaypointInOrder(i);
-		this.notifyAllRouteListeners();
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.moveActiveWaypointInOrder(i);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void addWaypoint(Coordinate c) {
+	public boolean addWaypoint(final Coordinate c) {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addWaypoint(Coordinate)");
 		Log.d(TAG, "addWaypoint(" + c + ")");
-		this.currentRoute.addWaypoint(c);
-		this.notifyAllRouteListeners();
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.addWaypoint(c);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void addRoundtrip(int profileID, int length) {
+	public boolean addRoundtrip(final int profileID, final int length) {
 		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(int-profile "
 				+ profileID + ", int-length " + length + ")");
-		this.currentRoute.addRoundtripAtActiveWaypoint(profileID, length);
-		this.notifyAllRouteListeners();
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.addRoundtripAtActiveWaypoint(profileID, length);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void addRoute(RouteInfo ri) {
+	public boolean addRoute(final RouteInfo ri) {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoute(RouteInfo)");
-		this.currentRoute.addRoute(ri);
-		this.notifyAllRouteListeners();
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.addRoute(ri);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void moveActiveWaypoint(Coordinate c) {
+	public boolean moveActiveWaypoint(final Coordinate c) {
 		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.moveActiveWaypoint(Coordinate)");
-		this.currentRoute.moveActiveWaypoint(c);
-		this.notifyAllRouteListeners();
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.moveActiveWaypoint(c);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void deleteActiveWaypoint() {
+	public boolean deleteActiveWaypoint() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.deleteActiveWaypoint()");
-		this.currentRoute.deleteActiveWaypoint();
-		this.notifyAllRouteListeners();
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.deleteActiveWaypoint();
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
+		
 	}
 
-	public void revertRoute() {
+	public boolean revertRoute() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.revertRoute()");
-		this.currentRoute.revertRoute();
-		this.notifyAllRouteListeners();
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.revertRoute();
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void resetRoute() {
+	public boolean resetRoute() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.resetRoute()");
-		this.currentRoute.resetRoute();
-		this.notifyAllRouteListeners();
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.resetRoute();
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
-	public void optimizeRoute() {
+	public boolean optimizeRoute() {
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.optimizeRoute()");
-		this.currentRoute.optimizeRoute();
-		this.notifyAllRouteListeners();
+
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread (new Runnable() {
+				@Override
+				public void run() {
+					newCurrentRoute.optimizeRoute();
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					RouteController.getInstance().notifyAllRouteListeners();
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+		return false;
 	}
 
 	public void replaceFullRoute(RouteInfo r) {
@@ -196,5 +339,12 @@ public class RouteController {
 				"RouteController.addLocationToFavorites(Location, String)");
 		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}
+	
+	
+	
+	
+	
+	
+	
 
 }
