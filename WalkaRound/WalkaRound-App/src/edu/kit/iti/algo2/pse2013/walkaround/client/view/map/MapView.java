@@ -210,6 +210,7 @@ public class MapView extends Activity {
 		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));
 		user.getLayoutParams().width = USER_X_DELTA * 4;
 		user.getLayoutParams().height = USER_Y_DELTA * 4;
+		user.setScaleType(ImageView.ScaleType.FIT_XY);
 		user.setOnTouchListener(new UserTouchEventListener());
 
 		// ---------------------------------------------

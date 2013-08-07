@@ -41,26 +41,36 @@ public final class TextToSpeechUtility implements OnInitListener, OnSharedPrefer
 	 * 
 	 * @param text
 	 */
-	public void speak(String text) {
+	public boolean speak(String text) {
 		if(isReady && sound){
 			tts.speak(text, TextToSpeech.QUEUE_ADD, null);
+			return true;
 		} else {
 			Log.e(TAG_TTSUTIL, "TextToSpeech is not ready");
+			if(!sound){
+				Log.e(TAG_TTSUTIL, "sound is off");
+			}
 		}
+		return false;
 	}
 	/**
 	 * Speaks a String
 	 * 
 	 * @param text
 	 */
-	public void speak(String text, Locale language) {
+	public boolean speak(String text, Locale language) {
 		if(isReady && sound){
 			tts.setLanguage(language);
 			tts.speak(text, TextToSpeech.QUEUE_ADD, null);
 			tts.setLanguage(Locale.getDefault());
+			return true;
 		} else {
-			Log.e(TAG_TTSUTIL, "TextToSpeech is not ready or offline");
+			Log.e(TAG_TTSUTIL, "TextToSpeech is not ready");
+			if(!sound){
+				Log.e(TAG_TTSUTIL, "sound is off");
+			}
 		}
+		return false;
 	}
 
 	public static TextToSpeechUtility getInstance() {
