@@ -196,10 +196,13 @@ public class RouteProcessing {
 			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),
 					RouteInfoTransfer.class);
 		}
-		// TODO
 
-		if (routeInfoTransfer == null || routeInfoTransfer.getError() != null)
-			throw new RouteProcessingException(routeInfoTransfer.getError());
+
+		if (routeInfoTransfer == null) {
+			throw new RouteProcessingException("routeInfoTransfer is null");
+		} else  if (routeInfoTransfer.getError() != null) {
+ 			throw new RouteProcessingException(routeInfoTransfer.getError());
+ 		}
 
 		// replace first and last Coordinate with Waypoint
 		routeInfoTransfer.postProcess();
@@ -271,6 +274,8 @@ public class RouteProcessing {
 			Log.e(TAG_ROUTE_PROCESSING, "Rundkurs konnte nicht berechnet werden");
 			return new Route(new LinkedList<Coordinate>());
 		}
+		
+		
 				
 		if(routeInfoTransfer.getError() != null) throw new RouteProcessingException(routeInfoTransfer.getError());
 		

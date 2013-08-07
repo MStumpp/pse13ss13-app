@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 
 public class RoundTripView extends Fragment {
@@ -81,24 +82,24 @@ public class RoundTripView extends Fragment {
 		display.getSize(size);
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der Größenverhältnisse");
-		//meter.setX(size.x / 3 * 2);
-		//meter.getLayoutParams().width = size.x;
-		//np.setX(size.x / 3);
-		//np.getLayoutParams().width = size.x / 3;
-		//length.setX(size.x / 10);
-		//length.getLayoutParams().width = size.x / 5;
-		//profiles.setX((size.x / 2.6f));
-		//profiles.getLayoutParams().width = size.x / 2;
-		//jogging.setX(size.x / 6);
-		//jogging.getLayoutParams().width = size.x / 2;
-		//sightseeing.setX((size.x / 6));
-		//sightseeing.getLayoutParams().width = size.x / 2;
-		//shopping.setX(size.x / 6);
-		//shopping.getLayoutParams().width = size.x / 2;
-		//clubbing.setX(size.x / 6);
-		//clubbing.getLayoutParams().width = size.x / 2;
-		//computeRoundtrip.setX(size.x / 4);
-		//computeRoundtrip.getLayoutParams().width = size.x / 2;
+		// meter.setX(size.x / 3 * 2);
+		// meter.getLayoutParams().width = size.x;
+		// np.setX(size.x / 3);
+		// np.getLayoutParams().width = size.x / 3;
+		// length.setX(size.x / 10);
+		// length.getLayoutParams().width = size.x / 5;
+		// profiles.setX((size.x / 2.6f));
+		// profiles.getLayoutParams().width = size.x / 2;
+		// jogging.setX(size.x / 6);
+		// jogging.getLayoutParams().width = size.x / 2;
+		// sightseeing.setX((size.x / 6));
+		// sightseeing.getLayoutParams().width = size.x / 2;
+		// shopping.setX(size.x / 6);
+		// shopping.getLayoutParams().width = size.x / 2;
+		// clubbing.setX(size.x / 6);
+		// clubbing.getLayoutParams().width = size.x / 2;
+		// computeRoundtrip.setX(size.x / 4);
+		// computeRoundtrip.getLayoutParams().width = size.x / 2;
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 		computeRoundtrip.setOnTouchListener(new RoundtripComputeListener());
@@ -128,25 +129,36 @@ public class RoundTripView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(computeRoundtrip) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(computeRoundtrip)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (jogging.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(jogging.getTag().toString()),
 							np.getValue() * 100);
+					MapController.getInstance().getPullUpView()
+							.setNullSizeHeight();
 				} else if (shopping.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(shopping.getTag().toString()),
 							np.getValue() * 100);
+					MapController.getInstance().getPullUpView()
+							.setNullSizeHeight();
 				} else if (sightseeing.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(sightseeing.getTag().toString()),
 							np.getValue() * 100);
+					MapController.getInstance().getPullUpView()
+							.setNullSizeHeight();
 				} else if (clubbing.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(clubbing.getTag().toString()),
 							np.getValue() * 100);
+					MapController.getInstance().getPullUpView()
+							.setNullSizeHeight();
 				} else {
 					routeController.addRoundtrip(0, np.getValue() * 100);
+					MapController.getInstance().getPullUpView()
+							.setNullSizeHeight();
 				}
 			}
 			return false;
@@ -158,7 +170,8 @@ public class RoundTripView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(jogging) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(jogging)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!jogging.isSelected()) {
 					setSelected(jogging);
 					setUnselected(sightseeing);
@@ -168,7 +181,8 @@ public class RoundTripView extends Fragment {
 				} else {
 					setUnselected(jogging);
 				}
-			} else if (v.equals(shopping) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(shopping)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!shopping.isSelected()) {
 					setSelected(shopping);
 					setUnselected(sightseeing);
@@ -177,7 +191,8 @@ public class RoundTripView extends Fragment {
 				} else {
 					setUnselected(shopping);
 				}
-			} else if (v.equals(sightseeing) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(sightseeing)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!sightseeing.isSelected()) {
 					setSelected(sightseeing);
 					setUnselected(jogging);
@@ -186,7 +201,8 @@ public class RoundTripView extends Fragment {
 				} else {
 					setUnselected(sightseeing);
 				}
-			} else if (v.equals(clubbing) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			} else if (v.equals(clubbing)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!clubbing.isSelected()) {
 					setSelected(clubbing);
 					setUnselected(sightseeing);

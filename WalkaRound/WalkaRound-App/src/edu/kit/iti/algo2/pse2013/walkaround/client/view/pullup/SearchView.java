@@ -153,7 +153,8 @@ public class SearchView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedr�ckt");
 				Log.d(TAG_PULLUP_CONTENT, ""
 						+ postalCodeSearch.getText().toString());
-				if (postalCodeSearch.getText().toString().trim().equals("")) {
+				if (postalCodeSearch.getText().toString().trim().equals("")
+						|| postalCodeSearch.getText().toString().isEmpty()) {
 					locations = searchMenuController
 							.requestSuggestionsByAddress(0, citySearch
 									.getText().toString(), streetSearch
