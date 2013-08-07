@@ -375,7 +375,8 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the y delta distance
 	 */
 	public void onShift(float distanceX, float distanceY) {
-
+		Log.d(TAG_MAP_CONTROLLER, "onShift(x: " + distanceX + ", y: " + distanceY + ")");
+		
 		if (this.lockUserPosition) {
 			this.toggleLockUserPosition();
 		}
