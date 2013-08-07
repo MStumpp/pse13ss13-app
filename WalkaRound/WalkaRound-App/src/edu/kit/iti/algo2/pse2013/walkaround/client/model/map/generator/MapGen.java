@@ -83,11 +83,6 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 */
 	private BoundingBox coorBox;
 
-	/**
-	 * the Level of Detail
-	 * 
-	 */
-	private float lod;
 
 	/**
 	 * the current Tile Width
@@ -108,8 +103,8 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	// TODO maybe it should be the center tile
 	private int[] indexXY;
 
-	public MapGen(Point size, BoundingBox coorBox, float lod, TileFetcher t) {
-		constructorHelper(size, coorBox, lod);
+	public MapGen(Point size, BoundingBox coorBox, TileFetcher t) {
+		constructorHelper(size, coorBox);
 
 		this.tileFetcher = t;
 	}
@@ -127,17 +122,15 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 * @param lod
 	 *            the start Level of Detail
 	 */
-	public MapGen(Point size, BoundingBox coorBox, float lod) {
-		constructorHelper(size, coorBox, lod);
+	public MapGen(Point size, BoundingBox coorBox) {
+		constructorHelper(size, coorBox);
 
 		this.tileFetcher = new TileFetcher();
 	}
 
-	private void constructorHelper(Point size, BoundingBox coorBox, float lod) {
+	private void constructorHelper(Point size, BoundingBox coorBox) {
 
 		this.coorBox = coorBox;
-
-		this.lod = lod;
 
 		this.indexXY = new int[2];
 
@@ -159,15 +152,15 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	private DisplayCoordinate computeTileOffset() {
 
 		double lonDiff = ((coorBox.getCenter().getLongitude() + 180) % (360 / Math
-				.pow(2, lod)));
+				.pow(2, this.coorBox.getLevelOfDetail())));
 
 		double latDiff = ((coorBox.getCenter().getLatitude() + 90) % (180 / Math
-				.pow(2, lod)));
+				.pow(2, this.coorBox.getLevelOfDetail())));
 
-		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, lod,
+		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_HORIZONTAL);
 
-		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, lod,
+		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_VERTICAL);
 
 		yDiff = (currentTileWidth - 1) - yDiff;
@@ -178,7 +171,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
-				coorBox.getCenter(), lod));
+				coorBox.getCenter(), this.coorBox.getLevelOfDetail()));
 
 		return new DisplayCoordinate(xDiff, yDiff);
 	}
@@ -188,7 +181,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 */
 	private void computeAmountOfTiles() {
 		this.currentTileWidth = CoordinateUtility
-				.computeCurrentTileWidthInPixels(this.lod);
+				.computeCurrentTileWidthInPixels(this.coorBox.getLevelOfDetail());
 
 		this.amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
 				(int) Math.ceil(size.y / currentTileWidth) + 1);
@@ -205,19 +198,18 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 * @param lod
 	 *            the Level of Detail
 	 */
-	public void generateMap(final BoundingBox coorBox, final float lod) {
+	public void generateMap(final BoundingBox coorBox) {
 
-		this.lod = lod;
 		this.coorBox = coorBox;
 		this.mapOffset = this.computeTileOffset();
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
-				Math.round(this.lod));
+				Math.round(this.coorBox.getLevelOfDetail()));
 		clearBitmap();
 		this.computeAmountOfTiles();
 		// Tiles requesten
 		//tileFetcher.requestTiles((int) this.lod, this.coorBox.getTopLeft(),
 		//		this.coorBox.getBottomRight(), this);
-		tileFetcher.requestTiles((int)lod, indexXY[0], indexXY[1], indexXY[0], indexXY[1], this);
+		tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), indexXY[0], indexXY[1], indexXY[0], indexXY[1], this);
 		fix = false;
 
 	}
@@ -328,7 +320,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 			Log.d("debugFu", "pref change " + pref.getString(key,"3"));
 			CurrentMapStyleModel.getInstance().setCurrentMapStyle(pref.getString(key,"3"));
 			this.tileFetcher.clearCache();
-			this.generateMap(coorBox, lod);
+			this.generateMap(coorBox);
 		}
 	}
 }

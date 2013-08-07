@@ -30,10 +30,6 @@ public class POIGen implements Runnable {
 	 */
 	private List<POI> poiList = new LinkedList<POI>();
 
-	/**
-	 * Bottom right Coordinate
-	 */
-	private BoundingBox coorBox;
 
 	/**
 	 * Construckts a new POIGen
@@ -68,12 +64,11 @@ public class POIGen implements Runnable {
 	/**
 	 * update the POI of the Display
 	 */
-	public void generatePOIView(BoundingBox coorBox, float lod, Point size) {
+	public void generatePOIView(BoundingBox coorBox, Point size) {
 		if (!POIManager.getInstance().isEmpty()) {
-			this.coorBox = coorBox;
 			
-			poiList = POIManager.getInstance().getPOIsWithinRectangle(this.coorBox.getTopLeft(),
-					this.coorBox.getBottomRight(), lod);
+			poiList = POIManager.getInstance().getPOIsWithinRectangle(coorBox.getTopLeft(),
+					coorBox.getBottomRight(),  coorBox.getLevelOfDetail());
 
 			Log.d(TAG_POIGen, "POI Anzahl" + poiList.size());
 
@@ -82,11 +77,11 @@ public class POIGen implements Runnable {
 			for (POI value : poiList) {
 				poi.add(new DisplayPOI(CoordinateUtility
 						.convertDegreesToPixels(
-								value.getLongitude() - this.coorBox.getTopLeft().getLongitude(),
-								lod, CoordinateUtility.DIRECTION_X),
+								value.getLongitude() - coorBox.getTopLeft().getLongitude(),
+								 coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_X),
 						CoordinateUtility.convertDegreesToPixels(
-								this.coorBox.getTopLeft().getLatitude() - value.getLatitude(),
-								lod, CoordinateUtility.DIRECTION_Y), value
+								coorBox.getTopLeft().getLatitude() - value.getLatitude(),
+								 coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_Y), value
 								.getId()));
 			}
 			if (MapController.getInstance() != null) {

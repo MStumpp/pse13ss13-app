@@ -94,25 +94,6 @@ public class MapController implements RouteListener, PositionListener,
 
 	private BoundingBox coorBox;
 	//private Coordinate center;
-	private float lod;
-
-	/**
-	 * gives the Level of Detail back
-	 * 
-	 * @return Level of Detail
-	 */
-	public float getLoD() {
-		return lod;
-	}
-
-	/**
-	 * sets a new Level of Detail
-	 * 
-	 * @param lod Level of Detail
-	 */
-	public void setLoD(float lod) {
-		this.lod = lod;
-	}
 
 	/**
 	 * gets the center Coordinate
@@ -129,7 +110,17 @@ public class MapController implements RouteListener, PositionListener,
 	 * @param center Coordinate
 	 */
 	public void setCenter(Coordinate center) {
-		this.coorBox.setCenter(center, lod);;
+		this.coorBox.setCenter(center);
+	}
+	
+	/**
+	 * sets the Center Coordinate
+	 * 
+	 * @param center Coordinate
+	 * @param lod Level Of Detail
+	 */
+	public void setCenter(Coordinate center, float lod) {
+		this.coorBox.setCenter(center, lod);
 	}
 
 	/*
@@ -143,23 +134,9 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the mapView
 	 * @return the mapController
 	 */
-	public static MapController initialize(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox, Coordinate user) {
+	public static MapController initialize(TileFetcher tileFetcher, Point size, BoundingBox coorBox, Coordinate user) {
 		if (mapController == null) {
-			mapController = new MapController(tileFetcher, size, lod, coorBox, user);
-		}
-		return mapController;
-	}
-	
-	/**
-	 * Initializes the MapController. Needs the current mapView
-	 * 
-	 * @param mapView
-	 *            the mapView
-	 * @return the mapController
-	 */
-	public static MapController initialize(MapView mapView) {
-		if (mapController == null) {
-			mapController = new MapController(mapView);
+			mapController = new MapController(tileFetcher, size, coorBox, user);
 		}
 		return mapController;
 	}
@@ -191,11 +168,11 @@ public class MapController implements RouteListener, PositionListener,
 		
 		PreferenceManager.getDefaultSharedPreferences(mv).registerOnSharedPreferenceChangeListener(map);
 		
-		this.map.generateMap(coorBox, lod);
+		this.map.generateMap(coorBox);
 		this.updateUserPosition();
 	}
 
-	private MapController(TileFetcher tileFetcher, Point size, float lod, BoundingBox coorBox, Coordinate user) {
+	private MapController(TileFetcher tileFetcher, Point size, BoundingBox coorBox, Coordinate user) {
 		this.user = user;
 
 		// initialize Vars
@@ -206,7 +183,6 @@ public class MapController implements RouteListener, PositionListener,
 		this.routeGen = new Thread();
 		this.userPos = new Thread();
 		
-		this.lod = lod;
 		this.size = size;
 		this.coorBox = coorBox;
 
@@ -214,7 +190,7 @@ public class MapController implements RouteListener, PositionListener,
 		
 		// initialize Threads
 
-		this.map = new MapGen(size, coorBox, lod, tileFetcher);
+		this.map = new MapGen(size, coorBox, tileFetcher);
 		
 		this.poiGen = new POIGen();
 		//TODO poi Gen doesnt run as Thread ... why?
@@ -226,65 +202,6 @@ public class MapController implements RouteListener, PositionListener,
 		// Controller
 		
 		this.routeController = RouteController.getInstance();
-	}
-	
-	/**
-	 * private Constructor of the Map Controller
-	 * 
-	 * @param mv
-	 *            the required MapView
-	 */
-	private MapController(MapView mv) {
-		Log.d(TAG_MAP_CONTROLLER, "Map Controller will be initialice!");
-		this.user = defaultCoordinate;
-		//this.center = defaultCoordinate;
-		this.currentRoute = new Route(new LinkedList<Coordinate>());
-		this.routeGen = new Thread();
-		this.mapView = mv;
-		this.lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle()
-				.getDefaultLevelOfDetail();
-		size = mv.getDisplaySize();	
-		userPos = new Thread();
-		
-		this.coorBox = new BoundingBox(defaultCoordinate,size,lod);
-		
-		this.route = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
-
-		Log.d(TAG_MAP_CONTROLLER, "Initialice List of Display Points!");
-		displayPoints = new LinkedList<DisplayWaypoint>();
-		lines = new LinkedList<DisplayCoordinate>();
-
-		Log.d(TAG_MAP_CONTROLLER, "Initialice MapModel!");
-		// this.mapModel = MapModel.initialize(defaultCoordinate, this, size);
-
-		map = new MapGen(size, coorBox, lod);
-		map.generateMap(coorBox, lod);
-		poiGen = new POIGen();
-		//TODO poi Gen doesnt run as Thread ... why?
-		Thread t = new Thread(poiGen);
-		t.setName("POI Generator");
-		t.setPriority(5);
-		//t.run();
-		
-		Log.d(TAG_MAP_CONTROLLER, "Initialice and register routeController!");
-		routeController = RouteController.getInstance();
-		routeController.registerRouteListener(this);
-
-		PositionManager.getInstance().registerPositionListener(this);
-		PositionManager.getInstance().getCompassManager()
-				.registerCompassListener(this);
-
-		Log.d(TAG_MAP_CONTROLLER,
-				"Add three Example Waypoints to routeController!");
-		// routeController.addWaypoint(new Waypoint(49.01, 8.40333,
-		// "Marktplatz"));
-		// routeController.addWaypoint(new Waypoint(49.00471, 8.3858300,
-		// "Brauerstraße"));
-		// routeController.addWaypoint(new Waypoint(49.0145, 8.419, "211"));
-
-		// CompassManager.getInstance().registerCompassListener(this);
-
-		// mapView.setUserPositionOverlayImage(200,100);
 	}
 
 	/*
@@ -313,7 +230,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
-		return this.lod;
+		return this.coorBox.getLevelOfDetail();
 	}
 
 	/**
@@ -381,10 +298,12 @@ public class MapController implements RouteListener, PositionListener,
 			this.toggleLockUserPosition();
 		}
 
+		
+		//TODO in CoorBox maybe
 		double deltaLongitude = CoordinateUtility.convertPixelsToDegrees(
-				distanceX, this.lod, CoordinateUtility.DIRECTION_LONGITUDE);
+				distanceX, this.coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_LONGITUDE);
 		double deltaLatitude = -1
-				* CoordinateUtility.convertPixelsToDegrees(distanceY, this.lod,
+				* CoordinateUtility.convertPixelsToDegrees(distanceY, this.coorBox.getLevelOfDetail(),
 						CoordinateUtility.DIRECTION_LATITUDE);
 
 		
@@ -405,15 +324,17 @@ public class MapController implements RouteListener, PositionListener,
 	public void onZoom(float delta, DisplayCoordinate dc) {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
 				+ dc.toString() + " will be forwarding to MapModel");
-		if (lod + delta <= CurrentMapStyleModel.getInstance()
+		if (this.coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getMaxLevelOfDetail()
-				&& lod + delta >= CurrentMapStyleModel.getInstance()
+				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
-			lod += delta;
+			
+			this.coorBox.setCenter(this.coorBox.getCenter(), this.coorBox.getLevelOfDetail()+delta);
+			
 			Coordinate center = new Coordinate(coorBox.getCenter(),
-					CoordinateUtility.convertPixelsToDegrees(dc.getY(), lod,
+					CoordinateUtility.convertPixelsToDegrees(dc.getY(), this.coorBox.getLevelOfDetail(),
 							CoordinateUtility.DIRECTION_LONGITUDE),
-					CoordinateUtility.convertPixelsToDegrees(dc.getX(), lod,
+					CoordinateUtility.convertPixelsToDegrees(dc.getX(), this.coorBox.getLevelOfDetail(),
 							CoordinateUtility.DIRECTION_LONGITUDE));
 			this.setCenter(center);
 			this.updateAll();
@@ -430,11 +351,12 @@ public class MapController implements RouteListener, PositionListener,
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
 				+ " will be forwarding to MapModel");
 
-		if (lod + delta <= CurrentMapStyleModel.getInstance()
+		if (this.coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getMaxLevelOfDetail()
-				&& lod + delta >= CurrentMapStyleModel.getInstance()
+				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
-			lod += delta;
+			
+			this.coorBox.setCenter(this.coorBox.getCenter(), this.coorBox.getLevelOfDetail()+delta);
 			this.updateAll();
 		}
 
@@ -465,7 +387,7 @@ public class MapController implements RouteListener, PositionListener,
 	 * 
 	 */
 	public void addPoiToView() {
-		this.poiGen.generatePOIView(coorBox, lod, size);
+		this.poiGen.generatePOIView(coorBox, size);
 	}
 
 	/*
@@ -501,7 +423,7 @@ public class MapController implements RouteListener, PositionListener,
 		Coordinate next = CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc,
 						coorBox.getTopLeft(),
-						lod);
+						coorBox.getLevelOfDetail());
 		
 		try {
 			CoordinateNormalizer.normalizeCoordinate(next,
@@ -564,11 +486,11 @@ public class MapController implements RouteListener, PositionListener,
 	private void updateRouteOverlay() {
 
 		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
-				currentRoute, coorBox.getTopLeft(), lod);
+				currentRoute, coorBox.getTopLeft(), this.coorBox.getLevelOfDetail());
 
 		this.displayPoints = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
-						coorBox.getTopLeft(), lod);
+						coorBox.getTopLeft(), this.coorBox.getLevelOfDetail());
 
 		mapView.updateDisplayWaypoints(displayPoints);
 
@@ -623,14 +545,14 @@ public class MapController implements RouteListener, PositionListener,
 		this.updateUserPosition();
 		this.updateRouteOverlay();
 		this.updatePOIView();
-		this.map.generateMap(coorBox, lod);
+		this.map.generateMap(coorBox);
 	}
 
 	/**
 	 * 
 	 */
 	public void updatePOIView(){
-		this.poiGen.generatePOIView(coorBox, lod, size);
+		this.poiGen.generatePOIView(coorBox, size);
 	}
 	
 	Thread userPos;
@@ -668,10 +590,10 @@ public class MapController implements RouteListener, PositionListener,
 
 			DisplayCoordinate pos = new DisplayCoordinate(
 					CoordinateUtility.convertDegreesToPixels(lon,
-							lod,
+							coorBox.getLevelOfDetail(),
 							CoordinateUtility.DIRECTION_LONGITUDE),
 					CoordinateUtility.convertDegreesToPixels(lat,
-							lod,
+							coorBox.getLevelOfDetail(),
 							CoordinateUtility.DIRECTION_LATITUDE));
 
 			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(), "User Posi ist:" + user.toString());

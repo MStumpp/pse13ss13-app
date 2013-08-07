@@ -222,7 +222,7 @@ public class BootActivity extends Activity {
 					sleep(50);
 				}
 
-				MapController.initialize(tileFetcher, size, lod, coorBox,
+				MapController.initialize(tileFetcher, size, coorBox,
 						coorBox.getCenter());
 				progress += 50;
 				updateProgress(progress);
