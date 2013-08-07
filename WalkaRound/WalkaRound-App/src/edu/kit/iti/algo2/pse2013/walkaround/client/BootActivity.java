@@ -4,6 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.location.Location;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Looper;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Display;
+import android.widget.ProgressBar;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
@@ -20,26 +35,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.location.Location;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Looper;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Display;
-import android.widget.ProgressBar;
 
 public class BootActivity extends Activity {
 	protected static final int TOTALSTEPS = 1000;
@@ -52,10 +54,13 @@ public class BootActivity extends Activity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		System.gc();
 		setContentView(R.layout.progress_bar);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 
-		PreferenceManager.setDefaultValues(this, R.xml.options, true);
+		PreferenceManager.setDefaultValues(getApplicationContext(),
+				R.xml.options, true);
+		PreferenceUtility.initialize(getApplicationContext());
 		final Thread timerThread = new BootHelper();
 		timerThread.start();
 	}
@@ -113,7 +118,7 @@ public class BootActivity extends Activity {
 				RouteController.getInstance();
 				SearchMenuController.getInstance();
 				CurrentMapStyleModel.getInstance();
-				String mapStyle = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.options_map_typ), "MapQuest");
+				String mapStyle = PreferenceUtility.getInstance().getMapStyle();
 				CurrentMapStyleModel.getInstance().setCurrentMapStyle(mapStyle);
 				// 10 %
 				progress = 100;
@@ -126,34 +131,38 @@ public class BootActivity extends Activity {
 				RouteProcessing.getInstance();
 				Looper.prepare();
 				PositionManager.initialize(getApplicationContext());
-				TextToSpeechUtility.initialize(getApplicationContext());
-				
+
+				Log.d("debugFu", " "
+						+ (PreferenceUtility.getInstance().isSoundOn() == true));
+				TextToSpeechUtility.initialize(getApplicationContext(),
+						PreferenceUtility.getInstance().isSoundOn());
+				PreferenceUtility.getInstance()
+						.registerOnSharedPreferenceChangeListener(
+								TextToSpeechUtility.getInstance());
+
 				while (!TextToSpeechUtility.getInstance().isReady()) {
 					Log.d(TAG, "TextToSpeech ist noch nicht ready");
 					sleep(50);
 				}
-				
+
 				// 20%
 				progress = 200;
 				updateProgress(progress);
 
 				System.gc();
 
-
 				updateProgress(progress);
+
 				/*
-				 * 
-				String fileString = File.separatorChar + "walkaround"
-						+ File.separatorChar + "geometryData.pbf";
-				GeometryDataIO geometryDataIO;
-				try {
-					geometryDataIO = GeometryDataIO.load(new File(Environment
-							.getExternalStorageDirectory().getAbsolutePath()
-							+ fileString));
-					GeometryProcessor.init(geometryDataIO);
-				} catch (IOException e) {
-					Log.e(TAG, "geometry konnte nicht initialisiert werden.");
-				}*/
+				 * String fileString = File.separatorChar + "walkaround" +
+				 * File.separatorChar + "geometryData.pbf"; GeometryDataIO
+				 * geometryDataIO; try { geometryDataIO =
+				 * GeometryDataIO.load(new File(Environment
+				 * .getExternalStorageDirectory().getAbsolutePath() +
+				 * fileString)); GeometryProcessor.init(geometryDataIO); } catch
+				 * (IOException e) { Log.e(TAG,
+				 * "geometry konnte nicht initialisiert werden."); }
+				 */
 
 				// 35%
 				progress = 350;
@@ -204,23 +213,32 @@ public class BootActivity extends Activity {
 						amountBottom[0], amountBottom[1], this);
 
 				updateProgress(progress);
-				while (amount > tiles) {
+				while ((amount - 4) > tiles) {
 					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
 							+ tiles);
 					updateProgress(progress);
 					sleep(50);
 				}
 
-				MapController.initialize(tileFetcher, size, lod, coorBox, coorBox.getCenter());
-				progress+=50;
+				MapController.initialize(tileFetcher, size, lod, coorBox,
+						coorBox.getCenter());
+				progress += 50;
 				updateProgress(progress);
 				HeadUpController.initializes();
-				
-				progress=1000;
+
+				progress = 1000;
 				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
-				TextToSpeechUtility.getInstance().speak("Wilkommen bei !");
-				TextToSpeechUtility.getInstance().speak("WalkaRound!", Locale.ENGLISH);
+				if (TextToSpeechUtility.getInstance().speak("Wilkommen bei !")) {
+					TextToSpeechUtility.getInstance().speak("WalkaRound!",
+							Locale.ENGLISH);
+				} else {
+					MediaPlayer mp = MediaPlayer.create(getBaseContext(),
+							R.raw.hangout_dingtone);
+					mp.setVolume(100, 100);
+					mp.start();
+					//mp.pause();
+				}
 
 			} catch (InterruptedException e) {
 			} finally {

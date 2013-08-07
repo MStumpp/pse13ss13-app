@@ -4,13 +4,17 @@ import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class InfoView extends Fragment {
@@ -18,10 +22,11 @@ public class InfoView extends Fragment {
 	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupInfoViewSwitcher;
-	TextView title;
-	ImageView iv;
-	TextView category;
-	TextView text;
+	private TextView title;
+	private ImageView iv;
+	private TextView category;
+	private TextView text;
+	private ImageView save;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,10 @@ public class InfoView extends Fragment {
 				R.id.poiinfoview_category);
 		this.text = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
+		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
 
 		POI poi = MapController.getInstance().getPOI();
+		save.setOnTouchListener(new saveListener(poi, save));
 
 		if (poi != null) {
 			Log.d("wtf", "" + (poi.getName() == null) + (title == null));
@@ -131,5 +138,27 @@ public class InfoView extends Fragment {
 			return true;
 		}
 		return false;
+	}
+
+	private class saveListener implements OnTouchListener {
+
+		private POI poi;
+		private View view;
+
+		public saveListener(POI poi, View view) {
+			this.poi = poi;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
+				RouteController.getInstance().addLocationToFavorites(
+						new Location(poi.getLatitude(), poi.getLongitude(),
+								poi.getName()), poi.getName());
+			}
+			return false;
+		}
 	}
 }
