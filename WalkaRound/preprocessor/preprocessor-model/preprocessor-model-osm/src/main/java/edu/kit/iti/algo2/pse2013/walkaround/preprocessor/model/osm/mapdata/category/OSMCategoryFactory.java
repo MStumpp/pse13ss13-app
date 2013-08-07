@@ -7,6 +7,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 
 public class OSMCategoryFactory {
 	public static final OSMCategory createFootwayCategory() {
+		OSMTagCategory all = new OSMTagCategory(false);
 		OSMTagCategory footway = new OSMTagCategory();
 		footway.addTag("highway", "track");
 		footway.addTag("highway", "path");
@@ -15,7 +16,8 @@ public class OSMCategoryFactory {
 		footway.addTag("highway", "footway");
 		footway.addTag("sidewalk", "both");
 		footway.addTag("foot", "yes");
-		return footway;
+		//TODO: Zurückstellen auf return footway;
+		return all;
 	}
 	public static final OSMCategory createPOICategory(int catID) {
 		if (catID == Category.POI_BARS_AND_PUBS) {

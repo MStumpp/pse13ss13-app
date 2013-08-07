@@ -80,3 +80,21 @@ message SaveGeometryData {
 	optional SaveGeometryNode root = 1;
 	optional int32 num_dimensions = 2;
 }
+
+///////////////////////////////////
+/// Favorites                   ///
+///////////////////////////////////
+message SaveFavorite {
+	repeated SaveRoute route = 1;
+	repeated SaveLocation location = 2;
+}
+message SaveRoute {
+	required string name = 1;
+	repeated SaveWaypoint waypoint = 2;
+	repeated SaveCoordinate coordinate = 3;
+}
+message SaveWaypoint {
+	required SaveLocation location = 1;
+	required int32 profile = 2;
+	optional SavePOI poi = 3;
+}

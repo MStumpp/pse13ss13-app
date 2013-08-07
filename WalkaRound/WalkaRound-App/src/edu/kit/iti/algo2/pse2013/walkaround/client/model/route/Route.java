@@ -28,6 +28,27 @@ public class Route implements RouteInfo {
 		this.routeProcessor = RouteProcessing.getInstance();
 	}
 
+	
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean setActiveWaypoint(int id) {
+		Log.d(TAG_ROUTE, "setActiveWaypoint(id)");
+		
+		for (Waypoint wp : this.getWaypoints()) {
+			if (wp.getId() == id) {
+				this.setActiveWaypoint(wp);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
 	/**
 	 *
 	 */
@@ -298,7 +319,6 @@ public class Route implements RouteInfo {
 					.computeOptimizedRoute((RouteInfo) this);
 			this.routeCoordinates = optimizedRoute.getCoordinates();
 		} catch (RouteProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

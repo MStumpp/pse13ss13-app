@@ -7,7 +7,7 @@
     <string name="reset" >Reset</string>
     <string name="add_favorite" >Favorite hinzufügen</string>
     <string name="go_to_map" >zur Karte</string>
-    <string name="query" >Schlange</string>
+    <string name="query" >Suchtext</string>
     <string name="zip_code" >PLZ</string>
     <string name="city" >Stadt</string>
     <string name="street" >Straße</string>
