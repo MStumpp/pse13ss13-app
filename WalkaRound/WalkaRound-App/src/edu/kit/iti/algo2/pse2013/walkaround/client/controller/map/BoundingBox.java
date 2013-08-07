@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
  * 
@@ -103,6 +104,70 @@ public class BoundingBox {
 	public void setCenter(Coordinate center) {
 		Log.d(TAG, "set a new Center: " + center.toString());
 		this.center = center;
+		this.topLeft = this.computeTopLeft();
+		this.bottomRight = this.computeBottomRight();
+	}
+
+	/**
+	 * Sets a new Center to the given DisplayCoordinate
+	 * 
+	 * @param dc
+	 *            the given Display Coordinate
+	 */
+	public void setCenter(DisplayCoordinate dc) {
+
+		double longitude = CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+				levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE);
+
+		double latitude = CoordinateUtility.convertPixelsToDegrees(dc.getX(),
+				levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE);
+		
+		Coordinate center = new Coordinate(this.topLeft, latitude, longitude);
+
+		this.setCenter(center);
+	}
+
+	/**
+	 * Shifts the Center Coordinate bei a Pixel delta
+	 * 
+	 * @param x
+	 *            pixel delta
+	 * @param y
+	 *            pixel delta
+	 */
+	public void shiftCenter(float x, float y) {
+
+		double deltaLongitude = CoordinateUtility.convertPixelsToDegrees(x,
+				levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE);
+		double deltaLatitude = -1
+				* CoordinateUtility.convertPixelsToDegrees(y, levelOfDetail,
+						CoordinateUtility.DIRECTION_LATITUDE);
+
+		Coordinate center = new Coordinate(this.center, deltaLatitude,
+				deltaLongitude);
+
+		this.setCenter(center);
+
+	}
+
+	/**
+	 * Sets a new Level Of Detail by a delta
+	 * 
+	 * @param delta
+	 *            the delta to the new Level Of Detail
+	 */
+	public void setLevelOfDetailByADelta(float delta) {
+		this.setLevelOfDetail(levelOfDetail + delta);
+	}
+
+	/**
+	 * Sets a new Level of Detail
+	 * 
+	 * @param levelOfDetail
+	 *            the new Level of Detail
+	 */
+	public void setLevelOfDetail(float levelOfDetail) {
+		this.levelOfDetail = levelOfDetail;
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();
 	}
@@ -277,4 +342,5 @@ public class BoundingBox {
 			return "Double Paring: width: " + width + ", height: " + height;
 		}
 	}
+
 }

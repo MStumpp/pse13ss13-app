@@ -298,17 +298,7 @@ public class MapController implements RouteListener, PositionListener,
 			this.toggleLockUserPosition();
 		}
 
-		
-		//TODO in CoorBox maybe
-		double deltaLongitude = CoordinateUtility.convertPixelsToDegrees(
-				distanceX, this.coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_LONGITUDE);
-		double deltaLatitude = -1
-				* CoordinateUtility.convertPixelsToDegrees(distanceY, this.coorBox.getLevelOfDetail(),
-						CoordinateUtility.DIRECTION_LATITUDE);
-
-		
-		Coordinate center = new Coordinate(coorBox.getCenter(), deltaLatitude, deltaLongitude);
-		this.setCenter(center);
+		coorBox.shiftCenter(distanceX, distanceY);
 		
 		this.updateAll();
 	}
@@ -329,14 +319,10 @@ public class MapController implements RouteListener, PositionListener,
 				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
 			
-			this.coorBox.setCenter(this.coorBox.getCenter(), this.coorBox.getLevelOfDetail()+delta);
+			// set center before zooming!
+			this.coorBox.setCenter(dc);
+			this.coorBox.setLevelOfDetail(delta);
 			
-			Coordinate center = new Coordinate(coorBox.getCenter(),
-					CoordinateUtility.convertPixelsToDegrees(dc.getY(), this.coorBox.getLevelOfDetail(),
-							CoordinateUtility.DIRECTION_LONGITUDE),
-					CoordinateUtility.convertPixelsToDegrees(dc.getX(), this.coorBox.getLevelOfDetail(),
-							CoordinateUtility.DIRECTION_LONGITUDE));
-			this.setCenter(center);
 			this.updateAll();
 		}
 	}
@@ -356,7 +342,7 @@ public class MapController implements RouteListener, PositionListener,
 				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
 			
-			this.coorBox.setCenter(this.coorBox.getCenter(), this.coorBox.getLevelOfDetail()+delta);
+			this.coorBox.setLevelOfDetail(delta);
 			this.updateAll();
 		}
 
