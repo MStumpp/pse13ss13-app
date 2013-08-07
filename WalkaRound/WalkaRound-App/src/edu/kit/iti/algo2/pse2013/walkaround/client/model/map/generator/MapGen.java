@@ -165,8 +165,8 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		yDiff = (currentTileWidth - 1) - yDiff;
 
-		xDiff = size.x / 2 - currentTileWidth / 2 - Math.abs(xDiff);
-		yDiff = size.y / 2 - currentTileWidth / 2 - Math.abs(yDiff);
+		xDiff = size.x / 2 - Math.abs(xDiff);
+		yDiff = size.y / 2 - Math.abs(yDiff);
 
 		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
