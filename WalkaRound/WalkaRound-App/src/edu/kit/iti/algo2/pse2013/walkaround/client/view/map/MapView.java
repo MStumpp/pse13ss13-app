@@ -1,8 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import android.animation.Animator;
@@ -16,9 +14,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -31,17 +27,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 // Android Library
 // Walkaround Library
 
@@ -141,14 +133,19 @@ public class MapView extends Activity {
 	// private Canvas canvas;
 	private Bitmap routeOverlayBitmap;
 
+	@SuppressWarnings("unused")
 	private float fromX;
+	@SuppressWarnings("unused")
 	private float fromY;
 
 	/**
 	 * User orientation
 	 */
+	@SuppressWarnings("unused")
 	private float userX;
+	@SuppressWarnings("unused")
 	private float userY;
+	@SuppressWarnings("unused")
 	private float delta;
 
 
