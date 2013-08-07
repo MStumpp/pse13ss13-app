@@ -34,6 +34,16 @@ public class BoundingBox {
 	 * Display Size
 	 */
 	private DoublePairing size;
+	
+	/**
+	 * Display Size in Pixel
+	 */
+	private Point display;
+	
+	/**
+	 * Current copy of LevelOf Detail
+	 */
+	float levelOfDetail;
 
 	/**
 	 * Constructs a new Bounding Box
@@ -46,13 +56,24 @@ public class BoundingBox {
 	 *            Level of Detail
 	 */
 	public BoundingBox(Coordinate center, Point size, float levelOfDetail) {
-		this.size = new DoublePairing(CoordinateUtility.convertPixelsToDegrees(
-				size.y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
-				CoordinateUtility.convertPixelsToDegrees(size.x, levelOfDetail,
-						CoordinateUtility.DIRECTION_LONGITUDE));
+		this.display = size;
+		this.levelOfDetail = levelOfDetail;
+		this.computeSize();
 		this.setCenter(center, levelOfDetail);
 	}
 
+	/**
+	 * Compute the Size of the Display
+	 * 
+	 * @param levelOfDetail
+	 */
+	private void computeSize(){
+		this.size = new DoublePairing(CoordinateUtility.convertPixelsToDegrees(
+				display.y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
+				CoordinateUtility.convertPixelsToDegrees(display.x, levelOfDetail,
+						CoordinateUtility.DIRECTION_LONGITUDE));
+	}
+	
 	/**
 	 * Sets a new Center by a new center and a new Level of detail
 	 * 
@@ -63,8 +84,21 @@ public class BoundingBox {
 	 */
 	public void setCenter(Coordinate center, float levelOfDetail) {
 		this.center = center;
-		this.topLeft = this.computeTopLeft(levelOfDetail);
-		this.bottomRight = this.computeBottomRight(levelOfDetail);
+		if(this.levelOfDetail != levelOfDetail) {
+			this.levelOfDetail = levelOfDetail;
+		}
+		this.setCenter(center);
+	}
+	/**
+	 * Sets a new Center by a new center and the current Level of Detail
+	 * 
+	 * @param center the center Coordinate
+	 */
+	public void setCenter(Coordinate center) {
+		this.center = center;
+		this.computeSize();
+		this.topLeft = this.computeTopLeft();
+		this.bottomRight = this.computeBottomRight();
 	}
 
 	/**
@@ -119,7 +153,7 @@ public class BoundingBox {
 	 * 
 	 * @return the top left geo-oordinate
 	 */
-	private Coordinate computeTopLeft(float lod) {
+	private Coordinate computeTopLeft() {
 		return new Coordinate(center, size.height / 2f, -size.width / 2f);
 	}
 
@@ -128,18 +162,8 @@ public class BoundingBox {
 	 * 
 	 * @return the top right geo-oordinate
 	 */
-	@SuppressWarnings("unused")
-	private Coordinate computeTopRight(float lod) {
-		return new Coordinate(center, size.height / 2f, size.width / 2f);
-	}
-
-	/**
-	 * Returns the bottom left Coordinate
-	 * 
-	 * @return the bottom left Coordinate
-	 */
 	private Coordinate computeTopRight() {
-		return new Coordinate(topLeft.getLatitude(), bottomRight.getLongitude());
+		return new Coordinate(center, size.height / 2f, size.width / 2f);
 	}
 
 	/**
@@ -147,18 +171,8 @@ public class BoundingBox {
 	 * 
 	 * @return the bottom left geo-oordinate
 	 */
-	@SuppressWarnings("unused")
-	private Coordinate computeBottomLeft(float lod) {
-		return new Coordinate(center, -size.height / 2f, -size.width / 2f);
-	}
-
-	/**
-	 * Returns the bottom left Coordinate
-	 * 
-	 * @return the bottom left Coordinate
-	 */
 	private Coordinate computeBottomLeft() {
-		return new Coordinate(bottomRight.getLatitude(), topLeft.getLongitude());
+		return new Coordinate(center, -size.height / 2f, -size.width / 2f);
 	}
 
 	/**
@@ -166,7 +180,7 @@ public class BoundingBox {
 	 * 
 	 * @return the bottom right geo-oordinate
 	 */
-	private Coordinate computeBottomRight(float lod) {
+	private Coordinate computeBottomRight() {
 		return new Coordinate(center, -size.height / 2f, size.width / 2f);
 	}
 
