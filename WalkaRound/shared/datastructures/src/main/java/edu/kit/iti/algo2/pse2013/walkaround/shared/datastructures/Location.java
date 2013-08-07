@@ -183,7 +183,16 @@ public class Location extends Coordinate {
 
 
 	public Location clone() {
-		Location clonedLocation = new Location(this.getLatitude(), this.getLongitude(), this.name.toString(), this.address.clone());
+    	String clonedName = null;
+    	if (this.getName() != null) {
+    	clonedName = this.getName().toString();
+    	}
+    	Address clonedAddress = null;
+    	if (this.getAddress() != null) {
+    	clonedAddress = this.getAddress().clone();
+    	}
+    	
+		Location clonedLocation = new Location(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);
 		clonedLocation.setMoveability(this.isMoveable());
 		clonedLocation.setIsFavorite(this.isFavorite());
 		return clonedLocation;
