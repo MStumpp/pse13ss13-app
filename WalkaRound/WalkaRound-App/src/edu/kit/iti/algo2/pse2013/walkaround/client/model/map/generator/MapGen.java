@@ -215,8 +215,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		clearBitmap();
 		this.computeAmountOfTiles();
 		// Tiles requesten
-		tileFetcher.requestTiles((int) this.lod, this.coorBox.getTopLeft(),
-				this.coorBox.getBottomRight(), this);
+		//tileFetcher.requestTiles((int) this.lod, this.coorBox.getTopLeft(),
+		//		this.coorBox.getBottomRight(), this);
+		tileFetcher.requestTiles((int)lod, indexXY[0], indexXY[1], indexXY[0], indexXY[1], this);
 		fix = false;
 
 	}
