@@ -8,6 +8,11 @@ public class OSMTagCategory extends OSMCategory {
 
 	private HashMap<String, String> tags = new HashMap<String, String>();
 
+	public OSMTagCategory() {}
+	public OSMTagCategory(boolean inverted) {
+		this.inverted = inverted;
+	}
+
 	public void addTag(String key, String value) {
 		this.tags.put(key, value);
 	}
@@ -18,6 +23,7 @@ public class OSMTagCategory extends OSMCategory {
 				return true;
 			}
 		}
-		return (decorated == null)? false:decoratedAccepts(element);
+		return true;
+		//return (decorated == null)? false:decoratedAccepts(element);
 	}
 }

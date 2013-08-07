@@ -15,7 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 /**
  * This class controls several Preprocessors.
  *
- * @author Matthias Stumpp
+ * @author Florian Sch&auml;fer
  * @version 1.0
  */
 public class PreprocessorAdmin {
