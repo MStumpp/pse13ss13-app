@@ -117,11 +117,11 @@ public class BoundingBox {
 	 */
 	public void setCenter(DisplayCoordinate dc) {
 
-		double longitude = CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+		double longitude = CoordinateUtility.convertPixelsToDegrees(dc.getX(),
 				levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE);
 
-		double latitude = CoordinateUtility.convertPixelsToDegrees(dc.getX(),
-				levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE);
+		double latitude = CoordinateUtility.convertPixelsToDegrees(dc.getY(),
+				levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
 		
 		Coordinate center = new Coordinate(this.topLeft, latitude, longitude);
 

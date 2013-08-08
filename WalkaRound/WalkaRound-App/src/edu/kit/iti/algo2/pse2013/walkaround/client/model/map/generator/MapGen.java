@@ -169,12 +169,15 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_VERTICAL);
+		
 
 		//yDiff = (currentTileWidth - 1) - yDiff;
 
 		xDiff = size.x / 2 - Math.abs(xDiff);
 		yDiff = size.y / 2 - Math.abs(yDiff);
 
+		//yDiff = (yDiff - 25) % this.currentTileWidth;
+		
 		Log.d("wrong", " " + coorBox.getCenter().getLatitude() + " |x " + index[0] + " |y " + index[1]);
 		
 		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"

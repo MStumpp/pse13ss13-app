@@ -342,7 +342,7 @@ public class MapController implements RouteListener, PositionListener,
 				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
 			
-			this.coorBox.setLevelOfDetail(delta);
+			this.coorBox.setLevelOfDetailByADelta(delta);
 			this.updateAll();
 		}
 
