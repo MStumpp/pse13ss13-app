@@ -37,4 +37,5 @@
     <string name="supermarket" >Supermärkte</string>
     <string name="theatre" >Theater</string>
     <string name="loading" >Lade</string>
+    <string name="suggestions" translatable="true">Vorschläge</string>
 </resources>
