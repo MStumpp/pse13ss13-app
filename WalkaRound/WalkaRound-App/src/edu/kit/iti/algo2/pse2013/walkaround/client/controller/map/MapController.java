@@ -312,7 +312,7 @@ public class MapController implements RouteListener, PositionListener,
 	 *            the DisplayCoordinate
 	 */
 	public void onZoom(float delta, DisplayCoordinate dc) {
-		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
+		/*Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
 				+ dc.toString() + " will be forwarding to MapModel");
 		if (this.coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getMaxLevelOfDetail()
@@ -324,7 +324,7 @@ public class MapController implements RouteListener, PositionListener,
 			this.coorBox.setLevelOfDetail(delta);
 			
 			this.updateAll();
-		}
+		}*/
 	}
 
 	/**
