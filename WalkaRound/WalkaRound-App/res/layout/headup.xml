@@ -105,7 +105,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/headup_option"
         android:scaleType="fitCenter"
-        android:src="@drawable/loupe" />
+        android:src="@drawable/loupe_zoom_in" />
 
     <ImageView
         android:id="@+id/headup_lupeminus"
@@ -114,7 +114,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/headup_lupeplus"
         android:scaleType="fitCenter"
-        android:src="@drawable/loupe" />
+        android:src="@drawable/loupe_zoom_out" />
 
     <FrameLayout
         android:layout_width="wrap_content"
