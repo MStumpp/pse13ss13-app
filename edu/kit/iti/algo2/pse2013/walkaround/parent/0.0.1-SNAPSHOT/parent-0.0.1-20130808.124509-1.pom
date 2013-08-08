@@ -1,0 +1,145 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<github.global.server>github</github.global.server>
+        <slf4jVersion>1.6.1</slf4jVersion>
+    </properties>
+
+	<!-- Project properties -->
+	<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>parent</name>
+	<artifactId>parent</artifactId>
+	<url>https://github.com/MStumpp/pse13ss13-app</url>
+
+	<mailingLists>
+		<mailingList>
+			<name>Mailingliste PSE 2013 am Lehrstuhl Algorithmik II (Sanders)</name>
+			<post>pse13ss13@ira.uni-karlsruhe.de</post>
+		</mailingList>
+	</mailingLists>
+
+	<!-- GitHub-Repositories -->
+	<repositories>
+		<repository>
+			<id>walkaround-repo</id>
+			<name>WalkaRound Repository</name>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/mvn/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<scm>
+		<url>scm:git:git@github.com:MStumpp/pse13ss13-app.git</url>
+		<developerConnection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</developerConnection>
+		<connection>scm:git:git@github.com:MStumpp/pse13ss13-app.git</connection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>github-repo</id>
+			<name>GitHub ${project.artifactId} Repository</name>
+			<url>https://raw.github.com/MStumpp/pse13ss13-app/${project.artifactId}/mvn</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
+	<!-- Default build configuration -->
+	<build>
+		<plugins>
+			<plugin>
+				<version>3.0</version>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<compilerVersion>1.7</compilerVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/pse13ss13-app/mvn/snapshots</altDeploymentRepository>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.8</version>
+				<configuration>
+					<message>[Maven] Deployed ${project.artifactId} (Version ${project.version}).</message> <!-- git commit message -->
+					<noJekyll>false</noJekyll> <!-- disable webpage processing -->
+					<outputDirectory>${project.build.directory}/pse13ss13-app/mvn/snapshots</outputDirectory> <!-- matches distribution management repository url above -->
+					<branch>refs/heads/mvn</branch> <!-- remote branch name -->
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<merge>true</merge>
+					<repositoryName>pse13ss13-app</repositoryName> <!-- github repo name -->
+					<repositoryOwner>MStumpp</repositoryOwner> <!-- github username  -->
+				</configuration>
+				<executions>
+					<!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Default dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <!-- CHOOSE BETWEEN ONE OF THESE DIFFERENT BINDINGS -->
+        <!-- Binding for NOP, silently discarding all logging. -->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-nop</artifactId>-->
+            <!--<version>${slf4jVersion}</version>-->
+        <!--</dependency>-->
+        <!-- Binding for System.out -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <!--Binding for log4j version 1.2.x You also need to
+        place log4j.jar on your class path. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!--Binding for commons logging over slf4j -->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>jcl-over-slf4j</artifactId>-->
+            <!--<version>${slf4jVersion}</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+	</dependencies>
+</project>
