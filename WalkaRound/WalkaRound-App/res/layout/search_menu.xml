@@ -5,6 +5,7 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
+        android:id="@+id/searchlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
@@ -71,7 +72,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="0.3"
                                     android:ems="10"
-                                    android:inputType="number" />
+                                    android:inputType="number" >
+
+                                    <requestFocus />
+                                </EditText>
                             </LinearLayout>
 
                             <LinearLayout
@@ -165,15 +169,21 @@
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/suggestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/suggestions"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
 

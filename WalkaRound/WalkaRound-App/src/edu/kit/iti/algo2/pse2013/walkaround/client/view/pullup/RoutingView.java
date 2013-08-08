@@ -250,11 +250,14 @@ public class RoutingView extends Fragment {
 					TextView waypoint = new TextView(context);
 					Log.d("routingView: ",
 							" " + value.getName() + " " + value.getId());
-					waypoint.setText(value.getName() + " "
-							+ value.getId());
+					waypoint.setText(value.getName() + " " + value.getId());
 					// TODO TextSize relativieren
-					waypoint.setTextSize(20);
-					waypoint.setPadding(10, 20, 10, 20);
+					waypoint.setTextSize(30);
+					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT);
+					myParams.setMargins(0, 10, 0, 0);
+					waypoint.setLayoutParams(myParams);
 					waypoint.setBackgroundColor(MapGen.defaultBackground);
 					layout.addView(waypoint);
 				}
@@ -270,11 +273,15 @@ public class RoutingView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "Ein name wurde eingegeben");
 				// TODO: ansicht wechselt in die liste der !!!!favorisierten
 				// routen!!!!
-				RouteController.getInstance().addRouteToFavorites(
-						v.getText().toString());
-				favoriteName.setVisibility(View.GONE);
-				MapController.getInstance().getPullUpView()
-						.changeView(PullUpView.CONTENT_FAVORITE);
+				String checkString = v.getText().toString()
+						.replaceAll(" ", null);
+				if (!checkString.isEmpty()) {
+					RouteController.getInstance().addRouteToFavorites(
+							v.getText().toString());
+					favoriteName.setVisibility(View.GONE);
+					MapController.getInstance().getPullUpView()
+							.changeView(PullUpView.CONTENT_FAVORITE);
+				}
 			}
 			return false;
 		}

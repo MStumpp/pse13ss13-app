@@ -42,13 +42,15 @@ public class SearchView extends Fragment {
 	private TextView city;
 	private TextView street;
 	private TextView number;
+	private TextView suggestions;
 	private EditText postalCodeSearch;
 	private EditText citySearch;
 	private EditText streetSearch;
 	private EditText numberSearch;
 	private EditText query;
 	private Button goButton;
-	LinearLayout result;
+	private LinearLayout result;
+	private LinearLayout searchLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,19 @@ public class SearchView extends Fragment {
 				R.id.number_search);
 		query = (EditText) this.getActivity().findViewById(R.id.query);
 		goButton = (Button) this.getActivity().findViewById(R.id.go_button);
+		suggestions = (TextView) this.getActivity().findViewById(
+				R.id.suggestions);
 
+		searchLayout = (LinearLayout) this.getActivity().findViewById(
+				R.id.searchlayout);
 		result = (LinearLayout) this.getActivity().findViewById(
 				R.id.search_result);
 
 		result.setVisibility(View.GONE);
 		tabHost.setVisibility(View.VISIBLE);
+		searchLayout.setVisibility(View.VISIBLE);
+
+		citySearch.setText("Karlsruhe");
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -132,6 +141,7 @@ public class SearchView extends Fragment {
 		Log.d(TAG_PULLUP_CONTENT, "Destroy SearchView");
 		tabHost.getTabWidget().removeAllViews();
 		result.removeAllViews();
+		result.addView(suggestions);
 		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
 	}
 
@@ -153,8 +163,16 @@ public class SearchView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "Go wurde gedr�ckt");
 				Log.d(TAG_PULLUP_CONTENT, ""
 						+ postalCodeSearch.getText().toString());
-				if (postalCodeSearch.getText().toString().trim().equals("")
-						|| postalCodeSearch.getText().toString().isEmpty()) {
+				String checkStringPostalCode = postalCodeSearch.getText()
+						.toString().replaceAll(" ", null);
+				String checkStringCity = citySearch.getText().toString()
+						.replaceAll(" ", null);
+				String checkStringStreet = streetSearch.getText().toString()
+						.replaceAll(" ", null);
+				String checkStringNumber = numberSearch.getText().toString()
+						.replaceAll(" ", null);
+
+				if (checkStringPostalCode.isEmpty()) {
 					locations = searchMenuController
 							.requestSuggestionsByAddress(0, citySearch
 									.getText().toString(), streetSearch
@@ -173,7 +191,7 @@ public class SearchView extends Fragment {
 				// TODO: bei ergebnis ort anzeigen
 
 				result.setVisibility(View.VISIBLE);
-				tabHost.setVisibility(View.GONE);
+				searchLayout.setVisibility(View.GONE);
 
 				for (Location value : locations) {
 					TextView location = new TextView(getActivity());
@@ -183,8 +201,12 @@ public class SearchView extends Fragment {
 					location.setOnTouchListener(new locationTouch(value,
 							location));
 					// TODO TextSize relativieren
-					location.setTextSize(40);
-					location.setPadding(10, 20, 10, 20);
+					location.setTextSize(30);
+					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT);
+					myParams.setMargins(0, 10, 0, 0);
+					location.setLayoutParams(myParams);
 					location.setBackgroundColor(MapGen.defaultBackground);
 					result.addView(location);
 				}
@@ -200,23 +222,32 @@ public class SearchView extends Fragment {
 			if (v.equals(query)) {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
 
-				List<POI> poiS = searchMenuController
-						.requestSuggestionsByText(v.getText().toString());
+				String checkString = v.getText().toString()
+						.replaceAll(" ", null);
+				if (!checkString.isEmpty()) {
 
-				result.setVisibility(View.VISIBLE);
-				tabHost.setVisibility(View.GONE);
+					List<POI> poiS = searchMenuController
+							.requestSuggestionsByText(v.getText().toString());
 
-				for (POI value : poiS) {
-					TextView poi = new TextView(getActivity());
-					Log.d("routingView: ",
-							" " + value.getName() + " " + value.getId());
-					poi.setText(value.getName());
-					poi.setOnTouchListener(new poiTouch(value, poi));
-					// TODO TextSize relativieren
-					poi.setTextSize(30);
-					poi.setPadding(10, 20, 10, 20);
-					poi.setBackgroundColor(MapGen.defaultBackground);
-					result.addView(poi);
+					result.setVisibility(View.VISIBLE);
+					searchLayout.setVisibility(View.GONE);
+
+					for (POI value : poiS) {
+						TextView poi = new TextView(getActivity());
+						Log.d("routingView: ", " " + value.getName() + " "
+								+ value.getId());
+						poi.setText(value.getName());
+						poi.setOnTouchListener(new poiTouch(value, poi));
+						// TODO TextSize relativieren
+						poi.setTextSize(30);
+						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+						myParams.setMargins(0, 10, 0, 0);
+						poi.setLayoutParams(myParams);
+						poi.setBackgroundColor(MapGen.defaultBackground);
+						result.addView(poi);
+					}
 				}
 			}
 			return false;

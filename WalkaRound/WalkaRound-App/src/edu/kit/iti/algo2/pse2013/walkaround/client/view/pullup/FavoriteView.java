@@ -96,6 +96,11 @@ public class FavoriteView extends Fragment {
 	}
 
 	private boolean updateFavorties() {
+		// set layout margins
+		LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+		myParams.setMargins(0, 10, 0, 0);
 
 		// locations
 		for (Iterator<String> iter = FavoriteMenuController.getInstance()
@@ -106,7 +111,7 @@ public class FavoriteView extends Fragment {
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favLocationTouch(current, tv));
 			tv.setTextSize(30);
-			tv.setPadding(10, 20, 10, 20);
+			tv.setLayoutParams(myParams);
 			tv.setBackgroundColor(MapGen.defaultBackground);
 			favPois.addView(tv);
 		}
@@ -120,7 +125,7 @@ public class FavoriteView extends Fragment {
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favRouteTouch(current, tv));
 			tv.setTextSize(30);
-			tv.setPadding(10, 20, 10, 20);
+			tv.setLayoutParams(myParams);
 			tv.setBackgroundColor(MapGen.defaultBackground);
 			favRoutes.addView(tv);
 		}
