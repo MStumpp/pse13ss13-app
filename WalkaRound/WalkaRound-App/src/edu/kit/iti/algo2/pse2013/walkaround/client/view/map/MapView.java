@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
@@ -148,7 +149,6 @@ public class MapView extends Activity {
 	@SuppressWarnings("unused")
 	private float delta;
 
-
 	private GestureDetector waypointGestureDetector;
 
 	public Point getDisplaySize() {
@@ -159,7 +159,6 @@ public class MapView extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		System.gc();
-		
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 
@@ -217,7 +216,7 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
 		MapController.getInstance().startController(this);
 		mc = MapController.getInstance();
-		
+
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
@@ -245,7 +244,7 @@ public class MapView extends Activity {
 		waypointGestureDetector = new GestureDetector(this,
 				new WaypointGestureDetector());
 
-		//this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
+		// this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
 	}
 
 	/**
@@ -366,13 +365,12 @@ public class MapView extends Activity {
 					fromY = displayPoints.get(0).getY();
 
 					for (DisplayWaypoint value : displayPoints) {
-						
+
 						ImageView iv = new ImageView(context);
 						iv.setImageDrawable(waypoint);
 						iv.setY(value.getY() - sizeOfPoints);
 						iv.setX(value.getX() - sizeOfPoints / 2);
-						
-						
+
 						iv.setVisibility(View.VISIBLE);
 						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 								(int) sizeOfPoints));
@@ -384,19 +382,18 @@ public class MapView extends Activity {
 					}
 
 					if (routeList.getChildCount() > 0) {
-						
+
 						ImageView iv = (ImageView) routeList
 								.getChildAt((routeList.getChildCount() - 1));
 						iv.setImageDrawable(flagTarget);
-						//iv.setX(iv.getX() - (sizeOfPoints / 2));
+						// iv.setX(iv.getX() - (sizeOfPoints / 2));
 
 						iv = (ImageView) routeList.getChildAt(0);
 						iv.setImageDrawable(flag);
 
-						
-						//if ((routeList.getChildCount() != 1)) {
-							//iv.setX(iv.getX() - (sizeOfPoints / 2));
-						//}
+						// if ((routeList.getChildCount() != 1)) {
+						// iv.setX(iv.getX() - (sizeOfPoints / 2));
+						// }
 					}
 				}
 			});
@@ -909,5 +906,10 @@ public class MapView extends Activity {
 		super.onDestroy();
 		TextToSpeechUtility.getInstance().shutdown();
 		Log.d(TAG_MAPVIEW, "Destroy MapView");
+	}
+
+	@Override
+	public void onBackPressed() {
+		MapController.getInstance().getPullUpView().setNullSizeHeight();
 	}
 }
