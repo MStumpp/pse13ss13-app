@@ -105,6 +105,7 @@ public class BoundingBox {
 		Log.d(TAG, "set a new Center: " + center.toString());
 		this.center = center;
 		this.topLeft = this.computeTopLeft();
+		Log.d(TAG, "Topleft is " + this.topLeft);
 		this.bottomRight = this.computeBottomRight();
 	}
 
@@ -248,10 +249,10 @@ public class BoundingBox {
 		Log.d(TAG,
 				"compute size of the display depending on the Level of Detail");
 		this.size = new DoublePairing(
-				CoordinateUtility.convertPixelsToDegrees(display.y,
-						levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE),
 				CoordinateUtility.convertPixelsToDegrees(display.x,
-						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE));
+						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
+				CoordinateUtility.convertPixelsToDegrees(display.y,
+						levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE));
 	}
 
 	/**
