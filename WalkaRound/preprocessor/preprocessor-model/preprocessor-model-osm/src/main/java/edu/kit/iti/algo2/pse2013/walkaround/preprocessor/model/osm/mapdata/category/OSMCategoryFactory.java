@@ -14,10 +14,13 @@ public class OSMCategoryFactory {
 		footway.addTag("sidewalk", "left");
 		footway.addTag("sidewalk", "right");
 		footway.addTag("highway", "footway");
+		footway.addTag("highway", "residential");
 		footway.addTag("sidewalk", "both");
+		footway.addTag("sidewalk", "left");
+		footway.addTag("sidewalk", "right");
 		footway.addTag("foot", "yes");
 		//TODO: Zurückstellen auf return footway;
-		return all;
+		return footway;
 	}
 	public static final OSMCategory createPOICategory(int catID) {
 		if (catID == Category.POI_BARS_AND_PUBS) {

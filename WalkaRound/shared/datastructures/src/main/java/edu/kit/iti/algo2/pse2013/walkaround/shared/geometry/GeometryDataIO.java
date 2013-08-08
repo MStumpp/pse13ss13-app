@@ -75,10 +75,8 @@ public class GeometryDataIO {
 	 */
 	public static void save(GeometryDataIO objectToSave, File destination)
 			throws IOException {
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(
-				destination));
-		ProtobufConverter.getGeometryDataBuilder(objectToSave).build()
-				.writeTo(out);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+		ProtobufConverter.getGeometryDataBuilder(objectToSave).build().writeTo(out);
 		out.flush();
 		out.close();
 	}
@@ -93,8 +91,7 @@ public class GeometryDataIO {
 	 */
 	public static GeometryDataIO load(File source) throws IOException {
 		InputStream in = new BufferedInputStream(new FileInputStream(source));
-		GeometryDataIO geom = ProtobufConverter
-				.getGeometryData(SaveGeometryData.parseFrom(in));
+		GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));
 		in.close();
 		return geom;
 	}

@@ -23,7 +23,7 @@ public class GeometryDataPreprocessor {
     /**
      * Logger.
      */
-    private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessor.class.getName());
 
 
     /**

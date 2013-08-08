@@ -20,10 +20,9 @@ public class OSMTagCategory extends OSMCategory {
 	public boolean accepts(OSMElement element) {
 		for (String key : tags.keySet()) {
 			if (element.hasTag(key, tags.get(key))) {
-				return true;
+				return !inverted;
 			}
 		}
-		return true;
-		//return (decorated == null)? false:decoratedAccepts(element);
+		return (decorated == null)? inverted:decoratedAccepts(element);
 	}
 }

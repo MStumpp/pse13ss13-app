@@ -54,7 +54,9 @@ public final class Edge implements Geometrizable {
         if (tail == null || head == null)
             throw new IllegalArgumentException("tail and head must not be null");
         this.tail = tail;
+        tail.addOutgoingEdge(this);
         this.head = head;
+        head.addOutgoingEdge(this);
         id = idCounter;
         idCounter += 1;
         length = computeLength();
