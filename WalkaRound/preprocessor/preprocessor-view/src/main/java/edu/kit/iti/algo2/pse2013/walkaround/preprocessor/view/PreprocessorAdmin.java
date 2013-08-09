@@ -23,7 +23,7 @@ public class PreprocessorAdmin {
 	@Option(name = "--input", required = true, usage="Location of the raw OSM-file")
 	public String input;
 
-	private String dropboxPath = System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar;
+	private String dropboxPath = System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar;
 
 	@Option(name = "--location_out", usage="Location of the LocationData-output")
 	public String locationOutput = dropboxPath + "locationData.pbf";

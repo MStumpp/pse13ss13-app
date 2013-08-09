@@ -17,7 +17,7 @@ import org.junit.Test;
 public class GraphDataIOTest {
 
 
-	private static final File REAL_GRAPH_DATA_FILE = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "/graphData.pbf");
+	private static final File REAL_GRAPH_DATA_FILE = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "/graphData.pbf");
 	private static final File TMP_GRAPH_DATA_FILE = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf");
 
 	@Before
