@@ -32,6 +32,7 @@ public class InfoView extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create InfoView");
+		
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 
 		this.title = (TextView) this.getActivity().findViewById(
@@ -56,8 +57,8 @@ public class InfoView extends Fragment {
 				title.setVisibility(View.VISIBLE);
 			}
 
-			Bitmap b = POIImageFetcher.fetchImage(poi.getURL());
-			if (b != null) {
+			if (poi.getURL() != null) {
+				Bitmap b = POIImageFetcher.fetchImage(poi.getURL());
 				iv.setImageBitmap(b);
 				iv.setVisibility(View.VISIBLE);
 			}
