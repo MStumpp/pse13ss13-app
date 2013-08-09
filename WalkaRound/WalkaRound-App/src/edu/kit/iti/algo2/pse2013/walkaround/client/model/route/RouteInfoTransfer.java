@@ -96,9 +96,9 @@ public class RouteInfoTransfer {
 
 
     /**
-     * Post processes.
+     * Post processes shortest path.
      */
-    public void postProcess() {
+    public void postProcessShortestPath() {
         if (coordinates.size() < 2)
             return;
 
@@ -106,6 +106,20 @@ public class RouteInfoTransfer {
         coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), "Source"));
         Coordinate target = coordinates.remove(coordinates.size()-1);
         coordinates.add(coordinates.size(), new Waypoint(target.getLatitude(), target.getLongitude(), "Target"));
+    }
+
+
+    /**
+     * Post processes roundtrip.
+     */
+    public void postProcessRoundtrip() {
+        if (coordinates.size() < 2)
+            return;
+
+        Coordinate source = coordinates.remove(0);
+        coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), "Source"));
+        Coordinate target = coordinates.remove(coordinates.size()-1);
+        coordinates.add(coordinates.size(), coordinates.get(0));
     }
 
 }

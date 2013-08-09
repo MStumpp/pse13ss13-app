@@ -29,25 +29,24 @@ public final class Graph {
      */
     private Graph(Set<Edge> edges) {
         vertices = new Vertex[edges.size()*2];
-        Vertex currentForTail;
-        Vertex currentForHead;
+        Vertex currentForTail, currentForHead;
         for (Edge edge : edges) {
             currentForTail = edge.getTail();
             if (vertices.length <= currentForTail.getID())
                 vertices = increaseArray(vertices, 100000);
             if (vertices[currentForTail.getID()] == null)
-                vertices[currentForTail.getID()] = edge.getTail();
+                vertices[currentForTail.getID()] = currentForTail;
             currentForHead = edge.getHead();
             if (vertices.length <= currentForHead.getID())
                 vertices = increaseArray(vertices, 100000);
             if (vertices[currentForHead.getID()] == null)
-                vertices[currentForHead.getID()] = edge.getHead();
+                vertices[currentForHead.getID()] = currentForHead;
 
             // for tail, reuse current edge object
-            edge.getTail().addOutgoingEdge(edge);
+            currentForTail.addOutgoingEdge(edge);
             // instantiate new Edge object for reverse egde
             Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
-            edge.getHead().addOutgoingEdge(inverseEdge);
+            currentForHead.addOutgoingEdge(inverseEdge);
         }
     }
 

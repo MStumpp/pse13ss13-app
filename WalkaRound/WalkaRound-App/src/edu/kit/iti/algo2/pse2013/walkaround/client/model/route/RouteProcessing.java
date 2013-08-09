@@ -144,6 +144,7 @@ public class RouteProcessing {
 		}
 	}
 
+
 	/**
 	 * Delegation method for computing a shortest path between any two
 	 * Coordinates. The actual computation is done by an endpoint.
@@ -162,12 +163,13 @@ public class RouteProcessing {
 	public RouteInfo computeShortestPath(Coordinate coordinate1,
 			Coordinate coordinate2) throws RouteProcessingException,
 			InterruptedException {
-		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate "
-				+ coordinate1 + ", Coordinate " + coordinate2 + ")");
 
 		if (coordinate1 == null || coordinate2 == null)
 			throw new IllegalArgumentException(
 					"coordinate 1 and coordinate 2 must be provided");
+
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate "
+				+ coordinate1 + ", Coordinate " + coordinate2 + ")");
 
 		GsonBuilder gsonb = new GsonBuilder();
 		Gson gson = gsonb.create();
@@ -195,7 +197,6 @@ public class RouteProcessing {
 					RouteInfoTransfer.class);
 		}
 
-
 		if (routeInfoTransfer == null) {
 			throw new RouteProcessingException("routeInfoTransfer is null");
 		} else  if (routeInfoTransfer.getError() != null) {
@@ -203,7 +204,7 @@ public class RouteProcessing {
  		}
 
 		// replace first and last Coordinate with Waypoint
-		routeInfoTransfer.postProcess();
+		routeInfoTransfer.postProcessShortestPath();
 
 		RouteInfo route = new Route(new LinkedList<Coordinate>(
 				routeInfoTransfer.getCoordinates()));
@@ -212,6 +213,7 @@ public class RouteProcessing {
 						+ route);
 		return route;
 	}
+
 
 	/**
 	 * Delegation method for computing a roundtrip based on a starting
@@ -260,7 +262,8 @@ public class RouteProcessing {
 		thread.join();
 
 		if (gsonAnswerer.getException() != null) {
-			gsonAnswerer.getException().printStackTrace();
+			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", gsonAnswerer.getException());
+			throw new RouteProcessingException(gsonAnswerer.getException().toString());
 		} else {
 			Log.d(TAG_ROUTE_PROCESSING,
 					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
@@ -270,16 +273,13 @@ public class RouteProcessing {
 
 		if (routeInfoTransfer == null) {
 			Log.e(TAG_ROUTE_PROCESSING, "Rundkurs konnte nicht berechnet werden");
-			return new Route(new LinkedList<Coordinate>());
-		}
-
-
-
-		if(routeInfoTransfer.getError() != null) throw new RouteProcessingException(routeInfoTransfer.getError());
-
+			throw new RouteProcessingException("routeInfoTransfer is null");
+		} else  if (routeInfoTransfer.getError() != null) {
+ 			throw new RouteProcessingException(routeInfoTransfer.getError());
+ 		}
 
 		// replace first and last Coordinate with Waypoint
-		routeInfoTransfer.postProcess();
+		routeInfoTransfer.postProcessRoundtrip();
 
 		RouteInfo routeInfo = new Route(new LinkedList<Coordinate>(
 				routeInfoTransfer.getCoordinates()));
@@ -288,6 +288,7 @@ public class RouteProcessing {
 				+ routeInfo);
 		return routeInfo;
 	}
+
 
 	/**
 	 * Delegation method for computing an optimized Route based on a given

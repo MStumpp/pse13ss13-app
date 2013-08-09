@@ -4,6 +4,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsExc
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -196,6 +197,38 @@ public class Server {
 //      return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
         transfer.setError("computeOptimizedRoute not yet implemented");
         return transfer;
+    }
+
+
+    /**
+     * Endpoint method for computing the projected Coordinate.
+     * The actual computation is done by an instance of GeometryProcessor.
+     *
+     * @param coordinate Coordinate to be projected.
+     * @return Coordinate.
+     */
+    @POST
+    @Path("/getNearestVertex")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Coordinate getNearestVertex(Coordinate coordinate) {
+
+        // check input
+        if (coordinate == null)
+            return null;
+
+        // project coordinate
+        Coordinate geometrizable;
+        try {
+            geometrizable = (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+        } catch (GeometryProcessorException e) {
+            return null;
+        } catch (InstantiationException e) {
+            return null;
+        }
+
+        return new Coordinate(geometrizable.getLatitude(),
+                geometrizable.getLongitude(), null);
     }
 
 

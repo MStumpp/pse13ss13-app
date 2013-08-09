@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -56,7 +57,7 @@ public class GraphDataIOTest {
 	}
 
 	@Test
-	public void testSaveAndLoadWithRealDataSet() throws IOException {
+    public void testSaveAndLoadWithRealDataSet() throws IOException {
 		System.out.println("### TestSaveAndLoadWithRealDataSet() ###");
 
 		Assert.assertNotNull(REAL_GRAPH_DATA_FILE);
