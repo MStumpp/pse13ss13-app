@@ -25,6 +25,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
@@ -417,6 +418,12 @@ public class MapController implements RouteListener, PositionListener,
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG_MAP_CONTROLLER,
 					"Coordinate konnte nicht normalisiert werden!");
+		} catch (CoordinateNormalizerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next

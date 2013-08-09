@@ -63,8 +63,9 @@ public final class CoordinateNormalizer {
 	 */
 	public static Coordinate normalizeCoordinate(Coordinate coordinate, float levelOfDetail)
 		throws CoordinateNormalizerException, InterruptedException {
+		return null;
 
-		if (coordinate == null)
+		/*if (coordinate == null)
 			throw new IllegalArgumentException(
 					"coordinate must be provided");
 
@@ -99,7 +100,7 @@ public final class CoordinateNormalizer {
 
 		Log.d(TAG, "normalizeCoordinate(Coordinate coordinate, float levelOfDetail) returning Coordinate: " + coordinate);
 
-		return coordinate;
+		return coordinate;*/
 	}
 
 	private class JSONAnswerGetter implements Runnable {
