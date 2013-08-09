@@ -145,10 +145,8 @@ public class Route implements RouteInfo {
 		} catch (RouteProcessingException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException ille) {
-			// TODO Auto-generated catch block
 			Log.d(TAG_ROUTE, "coordinate 1 and coordinate 2 must be provided");
 		}
 	}
@@ -189,7 +187,7 @@ public class Route implements RouteInfo {
 				+ ") METHOD START ");
 		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate) Active Waypoint is "
 				+ this.activeWaypoint.toString());
-
+		
 		if (this.activeWaypoint != null) {
 			LinkedList<Waypoint> waypoints = this.getWaypoints();
 			int indexOfActiveWaypoint = waypoints.indexOf(this
@@ -208,13 +206,11 @@ public class Route implements RouteInfo {
 						"moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. "
 								+ (waypoints.indexOf(beforeActive) + 1) + " / "
 								+ waypoints.size() + " in route");
+				
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
 				RouteInfo newRouteBeforeActiveWaypoint;
-				newRouteBeforeActiveWaypoint = this.computeShortestPath(
-						beforeActive, coord);
-				this.deletePathBetweenTwoWaypoints(beforeActive,
-						this.activeWaypoint);
-				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint,
-						beforeActive, this.activeWaypoint);
+				newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
+				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, this.activeWaypoint);
 			}
 
 			if (afterActive != null) {
@@ -222,13 +218,11 @@ public class Route implements RouteInfo {
 						"moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. "
 								+ (waypoints.indexOf(afterActive) + 1) + " / "
 								+ waypoints.size() + " in route");
+				
+				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
 				RouteInfo newRoutePastActiveWaypoint;
-				newRoutePastActiveWaypoint = this.computeShortestPath(coord,
-						afterActive);
-				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,
-						afterActive);
-				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint,
-						this.activeWaypoint, afterActive);
+				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, this.activeWaypoint, afterActive);
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());
