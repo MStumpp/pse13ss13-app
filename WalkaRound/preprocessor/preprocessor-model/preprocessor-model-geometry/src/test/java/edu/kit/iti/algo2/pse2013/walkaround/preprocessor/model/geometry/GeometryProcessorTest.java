@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -77,14 +79,14 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testInit() {
+    public void testInit() throws MalformedURLException {
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
     }
 
 
     @Test
-    public void testGetInstance() throws InstantiationException {
+    public void testGetInstance() throws InstantiationException, MalformedURLException {
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         Assert.assertNotNull(GeometryProcessor.getInstance());
@@ -92,7 +94,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testGetNearestVertex() throws InstantiationException {
+    public void testGetNearestVertex() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIO();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
@@ -140,7 +142,7 @@ public class GeometryProcessorTest {
         Assert.assertNotNull(locationData);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationData);
-        
+
         File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
         try {
 			GeometryDataIO.save(geometryDataIO, geometryDataio);
@@ -148,7 +150,7 @@ public class GeometryProcessorTest {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        
+
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
@@ -250,16 +252,16 @@ public class GeometryProcessorTest {
     }
 
 
-    private GeometryDataIO getGeometryDataIO() {
+    private GeometryDataIO getGeometryDataIO() throws MalformedURLException {
         GraphDataIO graphDataIO = new GraphDataIO();
         graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
 
         LocationDataIO locationDataIO = new LocationDataIO();
-        locationDataIO.addPOI(new POI(1.d, 2.d, "poi 1", "info 1", "url 1", new int[]{0, 1}));
-        locationDataIO.addPOI(new POI(3.d, 4.d, "poi 2", "info 2", "url 2", new int[]{0, 1}));
-        locationDataIO.addPOI(new POI(5.d, 7.d, "poi 3", "info 3", "url 3", new int[]{0, 1}));
+        locationDataIO.addPOI(new POI(1.d, 2.d, "poi 1", "info 1", new URL("url 1"), new int[]{0, 1}));
+        locationDataIO.addPOI(new POI(3.d, 4.d, "poi 2", "info 2", new URL("url 2"), new int[]{0, 1}));
+        locationDataIO.addPOI(new POI(5.d, 7.d, "poi 3", "info 3", new URL("url 3"), new int[]{0, 1}));
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
         return geometryDataIO;

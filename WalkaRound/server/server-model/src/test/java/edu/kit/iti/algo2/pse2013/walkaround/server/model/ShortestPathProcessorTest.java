@@ -3,7 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,6 +20,8 @@ import java.util.Random;
  * @version 1.0
  */
 public class ShortestPathProcessorTest {
+
+    private static final File REAL_GRAPH_DATA_FILE = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "/graphData.pbf");
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -93,14 +94,12 @@ public class ShortestPathProcessorTest {
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
-        File file = new File("/Users/Matthias/Workspace/PSE/pse13ss13-app/WalkaRound/shared/datastructures/src/main/resources/graphData.pbf");
-        //File file = new File(getClass().getResource("/graphData.io").getFile());
-        Assert.assertNotNull(file);
-        Assert.assertTrue(file.exists());
+        Assert.assertNotNull(REAL_GRAPH_DATA_FILE);
+        Assert.assertTrue(REAL_GRAPH_DATA_FILE.exists());
 
         GraphDataIO graphDataIO = null;
         try {
-            graphDataIO = GraphDataIO.load(file);
+            graphDataIO = GraphDataIO.load(REAL_GRAPH_DATA_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }

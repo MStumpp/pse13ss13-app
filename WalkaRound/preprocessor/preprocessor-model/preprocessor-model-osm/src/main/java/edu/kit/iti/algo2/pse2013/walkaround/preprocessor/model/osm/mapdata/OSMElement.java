@@ -1,5 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -82,12 +86,17 @@ public abstract class OSMElement {
 	 * Returns the Wikipedia-URL of the element, which is stored in the OSM-Data
 	 * @return a URL of the following form: http://[a-zA-Z]{2}.wikipedia.org/wiki/[.]+
 	 */
-	public String getWikipediaURL() {
+	public URL getWikipediaURL() {
 		String wikiValue = getTags().get(KEY_WIKIPEDIA);
 		if (wikiValue == null || wikiValue.length() < 4 || !wikiValue.substring(0, 2).matches("[a-zA-Z]{2}")) {
 			return null;
 		}
-		return "http://" + getTags().get(KEY_WIKIPEDIA).substring(0, 2) + ".wikipedia.org/wiki/" + getTags().get(KEY_WIKIPEDIA).substring(3);
+		try {
+			String s =  "https://" + getTags().get(KEY_WIKIPEDIA).substring(0, 2) + ".wikipedia.org/w/index.php?printable=yes&title=" + URLEncoder.encode(getTags().get(KEY_WIKIPEDIA).substring(3), "UTF-8");
+			return new URL(s);
+		} catch (MalformedURLException | UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 
 	public int[] getPOICategories() {

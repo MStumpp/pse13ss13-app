@@ -8,10 +8,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -134,7 +136,7 @@ public class PreprocessorAdminTest {
             {
                 String[] array = myLine.split(";");
                 locationDataIO.addPOI(new POI(format.parse(array[1]).doubleValue(),
-                        format.parse(array[0]).doubleValue(), array[2].replace("\"", ""), array[2].replace("\"", ""), "http://www.walkaround.com", new int[]{0, 1}));
+                        format.parse(array[0]).doubleValue(), array[2].replace("\"", ""), array[2].replace("\"", ""), new URL("http://www.walkaround.com"), new int[]{0, 1}));
             }
         } catch (IOException e) {
             e.printStackTrace();
