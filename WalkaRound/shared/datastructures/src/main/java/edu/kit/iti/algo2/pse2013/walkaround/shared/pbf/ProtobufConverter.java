@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -273,7 +275,12 @@ public class ProtobufConverter {
 		for (int i = 0; i < cats.length; i++) {
 			cats[i] = savePOI.getPOICategory(i);
 		}
-		return new POI(getLocation(savePOI.getParent()), savePOI.getTextInfo(), savePOI.getImageURL(), cats);
+		try {
+			return new POI(getLocation(savePOI.getParent()), savePOI.getTextInfo(), new URL(savePOI.getImageURL()), cats);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	public static SavePOI.Builder getPOIBuilder(POI p) {
 		if (p == null) {
@@ -291,7 +298,7 @@ public class ProtobufConverter {
 			builder.setTextInfo(p.getTextInfo());
 		}
 		if (p.getURL() != null) {
-			builder.setImageURL(p.getURL());
+			builder.setImageURL(p.getURL().getFile());
 		}
 		return builder;
 	}

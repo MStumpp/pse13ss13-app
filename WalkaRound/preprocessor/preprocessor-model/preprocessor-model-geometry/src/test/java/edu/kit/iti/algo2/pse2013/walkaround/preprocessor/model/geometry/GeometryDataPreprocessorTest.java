@@ -1,21 +1,25 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.DropboxUtil;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * GeometryDataPreprocessorTest.
@@ -24,8 +28,6 @@ import java.lang.reflect.Field;
  * @version 1.0
  */
 public class GeometryDataPreprocessorTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(GeometryDataPreprocessorTest.class);
 
 
     @Before
@@ -45,7 +47,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    public void testPreprocessGraphDataIO() {
+    public void testPreprocessGraphDataIO() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO(), getLocationDataIO());
 
         // check that root is not null
@@ -148,9 +150,8 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    public void testPreprocessGraphDataIO2() {
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO2(),
-                getLocationDataIO());
+    public void testPreprocessGraphDataIO2() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO2(), getLocationDataIO());
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -160,11 +161,11 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
-        File graphDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf");
+        File graphDataio = new File(DropboxUtil.getDropbox() + "graphData.pbf");
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.pbf");
+        File locationDataio = new File(DropboxUtil.getDropbox() + "locationData.pbf");
         Assert.assertNotNull(locationDataio);
         Assert.assertTrue(locationDataio.exists());
 
@@ -191,7 +192,7 @@ public class GeometryDataPreprocessorTest {
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
 
-        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
+        File geometryDataio = new File(DropboxUtil.getDropbox() + "geometryData.pbf");
 
         try {
             GeometryDataIO.save(geometryDataIO, geometryDataio);
@@ -249,11 +250,11 @@ public class GeometryDataPreprocessorTest {
     }
 
 
-    private LocationDataIO getLocationDataIO() {
+    private LocationDataIO getLocationDataIO() throws MalformedURLException {
         LocationDataIO locationDataIO = new LocationDataIO();
-        locationDataIO.addPOI(new POI(1.d, 2.d, "poi 1", "info 1", "url 1", new int[]{0, 1}));
-        locationDataIO.addPOI(new POI(3.d, 4.d, "poi 2", "info 2", "url 2", new int[]{0, 1}));
-        locationDataIO.addPOI(new POI(5.d, 7.d, "poi 3", "info 3", "url 3", new int[]{0, 1}));
+        locationDataIO.addPOI(new POI(1.d, 2.d, "poi 1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[]{0, 1}));
+        locationDataIO.addPOI(new POI(3.d, 4.d, "poi 2", "info 2", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=KIT"), new int[]{0, 1}));
+        locationDataIO.addPOI(new POI(5.d, 7.d, "poi 3", "info 3", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Karlsruhe"), new int[]{0, 1}));
         return locationDataIO;
     }
 
