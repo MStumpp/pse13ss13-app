@@ -86,19 +86,22 @@ public class RouteController {
 	public boolean setActiveWaypoint(final int id) {
 		Log.d(TAG_ROUTE_CONTROLLER, "Routecontroller.setActiveWaypoint(id)");
 		
-		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
-			final Route newCurrentRoute = this.currentRoute;
-			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
-				public void run() {
-					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(id)");
-					newCurrentRoute.setActiveWaypoint(id);
-					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
-				}
-			});
-			RouteController.routeChanger.start();
-			return true;
+		if (this.currentRoute.getActiveWaypoint().getId() != id) {
+			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+				final Route newCurrentRoute = this.currentRoute;
+				RouteController.routeChanger = new Thread (new Runnable() {
+					@Override
+					public void run() {
+						Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(id)");
+						newCurrentRoute.setActiveWaypoint(id);
+						RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					}
+				});
+				RouteController.routeChanger.start();
+				return true;
+			}
 		}
+	
 		return false;
 	}
 	
@@ -107,18 +110,20 @@ public class RouteController {
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.setActiveWaypoint(Waypoint)");
 		
-		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
-			final Route newCurrentRoute = this.currentRoute;
-			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
-				public void run() {
-					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(wp)");
-					newCurrentRoute.setActiveWaypoint(wp);
-					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
-				}
-			});
-			RouteController.routeChanger.start();
-			return true;
+		if (!this.currentRoute.getActiveWaypoint().equals(wp)) {
+			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+				final Route newCurrentRoute = this.currentRoute;
+				RouteController.routeChanger = new Thread (new Runnable() {
+					@Override
+					public void run() {
+						Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(wp)");
+						newCurrentRoute.setActiveWaypoint(wp);
+						RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					}
+				});
+				RouteController.routeChanger.start();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -144,7 +149,6 @@ public class RouteController {
 	}
 
 	public boolean moveActiveWaypointInOrder(final int i) {
-		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.moveActiveWaypointInOrder(int)");
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
@@ -184,7 +188,6 @@ public class RouteController {
 	}
 
 	public boolean addRoundtrip(final int profileID, final int length) {
-		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER, "RouteController.addRoundtrip(int-profile "
 				+ profileID + ", int-length " + length + ")");
 		
@@ -224,7 +227,6 @@ public class RouteController {
 	}
 
 	public boolean moveActiveWaypoint(final Coordinate c) {
-		// TODO: in boolean ändern
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.moveActiveWaypoint(Coordinate)");
 		
@@ -331,20 +333,16 @@ public class RouteController {
 		return this.currentRoute.containsWaypoint(w);
 	}
 
-	public void addRouteToFavorites(String name) {
-		// TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen,
-		// favoriten manager containsName())
+	public boolean addRouteToFavorites(String name) {
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.addRouteToFavorites(RouteInfo, String)");
-		FavoritesManager.getInstance().addRouteToFavorites(currentRoute, name);
+		return FavoritesManager.getInstance().addRouteToFavorites(currentRoute, name);
 	}
 
-	public void addLocationToFavorites(Location ri, String name) {
-		// TODO: in boolean ändern (namen dürfen nicht doppelt vorkommen,
-		// favoriten manager containsName())
+	public boolean addLocationToFavorites(Location ri, String name) {
 		Log.d(TAG_ROUTE_CONTROLLER,
 				"RouteController.addLocationToFavorites(Location, String)");
-		FavoritesManager.getInstance().addLocationToFavorites(ri, name);
+		return FavoritesManager.getInstance().addLocationToFavorites(ri, name);
 	}
 	
 	

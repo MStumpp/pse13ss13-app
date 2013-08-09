@@ -165,12 +165,9 @@ public class SearchView extends Fragment {
 						+ postalCodeSearch.getText().toString());
 				String checkStringPostalCode = postalCodeSearch.getText()
 						.toString().replaceAll(" ", null);
-				String checkStringCity = citySearch.getText().toString()
-						.replaceAll(" ", null);
-				String checkStringStreet = streetSearch.getText().toString()
-						.replaceAll(" ", null);
-				String checkStringNumber = numberSearch.getText().toString()
-						.replaceAll(" ", null);
+				String checkStringCity = citySearch.getText().toString().replaceAll(" ", null);
+				String checkStringStreet = streetSearch.getText().toString().replaceAll(" ", null);
+				String checkStringNumber = numberSearch.getText().toString().replaceAll(" ", null);
 
 				if (checkStringPostalCode.isEmpty()) {
 					locations = searchMenuController
