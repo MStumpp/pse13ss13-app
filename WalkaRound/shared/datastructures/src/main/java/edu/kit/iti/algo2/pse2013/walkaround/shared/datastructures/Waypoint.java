@@ -99,8 +99,22 @@ public class Waypoint extends Location {
     
     
     public Waypoint clone() {
-    	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), this.getName().toString(), this.getAddress().clone());
-    	clonedWaypoint.setPOI(this.getPOI().clone());
+    	String clonedName = null;
+    	if (this.getName() != null) {
+    	clonedName = this.getName().toString();
+    	}
+    	Address clonedAddress = null;
+    	if (this.getAddress() != null) {
+    	clonedAddress = this.getAddress().clone();
+    	}
+    	POI clonedPOI = null;
+    	if (this.getPOI() != null) {
+    	clonedPOI = this.getPOI().clone();
+    	}
+    	
+    	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);
+    	
+    	clonedWaypoint.setPOI(clonedPOI);
     	clonedWaypoint.setProfile(this.getProfile());
     	return clonedWaypoint;
     }

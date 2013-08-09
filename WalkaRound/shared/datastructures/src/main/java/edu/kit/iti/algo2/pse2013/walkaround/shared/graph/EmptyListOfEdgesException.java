@@ -8,7 +8,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
  */
 public class EmptyListOfEdgesException extends Exception {
 
-    public EmptyListOfEdgesException(String message) {
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = -6076965316266623327L;
+
+	public EmptyListOfEdgesException(String message) {
         super(message);
     }
 

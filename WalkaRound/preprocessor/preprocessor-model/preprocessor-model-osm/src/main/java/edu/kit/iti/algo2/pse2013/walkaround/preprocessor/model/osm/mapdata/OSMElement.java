@@ -11,6 +11,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public abstract class OSMElement {
+	private static final String KEY_WIKIPEDIA = "wikipedia";
+	private static final String KEY_CITY = "addr:city";
+	private static final String KEY_HOUSENUMBER = "addr:housenumber";
+	private static final String KEY_STREET = "addr:street";
+	private static final String KEY_POSTCODE = "addr:postcode";
 	protected long id;
 	protected HashMap<String, String> tags = new HashMap<String, String>();
 	public OSMElement(long id) {
@@ -60,24 +65,29 @@ public abstract class OSMElement {
 	private Address getAddress() {
 		Integer postcode;
 		try {
-			postcode = getTags().containsKey("addr:postcode")?Integer.parseInt(getTags().get("addr:postcode")):null;
+			postcode = getTags().containsKey(KEY_POSTCODE)?Integer.parseInt(getTags().get(KEY_POSTCODE)):null;
 		} catch (NumberFormatException nfe) {
 			postcode = null;
 		}
 		Address addr = new Address(
-			getTags().containsKey("addr:street")?getTags().get("addr:street"):null,
-			getTags().containsKey("addr:housenumber")?getTags().get("addr:housenumber"):null,
-			getTags().containsKey("addr:city")?getTags().get("addr:city"):null,
+			getTags().containsKey(KEY_STREET)?getTags().get(KEY_STREET):null,
+			getTags().containsKey(KEY_HOUSENUMBER)?getTags().get(KEY_HOUSENUMBER):null,
+			getTags().containsKey(KEY_CITY)?getTags().get(KEY_CITY):null,
 			postcode
 		);
 		return addr;
 	}
 
+	/**
+	 * Returns the Wikipedia-URL of the element, which is stored in the OSM-Data
+	 * @return a URL of the following form: http://[a-zA-Z]{2}.wikipedia.org/wiki/[.]+
+	 */
 	public String getWikipediaURL() {
-		if (getTags().get("wikipedia") == null || getTags().get("wikipedia").length() < 4) {
+		String wikiValue = getTags().get(KEY_WIKIPEDIA);
+		if (wikiValue == null || wikiValue.length() < 4 || !wikiValue.substring(0, 2).matches("[a-zA-Z]{2}")) {
 			return null;
 		}
-		return "http://" + getTags().get("wikipedia").substring(0, 2) + ".wikipedia.org/wiki/" + getTags().get("wikipedia").substring(3);
+		return "http://" + getTags().get(KEY_WIKIPEDIA).substring(0, 2) + ".wikipedia.org/wiki/" + getTags().get(KEY_WIKIPEDIA).substring(3);
 	}
 
 	public int[] getPOICategories() {

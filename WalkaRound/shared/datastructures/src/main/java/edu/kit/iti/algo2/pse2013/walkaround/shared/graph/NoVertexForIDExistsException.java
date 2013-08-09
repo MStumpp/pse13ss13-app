@@ -8,7 +8,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
  */
 public class NoVertexForIDExistsException extends Exception {
 
-    public NoVertexForIDExistsException(String message) {
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = 2591315153880162289L;
+
+	public NoVertexForIDExistsException(String message) {
         super(message);
     }
 

@@ -32,7 +32,7 @@ public final class CoordinateUtility {
 	/**
 	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
 	 */
-	public static boolean DIRECTION_LONGTITUDE = DIRECTION_HORIZONTAL;
+	public static boolean DIRECTION_LONGITUDE = DIRECTION_HORIZONTAL;
 	/**
 	 * Alias for {@link this#DIRECTION_VERTICAL}.
 	 */
@@ -151,7 +151,7 @@ public final class CoordinateUtility {
 			Coordinate c, Coordinate upperLeft, float levelOfDetail) {
 		double deltaX = CoordinateUtility.convertDegreesToPixels(
 				c.getLongitude() - upperLeft.getLongitude(), levelOfDetail,
-				CoordinateUtility.DIRECTION_LONGTITUDE);
+				CoordinateUtility.DIRECTION_LONGITUDE);
 		double deltaY = CoordinateUtility.convertDegreesToPixels(
 				c.getLatitude() - upperLeft.getLatitude(), levelOfDetail,
 				CoordinateUtility.DIRECTION_LATITUDE);
@@ -178,14 +178,14 @@ public final class CoordinateUtility {
 
 			dw.add(new DisplayWaypoint(
 
-			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGTITUDE),
+			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
 
 			-CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
 					CoordinateUtility.DIRECTION_LATITUDE),
 
 			value.getId()));
 			Log.d("d x", "" + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
-					CoordinateUtility.DIRECTION_LONGTITUDE));
+					CoordinateUtility.DIRECTION_LONGITUDE));
 			Log.d("d y", "" + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
 					CoordinateUtility.DIRECTION_LATITUDE));
 		}
@@ -213,7 +213,7 @@ public final class CoordinateUtility {
 			dw.add(new DisplayCoordinate(
 
 			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
-					CoordinateUtility.DIRECTION_LONGTITUDE),
+					CoordinateUtility.DIRECTION_LONGITUDE),
 
 			CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
 					CoordinateUtility.DIRECTION_LATITUDE)

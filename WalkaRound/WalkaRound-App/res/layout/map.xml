@@ -5,22 +5,13 @@
     android:layout_height="fill_parent"
     android:background="@drawable/fog" >
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
-
-        <ImageView
-            android:id="@+id/mapview_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:contentDescription="TODO"
-            android:scaleType="center" />
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/mapview_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:contentDescription="TODO"
+        android:scaleType="center" />
 
     <ImageView
         android:id="@+id/mapview_overlay"
@@ -50,7 +41,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="TODO"
         android:scaleType="center"
-        android:src="@drawable/user_arrow_30x38" />
+        android:src="@drawable/user_arrow" />
 
     <RelativeLayout
         android:id="@+id/headup_container"

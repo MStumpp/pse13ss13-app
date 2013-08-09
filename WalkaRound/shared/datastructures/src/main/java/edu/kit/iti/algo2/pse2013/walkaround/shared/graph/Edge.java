@@ -12,7 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Edge implements Geometrizable {
+public final class Edge implements Geometrizable, Comparable<Edge> {
 
     /**
      * Internally used ID of Edge.
@@ -54,13 +54,19 @@ public final class Edge implements Geometrizable {
         if (tail == null || head == null)
             throw new IllegalArgumentException("tail and head must not be null");
         this.tail = tail;
+        tail.addOutgoingEdge(this);
         this.head = head;
+        head.addOutgoingEdge(this);
         id = idCounter;
         idCounter += 1;
         length = computeLength();
         //System.out.println(String.format("Creates edge %d->%d", tail.getID(), head.getID()));
     }
 
+    public Edge(Vertex tail, Vertex head, int id) {
+    	this(tail, head);
+    	this.id = id;
+    }
 
     /**
      * Returns id of this Edge.
@@ -112,16 +118,6 @@ public final class Edge implements Geometrizable {
      */
     public double getLength() {
         return length;
-    }
-
-
-    /**
-     * Overwrites the length computed in constructor.
-     *
-     * @param length Length.
-     */
-    public void setLength(double length) {
-        this.length = length;
     }
 
 
@@ -178,4 +174,18 @@ public final class Edge implements Geometrizable {
         return earthRadius * c;
     }
 
+
+    public String toString() {
+    	return "Edge(\n\t" + getID() + ",\n\t" + getTail() + ",\n\t" + getHead() + "\n)";
+    }
+
+	@Override
+	public int compareTo(Edge other) {
+        if (this.getID() > other.getID()) {
+            return 1;
+        } else if (this.getID() < other.getID()) {
+            return -1;
+        }
+        return 0;
+	}
 }

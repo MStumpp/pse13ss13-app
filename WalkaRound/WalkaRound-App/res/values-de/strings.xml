@@ -1,3 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="address">address</string>
+    <string name="current" >aktuell</string>
+    <string name="Route" >Strecke</string>
+    <string name="current_route" >aktuelle Route</string>
+    <string name="reset" >Reset</string>
+    <string name="add_favorite" >Favorite hinzufügen</string>
+    <string name="go_to_map" >zur Karte</string>
+    <string name="query" >Suchtext</string>
+    <string name="zip_code" >PLZ</string>
+    <string name="city" >Stadt</string>
+    <string name="street" >Straße</string>
+    <string name="number" >Nummer</string>
+    <string name="start_search" >Los</string>
+    <string name="favorite" >Favoriten</string>
+    <string name="meter" >Meter</string>
+    <string name="compute_roundtrip" >Rundkurs berechnen</string>
+    <string name="profiles" >Profile</string>
+    <string name="clubbing" >Bartour</string>
+    <string name="shopping" >Shopping</string>
+    <string name="sightseeing" >Sightseeing</string>
+    <string name="jogging" >Joggen</string>
+    <string name="length" >Länge:</string>
+    <string name="pois" >POIs</string>
+    <string name="favorite_name" >Name des Favoriten</string>
+    <string name="search" >Suche</string>
+    <string name="bars_and_pubs" >Bars und Pubs</string>
+    <string name="cinema" >Kinos</string>
+    <string name="clubs_and_nightclubs" >Clubs und Nachtclubs</string>
+    <string name="fast_food" >Fast-Food</string>
+    <string name="food" >Essen</string>
+    <string name="museum" >Museums</string>
+    <string name="public_transportation" >Öffentliche Verkehrsmittel</string>
+    <string name="shop" >Einkaufsläden</string>
+    <string name="sleeping_accomodation" >Übernachtungsmöglichkeiten</string>
+    <string name="supermarket" >Supermärkte</string>
+    <string name="theatre" >Theater</string>
+    <string name="loading" >Lade</string>
+    <string name="suggestions" translatable="true">Vorschläge</string>
 </resources>

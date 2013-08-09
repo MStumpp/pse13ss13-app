@@ -34,7 +34,7 @@ public class POIManager {
 			.getSimpleName();
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
-	private final int MAX_NUMBER_OF_SUGGESTIONS = 12;
+	private final int MAX_NUMBER_OF_SUGGESTIONS = 10;
 
 	private final int NUMBER_OF_CATEGORIES = 11;
 
@@ -216,8 +216,20 @@ public class POIManager {
 				int currentKey = keyIter.next();
 				suggestions.addAll(suggestionsMap.get(currentKey));
 			}
+			int suggestionsCounter = MAX_NUMBER_OF_SUGGESTIONS;
+			ArrayList<POI> suggestionsReduced = new ArrayList<POI>();
+			for (Iterator<POI> suggestionsIter = suggestions.iterator(); suggestionsIter
+					.hasNext();) {
+				if (suggestionsCounter > 0) {
+					POI currentSuggestion = suggestionsIter.next();
+					suggestionsReduced.add(currentSuggestion);
+					suggestionsCounter--;
+				} else {
+					return suggestionsReduced;
+				}
+			}
 			// Log.d(TAG_POIMANAGER, "suggestions" + suggestions.get(0));
-			return suggestions;
+			return suggestionsReduced;
 		}
 		return suggestions;
 	}
@@ -253,7 +265,7 @@ public class POIManager {
 					current.getThoroughfare(), current.getSubThoroughfare(),
 					current.getLocality(), address.getPostalCode())));
 		}
-		//Log.d(TAG_POIMANAGER, suggestions.get(0).toString());
+		// Log.d(TAG_POIMANAGER, suggestions.get(0).toString());
 		return suggestions;
 	}
 

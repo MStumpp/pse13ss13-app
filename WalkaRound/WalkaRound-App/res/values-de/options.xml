@@ -12,6 +12,7 @@
     <string name="options_navigation_text_output_speed">Geschwindigkeit</string>
     <string name="options_map">Karte</string>
     <string name="options_poi">POI Informationen</string>
-    <string name="options_poi_text_output">Text Ausgabe</string>
-    <string name="options_poi_speech_output">Sprachausgabe</string>
+    <string name="options_poi_text_output">Text ausgeben</string>
+    <string name="options_poi_speech_output">Titel ausgeben</string>
+    <string name="options_map_typ">Karten Typ</string>
 </resources>

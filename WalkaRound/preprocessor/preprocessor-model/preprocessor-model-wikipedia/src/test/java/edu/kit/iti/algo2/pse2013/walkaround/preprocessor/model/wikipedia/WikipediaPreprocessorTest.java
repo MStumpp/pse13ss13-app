@@ -14,7 +14,8 @@ public class WikipediaPreprocessorTest {
 	@Test
 	public void testTextFetsching() throws IOException, XMLStreamException {
 		LocationDataIO locData = new LocationDataIO();
-		locData.addPOI(new POI(0, 0, "Test", null, null, null));
+		locData.addPOI(new POI(0, 0, "Test", null,
+				"http://en.wikipedia.org/wiki/Vacuum_cleaner", null));
 
 		WikipediaPreprocessor.preprocessWikipediaInformation(locData);
 
