@@ -157,6 +157,8 @@ public class InfoView extends Fragment {
 				RouteController.getInstance().addLocationToFavorites(
 						new Location(poi.getLatitude(), poi.getLongitude(),
 								poi.getName()), poi.getName());
+				MapController.getInstance().getPullUpView()
+				.changeView(PullUpView.CONTENT_FAVORITE);
 			}
 			return false;
 		}

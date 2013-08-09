@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothClass.Device.Major;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -314,12 +315,14 @@ public class RoutingView extends Fragment {
 		@Override
 		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
 				float arg3) {
+			Log.d(TAG_PULLUP_CONTENT, "GESTURE!!!!");
 
 			float velocity = (float) Math.sqrt((double) Math.pow(
 					Math.abs(arg2), 2) + (double) Math.pow(Math.abs(arg3), 2));
-
+			
 			if (velocity > 400) {
 				Log.d(TAG_PULLUP_CONTENT, "GESTURE!!!!");
+				
 				RouteController.getInstance().resetRoute();
 				layout.removeView(tv);
 			}
