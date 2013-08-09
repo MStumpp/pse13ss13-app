@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -15,7 +16,7 @@ public class WikipediaPreprocessorTest {
 	public void testTextFetsching() throws IOException, XMLStreamException {
 		LocationDataIO locData = new LocationDataIO();
 		locData.addPOI(new POI(0, 0, "Test", null,
-				"http://en.wikipedia.org/wiki/Vacuum_cleaner", null));
+				new URL("http://en.wikipedia.org/w/index.php?title=Badisches_Staatstheater_Karlsruhe&printable=yes"), null));
 
 		WikipediaPreprocessor.preprocessWikipediaInformation(locData);
 
