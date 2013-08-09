@@ -19,7 +19,7 @@ public final class POIImageFetcher {
 	}
 
 	public static Bitmap fetchImage(URL url) {
-		try {
+		/*try {
 			URLConnection connection = url.openConnection();
 			connection.connect();
 			InputStream input = connection.getInputStream();
@@ -27,7 +27,7 @@ public final class POIImageFetcher {
 			return bitmap;
 		} catch (IOException e) {
 			Log.e(TAG_POIIMAGEFETCHER, e.toString());
-		}
+		}*/
 		return null;
 	}
 }
