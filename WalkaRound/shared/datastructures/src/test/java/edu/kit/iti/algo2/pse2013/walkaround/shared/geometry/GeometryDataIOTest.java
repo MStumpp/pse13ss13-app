@@ -20,8 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  */
 public class GeometryDataIOTest {
 
-	private static File file = new File(System.getProperty("java.io.tmpdir") + File.separator + "geometryDataIO");
-
+    private static File file = new File(System.getProperty("java.io.tmpdir") + File.separator + "geometryDataIO");
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
