@@ -435,47 +435,52 @@ public class MapView extends Activity {
 	 * @param id
 	 *            the id of the waypoint
 	 */
-	public void setActiveWaypoint(int id) {
+	public void setActiveWaypoint(final int id) {
+		runOnUiThread(new Runnable() {
+			public void run() {
 
-		if (currentActive != null) {
-			if (currentActive.getDrawable().equals(flagActive)) {
-				currentActive.setImageDrawable(flag);
+				if (currentActive != null) {
+					if (currentActive.getDrawable().equals(flagActive)) {
+						currentActive.setImageDrawable(flag);
 
-			}
+					}
 
-			if (currentActive.getDrawable().equals(flagTargetActive)) {
-				currentActive.setImageDrawable(flagTarget);
+					if (currentActive.getDrawable().equals(flagTargetActive)) {
+						currentActive.setImageDrawable(flagTarget);
 
-			}
+					}
 
-			if (currentActive.getDrawable().equals(waypointActive)) {
-				currentActive.setImageDrawable(waypoint);
+					if (currentActive.getDrawable().equals(waypointActive)) {
+						currentActive.setImageDrawable(waypoint);
 
-			}
-		}
-
-		boolean found = false;
-
-		for (int a = 0; a < routeList.getChildCount() && !found; a++) {
-			int valueId = Integer.parseInt(routeList.getChildAt(a).getTag()
-					.toString());
-			if (valueId == id) {
-				currentActive = (ImageView) routeList.getChildAt(a);
-
-				if (currentActive.getDrawable().equals(flag)) {
-					currentActive.setImageDrawable(flagActive);
+					}
 				}
 
-				if (currentActive.getDrawable().equals(flagTarget)) {
-					currentActive.setImageDrawable(flagTargetActive);
-				}
+				boolean found = false;
 
-				if (currentActive.getDrawable().equals(waypoint)) {
-					currentActive.setImageDrawable(waypointActive);
+				for (int a = 0; a < routeList.getChildCount() && !found; a++) {
+					int valueId = Integer.parseInt(routeList.getChildAt(a).getTag()
+							.toString());
+					if (valueId == id) {
+						currentActive = (ImageView) routeList.getChildAt(a);
+
+						if (currentActive.getDrawable().equals(flag)) {
+							currentActive.setImageDrawable(flagActive);
+						}
+
+						if (currentActive.getDrawable().equals(flagTarget)) {
+							currentActive.setImageDrawable(flagTargetActive);
+						}
+
+						if (currentActive.getDrawable().equals(waypoint)) {
+							currentActive.setImageDrawable(waypointActive);
+						}
+						found = true;
+					}
 				}
-				found = true;
 			}
-		}
+		});
+		
 	}
 
 	/**
