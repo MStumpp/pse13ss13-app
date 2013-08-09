@@ -223,10 +223,17 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 							}
 						}
 					}
-					if (allPOICat.accepts(way) && state == STATE_PARSE_POIS) {
-						POI poi = way.getPOI();
-						if (poi != null) {
-							locationData.addPOI(poi);
+					if (allPOICat.accepts(way)) {
+						if (state == STATE_PARSE_POIS) {
+							POI poi = way.getPOI();
+							if (poi != null) {
+								locationData.addPOI(poi);
+							}
+						} else if (state == STATE_FIND_NODES_FOR_POIS) {
+							long curID = 0;
+							for (Long idDiff : w.getRefsList()) {
+								interestingNodes.put(curID += idDiff, new OSMNode(curID));
+							}
 						}
 					}
 				}

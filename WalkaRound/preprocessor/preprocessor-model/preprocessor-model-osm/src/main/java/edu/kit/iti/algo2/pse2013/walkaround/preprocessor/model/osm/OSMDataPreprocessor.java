@@ -62,6 +62,8 @@ public class OSMDataPreprocessor {
 
 		logger.info(String.format("Try writing %d edges (%d vertices) to GraphDataIO-file...", graphData.getEdges().size(), graphData.getVertices().size()));
 
+		logger.info(graphData.getNumOfPartitions() + " partitions are in graphData.pbf");
+
 		GraphDataIO.save(graphData, graphDestination);
 
 		logger.info("Writing GraphDataIO finished (written data not yet validated).");

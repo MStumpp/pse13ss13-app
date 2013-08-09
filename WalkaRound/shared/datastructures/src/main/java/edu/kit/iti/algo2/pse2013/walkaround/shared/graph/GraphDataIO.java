@@ -6,18 +6,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+
+import com.google.protobuf.CodedInputStream;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
 
 public class GraphDataIO {
 
-    /**
+	/**
      * Stores a set of Edge objects.
      */
     private Set<Edge> edges;
@@ -27,7 +28,7 @@ public class GraphDataIO {
      * Initializes a GraphDataIO object.
      */
     public GraphDataIO() {
-        edges = new HashSet<Edge>();
+        edges = new TreeSet<Edge>();
     }
 
 
@@ -67,12 +68,39 @@ public class GraphDataIO {
      * @return Set<Vertex> List of all egdes.
      */
     public Set<Vertex> getVertices() {
-        Set<Vertex> vertices = new HashSet<Vertex>();
+        Set<Vertex> vertices = new TreeSet<Vertex>();
         for (Edge edge : edges)
             for (Vertex vertex : edge.getVertices())
                 vertices.add(vertex);
         return vertices;
     }
+
+	public int getNumOfPartitions() {
+		TreeSet<Edge> edges = new TreeSet<Edge>(getEdges());
+		System.out.println(edges.size() + " edges in dataset");
+		int numPartitions = 0;
+		while (edges.size() > 0) {
+			int numEdgesInPartition = 1;
+			Edge curEdge = edges.pollFirst();
+			numEdgesInPartition = addAdjacentEdges(curEdge.getHead(), numEdgesInPartition, edges);
+			numEdgesInPartition = addAdjacentEdges(curEdge.getTail(), numEdgesInPartition, edges);
+			numPartitions++;
+			//System.out.println(String.format("Partition %d hat %d Elemente", numPartitions, numEdgesInPartition));
+		}
+		return numPartitions;
+	}
+
+	private int addAdjacentEdges(Vertex v, int numEdgesInPartition, TreeSet<Edge> source) {
+		List<Edge> outgoing = v.getOutgoingEdges();
+		for (Edge e : outgoing) {
+			if (source.remove(e)) {
+				numEdgesInPartition++;
+				numEdgesInPartition = addAdjacentEdges(e.getHead(), numEdgesInPartition, source);
+				numEdgesInPartition = addAdjacentEdges(e.getTail(), numEdgesInPartition, source);
+			}
+		}
+		return numEdgesInPartition;
+	}
 
 
     /**
@@ -98,9 +126,9 @@ public class GraphDataIO {
      * @throws ClassNotFoundException
      */
     public static GraphDataIO load(File source) throws IOException {
-        InputStream in = new BufferedInputStream(new FileInputStream(source));
+        CodedInputStream in = CodedInputStream.newInstance(new BufferedInputStream(new FileInputStream(source)));
+        in.setSizeLimit(150000000);
         GraphDataIO geom = ProtobufConverter.getGraphData(Protos.SaveGraphData.parseFrom(in));
-        in.close();
         return geom;
     }
 

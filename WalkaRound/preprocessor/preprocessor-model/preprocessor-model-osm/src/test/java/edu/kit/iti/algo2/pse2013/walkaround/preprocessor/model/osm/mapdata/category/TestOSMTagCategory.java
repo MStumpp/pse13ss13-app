@@ -11,9 +11,6 @@ public class TestOSMTagCategory {
 		way.addTag("highway", "footway");
 		way.addTag("highway", "track");
 		way.addTag("sidewalk", "left");
-		OSMTagCategory test = new OSMTagCategory();
-		test.addTag("highway", "footway");
-		test.addTag("sidewalk", "left");
-		assertTrue(test.accepts(way));
+		assertTrue(OSMCategoryFactory.createFootwayCategory().accepts(way));
 	}
 }

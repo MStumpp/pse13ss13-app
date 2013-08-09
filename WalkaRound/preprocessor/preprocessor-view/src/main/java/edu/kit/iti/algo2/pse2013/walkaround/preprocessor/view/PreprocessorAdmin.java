@@ -68,8 +68,8 @@ public class PreprocessorAdmin {
 			"Input file:\n\t%s\n"
 			+ "Output files:\n"
 			+ "\tGeometryData: %s\n"
-			+ "\tGraphData : %s\n"
-			+ "\tLocationData output file: %s\n",
+			+ "\tGraphData:    %s\n"
+			+ "\tLocationData: %s\n",
 			input, geometryOutput, graphOutput, locationOutput);
 	}
 }
