@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -10,7 +12,7 @@ import org.junit.Test;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
-public class WikipediaPreprocessorTest {
+public class TestWikipediaPreprocessor {
 
 	@Test
 	public void testTextFetsching() throws IOException, XMLStreamException {
@@ -20,7 +22,10 @@ public class WikipediaPreprocessorTest {
 
 		WikipediaPreprocessor.preprocessWikipediaInformation(locData);
 
-		System.out.println(locData.getPOIs().get(0).getTextInfo());
+		String text = locData.getPOIs().get(0).getTextInfo();
+		assertTrue(text != null);
+		assertTrue(text.startsWith("<p>") && text.endsWith("</p>"));
+		assertTrue(text.contains("Badisches Staatstheater Karlsruhe"));
 		System.out.println(locData.getPOIs().get(0).getURL());
 	}
 }

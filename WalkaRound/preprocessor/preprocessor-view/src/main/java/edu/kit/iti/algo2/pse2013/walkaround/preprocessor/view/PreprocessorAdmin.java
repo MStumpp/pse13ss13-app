@@ -55,7 +55,7 @@ public class PreprocessorAdmin {
 			locFile.getParentFile().mkdirs();
 
 			prep.parse();
-			WikipediaPreprocessor.preprocessWikipediaInformation(LocationDataIO.load(locFile));
+			//WikipediaPreprocessor.preprocessWikipediaInformation(LocationDataIO.load(locFile));
 			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(GraphDataIO.load(graphFile), LocationDataIO.load(locFile));
 			GeometryDataIO.save(geomData, geomFile);
 			return 0;
