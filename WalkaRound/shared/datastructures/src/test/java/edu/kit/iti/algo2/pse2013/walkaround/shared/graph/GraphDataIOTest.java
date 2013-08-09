@@ -3,8 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.TreeSet;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +17,7 @@ import org.junit.Test;
 public class GraphDataIOTest {
 
 
-	private static final File REAL_GRAPH_DATA_FILE = new File(GraphDataIO.class.getResource("/graphData.pbf").getFile());
+	private static final File REAL_GRAPH_DATA_FILE = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "/graphData.pbf");
 	private static final File TMP_GRAPH_DATA_FILE = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf");
 
 	@Before
@@ -90,37 +88,6 @@ public class GraphDataIOTest {
 		Assert.assertEquals(numVertices, graphData.getVertices().size());
 	}
 
-	@Test
-	public void testNumOfGraphPartitions() throws IOException {
-		Assert.assertNotNull(REAL_GRAPH_DATA_FILE);
-		Assert.assertTrue(REAL_GRAPH_DATA_FILE.exists());
-		Assert.assertTrue(REAL_GRAPH_DATA_FILE.canRead());
-
-		TreeSet<Edge> edges =new TreeSet<Edge>(GraphDataIO.load(REAL_GRAPH_DATA_FILE).getEdges());
-		System.out.println(edges.size() + " edges in dataset");
-		int numPartitions = 0;
-		while (edges.size() > 0) {
-			int numEdgesInPartition = 1;
-			Edge curEdge = edges.pollFirst();
-			numEdgesInPartition = addAdjacentEdges(curEdge.getHead(), numEdgesInPartition, edges);
-			numEdgesInPartition = addAdjacentEdges(curEdge.getTail(), numEdgesInPartition, edges);
-			numPartitions++;
-			System.out.println(String.format("Partition %d hat %d Elemente", numPartitions, numEdgesInPartition));
-		}
-		System.out.println(numPartitions + " Partitionen");
-	}
-
-	private int addAdjacentEdges(Vertex v, int numEdgesInPartition, TreeSet<Edge> source) {
-		List<Edge> outgoing = v.getOutgoingEdges();
-		for (Edge e : outgoing) {
-			if (source.remove(e)) {
-				numEdgesInPartition++;
-				numEdgesInPartition = addAdjacentEdges(e.getHead(), numEdgesInPartition, source);
-				numEdgesInPartition = addAdjacentEdges(e.getTail(), numEdgesInPartition, source);
-			}
-		}
-		return numEdgesInPartition;
-	}
 
 	private GraphDataIO getGraphDataIO() {
 		GraphDataIO graphDataIO = new GraphDataIO();
