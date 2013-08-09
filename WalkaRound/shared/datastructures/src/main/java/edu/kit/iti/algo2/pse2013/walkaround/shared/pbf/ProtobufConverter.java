@@ -275,12 +275,13 @@ public class ProtobufConverter {
 		for (int i = 0; i < cats.length; i++) {
 			cats[i] = savePOI.getPOICategory(i);
 		}
+		URL url;
 		try {
-			return new POI(getLocation(savePOI.getParent()), savePOI.getTextInfo(), new URL(savePOI.getImageURL()), cats);
+			url = new URL(savePOI.getImageURL());
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
+			url = null;
 		}
+		return new POI(getLocation(savePOI.getParent()), savePOI.getTextInfo(), url, cats);
 	}
 	public static SavePOI.Builder getPOIBuilder(POI p) {
 		if (p == null) {
@@ -298,7 +299,7 @@ public class ProtobufConverter {
 			builder.setTextInfo(p.getTextInfo());
 		}
 		if (p.getURL() != null) {
-			builder.setImageURL(p.getURL().getFile());
+			builder.setImageURL(p.getURL().toExternalForm());
 		}
 		return builder;
 	}

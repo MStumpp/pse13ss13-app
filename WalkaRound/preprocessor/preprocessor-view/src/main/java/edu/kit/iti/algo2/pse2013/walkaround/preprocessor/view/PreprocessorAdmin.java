@@ -9,6 +9,7 @@ import org.kohsuke.args4j.Option;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.OSMDataPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia.WikipediaPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
@@ -54,7 +55,7 @@ public class PreprocessorAdmin {
 			locFile.getParentFile().mkdirs();
 
 			prep.parse();
-			//WikipediaPreprocessor.preprocessWikipediaInformation(LocationDataIO.load(locFile));
+			WikipediaPreprocessor.preprocessWikipediaInformation(LocationDataIO.load(locFile));
 			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(GraphDataIO.load(graphFile), LocationDataIO.load(locFile));
 			GeometryDataIO.save(geomData, geomFile);
 			return 0;

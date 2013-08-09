@@ -231,6 +231,16 @@ public class RouteController {
 				"RouteController.moveActiveWaypoint(Coordinate)");
 		
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			this.currentRoute.moveActiveWaypoint(c);
+			this.notifyAllRouteListeners();
+			return true;
+		}
+		
+		
+		//TODO: Methode muss in hoher Frequenz und parallel aufgerufen werden können.
+		
+		/* OLD VERSION
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
@@ -242,7 +252,7 @@ public class RouteController {
 			});
 			RouteController.routeChanger.start();
 			return true;
-		}
+		} */
 		return false;
 	}
 
