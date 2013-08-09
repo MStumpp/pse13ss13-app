@@ -1,17 +1,17 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import org.junit.Test;
+import junit.framework.TestCase;
+
 
 /**
  * This class tests the text-to-speech utility.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
-public class TextToSpeechUtilityTest {
+public class TestTextToSpeechUtility extends TestCase {
 
-	@Test
 	public void testTextToSpeech() {
-		
+		assertTrue(true);
 	}
 }
