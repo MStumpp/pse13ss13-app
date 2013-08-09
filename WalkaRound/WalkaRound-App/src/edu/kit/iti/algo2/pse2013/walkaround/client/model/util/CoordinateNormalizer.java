@@ -1,9 +1,28 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 
 /**
  * This class provides a method to normalize a coordinate to a coordinate on a
@@ -15,12 +34,15 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorExc
  */
 public final class CoordinateNormalizer {
 
+	private static final int timeout = 2000;
+
 	private static final String TAG = CoordinateNormalizer.class.getSimpleName();
 
 	/**
 	 * URL for roundtrip computation.
 	 */
 	private static String URL_NEARESTVERTEX = "http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex";
+
 
 	/**
 	 * This class is an utility class which is not instantiated.
@@ -37,9 +59,10 @@ public final class CoordinateNormalizer {
 	 *            the "tile zoom level" for which the calculation should be made
 	 * @return a normalized coordinate on a graph
 	 * @throws CoordinateNormalizerException If something goes wrong.
+	 * @throws InterruptedException
 	 */
-	public static Coordinate normalizeCoordinate(Coordinate coordinate, float levelOfDetail) 
-		throws CoordinateNormalizerException {
+	public static Coordinate normalizeCoordinate(Coordinate coordinate, float levelOfDetail)
+		throws CoordinateNormalizerException, InterruptedException {
 
 		if (coordinate == null)
 			throw new IllegalArgumentException(
@@ -54,8 +77,8 @@ public final class CoordinateNormalizer {
 		Coordinate normalizedCoordinate = null;
 
 		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
-				new Coordinate(coordinate.getLatitude(),
-						coordinate.getLongitude()), new HttpPost(URL_NEARESTVERTEX));
+				new Coordinate(coordinate.getLatitude(), coordinate.getLongitude()),
+				new HttpPost(URL_NEARESTVERTEX));
 		Log.d(TAG, "normalizeCoordinate() - pre Thread");
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
@@ -74,8 +97,7 @@ public final class CoordinateNormalizer {
 		if (normalizedCoordinate == null)
 			throw new CoordinateNormalizerException("normalizedCoordinate is null");
 
-		Log.d(TAG, "normalizeCoordinate(Coordinate coordinate, float levelOfDetail) 
-			returning Coordinate: " + coordinate);
+		Log.d(TAG, "normalizeCoordinate(Coordinate coordinate, float levelOfDetail) returning Coordinate: " + coordinate);
 
 		return coordinate;
 	}
