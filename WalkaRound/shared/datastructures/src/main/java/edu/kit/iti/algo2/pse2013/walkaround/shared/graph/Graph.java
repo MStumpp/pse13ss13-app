@@ -43,10 +43,10 @@ public final class Graph {
                 vertices[currentForHead.getID()] = currentForHead;
 
             // for tail, reuse current edge object
-            edge.getTail().addOutgoingEdge(edge);
+            currentForTail.addOutgoingEdge(edge);
             // instantiate new Edge object for reverse egde
             Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
-            edge.getHead().addOutgoingEdge(inverseEdge);
+            currentForHead.addOutgoingEdge(inverseEdge);
         }
     }
 
