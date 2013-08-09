@@ -4,6 +4,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsExc
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -200,29 +201,34 @@ public class Server {
 
 
     /**
-     * Endpoint method for computation an optimized route based on a given route.
-     * The actual computation is done by an instance of RoundtripProcessor.
+     * Endpoint method for computing the projected Coordinate.
+     * The actual computation is done by an instance of GeometryProcessor.
      *
-     * @param coordinates List of coordinates.
-     * @return RouteInfoTransfer.
+     * @param coordinate Coordinate to be projected.
+     * @return Coordinate.
      */
     @POST
-    @Path("computeOptimizedRoute")
+    @Path("/getNearestVertex")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public RouteInfoTransfer computeOptimizedRoute(List<Coordinate> coordinates) {
-
-        RouteInfoTransfer transfer = new RouteInfoTransfer();
+    public Coordinate getNearestVertex(Coordinate coordinate) {
 
         // check input
-        if (coordinates == null || coordinates.size() < 2) {
-            transfer.setError("coordinates must not be null and size equal to or greater than 2");
-            return transfer;
+        if (coordinate == null)
+            return null;
+
+        // project coordinate
+        Coordinate geometrizable;
+        try {
+            geometrizable = (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+        } catch (GeometryProcessorException e) {
+            return null;
+        } catch (InstantiationException e) {
+            return null;
         }
 
-//      return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
-        transfer.setError("computeOptimizedRoute not yet implemented");
-        return transfer;
+        return new Coordinate(geometrizable.getLatitude(),
+                geometrizable.getLongitude(), null);
     }
 
 
