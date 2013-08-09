@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.DropboxUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
@@ -24,7 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 public class LocationDataIOTest {
 
 	private static final File TMP_LOCATIONDATA_FILE = new File(System.getProperty("java.io.tmpdir") + File.separator + "locationData.pbf");
-	private static final File REAL_LOCATIONDATA_FILE = new File("src/test/resources/locationData.pbf");
+	private static final File REAL_LOCATIONDATA_FILE = new File(DropboxUtil.getDropbox() + "locationData.pbf");
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -39,7 +42,7 @@ public class LocationDataIOTest {
 
 
 	@Test
-	public void testSaveAndLoad() {
+	public void testSaveAndLoad() throws MalformedURLException {
 		LocationDataIO writeLocationData = getLocationDataIO();
 		int size = writeLocationData.getPOIs().size();
 		try {
@@ -96,12 +99,12 @@ public class LocationDataIOTest {
     }
 
 
-	private LocationDataIO getLocationDataIO() {
+	private LocationDataIO getLocationDataIO() throws MalformedURLException {
 
 		LocationDataIO locationDataIO = new LocationDataIO();
 
-		POI poi1 = new POI(1.d, 2.d, "poi 1", "info 1", "url 1", new int[] { 0, 1 });
-		POI poi2 = new POI(3.d, 4.d, "poi 2", "info 2", "url 2", new int[] { 0, 1 });
+		POI poi1 = new POI(1.d, 2.d, "poi 1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 0, 1 });
+		POI poi2 = new POI(3.d, 4.d, "poi 2", "info 2", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=KIT"), new int[] { 0, 1 });
 
 		locationDataIO.addPOI(poi1);
 		locationDataIO.addPOI(poi2);

@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.net.URL;
+
 /**
  * This class represents a POI.
  *
@@ -16,7 +18,7 @@ public class POI extends Location {
 	/**
 	 * url of image of POI.
 	 */
-	private String url;
+	private URL url;
 
 	/**
 	 * poi categories of POI.
@@ -39,8 +41,7 @@ public class POI extends Location {
 	 * @param categories
 	 *            Categories of POI.
 	 */
-	public POI(double lat, double lon, String name, String textInfo,
-			String url, int[] categories) {
+	public POI(double lat, double lon, String name, String textInfo, URL url, int[] categories) {
 		this(lat, lon, name, textInfo, url, categories, null);
 	}
 
@@ -58,10 +59,8 @@ public class POI extends Location {
 	 * @param poiCategories
 	 *            the POI-Categories, this POI belongs to
 	 */
-	public POI(Location loc, String textInfo, String imageURL,
-			int[] poiCategories) {
-		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo,
-				imageURL, poiCategories);
+	public POI(Location loc, String textInfo, URL url, int[] poiCategories) {
+		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, url, poiCategories);
 	}
 
 	/**
@@ -82,8 +81,7 @@ public class POI extends Location {
 	 * @param address
 	 *            Address of POI.
 	 */
-	public POI(double lat, double lon, String name, String textInfo,
-			String url, int[] poiCategories, Address address) {
+	public POI(double lat, double lon, String name, String textInfo, URL url, int[] poiCategories, Address address) {
 		super(lat, lon, name, address);
 		this.textInfo = textInfo;
 		this.url = url;
@@ -114,16 +112,16 @@ public class POI extends Location {
 	 *
 	 * @param url String
 	 */
-	public void setURL(String url) {
+	public void setURL(URL url) {
 		this.url = url;
 	}
 
 	/**
 	 * Returns an url of the image for this POI.
 	 *
-	 * @return String
+	 * @return URL
 	 */
-	public String getURL() {
+	public URL getURL() {
 		return url;
 	}
 
@@ -207,9 +205,8 @@ public class POI extends Location {
 
 	public POI clone() {
 		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this
-				.getName().toString(), this.getTextInfo().toString(), this
-				.getURL().toString(), this.getPOICategories(), this
-				.getAddress().clone());
+				.getName(), this.getTextInfo(), this.getURL(), this.getPOICategories(),
+				this.getAddress().clone());
 		return clonedPOI;
 	}
 }
