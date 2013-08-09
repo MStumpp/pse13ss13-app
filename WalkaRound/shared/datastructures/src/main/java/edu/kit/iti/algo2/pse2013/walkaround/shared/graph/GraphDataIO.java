@@ -77,7 +77,6 @@ public class GraphDataIO {
 
 	public int getNumOfPartitions() {
 		TreeSet<Edge> edges = new TreeSet<Edge>(getEdges());
-		System.out.println(edges.size() + " edges in dataset");
 		int numPartitions = 0;
 		while (edges.size() > 0) {
 			int numEdgesInPartition = 1;

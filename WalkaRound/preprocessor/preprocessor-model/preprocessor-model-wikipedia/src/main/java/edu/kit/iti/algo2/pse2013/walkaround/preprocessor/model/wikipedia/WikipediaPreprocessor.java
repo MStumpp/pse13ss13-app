@@ -18,7 +18,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -27,25 +27,24 @@ public class WikipediaPreprocessor {
 	/**
 	 * Enhances all POIs within the location data file with textual informations
 	 * and a link to an image if available.
-	 * 
+	 *
 	 * @param locationData
 	 * @throws IOException
 	 * @throws XMLStreamException
 	 */
 	public static void preprocessWikipediaInformation(
 			LocationDataIO locationData) {
-		for (Iterator<POI> iter = locationData.getPOIs().iterator(); iter
-				.hasNext();) {
+		for (Iterator<POI> iter = locationData.getPOIs().iterator();iter.hasNext();) {
 			POI current = iter.next();
 
 			/* Text information parsing. */
 
 			// Prepare wikipedia url
 
-			// hier getURL() nicht url vom image sondern zun�chst wikipedia url
-			// wird aber w�hrend dem preprocessing als url vom image
-			// �berschrieben...
-			// k�nnte eleganter gel�st werden.
+			// hier getURL() nicht url vom image sondern zunächst wikipedia url
+			// wird aber während dem preprocessing als url vom image
+			// überschrieben...
+			// könnte eleganter gelöst werden.
 			if (!(current.getURL() == null)) {
 				try {
 					String wikipediaURL = current.getURL();
@@ -80,10 +79,10 @@ public class WikipediaPreprocessor {
 							parser.next();
 							while (parser.getEventType() == XMLStreamConstants.CHARACTERS
 									&& !parser.getText().contains("==")) {
-								// TODO: Einschr�nkung verbessern da
-								// m�glicherweise
+								// TODO: Einschränkung verbessern da
+								// möglicherweise
 								// zu
-								// viel unn�tiger text mitgenommen wird!
+								// viel unnötiger text mitgenommen wird!
 								sb.append(parser.getText());
 								parser.next();
 							}
@@ -92,7 +91,7 @@ public class WikipediaPreprocessor {
 						parser.next();
 					}
 					input.close();
-					
+
 					while (sb.indexOf("{{") != -1) {
 						sb = sb.delete(sb.indexOf("{{"),
 								sb.indexOf("}}") + 2);
@@ -238,7 +237,7 @@ public class WikipediaPreprocessor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// delete substringA in textInfo
 		while (sb.indexOf(substringA) != -1) {
 			int counter = 1;
