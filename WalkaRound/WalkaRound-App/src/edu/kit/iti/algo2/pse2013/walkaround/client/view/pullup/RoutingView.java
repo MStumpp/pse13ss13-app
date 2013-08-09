@@ -9,9 +9,11 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -247,7 +249,7 @@ public class RoutingView extends Fragment {
 				layout.removeAllViews();
 
 				for (Waypoint value : currentRoute.getWaypoints()) {
-					TextView waypoint = new TextView(context);
+					final TextView waypoint = new TextView(context);
 					Log.d("routingView: ",
 							" " + value.getName() + " " + value.getId());
 					waypoint.setText(value.getName() + " " + value.getId());
@@ -259,8 +261,22 @@ public class RoutingView extends Fragment {
 					myParams.setMargins(0, 10, 0, 0);
 					waypoint.setLayoutParams(myParams);
 					waypoint.setBackgroundColor(MapGen.defaultBackground);
+					waypoint.setOnTouchListener(new OnTouchListener() {
+
+						GestureDetector gestDect = new GestureDetector(
+								new WaypointTextGestureListener(waypoint));
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							gestDect.onTouchEvent(event);
+							return false;
+						}
+					});
+
 					layout.addView(waypoint);
 				}
+			} else {
+				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
 			}
 		}
 	}
@@ -283,6 +299,61 @@ public class RoutingView extends Fragment {
 							.changeView(PullUpView.CONTENT_FAVORITE);
 				}
 			}
+			return false;
+		}
+	}
+
+	private class WaypointTextGestureListener implements OnGestureListener {
+
+		TextView tv;
+
+		public WaypointTextGestureListener(TextView tv) {
+			this.tv = tv;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
+				float arg3) {
+
+			float velocity = (float) Math.sqrt((double) Math.pow(
+					Math.abs(arg2), 2) + (double) Math.pow(Math.abs(arg3), 2));
+
+			if (velocity > 400) {
+				Log.d(TAG_PULLUP_CONTENT, "GESTURE!!!!");
+				RouteController.getInstance().resetRoute();
+				layout.removeView(tv);
+			}
+			return false;
+		}
+
+		@Override
+		public void onLongPress(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
+				float arg3) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onShowPress(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent arg0) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			// TODO Auto-generated method stub
 			return false;
 		}
 	}
