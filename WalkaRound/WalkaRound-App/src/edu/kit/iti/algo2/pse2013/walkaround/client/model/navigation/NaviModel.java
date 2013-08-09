@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
@@ -190,18 +191,34 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	private void computeNextTurnCoordinate() {
 		Coordinate tempNearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
 		
-		// In case of the closest coordinate on route being a crossing:
+		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
+		Coordinate tempCoord = null;
+		
+		// Forward iterator to nearestCoordinate:
+		while (coordsIter.hasNext() && !tempNearestCoordOnRoute.equals(tempCoord)) {
+			tempCoord = coordsIter.next();
+		}
+		
+		// TODO: In case of the closest coordinate on route being a crossing, check if it is before the user:
 		if (tempNearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1) {
 			
 		}
+		
+		tempCoord = null;
+		while (coordsIter.hasNext()) {
+			tempCoord = coordsIter.next();
+			if (tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
+				
+			}
+		}
+		
 		
 		// Crossing Info wird überall hinzugefügt, also sind nur die mit mehr als einer TurnAngle relevant!
 		// TODO: iteriere Coords der Route von hier aus durch, bis nächster Turn gefunden.
 		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord
 		
-		
-		
 		// Compute NextNextTurnCoord now that you know the next turn
+		
 	}
 	
 	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
