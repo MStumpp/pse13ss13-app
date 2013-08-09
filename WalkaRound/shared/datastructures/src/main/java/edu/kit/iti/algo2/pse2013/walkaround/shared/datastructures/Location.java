@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import android.util.Log;
 
 /**
  * This class represents a location.
@@ -9,8 +8,6 @@ import android.util.Log;
  * @version 1.0
  */
 public class Location extends Coordinate {
-
-	private static String TAG_LOCATION = Location.class.getSimpleName();
 
     /**
      * id of Location.
@@ -191,7 +188,7 @@ public class Location extends Coordinate {
     	if (this.getAddress() != null) {
     	clonedAddress = this.getAddress().clone();
     	}
-    	
+
 		Location clonedLocation = new Location(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);
 		clonedLocation.setMoveability(this.isMoveable());
 		clonedLocation.setIsFavorite(this.isFavorite());

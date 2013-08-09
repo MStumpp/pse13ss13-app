@@ -47,7 +47,6 @@ public final class Graph {
             edge.getTail().addOutgoingEdge(edge);
             // instantiate new Edge object for reverse egde
             Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
-            inverseEdge.setLength(edge.getLength());
             edge.getHead().addOutgoingEdge(inverseEdge);
         }
     }

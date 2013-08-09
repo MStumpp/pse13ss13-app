@@ -111,8 +111,7 @@ public class ProtobufConverter {
 		if (saveEdge == null) {
 			return null;
 		}
-		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()));
-		e.setLength(saveEdge.getLength());
+		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()), saveEdge.getID());
 		return e;
 	}
 	public static SaveEdge.Builder getEdgeBuilder(Edge e) {
@@ -122,7 +121,7 @@ public class ProtobufConverter {
 		return SaveEdge.newBuilder()
 			.setHead(getVertexBuilder(e.getHead()))
 			.setTail(getVertexBuilder(e.getTail()))
-			.setLength(e.getLength());
+			.setID(e.getID());
 	}
 
 	public static Geometrizable getGeometrizable(SaveGeometrizable geometrizable) {
@@ -303,9 +302,6 @@ public class ProtobufConverter {
 			return tmp_vertices.get(saveVertex.getID());
 		}
 		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getID());
-		//v.setParent(getVertex(saveVertex.getParent())); // TODO: Aufpassen, dass das nicht zur Endlosschleife wird!
-		//v.setRun(saveVertex.getRun());
-		//v.setCurrentLength(saveVertex.getCurrentLength());
 		tmp_vertices.put(v.getID(), v);
 		return v;
 	}
