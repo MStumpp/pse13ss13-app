@@ -36,12 +36,12 @@ public final class Graph {
             if (vertices.length <= currentForTail.getID())
                 vertices = increaseArray(vertices, 100000);
             if (vertices[currentForTail.getID()] == null)
-                vertices[currentForTail.getID()] = edge.getTail();
+                vertices[currentForTail.getID()] = currentForTail;
             currentForHead = edge.getHead();
             if (vertices.length <= currentForHead.getID())
                 vertices = increaseArray(vertices, 100000);
             if (vertices[currentForHead.getID()] == null)
-                vertices[currentForHead.getID()] = edge.getHead();
+                vertices[currentForHead.getID()] = currentForHead;
 
             // for tail, reuse current edge object
             edge.getTail().addOutgoingEdge(edge);
