@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -13,7 +11,6 @@ import android.graphics.Point;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -40,8 +37,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtilit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 
 public class BootActivity extends Activity {
 	protected static final int TOTALSTEPS = 1000;

@@ -18,10 +18,9 @@ public final class POIImageFetcher {
 
 	}
 
-	public static Bitmap fetchImage(String url) {
+	public static Bitmap fetchImage(URL url) {
 		try {
-			URL imageUrl = new URL(url);
-			URLConnection connection = imageUrl.openConnection();
+			URLConnection connection = url.openConnection();
 			connection.connect();
 			InputStream input = connection.getInputStream();
 			Bitmap bitmap = BitmapFactory.decodeStream(input);

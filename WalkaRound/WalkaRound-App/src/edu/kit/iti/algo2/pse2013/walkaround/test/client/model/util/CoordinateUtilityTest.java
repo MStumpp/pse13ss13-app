@@ -1,8 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.test.client.model.util;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import junit.framework.Assert;
 import android.test.AndroidTestCase;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 
 public class CoordinateUtilityTest extends AndroidTestCase  {
 	private final static double FRACTION_DELTA = 1e-4; // TODO: Can this be lowered any further by improving the conversion-method?
