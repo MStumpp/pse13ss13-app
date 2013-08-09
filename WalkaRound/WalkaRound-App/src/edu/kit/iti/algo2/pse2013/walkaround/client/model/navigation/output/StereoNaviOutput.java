@@ -23,6 +23,7 @@ public class StereoNaviOutput implements NaviOutput {
 		// TODO: Parameter, von denen Töne abhängen sind Lautstärke, Frequenz des Abspielens, Tonart, Ausgabe links/rechts
 		
 		
+		
 	}
 
 }

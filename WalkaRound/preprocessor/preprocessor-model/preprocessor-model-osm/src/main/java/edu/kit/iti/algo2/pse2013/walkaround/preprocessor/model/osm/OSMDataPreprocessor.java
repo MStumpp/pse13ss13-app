@@ -10,7 +10,6 @@ import crosby.binary.file.BlockInputStream;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class OSMDataPreprocessor {
 
@@ -62,6 +61,8 @@ public class OSMDataPreprocessor {
 		} while (parser.needsFurtherRun());
 
 		logger.info(String.format("Try writing %d edges (%d vertices) to GraphDataIO-file...", graphData.getEdges().size(), graphData.getVertices().size()));
+
+		logger.info(graphData.getNumOfPartitions() + " partitions are in graphData.pbf");
 
 		GraphDataIO.save(graphData, graphDestination);
 

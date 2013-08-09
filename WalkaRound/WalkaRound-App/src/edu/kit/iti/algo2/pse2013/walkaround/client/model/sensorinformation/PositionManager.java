@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import android.content.Context;
 import android.location.GpsStatus.Listener;
 import android.location.Location;
@@ -56,7 +58,7 @@ public class PositionManager implements Listener {
 		
 		
 		locationManager.addGpsStatusListener(positionManager);
-		this.getLastKnownPosition();
+		this.getLastKnownPositionFromAndroid();
 		
 		//initialize other Sensors
 		compass = new CompassManager(context.getApplicationContext());
@@ -114,7 +116,7 @@ public class PositionManager implements Listener {
 		if (!this.positionListeners.contains(newPL)) {
 			this.positionListeners.add(newPL);
 		}
-		this.getLastKnownPosition();
+		this.getLastKnownPositionFromAndroid();
 	}
 
 	/**
@@ -126,6 +128,7 @@ public class PositionManager implements Listener {
 		Log.d(TAG_POSITION_MANAGER,
 				"notify " + (positionListeners != null));
 		if (this.lastKnownLocation != null) {
+			Log.d(TAG_POSITION_MANAGER, lastKnownLocation.toString());
 			for (PositionListener pl : this.positionListeners) {
 				Log.d(TAG_POSITION_MANAGER,
 						"notify " + (pl != null));
@@ -134,6 +137,10 @@ public class PositionManager implements Listener {
 		}
 	}
 
+	public Location getLastKnownPosition(){
+		return this.lastKnownLocation;
+	}
+	
 	/**
 	 * 
 	 */
@@ -142,14 +149,14 @@ public class PositionManager implements Listener {
 				+ event + ")");
 		lastGPSEvent = event;
 		if (lastGPSEvent == 3 || lastGPSEvent == 4) {
-			this.getLastKnownPosition();
+			this.getLastKnownPositionFromAndroid();
 		}
 	}
 
 	/**
 	 * the method return the last known position of the user if possible
 	 */
-	private void getLastKnownPosition() {
+	private void getLastKnownPositionFromAndroid() {
 		Log.d(TAG_POSITION_MANAGER, "getLastKnownPosition");
 		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			lastKnownLocation = locationManager

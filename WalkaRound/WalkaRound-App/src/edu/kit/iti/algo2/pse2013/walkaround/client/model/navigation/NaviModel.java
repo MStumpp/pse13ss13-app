@@ -17,7 +17,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -92,12 +91,15 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	
 	private void notifyAllNaviOutputs() {
-		// Sending information to headUp display:
+		Log.e(TAG_NAVI, "notifyAllNaviOutputs() METHOD START");
+		// Sending information to controller of headUp display:
 		this.headUpControllerInstance.setSpeed(this.speed);
 		this.headUpControllerInstance.setTimePassed(this.timeOnRouteInSec);
 		this.headUpControllerInstance.setTimeToGo(this.timeLeftOnRouteInSec);
 		this.headUpControllerInstance.setWayPassed(this.distOnRouteInMeters);
 		this.headUpControllerInstance.setWayToGo(this.distLeftOnRouteInMeter);
+		// TODO: this.headUpControllerInstance.setTurnAngle(this.turnAngle);
+		// TODO: this.headUpControllerInstance.setDistToTurn(this.distToTurn);
 		// notifying all Navi Outputs:
 		for (NaviOutput naviOutput : this.naviOutputs) {
 			naviOutput.deliverOutput(this.turnAngle, this.distToTurn);
@@ -157,7 +159,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	@Override
 	public void onCompassChange(float direction) {
 		Log.d(TAG_NAVI, "onCompassChange(float)");
-		// TODO: Vor allem für Stereo Navi relevant
+		// TODO: Vor allem / evtl. für Stereo Navi relevant
 		// this.lastKnownUserLocation.setBearing(direction);
 		
 	}
@@ -166,8 +168,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	public void onPositionChange(Location androidLocation) {
 		Log.d(TAG_NAVI, "onPositionChange(Location)");
 		this.lastKnownUserLocation = androidLocation;
-		// Coordinate nextCrossing = 
-		
+		this.computeNavi();
 	}
 
 	@Override
@@ -177,13 +178,65 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	}
 	
 	private void computeNavi() {
-		this.nextCrossing = this.getNearestCoordinateWithRelevantCrossingInfo(this.lastKnownUserLocation);
-		// TODO: Berechne TURN ANGLE, BRAUCHT METHODE
-		
-		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
+		Log.e(TAG_NAVI, "computeNavi()");
+		this.computeNextTurnCoordinate();
+		this.computeNewTurnAngle();
+		this.computeNewDistanceToTurn();
 		this.notifyAllNaviOutputs();
 	}
 	
+	
+	private void computeNextTurnCoordinate() {
+		Coordinate tempNearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
+		// TODO: iteriere Coords der Route von hier aus durch, bis nächster Turn gefunden.
+		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord
+	}
+	
+	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
+		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + androidLocation.toString());
+		Coordinate nearestCoordinate = null;
+		float smallestDifference = Float.POSITIVE_INFINITY;
+		double tempDifference;
+		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
+			 tempDifference = CoordinateUtility.calculateDifferenceInMeters(new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude()), coord);
+			 if (tempDifference < smallestDifference) {
+				 smallestDifference = (float) tempDifference;
+				 nearestCoordinate = coord;
+			 }
+		}
+		return nearestCoordinate;
+	}
+	
+	private void computeNewTurnAngle() {
+		Log.e(TAG_NAVI, "computeNewTurnAngle()");
+		double result = this.turnAngle;
+		//TODO: mit den Trigs den Angle anhand von aktueller Pos und this.nextCrossing bestimmen.
+		// INPUT: 3 Coords, aktuelle Pos, nächste TurnCoord, darauf folgende TurnCoord.
+		// 1. Vektoren Pos -> TurnCoord und TurnCoord -> 2. TurnCoord berechnen.
+		// 2. Winkel der beiden Vektoren zur x-Achse bestimmen.
+		// 3. Winkel des zweiten Vektoren vom ersten abziehen
+		
+		// CoordinateUtility.calculateDifferenceInMeters(c1, c2)
+		
+		
+		
+		this.turnAngle = result;
+	}
+	
+
+	private void computeNewDistanceToTurn() {
+		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
+	}
+	
+	
+	
+	
+	
+	
+	
+	// Some old stuff:
+	
+	/*
 	private Coordinate getNearestCoordinateWithRelevantCrossingInfo(Location androidLocation) {
 		Log.d(TAG_NAVI, "getNearestCoordinateWithRelevantCrossingInfo(Location) METHOD START input Coordinate: " + androidLocation.toString());
 		float smallestDifference = Float.POSITIVE_INFINITY;
@@ -206,27 +259,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD END return Coordinate: " + closestCoordinate.toString());
 		return closestCoordinate;
 	}
-	
-	
-	
-	
-	
-	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
-		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + androidLocation.toString());
-		Coordinate nearestCoordinate = null;
-		float smallestDifference = Float.POSITIVE_INFINITY;
-		double tempDifference;
-		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
-			 tempDifference = CoordinateUtility.calculateDifferenceInMeters(new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude()), coord);
-			 if (tempDifference < smallestDifference) {
-				 smallestDifference = (float) tempDifference;
-				 nearestCoordinate = coord;
-			 }
-		}
-		return nearestCoordinate;
-	}
-	
-	
+	*/
 	
 	
 	

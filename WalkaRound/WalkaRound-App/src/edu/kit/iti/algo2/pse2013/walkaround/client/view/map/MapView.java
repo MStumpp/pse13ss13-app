@@ -1,8 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 // Java Library
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import android.animation.Animator;
@@ -13,14 +11,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -33,27 +27,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 // Android Library
 // Walkaround Library
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 
 /**
- *
+ * 
  * This class is the main activity of the Walkaround app. This class organize
  * the whole view and shows the drawing map and route.
- *
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class MapView extends Activity {
 
@@ -75,7 +66,7 @@ public class MapView extends Activity {
 	/**
 	 * Default Pictures
 	 */
-	public static final int USER_ARROW_IMAGE = R.drawable.user_arrow_30x38;
+	public static final int USER_ARROW_IMAGE = R.drawable.user_arrow;
 	public static final int DEFAULT_PATTERN = R.drawable.fog;
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;
@@ -122,7 +113,7 @@ public class MapView extends Activity {
 	 * Gestik
 	 */
 	private GestureDetector gestureDetector;
-	private GestureOverlayView mapGest;
+	// private GestureOverlayView mapGest;
 
 	/**
 	 * Routen
@@ -131,7 +122,7 @@ public class MapView extends Activity {
 	private RelativeLayout routeList;
 	private RelativeLayout poiList;
 	private float sizeOfPoints;
-	private int sizeOfRoute = 6;
+	// private int sizeOfRoute = 6;
 
 	/**
 	 *
@@ -140,20 +131,23 @@ public class MapView extends Activity {
 
 	private Point size;
 
-	private Canvas canvas;
+	// private Canvas canvas;
 	private Bitmap routeOverlayBitmap;
 
+	@SuppressWarnings("unused")
 	private float fromX;
+	@SuppressWarnings("unused")
 	private float fromY;
 
 	/**
 	 * User orientation
 	 */
+	@SuppressWarnings("unused")
 	private float userX;
+	@SuppressWarnings("unused")
 	private float userY;
+	@SuppressWarnings("unused")
 	private float delta;
-
-	private LocationManager locationManager;
 
 	private GestureDetector waypointGestureDetector;
 
@@ -164,23 +158,7 @@ public class MapView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		String fileString = File.separatorChar + "walkaround"
-				+ File.separatorChar + "geometryData.pbf";
-
-		
-		GeometryDataIO geometryDataIO;
-		try {
-			geometryDataIO = GeometryDataIO.load(new File(Environment
-					.getExternalStorageDirectory().getAbsolutePath()
-					+ fileString));
-			GeometryProcessor.init(geometryDataIO);
-		} catch (IOException e) {
-			Log.e(TAG_MAPVIEW, "geometry konnte nicht initialisiert werden.");
-		}
-
-		PositionManager.initialize(this);
-		POIManager.initialize(this);
+		System.gc();
 
 		Log.d(TAG_MAPVIEW, "Get Display size.");
 
@@ -231,11 +209,13 @@ public class MapView extends Activity {
 		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));
 		user.getLayoutParams().width = USER_X_DELTA * 4;
 		user.getLayoutParams().height = USER_Y_DELTA * 4;
+		user.setScaleType(ImageView.ScaleType.FIT_XY);
 		user.setOnTouchListener(new UserTouchEventListener());
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Initialisiere MapController.");
-		mc = MapController.initialize(this);
+		MapController.getInstance().startController(this);
+		mc = MapController.getInstance();
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragmente werden eingebaut");
@@ -264,11 +244,7 @@ public class MapView extends Activity {
 		waypointGestureDetector = new GestureDetector(this,
 				new WaypointGestureDetector());
 
-		locationManager = (LocationManager) this.getApplicationContext()
-				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
-		Log.d(TAG_MAPVIEW, "locationManager is " + (locationManager != null));
-
-		this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
+		// this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
 	}
 
 	/**
@@ -280,7 +256,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updates the map
-	 *
+	 * 
 	 * @param b
 	 *            the new map bitmap
 	 */
@@ -288,14 +264,12 @@ public class MapView extends Activity {
 
 		runOnUiThread(new Runnable() {
 			public void run() {
-				synchronized (b) {
-					if (!b.isRecycled()) {
-						try {
-							map.setImageBitmap(b);
-							map.setVisibility(View.VISIBLE);
-						} catch (IllegalArgumentException e) {
-							Log.e(TAG_MAPVIEW, "" + e.toString());
-						}
+				if (!b.isRecycled()) {
+					try {
+						map.setImageBitmap(b);
+						map.setVisibility(View.VISIBLE);
+					} catch (IllegalArgumentException e) {
+						Log.e(TAG_MAPVIEW, "" + e.toString());
 					}
 				}
 			}
@@ -304,7 +278,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the route
-	 *
+	 * 
 	 * @param b
 	 *            the new route bitmap
 	 */
@@ -315,37 +289,36 @@ public class MapView extends Activity {
 		}
 		runOnUiThread(new Runnable() {
 			public void run() {
-				synchronized (b) {
-					if (!b.isRecycled()) {
-						try {
-							routeOverlay.setImageBitmap(b);
-							routeOverlay.setVisibility(View.VISIBLE);
-						} catch (IllegalArgumentException e) {
-							Log.e(TAG_MAPVIEW, "" + e.toString());
-						}
+				if (!b.isRecycled()) {
+					try {
+						routeOverlay.setImageBitmap(b);
+						routeOverlay.setVisibility(View.VISIBLE);
+					} catch (IllegalArgumentException e) {
+						Log.e(TAG_MAPVIEW, "" + e.toString());
 					}
 				}
+
 			}
 		});
 	}
 
 	/*
-	 *
-	 *
+	 * 
+	 * 
 	 * @param dip
-	 *
+	 * 
 	 * @return
-	 *
+	 * 
 	 * public int dipToPixel(float dip) { return (int)
 	 * (getResources().getDisplayMetrics().density * dip); }
-	 *
+	 * 
 	 * public float pixelToDip(int p) { return (p /
 	 * getResources().getDisplayMetrics().density); }
 	 */
 
 	/**
 	 * Change the position and the orientation of the user
-	 *
+	 * 
 	 * @param delta
 	 *            degree of the neew rotation
 	 */
@@ -364,7 +337,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the DisplayWaypoints
-	 *
+	 * 
 	 * @param displayPoints
 	 *            the new DisplayWaypoints
 	 */
@@ -392,14 +365,16 @@ public class MapView extends Activity {
 					fromY = displayPoints.get(0).getY();
 
 					for (DisplayWaypoint value : displayPoints) {
+
 						ImageView iv = new ImageView(context);
 						iv.setImageDrawable(waypoint);
 						iv.setY(value.getY() - sizeOfPoints);
 						iv.setX(value.getX() - sizeOfPoints / 2);
+
 						iv.setVisibility(View.VISIBLE);
 						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 								(int) sizeOfPoints));
-						iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+						iv.setScaleType(ImageView.ScaleType.FIT_XY);
 						iv.setTag(value.getId());
 						iv.setOnTouchListener(new WaypointTouchListener(iv,
 								value.getId()));
@@ -407,16 +382,18 @@ public class MapView extends Activity {
 					}
 
 					if (routeList.getChildCount() > 0) {
+
 						ImageView iv = (ImageView) routeList
 								.getChildAt((routeList.getChildCount() - 1));
 						iv.setImageDrawable(flagTarget);
-						iv.setX(iv.getX() - (sizeOfPoints / 2));
+						// iv.setX(iv.getX() - (sizeOfPoints / 2));
 
 						iv = (ImageView) routeList.getChildAt(0);
 						iv.setImageDrawable(flag);
-						if((routeList.getChildCount() != 1)){
-							iv.setX(iv.getX() - (sizeOfPoints / 2));
-						}
+
+						// if ((routeList.getChildCount() != 1)) {
+						// iv.setX(iv.getX() - (sizeOfPoints / 2));
+						// }
 					}
 				}
 			});
@@ -425,7 +402,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the POI´s on the Display
-	 *
+	 * 
 	 * @param dp
 	 *            List of pois
 	 */
@@ -443,7 +420,7 @@ public class MapView extends Activity {
 					iv.setTag(value.getId());
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));
-					iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+					iv.setScaleType(ImageView.ScaleType.FIT_XY);
 					iv.setOnTouchListener(new POITouchListener(iv, value
 							.getId()));
 					poiList.addView(iv);
@@ -454,7 +431,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Set an new Waypoint as active
-	 *
+	 * 
 	 * @param id
 	 *            the id of the waypoint
 	 */
@@ -503,7 +480,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 *
+	 * 
 	 */
 	public void setUserPositionOverlayImage(final float x, final float y) {
 		runOnUiThread(new Runnable() {
@@ -516,7 +493,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 *
+	 * 
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -532,12 +509,13 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 *
+	 * 
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
 	 *            rotation
 	 */
+	@SuppressWarnings("unused")
 	private void setUserPositionOverlayImage(DisplayCoordinate coor,
 			float degree) {
 		// TODO duration überdenken
@@ -574,9 +552,9 @@ public class MapView extends Activity {
 
 	/**
 	 * A Listener who listen to the user position animation
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserAnimationListener implements AnimatorListener {
 
@@ -623,9 +601,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This is a Gesture Detector which listen to the map touches.
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class MapGestureDetector implements OnGestureListener {
 
@@ -633,7 +611,6 @@ public class MapView extends Activity {
 		float oldX;
 		@SuppressWarnings("unused")
 		float oldY;
-		@SuppressWarnings("unused")
 		float gesamt;
 
 		public MapGestureDetector() {
@@ -677,7 +654,7 @@ public class MapView extends Activity {
 						(double) Math.abs(e2.getX(0) - e2.getX(1)), 2)
 						* Math.pow((double) Math.abs(e2.getY(1) - e2.getY(1)),
 								2));
-				if(diff < gesamt){
+				if (diff < gesamt) {
 					mc.onZoom(z, new DisplayCoordinate(x, y));
 				} else {
 					mc.onZoom(-z, new DisplayCoordinate(x, y));
@@ -732,9 +709,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class forwards the touch events to the gesture detector
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -753,9 +730,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class intercept the touch events on the user arrow
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
@@ -772,9 +749,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class WaypointTouchListener implements OnTouchListener {
 
@@ -783,7 +760,7 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new Waypoint
-		 *
+		 * 
 		 * @param iv
 		 *            the new Imageview
 		 */
@@ -808,9 +785,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
 
@@ -829,7 +806,9 @@ public class MapView extends Activity {
 			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY()
 					+ " " + currentId);
 
-			float velocity = (float) Math.sqrt((double) Math.pow(Math.abs(velocityX), 2) + (double) Math.pow(Math.abs(velocityY), 2));
+			float velocity = (float) Math.sqrt((double) Math.pow(
+					Math.abs(velocityX), 2)
+					+ (double) Math.pow(Math.abs(velocityY), 2));
 
 			if (velocity > 400) {
 				Log.d(TAG_MAPVIEW_GESTURE, "Delete Point " + currentId);
@@ -870,9 +849,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class POITouchListener implements OnTouchListener {
 
@@ -881,7 +860,7 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new POITouchListener
-		 *
+		 * 
 		 * @param iv
 		 *            the new Imageview
 		 */
@@ -925,6 +904,12 @@ public class MapView extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		TextToSpeechUtility.getInstance().shutdown();
 		Log.d(TAG_MAPVIEW, "Destroy MapView");
+	}
+
+	@Override
+	public void onBackPressed() {
+		MapController.getInstance().getPullUpView().setNullSizeHeight();
 	}
 }

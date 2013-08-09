@@ -4,169 +4,186 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TabHost
-        android:id="@+id/tabhost_search"
+    <LinearLayout
+        android:id="@+id/searchlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/search"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TabHost
+            android:id="@+id/tabhost_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content" >
 
-            <TabWidget
-                android:id="@android:id/tabs"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:tabStripEnabled="false" >
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
 
-            </TabWidget>
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <LinearLayout
-                    android:id="@+id/address_search"
+                <TabWidget
+                    android:id="@android:id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/address" >
+                    android:layout_height="wrap_content"
+                    android:tabStripEnabled="false" >
+                </TabWidget>
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.40"
-                        android:orientation="vertical" >
+                        android:id="@+id/address_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/address" >
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
-
-                            <TextView
-                                android:id="@+id/postal_code"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:scaleType="center"
-                                android:text="@string/zip_code"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <EditText
-                                android:id="@+id/postal_code_search"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
-                                android:ems="10"
-                                android:inputType="number" >
-
-                                <requestFocus />
-                            </EditText>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
-
-                            <TextView
-                                android:id="@+id/city"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/city"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <EditText
-                                android:id="@+id/city_search"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
-                                android:inputType="text" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
-
-                            <TextView
-                                android:id="@+id/street"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/street"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <EditText
-                                android:id="@+id/street_search"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
-                                android:inputType="text" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.40" >
-
-                            <TextView
-                                android:id="@+id/number"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/number"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <EditText
-                                android:id="@+id/number_search"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.3"
-                                android:ems="10"
-                                android:inputType="text" />
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/go_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
                             android:layout_weight="0.40"
-                            android:text="@string/start_search" />
+                            android:orientation="vertical" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" >
+
+                                <TextView
+                                    android:id="@+id/postal_code"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:scaleType="center"
+                                    android:text="@string/zip_code"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <EditText
+                                    android:id="@+id/postal_code_search"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.3"
+                                    android:ems="10"
+                                    android:inputType="number" >
+
+                                    <requestFocus />
+                                </EditText>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" >
+
+                                <TextView
+                                    android:id="@+id/city"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/city"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <EditText
+                                    android:id="@+id/city_search"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.3"
+                                    android:inputType="text" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" >
+
+                                <TextView
+                                    android:id="@+id/street"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/street"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <EditText
+                                    android:id="@+id/street_search"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.3"
+                                    android:inputType="text" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.40" >
+
+                                <TextView
+                                    android:id="@+id/number"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/number"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <EditText
+                                    android:id="@+id/number_search"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.3"
+                                    android:ems="10"
+                                    android:inputType="text" />
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/go_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="20dp"
+                                android:text="@string/start_search" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/poi_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:text="@string/poi" >
-
-                    <EditText
-                        android:id="@+id/query"
+                    <LinearLayout
+                        android:id="@+id/poi_search"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/query"
-                        android:inputType="text" />
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:text="@string/poi" >
 
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+                        <EditText
+                            android:id="@+id/query"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/query"
+                            android:inputType="text" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/suggestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/suggestions"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
 

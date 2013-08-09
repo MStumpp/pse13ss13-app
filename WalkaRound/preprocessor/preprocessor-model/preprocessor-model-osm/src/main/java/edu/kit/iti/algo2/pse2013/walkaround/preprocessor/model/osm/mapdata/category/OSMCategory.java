@@ -8,8 +8,8 @@ public abstract class OSMCategory {
 	public OSMCategory() {
 		this(false);
 	}
-	public OSMCategory(boolean invert) {
-		this(null, invert);
+	public OSMCategory(boolean inverted) {
+		this(null, inverted);
 	}
 	public OSMCategory(OSMCategory decorated, boolean inverted) {
 		this.decorated = decorated;

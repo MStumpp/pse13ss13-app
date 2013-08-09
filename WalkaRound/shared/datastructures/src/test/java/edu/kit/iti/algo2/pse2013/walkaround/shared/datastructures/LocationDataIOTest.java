@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,8 +23,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  */
 public class LocationDataIOTest {
 
-	private static final File file = new File(System.getProperty("java.io.tmpdir") + File.separator + "locationDataIO");
-
+	private static final File TMP_LOCATIONDATA_FILE = new File(System.getProperty("java.io.tmpdir") + File.separator + "locationData.pbf");
+	private static final File REAL_LOCATIONDATA_FILE = new File("src/test/resources/locationData.pbf");
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -41,18 +43,18 @@ public class LocationDataIOTest {
 		LocationDataIO writeLocationData = getLocationDataIO();
 		int size = writeLocationData.getPOIs().size();
 		try {
-			LocationDataIO.save(writeLocationData, file);
+			LocationDataIO.save(writeLocationData, TMP_LOCATIONDATA_FILE);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertTrue(file.exists());
+		Assert.assertTrue(TMP_LOCATIONDATA_FILE.exists());
 
 		LocationDataIO readLocationData = null;
 		try {
-			readLocationData = LocationDataIO.load(file);
+			readLocationData = LocationDataIO.load(TMP_LOCATIONDATA_FILE);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -75,22 +77,22 @@ public class LocationDataIOTest {
 
 
     @Test
-    public void testSaveAndLoadWithRealDataSet() {
-        File file = new File(getClass().getResource("/locationData.io").getFile());
-        Assert.assertNotNull(file);
-        Assert.assertTrue(file.exists());
+    public void testSaveAndLoadWithRealDataSet() throws IOException {
+        Assert.assertNotNull(REAL_LOCATIONDATA_FILE);
+        Assert.assertTrue(REAL_LOCATIONDATA_FILE.exists());
 
         LocationDataIO readLocationData = null;
-        try {
-            readLocationData = LocationDataIO.load(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        readLocationData = LocationDataIO.load(REAL_LOCATIONDATA_FILE);
 
         // Check, if something was read
         Assert.assertNotNull(readLocationData);
+
+        Set<Integer> ids = new TreeSet<Integer>();
+        for (POI p : readLocationData.getPOIs()) {
+        	Assert.assertTrue(ids.add(p.getId()));
+        }
+
+        LocationDataIO.save(readLocationData, REAL_LOCATIONDATA_FILE);
     }
 
 

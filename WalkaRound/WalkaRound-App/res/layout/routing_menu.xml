@@ -5,8 +5,9 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -46,13 +47,6 @@
                 android:src="@drawable/tsp" />
 
             <ImageButton
-                android:id="@+id/load"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
-                android:src="@drawable/load" />
-
-            <ImageButton
                 android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,20 +55,26 @@
 
         </LinearLayout>
 
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/waylist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:orientation="vertical" >
+
+            </LinearLayout>
+
+        </ScrollView>
+
         <LinearLayout
-            android:id="@+id/waylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_weight="0.35"
-            android:orientation="vertical" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="46dp" >
+            android:layout_marginTop="10dp" >
 
             <Button
                 android:id="@+id/add_favorite"
@@ -91,5 +91,17 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/favoritename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="@string/favorite_name"
+        android:inputType="text"
+        android:visibility="gone" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

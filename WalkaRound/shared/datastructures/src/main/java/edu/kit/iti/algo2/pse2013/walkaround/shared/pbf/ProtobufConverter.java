@@ -111,8 +111,7 @@ public class ProtobufConverter {
 		if (saveEdge == null) {
 			return null;
 		}
-		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()));
-		e.setLength(saveEdge.getLength());
+		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()), saveEdge.getID());
 		return e;
 	}
 	public static SaveEdge.Builder getEdgeBuilder(Edge e) {
@@ -122,7 +121,7 @@ public class ProtobufConverter {
 		return SaveEdge.newBuilder()
 			.setHead(getVertexBuilder(e.getHead()))
 			.setTail(getVertexBuilder(e.getTail()))
-			.setLength(e.getLength());
+			.setID(e.getID());
 	}
 
 	public static Geometrizable getGeometrizable(SaveGeometrizable geometrizable) {
@@ -146,7 +145,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		tmp_vertices = new TreeMap<Integer, Vertex>();
-		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
+		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot(), saveGeometryData.getRoot().getDepth()), saveGeometryData.getNumDimensions());
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
 		if (geometryData == null || geometryData.getRoot() == null) {
@@ -156,7 +155,7 @@ public class ProtobufConverter {
 			.setRoot(getGeometryNodeBuilder(geometryData.getRoot()))
 			.setNumDimensions(geometryData.getNumDimensions());
 	}
-	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode) {
+	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode, int depth) {
 		if (saveNode == null) {
 			return null;
 		}
@@ -167,10 +166,10 @@ public class ProtobufConverter {
 			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
 		}
 		if (saveNode.hasLeft()) {
-			node.setLeftNode(getGeometryNode(node, saveNode.getLeft()));
+			node.setLeftNode(getGeometryNode(node, saveNode.getLeft(), depth + 1));
 		}
 		if (saveNode.hasRight()) {
-			node.setRightNode(getGeometryNode(node, saveNode.getRight()));
+			node.setRightNode(getGeometryNode(node, saveNode.getRight(), depth + 1));
 		}
 		if (saveNode.hasGeometrizable()) {
 			node.setGeometrizable(getGeometrizable(saveNode.getGeometrizable()));
@@ -182,7 +181,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()
-			.setDepth(node.getDepth())
+			//.setDepth(node.getDepth())
 			.setSplitValue(node.getSplitValue());
 		if (node.getLeftNode() != null) {
 			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));
@@ -303,12 +302,6 @@ public class ProtobufConverter {
 			return tmp_vertices.get(saveVertex.getID());
 		}
 		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getID());
-		//v.setParent(getVertex(saveVertex.getParent())); // TODO: Aufpassen, dass das nicht zur Endlosschleife wird!
-		//v.setRun(saveVertex.getRun());
-		//v.setCurrentLength(saveVertex.getCurrentLength());
-		for (int i = 0; i < saveVertex.getOutgoingEdgeCount(); i++) {
-			v.addOutgoingEdge(getEdge(saveVertex.getOutgoingEdge(i)));
-		}
 		tmp_vertices.put(v.getID(), v);
 		return v;
 	}
@@ -319,9 +312,6 @@ public class ProtobufConverter {
 		SaveVertex.Builder builder = SaveVertex.newBuilder()
 			.setCoordinate(getCoordinateBuilder(vertex))
 			.setID(vertex.getID());
-		for (Edge e : vertex.getOutgoingEdges()) {
-			builder.addOutgoingEdge(getEdgeBuilder(e));
-		}
 		return builder;
 	}
 }

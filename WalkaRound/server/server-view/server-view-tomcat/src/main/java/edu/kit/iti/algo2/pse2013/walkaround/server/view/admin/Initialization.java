@@ -72,7 +72,7 @@ public class Initialization implements ServletContextListener {
      * Loads GraphDataIO
      */
     private GraphDataIO getGraphDataIO() {
-        File file = new File(getClass().getResource("/graphData.io").getFile());
+        File file = new File(getClass().getResource("/graphData.pbf").getFile());
         GraphDataIO graphDataIO = null;
         try {
             graphDataIO = GraphDataIO.load(file);
@@ -86,8 +86,14 @@ public class Initialization implements ServletContextListener {
     /**
      * Loads LocationDataIO
      */
-    private static LocationDataIO getLocationDataIO() {
-        LocationDataIO locationDataIO = new LocationDataIO();
+    private LocationDataIO getLocationDataIO() {
+        File file = new File(getClass().getResource("/locationData.pbf").getFile());
+        LocationDataIO locationDataIO = null;
+        try {
+            locationDataIO = LocationDataIO.load(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return locationDataIO;
     }
 
@@ -96,7 +102,7 @@ public class Initialization implements ServletContextListener {
      * Loads GeometryDataIO
      */
     private GeometryDataIO getGeometryDataIO() {
-        File file = new File(getClass().getResource("/geometryData.io").getFile());
+        File file = new File(getClass().getResource("/geometryData.pbf").getFile());
         GeometryDataIO geometryDataIO = null;
         try {
             geometryDataIO = GeometryDataIO.load(file);

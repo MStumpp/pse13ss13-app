@@ -28,6 +28,27 @@ public class Route implements RouteInfo {
 		this.routeProcessor = RouteProcessing.getInstance();
 	}
 
+	
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean setActiveWaypoint(int id) {
+		Log.d(TAG_ROUTE, "setActiveWaypoint(id)");
+		
+		for (Waypoint wp : this.getWaypoints()) {
+			if (wp.getId() == id) {
+				this.setActiveWaypoint(wp);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
 	/**
 	 *
 	 */
@@ -96,7 +117,8 @@ public class Route implements RouteInfo {
 			RouteInfo routeExtension;
 			routeExtension = this.computeShortestPath(this.getEnd(), c);
 
-			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with " + routeExtension.getCoordinates().size() + " Coordinates");
+			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with "
+					+ routeExtension.getCoordinates().size() + " Coordinates");
 			this.addRoute(routeExtension);
 		} else {
 			this.routeCoordinates.add(c);
@@ -117,12 +139,17 @@ public class Route implements RouteInfo {
 		try {
 			newRoundtrip = this.routeProcessor.computeRoundtrip(
 					this.getActiveWaypoint(), profile, length);
-			this.addRoute(newRoundtrip);
+			if (newRoundtrip != null) {
+				this.addRoute(newRoundtrip);
+			}
 		} catch (RouteProcessingException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IllegalArgumentException ille) {
+			// TODO Auto-generated catch block
+			Log.d(TAG_ROUTE, "coordinate 1 and coordinate 2 must be provided");
 		}
 	}
 
@@ -158,31 +185,50 @@ public class Route implements RouteInfo {
 	 * Moves the active waypoint to the position of the given coordinate.
 	 */
 	public void moveActiveWaypoint(Coordinate coord) {
-		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate " + coord + ") METHOD START ");
-		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate) Active Waypoint is " + this.activeWaypoint.toString());
+		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate " + coord
+				+ ") METHOD START ");
+		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate) Active Waypoint is "
+				+ this.activeWaypoint.toString());
 
 		if (this.activeWaypoint != null) {
 			LinkedList<Waypoint> waypoints = this.getWaypoints();
-			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
-			Log.d(TAG_ROUTE, "moveActiveWaypoint(coord) Active Waypoint is Nr. " + (indexOfActiveWaypoint + 1) + " of " + waypoints.size() + " Waypoints in route.");
+			int indexOfActiveWaypoint = waypoints.indexOf(this
+					.getActiveWaypoint());
+			Log.d(TAG_ROUTE,
+					"moveActiveWaypoint(coord) Active Waypoint is Nr. "
+							+ (indexOfActiveWaypoint + 1) + " of "
+							+ waypoints.size() + " Waypoints in route.");
 
-			Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
+			Waypoint beforeActive = this
+					.getPreviousWaypoint(indexOfActiveWaypoint);
 			Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
 
 			if (beforeActive != null) {
-				Log.d(TAG_ROUTE, "moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. " + (waypoints.indexOf(beforeActive) + 1) + " / " + waypoints.size() + " in route");
+				Log.d(TAG_ROUTE,
+						"moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. "
+								+ (waypoints.indexOf(beforeActive) + 1) + " / "
+								+ waypoints.size() + " in route");
 				RouteInfo newRouteBeforeActiveWaypoint;
-				newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
-				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
-				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, this.activeWaypoint);
+				newRouteBeforeActiveWaypoint = this.computeShortestPath(
+						beforeActive, coord);
+				this.deletePathBetweenTwoWaypoints(beforeActive,
+						this.activeWaypoint);
+				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint,
+						beforeActive, this.activeWaypoint);
 			}
 
 			if (afterActive != null) {
-				Log.d(TAG_ROUTE, "moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. " + (waypoints.indexOf(afterActive) + 1) + " / " + waypoints.size() + " in route");
+				Log.d(TAG_ROUTE,
+						"moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. "
+								+ (waypoints.indexOf(afterActive) + 1) + " / "
+								+ waypoints.size() + " in route");
 				RouteInfo newRoutePastActiveWaypoint;
-				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
-				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
-				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, this.activeWaypoint, afterActive);
+				newRoutePastActiveWaypoint = this.computeShortestPath(coord,
+						afterActive);
+				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,
+						afterActive);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint,
+						this.activeWaypoint, afterActive);
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());
@@ -195,32 +241,41 @@ public class Route implements RouteInfo {
 
 	public void deleteActiveWaypoint() {
 		Log.d(TAG_ROUTE, "deleteActiveWaypoint() METHOD START");
-		int indexOfActiveWaypoint = this.getWaypoints().indexOf(this.getActiveWaypoint());
+		int indexOfActiveWaypoint = this.getWaypoints().indexOf(
+				this.getActiveWaypoint());
 		Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
 		Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
-		Log.d(TAG_ROUTE, "deleteActiveWaypoint(coord) Active Waypoint is Nr. " + (indexOfActiveWaypoint + 1) + " of " + this.getWaypoints().size() + " Waypoints in route.");
-		Log.d(TAG_ROUTE, "deleteActiveWaypoint() beforeActive is " + beforeActive + ", afterActive is " + afterActive);
-		
+		Log.d(TAG_ROUTE, "deleteActiveWaypoint(coord) Active Waypoint is Nr. "
+				+ (indexOfActiveWaypoint + 1) + " of "
+				+ this.getWaypoints().size() + " Waypoints in route.");
+		Log.d(TAG_ROUTE, "deleteActiveWaypoint() beforeActive is "
+				+ beforeActive + ", afterActive is " + afterActive);
+
 		if (beforeActive == null && afterActive == null) {
-		Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive == null && afterActive == null");
+			Log.d(TAG_ROUTE,
+					"deleteActiveWaypoint() case beforeActive == null && afterActive == null");
 			this.resetRoute();
 		} else if (beforeActive == null && afterActive != null) {
-			Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive == null && afterActive != null");
+			Log.d(TAG_ROUTE,
+					"deleteActiveWaypoint() case beforeActive == null && afterActive != null");
 			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
 			this.routeCoordinates.remove(this.activeWaypoint);
 		} else if (beforeActive != null && afterActive == null) {
-			Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive != null && afterActive == null");
-			this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+			Log.d(TAG_ROUTE,
+					"deleteActiveWaypoint() case beforeActive != null && afterActive == null");
+			this.deletePathBetweenTwoWaypoints(beforeActive,
+					this.activeWaypoint);
 			this.routeCoordinates.remove(this.activeWaypoint);
 		} else if (beforeActive != null && afterActive != null) {
-			Log.d(TAG_ROUTE, "deleteActiveWaypoint() case beforeActive != null && afterActive != null");
+			Log.d(TAG_ROUTE,
+					"deleteActiveWaypoint() case beforeActive != null && afterActive != null");
 			this.deletePathBetweenTwoWaypoints(beforeActive,
 					this.activeWaypoint);
 			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
 			this.routeCoordinates.remove(this.activeWaypoint);
 
 			RouteInfo route;
-			
+
 			route = this.computeShortestPath(beforeActive, afterActive);
 			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);
 		}
@@ -264,7 +319,6 @@ public class Route implements RouteInfo {
 					.computeOptimizedRoute((RouteInfo) this);
 			this.routeCoordinates = optimizedRoute.getCoordinates();
 		} catch (RouteProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -333,7 +387,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param waypointNr
 	 * @return
 	 */
@@ -348,7 +402,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param waypointNr
 	 * @return
 	 */
@@ -363,14 +417,17 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param one
 	 * @param two
 	 * @return
 	 */
 	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
-		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint " + one + ", Waypoint " + two + ") METHOD START");
-		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: " + this.routeCoordinates.size());
+		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint " + one
+				+ ", Waypoint " + two + ") METHOD START");
+		Log.d(TAG_ROUTE,
+				"deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: "
+						+ this.routeCoordinates.size());
 		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
 
 		Coordinate tempCoord = null;
@@ -383,12 +440,14 @@ public class Route implements RouteInfo {
 			routeCoordsIter.remove();
 			tempCoord = routeCoordsIter.next();
 		}
-		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: " + this.routeCoordinates.size());
+		Log.d(TAG_ROUTE,
+				"deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: "
+						+ this.routeCoordinates.size());
 		return true;
 	}
 
 	/**
-	 *
+	 * 
 	 * @param route
 	 * @param one
 	 * @param two
@@ -396,8 +455,13 @@ public class Route implements RouteInfo {
 	 */
 	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one,
 			Coordinate two) {
-		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coordinate : " + one + ", Coordinate: " + two + ")");
-		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size " + this.routeCoordinates.size() + ", adding route size: " + route.getCoordinates().size());
+		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coordinate : "
+				+ one + ", Coordinate: " + two + ")");
+		Log.d(TAG_ROUTE,
+				"addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size "
+						+ this.routeCoordinates.size()
+						+ ", adding route size: "
+						+ route.getCoordinates().size());
 		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates
 				.indexOf(two));
 		assert (route.getStart().equals(one) && route.getEnd().equals(two));
@@ -407,7 +471,7 @@ public class Route implements RouteInfo {
 		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
 			tempCoord = routeCoordsIter.next();
 		}
-		
+
 		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
 		bridgingCoords.removeFirst();
 		bridgingCoords.removeLast();
@@ -420,7 +484,9 @@ public class Route implements RouteInfo {
 			this.routeCoordinates.add(indexOfInsertion, coord);
 			indexOfInsertion++;
 		}
-		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: " + this.routeCoordinates.size());
+		Log.d(TAG_ROUTE,
+				"addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: "
+						+ this.routeCoordinates.size());
 
 		return true;
 	}
@@ -469,15 +535,14 @@ public class Route implements RouteInfo {
 		return new Route(clonedCoords);
 	}
 
-	
-	
 	private RouteInfo computeShortestPath(Coordinate start, Coordinate end) {
 		RouteInfo output = null;
-		
+
 		try {
 			output = this.routeProcessor.computeShortestPath(start, end);
 		} catch (Exception e) {
-			Log.d(TAG_ROUTE, "computeShortestPath() - RETURN TO SENDER, ADDRESS UNKNOWN.");
+			Log.d(TAG_ROUTE,
+					"computeShortestPath() - RETURN TO SENDER, ADDRESS UNKNOWN.");
 			if (output == null) {
 				LinkedList<Coordinate> coordinatesOfOutputRoute = new LinkedList<Coordinate>();
 				coordinatesOfOutputRoute.add(start);
@@ -488,12 +553,5 @@ public class Route implements RouteInfo {
 		}
 		return output;
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }

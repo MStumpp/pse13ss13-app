@@ -28,16 +28,16 @@ public class HeadUpView extends Fragment {
 	private final static String TAG_HEADUP_VIEW = HeadUpView.class.getSimpleName();
 	private final static String TAG_HEADUP_VIEW_TOUCH = TAG_HEADUP_VIEW + "_touch";
 
-	private final static int user_lock = R.drawable.user_arrow_80x100_lock;
-	private final static int user_unlock = R.drawable.user_arrow_80x100_unlock;
+	private final static int user_lock = R.drawable.user_arrow_lock;
+	private final static int user_unlock = R.drawable.user_arrow_unlock;
 
-	private final static int play = R.drawable.play_100x100;
-	private final static int pause = R.drawable.pause_100x100;
+	private final static int play = R.drawable.play;
+	private final static int pause = R.drawable.pause;
 
 	private final static boolean defaultLockPosition = true;
 
 	// Mögliche Piktogramme
-	public final static int ARROW_RIGHT = R.drawable.pikto_rechts_100x100;
+	public final static int ARROW_RIGHT = R.drawable.pikto_rechts;
 
 	HeadUpController headUpController;
 
@@ -71,7 +71,8 @@ public class HeadUpView extends Fragment {
 
 		// -----------------------------------------------
 		Log.d(TAG_HEADUP_VIEW, "Es wird mit dem headUpController verbunden");
-		headUpController = HeadUpController.initializes(this);
+		HeadUpController.getInstance().setHeadUpView(this);
+		headUpController = HeadUpController.getInstance();
 		Log.d(TAG_HEADUP_VIEW, "Controller wurde initialisiert: " + (headUpController != null));
 
 		Display display = this.getActivity().getWindowManager()
@@ -290,10 +291,10 @@ public class HeadUpView extends Fragment {
 	 */
 	public void setUserPositionLock(boolean status) {
 		if(status){
-			userLock.setImageDrawable(unlock);
+			userLock.setImageDrawable(lock);
 			Log.d(TAG_HEADUP_VIEW_TOUCH, "UNLOCK");
 		} else {
-			userLock.setImageDrawable(lock);
+			userLock.setImageDrawable(unlock);
 			Log.d(TAG_HEADUP_VIEW_TOUCH, "LOCK");
 		}
 	}

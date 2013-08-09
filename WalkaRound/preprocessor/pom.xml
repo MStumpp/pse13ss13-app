@@ -17,15 +17,37 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</modules>
 
     <dependencies>
-        <dependency>
-            <groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
-            <artifactId>shared-datastructures</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+       <dependency>
+			<groupId>edu.kit.iti.algo2.pse2013.walkaround</groupId>
+			<artifactId>shared-datastructures</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>protobuf-java</artifactId>
+					<groupId>com.google.protobuf</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>android</artifactId>
+					<groupId>com.google.android</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>gson</artifactId>
+					<groupId>com.google.code.gson</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
     </dependencies>
 
 	<build>
 		<plugins>
+		<plugin>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.0</version>
+			<configuration>
+				<source>1.7</source>
+				<target>1.7</target>
+			</configuration>
+		</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
