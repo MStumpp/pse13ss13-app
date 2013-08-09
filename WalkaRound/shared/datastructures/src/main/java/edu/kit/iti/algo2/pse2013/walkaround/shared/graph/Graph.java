@@ -29,8 +29,7 @@ public final class Graph {
      */
     private Graph(Set<Edge> edges) {
         vertices = new Vertex[edges.size()*2];
-        Vertex currentForTail;
-        Vertex currentForHead;
+        Vertex currentForTail, currentForHead;
         for (Edge edge : edges) {
             currentForTail = edge.getTail();
             if (vertices.length <= currentForTail.getID())
