@@ -298,7 +298,7 @@ public class ProtobufConverter {
 			builder.setTextInfo(p.getTextInfo());
 		}
 		if (p.getURL() != null) {
-			builder.setImageURL(p.getURL().getFile());
+			builder.setImageURL(p.getURL().toString());
 		}
 		return builder;
 	}
