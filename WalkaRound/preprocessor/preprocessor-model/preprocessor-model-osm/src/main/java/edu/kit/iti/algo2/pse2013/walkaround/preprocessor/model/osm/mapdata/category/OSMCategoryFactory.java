@@ -7,19 +7,28 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 
 public class OSMCategoryFactory {
 	public static final OSMCategory createFootwayCategory() {
-		OSMTagCategory all = new OSMTagCategory(false);
 		OSMTagCategory footway = new OSMTagCategory();
 		footway.addTag("highway", "track");
 		footway.addTag("highway", "path");
-		footway.addTag("sidewalk", "left");
-		footway.addTag("sidewalk", "right");
+		footway.addTag("highway", "steps");
 		footway.addTag("highway", "footway");
+		footway.addTag("highway", "pedestrian");
+		footway.addTag("highway", "living_street");
+		footway.addTag("highway", "unclassified");
+		footway.addTag("highway", "service");
 		footway.addTag("highway", "residential");
-		footway.addTag("sidewalk", "both");
+		footway.addTag("highway", "tertiary");
+		footway.addTag("highway", "tertiary_link");
+		footway.addTag("highway", "secondary");
+		footway.addTag("highway", "secondary_link");
+		footway.addTag("highway", "primary");
+		footway.addTag("highway", "primary_link");
+		footway.addTag("highway", "motorway");
+		footway.addTag("highway", "motorway_link");
 		footway.addTag("sidewalk", "left");
 		footway.addTag("sidewalk", "right");
+		footway.addTag("sidewalk", "both");
 		footway.addTag("foot", "yes");
-		//TODO: Zurückstellen auf return footway;
 		return footway;
 	}
 	public static final OSMCategory createPOICategory(int catID) {
