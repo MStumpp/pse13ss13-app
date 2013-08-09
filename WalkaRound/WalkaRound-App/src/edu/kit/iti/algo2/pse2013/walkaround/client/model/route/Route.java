@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -156,14 +157,11 @@ public class Route implements RouteInfo {
 	 */
 	public void addRoute(RouteInfo newRoute) {
 		Log.d(TAG_ROUTE, "addRoute(RouteInfo) METHOD START");
-		Log.d(TAG_ROUTE,
-				"addRoute(RouteInfo) adding route with the following coordinates: "
-						+ newRoute);
+		Log.d(TAG_ROUTE, "addRoute(RouteInfo) adding route with the following coordinates: " + newRoute);
 
-		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates()
-				.iterator();
+		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates().iterator();
 
-		if (!this.getEnd().equals(newRoute.getStart())) {
+		if (this.getEnd() != null && !this.getEnd().equals(newRoute.getStart())) {
 			Log.d(TAG_ROUTE,
 					"intermediate path has to be computed. Current Route end: "
 							+ this.getEnd() + ", new Route start"
@@ -182,25 +180,27 @@ public class Route implements RouteInfo {
 	/**
 	 * Moves the active waypoint to the position of the given coordinate.
 	 */
-	public void moveActiveWaypoint(Coordinate coord) {
+	public void moveActiveWaypoint(final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate " + coord
 				+ ") METHOD START ");
-		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate) Active Waypoint is "
-				+ this.activeWaypoint.toString());
 		
+		//TODO: 
 		if (this.activeWaypoint != null) {
+			Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate) Active Waypoint is "
+					+ this.activeWaypoint.toString());
 			LinkedList<Waypoint> waypoints = this.getWaypoints();
-			int indexOfActiveWaypoint = waypoints.indexOf(this
-					.getActiveWaypoint());
+			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
 			Log.d(TAG_ROUTE,
 					"moveActiveWaypoint(coord) Active Waypoint is Nr. "
 							+ (indexOfActiveWaypoint + 1) + " of "
 							+ waypoints.size() + " Waypoints in route.");
-
-			Waypoint beforeActive = this
-					.getPreviousWaypoint(indexOfActiveWaypoint);
-			Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
-
+			
+			final Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
+			final Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
+			
+			final Waypoint activeWP = this.activeWaypoint;
+			final Route tempCurrentRoute = this;
+			
 			if (beforeActive != null) {
 				Log.d(TAG_ROUTE,
 						"moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. "
@@ -208,9 +208,19 @@ public class Route implements RouteInfo {
 								+ waypoints.size() + " in route");
 				
 				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
-				RouteInfo newRouteBeforeActiveWaypoint;
-				newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
-				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, this.activeWaypoint);
+				
+				Thread pathCalculator = new Thread (new Runnable() {
+					@Override
+					public void run() {
+						Log.d(TAG_ROUTE, "Thread.run() in moveActiveWaypoint(Coordinate)");
+						RouteInfo newRouteBeforeActiveWaypoint;
+
+						newRouteBeforeActiveWaypoint = tempCurrentRoute.computeShortestPath(beforeActive, coord);
+						tempCurrentRoute.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, activeWP);
+						
+					}
+				});
+				pathCalculator.start();
 			}
 
 			if (afterActive != null) {
@@ -220,9 +230,19 @@ public class Route implements RouteInfo {
 								+ waypoints.size() + " in route");
 				
 				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
-				RouteInfo newRoutePastActiveWaypoint;
-				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
-				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, this.activeWaypoint, afterActive);
+
+				Thread pathCalculator = new Thread (new Runnable() {
+					@Override
+					public void run() {
+						Log.d(TAG_ROUTE, "Thread.run() in moveActiveWaypoint(Coordinate)");
+						RouteInfo newRoutePastActiveWaypoint;
+
+						newRoutePastActiveWaypoint = tempCurrentRoute.computeShortestPath(coord, afterActive);
+						tempCurrentRoute.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
+						
+					}
+				});
+				pathCalculator.start();
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());

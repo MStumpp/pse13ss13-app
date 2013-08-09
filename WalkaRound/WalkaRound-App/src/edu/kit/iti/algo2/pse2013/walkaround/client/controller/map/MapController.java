@@ -439,7 +439,7 @@ public class MapController implements RouteListener, PositionListener,
 		Coordinate c = this.getWaypointById(id);
 		c.setLatitude(c.getLatitude() - yDelta);
 		c.setLongitude(c.getLongitude() + xDelta);
-
+		
 		this.routeController.moveActiveWaypoint(c);
 	}
 

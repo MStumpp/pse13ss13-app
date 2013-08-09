@@ -41,6 +41,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	// Current information, used as input for navi-calculations:
 	private Location lastKnownUserLocation;
 	private Coordinate nextCrossing;
+	private Coordinate nextNextCrossing;
 	private RouteInfo lastKnownRoute;
 	
 	// Navigation information for NaviOutput-Classes
@@ -159,7 +160,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	@Override
 	public void onCompassChange(float direction) {
 		Log.d(TAG_NAVI, "onCompassChange(float)");
-		// TODO: Vor allem / evtl. für Stereo Navi relevant
+		// TODO: für Stereo Navi relevant
 		// this.lastKnownUserLocation.setBearing(direction);
 		
 	}
@@ -188,8 +189,19 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	private void computeNextTurnCoordinate() {
 		Coordinate tempNearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
+		
+		// In case of the closest coordinate on route being a crossing:
+		if (tempNearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1) {
+			
+		}
+		
+		// Crossing Info wird überall hinzugefügt, also sind nur die mit mehr als einer TurnAngle relevant!
 		// TODO: iteriere Coords der Route von hier aus durch, bis nächster Turn gefunden.
 		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord
+		
+		
+		
+		// Compute NextNextTurnCoord now that you know the next turn
 	}
 	
 	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
@@ -209,16 +221,25 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	
 	private void computeNewTurnAngle() {
 		Log.e(TAG_NAVI, "computeNewTurnAngle()");
-		double result = this.turnAngle;
-		//TODO: mit den Trigs den Angle anhand von aktueller Pos und this.nextCrossing bestimmen.
-		// INPUT: 3 Coords, aktuelle Pos, nächste TurnCoord, darauf folgende TurnCoord.
-		// 1. Vektoren Pos -> TurnCoord und TurnCoord -> 2. TurnCoord berechnen.
-		// 2. Winkel der beiden Vektoren zur x-Achse bestimmen.
-		// 3. Winkel des zweiten Vektoren vom ersten abziehen
-		
-		// CoordinateUtility.calculateDifferenceInMeters(c1, c2)
-		
-		
+		double result = 0.00;
+		// a turn angle can only exists if there's a direction to turn to:
+		if (this.nextNextCrossing != null) {
+			double[] vectorPosToNextCrossing = new double[2];
+			double[] vectorNextCrossingToNextNextCrossing = new double[2];
+			
+			// Calculating x and y components of Vectors.
+			// TODO: Check if this method works:
+			// otherwise use CoordinateUtility.calculateDifferenceInMeters(c1, c2)
+			vectorPosToNextCrossing[0] = this.nextCrossing.getLongitude() - this.lastKnownUserLocation.getLongitude();
+			vectorPosToNextCrossing[1] = this.nextCrossing.getLatitude() - this.lastKnownUserLocation.getLatitude();
+			vectorNextCrossingToNextNextCrossing[0] = this.nextNextCrossing.getLongitude() - this.nextCrossing.getLongitude();
+			vectorNextCrossingToNextNextCrossing[1] = this.nextNextCrossing.getLatitude() - this.nextCrossing.getLatitude();
+			
+			double angleOfvectorPosToNextCrossingToXAxis = Math.cos(vectorPosToNextCrossing[1] / vectorPosToNextCrossing[0]);
+			double angleOfvectorNextCrossingToNextNextCrossingToXAxis = Math.cos(vectorNextCrossingToNextNextCrossing[1] / vectorNextCrossingToNextNextCrossing[0]);
+			
+			this.turnAngle = angleOfvectorPosToNextCrossingToXAxis - angleOfvectorNextCrossingToNextNextCrossingToXAxis;
+		}
 		
 		this.turnAngle = result;
 	}
@@ -282,14 +303,5 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	}
 	
 	*/
-	
-	
-	
-	
-	
-	// TODO: (OLD!?) nächsten turnAngle berechnen.
-	// Dazu nächstliegenden Coord zur GPS Pos aus Route bestimmen(, dieser muss aber vor dem User auf der Route liegen), danach von dort die Route abgehen bis Coord mit CrossingInfo != null vorhanden.
-	// 
-	
 	
 }

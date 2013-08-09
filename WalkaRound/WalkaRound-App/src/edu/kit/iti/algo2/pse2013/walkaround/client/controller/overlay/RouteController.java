@@ -83,9 +83,16 @@ public class RouteController {
 	 * @param id
 	 *            of the Waypoint
 	 */
-	public boolean setActiveWaypoint(final int id) {
+	public boolean setActiveWaypoint(int id) {
 		Log.d(TAG_ROUTE_CONTROLLER, "Routecontroller.setActiveWaypoint(id)");
 		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			this.currentRoute.setActiveWaypoint(id);
+			this.notifyAllRouteListeners();
+			return true;
+		}
+		
+		/* OLD VERSION
 		if (this.currentRoute.getActiveWaypoint().getId() != id) {
 			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 				final Route newCurrentRoute = this.currentRoute;
@@ -100,8 +107,8 @@ public class RouteController {
 				RouteController.routeChanger.start();
 				return true;
 			}
-		}
-	
+		}*/
+		
 		return false;
 	}
 	
@@ -226,9 +233,8 @@ public class RouteController {
 		return false;
 	}
 
-	public boolean moveActiveWaypoint(final Coordinate c) {
-		Log.d(TAG_ROUTE_CONTROLLER,
-				"RouteController.moveActiveWaypoint(Coordinate)");
+	public boolean moveActiveWaypoint(Coordinate c) {
+		Log.d(TAG_ROUTE_CONTROLLER,	"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
 		
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			this.currentRoute.moveActiveWaypoint(c);
@@ -236,23 +242,7 @@ public class RouteController {
 			return true;
 		}
 		
-		
-		//TODO: Methode muss in hoher Frequenz und parallel aufgerufen werden können.
-		
-		/* OLD VERSION
-		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
-			final Route newCurrentRoute = this.currentRoute;
-			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
-				public void run() {
-					Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in moveActiveWaypoint(Coordinate)");
-					newCurrentRoute.moveActiveWaypoint(c);
-					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
-				}
-			});
-			RouteController.routeChanger.start();
-			return true;
-		} */
+		Log.d(TAG_ROUTE_CONTROLLER,	"RouteController.moveActiveWaypoint(Coordinate) returning false");
 		return false;
 	}
 
@@ -273,7 +263,6 @@ public class RouteController {
 			return true;
 		}
 		return false;
-		
 	}
 
 	public boolean revertRoute() {
