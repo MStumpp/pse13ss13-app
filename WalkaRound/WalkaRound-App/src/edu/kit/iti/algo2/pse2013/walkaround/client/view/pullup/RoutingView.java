@@ -277,7 +277,7 @@ public class RoutingView extends Fragment {
 					layout.addView(waypoint);
 				}
 			} else {
-				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
+				Log.d(TAG_PULLUP_CONTENT, "route ist null");
 			}
 		}
 	}
