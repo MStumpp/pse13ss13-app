@@ -199,8 +199,31 @@ public class Server {
     }
 
 
+    /**
+     * Endpoint method for computation an optimized route based on a given route.
+     * The actual computation is done by an instance of RoundtripProcessor.
+     *
+     * @param coordinates List of coordinates.
+     * @return RouteInfoTransfer.
+     */
+    @POST
+    @Path("computeOptimizedRoute")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    public RouteInfoTransfer computeOptimizedRoute(List<Coordinate> coordinates) {
 
+        RouteInfoTransfer transfer = new RouteInfoTransfer();
 
+        // check input
+        if (coordinates == null || coordinates.size() < 2) {
+            transfer.setError("coordinates must not be null and size equal to or greater than 2");
+            return transfer;
+        }
+
+//      return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
+        transfer.setError("computeOptimizedRoute not yet implemented");
+        return transfer;
+    }
 
 
     /**
