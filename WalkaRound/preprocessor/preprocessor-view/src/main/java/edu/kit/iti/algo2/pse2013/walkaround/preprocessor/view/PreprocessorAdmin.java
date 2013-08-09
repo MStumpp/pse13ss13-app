@@ -23,14 +23,16 @@ public class PreprocessorAdmin {
 	@Option(name = "--input", required = true, usage="Location of the raw OSM-file")
 	public String input;
 
+	private String dropboxPath = System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar;
+
 	@Option(name = "--location_out", usage="Location of the LocationData-output")
-	public String locationOutput = System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.pbf";
+	public String locationOutput = dropboxPath + "locationData.pbf";
 
 	@Option(name = "--graph_out", usage="Location of the GraphData-output")
-	public String graphOutput = System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf";
+	public String graphOutput = dropboxPath + "graphData.pbf";
 
 	@Option(name = "--geometry_out", usage="Location of the GeometryData-output")
-	public String geometryOutput = System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf";
+	public String geometryOutput = dropboxPath + "geometryData.pbf";
 
 	public static void main(String[] args) {
 		System.exit(new PreprocessorAdmin().run(args));
