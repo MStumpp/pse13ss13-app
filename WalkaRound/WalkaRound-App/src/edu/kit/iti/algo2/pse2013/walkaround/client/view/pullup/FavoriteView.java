@@ -18,13 +18,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class FavoriteView extends Fragment {
 
 	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
 	private int switcher = R.id.pullupFavoriteSwitcher;
+
+	private String TAG = FavoriteView.class.getSimpleName();
 
 	private TabHost tabHost;
 
@@ -145,8 +146,8 @@ public class FavoriteView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				FavoriteMenuController.getInstance()
-						.appendFavoriteRouteToRoute(name);
+				Log.d(TAG, String.format("Add route '%s' to current route", name));
+				FavoriteMenuController.getInstance().appendFavoriteRouteToRoute(name);
 				MapController.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;
@@ -166,8 +167,8 @@ public class FavoriteView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				FavoriteMenuController.getInstance()
-						.appendFavoriteLocationToRoute(name);
+				Log.d(TAG, String.format("Add location '%s' to current route", name));
+				FavoriteMenuController.getInstance().appendFavoriteLocationToRoute(name);
 				MapController.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;

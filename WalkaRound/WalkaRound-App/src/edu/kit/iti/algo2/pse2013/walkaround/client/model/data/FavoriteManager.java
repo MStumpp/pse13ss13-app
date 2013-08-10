@@ -2,11 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,19 +31,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
  * @author Thomas Kadow
  * @version 1.0
  */
-public class FavoritesManager implements Serializable {
+public class FavoriteManager {
 
-	private static final String TAG_FAVORITE_MANAGER = FavoritesManager.class.getSimpleName();
-
-	/**
-	 * Serialization ID.
-	 */
-	private static final long serialVersionUID = 3773292311411426803L;
+	private static final String TAG = FavoriteManager.class.getSimpleName();
 
 	/**
 	 * Instance of the FavoritesManager.
 	 */
-	private static FavoritesManager instance;
+	private static FavoriteManager instance;
 
 	/**
 	 * List of all saved routes.
@@ -65,7 +57,7 @@ public class FavoritesManager implements Serializable {
 	/**
 	 * Constructs a new manager for the favorites.
 	 */
-	private FavoritesManager() {
+	private FavoriteManager() {
 		savedRoutes = new TreeMap<String, RouteInfo>();
 		savedLocations = new TreeMap<String, Location>();
 	}
@@ -79,37 +71,29 @@ public class FavoritesManager implements Serializable {
 	 *
 	 * @return an instance of the FavoritesManager
 	 */
-	public static FavoritesManager getInstance() {
+	public static FavoriteManager getInstance() {
 		if (instance == null) {
-			/*try {
-				FileInputStream fis = applicationContext
-						.openFileInput(FILENAME);
-				ObjectInputStream oos = new ObjectInputStream(fis);
-				instance = (FavoritesManager) oos.readObject();
-				return instance;
-			} catch (FileNotFoundException e) {
-				Log.d(TAG_FAVORITE_MANAGER, e.toString());
-			} catch (IOException ioe) {
-				Log.d(TAG_FAVORITE_MANAGER, ioe.toString());
-			} catch (ClassNotFoundException cnfe) {
-				Log.d(TAG_FAVORITE_MANAGER, cnfe.toString());
-			}*/
 			try {
-				SaveFavorite saFav = Protos.SaveFavorite.parseFrom(new BufferedInputStream(new FileInputStream(FILENAME)));
-				instance = new FavoritesManager();
+				BufferedInputStream bis = new BufferedInputStream(applicationContext.openFileInput(FILENAME));
+				SaveFavorite saFav = Protos.SaveFavorite.parseFrom(bis);
+				bis.close();
+				instance = new FavoriteManager();
 				for (SaveRoute sr : saFav.getRouteList()) {
 					LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
 					for (SaveCoordinate saCo : sr.getCoordinateList()) {
 						coordinates.add(ProtobufConverter.getCoordinate(saCo));
 					}
 					RouteInfo r = new Route(coordinates);
+					Log.d(TAG, "Loaded route");
 					instance.savedRoutes.put(sr.getName(), r);
 				}
 				for (SaveLocation saLoc : saFav.getLocationList()) {
+					Log.d(TAG, "Loaded location");
 					instance.addLocationToFavorites(ProtobufConverter.getLocation(saLoc), saLoc.getName());
 				}
+				Log.d(TAG, "The favorites were loaded successfully");
 			} catch (FileNotFoundException e) {
-				instance = new FavoritesManager();
+				instance = new FavoriteManager();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -172,7 +156,7 @@ public class FavoritesManager implements Serializable {
 	 */
 	public RouteInfo getFavoriteRoute(String name) {
 		if(savedRoutes.get(name).clone() == null) {
-			Log.d(TAG_FAVORITE_MANAGER, "Klon ist null");
+			Log.d(TAG, "Klon ist null");
 		}
 		return savedRoutes.get(name).clone();
 	}
@@ -198,20 +182,9 @@ public class FavoritesManager implements Serializable {
 	 * @throws FileNotFoundException
 	 */
 	public boolean deleteRoute(String name) {
-		try {
-			savedRoutes.remove(name);
-			try {
-				this.save();
-			} catch (FileNotFoundException fnfe) {
-				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
-			} catch (IOException e) {
-				Log.d(TAG_FAVORITE_MANAGER, e.toString());
-			}
-			return true;
-		} catch (IndexOutOfBoundsException e) {
-			Log.d(TAG_FAVORITE_MANAGER, e.toString());
-			return false;
-		}
+		RouteInfo result = savedRoutes.remove(name);
+		this.save();
+		return result != null;
 	}
 
 	/**
@@ -224,20 +197,9 @@ public class FavoritesManager implements Serializable {
 	 * @throws FileNotFoundException
 	 */
 	public boolean deleteLocation(String name) {
-		try {
-			savedLocations.remove(name);
-			try {
-				this.save();
-			} catch (FileNotFoundException fnfe) {
-				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
-			} catch (IOException e) {
-				Log.d(TAG_FAVORITE_MANAGER, e.toString());
-			}
-			return true;
-		} catch (IndexOutOfBoundsException e) {
-			Log.d(TAG_FAVORITE_MANAGER, e.toString());
-			return false;
-		}
+		Location result = savedLocations.remove(name);
+		this.save();
+		return result != null;
 	}
 
 	/**
@@ -253,13 +215,7 @@ public class FavoritesManager implements Serializable {
 	public boolean addRouteToFavorites(RouteInfo routeToSave, String name) {
 		if (!savedRoutes.containsKey(name)) {
 			savedRoutes.put(name, routeToSave);
-			try {
-				this.save();
-			} catch (FileNotFoundException fnfe) {
-				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			this.save();
 			return true;
 		}
 		return false;
@@ -278,13 +234,7 @@ public class FavoritesManager implements Serializable {
 	public boolean addLocationToFavorites(Location locationToSave, String name) {
 		if (!savedLocations.containsKey(name)) {
 			savedLocations.put(name, locationToSave);
-			try {
-				this.save();
-			} catch (FileNotFoundException fnfe) {
-				Log.d(TAG_FAVORITE_MANAGER, fnfe.toString());
-			} catch (IOException e) {
-				Log.d(TAG_FAVORITE_MANAGER, e.toString());
-			}
+			this.save();
 			return true;
 		}
 		return false;
@@ -293,8 +243,7 @@ public class FavoritesManager implements Serializable {
 	/**
 	 * Returns whether the given RouteInfo is a favorite.
 	 *
-	 * @param routeInfo
-	 *            RouteInfo to check
+	 * @param routeInfo RouteInfo to check
 	 * @return true if it is a favorite, false otherwise
 	 */
 	public boolean containsRoute(RouteInfo routeInfo) {
@@ -304,8 +253,7 @@ public class FavoritesManager implements Serializable {
 	/**
 	 * Returns whether the given Location is a favorite.
 	 *
-	 * @param location
-	 *            Location to check
+	 * @param location Location to check
 	 * @return true if it is a favorite, false otherwise
 	 */
 	public boolean containsLocation(Location location) {
@@ -315,13 +263,11 @@ public class FavoritesManager implements Serializable {
 	/**
 	 * Returns whether the given name already exists.
 	 *
-	 * @param name
-	 *            name to check
+	 * @param name name to check
 	 * @return true if it exists, false otherwise
 	 */
 	public boolean containsName(String name) {
-		if (savedRoutes.keySet().contains(name)
-				|| savedLocations.keySet().contains(name)) {
+		if (savedRoutes.keySet().contains(name) || savedLocations.keySet().contains(name)) {
 			return true;
 		}
 		return false;
@@ -336,7 +282,7 @@ public class FavoritesManager implements Serializable {
 	 *            Location of output file on file system.
 	 * @throws java.io.IOException
 	 */
-	private void save() throws FileNotFoundException, IOException {
+	private void save() {
 		SaveFavorite.Builder favBuilder = Protos.SaveFavorite.newBuilder();
 		Iterator<String> keys = savedRoutes.keySet().iterator();
 		while (keys.hasNext()) {
@@ -359,13 +305,17 @@ public class FavoritesManager implements Serializable {
 		for (Location l : savedLocations.values()) {
 			favBuilder.addLocation(ProtobufConverter.getLocationBuilder(l));
 		}
-		favBuilder.build().writeTo(new BufferedOutputStream(new FileOutputStream(FILENAME)));
-		/*
-		FileOutputStream fos = applicationContext.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(this);
-		oos.flush();
-		oos.close();
-		*/
+		BufferedOutputStream bos;
+		try {
+			bos = new BufferedOutputStream(applicationContext.openFileOutput(FILENAME, Context.MODE_PRIVATE));
+			favBuilder.build().writeTo(bos);
+			bos.flush();
+			bos.close();
+			Log.d(TAG, "The favorites were loaded successfully");
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "The file " + FILENAME + " was not found!", e);
+		} catch (IOException e) {
+			Log.e(TAG, "The file " + FILENAME + " could not be read successfully!", e);
+		}
 	}
 }

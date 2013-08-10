@@ -188,8 +188,7 @@ public class PullUpView extends Fragment implements RouteListener {
 		optionView = new OptionView();
 
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		pullUpContent = new InfoView();
-		ft.add(R.id.pullupContent, pullUpContent).commit();
+		//ft.add(R.id.pullupContent, pullUpContent).commit();
 		main.setOnTouchListener(new MainListener());
 		
 		RouteController.getInstance().registerRouteListener(this);
@@ -272,7 +271,8 @@ public class PullUpView extends Fragment implements RouteListener {
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
 
-			if (!this.pullUpContent.equals(CONTENT_ROUTING)) {
+			if (!(this.pullUpContent == routingView)) {
+				pullUpContent = routingView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "routing starts");
@@ -287,7 +287,8 @@ public class PullUpView extends Fragment implements RouteListener {
 			break;
 		case PullUpView.CONTENT_FAVORITE:
 
-			if (!this.pullUpContent.equals(CONTENT_FAVORITE)) {
+			if (!(this.pullUpContent == favoriteView)) {
+				pullUpContent = favoriteView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "favorite starts");
@@ -299,7 +300,8 @@ public class PullUpView extends Fragment implements RouteListener {
 			break;
 		case PullUpView.CONTENT_ROUNDTRIP:
 
-			if (!this.pullUpContent.equals(CONTENT_ROUNDTRIP)) {
+			if (!(this.pullUpContent == roundtripView)) {
+				pullUpContent = roundtripView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "roundtrip starts");
@@ -311,7 +313,8 @@ public class PullUpView extends Fragment implements RouteListener {
 			break;
 		case PullUpView.CONTENT_POI:
 
-			if (!this.pullUpContent.equals(CONTENT_POI)) {
+			if (!(this.pullUpContent == poiView)) {
+				pullUpContent = poiView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "poi starts");
@@ -325,7 +328,8 @@ public class PullUpView extends Fragment implements RouteListener {
 			break;
 		case PullUpView.CONTENT_SEARCH:
 
-			if (!this.pullUpContent.equals(CONTENT_SEARCH)) {
+			if (!(this.pullUpContent == searchView)) {
+				pullUpContent = searchView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "search starts");
@@ -337,7 +341,8 @@ public class PullUpView extends Fragment implements RouteListener {
 			break;
 		case PullUpView.CONTENT_OPTION:
 
-			if (!this.pullUpContent.equals(CONTENT_OPTION)) {
+			if (!(this.pullUpContent == optionView)) {
+				pullUpContent = optionView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "optionen starts");
@@ -349,12 +354,19 @@ public class PullUpView extends Fragment implements RouteListener {
 			break;
 		default:
 
-			if (!this.pullUpContent.equals(CONTENT_INFO)) {
+			if (!(this.pullUpContent == infoView)) {
+				pullUpContent = infoView;
 				FragmentTransaction ft = this.getFragmentManager()
 						.beginTransaction();
 				Log.d(TAG_PULLUP, "InfoView starts");
 				//ft.remove(pullUpContent);
 				//pullUpContent = new InfoView();
+				ft.replace(R.id.pullupContent, infoView).commit();
+			} else {
+				infoView = new InfoView();
+				pullUpContent = infoView;
+				FragmentTransaction ft = this.getFragmentManager()
+						.beginTransaction();
 				ft.replace(R.id.pullupContent, infoView).commit();
 			}
 
