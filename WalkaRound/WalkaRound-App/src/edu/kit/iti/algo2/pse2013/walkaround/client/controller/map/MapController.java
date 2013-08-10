@@ -41,13 +41,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  *
  * @author Ludwig Biermann
  */
-public class MapController implements RouteListener, PositionListener,
-		CompassListener {
-
-	// public static Coordinate defaultCoordinate = new Coordinate(49.00471,
-	// 8.3858300); // Brauerstraße
-	// public static Coordinate defaultCoordinate = new Coordinate(49.01,
-	// 8.40333); // Marktplatz
+public class MapController implements RouteListener, PositionListener, CompassListener {
 
 	/**
 	 * default starting Coordinate if GPS is offline
@@ -141,6 +135,9 @@ public class MapController implements RouteListener, PositionListener,
 		}
 		return mapController;
 	}
+	public static boolean isInitialized() {
+		return mapController != null;
+	}
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
@@ -149,7 +146,7 @@ public class MapController implements RouteListener, PositionListener,
 	 */
 	public static MapController getInstance() {
 		if (mapController == null) {
-			Log.d(TAG_MAP_CONTROLLER, "you need to initialice MapView first");
+			Log.e(TAG_MAP_CONTROLLER, "getInstance(): you need to initialize MapController prior to getting an instance");
 			return null;
 		}
 		return mapController;

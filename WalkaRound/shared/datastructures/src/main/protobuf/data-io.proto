@@ -8,7 +8,7 @@ option java_outer_classname = "Protos";
 message SaveCoordinate {
 	required double latitude = 1;
 	required double longitude = 2;
-	repeated float crossroad_angle = 3;
+	repeated float crossing_angle = 3;
 }
 message SaveAddress {
 	optional string street = 1;
@@ -17,13 +17,13 @@ message SaveAddress {
 	optional int32 postal_code = 4;
 }
 message SaveLocation {
-	required SaveCoordinate parent = 1;
+	required SaveCoordinate parent_coordinate = 1;
 	optional string name = 2;
 	optional int32 i_d = 3;
 	optional SaveAddress address = 4;
 }
 message SavePOI {
-	optional SaveLocation parent = 1;
+	optional SaveLocation parent_location = 1;
 	optional string text_info = 2;
 	optional string image_u_r_l = 3;
 	repeated int32 p_o_i_category = 4;
@@ -86,15 +86,23 @@ message SaveGeometryData {
 ///////////////////////////////////
 message SaveFavorite {
 	repeated SaveRoute route = 1;
-	repeated SaveLocation location = 2;
+	repeated SaveFavLocation location = 2;
 }
 message SaveRoute {
 	required string name = 1;
-	repeated SaveWaypoint waypoint = 2;
-	repeated SaveCoordinate coordinate = 3;
+	repeated SaveRoutepoint routepoint = 2;
+}
+message SaveRoutepoint {
+	optional SaveCoordinate coord = 2;
+	optional SaveWaypoint w_p = 3;
+}
+message SaveFavLocation {
+	required string name = 1;
+	required SaveLocation location = 2;
 }
 message SaveWaypoint {
-	required SaveLocation location = 1;
+	required SaveLocation parent_location = 1;
 	required int32 profile = 2;
-	optional SavePOI poi = 3;
+	required bool favorite = 3;
+	optional SavePOI p_o_i = 4;
 }
