@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
@@ -16,7 +14,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -34,10 +31,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SavePOI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveVertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 
 public class ProtobufConverter {
-	private static Logger logger = Logger.getLogger(ProtobufConverter.class.getSimpleName());
 	private static Map<Integer, Vertex> tmp_vertices;
 	public static Address getAddress(SaveAddress saveAddress) {
 		if (saveAddress == null) {
@@ -89,9 +84,13 @@ public class ProtobufConverter {
 		if (saveCoord == null) {
 			return null;
 		}
+		float[] crossroads = new float[saveCoord.getCrossroadAngleCount()];
+		for (int i = 0; i < saveCoord.getCrossroadAngleCount(); i++) {
+			crossroads[i] = saveCoord.getCrossroadAngle(i);
+		}
 		CrossingInformation crossInfo = null;
-		if (saveCoord.getCrossingAngleCount() > 0) {
-			crossInfo = new CrossingInformation(saveCoord.getCrossingAngleList());
+		if (crossroads.length > 0) {
+			crossInfo = new CrossingInformation(crossroads);
 		}
 		return new Coordinate(saveCoord.getLatitude(), saveCoord.getLongitude(), crossInfo);
 	}
@@ -104,7 +103,7 @@ public class ProtobufConverter {
 				.setLongitude(c.getLongitude());
 		if (c.getCrossingInformation() != null && c.getCrossingInformation().getCrossingAngles() != null) {
 			for (float angle : c.getCrossingInformation().getCrossingAngles()) {
-				saveCoord.addCrossingAngle(angle);
+				saveCoord.addCrossroadAngle(angle);
 			}
 		}
 		return saveCoord;
@@ -223,8 +222,8 @@ public class ProtobufConverter {
 			return null;
 		}
 		return new Location(
-			saveLoc.getParentCoordinate().getLatitude(),
-			saveLoc.getParentCoordinate().getLongitude(),
+			saveLoc.getParent().getLatitude(),
+			saveLoc.getParent().getLongitude(),
 			saveLoc.getName(),
 			getAddress(saveLoc.getAddress()));
 	}
@@ -233,7 +232,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		SaveLocation.Builder builder = SaveLocation.newBuilder()
-				.setParentCoordinate(getCoordinateBuilder(loc))
+				.setParent(getCoordinateBuilder(loc))
 				.setID(loc.getId())
 				.setName(loc.getName());
 		SaveAddress.Builder addr = getAddressBuilder(loc.getAddress());
@@ -278,11 +277,11 @@ public class ProtobufConverter {
 		}
 		URL url;
 		try {
-			url = new URL(savePOI.getURL());
+			url = new URL(savePOI.getImageURL());
 		} catch (MalformedURLException e) {
 			url = null;
 		}
-		return new POI(getLocation(savePOI.getParentLocation()), savePOI.getTextInfo(), url, cats);
+		return new POI(getLocation(savePOI.getParent()), savePOI.getTextInfo(), url, cats);
 	}
 	public static SavePOI.Builder getPOIBuilder(POI p) {
 		if (p == null) {
@@ -294,13 +293,13 @@ public class ProtobufConverter {
 			poiList.add(cats[i]);
 		}
 		SavePOI.Builder builder = SavePOI.newBuilder()
-			.setParentLocation(getLocationBuilder(p))
+			.setParent(getLocationBuilder(p))
 			.addAllPOICategory(poiList);
 		if (p.getTextInfo() != null) {
 			builder.setTextInfo(p.getTextInfo());
 		}
 		if (p.getURL() != null) {
-			builder.setURL(p.getURL().toExternalForm());
+			builder.setImageURL(p.getURL().toExternalForm());
 		}
 		return builder;
 	}
@@ -322,33 +321,5 @@ public class ProtobufConverter {
 			.setCoordinate(getCoordinateBuilder(vertex))
 			.setID(vertex.getID());
 		return builder;
-	}
-	public static Waypoint getWaypoint(SaveWaypoint saWP) {
-		SaveCoordinate coord = saWP.getParentLocation().getParentCoordinate();
-		SaveAddress addr = saWP.getParentLocation().getAddress();
-		Waypoint wp = new Waypoint(coord.getLatitude(), coord.getLongitude(), saWP.getParentLocation().getName(),
-			new Address(addr.getStreet(), addr.getHouseNumber(), addr.getCity(), addr.getPostalCode()));
-		try {
-			wp.getClass().getField("crossInfo").set(wp, new CrossingInformation(saWP.getParentLocation().getParentCoordinate().getCrossingAngleList()));
-			wp.getClass().getField("id").setInt(wp, saWP.getParentLocation().getID());
-		} catch (NoSuchFieldException e) {
-			logger.log(Level.WARNING, "Reflection failed!", e);
-		} catch (IllegalArgumentException e) {
-			logger.log(Level.WARNING, "Reflection failed!", e);
-		} catch (IllegalAccessException e) {
-			logger.log(Level.WARNING, "Reflection failed!", e);
-		}
-		wp.setProfile(saWP.getProfile());
-		wp.setIsFavorite(saWP.hasFavorite());
-		wp.setPOI(ProtobufConverter.getPOI(saWP.getPOI()));
-		return wp;
-	}
-	public static SaveWaypoint.Builder getWaypointBuilder(Waypoint wp) {
-		SaveLocation.Builder loc = ProtobufConverter.getLocationBuilder(wp);
-		return SaveWaypoint.newBuilder()
-				.setProfile(wp.getProfile())
-				.setFavorite(wp.isFavorite())
-				.setPOI(ProtobufConverter.getPOIBuilder(wp.getPOI()))
-				.setParentLocation(loc);
 	}
 }

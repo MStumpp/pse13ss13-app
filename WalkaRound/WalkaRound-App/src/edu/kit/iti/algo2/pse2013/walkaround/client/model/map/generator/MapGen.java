@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
@@ -15,6 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
@@ -22,80 +25,80 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * Coordinate is the fix Point of the map at the center. Out of this Coordinate
  * this Class build a bounding box between the top left corner and the bottom
  * right corner.
- *
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 	/**
 	 * Debug Tag
 	 */
-	private static String TAG = MapGen.class.getSimpleName();
+	private static String TAG_MapGen = MapGen.class.getSimpleName();
 
 	/**
-	 *
+	 * 
 	 * The default Background Color
-	 *
-	 *
+	 * 
+	 * 
 	 */
 	public static int defaultBackground = Color.rgb(227, 227, 227);
 
 	/**
-	 *
+	 * 
 	 * The default empty Background Color
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 
 	/**
 	 * The Tile Fetcher. This is the location to get the tile parts of the map
-	 *
+	 * 
 	 */
 	private TileFetcher tileFetcher;
 
 	/**
-	 *
+	 * 
 	 * The Bitmap that represent the map on the display. Its essential that the
 	 * Map is created on time.
-	 *
-	 *
+	 * 
+	 * 
 	 */
 	private Bitmap map;
 
 	/**
 	 * the size of the Display
-	 *
+	 * 
 	 */
 	private Point size;
 
 	/**
 	 * the amount of tile parts which fit in the display
-	 *
+	 * 
 	 */
 	private Point amount;
 
 	/**
 	 * the current Coordinates
-	 *
+	 * 
 	 */
 	private BoundingBox coorBox;
 
 
 	/**
 	 * the current Tile Width
-	 *
+	 * 
 	 */
 	private float currentTileWidth;
 
 	/**
 	 * the Offset of the tile parts
-	 *
+	 * 
 	 */
 	private DisplayCoordinate mapOffset;
 
 	/**
 	 * the index of the tile on the top Left corner
-	 *
+	 * 
 	 */
 	// TODO maybe it should be the center tile
 	private int[] indexXY;
@@ -107,9 +110,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	}
 
 	/**
-	 *
+	 * 
 	 * COntstructs a new MapGenerator
-	 *
+	 * 
 	 * @param size
 	 *            the display size
 	 * @param mc
@@ -143,7 +146,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 *
+	 * 
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -154,10 +157,10 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		//double latDiff = ((coorBox.getCenter().getLatitude() + 90) % (180 / Math
 		//		.pow(2, this.coorBox.getLevelOfDetail())));
 		int[] index  = TileUtility.getXYTileIndex(coorBox.getCenter(),(int) coorBox.getLevelOfDetail());
-
+		
 		double n = Math.PI - (2.0 * Math.PI * index[1]) / Math.pow(2.0, this.coorBox.getLevelOfDetail());
 		n = Math.toDegrees(Math.atan(Math.sinh(n)));
-
+		 
 		Log.d("wrong", "Tile Lat " + n);;
 		double latDiff = Math.abs(coorBox.getCenter().getLatitude() - n);
 
@@ -166,7 +169,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_VERTICAL);
-
+		
 
 		//yDiff = (currentTileWidth - 1) - yDiff;
 
@@ -174,10 +177,10 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		yDiff = size.y / 2 - Math.abs(yDiff);
 
 		//yDiff = (yDiff - 25) % this.currentTileWidth;
-
+		
 		Log.d("wrong", " " + coorBox.getCenter().getLatitude() + " |x " + index[0] + " |y " + index[1]);
-
-		Log.d(TAG, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
+		
+		Log.d(TAG_MapGen, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
 				coorBox.getCenter(), this.coorBox.getLevelOfDetail()));
@@ -199,9 +202,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	boolean fix = false;
 
 	/**
-	 *
+	 * 
 	 * This Method starts the compute of a new Map.
-	 *
+	 * 
 	 * @param center
 	 *            the new center Coordinate
 	 * @param lod
@@ -225,14 +228,14 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 	/**
 	 * recycle and creates a new map recycle and creates a new routeOverlay
-	 *
+	 * 
 	 * @param width
 	 *            of the map and routeOverlay
 	 * @param height
 	 *            of the map and routeOverlay
 	 */
 	private void clearBitmap() {
-		Log.d(TAG, "clear Map Bitmap");
+		Log.d(TAG_MapGen, "clear Map Bitmap");
 
 		this.map.eraseColor(defaultBackground);
 		this.pushMap();
@@ -241,13 +244,13 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 	/**
 	 * push the map to the View
-	 *
+	 * 
 	 */
 	private void pushMap() {
 		try {
 			MapController.getInstance().onMapOverlayImageChange(map);
 		} catch (NullPointerException e) {
-			Log.e(TAG, "MapController existiert noch nicht");
+			Log.e(TAG_MapGen, "MapController existiert noch nicht");
 		}
 	}
 
@@ -260,9 +263,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 	/**
 	 * This class draws a part of the map
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class TileDrawer implements Runnable {
 
@@ -283,7 +286,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		/**
 		 * Constructs a new Tile Drawer
-		 *
+		 * 
 		 * @param tile
 		 *            the new tile to draw
 		 * @param x
@@ -302,12 +305,12 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		@Override
 		public void run() {
-			Log.d(TAG, "Receive Tile!");
+			Log.d(TAG_MapGen, "Receive Tile!");
 
 			int tileX = x - indexXY[0];
 			int tileY = (y - indexXY[1]);
 
-			Log.d(TAG, "Normalise Tile:  x " + tileX + " y " + tileY);
+			Log.d(TAG_MapGen, "Normalise Tile:  x " + tileX + " y " + tileY);
 
 			if (!map.isRecycled() && tile != null) {
 				Canvas canvas = new Canvas(map);

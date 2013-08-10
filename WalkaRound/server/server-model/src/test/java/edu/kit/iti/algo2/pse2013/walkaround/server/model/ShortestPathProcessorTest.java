@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,7 +21,7 @@ import java.util.Random;
  */
 public class ShortestPathProcessorTest {
 
-    private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
+    private static final File REAL_GRAPH_DATA_FILE = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "/graphData.pbf");
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -84,16 +83,19 @@ public class ShortestPathProcessorTest {
         }
 
         Assert.assertNotNull(route);
-        Assert.assertEquals(3, route.size());
+        Assert.assertEquals(route.size(), 3);
 
-        Assert.assertEquals(0, (route.get(0)).getID());
-        Assert.assertEquals(2, (route.get(1)).getID());
-        Assert.assertEquals(4, (route.get(2)).getID());
+        Assert.assertEquals((route.get(0)).getID(), 0);
+        Assert.assertEquals((route.get(1)).getID(), 2);
+        Assert.assertEquals((route.get(2)).getID(), 4);
     }
 
 
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
+
+        Assert.assertNotNull(REAL_GRAPH_DATA_FILE);
+        Assert.assertTrue(REAL_GRAPH_DATA_FILE.exists());
 
         GraphDataIO graphDataIO = null;
         try {
@@ -178,31 +180,35 @@ public class ShortestPathProcessorTest {
             e.printStackTrace();
         }
 
-        Assert.assertNotNull(route);
+        //Assert.assertEquals(route.size(), numVerticesOnRoute);
     }
 
 
     private Graph getGraph() {
 
         GraphDataIO graphDataIO = new GraphDataIO();
-        Vertex vertex0 = new Vertex(0.d, 0.d);
-        Vertex vertex1 = new Vertex(0.d, 1.d);
-        Vertex vertex2 = new Vertex(0.d, 2.d);
-        Vertex vertex3 = new Vertex(0.d, 3.d);
-        Vertex vertex4 = new Vertex(0.d, 4.d);
-        Vertex vertex5 = new Vertex(0.d, 5.d);
+        Vertex vertex1 = new Vertex(1.d, 1.d);
+        Vertex vertex2 = new Vertex(1.d, 2.d);
+        Vertex vertex3 = new Vertex(1.d, 3.d);
+        Vertex vertex4 = new Vertex(1.d, 4.d);
+        Vertex vertex5 = new Vertex(1.d, 5.d);
+        Vertex vertex6 = new Vertex(1.d, 6.d);
 
-        Edge edge1 = new Edge(vertex0, vertex1);
-        Edge edge2 = new Edge(vertex0, vertex2);
-        Edge edge5 = new Edge(vertex2, vertex3);
-        Edge edge6 = new Edge(vertex2, vertex5);
-        Edge edge7 = new Edge(vertex3, vertex0);
-        Edge edge8 = new Edge(vertex4, vertex2);
-        Edge edge9 = new Edge(vertex4, vertex5);
-        Edge edge10 = new Edge(vertex5, vertex3);
+        Edge edge1 = new Edge(vertex1, vertex2);
+        Edge edge2 = new Edge(vertex1, vertex3);
+        Edge edge3 = new Edge(vertex2, vertex5);
+        Edge edge4 = new Edge(vertex3, vertex2);
+        Edge edge5 = new Edge(vertex3, vertex4);
+        Edge edge6 = new Edge(vertex3, vertex6);
+        Edge edge7 = new Edge(vertex4, vertex1);
+        Edge edge8 = new Edge(vertex5, vertex3);
+        Edge edge9 = new Edge(vertex5, vertex6);
+        Edge edge10 = new Edge(vertex6, vertex4);
 
         graphDataIO.addEdge(edge1);
         graphDataIO.addEdge(edge2);
+        graphDataIO.addEdge(edge3);
+        graphDataIO.addEdge(edge4);
         graphDataIO.addEdge(edge5);
         graphDataIO.addEdge(edge6);
         graphDataIO.addEdge(edge7);

@@ -25,7 +25,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIInfoCon
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
@@ -121,7 +121,7 @@ public class BootActivity extends Activity {
 
 				// Model initialisierung
 
-				FavoriteManager.initialize(getApplicationContext());
+				FavoritesManager.initialize(getApplicationContext());
 				POIManager.initialize(getApplicationContext());
 				RouteProcessing.getInstance();
 				Looper.prepare();
@@ -166,16 +166,19 @@ public class BootActivity extends Activity {
 				updateProgress(progress);
 
 				// TileFetcher
-				float lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail();
+				float lod = CurrentMapStyleModel.getInstance()
+						.getCurrentMapStyle().getDefaultLevelOfDetail();
 				Display display = getWindowManager().getDefaultDisplay();
 				Point size = new Point();
 				display.getSize(size);
 
-				Location l = PositionManager.getInstance().getLastKnownPosition();
+				Location l = PositionManager.getInstance()
+						.getLastKnownPosition();
 				BoundingBox coorBox;
 
 				if (l != null) {
-					coorBox = new BoundingBox(new Coordinate(l.getLatitude(), l.getLongitude()), size, lod);
+					coorBox = new BoundingBox(new Coordinate(l.getLatitude(),
+							l.getLongitude()), size, lod);
 				} else {
 					coorBox = new BoundingBox(defaultCoordinate, size, lod);
 				}
@@ -214,7 +217,8 @@ public class BootActivity extends Activity {
 					sleep(50);
 				}
 
-				MapController.initialize(tileFetcher, size, coorBox, coorBox.getCenter());
+				MapController.initialize(tileFetcher, size, coorBox,
+						coorBox.getCenter());
 				progress += 50;
 				updateProgress(progress);
 				HeadUpController.initializes();
@@ -222,7 +226,7 @@ public class BootActivity extends Activity {
 				progress = 1000;
 				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
-				if (TextToSpeechUtility.getInstance().speak("Willkommen bei !")) {
+				if (TextToSpeechUtility.getInstance().speak("Wilkommen bei !")) {
 					TextToSpeechUtility.getInstance().speak("WalkaRound!",
 							Locale.ENGLISH);
 				} else {

@@ -97,7 +97,7 @@ public class Waypoint extends Location {
         return poi != null;
     }
     
-    
+
     public Waypoint clone() {
     	String clonedName = null;
     	if (this.getName() != null) {
@@ -118,6 +118,7 @@ public class Waypoint extends Location {
     	clonedWaypoint.setProfile(this.getProfile());
     	return clonedWaypoint;
     }
+	
     
 
 }

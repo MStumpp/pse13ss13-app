@@ -149,10 +149,7 @@ public class Coordinate implements Geometrizable {
 
 	@Override
 	public String toString() {
-		return String.format(
-			"Coord(%.5f° %s %.5f° %s)",
-			latitude,latitude > 0 ? "N" : "S", longitude, longitude > 0 ? "E" : "W"
-		);
+		return String.format("Coordinate latitude: %.8f° longitude %.8f°", latitude, longitude);
 	}
 
 

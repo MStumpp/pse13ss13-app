@@ -7,13 +7,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
- *
+ * 
  * This class represent a rectangle of two Coordinates and his center
  * Coordinate. This class holds the upper Left, bottom Right and center
  * Coordinate.
- *
+ * 
  * @author Ludwig Biermann
- *
+ * 
  */
 public class BoundingBox {
 
@@ -60,7 +60,7 @@ public class BoundingBox {
 
 	/**
 	 * Constructs a new Bounding Box
-	 *
+	 * 
 	 * @param center
 	 *            center Coordinate
 	 * @param size
@@ -80,7 +80,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center by a new center and a new Level of detail
-	 *
+	 * 
 	 * @param center
 	 *            the center Coordinate
 	 * @param levelOfDetail
@@ -97,7 +97,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center by a new center and the current Level of Detail
-	 *
+	 * 
 	 * @param center
 	 *            the center Coordinate
 	 */
@@ -107,14 +107,11 @@ public class BoundingBox {
 		this.topLeft = this.computeTopLeft();
 		Log.d(TAG, "Topleft is " + this.topLeft);
 		this.bottomRight = this.computeBottomRight();
-		if (MapController.isInitialized()) {
-			MapController.getInstance().updateAll();
-		}
 	}
 
 	/**
 	 * Sets a new Center to the given DisplayCoordinate
-	 *
+	 * 
 	 * @param dc
 	 *            the given Display Coordinate
 	 */
@@ -125,7 +122,7 @@ public class BoundingBox {
 
 		double latitude = CoordinateUtility.convertPixelsToDegrees(dc.getY(),
 				levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
-
+		
 		Coordinate center = new Coordinate(this.topLeft, latitude, longitude);
 
 		this.setCenter(center);
@@ -133,7 +130,7 @@ public class BoundingBox {
 
 	/**
 	 * Shifts the Center Coordinate bei a Pixel delta
-	 *
+	 * 
 	 * @param x
 	 *            pixel delta
 	 * @param y
@@ -156,7 +153,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level Of Detail by a delta
-	 *
+	 * 
 	 * @param delta
 	 *            the delta to the new Level Of Detail
 	 */
@@ -166,7 +163,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level of Detail
-	 *
+	 * 
 	 * @param levelOfDetail
 	 *            the new Level of Detail
 	 */
@@ -180,7 +177,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper left corner
-	 *
+	 * 
 	 * @return top left
 	 */
 	public Coordinate getTopLeft() {
@@ -189,7 +186,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 *
+	 * 
 	 * @return top right
 	 */
 	public Coordinate getTopRight() {
@@ -198,7 +195,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 *
+	 * 
 	 * @return bottom left
 	 */
 	public Coordinate getBottomLeft() {
@@ -207,7 +204,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 *
+	 * 
 	 * @return bottom right
 	 */
 	public Coordinate getBottomRight() {
@@ -216,7 +213,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Center Coordinate of the box
-	 *
+	 * 
 	 * @return
 	 */
 	public Coordinate getCenter() {
@@ -225,7 +222,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the width and the height of the current Display back
-	 *
+	 * 
 	 * @return display size as Point
 	 */
 	public Point getDisplaySize() {
@@ -234,7 +231,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the current Level Of Detail back
-	 *
+	 * 
 	 * @return Level of Detail as float
 	 */
 	public float getLevelOfDetail() {
@@ -245,7 +242,7 @@ public class BoundingBox {
 
 	/**
 	 * Compute the Size of the Display
-	 *
+	 * 
 	 * @param levelOfDetail
 	 */
 	private void computeSize() {
@@ -260,7 +257,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the upperLeft Coordinate
-	 *
+	 * 
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate computeTopLeft() {
@@ -270,7 +267,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the upper right Coordinate
-	 *
+	 * 
 	 * @return the top right geo-oordinate
 	 */
 	private Coordinate computeTopRight() {
@@ -280,7 +277,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the bootom left Coordinate
-	 *
+	 * 
 	 * @return the bottom left geo-oordinate
 	 */
 	private Coordinate computeBottomLeft() {
@@ -290,7 +287,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the bottom right Coordinate
-	 *
+	 * 
 	 * @return the bottom right geo-oordinate
 	 */
 	private Coordinate computeBottomRight() {
@@ -312,9 +309,9 @@ public class BoundingBox {
 	/**
 	 * A simple Helper Class to pair two doubles. In this Case the make
 	 * relationship between width and height of the display in Coordinates
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class DoublePairing {
 
@@ -330,7 +327,7 @@ public class BoundingBox {
 
 		/**
 		 * Construct a new Double Paring
-		 *
+		 * 
 		 * @param width
 		 *            of the display
 		 * @param height

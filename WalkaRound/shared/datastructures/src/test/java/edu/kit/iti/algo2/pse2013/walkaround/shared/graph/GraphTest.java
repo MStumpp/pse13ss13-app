@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.DropboxUtil;
 
 /**
  * GraphDataIOTest.
@@ -67,7 +68,7 @@ public class GraphTest {
     @Test
     public void testInitGraphWithRealDataSet() {
 
-        File file = FileUtil.getFile("graphData.pbf");
+        File file = new File(DropboxUtil.getDropbox() + "graphData.pbf");
         Assert.assertNotNull(file);
         Assert.assertTrue(file.exists());
 

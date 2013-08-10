@@ -62,9 +62,6 @@ public abstract class OSMElement {
 		Coordinate c = getCenterCoordinate();
 		int[] poiCats = getPOICategories();
 		if (getName() != null && c != null && poiCats.length != 0) {
-			if (getWikipediaURL() != null) {
-				System.out.println("Wikipedia-Artikel gefunden für: " + getName());
-			}
 			return new POI(c.getLatitude(), c.getLongitude(), getName(), null, getWikipediaURL(), poiCats, getAddress());
 		}
 		return null;
@@ -95,7 +92,7 @@ public abstract class OSMElement {
 			return null;
 		}
 		try {
-			String s =  "http://" + getTags().get(KEY_WIKIPEDIA).substring(0, 2) + ".wikipedia.org/w/index.php?printable=yes&title=" + URLEncoder.encode(getTags().get(KEY_WIKIPEDIA).substring(3), "UTF-8");
+			String s =  "https://" + getTags().get(KEY_WIKIPEDIA).substring(0, 2) + ".wikipedia.org/w/index.php?printable=yes&title=" + URLEncoder.encode(getTags().get(KEY_WIKIPEDIA).substring(3), "UTF-8");
 			return new URL(s);
 		} catch (MalformedURLException | UnsupportedEncodingException e) {
 			return null;

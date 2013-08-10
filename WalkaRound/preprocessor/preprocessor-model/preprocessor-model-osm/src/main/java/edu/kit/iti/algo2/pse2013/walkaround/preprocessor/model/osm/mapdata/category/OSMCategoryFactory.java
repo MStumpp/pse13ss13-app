@@ -54,10 +54,6 @@ public class OSMCategoryFactory {
 			return createSupermarketCategory();
 		} else if (catID == Category.POI_THEATRE) {
 			return createTheatreCategory();
-		} else if (catID == Category.POI_CHURCHES_AND_MONUMENTS) {
-			return createChurchesMonumentsCategory();
-		} else if (catID == Category.POI_CASTLES) {
-			return createCastleCategory();
 		}
 		Logger.getLogger(OSMCategoryFactory.class.getSimpleName()).log(Level.SEVERE, String.format("No poi-category for ID %d found!", catID));
 		return null;
@@ -96,7 +92,6 @@ public class OSMCategoryFactory {
 	private static final OSMCategory createMuseumCategory() {
 		OSMTagCategory museum = new OSMTagCategory();
 		museum.addTag("amenity", "museum");
-		museum.addTag("tourism", "museum");
 		return museum;
 	}
 	private static final OSMCategory createPublicTransportCategory() {
@@ -104,7 +99,7 @@ public class OSMCategoryFactory {
 		pub_trans.addTag("highway", "bus_stop");
 		pub_trans.addTag("public_transport", "stop_position");
 		pub_trans.addTag("public_transport", "platform"); // FIXME
-		return pub_trans;
+		return new OSMTagCategory();
 	}
 	private static final OSMCategory createShopCategory() {
 		OSMTagCategory shop = new OSMTagCategory();
@@ -128,19 +123,6 @@ public class OSMCategoryFactory {
 		OSMTagCategory theatre = new OSMTagCategory();
 		theatre.addTag("amenity", "theatre");
 		return theatre;
-	}
-	private static final OSMCategory createChurchesMonumentsCategory() {
-		OSMTagCategory churches = new OSMTagCategory();
-		churches.addTag("amenity", "place_of_worship");
-		churches.addTag("historic", "monument");
-		churches.addTag("landmark", "monument");
-		churches.addTag("historic", "memorial");
-		return churches;
-	}
-	private static final OSMCategory createCastleCategory() {
-		OSMTagCategory castle = new OSMTagCategory();
-		castle.addTag("historic", "castle");
-		return castle;
 	}
 	public static OSMCategory createAllAreaCategory() {
 		return new OSMOrCategory(createForestCategory(), createGardenCategory());
@@ -177,9 +159,7 @@ public class OSMCategoryFactory {
 			new OSMOrCategory(createShopCategory(),
 			new OSMOrCategory(createSleepingCategory(),
 			new OSMOrCategory(createSupermarketCategory(),
-			new OSMOrCategory(createTheatreCategory(),
-			new OSMOrCategory(createChurchesMonumentsCategory(),
-			createCastleCategory()))))))))))));
+			createTheatreCategory()))))))))));
 		return cat;
 	}
 }
