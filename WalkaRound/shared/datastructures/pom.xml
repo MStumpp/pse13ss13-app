@@ -43,8 +43,9 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <include>graphData.io</include>
-                        <include>locationData.io</include>
+                        <include>graphData.pdf</include>
+                        <include>locationData.pdf</include>
+                        <include>geometryData.pdf</include>
                     </includes>
                 </configuration>
             </plugin>
