@@ -11,7 +11,7 @@ public class FileUtil {
 
         // check dropbox dir
         File path = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + file);
-        if (path.exists())
+        if (path.getParentFile().exists())
 		    return path;
 
         // check resources dir (server only)
@@ -21,7 +21,7 @@ public class FileUtil {
 
         // check resources dir
         path = new File(FileUtil.class.getResource(File.separatorChar + file).getFile());
-        if (path.exists())
+        if (path.getParentFile().exists())
             return path;
 
         throw new RuntimeException("file not available");

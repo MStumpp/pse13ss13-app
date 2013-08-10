@@ -25,7 +25,7 @@ message SaveLocation {
 message SavePOI {
 	optional SaveLocation parent_location = 1;
 	optional string text_info = 2;
-	optional string image_u_r_l = 3;
+	optional string u_r_l = 3;
 	repeated int32 p_o_i_category = 4;
 }
 message SaveLocationData {

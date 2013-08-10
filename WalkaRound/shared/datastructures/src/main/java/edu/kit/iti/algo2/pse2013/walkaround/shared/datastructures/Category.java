@@ -30,6 +30,10 @@ public class Category {
 
 	public static final int POI_THEATRE = 11;
 
+	public static final int POI_CHURCHES_AND_MONUMENTS = 12;
+
+	public static final int POI_CASTLES = 13;
+
 	public static final int AREA_FOREST = 100;
 
 	public static final int AREA_GARDEN = 101;
@@ -44,7 +48,7 @@ public class Category {
 	 */
 	private static int[] allPOICategories = { POI_FOOD, POI_FAST_FOOD,POI_BARS_AND_PUBS, POI_CLUBS_AND_NIGHTCLUBS,
 			POI_SUPERMARKET, POI_SHOP, POI_PUBLIC_TRANSPORTATION, POI_MUSEUM, POI_THEATRE, POI_CINEMA,
-			POI_SLEEPING_ACCOMODATIONS };
+			POI_SLEEPING_ACCOMODATIONS, POI_CHURCHES_AND_MONUMENTS, POI_CASTLES };
 
 	/**
 	 * Returns all existing categories of areas.
