@@ -15,7 +15,7 @@ public class FileUtil {
 		    return path;
 
         // check resources dir (server only)
-        path = new File(System.getProperty("user.home") + File.separatorChar + "resources" + File.separatorChar + file);
+        path = new File("/home/walkaround/resources" + File.separatorChar + file);
         if (path.exists())
             return path;
 
