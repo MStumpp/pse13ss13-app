@@ -188,7 +188,6 @@ public class PullUpView extends Fragment implements RouteListener {
 		optionView = new OptionView();
 
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		pullUpContent = searchView;
 		//ft.add(R.id.pullupContent, pullUpContent).commit();
 		main.setOnTouchListener(new MainListener());
 		
