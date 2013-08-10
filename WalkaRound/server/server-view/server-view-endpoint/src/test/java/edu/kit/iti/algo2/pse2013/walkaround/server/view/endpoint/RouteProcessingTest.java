@@ -18,7 +18,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 public class RouteProcessingTest {
 
     @Test(expected = IllegalArgumentException.class)
-    @Ignore
     public void testException1() throws IllegalArgumentException, RouteProcessingException {
         RouteProcessing routeProcessing = RouteProcessing.getInstance();
         Coordinate coordinate1 = new Coordinate(2.d, 3.d);
@@ -27,7 +26,6 @@ public class RouteProcessingTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    @Ignore
     public void testException2() throws IllegalArgumentException, RouteProcessingException {
         RouteProcessing routeProcessing = RouteProcessing.getInstance();
         Coordinate coordinate2 = new Coordinate(2.d, 3.d);

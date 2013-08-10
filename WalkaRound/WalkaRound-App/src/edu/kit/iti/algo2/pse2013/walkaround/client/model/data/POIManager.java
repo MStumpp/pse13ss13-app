@@ -24,7 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class manages requests about POIs.
- *
+ * 
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -36,7 +36,7 @@ public class POIManager {
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 10;
 
-	private final int NUMBER_OF_CATEGORIES = 13;
+	private final int NUMBER_OF_CATEGORIES = 11;
 
 	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 10;
 	/**
@@ -75,7 +75,7 @@ public class POIManager {
 
 	/**
 	 * Constructs a new manager for POIs.
-	 *
+	 * 
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 */
@@ -88,7 +88,7 @@ public class POIManager {
 
 	/**
 	 * Singleton getInstance method.
-	 *
+	 * 
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
@@ -102,7 +102,7 @@ public class POIManager {
 
 	/**
 	 * Returns the IDs of all active categories.
-	 *
+	 * 
 	 * @return int[] of IDs of all active categories
 	 */
 	public int[] getActiveCategories() {
@@ -112,7 +112,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying within a rectangle.
-	 *
+	 * 
 	 * @param upperLeft
 	 *            upperleft coordinate of the rectangle
 	 * @param bottomRight
@@ -146,7 +146,7 @@ public class POIManager {
 			return poiList;
 		}
 		return poiList;
-		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
+		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}
@@ -154,7 +154,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying upon a route.
-	 *
+	 * 
 	 * @param routeInfo
 	 *            Route to search POIs in the near
 	 * @param levelOfDetail
@@ -188,7 +188,7 @@ public class POIManager {
 	// aus location poi gemacht
 	/**
 	 * Returns suggestions of locations searched by query.
-	 *
+	 * 
 	 * @param query
 	 *            query to search with
 	 * @return a list of three suggestions of locations
@@ -239,7 +239,7 @@ public class POIManager {
 	// android funktion zugegriffen wird
 	/**
 	 * Returns suggestions of locations searched by an address.
-	 *
+	 * 
 	 * @param address
 	 *            address to search with
 	 * @param context
@@ -272,7 +272,7 @@ public class POIManager {
 	// changed boolean return to void
 	/**
 	 * Adds the ID of an active category.
-	 *
+	 * 
 	 * @param id
 	 *            id of the category to activate
 	 */
@@ -285,7 +285,7 @@ public class POIManager {
 	// changed boolean return to void
 	/**
 	 * Removes the ID of an active category.
-	 *
+	 * 
 	 * @param id
 	 *            id of the category to deactivate
 	 */
@@ -297,7 +297,7 @@ public class POIManager {
 
 	/**
 	 * Computes the difference between two strings.
-	 *
+	 * 
 	 * @param first
 	 *            first string to compare
 	 * @param second
@@ -333,7 +333,7 @@ public class POIManager {
 
 	/**
 	 * Return whether the active poi list is empty
-	 *
+	 * 
 	 * @return true is empty
 	 */
 	public boolean isEmpty() {

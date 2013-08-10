@@ -7,11 +7,11 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.DropboxUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
@@ -161,11 +161,11 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
-        File graphDataio = FileUtil.getFile("graphData.pbf");
+        File graphDataio = new File(DropboxUtil.getDropbox() + "graphData.pbf");
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = FileUtil.getFile("locationData.pbf");
+        File locationDataio = new File(DropboxUtil.getDropbox() + "locationData.pbf");
         Assert.assertNotNull(locationDataio);
         Assert.assertTrue(locationDataio.exists());
 
@@ -192,7 +192,7 @@ public class GeometryDataPreprocessorTest {
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
 
-        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
+        File geometryDataio = new File(DropboxUtil.getDropbox() + "geometryData.pbf");
 
         try {
             GeometryDataIO.save(geometryDataIO, geometryDataio);

@@ -203,10 +203,15 @@ public class POI extends Location {
 		return true;
 	}
 
+	
 	public POI clone() {
-		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this
-				.getName(), this.getTextInfo(), this.getURL(), this.getPOICategories(),
-				this.getAddress()==null ? null : this.getAddress().clone());
+    	Address clonedAddress = null;
+    	if (this.getAddress() != null) {
+    	clonedAddress = this.getAddress().clone();
+    	}
+    	
+		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this.getName(), this.getTextInfo(), this.getURL(), this.getPOICategories(), clonedAddress);
+
 		return clonedPOI;
 	}
 }

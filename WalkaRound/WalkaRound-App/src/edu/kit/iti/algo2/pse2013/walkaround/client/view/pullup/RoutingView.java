@@ -163,7 +163,7 @@ public class RoutingView extends Fragment {
 			if (v.equals(invert)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "invert was pressed");
-				RouteController.getInstance().invertRoute();
+				RouteController.getInstance().revertRoute();
 			}
 			// TODO: refresh activity?
 			return false;

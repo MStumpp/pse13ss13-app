@@ -96,6 +96,21 @@ public class Address {
 
 
 	public Address clone() {
-		return new Address(this.street.toString(), this.houseNumber.toString(), this.city.toString(), this.postalCode);
+    	String clonedStreet = "";
+    	if (this.getStreet() != null) {
+    	clonedStreet = this.getStreet().toString();
+    	}
+    	
+    	String clonedHouseNumber = "";
+    	if (this.getHouseNumber() != null) {
+    	houseNumber = this.getHouseNumber().toString();
+    	}
+    	
+    	String clonedCity = "";
+    	if (this.getCity() != null) {
+    	clonedCity = this.getCity().toString();
+    	}
+		
+		return new Address(clonedStreet, clonedHouseNumber, clonedCity, this.postalCode);
 	}
 }

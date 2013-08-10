@@ -2,7 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -10,9 +9,7 @@ import org.kohsuke.args4j.Option;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.OSMDataPreprocessor;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMElement;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia.WikipediaPreprocessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
@@ -24,19 +21,19 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
  * @version 1.0
  */
 public class PreprocessorAdmin {
-	Logger logger = Logger.getLogger(PreprocessorAdmin.class.getSimpleName());
-
 	@Option(name = "--input", required = true, usage="Location of the raw OSM-file")
 	public String input;
 
+	private String dropboxPath = System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar;
+
 	@Option(name = "--location_out", usage="Location of the LocationData-output")
-	public String locationOutput = FileUtil.getFile("locationData.pbf").getAbsolutePath();
+	public String locationOutput = dropboxPath + "locationData.pbf";
 
 	@Option(name = "--graph_out", usage="Location of the GraphData-output")
-	public String graphOutput = FileUtil.getFile("graphData.pbf").getAbsolutePath();
+	public String graphOutput = dropboxPath + "graphData.pbf";
 
 	@Option(name = "--geometry_out", usage="Location of the GeometryData-output")
-	public String geometryOutput = FileUtil.getFile("geometryData.pbf").getAbsolutePath();
+	public String geometryOutput = dropboxPath + "geometryData.pbf";
 
 	public static void main(String[] args) {
 		System.exit(new PreprocessorAdmin().run(args));
@@ -58,17 +55,9 @@ public class PreprocessorAdmin {
 			locFile.getParentFile().mkdirs();
 
 			prep.parse();
-
-			logger.info("Fetching Wikipedia-information...");
-			LocationDataIO locData = LocationDataIO.load(locFile);
-			WikipediaPreprocessor.preprocessWikipediaInformation(locData);
-			logger.info("Writing LocationDataIo again with Wikipedia-Information...");
-			LocationDataIO.save(locData, locFile);
-
-			logger.info("Start building GeometryData...");
+			//WikipediaPreprocessor.preprocessWikipediaInformation(LocationDataIO.load(locFile));
 			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(GraphDataIO.load(graphFile), LocationDataIO.load(locFile));
 			GeometryDataIO.save(geomData, geomFile);
-			logger.info("Writing GeometryDataIO finished.");
 			return 0;
 		} catch (CmdLineException | IOException e) {
 			System.err.println(e.getMessage());
