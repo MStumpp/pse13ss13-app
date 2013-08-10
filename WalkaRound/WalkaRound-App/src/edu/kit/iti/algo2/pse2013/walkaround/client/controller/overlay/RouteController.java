@@ -179,23 +179,23 @@ public class RouteController {
 		return false;
 	}
 
-	public boolean addWaypoint(final Waypoint c) {
-		Log.d(TAG, String.format("RouteController.addWaypoint(%s)", c.toString()));
+	public boolean addWaypoint(final Waypoint w) {
+		Log.d(TAG, String.format("RouteController.addWaypoint(%s)", w.toString()));
 
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
 				@Override
 				public void run() {
-					Log.d(TAG, String.format("Thread.run() in RouteController.addWaypoint(%s)", c.toString()));
-					newCurrentRoute.addWaypoint(c);
+					Log.d(TAG, String.format("Thread.run() in RouteController.addWaypoint(%s)", w.toString()));
+					newCurrentRoute.addWaypoint(w);
 					replaceFullRoute(newCurrentRoute);
 				}
 			});
 			RouteController.routeChanger.start();
 			return true;
 		}
-		Log.e(TAG, String.format("%s wurde NICHT der Route hinzugefügt! Der routeChanger ist gerade beschäftigt.", c.toString()));
+		Log.e(TAG, String.format("%s wurde NICHT der Route hinzugefügt! Der routeChanger ist gerade beschäftigt.", w.toString()));
 		return false;
 	}
 
@@ -338,8 +338,7 @@ public class RouteController {
 	}
 
 	public boolean addRouteToFavorites(String name) {
-		Log.d(TAG,
-				"RouteController.addRouteToFavorites(RouteInfo, String)");
+		Log.d(TAG, "RouteController.addRouteToFavorites(RouteInfo, String)");
 		return FavoriteManager.getInstance().addRouteToFavorites(currentRoute, name);
 	}
 

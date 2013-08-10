@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import android.content.Context;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
@@ -20,9 +22,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveFavLocation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveFavorite;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveRoute;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveRoutepoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 
 /**
@@ -74,31 +78,47 @@ public class FavoriteManager {
 	public static FavoriteManager getInstance() {
 		if (instance == null) {
 			try {
-				BufferedInputStream bis = new BufferedInputStream(applicationContext.openFileInput(FILENAME));
-				SaveFavorite saFav = Protos.SaveFavorite.parseFrom(bis);
-				bis.close();
-				instance = new FavoriteManager();
-				for (SaveRoute sr : saFav.getRouteList()) {
-					LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
-					for (SaveCoordinate saCo : sr.getCoordinateList()) {
-						coordinates.add(ProtobufConverter.getCoordinate(saCo));
-					}
-					RouteInfo r = new Route(coordinates);
-					Log.d(TAG, "Loaded route");
-					instance.savedRoutes.put(sr.getName(), r);
-				}
-				for (SaveLocation saLoc : saFav.getLocationList()) {
-					Log.d(TAG, "Loaded location");
-					instance.addLocationToFavorites(ProtobufConverter.getLocation(saLoc), saLoc.getName());
-				}
-				Log.d(TAG, "The favorites were loaded successfully");
+				loadInstanceFromFile();
 			} catch (FileNotFoundException e) {
 				instance = new FavoriteManager();
+			} catch (InvalidProtocolBufferException e) {
+				Log.e(TAG, "The favorite-file was either obsolete or corrupted, I'll delete it now.");
+				applicationContext.deleteFile(FILENAME);
+				instance = new FavoriteManager();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Error loading favorites", e);
 			}
 		}
+		assert instance != null;
 		return instance;
+	}
+
+	private static void loadInstanceFromFile() throws IOException {
+		BufferedInputStream bis = new BufferedInputStream(applicationContext.openFileInput(FILENAME));
+		SaveFavorite saveFav = Protos.SaveFavorite.parseFrom(bis);
+		bis.close();
+		instance = new FavoriteManager();
+		for (SaveRoute sr : saveFav.getRouteList()) {
+			LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
+			for (SaveRoutepoint saCo : sr.getRoutepointList()) {
+				if (saCo.hasCoord()) {
+					coordinates.add(ProtobufConverter.getCoordinate(saCo.getCoord()));
+				} else if (saCo.hasWP()) {
+					coordinates.add(ProtobufConverter.getWaypoint(saCo.getWP()));
+				}
+			}
+			RouteInfo r = new Route(coordinates);
+			instance.savedRoutes.put(sr.getName(), r);
+		}
+		for (SaveFavLocation saveFavLoc : saveFav.getLocationList()) {
+			instance.addLocationToFavorites(ProtobufConverter.getLocation(saveFavLoc.getLocation()), saveFavLoc.getName());
+		}
+		Log.d(TAG,
+			String.format(
+				"The favorites (%d routes and %d locations) were loaded successfully",
+				saveFav.getRouteCount(), saveFav.getLocationCount()
+			)
+		);
 	}
 
 	/**
@@ -290,20 +310,23 @@ public class FavoriteManager {
 			RouteInfo nextRoute = savedRoutes.get(nextKey);
 			SaveRoute.Builder routeBuilder = Protos.SaveRoute.newBuilder().setName(nextKey);
 			for (Coordinate c : nextRoute.getCoordinates()) {
-				routeBuilder.addCoordinate(ProtobufConverter.getCoordinateBuilder(c));
 				if (c instanceof Waypoint) {
-					SaveWaypoint wp = SaveWaypoint.newBuilder()
-						.setLocation(ProtobufConverter.getLocationBuilder((Location) c))
-						.setPoi(ProtobufConverter.getPOIBuilder(((Waypoint) c).getPOI()))
+					SaveWaypoint.Builder wp = SaveWaypoint.newBuilder()
+						.setParentLocation(ProtobufConverter.getLocationBuilder((Location) c))
 						.setProfile(((Waypoint) c).getProfile())
-						.build();
-					routeBuilder.addWaypoint(wp);
+						.setFavorite(((Waypoint) c).isFavorite());
+					if (((Waypoint) c).getPOI() != null) {
+						wp.setPOI(ProtobufConverter.getPOIBuilder(((Waypoint) c).getPOI()));
+					}
+					routeBuilder.addRoutepoint(SaveRoutepoint.newBuilder().setWP(wp));
+				} else {
+					routeBuilder.addRoutepoint(SaveRoutepoint.newBuilder().setCoord(ProtobufConverter.getCoordinateBuilder(c)));
 				}
 			}
 			favBuilder.addRoute(routeBuilder.build());
 		}
-		for (Location l : savedLocations.values()) {
-			favBuilder.addLocation(ProtobufConverter.getLocationBuilder(l));
+		for (String name : savedLocations.keySet()) {
+			favBuilder.addLocation(SaveFavLocation.newBuilder().setLocation(ProtobufConverter.getLocationBuilder(savedLocations.get(name))).setName(name));
 		}
 		BufferedOutputStream bos;
 		try {
