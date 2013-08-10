@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.DropboxUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
@@ -27,7 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 public class LocationDataIOTest {
 
 	private static final File TMP_LOCATIONDATA_FILE = new File(System.getProperty("java.io.tmpdir") + File.separator + "locationData.pbf");
-	private static final File REAL_LOCATIONDATA_FILE = new File(DropboxUtil.getDropbox() + "locationData.pbf");
+	private static final File REAL_LOCATIONDATA_FILE = FileUtil.getFile("locationData.pbf");
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
