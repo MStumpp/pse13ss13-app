@@ -25,7 +25,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIInfoCon
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
@@ -121,7 +121,7 @@ public class BootActivity extends Activity {
 
 				// Model initialisierung
 
-				FavoritesManager.initialize(getApplicationContext());
+				FavoriteManager.initialize(getApplicationContext());
 				POIManager.initialize(getApplicationContext());
 				RouteProcessing.getInstance();
 				Looper.prepare();

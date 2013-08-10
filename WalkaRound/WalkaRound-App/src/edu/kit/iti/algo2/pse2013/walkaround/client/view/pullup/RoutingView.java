@@ -163,7 +163,7 @@ public class RoutingView extends Fragment {
 			if (v.equals(invert)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "invert was pressed");
-				RouteController.getInstance().revertRoute();
+				RouteController.getInstance().invertRoute();
 			}
 			// TODO: refresh activity?
 			return false;
@@ -277,7 +277,7 @@ public class RoutingView extends Fragment {
 					layout.addView(waypoint);
 				}
 			} else {
-				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
+				Log.d(TAG_PULLUP_CONTENT, "route ist null");
 			}
 		}
 	}
