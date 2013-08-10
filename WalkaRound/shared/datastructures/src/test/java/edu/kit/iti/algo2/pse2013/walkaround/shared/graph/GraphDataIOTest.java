@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -18,7 +18,7 @@ import org.junit.Test;
 public class GraphDataIOTest {
 
 
-	private static final File REAL_GRAPH_DATA_FILE = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "/graphData.pbf");
+	private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
 	private static final File TMP_GRAPH_DATA_FILE = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf");
 
 	@Before
