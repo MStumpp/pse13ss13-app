@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -9,6 +10,8 @@ import org.kohsuke.args4j.Option;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.OSMDataPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMElement;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia.WikipediaPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
@@ -21,6 +24,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
  * @version 1.0
  */
 public class PreprocessorAdmin {
+	Logger logger = Logger.getLogger(PreprocessorAdmin.class.getSimpleName());
+
 	@Option(name = "--input", required = true, usage="Location of the raw OSM-file")
 	public String input;
 
@@ -53,9 +58,17 @@ public class PreprocessorAdmin {
 			locFile.getParentFile().mkdirs();
 
 			prep.parse();
-			//WikipediaPreprocessor.preprocessWikipediaInformation(LocationDataIO.load(locFile));
+
+			logger.info("Fetching Wikipedia-information...");
+			LocationDataIO locData = LocationDataIO.load(locFile);
+			WikipediaPreprocessor.preprocessWikipediaInformation(locData);
+			logger.info("Writing LocationDataIo again with Wikipedia-Information...");
+			LocationDataIO.save(locData, locFile);
+
+			logger.info("Start building GeometryData...");
 			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(GraphDataIO.load(graphFile), LocationDataIO.load(locFile));
 			GeometryDataIO.save(geomData, geomFile);
+			logger.info("Writing GeometryDataIO finished.");
 			return 0;
 		} catch (CmdLineException | IOException e) {
 			System.err.println(e.getMessage());

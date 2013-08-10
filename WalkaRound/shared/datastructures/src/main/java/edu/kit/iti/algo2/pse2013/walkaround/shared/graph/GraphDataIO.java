@@ -19,26 +19,26 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
 public class GraphDataIO {
 
 	/**
-     * Stores a set of Edge objects.
-     */
-    private Set<Edge> edges;
+	 * Stores a set of Edge objects.
+	 */
+	private Set<Edge> edges;
 
 
-    /**
-     * Initializes a GraphDataIO object.
-     */
-    public GraphDataIO() {
-        edges = new TreeSet<Edge>();
-    }
+	/**
+	 * Initializes a GraphDataIO object.
+	 */
+	public GraphDataIO() {
+		edges = new TreeSet<Edge>();
+	}
 
 
-    /**
+	/**
 	 * Adds an Edge to the list of all Edges.
 	 *
 	 * @param edge Edge to be added.
 	 */
 	public void addEdge(Edge edge) {
-	    edges.add(edge);
+		edges.add(edge);
 	}
 
 
@@ -48,7 +48,7 @@ public class GraphDataIO {
 	 * @param edges List of Edges to be added.
 	 */
 	public void addEdges(List<Edge> edges) {
-	    this.edges.addAll(edges);
+		this.edges.addAll(edges);
 	}
 
 
@@ -58,77 +58,51 @@ public class GraphDataIO {
 	 * @return Set<Edge>.
 	 */
 	public Set<Edge> getEdges() {
-	    return edges;
+		return edges;
 	}
 
 
 	/**
-     * Returns a set of all Vertex objects contained in all edges.
-     *
-     * @return Set<Vertex> List of all egdes.
-     */
-    public Set<Vertex> getVertices() {
-        Set<Vertex> vertices = new TreeSet<Vertex>();
-        for (Edge edge : edges)
-            for (Vertex vertex : edge.getVertices())
-                vertices.add(vertex);
-        return vertices;
-    }
-
-	public int getNumOfPartitions() {
-		TreeSet<Edge> edges = new TreeSet<Edge>(getEdges());
-		int numPartitions = 0;
-		while (edges.size() > 0) {
-			int numEdgesInPartition = 1;
-			Edge curEdge = edges.pollFirst();
-			numEdgesInPartition = addAdjacentEdges(curEdge.getHead(), numEdgesInPartition, edges);
-			numEdgesInPartition = addAdjacentEdges(curEdge.getTail(), numEdgesInPartition, edges);
-			numPartitions++;
-			//System.out.println(String.format("Partition %d hat %d Elemente", numPartitions, numEdgesInPartition));
-		}
-		return numPartitions;
-	}
-
-	private int addAdjacentEdges(Vertex v, int numEdgesInPartition, TreeSet<Edge> source) {
-		List<Edge> outgoing = v.getOutgoingEdges();
-		for (Edge e : outgoing) {
-			if (source.remove(e)) {
-				numEdgesInPartition++;
-				numEdgesInPartition = addAdjacentEdges(e.getHead(), numEdgesInPartition, source);
-				numEdgesInPartition = addAdjacentEdges(e.getTail(), numEdgesInPartition, source);
-			}
-		}
-		return numEdgesInPartition;
+	 * Returns a set of all Vertex objects contained in all edges.
+	 *
+	 * @return Set<Vertex> List of all egdes.
+	 */
+	public Set<Vertex> getVertices() {
+		Set<Vertex> vertices = new TreeSet<Vertex>();
+		for (Edge edge : edges)
+			for (Vertex vertex : edge.getVertices())
+				vertices.add(vertex);
+		return vertices;
 	}
 
 
-    /**
-     * Saves the GraphDataIO  object to an external file.
-     *
-     * @param objectToSave GeometryDataIO object to save.
-     * @param destination Location of output file on file system.
-     * @throws java.io.IOException
-     */
-    public static void save(GraphDataIO objectToSave, File destination) throws IOException {
-        OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-        ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);
-        out.flush();
-        out.close();
-    }
+	/**
+	 * Saves the GraphDataIO  object to an external file.
+	 *
+	 * @param objectToSave GeometryDataIO object to save.
+	 * @param destination Location of output file on file system.
+	 * @throws java.io.IOException
+	 */
+	public static void save(GraphDataIO objectToSave, File destination) throws IOException {
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
+		ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);
+		out.flush();
+		out.close();
+	}
 
 
-    /**
-     * Loads and returns a GraphDataIO  object from a given file.
-     *
-     * @param source Location of source file in file system.
-     * @throws java.io.IOException
-     * @throws ClassNotFoundException
-     */
-    public static GraphDataIO load(File source) throws IOException {
-        CodedInputStream in = CodedInputStream.newInstance(new BufferedInputStream(new FileInputStream(source)));
-        in.setSizeLimit(150000000);
-        GraphDataIO geom = ProtobufConverter.getGraphData(Protos.SaveGraphData.parseFrom(in));
-        return geom;
-    }
+	/**
+	 * Loads and returns a GraphDataIO  object from a given file.
+	 *
+	 * @param source Location of source file in file system.
+	 * @throws java.io.IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static GraphDataIO load(File source) throws IOException {
+		CodedInputStream in = CodedInputStream.newInstance(new BufferedInputStream(new FileInputStream(source)));
+		in.setSizeLimit(150000000); // Enables reading of files up to 150 MB
+		GraphDataIO geom = ProtobufConverter.getGraphData(Protos.SaveGraphData.parseFrom(in));
+		return geom;
+	}
 
 }

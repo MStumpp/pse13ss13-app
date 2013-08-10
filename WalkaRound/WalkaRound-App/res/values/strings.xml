@@ -40,4 +40,6 @@
     <string name="theatre" translatable="true">Theatres</string>
     <string name="loading" translatable="true">Loading</string>
     <string name="suggestions" translatable="true">Suggestions</string>
+    <string name="monument">Monuments and churches</string>
+    <string name="castle">Castles</string>
 </resources>

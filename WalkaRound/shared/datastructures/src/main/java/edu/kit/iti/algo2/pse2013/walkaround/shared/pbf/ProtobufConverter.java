@@ -278,7 +278,7 @@ public class ProtobufConverter {
 		}
 		URL url;
 		try {
-			url = new URL(savePOI.getImageURL());
+			url = new URL(savePOI.getURL());
 		} catch (MalformedURLException e) {
 			url = null;
 		}
@@ -300,7 +300,7 @@ public class ProtobufConverter {
 			builder.setTextInfo(p.getTextInfo());
 		}
 		if (p.getURL() != null) {
-			builder.setImageURL(p.getURL().toExternalForm());
+			builder.setURL(p.getURL().toExternalForm());
 		}
 		return builder;
 	}

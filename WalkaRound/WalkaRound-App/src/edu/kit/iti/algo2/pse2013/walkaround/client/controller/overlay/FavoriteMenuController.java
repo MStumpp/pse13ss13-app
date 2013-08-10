@@ -95,8 +95,12 @@ public class FavoriteMenuController {
 	public void appendFavoriteRouteToRoute(String name) {
 		Log.d(TAG, String.format("Favorisierte Route '%s' wird der Route hinzugefügt.", name));
 		RouteInfo route = FavoriteManager.getInstance().getFavoriteRoute(name);
+		if (route == null || route.getCoordinates().size() <= 0) {
+			Log.e(TAG, "Die selektierte Route hat keine Koordinaten.");
+			return;
+		}
 		RouteController.getInstance().addRoute(route);
-		MapController.getInstance().setCenter(route.getEnd());
+		MapController.getInstance().setCenter(route.getCoordinates().getLast());
 	}
 
 	/**

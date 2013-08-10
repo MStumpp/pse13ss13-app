@@ -32,9 +32,11 @@ public class POIView extends Fragment {
 	private TextView category9;
 	private TextView category10;
 	private TextView category11;
+	private TextView category12;
+	private TextView category13;
 
 	private POIMenuController poiController;
-	
+
 	private ScrollView sc;
 
 	@Override
@@ -54,10 +56,10 @@ public class POIView extends Fragment {
 		category7 = (TextView) this.getActivity().findViewById(R.id.category_7);
 		category8 = (TextView) this.getActivity().findViewById(R.id.category_8);
 		category9 = (TextView) this.getActivity().findViewById(R.id.category_9);
-		category10 = (TextView) this.getActivity().findViewById(
-				R.id.category_10);
-		category11 = (TextView) this.getActivity().findViewById(
-				R.id.category_11);
+		category10 = (TextView) this.getActivity().findViewById(R.id.category_10);
+		category11 = (TextView) this.getActivity().findViewById(R.id.category_11);
+		category12 = (TextView) this.getActivity().findViewById(R.id.category_12);
+		category13 = (TextView) this.getActivity().findViewById(R.id.category_13);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -66,7 +68,7 @@ public class POIView extends Fragment {
 		display.getSize(size);
 
 
-		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
+		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugefügt");
 		category1.setOnTouchListener(new onCategoryTouch());
 		category2.setOnTouchListener(new onCategoryTouch());
 		category3.setOnTouchListener(new onCategoryTouch());
@@ -78,6 +80,8 @@ public class POIView extends Fragment {
 		category9.setOnTouchListener(new onCategoryTouch());
 		category10.setOnTouchListener(new onCategoryTouch());
 		category11.setOnTouchListener(new onCategoryTouch());
+		category12.setOnTouchListener(new onCategoryTouch());
+		category13.setOnTouchListener(new onCategoryTouch());
 		sc = (ScrollView) this.getActivity().findViewById(R.id.poi_menu_scroll);
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
@@ -183,6 +187,20 @@ public class POIView extends Fragment {
 					setSelected(category11);
 				} else {
 					setUnselected(category11);
+				}
+			} else if (v.equals(category12)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
+				if (!category12.isSelected()) {
+					setSelected(category12);
+				} else {
+					setUnselected(category12);
+				}
+			} else if (v.equals(category13)
+					&& event.getAction() == MotionEvent.ACTION_DOWN) {
+				if (!category13.isSelected()) {
+					setSelected(category13);
+				} else {
+					setUnselected(category13);
 				}
 			}
 			return false;

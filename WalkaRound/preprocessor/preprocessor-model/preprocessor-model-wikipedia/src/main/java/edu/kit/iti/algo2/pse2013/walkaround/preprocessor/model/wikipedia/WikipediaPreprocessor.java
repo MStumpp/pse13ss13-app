@@ -1,19 +1,20 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLStreamException;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
@@ -41,30 +42,41 @@ public class WikipediaPreprocessor {
 	 * @throws XMLStreamException
 	 */
 	public static void preprocessWikipediaInformation(LocationDataIO locationData) {
-		Iterator<POI> iter;
-		while ((iter = locationData.getPOIs().iterator()).hasNext()) {
-			POI current = iter.next();
-			if (current.getURL() != null) {
-				try {
-					URL url = current.getURL();
-					URLConnection connection;
-					connection = url.openConnection();
-					connection.connect();
-					InputSource input = new InputSource(connection.getInputStream());
-					WikipediaHandler handler = new WikipediaHandler();
+		try {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			factory.setFeature("http://xml.org/sax/features/validation", false);
+			SAXParser parser = factory.newSAXParser();
 
-					SAXParserFactory.newInstance().newSAXParser().parse(input, handler);
-					current.setTextInfo(handler.getFirstParagraphs());
-					System.out.println("Fetched Wikipedia from " + current.getURL());
-					current.setURL(handler.getImageURL());
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					e.printStackTrace();
+			Iterator<POI> iter = locationData.getPOIs().iterator();
+			while (iter.hasNext()) {
+				POI current = iter.next();
+				if (current.getURL() != null) {
+					try {
+						URL url = current.getURL();
+						URLConnection connection;
+						connection = url.openConnection();
+						connection.connect();
+						InputSource input = new InputSource(connection.getInputStream());
+						WikipediaHandler handler = new WikipediaHandler();
+
+						parser.parse(input, handler);
+						current.setTextInfo(handler.getFirstParagraphs());
+						current.setURL(handler.getImageURL());
+					} catch (SAXException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXNotRecognizedException e) {
+			e.printStackTrace();
+		} catch (SAXNotSupportedException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
 		}
 	}
 }

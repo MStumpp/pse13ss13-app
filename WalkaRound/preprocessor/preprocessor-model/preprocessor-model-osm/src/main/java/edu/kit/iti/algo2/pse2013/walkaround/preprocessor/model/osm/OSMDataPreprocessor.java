@@ -11,6 +11,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileB
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
+/**
+ * @author Florian Sch&auml;fer
+ */
 public class OSMDataPreprocessor {
 
 	private static final Logger logger = Logger.getLogger(OSMDataPreprocessor.class.getSimpleName());
@@ -62,8 +65,6 @@ public class OSMDataPreprocessor {
 
 		logger.info(String.format("Try writing %d edges (%d vertices) to GraphDataIO-file...", graphData.getEdges().size(), graphData.getVertices().size()));
 
-		logger.info(graphData.getNumOfPartitions() + " partitions are in graphData.pbf");
-
 		GraphDataIO.save(graphData, graphDestination);
 
 		logger.info("Writing GraphDataIO finished (written data not yet validated).");
@@ -85,10 +86,5 @@ public class OSMDataPreprocessor {
 		LocationDataIO location = LocationDataIO.load(locationDestination);
 
 		logger.info(String.format("Read %d POI and %d areas from file.", location.getPOIs().size(), location.getAreas().size()));
-	}
-
-	public static void main(String[] args) throws IOException {
-		OSMDataPreprocessor prep = new OSMDataPreprocessor(new File("/home/florian/OSM/Karten/2013-04-30-RegBez-KA.osm.pbf"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "locationData.pbf"), new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "graphData.pbf"));
-		prep.parse();
 	}
 }
