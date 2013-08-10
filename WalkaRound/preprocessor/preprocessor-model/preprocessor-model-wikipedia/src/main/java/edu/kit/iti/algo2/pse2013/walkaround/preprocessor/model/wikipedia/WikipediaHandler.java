@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.HandlerBase;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -12,8 +11,6 @@ import org.xml.sax.helpers.DefaultHandler;
 public class WikipediaHandler extends DefaultHandler {
 	private static final int STATE_HEADER = 0;
 	private static final int STATE_BODY = 1;
-	private static final int STATE_INSIDE_PARAGRAPH = 2;
-	private static final int STATE_FINISHED = 3;
 
 	private static final int NUM_PARAGRAPHS_TO_COLLECT = 2;
 
@@ -40,6 +37,9 @@ public class WikipediaHandler extends DefaultHandler {
 			firstParagraphs += "</" + qName + ">";
 			if (depthInParagraph < 0) {
 				alreadyCollectedParagraphs++;
+				if (imageURL != null) {
+					state++;
+				}
 			}
 		}
 	}
@@ -60,21 +60,21 @@ public class WikipediaHandler extends DefaultHandler {
 	public void skippedEntity(String arg0) throws SAXException {}
 
 	@Override
-	public void startDocument() throws SAXException {
-		System.out.println("Begin document");
-	}
+	public void startDocument() throws SAXException {}
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		if (state == STATE_HEADER) {
 			if ("body".equals(qName)) {
 				state = STATE_BODY;
-				System.out.println("State: body");
 			}
 		} else if (state == STATE_BODY) {
-			if (imageURL == null && "img".equals(qName) && "thumbimage".equals(atts.getValue("class"))) {
+			if (imageURL == null && "img".equals(qName) && ("thumbimage".equals(atts.getValue("class")) || "image".equals(atts.getValue("class")))) {
 				try {
 					imageURL = new URL("https:" + atts.getValue("src"));
+					if (alreadyCollectedParagraphs >= NUM_PARAGRAPHS_TO_COLLECT) {
+						state++;
+					}
 				} catch (MalformedURLException e) {
 					// Malformed URL, try next image
 				}

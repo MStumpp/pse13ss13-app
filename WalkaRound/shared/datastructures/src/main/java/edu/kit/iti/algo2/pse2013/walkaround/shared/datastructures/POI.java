@@ -206,7 +206,7 @@ public class POI extends Location {
 	public POI clone() {
 		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this
 				.getName(), this.getTextInfo(), this.getURL(), this.getPOICategories(),
-				this.getAddress().clone());
+				this.getAddress()==null ? null : this.getAddress().clone());
 		return clonedPOI;
 	}
 }

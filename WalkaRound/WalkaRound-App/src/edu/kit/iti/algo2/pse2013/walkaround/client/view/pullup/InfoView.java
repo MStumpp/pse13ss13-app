@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,7 +33,7 @@ public class InfoView extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create InfoView");
-		
+
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 
 		this.title = (TextView) this.getActivity().findViewById(
@@ -46,7 +47,7 @@ public class InfoView extends Fragment {
 				R.id.poiinfoview_text);
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
 
-		POI poi = MapController.getInstance().getPOI();
+		final POI poi = MapController.getInstance().getPOI();
 		save.setOnTouchListener(new saveListener(poi, save));
 
 		if (poi != null) {
@@ -58,9 +59,13 @@ public class InfoView extends Fragment {
 			}
 
 			if (poi.getURL() != null) {
-				Bitmap b = POIImageFetcher.fetchImage(poi.getURL());
-				iv.setImageBitmap(b);
-				iv.setVisibility(View.VISIBLE);
+				Thread thread = new Thread(new Runnable() {
+					public void run() {
+						Bitmap b = POIImageFetcher.fetchImage(poi.getURL());
+						iv.setImageBitmap(b);
+						iv.setVisibility(View.VISIBLE);
+					}
+				});
 			}
 
 			if (poi.getPOICategories().length != 0) {
@@ -78,9 +83,9 @@ public class InfoView extends Fragment {
 			}
 
 			if (poi.getTextInfo() != null) {
-				text.setText(poi.getTextInfo());
+				text.setText(Html.fromHtml("<img src=\"" + poi.getURL() + "\">" + poi.getTextInfo()));
 				text.setVisibility(View.VISIBLE);
-				TextToSpeechUtility.getInstance().speak(poi.getTextInfo());
+				TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());
 			}
 		}
 
@@ -122,6 +127,12 @@ public class InfoView extends Fragment {
 		case 11:
 			tv = (TextView) getActivity().findViewById(R.id.category_11);
 			return tv.getText().toString();
+		case 12:
+			tv = (TextView) getActivity().findViewById(R.id.category_12);
+			return tv.getText().toString();
+		case 13:
+			tv = (TextView) getActivity().findViewById(R.id.category_13);
+			return tv.getText().toString();
 		default:
 			return "";
 		}
@@ -154,7 +165,7 @@ public class InfoView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
+				Log.d(TAG_PULLUP_CONTENT, "save wurde gedrückt");
 				RouteController.getInstance().addLocationToFavorites(
 						new Location(poi.getLatitude(), poi.getLongitude(),
 								poi.getName()), poi.getName());
