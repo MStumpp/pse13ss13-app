@@ -98,7 +98,7 @@ public class Route implements RouteInfo {
 
 		// this.addRouteBetweenTwoCoords(route, one, two)
 
-		// F�ge den aktiven WP an der �bergebenen Position in die Route ein.
+		// Füge den aktiven WP an der übergebenen Position in die Route ein.
 
 		this.setActiveWaypoint(activeWaypoint);
 		this.cleanRouteOfDuplicateCoordinatePairs();
@@ -107,25 +107,25 @@ public class Route implements RouteInfo {
 	/**
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 */
-	public void addWaypoint(Waypoint c) {
-		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", c.toString()));
-		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", c, this.routeCoordinates.size()));
+	public void addWaypoint(Waypoint w) {
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w.toString()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
 		if (this.routeCoordinates.size() != 0) {
-			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", c.toString()));
+			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w.toString()));
 			RouteInfo routeExtension;
-			routeExtension = this.computeShortestPath(this.getEnd(), c);
+			routeExtension = this.computeShortestPath(this.getEnd(), w);
 
 			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> addingRoute with %d Coordinates",
-					c.toString(), routeExtension.getCoordinates().size()));
+					w.toString(), routeExtension.getCoordinates().size()));
 			this.addRoute(routeExtension);
 		} else {
-			this.routeCoordinates.add(c);
+			this.routeCoordinates.add(w);
 		}
 
-		this.setActiveWaypoint(c);
+		this.setActiveWaypoint(w);
 		this.cleanRouteOfDuplicateCoordinatePairs();
-		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) - new size of route: %d", c.toString(), this.routeCoordinates.size()));
-		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD END", c.toString()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) - new size of route: %d", w.toString(), this.routeCoordinates.size()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD END", w.toString()));
 	}
 
 	/**

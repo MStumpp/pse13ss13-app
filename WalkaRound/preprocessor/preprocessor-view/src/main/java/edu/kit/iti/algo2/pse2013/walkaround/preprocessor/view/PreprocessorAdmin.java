@@ -9,7 +9,7 @@ import org.kohsuke.args4j.Option;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.OSMDataPreprocessor;
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia.WikipediaPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
@@ -24,16 +24,14 @@ public class PreprocessorAdmin {
 	@Option(name = "--input", required = true, usage="Location of the raw OSM-file")
 	public String input;
 
-	private String dropboxPath = System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar;
-
 	@Option(name = "--location_out", usage="Location of the LocationData-output")
-	public String locationOutput = dropboxPath + "locationData.pbf";
+	public String locationOutput = FileUtil.getFile("locationData.pbf").getAbsolutePath();
 
 	@Option(name = "--graph_out", usage="Location of the GraphData-output")
-	public String graphOutput = dropboxPath + "graphData.pbf";
+	public String graphOutput = FileUtil.getFile("graphData.pbf").getAbsolutePath();
 
 	@Option(name = "--geometry_out", usage="Location of the GeometryData-output")
-	public String geometryOutput = dropboxPath + "geometryData.pbf";
+	public String geometryOutput = FileUtil.getFile("geometryData.pbf").getAbsolutePath();
 
 	public static void main(String[] args) {
 		System.exit(new PreprocessorAdmin().run(args));

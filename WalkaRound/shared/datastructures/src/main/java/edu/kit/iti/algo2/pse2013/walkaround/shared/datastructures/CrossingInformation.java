@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.util.List;
+
 
 /**
  * This class represents CrossingInformation belonging to some Coordinate.
@@ -12,19 +14,29 @@ public final class CrossingInformation {
     /**
      * list of crossroad angles.
      */
-    private float[] crossroadAngles;
+    private float[] angles;
     private int nextCrossingAngleOnRoute;
-    
+
     /**
      * Creates an instance of CrossingInformation.
      *
      * @param crossroadAngles An array of crossroad angles.
      */
-    public CrossingInformation(float[] crossroadAngles) {
-        if (crossroadAngles.length == 0)
+    public CrossingInformation(float[] angles) {
+        if (angles.length == 0)
             throw new IllegalArgumentException("number of crossing angles must be at least one");
-        this.crossroadAngles = crossroadAngles;
+        this.angles = angles;
 	}
+
+    public CrossingInformation(List<Float> angles) {
+    	this.angles = new float[angles.size()];
+    	for (int i = 0; i < angles.size(); i++) {
+    		assert angles.get(i) != null;
+    		if (angles.get(i) != null) {
+        		this.angles[i] = angles.get(i);
+    		}
+    	}
+    }
 
 
     /**
@@ -33,7 +45,7 @@ public final class CrossingInformation {
      * @return array of float.
      */
     public float[] getCrossingAngles() {
-        return crossroadAngles;
+        return angles;
     }
 
 
@@ -43,10 +55,10 @@ public final class CrossingInformation {
      * @return float.
      */
     public float getCrossroadAngle(int index) {
-        if (index < 0 || index > crossroadAngles.length-1)
+        if (index < 0 || index > angles.length-1)
             throw new IllegalArgumentException("index must be equal or greater " +
-                    "than zero but not greater than " + (crossroadAngles.length-1));
-        return crossroadAngles[index];
+                    "than zero but not greater than " + (angles.length-1));
+        return angles[index];
 	}
 
 
@@ -56,19 +68,19 @@ public final class CrossingInformation {
      * @return int.
      */
     public int getNumCrossroads() {
-        return crossroadAngles.length;
+        return angles.length;
     }
 
     public CrossingInformation clone() {
-    	return new CrossingInformation(this.crossroadAngles);
+    	return new CrossingInformation(this.angles);
     }
-    
+
     public boolean setNextCrossingAngleOnRoute(int index) {
-    	if (index >= this.crossroadAngles.length) {
+    	if (index >= this.angles.length) {
     		return false;
     	}
     	this.nextCrossingAngleOnRoute = index;
     	return true;
     }
-    
+
 }
