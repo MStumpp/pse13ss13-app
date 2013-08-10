@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoritesManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -29,16 +28,16 @@ public class Route implements RouteInfo {
 		this.routeProcessor = RouteProcessing.getInstance();
 	}
 
-	
+
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
 	public boolean setActiveWaypoint(int id) {
 		Log.d(TAG_ROUTE, "setActiveWaypoint(id)");
-		
+
 		for (Waypoint wp : this.getWaypoints()) {
 			if (wp.getId() == id) {
 				this.setActiveWaypoint(wp);
@@ -47,9 +46,9 @@ public class Route implements RouteInfo {
 		}
 		return false;
 	}
-	
-	
-	
+
+
+
 	/**
 	 *
 	 */
@@ -108,27 +107,25 @@ public class Route implements RouteInfo {
 	/**
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 */
-	public void addWaypoint(Coordinate c) {
-		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) METHOD START");
-		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) to route with "
-				+ this.routeCoordinates.size() + " Coordinates");
+	public void addWaypoint(Waypoint c) {
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", c.toString()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", c, this.routeCoordinates.size()));
 		if (this.routeCoordinates.size() != 0) {
-			Log.d(TAG_ROUTE,
-					"addWaypoint(Coordinate c) -> computing shortest path");
+			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", c.toString()));
 			RouteInfo routeExtension;
 			routeExtension = this.computeShortestPath(this.getEnd(), c);
 
-			Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) -> addingRoute with "
-					+ routeExtension.getCoordinates().size() + " Coordinates");
+			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> addingRoute with %d Coordinates",
+					c.toString(), routeExtension.getCoordinates().size()));
 			this.addRoute(routeExtension);
 		} else {
 			this.routeCoordinates.add(c);
 		}
-		this.setActiveWaypoint(this.getEnd());
+
+		this.setActiveWaypoint(c);
 		this.cleanRouteOfDuplicateCoordinatePairs();
-		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) - new size of route: "
-				+ this.routeCoordinates.size());
-		Log.d(TAG_ROUTE, "addWaypoint(Coordinate c) METHOD END");
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) - new size of route: %d", c.toString(), this.routeCoordinates.size()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD END", c.toString()));
 	}
 
 	/**
@@ -183,8 +180,8 @@ public class Route implements RouteInfo {
 	public void moveActiveWaypoint(final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate " + coord
 				+ ") METHOD START ");
-		
-		//TODO: 
+
+		//TODO:
 		if (this.activeWaypoint != null) {
 			Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate) Active Waypoint is "
 					+ this.activeWaypoint.toString());
@@ -194,21 +191,21 @@ public class Route implements RouteInfo {
 					"moveActiveWaypoint(coord) Active Waypoint is Nr. "
 							+ (indexOfActiveWaypoint + 1) + " of "
 							+ waypoints.size() + " Waypoints in route.");
-			
+
 			final Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
 			final Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
-			
+
 			final Waypoint activeWP = this.activeWaypoint;
 			final Route tempCurrentRoute = this;
-			
+
 			if (beforeActive != null) {
 				Log.d(TAG_ROUTE,
 						"moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. "
 								+ (waypoints.indexOf(beforeActive) + 1) + " / "
 								+ waypoints.size() + " in route");
-				
+
 				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
-				
+
 				Thread pathCalculator = new Thread (new Runnable() {
 					@Override
 					public void run() {
@@ -217,7 +214,7 @@ public class Route implements RouteInfo {
 
 						newRouteBeforeActiveWaypoint = tempCurrentRoute.computeShortestPath(beforeActive, coord);
 						tempCurrentRoute.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, activeWP);
-						
+
 					}
 				});
 				pathCalculator.start();
@@ -228,7 +225,7 @@ public class Route implements RouteInfo {
 						"moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. "
 								+ (waypoints.indexOf(afterActive) + 1) + " / "
 								+ waypoints.size() + " in route");
-				
+
 				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
 
 				Thread pathCalculator = new Thread (new Runnable() {
@@ -239,7 +236,7 @@ public class Route implements RouteInfo {
 
 						newRoutePastActiveWaypoint = tempCurrentRoute.computeShortestPath(coord, afterActive);
 						tempCurrentRoute.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
-						
+
 					}
 				});
 				pathCalculator.start();
@@ -298,14 +295,13 @@ public class Route implements RouteInfo {
 	}
 
 	/*
-	 * Reverts all Coordinates in the route.
+	 * Inverts all Coordinates in the route.
 	 */
-	public void revertRoute() {
-		Log.d(TAG_ROUTE, "revertRoute()");
+	public void invertRoute() {
+		Log.d(TAG_ROUTE, "invertRoute()");
 		LinkedList<Coordinate> revertedRoute = new LinkedList<Coordinate>();
 
-		Iterator<Coordinate> routeCoordsDecIter = this.routeCoordinates
-				.descendingIterator();
+		Iterator<Coordinate> routeCoordsDecIter = this.routeCoordinates.descendingIterator();
 
 		while (routeCoordsDecIter.hasNext()) {
 			revertedRoute.add(routeCoordsDecIter.next());
@@ -355,8 +351,9 @@ public class Route implements RouteInfo {
 	@Override
 	public Waypoint getEnd() {
 		Log.d(TAG_ROUTE, "getEnd()");
-		if (this.routeCoordinates.size() > 0) {
-			return this.getWaypoints().getLast();
+		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
+		if (waypoints.size() > 0) {
+			return waypoints.getLast();
 		}
 		return null;
 	}
@@ -382,7 +379,7 @@ public class Route implements RouteInfo {
 	@Override
 	public boolean isFavorite() {
 		Log.d(TAG_ROUTE, "isFavorite()");
-		return FavoritesManager.getInstance().containsRoute(this);
+		return FavoriteManager.getInstance().containsRoute(this);
 	}
 
 	@Override
@@ -401,7 +398,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param waypointNr
 	 * @return
 	 */
@@ -416,7 +413,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param waypointNr
 	 * @return
 	 */
@@ -431,7 +428,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param one
 	 * @param two
 	 * @return
@@ -461,7 +458,7 @@ public class Route implements RouteInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param route
 	 * @param one
 	 * @param two
