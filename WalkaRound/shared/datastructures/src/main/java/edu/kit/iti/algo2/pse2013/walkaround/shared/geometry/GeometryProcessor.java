@@ -82,7 +82,6 @@ public class GeometryProcessor {
      * @return GeometryProcessor.
      */
     public static GeometryProcessor init(GeometryDataIO geometryDataIO) {
-    	Log.e(TAG, "GeometryProcessor Init!");
         if (geometryDataIO == null)
             throw new IllegalArgumentException("GeometryDataIO must be provided");
         if (instance != null)
