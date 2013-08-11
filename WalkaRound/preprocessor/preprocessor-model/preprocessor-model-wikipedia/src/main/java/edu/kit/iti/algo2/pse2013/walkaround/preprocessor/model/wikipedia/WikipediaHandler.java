@@ -89,9 +89,10 @@ public class WikipediaHandler extends DefaultHandler {
 				firstParagraphs += "<" + qName;
 				for (int i = 0; i < atts.getLength(); i++) {
 					if ("a".equals(qName) && "href".equals(atts.getQName(i))) {
-						firstParagraphs += " " + atts.getQName(i) + "=\"http://" + lang +  ".wikipedia.org/wiki/" + atts.getValue(i) + '"';
+						firstParagraphs += " " + atts.getQName(i) + "=\"http://" + lang +  ".wikipedia.org" + atts.getValue(i) + '"';
+					} else {
+						firstParagraphs += " " + atts.getQName(i) + "=\"" + atts.getValue(i) + '"';
 					}
-					firstParagraphs += " " + atts.getQName(i) + "=\"" + atts.getValue(i) + '"';
 				}
 				firstParagraphs += ">";
 			}
