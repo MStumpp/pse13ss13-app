@@ -3,7 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
@@ -73,7 +72,7 @@ public class Initialization implements ServletContextListener {
      * Loads GraphDataIO
      */
     private GraphDataIO getGraphDataIO() {
-        File file = FileUtil.getFile("/graphData.pbf");
+        File file = new File(getClass().getResource("/graphData.pbf").getFile());
         GraphDataIO graphDataIO = null;
         try {
             graphDataIO = GraphDataIO.load(file);
@@ -88,7 +87,7 @@ public class Initialization implements ServletContextListener {
      * Loads LocationDataIO
      */
     private LocationDataIO getLocationDataIO() {
-        File file = FileUtil.getFile("/locationData.pbf");
+        File file = new File(getClass().getResource("/locationData.pbf").getFile());
         LocationDataIO locationDataIO = null;
         try {
             locationDataIO = LocationDataIO.load(file);
@@ -103,7 +102,7 @@ public class Initialization implements ServletContextListener {
      * Loads GeometryDataIO
      */
     private GeometryDataIO getGeometryDataIO() {
-        File file = FileUtil.getFile("/geometryData.pbf");
+        File file = new File(getClass().getResource("/geometryData.pbf").getFile());
         GeometryDataIO geometryDataIO = null;
         try {
             geometryDataIO = GeometryDataIO.load(file);
