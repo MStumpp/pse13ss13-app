@@ -119,7 +119,6 @@ public class ShortestPathProcessor {
             }
         });
 
-        logger.info("computeShortestPath -> Start");
         long startTime = System.currentTimeMillis();
 
         Vertex sourceVertex;
@@ -196,12 +195,11 @@ public class ShortestPathProcessor {
                     + sourceVertex.getID() + " and target vertex with id: "
                     + targetVertex.getID());
 
-        logger.info("computeShortestPath -> End: " + route.size());
         long stopTime = System.currentTimeMillis();
         long runTime = stopTime - startTime;
-        logger.info("Run time: " + runTime);
-        for (Vertex vertex : route)
-            logger.info(vertex.toString() + "\n");
+
+        logger.info("computeShortestPath: Start: " + sourceVertex.toString() +
+                " End: " + targetVertex.toString() + " Route Size: " + route.size() + " Run time: " + runTime);
 
         return route;
     }

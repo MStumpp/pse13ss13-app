@@ -4,7 +4,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsExc
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeException;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -218,17 +217,17 @@ public class Server {
             return null;
 
         // project coordinate
-        Coordinate geometrizable;
+        Vertex vertex;
         try {
-            geometrizable = (Coordinate) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+            vertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
         } catch (GeometryProcessorException e) {
             return null;
         } catch (InstantiationException e) {
             return null;
         }
 
-        return new Coordinate(geometrizable.getLatitude(),
-                geometrizable.getLongitude(), null);
+        return new Coordinate(vertex.getLatitude(),
+                vertex.getLongitude(), null);
     }
 
 
