@@ -42,7 +42,7 @@ public class WikipediaHandler extends DefaultHandler {
 			firstParagraphs += "</" + qName + ">";
 			if (depthInParagraph < 0) {
 				alreadyCollectedParagraphs++;
-				if (imageURL != null) {
+				if (alreadyCollectedParagraphs >= NUM_PARAGRAPHS_TO_COLLECT && imageURL != null) {
 					state++;
 				}
 			}
@@ -88,7 +88,7 @@ public class WikipediaHandler extends DefaultHandler {
 				depthInParagraph++;
 				firstParagraphs += "<" + qName;
 				for (int i = 0; i < atts.getLength(); i++) {
-					if ("a".equals(qName) && "src".equals(atts.getValue(i))) {
+					if ("a".equals(qName) && "href".equals(atts.getQName(i))) {
 						firstParagraphs += " " + atts.getQName(i) + "=\"http://" + lang +  ".wikipedia.org/wiki/" + atts.getValue(i) + '"';
 					}
 					firstParagraphs += " " + atts.getQName(i) + "=\"" + atts.getValue(i) + '"';
