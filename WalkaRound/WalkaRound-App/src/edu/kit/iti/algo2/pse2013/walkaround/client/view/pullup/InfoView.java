@@ -48,6 +48,8 @@ public class InfoView extends Fragment implements POIImageListener {
 		this.text = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
+		
+		iv.setVisibility(View.GONE);
 
 		final POI poi = MapController.getInstance().getPOI();
 		save.setOnTouchListener(new saveListener(poi, save));
