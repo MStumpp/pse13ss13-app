@@ -36,6 +36,8 @@
     <string name="sleeping_accomodation" >Übernachtungsmöglichkeiten</string>
     <string name="supermarket" >Supermärkte</string>
     <string name="theatre" >Theater</string>
+    <string name="monument" >Monumente &amp; Kirchen</string>
+    <string name="castle" >Schlösser &amp; Burgen</string>
     <string name="loading" >Lade</string>
     <string name="suggestions" translatable="true">Vorschläge</string>
 </resources>

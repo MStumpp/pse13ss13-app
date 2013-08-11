@@ -62,9 +62,6 @@ public abstract class OSMElement {
 		Coordinate c = getCenterCoordinate();
 		int[] poiCats = getPOICategories();
 		if (getName() != null && c != null && poiCats.length != 0) {
-			if (getWikipediaURL() != null) {
-				System.out.println("Wikipedia-Artikel gefunden für: " + getName());
-			}
 			return new POI(c.getLatitude(), c.getLongitude(), getName(), null, getWikipediaURL(), poiCats, getAddress());
 		}
 		return null;

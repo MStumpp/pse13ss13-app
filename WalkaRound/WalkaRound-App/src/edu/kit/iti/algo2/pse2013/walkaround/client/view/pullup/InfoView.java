@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,11 +15,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
-public class InfoView extends Fragment {
+public class InfoView extends Fragment implements POIImageListener {
 
 	private final String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 
@@ -59,13 +61,7 @@ public class InfoView extends Fragment {
 			}
 
 			if (poi.getURL() != null) {
-				Thread thread = new Thread(new Runnable() {
-					public void run() {
-						Bitmap b = POIImageFetcher.fetchImage(poi.getURL());
-						iv.setImageBitmap(b);
-						iv.setVisibility(View.VISIBLE);
-					}
-				});
+				getActivity().runOnUiThread(new POIImageFetcher(poi.getURL(), this));
 			}
 
 			if (poi.getPOICategories().length != 0) {
@@ -83,12 +79,17 @@ public class InfoView extends Fragment {
 			}
 
 			if (poi.getTextInfo() != null) {
-				text.setText(Html.fromHtml("<img src=\"" + poi.getURL() + "\">" + poi.getTextInfo()));
+				text.setText(Html.fromHtml(poi.getTextInfo()));
+				text.setMovementMethod(LinkMovementMethod.getInstance());
 				text.setVisibility(View.VISIBLE);
 				TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());
 			}
 		}
 
+	}
+	public void setImage(Bitmap b) {
+		iv.setVisibility(View.VISIBLE);
+		iv.setImageBitmap(b);
 	}
 
 	private String getCategoryName(int id) {

@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
@@ -11,12 +10,12 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
@@ -27,12 +26,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  * @version 1.0
  */
 public class WikipediaPreprocessor {
+	private static Logger logger = Logger.getLogger(WikipediaPreprocessor.class.getSimpleName());
 
-	public static void main(String[] args) throws MalformedURLException {
-		LocationDataIO locData = new LocationDataIO();
-		locData.addPOI(new POI(new Location(5, 5, "LocName"), "Text-Info", new URL("http://de.wikipedia.org/w/index.php?title=Karlsruhe&printable=yes"), null));
-		preprocessWikipediaInformation(locData);
-	}
 	/**
 	 * Enhances all POIs within the location data file with textual informations
 	 * and a link to an image if available.
@@ -57,7 +52,13 @@ public class WikipediaPreprocessor {
 						connection = url.openConnection();
 						connection.connect();
 						InputSource input = new InputSource(connection.getInputStream());
-						WikipediaHandler handler = new WikipediaHandler();
+						String lang = current.getURL().toExternalForm();
+						if (lang.length() > 9 && lang.substring(7, 9).matches("[a-zA-Z]{2}")) {
+							lang = lang.substring(7, 9);
+						} else {
+							lang = "de";
+						}
+						WikipediaHandler handler = new WikipediaHandler(lang);
 
 						parser.parse(input, handler);
 						current.setTextInfo(handler.getFirstParagraphs());
@@ -65,7 +66,7 @@ public class WikipediaPreprocessor {
 					} catch (SAXException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger .info(current.getURL().toExternalForm() + " konnte nicht gelesen werden! Wird ignoriert.");
 					}
 				}
 			}

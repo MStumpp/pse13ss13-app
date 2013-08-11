@@ -9,25 +9,38 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-public final class POIImageFetcher {
+public final class POIImageFetcher implements Runnable {
 
-	private static final String TAG_POIIMAGEFETCHER = POIImageFetcher.class
-			.getSimpleName();
+	private static final String TAG_POIIMAGEFETCHER = POIImageFetcher.class.getSimpleName();
+	private POIImageListener listener;
+	private URL url;
+	private Bitmap b;
 
-	private POIImageFetcher() {
-
+	public POIImageFetcher(URL url, POIImageListener listener) {
+		this.url = url;
+		this.listener = listener;
 	}
 
-	public static Bitmap fetchImage(URL url) {
+	@Override
+	public void run() {
+		Thread t = new Thread() {
+			public void run() {
+				try {
+					URLConnection connection = url.openConnection();
+					connection.connect();
+					InputStream input = connection.getInputStream();
+					b = BitmapFactory.decodeStream(input);
+				} catch (IOException e) {
+					Log.e(TAG_POIIMAGEFETCHER, e.toString());
+				}
+			}
+		};
+		t.start();
 		try {
-			URLConnection connection = url.openConnection();
-			connection.connect();
-			InputStream input = connection.getInputStream();
-			Bitmap bitmap = BitmapFactory.decodeStream(input);
-			return bitmap;
-		} catch (IOException e) {
-			Log.e(TAG_POIIMAGEFETCHER, e.toString());
+			t.join();
+			listener.setImage(b);
+		} catch (InterruptedException e) {
+			Log.e(TAG_POIIMAGEFETCHER, "Multithreading failed", e);
 		}
-		return null;
 	}
 }

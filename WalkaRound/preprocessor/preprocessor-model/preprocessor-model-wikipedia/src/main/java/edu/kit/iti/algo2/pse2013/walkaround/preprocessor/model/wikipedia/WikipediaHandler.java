@@ -19,6 +19,11 @@ public class WikipediaHandler extends DefaultHandler {
 	private String firstParagraphs = "";
 	private int depthInParagraph = -1;
 	private URL imageURL;
+	private String lang;
+
+	public WikipediaHandler(String lang) {
+		this.lang = lang;
+	}
 
 	@Override
 	public void characters(char[] chars, int start, int length) throws SAXException {
@@ -83,6 +88,9 @@ public class WikipediaHandler extends DefaultHandler {
 				depthInParagraph++;
 				firstParagraphs += "<" + qName;
 				for (int i = 0; i < atts.getLength(); i++) {
+					if ("a".equals(qName) && "src".equals(atts.getValue(i))) {
+						firstParagraphs += " " + atts.getQName(i) + "=\"http://" + lang +  ".wikipedia.org/wiki/" + atts.getValue(i) + '"';
+					}
 					firstParagraphs += " " + atts.getQName(i) + "=\"" + atts.getValue(i) + '"';
 				}
 				firstParagraphs += ">";
