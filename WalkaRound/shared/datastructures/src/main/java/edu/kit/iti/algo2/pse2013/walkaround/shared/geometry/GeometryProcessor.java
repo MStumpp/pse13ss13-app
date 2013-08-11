@@ -1,7 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * GeometryProcessor provides some api to query nearest Edges and Vertices based on Coordinates.
@@ -10,6 +11,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
  * @version 1.0
  */
 public class GeometryProcessor {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
 
 
     /**
@@ -124,7 +130,17 @@ public class GeometryProcessor {
             throw new IllegalArgumentException("geometrizable must not be null");
         if (running)
             throw new GeometryProcessorException("currently running");
-        return search(geometryDataIO.getRoot(), geometrizable);
+
+        long startTime = System.currentTimeMillis();
+
+        Geometrizable nearestVertex = search(geometryDataIO.getRoot(), geometrizable);
+
+        long stopTime = System.currentTimeMillis();
+        long runTime = stopTime - startTime;
+
+        logger.info("getNearestVertex: Run time: " + runTime);
+
+        return nearestVertex;
     }
 
 
