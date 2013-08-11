@@ -57,7 +57,7 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
         this.head = head;
         id = idCounter;
         idCounter += 1;
-        length = computeLength();
+        //length = computeLength();
         //System.out.println(String.format("Creates edge %d->%d", tail.getID(), head.getID()));
     }
 
@@ -115,7 +115,7 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
      * @return double.
      */
     public double getLength() {
-        return length;
+        return computeLength(); //length;
     }
 
 
