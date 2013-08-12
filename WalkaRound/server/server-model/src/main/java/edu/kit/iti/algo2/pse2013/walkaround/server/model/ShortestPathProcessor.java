@@ -31,21 +31,9 @@ public class ShortestPathProcessor {
 
 
     /**
-     * Graph instance.
-     */
-    private GraphDataIO graphDataIO;
-
-
-    /**
      * ExecutorService.
      */
     private ExecutorService executor;
-
-
-    /**
-     * ShortestPathComputers.
-     */
-    private ArrayDeque<ShortestPathComputer> shortestPathComputerQueue;
 
 
     /**
@@ -54,18 +42,61 @@ public class ShortestPathProcessor {
      * @param graphDataIO GraphDataIO used for shortest path computation.
      * @param numberThreads The number of threads for parallel computation.
      */
-    private ShortestPathProcessor(GraphDataIO graphDataIO, int numberThreads) throws EmptyListOfEdgesException {
-        shortestPathComputerQueue = new ArrayDeque<ShortestPathComputer>();
-        this.graphDataIO = graphDataIO;
-        for (int t=0; t<numberThreads; t++) {
-            Graph graph = new Graph(graphDataIO);
-            shortestPathComputerQueue.add(new ShortestPathComputer(graph));
-        }
+    private ShortestPathProcessor(GraphDataIO graphDataIO, int numberThreads)
+            throws EmptyListOfEdgesException {
+        ArrayDeque<ShortestPathComputer> shortestPathComputerQueue =
+                new ArrayDeque<ShortestPathComputer>();
+        for (int t=0; t<numberThreads; t++)
+            shortestPathComputerQueue.add(new ShortestPathComputer(new Graph(graphDataIO)));
 
         executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 1,
                 TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(shortestPathComputerQueue), shortestPathComputerQueue);
-        // Executors.newFixedThreadPool(numberThreads, new ThreadFactoryCustom(shortestPathComputerQueue));
+    }
+
+
+    /**
+     * Instantiates and/or returns a singleton instance of ShortestPathProcessor.
+     *
+     * @return ShortestPathProcessor.
+     * @throws InstantiationException If not instantiated before.
+     */
+    public static ShortestPathProcessor getInstance() throws InstantiationException {
+        if (instance == null)
+            throw new InstantiationException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of ShortestPathProcessor.
+     *
+     * @param graphDataIO GraphDataIO used for shortest path computation.
+     * @return ShortestPathProcessor.
+     */
+    public static ShortestPathProcessor init(GraphDataIO graphDataIO)
+            throws IllegalArgumentException, EmptyListOfEdgesException {
+        return init(graphDataIO, 1);
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of ShortestPathProcessor.
+     *
+     * @param graphDataIO GraphDataIO used for shortest path computation.
+     * @param numberThreads The number of threads for parallel computation.
+     * @return ShortestPathProcessor.
+     */
+    public static ShortestPathProcessor init(GraphDataIO graphDataIO, int numberThreads)
+            throws IllegalArgumentException, EmptyListOfEdgesException {
+        if (graphDataIO == null)
+            throw new IllegalArgumentException("GraphDataIO must be provided");
+        if (numberThreads < 1)
+            throw new IllegalArgumentException("Number of threads must be greater or equal to 1");
+        if (instance != null)
+            throw new IllegalArgumentException("ShortestPathProcessor already initialized");
+        instance = new ShortestPathProcessor(graphDataIO, numberThreads);
+        return instance;
     }
 
 
@@ -132,51 +163,6 @@ public class ShortestPathProcessor {
 
 
     /**
-     * Instantiates and/or returns a singleton instance of ShortestPathProcessor.
-     *
-     * @return ShortestPathProcessor.
-     * @throws InstantiationException If not instantiated before.
-     */
-    public static ShortestPathProcessor getInstance() throws InstantiationException {
-        if (instance == null)
-            throw new InstantiationException("singleton must be initialized first");
-        return instance;
-    }
-
-
-    /**
-     * Instantiates and returns a singleton instance of ShortestPathProcessor.
-     *
-     * @param graphDataIO GraphDataIO used for shortest path computation.
-     * @return ShortestPathProcessor.
-     */
-    public static ShortestPathProcessor init(GraphDataIO graphDataIO)
-            throws IllegalArgumentException, EmptyListOfEdgesException {
-        return init(graphDataIO, 1);
-    }
-
-
-    /**
-     * Instantiates and returns a singleton instance of ShortestPathProcessor.
-     *
-     * @param graphDataIO GraphDataIO used for shortest path computation.
-     * @param numberThreads The number of threads for parallel computation.
-     * @return ShortestPathProcessor.
-     */
-    public static ShortestPathProcessor init(GraphDataIO graphDataIO, int numberThreads)
-            throws IllegalArgumentException, EmptyListOfEdgesException {
-        if (graphDataIO == null)
-            throw new IllegalArgumentException("GraphDataIO must be provided");
-        if (numberThreads < 1)
-            throw new IllegalArgumentException("Number of threads must be greater or equal to 1");
-        if (instance != null)
-            throw new IllegalArgumentException("ShortestPathProcessor already initialized");
-        instance = new ShortestPathProcessor(graphDataIO, numberThreads);
-        return instance;
-    }
-
-
-    /**
      * Computes a shortest path between any given two Coordinates using the provided
      * graph.
      *
@@ -220,7 +206,8 @@ public class ShortestPathProcessor {
             ShortestPathComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
             if (computer == null)
-                throw new ShortestPathComputeException("ShortestPathComputer is null in ShortestPathTask");
+                throw new ShortestPathComputeException(
+                        "ShortestPathComputer is null in ShortestPathTask");
             return computer.computeShortestPath(source, target);
         }
     }
@@ -232,9 +219,9 @@ public class ShortestPathProcessor {
     private class ShortestPathComputer {
 
         /**
-         * Priority queue.
+         * Graph instance.
          */
-        private PriorityQueue<Vertex> queue;
+        private Graph graph;
 
 
         /**
@@ -244,9 +231,9 @@ public class ShortestPathProcessor {
 
 
         /**
-         * Graph instance.
+         * Priority queue.
          */
-        private Graph graph;
+        private PriorityQueue<Vertex> queue;
 
 
         /**
