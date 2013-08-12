@@ -26,11 +26,7 @@ public class ShortestPathProcessorTest {
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field instance = Graph.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(null, null);
-
-        instance = ShortestPathProcessor.class.getDeclaredField("instance");
+        Field instance = ShortestPathProcessor.class.getDeclaredField("instance");
         instance.setAccessible(true);
         instance.set(null, null);
 

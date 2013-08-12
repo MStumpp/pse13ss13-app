@@ -55,7 +55,7 @@ public class Initialization implements ServletContextListener {
         GeometryProcessor.init(geometryDataIO);
 
         try {
-            RoundtripProcessor.init(Graph.getInstance(), GeometryProcessor.getInstance());
+            RoundtripProcessor.init(graphDataIO, GeometryProcessor.getInstance());
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
