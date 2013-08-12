@@ -24,10 +24,6 @@ public class GeometryDataIOTest {
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field instance = Graph.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(null, null);
-
         Field idCounter = Vertex.class.getDeclaredField("idCounter");
         idCounter.setAccessible(true);
         idCounter.setInt(null, 0);

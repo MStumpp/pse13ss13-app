@@ -19,10 +19,6 @@ public class GraphTest {
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field instance = Graph.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(null, null);
-
         Field idCounter = Vertex.class.getDeclaredField("idCounter");
         idCounter.setAccessible(true);
         idCounter.setInt(null, 0);
@@ -35,11 +31,8 @@ public class GraphTest {
         GraphDataIO graphDataIO = getGraphDataIO();
         Graph graph = null;
         try {
-            Graph.init(graphDataIO.getEdges());
-            graph = Graph.getInstance();
+            graph = new Graph(graphDataIO);
         } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
 
@@ -81,11 +74,8 @@ public class GraphTest {
 
         Graph graph = null;
         try {
-            Graph.init(graphDataIO.getEdges());
-            graph = Graph.getInstance();
+            graph = new Graph(graphDataIO);
         } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
         Assert.assertNotNull(graph);

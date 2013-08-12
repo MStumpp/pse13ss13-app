@@ -46,15 +46,23 @@ public class ShortestPathProcessorTest {
 
     @Test
     public void testInit() {
-        Graph graph = getGraph();
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        GraphDataIO graphDataIO = getGraph();
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Test
     public void testGetInstance() throws InstantiationException {
-        Graph graph = getGraph();
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        GraphDataIO graphDataIO = getGraph();
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
         Assert.assertNotNull(ShortestPathProcessor.getInstance());
     }
 
@@ -62,7 +70,17 @@ public class ShortestPathProcessorTest {
     @Test
     public void testComputesShortestPath() throws InstantiationException {
 
-        Graph graph = getGraph();
+        GraphDataIO graphDataIO = getGraph();
+        Assert.assertNotNull(graphDataIO);
+
+        Graph graph = null;
+        try {
+            graph = new Graph(graphDataIO);
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(graph);
+
         Vertex source = null;
         Vertex target = null;
         try {
@@ -72,7 +90,11 @@ public class ShortestPathProcessorTest {
             e.printStackTrace();
         }
 
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
         ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
         List<Vertex> route = null;
         try {
@@ -105,11 +127,8 @@ public class ShortestPathProcessorTest {
 
         Graph graph = null;
         try {
-            Graph.init(graphDataIO.getEdges());
-            graph = Graph.getInstance();
+            graph = new Graph(graphDataIO);
         } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
         Assert.assertNotNull(graph);
@@ -167,7 +186,11 @@ public class ShortestPathProcessorTest {
         if (source == null || target == null)
             return;
 
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
         ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
         List<Vertex> route = null;
         try {
@@ -177,12 +200,10 @@ public class ShortestPathProcessorTest {
         } catch (ShortestPathComputeException e) {
             e.printStackTrace();
         }
-
-        //Assert.assertEquals(route.size(), numVerticesOnRoute);
     }
 
 
-    private Graph getGraph() {
+    private GraphDataIO getGraph() {
 
         GraphDataIO graphDataIO = new GraphDataIO();
         Vertex vertex0 = new Vertex(0.d, 0.d);
@@ -210,17 +231,7 @@ public class ShortestPathProcessorTest {
         graphDataIO.addEdge(edge9);
         graphDataIO.addEdge(edge10);
 
-        Graph graph = null;
-        try {
-            Graph.init(graphDataIO.getEdges());
-            graph = Graph.getInstance();
-        } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-
-        return graph;
+        return graphDataIO;
     }
 
 }

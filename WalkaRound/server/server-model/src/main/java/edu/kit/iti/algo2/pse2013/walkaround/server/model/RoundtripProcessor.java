@@ -2,10 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -31,6 +28,8 @@ public class RoundtripProcessor {
     /**
      * Graph instance.
      */
+    private GraphDataIO graphDataIO;
+
     private Graph graph;
 
 
@@ -61,10 +60,15 @@ public class RoundtripProcessor {
     /**
      * Creates an instance of RoundtripProcessor.
      *
-     * @param graph Graph used for shortest path computation.
+     * @param graphDataIO GraphDataIO used for shortest path computation.
      */
-    private RoundtripProcessor(Graph graph, GeometryProcessor geometryProcessor) {
-        this.graph = graph;
+    private RoundtripProcessor(GraphDataIO graphDataIO, GeometryProcessor geometryProcessor) {
+        this.graphDataIO = graphDataIO;
+        try {
+            this.graph = new Graph(graphDataIO);
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         // set up the priority queue
         queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
             @Override
@@ -98,17 +102,17 @@ public class RoundtripProcessor {
     /**
      * Instantiates and returns a singleton instance of RoundtripProcessor.
      *
-     * @param graph Graph used for shortest path computation.
+     * @param graphDataIO Graph used for shortest path computation.
      * @return RoundtripProcessor.
      */
-    public static RoundtripProcessor init(Graph graph, GeometryProcessor geometryProcessor) {
-        if (graph == null)
+    public static RoundtripProcessor init(GraphDataIO graphDataIO, GeometryProcessor geometryProcessor) {
+        if (graphDataIO == null)
             throw new IllegalArgumentException("Graph must be provided");
         if (geometryProcessor == null)
             throw new IllegalArgumentException("Graph must be provided");
         if (instance != null)
             throw new IllegalArgumentException("RoundtripProcessor already initialized");
-        instance = new RoundtripProcessor(graph, geometryProcessor);
+        instance = new RoundtripProcessor(graphDataIO, geometryProcessor);
         return instance;
     }
 
@@ -132,20 +136,15 @@ public class RoundtripProcessor {
         if (length < 100)
             throw new IllegalArgumentException("length must be at least 100 meter");
 
-        throw new ShortestPathComputeException("implementation ot finished");
-
-        /*
         Vertex sourceVertex;
-        Vertex targetVertex;
         try {
-            sourceVertex = graph.getVertexByID(source.getID());
-            targetVertex = graph.getVertexByID(source.getID());
+           sourceVertex = graph.getVertexByID(source.getID());
         } catch (NoVertexForIDExistsException e) {
-            throw new ShortestPathComputeException("source and/or target vertex provided not in graph contained");
+            throw new ShortestPathComputeException("source vertex provided not in graph contained");
         }
 
-        if (sourceVertex == null || targetVertex == null)
-            throw new ShortestPathComputeException("source and/or target provided not in graph contained");
+        if (sourceVertex == null)
+            throw new ShortestPathComputeException("source provided not in graph contained");
 
         // some init
         runCounter += 1;
@@ -159,13 +158,9 @@ public class RoundtripProcessor {
         while (!queue.isEmpty()) {
             current = queue.poll();
 
-//            if (current.getRun() == runCounter &&
-//                 current.getCurrentLength() > (1+epsilon)*length/3)
-//                continue;
-
-            // stop criteria
-            if (current.equals(targetVertex))
-                break;
+            if (current.getRun() == runCounter &&
+                 current.getCurrentLength() > (1+epsilon)*length/3)
+                continue;
 
             for (Edge edge : current.getOutgoingEdges()) {
                 distance = current.getCurrentLength() + edgeWeight(edge);
@@ -191,29 +186,25 @@ public class RoundtripProcessor {
             }
         }
 
-        // free queue from memory
-        queue = null;
-        System.gc();
-
         // get the list of coordinates
         LinkedList<Vertex> route = new LinkedList<Vertex>();
-        route.add(targetVertex);
-        Vertex currentParent = targetVertex.getParent();
-        while (currentParent != null && !currentParent.equals(sourceVertex)) {
-            route.addFirst(currentParent);
-            currentParent = currentParent.getParent();
-        }
-        if (currentParent != null)
-            route.addFirst(currentParent);
+//        route.add(targetVertex);
+//        Vertex currentParent = targetVertex.getParent();
+//        while (currentParent != null && !currentParent.equals(sourceVertex)) {
+//            route.addFirst(currentParent);
+//            currentParent = currentParent.getParent();
+//        }
+//        if (currentParent != null)
+//            route.addFirst(currentParent);
+//
+//        // throw exception if not shortest path exists
+//        if (route.size() == 1)
+//            throw new NoShortestPathExistsException("no shortest path exists "
+//                    + "between source vertex with id: "
+//                    + sourceVertex.getID() + " and target vertex with id: "
+//                    + targetVertex.getID());
 
-        // throw exception if not shortest path exists
-        if (route.size() == 1)
-            throw new NoShortestPathExistsException("no shortest path exists "
-                    + "between source vertex with id: "
-                    + sourceVertex.getID() + " and target vertex with id: "
-                    + targetVertex.getID());
-
-        return route;*/
+        return route;
     }
 
 
@@ -227,7 +218,7 @@ public class RoundtripProcessor {
      * @return double Weight for edge considering its length and badness.
      */
     private double edgeWeight(Edge edge) {
-        double badness = 0.5;
+        double badness = 1.d;
         return edge.getLength()*badness;
     }
 

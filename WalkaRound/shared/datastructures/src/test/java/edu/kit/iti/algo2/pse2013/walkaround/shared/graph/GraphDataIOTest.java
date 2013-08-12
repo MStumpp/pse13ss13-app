@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -23,10 +24,6 @@ public class GraphDataIOTest {
 
 	@Before
 	public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		Field instance = Graph.class.getDeclaredField("instance");
-		instance.setAccessible(true);
-		instance.set(null, null);
-
 		Field idCounter = Vertex.class.getDeclaredField("idCounter");
 		idCounter.setAccessible(true);
 		idCounter.setInt(null, 0);
