@@ -47,8 +47,6 @@ public class Route implements RouteInfo {
 		return false;
 	}
 
-
-
 	/**
 	 *
 	 */
