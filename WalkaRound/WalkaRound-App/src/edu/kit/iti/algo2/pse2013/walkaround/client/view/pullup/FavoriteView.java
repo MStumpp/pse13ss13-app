@@ -4,17 +4,21 @@ import java.util.Iterator;
 
 import android.app.Fragment;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R.drawable;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R.layout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
@@ -43,19 +47,18 @@ public class FavoriteView extends Fragment {
 		tabHost.setup();
 
 		TabSpec spec1 = tabHost.newTabSpec("route_favorites_tab");
-		spec1.setContent(R.id.route_favorites);
+		spec1.setContent(R.id.tab_route);
 		spec1.setIndicator("Routes");
 		TabSpec spec2 = tabHost.newTabSpec("poi_favorites_tab");
-		spec2.setContent(R.id.poi_favorites);
+		spec2.setContent(R.id.tab_poi);
 		spec2.setIndicator("POIs");
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
 
 		favorite = (TextView) this.getActivity().findViewById(R.id.favorite);
-		favPois = (LinearLayout) this.getActivity().findViewById(
-				R.id.poi_favorites);
+		favPois = (LinearLayout) this.getActivity().findViewById(R.id.tab_poi);
 		favRoutes = (LinearLayout) this.getActivity().findViewById(
-				R.id.route_favorites);
+				R.id.tab_route);
 
 		tabHost.setVisibility(View.VISIBLE);
 
@@ -97,38 +100,69 @@ public class FavoriteView extends Fragment {
 	}
 
 	private boolean updateFavorties() {
-		// set layout margins
-		LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-		myParams.setMargins(0, 10, 0, 0);
+
+		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+		Display display = this.getActivity().getWindowManager()
+				.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+
+		// set layout margins for Text
+		LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+				4 * size.x / 5, LinearLayout.LayoutParams.WRAP_CONTENT);
+		textParams.setMargins(0, 10, 0, 0);
+
+		// set layout margins for delete bu tton
+		// TODO: größe des delete buttons generisch an text größe anpassen
+		LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
+				size.x / 5, 135);
+		deleteParams.setMargins(0, 10, 0, 0);
+
+		favPois.removeAllViews();
+		favRoutes.removeAllViews();
 
 		// locations
 		for (Iterator<String> iter = FavoriteMenuController.getInstance()
 				.getNamesOfFavoriteLocations().iterator(); iter.hasNext();) {
 			String current = iter.next();
+			LinearLayout poi = new LinearLayout(getActivity());
+			poi.setOrientation(LinearLayout.HORIZONTAL);
 			TextView tv = new TextView(getActivity());
+			ImageButton delete = new ImageButton(getActivity());
+			delete.setImageResource(R.drawable.delete);
 			tv.setText(current);
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favLocationTouch(current, tv));
+			delete.setOnTouchListener(new favLocationDeleteTouch(current, delete));
 			tv.setTextSize(30);
-			tv.setLayoutParams(myParams);
+			delete.setLayoutParams(deleteParams);
+			tv.setLayoutParams(textParams);
 			tv.setBackgroundColor(MapGen.defaultBackground);
-			favPois.addView(tv);
+			poi.addView(tv);
+			poi.addView(delete);
+			favPois.addView(poi);
 		}
 
 		// routes
 		for (Iterator<String> iter = FavoriteMenuController.getInstance()
 				.getNamesOfFavoriteRoutes().iterator(); iter.hasNext();) {
 			String current = iter.next();
+			LinearLayout poi = new LinearLayout(getActivity());
+			poi.setOrientation(LinearLayout.HORIZONTAL);
 			TextView tv = new TextView(getActivity());
+			ImageButton delete = new ImageButton(getActivity());
+			delete.setImageResource(R.drawable.delete);
 			tv.setText(current);
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favRouteTouch(current, tv));
+			delete.setOnTouchListener(new favRouteDeleteTouch(current, delete));
 			tv.setTextSize(30);
-			tv.setLayoutParams(myParams);
+			delete.setLayoutParams(deleteParams);
+			tv.setLayoutParams(textParams);
 			tv.setBackgroundColor(MapGen.defaultBackground);
-			favRoutes.addView(tv);
+			poi.addView(tv);
+			poi.addView(delete);
+			favRoutes.addView(poi);
 		}
 		return false;
 	}
@@ -146,8 +180,10 @@ public class FavoriteView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				Log.d(TAG, String.format("Add route '%s' to current route", name));
-				FavoriteMenuController.getInstance().appendFavoriteRouteToRoute(name);
+				Log.d(TAG,
+						String.format("Add route '%s' to current route", name));
+				FavoriteMenuController.getInstance()
+						.appendFavoriteRouteToRoute(name);
 				MapController.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;
@@ -167,9 +203,53 @@ public class FavoriteView extends Fragment {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				Log.d(TAG, String.format("Add location '%s' to current route", name));
-				FavoriteMenuController.getInstance().appendFavoriteLocationToRoute(name);
+				Log.d(TAG, String.format("Add location '%s' to current route",
+						name));
+				FavoriteMenuController.getInstance()
+						.appendFavoriteLocationToRoute(name);
 				MapController.getInstance().getPullUpView().setNullSizeHeight();
+			}
+			return false;
+		}
+	}
+
+	private class favLocationDeleteTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+		public favLocationDeleteTouch(String name, View view) {
+			this.name = name;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				Log.d(TAG, String.format("delete fav location"));
+				FavoriteMenuController.getInstance().deleteLocation(name);
+				updateFavorties();
+			}
+			return false;
+		}
+	}
+	
+	private class favRouteDeleteTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+		public favRouteDeleteTouch(String name, View view) {
+			this.name = name;
+			this.view = view;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				Log.d(TAG, String.format("delete fav location"));
+				FavoriteMenuController.getInstance().deleteRoute(name);
+				updateFavorties();
 			}
 			return false;
 		}
