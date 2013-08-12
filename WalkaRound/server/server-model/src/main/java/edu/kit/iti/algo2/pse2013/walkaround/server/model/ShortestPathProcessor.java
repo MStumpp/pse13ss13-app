@@ -233,8 +233,8 @@ public class ShortestPathProcessor {
         if (future.isCancelled())
             throw new ShortestPathComputationNoSlotsException("no slots available");
 
-        if (!future.isDone())
-            throw new ShortestPathComputeException("something went wrong internally");
+//        if (!future.isDone())
+//            throw new ShortestPathComputeException("something went wrong internally");
 
         try {
             return future.get();

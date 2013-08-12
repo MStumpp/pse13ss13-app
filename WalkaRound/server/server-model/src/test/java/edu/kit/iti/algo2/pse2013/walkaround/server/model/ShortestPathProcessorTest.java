@@ -104,7 +104,7 @@ public class ShortestPathProcessorTest {
         }
 
         Assert.assertNotNull(route);
-        Assert.assertEquals(route.size(), 3);
+        Assert.assertEquals(3, route.size());
 
         Assert.assertEquals(0, (route.get(0)).getID());
         Assert.assertEquals(2, (route.get(1)).getID());
