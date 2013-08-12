@@ -59,6 +59,7 @@ public class GraphDataIOTest {
 	@Test
     public void testSaveAndLoadWithRealDataSet() throws IOException {
 		System.out.println("### TestSaveAndLoadWithRealDataSet() ###");
+		System.out.println(REAL_GRAPH_DATA_FILE);
 
 		Assert.assertNotNull(REAL_GRAPH_DATA_FILE);
 		Assert.assertTrue(REAL_GRAPH_DATA_FILE.exists());
