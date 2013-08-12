@@ -62,7 +62,7 @@ public class ShortestPathProcessor {
         }
 
         executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 1,
-                TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(numberThreads),
+                TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(shortestPathComputerQueue), shortestPathComputerQueue);
     }
 
