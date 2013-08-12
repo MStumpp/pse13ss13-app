@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * ShortestPathProcessor which takes two Coordinates and computes the shortest path between
@@ -37,6 +38,12 @@ public class ShortestPathProcessor {
 
 
     /**
+     * ID counter for ShortestPathComputer.
+     */
+    private int idCounter;
+
+
+    /**
      * Creates an instance of ShortestPathProcessor.
      *
      * @param graphDataIO GraphDataIO used for shortest path computation.
@@ -46,8 +53,13 @@ public class ShortestPathProcessor {
             throws EmptyListOfEdgesException {
         ArrayDeque<ShortestPathComputer> shortestPathComputerQueue =
                 new ArrayDeque<ShortestPathComputer>();
-        for (int t=0; t<numberThreads; t++)
-            shortestPathComputerQueue.add(new ShortestPathComputer(new Graph(graphDataIO)));
+        idCounter = 0;
+        for (int t=0; t<numberThreads; t++) {
+            ShortestPathComputer computer = new ShortestPathComputer(idCounter, new Graph(graphDataIO));
+            shortestPathComputerQueue.add(computer);
+            logger.info("Instantiated ShortestPathComputer: " + computer.getId());
+            idCounter++;
+        }
 
         executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 1,
                 TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
@@ -105,9 +117,24 @@ public class ShortestPathProcessor {
      */
     private class ThreadFactoryCustom implements ThreadFactory {
 
-        private ArrayDeque<ShortestPathComputer> shortestPathComputerQueue;
+        /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(ThreadFactoryCustom.class);
+
+        final AtomicInteger poolNumber = new AtomicInteger(1);
+        final ThreadGroup group;
+        final AtomicInteger threadNumber = new AtomicInteger(1);
+        final String namePrefix;
+        final ArrayDeque<ShortestPathComputer> shortestPathComputerQueue;
 
         ThreadFactoryCustom(ArrayDeque<ShortestPathComputer> shortestPathComputerQueue) {
+            SecurityManager s = System.getSecurityManager();
+            group = (s != null)? s.getThreadGroup() :
+                    Thread.currentThread().getThreadGroup();
+            namePrefix = "pool-" +
+                    poolNumber.getAndIncrement() +
+                    "-thread-";
             this.shortestPathComputerQueue = shortestPathComputerQueue;
         }
 
@@ -115,7 +142,16 @@ public class ShortestPathProcessor {
         public Thread newThread(Runnable r) {
             if (shortestPathComputerQueue.isEmpty())
                 return null;
-            return new ThreadCustom(r, shortestPathComputerQueue.getFirst());
+            Thread t = new ThreadCustom(group, r,
+                    namePrefix + threadNumber.getAndIncrement(),
+                    0, shortestPathComputerQueue.getFirst());
+            logger.info("New Thread: " + t.getName());
+            if (t.isDaemon())
+                t.setDaemon(false);
+            if (t.getPriority() != Thread.NORM_PRIORITY)
+                t.setPriority(Thread.NORM_PRIORITY);
+
+            return t;
         }
     }
 
@@ -125,11 +161,17 @@ public class ShortestPathProcessor {
      */
     private class ThreadCustom extends Thread {
 
+        /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(ThreadCustom.class);
+
         private ShortestPathComputer computer;
 
-        ThreadCustom(Runnable runnable, ShortestPathComputer computer) {
-            super(runnable);
+        ThreadCustom(ThreadGroup group, Runnable target, String name, long stackSize, ShortestPathComputer computer) {
+            super(group, target, name, stackSize);
             this.computer = computer;
+            logger.info("New Thread: " + name);
         }
 
         private ShortestPathComputer getComputer() {
@@ -143,6 +185,11 @@ public class ShortestPathProcessor {
      */
     private class ThreadPoolExecutorCustom extends ThreadPoolExecutor {
 
+        /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorCustom.class);
+
         private ArrayDeque<ShortestPathComputer> shortestPathComputerQueue;
 
         public ThreadPoolExecutorCustom(int corePoolSize, int maximumPoolSize, long keepAliveTime,
@@ -155,6 +202,8 @@ public class ShortestPathProcessor {
         protected void afterExecute(Runnable r, Throwable t) {
             ShortestPathComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
+            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() +
+                    " and ShortestPathComputer: " + computer.getId());
             if (computer == null)
                 logger.info("ShortestPathComputer is null in ThreadPoolExecutorCustom");
             shortestPathComputerQueue.add(computer);
@@ -171,12 +220,21 @@ public class ShortestPathProcessor {
      * @return RouteInfoTransfer.
      * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
      * @throws ShortestPathComputeException If something during computation goes wrong.
+     * @throws ShortestPathComputationNoSlotsException If no slots available for computing shortest path.
      */
     public List<Vertex> computeShortestPath(Vertex source,
                                             Vertex target)
-            throws NoShortestPathExistsException, ShortestPathComputeException {
+            throws NoShortestPathExistsException, ShortestPathComputeException,
+            ShortestPathComputationNoSlotsException {
 
+        logger.info("computeShortestPath: Source: " + source.toString() + " Target: " + target.toString());
         Future<List<Vertex>> future = executor.submit(new ShortestPathTask(source, target));
+
+        if (future.isCancelled())
+            throw new ShortestPathComputationNoSlotsException("no slots available");
+
+        if (!future.isDone())
+            throw new ShortestPathComputeException("something went wrong internally");
 
         try {
             return future.get();
@@ -193,6 +251,11 @@ public class ShortestPathProcessor {
      */
     private class ShortestPathTask implements Callable<List<Vertex>> {
 
+        /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(ShortestPathTask.class);
+
         private Vertex source;
         private Vertex target;
 
@@ -205,6 +268,8 @@ public class ShortestPathProcessor {
         public List<Vertex> call() throws Exception {
             ShortestPathComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
+            logger.info("call(): Thread: " + Thread.currentThread().getName() +
+                    " and ShortestPathComputer: " + computer.getId());
             if (computer == null)
                 throw new ShortestPathComputeException(
                         "ShortestPathComputer is null in ShortestPathTask");
@@ -217,6 +282,12 @@ public class ShortestPathProcessor {
      * This class actually computes the shortest path.
      */
     private class ShortestPathComputer {
+
+        /**
+         * id.
+         */
+        private int id;
+
 
         /**
          * Graph instance.
@@ -239,7 +310,8 @@ public class ShortestPathProcessor {
         /**
          * ShortestPathWorker.
          */
-        ShortestPathComputer(Graph graphIO) {
+        ShortestPathComputer(int id, Graph graphIO) {
+            this.id = id;
             graph = graphIO;
             runCounter = 0;
             queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
@@ -350,6 +422,10 @@ public class ShortestPathProcessor {
                     " End: " + targetVertex.toString() + " Route Size: " + route.size() + " Run time: " + runTime);
 
             return route;
+        }
+
+        private int getId() {
+            return id;
         }
     }
 
