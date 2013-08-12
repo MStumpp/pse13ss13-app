@@ -84,9 +84,25 @@ public class ShortestPathProcessor {
         public Thread newThread(Runnable r) {
             if (shortestPathComputerQueue.isEmpty())
                 return null;
-            ShortestPathTask callable = (ShortestPathTask) r;
-            callable.setComputer(shortestPathComputerQueue.getFirst());
-            return new Thread(r);
+            return new ThreadCustom(r, shortestPathComputerQueue.getFirst());
+        }
+    }
+
+
+    /**
+     * ThreadCustom.
+     */
+    private class ThreadCustom extends Thread {
+
+        private ShortestPathComputer computer;
+
+        ThreadCustom(Runnable runnable, ShortestPathComputer computer) {
+            super(runnable);
+            this.computer = computer;
+        }
+
+        private ShortestPathComputer getComputer() {
+            return computer;
         }
     }
 
@@ -106,8 +122,11 @@ public class ShortestPathProcessor {
         }
 
         protected void afterExecute(Runnable r, Throwable t) {
-            ShortestPathTask callable = (ShortestPathTask) r;
-            shortestPathComputerQueue.add(callable.getComputer());
+            ShortestPathComputer computer =
+                    ((ThreadCustom)r).getComputer();
+            if (computer == null)
+                logger.info("ShortestPathComputer is null in ThreadPoolExecutorCustom");
+            shortestPathComputerQueue.add(computer);
         }
     }
 
@@ -191,8 +210,6 @@ public class ShortestPathProcessor {
         private Vertex source;
         private Vertex target;
 
-        private ShortestPathComputer computer;
-
         ShortestPathTask(Vertex source, Vertex target) {
             this.source = source;
             this.target = target;
@@ -200,18 +217,12 @@ public class ShortestPathProcessor {
 
         @Override
         public List<Vertex> call() throws Exception {
+            ShortestPathComputer computer =
+                    ((ThreadCustom) Thread.currentThread()).getComputer();
+            if (computer == null)
+                throw new ShortestPathComputeException("ShortestPathComputer is null in ShortestPathTask");
             return computer.computeShortestPath(source, target);
-
         }
-
-        private ShortestPathComputer getComputer() {
-            return computer;
-        }
-
-        private void setComputer(ShortestPathComputer computer) {
-            this.computer = computer;
-        }
-
     }
 
 
