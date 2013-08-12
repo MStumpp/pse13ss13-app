@@ -175,7 +175,6 @@ public class ShortestPathProcessor {
 
         // free queue from memory
         queue = null;
-        System.gc();
 
         // get the list of coordinates
         LinkedList<Vertex> route = new LinkedList<Vertex>();
@@ -188,7 +187,7 @@ public class ShortestPathProcessor {
         if (currentParent != null)
             route.addFirst(currentParent);
 
-        // throw exception if not shortest path exists
+        // throw exception if no shortest path exists
         if (route.size() == 1)
             throw new NoShortestPathExistsException("no shortest path exists "
                     + "between source vertex with id: "

@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -48,8 +48,7 @@ public class WikipediaPreprocessor {
 				if (current.getURL() != null) {
 					try {
 						URL url = current.getURL();
-						URLConnection connection;
-						connection = url.openConnection();
+						URLConnection connection = url.openConnection();
 						connection.connect();
 						InputSource input = new InputSource(connection.getInputStream());
 						String lang = current.getURL().toExternalForm();
@@ -66,7 +65,7 @@ public class WikipediaPreprocessor {
 					} catch (SAXException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
-						logger .info(current.getURL().toExternalForm() + " konnte nicht gelesen werden! Wird ignoriert.");
+						logger.info(current.getURL().toExternalForm() + " konnte nicht gelesen werden! Wird ignoriert.");
 					}
 				}
 			}
