@@ -1,9 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.NoShortestPathExistsException;
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathComputeException;
-import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -74,6 +71,9 @@ public class Server {
             return transfer;
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
+            return transfer;
+        } catch (ShortestPathComputationNoSlotsException e) {
+            transfer.setError("ShortestPathComputationNoSlotsException");
             return transfer;
         }
 

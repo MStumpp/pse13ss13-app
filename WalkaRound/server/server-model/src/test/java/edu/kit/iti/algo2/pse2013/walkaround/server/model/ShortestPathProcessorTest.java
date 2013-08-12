@@ -99,6 +99,8 @@ public class ShortestPathProcessorTest {
             e.printStackTrace();
         } catch (ShortestPathComputeException e) {
             e.printStackTrace();
+        } catch (ShortestPathComputationNoSlotsException e) {
+            e.printStackTrace();
         }
 
         Assert.assertNotNull(route);
@@ -194,6 +196,8 @@ public class ShortestPathProcessorTest {
         } catch (NoShortestPathExistsException e) {
             e.printStackTrace();
         } catch (ShortestPathComputeException e) {
+            e.printStackTrace();
+        } catch (ShortestPathComputationNoSlotsException e) {
             e.printStackTrace();
         }
     }

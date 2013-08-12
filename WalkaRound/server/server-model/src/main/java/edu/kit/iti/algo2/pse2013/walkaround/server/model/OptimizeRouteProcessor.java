@@ -82,7 +82,7 @@ public class OptimizeRouteProcessor {
 	 * @throws NoShortestPathExistsException
 	 */
 	public List<Vertex> computeOptimizedRoute(List<Vertex> vertices)
-			throws NoShortestPathExistsException, ShortestPathComputeException {
+            throws NoShortestPathExistsException, ShortestPathComputeException, ShortestPathComputationNoSlotsException {
 		if (vertices == null)
 			throw new IllegalArgumentException(
 					"list of vertices must be provided");
