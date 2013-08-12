@@ -87,7 +87,7 @@ public class ShortestPathProcessorTest {
         }
 
         try {
-            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 5));
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         }
@@ -183,7 +183,7 @@ public class ShortestPathProcessorTest {
             return;
 
         try {
-            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 5));
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         }

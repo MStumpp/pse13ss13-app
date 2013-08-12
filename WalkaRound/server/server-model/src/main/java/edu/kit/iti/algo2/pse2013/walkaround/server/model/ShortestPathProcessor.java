@@ -123,7 +123,7 @@ public class ShortestPathProcessor {
 
         protected void afterExecute(Runnable r, Throwable t) {
             ShortestPathComputer computer =
-                    ((ThreadCustom)r).getComputer();
+                    ((ThreadCustom) Thread.currentThread()).getComputer();
             if (computer == null)
                 logger.info("ShortestPathComputer is null in ThreadPoolExecutorCustom");
             shortestPathComputerQueue.add(computer);
