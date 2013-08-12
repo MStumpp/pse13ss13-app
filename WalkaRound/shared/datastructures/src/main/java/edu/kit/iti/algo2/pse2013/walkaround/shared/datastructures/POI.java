@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * This class represents a POI.
@@ -135,36 +137,33 @@ public class POI extends Location {
 	}
 
 	public String toString() {
-		String result = "POI:\n\tCoordinate: (" + getLatitude() + "|"
-				+ getLongitude() + ")\n\t" + "Name: " + getName() + "\n\t"
-				+ "TextInfo: " + getTextInfo() + "\n\t" + "URL: " + getURL()
-				+ "\n\t" + "POI-Categories: ";
+		String result = "POI:\n\t"
+				+ "\n\tLocation: " + super.toString()
+				+ "\n\tTextInfo: " + getTextInfo()
+				+ "\n\tURL: " + getURL().toExternalForm()
+				+ "\n\tPOI-Categories: ";
 		for (int i : getPOICategories()) {
 			result += " " + i;
 		}
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((poiCategories == null) ? 0 : poiCategories.hashCode());
+		int result = super.hashCode();
+		result = prime * result + Arrays.hashCode(poiCategories);
 		result = prime * result
 				+ ((textInfo == null) ? 0 : textInfo.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -172,18 +171,14 @@ public class POI extends Location {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!super.equals(obj)) {
 			return false;
 		}
 		if (!(obj instanceof POI)) {
 			return false;
 		}
 		POI other = (POI) obj;
-		if (poiCategories == null) {
-			if (other.poiCategories != null) {
-				return false;
-			}
-		} else if (!poiCategories.equals(other.poiCategories)) {
+		if (!Arrays.equals(poiCategories, other.poiCategories)) {
 			return false;
 		}
 		if (textInfo == null) {
@@ -203,15 +198,14 @@ public class POI extends Location {
 		return true;
 	}
 
-	
+	@Override
 	public POI clone() {
-    	Address clonedAddress = null;
-    	if (this.getAddress() != null) {
-    	clonedAddress = this.getAddress().clone();
-    	}
-    	
-		POI clonedPOI = new POI(this.getLatitude(), this.getLongitude(), this.getName(), this.getTextInfo(), this.getURL(), this.getPOICategories(), clonedAddress);
-
-		return clonedPOI;
+    	URL newURL;
+		try {
+			newURL = new URL(getURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			newURL = null;
+		}
+		return new POI(super.clone(), new String(getTextInfo()), newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));
 	}
 }

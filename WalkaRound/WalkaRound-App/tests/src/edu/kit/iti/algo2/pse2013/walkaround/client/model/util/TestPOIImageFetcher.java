@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import android.graphics.Bitmap;
 
 public class TestPOIImageFetcher extends TestCase {
-	private Bitmap bitmap;
+	public static Bitmap bitmap;
 	private POIImageListener listener = new POIImageListener() {
 		@Override
 		public void setImage(Bitmap b) {
@@ -19,7 +19,7 @@ public class TestPOIImageFetcher extends TestCase {
 	}
 
 	public void testImageFetcher() throws MalformedURLException {
-		Thread t = new Thread(new POIImageFetcher(new URL("http://commons.wikimedia.org/wiki/File:Gray_vacuum_cleaner.svg"), listener));
+		Thread t = new Thread(new POIImageFetcher(new URL("http://upload.wikimedia.org/wikipedia/commons/5/51/Karlsruher_Schloss_Front_Panorama.jpg"), listener));
 		t.start();
 		try {
 			t.join();

@@ -157,32 +157,6 @@ public class Coordinate implements Geometrizable {
 
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Coordinate that = (Coordinate) o;
-
-        if (Double.compare(that.latitude, latitude) != 0) return false;
-        if (Double.compare(that.longitude, longitude) != 0) return false;
-
-        return true;
-    }
-
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(latitude);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(longitude);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-
-    @Override
     public Coordinate clone() {
     	Coordinate clonedCoordinate;
     	if (this.crossInfo == null) {
@@ -192,5 +166,57 @@ public class Coordinate implements Geometrizable {
     	}
     	return clonedCoordinate;
     }
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((crossInfo == null) ? 0 : crossInfo.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(latitude);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(longitude);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Coordinate)) {
+			return false;
+		}
+		Coordinate other = (Coordinate) obj;
+		if (crossInfo == null) {
+			if (other.crossInfo != null) {
+				return false;
+			}
+		} else if (!crossInfo.equals(other.crossInfo)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(latitude) != Double
+				.doubleToLongBits(other.latitude)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(longitude) != Double
+				.doubleToLongBits(other.longitude)) {
+			return false;
+		}
+		return true;
+	}
 
 }
