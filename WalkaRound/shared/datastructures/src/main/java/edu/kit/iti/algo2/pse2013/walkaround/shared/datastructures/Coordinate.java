@@ -208,12 +208,11 @@ public class Coordinate implements Geometrizable {
 		} else if (!crossInfo.equals(other.crossInfo)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(latitude) != Double
-				.doubleToLongBits(other.latitude)) {
+		double epsilon = 1e-323;
+		if (Math.abs(Math.abs(latitude) - Math.abs(other.latitude)) > epsilon) {
 			return false;
 		}
-		if (Double.doubleToLongBits(longitude) != Double
-				.doubleToLongBits(other.longitude)) {
+		if (Math.abs(Math.abs(longitude) - Math.abs(other.longitude)) > epsilon) {
 			return false;
 		}
 		return true;
