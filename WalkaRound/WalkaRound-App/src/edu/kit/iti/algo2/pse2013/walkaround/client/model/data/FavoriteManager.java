@@ -10,10 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -21,10 +22,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveFavLocation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveFavorite;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveRoute;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveRoutepoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
@@ -32,7 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 /**
  * This class manages all saved locations and routes.
  *
- * @author Thomas Kadow
+ * @author Thomas Kadow, Florian Sch&auml;fer
  * @version 1.0
  */
 public class FavoriteManager {
