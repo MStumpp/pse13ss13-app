@@ -136,6 +136,11 @@ public class ShortestPathProcessorTest {
         Vertex[] pair3 = null;
         Vertex[] pair4 = null;
         Vertex[] pair5 = null;
+        Vertex[] pair6 = null;
+        Vertex[] pair7 = null;
+        Vertex[] pair8 = null;
+        Vertex[] pair9 = null;
+        Vertex[] pair10 = null;
 
         while(pair1 == null)
             pair1 = getRoute(graphDataIO, graph);
@@ -152,6 +157,21 @@ public class ShortestPathProcessorTest {
         while(pair5 == null)
             pair5 = getRoute(graphDataIO, graph);
 
+        while(pair6 == null)
+            pair6 = getRoute(graphDataIO, graph);
+
+        while(pair7 == null)
+            pair7 = getRoute(graphDataIO, graph);
+
+        while(pair8 == null)
+            pair8 = getRoute(graphDataIO, graph);
+
+        while(pair9 == null)
+            pair9 = getRoute(graphDataIO, graph);
+
+        while(pair10 == null)
+            pair10 = getRoute(graphDataIO, graph);
+
         try {
             Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 5));
         } catch (EmptyListOfEdgesException e) {
@@ -164,12 +184,22 @@ public class ShortestPathProcessorTest {
         List<Vertex> route3 = null;
         List<Vertex> route4 = null;
         List<Vertex> route5 = null;
+        List<Vertex> route6 = null;
+        List<Vertex> route7 = null;
+        List<Vertex> route8 = null;
+        List<Vertex> route9 = null;
+        List<Vertex> route10 = null;
         try {
             route1 = shortestPathProcessor.computeShortestPath(pair1[0], pair1[1]);
             route2 = shortestPathProcessor.computeShortestPath(pair2[0], pair2[1]);
             route3 = shortestPathProcessor.computeShortestPath(pair3[0], pair3[1]);
             route4 = shortestPathProcessor.computeShortestPath(pair4[0], pair4[1]);
             route5 = shortestPathProcessor.computeShortestPath(pair5[0], pair5[1]);
+            route6 = shortestPathProcessor.computeShortestPath(pair6[0], pair6[1]);
+            route7 = shortestPathProcessor.computeShortestPath(pair7[0], pair7[1]);
+            route8 = shortestPathProcessor.computeShortestPath(pair8[0], pair8[1]);
+            route9 = shortestPathProcessor.computeShortestPath(pair9[0], pair9[1]);
+            route10 = shortestPathProcessor.computeShortestPath(pair10[0], pair10[1]);
 
         } catch (NoShortestPathExistsException e) {
             e.printStackTrace();
