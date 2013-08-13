@@ -213,7 +213,7 @@ public class ShortestPathProcessor {
                     + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null)
                 logger.info("ShortestPathComputer is null in ThreadPoolExecutorCustom");
-            shortestPathComputerQueue.add(computer);
+            //shortestPathComputerQueue.add(computer);
         }
     }
 

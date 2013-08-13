@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
@@ -151,15 +152,16 @@ public class Server {
 
         List<Vertex> route;
         try {
-            route = RoundtripProcessor.getInstance().computeRoundtrip(source, profileAsInt, lengthAsInt);
-        } catch (ShortestPathComputeException e) {
-            transfer.setError("ShortestPathComputeException");
-            return transfer;
-        } catch (NoShortestPathExistsException e) {
-            transfer.setError("NoShortestPathExistsException");
-            return transfer;
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source,
+                    Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
+            return transfer;
+        } catch (RoundtripComputationNoSlotsException e) {
+            transfer.setError("RoundtripComputationNoSlotsException");
+            return transfer;
+        } catch (RoundtripComputeException e) {
+            transfer.setError("RoundtripComputeException");
             return transfer;
         }
 
