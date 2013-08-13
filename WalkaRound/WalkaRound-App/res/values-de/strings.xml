@@ -3,7 +3,7 @@
     <string name="address">address</string>
     <string name="current" >aktuell</string>
     <string name="Route" >Strecke</string>
-    <string name="current_route" >aktuelle Route</string>
+    <string name="current_route" >Aktuelle Route</string>
     <string name="reset" >Reset</string>
     <string name="add_favorite" >Favorite hinzufügen</string>
     <string name="go_to_map" >zur Karte</string>
