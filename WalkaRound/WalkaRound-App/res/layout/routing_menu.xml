@@ -73,34 +73,40 @@
             android:layout_height="wrap_content" >
 
             <LinearLayout
-                android:id="@+id/waylist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.35"
+                android:layout_height="match_parent"
                 android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/waylist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.35"
+                    android:orientation="vertical" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.35" >
+
+                    <Button
+                        android:id="@+id/add_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_favorite" />
+
+                    <Button
+                        android:id="@+id/go_to_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/go_to_map" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </ScrollView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" >
-
-            <Button
-                android:id="@+id/add_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_favorite" />
-
-            <Button
-                android:id="@+id/go_to_map"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/go_to_map" />
-
-        </LinearLayout>
 
     </LinearLayout>
 
