@@ -490,6 +490,7 @@ public class MapView extends Activity {
 	public void setUserPositionOverlayImage(final float x, final float y) {
 		runOnUiThread(new Runnable() {
 			public void run() {
+				//TODO User Pos mitten
 				user.setX(x);
 				user.setY(y);
 			}
