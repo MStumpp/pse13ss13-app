@@ -1,13 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
+import com.google.common.collect.Sets;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * RoundtripProcessor which takes a Coordinate, a Profile and a length, and computes a roundtrip.
@@ -20,69 +19,42 @@ import java.util.PriorityQueue;
 public class RoundtripProcessor {
 
     /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(RoundtripProcessor.class);
+
+
+    /**
      * RoundtripProcessor instance.
      */
     private static RoundtripProcessor instance;
 
 
     /**
-     * Graph instance.
+     * ExecutorService.
      */
-    private GraphDataIO graphDataIO;
-
-    private Graph graph;
-
-
-    /**
-     * GeometryProcessor.
-     */
-    private GeometryProcessor geometryProcessor;
-
-
-    /**
-     * Priority queue.
-     */
-    private PriorityQueue<Vertex> queue;
-
-
-    /**
-     * Run counter.
-     */
-    private int runCounter;
+    private ExecutorService executor;
 
 
     /**
      * Epsilon.
      */
-    private final static double epsilon = 0.05;
+    private final static double eps = 0.05;
 
 
     /**
      * Creates an instance of RoundtripProcessor.
      *
      * @param graphDataIO GraphDataIO used for shortest path computation.
+     * @param numberThreads The number of threads for parallel computation.
      */
-    private RoundtripProcessor(GraphDataIO graphDataIO, GeometryProcessor geometryProcessor) {
-        this.graphDataIO = graphDataIO;
-        try {
-            this.graph = new Graph(graphDataIO);
-        } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        // set up the priority queue
-        queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
-            @Override
-            public int compare(Vertex v1, Vertex v2) {
-                if (v1.getCurrentLength() >  v2.getCurrentLength()){
-                    return 1;
-                } else if (v1.getCurrentLength() < v2.getCurrentLength()){
-                    return -1;
-                } else
-                    return 0;
-            }
-        });
-        runCounter = 0;
-        this.geometryProcessor = geometryProcessor;
+    private RoundtripProcessor(GraphDataIO graphDataIO, int numberThreads)
+            throws EmptyListOfEdgesException {
+
+        // initialize ShortestPathTreeProcessor
+        ShortestPathTreeProcessor.init(graphDataIO, numberThreads);
+
+        executor = Executors.newFixedThreadPool(numberThreads);
     }
 
 
@@ -102,124 +74,160 @@ public class RoundtripProcessor {
     /**
      * Instantiates and returns a singleton instance of RoundtripProcessor.
      *
-     * @param graphDataIO Graph used for shortest path computation.
+     * @param graphDataIO GraphDataIO used for shortest path computation.
+     * @return RoundtripProcessor.
+     * @throws IllegalArgumentException If some input parameter are missing.
+     * @throws EmptyListOfEdgesException If there are no edges.
+     */
+    public static RoundtripProcessor init(GraphDataIO graphDataIO)
+            throws IllegalArgumentException, EmptyListOfEdgesException {
+        return init(graphDataIO, 1);
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of RoundtripProcessor.
+     *
+     * @param graphDataIO Graph used for roundtrip computation.
+     * @param numberThreads The number of threads for parallel computation.
      * @return RoundtripProcessor.
      */
-    public static RoundtripProcessor init(GraphDataIO graphDataIO, GeometryProcessor geometryProcessor) {
+    public static RoundtripProcessor init(GraphDataIO graphDataIO, int numberThreads)
+            throws EmptyListOfEdgesException {
         if (graphDataIO == null)
             throw new IllegalArgumentException("Graph must be provided");
-        if (geometryProcessor == null)
-            throw new IllegalArgumentException("Graph must be provided");
+        if (numberThreads < 1)
+            throw new IllegalArgumentException("Number of threads must be greater or equal to 1");
         if (instance != null)
             throw new IllegalArgumentException("RoundtripProcessor already initialized");
-        instance = new RoundtripProcessor(graphDataIO, geometryProcessor);
+        instance = new RoundtripProcessor(graphDataIO, numberThreads);
         return instance;
     }
 
 
     /**
-     * Computes a roundtrip based on a starting Coordinate, Profile id
-     * and a roundtrip length using the provided Graph.
+     * Computes a shortest path between any given two Coordinates using the provided
+     * graph.
      *
-     * @param source The starting Coordinate of the roundtrip to be computed.
-     * @param profile The id of the Profile of the roundtrip to be computed.
-     * @param length The length of the roundtrip in meter to be computed.
-     * @return RouteInfoTransfer.
+     * @param source Source of the route to be computed.
+     * @param categories List of Categories.
+     * @param length Length of the roundtrip.
+     * @return List of Vertices.
+     * @throws IllegalArgumentException Some input parameter is missing.
+     * @throws RoundtripComputationNoSlotsException If no slots available for computing roundtrip.
+     * @throws RoundtripComputeException If something during computation goes wrong.
      */
-    public List<Vertex> computeRoundtrip(Vertex source, int profile, int length)
-        throws NoShortestPathExistsException, ShortestPathComputeException {
-        if (source == null)
-            throw new IllegalArgumentException("coordinate must be provided");
-        // TODO: Uncomment once Profile returned
-        /*if (Profile.getByID(profile) == null)
-            throw new IllegalArgumentException("profile for id unknown");  */
+    public List<Vertex> computeRoundtrip(Vertex source, int[] categories, int length)
+            throws IllegalArgumentException, RoundtripComputationNoSlotsException,
+            RoundtripComputeException {
+
+        if (source == null || categories == null)
+            throw new IllegalArgumentException("source and/or categories must not be null");
         if (length < 100)
-            throw new IllegalArgumentException("length must be at least 100 meter");
+            throw new IllegalArgumentException("length must be at least 100 meters");
 
-        Vertex sourceVertex;
+        logger.info("computeRoundtrip: Source: " + source.toString());
+        Future<List<Vertex>> future = executor.submit(new RoundtripTask(source, categories, length));
+
+        if (future.isCancelled())
+            throw new RoundtripComputationNoSlotsException("no slots available");
+
         try {
-           sourceVertex = graph.getVertexByID(source.getID());
-        } catch (NoVertexForIDExistsException e) {
-            throw new ShortestPathComputeException("source vertex provided not in graph contained");
+            return future.get();
+        } catch (InterruptedException e) {
+            throw new RoundtripComputeException(e.getMessage());
+        } catch (ExecutionException e) {
+            throw new RoundtripComputeException(e.getMessage());
         }
-
-        if (sourceVertex == null)
-            throw new ShortestPathComputeException("source provided not in graph contained");
-
-        // some init
-        runCounter += 1;
-        sourceVertex.setCurrentLength(0.d);
-        queue.clear();
-        queue.add(sourceVertex);
-
-        // update parent and currentLengths
-        Vertex current, currentHead;
-        double distance;
-        while (!queue.isEmpty()) {
-            current = queue.poll();
-
-            if (current.getRun() == runCounter &&
-                 current.getCurrentLength() > (1+epsilon)*length/3)
-                continue;
-
-            for (Edge edge : current.getOutgoingEdges()) {
-                distance = current.getCurrentLength() + edgeWeight(edge);
-                currentHead = edge.getHead();
-
-                // not yet visited during current run
-                if (currentHead.getRun() != runCounter) {
-                    currentHead.setCurrentLength(distance);
-                    currentHead.setParent(current);
-                    queue.add(currentHead);
-                    currentHead.setRun(runCounter);
-
-                    // edge head already in queue, eventually decrease key
-                } else if (distance < currentHead.getCurrentLength()) {
-                    currentHead.setCurrentLength(distance);
-                    currentHead.setParent(current);
-                    // remove head if its already in the queue, coz
-                    // updating current length after added to queue doesn't
-                    // lead to order change
-                    queue.remove(currentHead);
-                    queue.add(currentHead);
-                }
-            }
-        }
-
-        // get the list of coordinates
-        LinkedList<Vertex> route = new LinkedList<Vertex>();
-//        route.add(targetVertex);
-//        Vertex currentParent = targetVertex.getParent();
-//        while (currentParent != null && !currentParent.equals(sourceVertex)) {
-//            route.addFirst(currentParent);
-//            currentParent = currentParent.getParent();
-//        }
-//        if (currentParent != null)
-//            route.addFirst(currentParent);
-//
-//        // throw exception if not shortest path exists
-//        if (route.size() == 1)
-//            throw new NoShortestPathExistsException("no shortest path exists "
-//                    + "between source vertex with id: "
-//                    + sourceVertex.getID() + " and target vertex with id: "
-//                    + targetVertex.getID());
-
-        return route;
     }
 
 
     /**
-     * Computes weight for a given Edge considering its length and some badness
-     * value. Badness value is based on distance to certain types of locations
-     * and can take value between 0 and 1. In case of areas, badness is either
-     * 0 or 1.
-     *
-     * @param edge Edge weight to be computed for.
-     * @return double Weight for edge considering its length and badness.
+     * Represents a task for roundtrip computation.
      */
-    private double edgeWeight(Edge edge) {
-        double badness = 1.d;
-        return edge.getLength()*badness;
+    private class RoundtripTask implements Callable<List<Vertex>> {
+
+        /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(RoundtripTask.class);
+
+        private Vertex source;
+        private int[] categories;
+        private int length;
+
+        RoundtripTask(Vertex source, int[] categories, int length) {
+            this.source = source;
+            this.categories = categories;
+            this.length = length;
+        }
+
+        @Override
+        public List<Vertex> call() throws Exception {
+            logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()));
+
+            // get the initial set of Vertices
+            RouteSet ring_s = ShortestPathTreeProcessor.getInstance().
+                    computeShortestPathTree(source, categories, length/3, eps);
+
+            // for all Vertices
+            RouteSet ring_u;
+            Set<Vertex> intersect;
+
+            Vertex currentBestU = null,
+                   currentBestV = null;
+            List<Vertex> currentRouteUToV = null;
+            double weigthedLenghtU, weightedLengthV,
+                    bestTotalWeightedLength = Double.POSITIVE_INFINITY;
+
+            for (Vertex vertexU : ring_s.getTargets()) {
+                ring_u = ShortestPathTreeProcessor.getInstance().
+                        computeShortestPathTree(vertexU, categories, length/3, eps);
+                weigthedLenghtU = ring_s.getWeithedLength(vertexU);
+
+                // compute intersection
+                intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
+
+                // of the intersection, only consider the ones having greater weighted length
+                // then vertex_u
+                for (Vertex vertexV : intersect) {
+                    weightedLengthV = ring_u.getWeithedLength(vertexV) + ring_s.getWeithedLength(vertexV);
+                    if (ring_s.getWeithedLength(vertexU) <= ring_s.getWeithedLength(vertexV)) {
+                        if (currentBestU == null) {
+                            currentBestU = vertexU;
+                            currentBestV = vertexV;
+                            currentRouteUToV = ring_u.getRoute(vertexV);
+                            bestTotalWeightedLength = weigthedLenghtU + weightedLengthV;
+
+                        } else if (weigthedLenghtU + weightedLengthV < bestTotalWeightedLength) {
+                            currentBestU = vertexU;
+                            currentBestV = vertexV;
+                            currentRouteUToV = ring_u.getRoute(vertexV);
+                            bestTotalWeightedLength = weigthedLenghtU + weightedLengthV;
+                        }
+                    }
+                }
+            }
+
+            if (currentBestU == null || currentBestU == null || currentRouteUToV == null)
+                throw new NoRoundtripExistsException("no roundtrip exists");
+
+            List<Vertex> roundtrip = new LinkedList<Vertex>();
+            roundtrip.addAll(ring_s.getRoute(currentBestU));
+            roundtrip.addAll(currentRouteUToV);
+            roundtrip.addAll(reverseList(ring_s.getRoute(currentBestV)));
+
+            return roundtrip;
+        }
+    }
+
+    private List<Vertex> reverseList(List<Vertex> list) {
+        List<Vertex> invertedList = new LinkedList<Vertex>();
+        for (int i = list.size() - 1; i >= 0; i--) {
+            invertedList.add(list.get(i));
+        }
+        return invertedList;
     }
 
 }

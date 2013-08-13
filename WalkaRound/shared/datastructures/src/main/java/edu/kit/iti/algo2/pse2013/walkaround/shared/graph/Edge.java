@@ -2,7 +2,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
 /**
@@ -138,6 +140,18 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
      */
     public double getLength() {
         return length;
+    }
+
+
+    /**
+     * Returns weighted distance between tail and head
+     * based on the set of Categories. It returns a value
+     * between 0 and the length.
+     *
+     * @return double.
+     */
+    public double getWeightedLength(int[] categories) {
+        return length * 1.0;
     }
 
 
