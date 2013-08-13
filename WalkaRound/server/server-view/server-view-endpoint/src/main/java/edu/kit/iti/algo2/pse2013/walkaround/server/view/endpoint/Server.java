@@ -7,6 +7,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -23,6 +25,12 @@ import java.util.List;
  */
 @Path("/processor")
 public class Server {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
+
 
     /**
      * Endpoint method for computation of a shortest path between any given two Coordinates.
@@ -114,6 +122,8 @@ public class Server {
     public RouteInfoTransfer computeRoundtrip(Coordinate coordinate,
                                               @PathParam("profile") String profile,
                                               @PathParam("length") String length) {
+
+        logger.info("computeRoundtrip: Coordinate: " + coordinate + " Profile: " + profile + " Length: " + length);
 
         RouteInfoTransfer transfer = new RouteInfoTransfer();
 
