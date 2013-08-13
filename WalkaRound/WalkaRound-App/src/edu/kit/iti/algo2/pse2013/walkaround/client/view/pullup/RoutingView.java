@@ -30,6 +30,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -75,7 +76,7 @@ public class RoutingView extends Fragment {
 		layout = (LinearLayout) getActivity().findViewById(R.id.waylist);
 
 		favoriteName = (EditText) this.getActivity().findViewById(
-				R.id.favoritename);
+				R.id.favorite_name);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
@@ -118,8 +119,6 @@ public class RoutingView extends Fragment {
 		save.setOnTouchListener(new saveListener());
 		addFavorite.setOnTouchListener(new favoriteListener());
 		goToMap.setOnTouchListener(new backToMapListener());
-		favoriteName
-				.setOnEditorActionListener(new FavoriteNameActionListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}
@@ -205,6 +204,8 @@ public class RoutingView extends Fragment {
 			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedr�ckt");
 				if (layout.getChildCount() != 0) {
+					favoriteName
+							.setOnEditorActionListener(new FavoriteNameActionListener());
 					favoriteName.setVisibility(View.VISIBLE);
 				}
 			}
@@ -258,8 +259,7 @@ public class RoutingView extends Fragment {
 
 				// set layout margins for Text
 				LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-						3 * size.x / 5,
-						LinearLayout.LayoutParams.WRAP_CONTENT);
+						3 * size.x / 5, LinearLayout.LayoutParams.WRAP_CONTENT);
 				myParams.setMargins(0, 10, 0, 0);
 
 				// set layout margins for delete bu tton
@@ -341,9 +341,46 @@ public class RoutingView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_CONTENT, "save waypoint gedrückt");
+				favoriteName
+						.setOnEditorActionListener(new FavoriteNameForWaypointsActionListener(
+								value));
+				favoriteName.setVisibility(View.VISIBLE);
+			}
+			return false;
+		}
+	}
+
+	private class FavoriteNameForWaypointsActionListener implements
+			OnEditorActionListener {
+
+		Waypoint value;
+
+		public FavoriteNameForWaypointsActionListener(Waypoint value) {
+			this.value = value;
+		}
+
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (v.equals(favoriteName)) {
+				Log.d(TAG_PULLUP_CONTENT, "Ein name wurde eingegeben");
+				// TODO: ansicht wechselt in die liste der !!!!favorisierten
+				// pois!!!!
 				// RouteController.getInstance().addLocationToFavorites(value,
 				// name);
+				String checkString = v.getText().toString()
+						.replaceAll(" ", null);
+				if (!checkString.isEmpty()) {
+					RouteController.getInstance().addLocationToFavorites(
+							new Location(value.getLatitude(),
+									value.getLongitude(), v.getText()
+											.toString()),
+							v.getText().toString());
+					favoriteName.setVisibility(View.GONE);
+					MapController.getInstance().getPullUpView()
+							.changeView(PullUpView.CONTENT_FAVORITE);
+				}
 			}
 			return false;
 		}
@@ -361,7 +398,8 @@ public class RoutingView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_CONTENT, "delete waypoint gedrückt");
 				// TODO: metho zum löschen eines bestimmten wegpunktes
 				// RouteController.getInstance().
 			}

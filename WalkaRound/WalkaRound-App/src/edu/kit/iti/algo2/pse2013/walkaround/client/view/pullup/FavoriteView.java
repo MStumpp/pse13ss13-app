@@ -179,7 +179,7 @@ public class FavoriteView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG,
 						String.format("Add route '%s' to current route", name));
 				FavoriteMenuController.getInstance()
@@ -202,7 +202,7 @@ public class FavoriteView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG, String.format("Add location '%s' to current route",
 						name));
 				FavoriteMenuController.getInstance()
@@ -225,7 +225,7 @@ public class FavoriteView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG, String.format("delete fav location"));
 				FavoriteMenuController.getInstance().deleteLocation(name);
 				updateFavorties();
@@ -246,7 +246,7 @@ public class FavoriteView extends Fragment {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG, String.format("delete fav location"));
 				FavoriteMenuController.getInstance().deleteRoute(name);
 				updateFavorties();

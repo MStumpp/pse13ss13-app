@@ -55,6 +55,18 @@
 
         </LinearLayout>
 
+        <EditText
+            android:id="@+id/favorite_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/favorite_name"
+            android:inputType="text"
+            android:visibility="gone" >
+
+            <requestFocus />
+        </EditText>
+
         <ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="match_parent"
@@ -91,18 +103,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/favoritename"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center|top"
-        android:hint="@string/favorite_name"
-        android:inputType="text"
-        android:visibility="gone" >
-
-        <requestFocus />
-    </EditText>
 
 </RelativeLayout>
