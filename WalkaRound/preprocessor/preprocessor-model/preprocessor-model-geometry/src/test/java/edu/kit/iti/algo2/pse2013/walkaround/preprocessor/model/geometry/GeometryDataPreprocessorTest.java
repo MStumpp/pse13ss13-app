@@ -155,7 +155,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
+    public void testPreprocessGraphDataIOWithRealDataSet() throws InstantiationException {
 
         File graphDataio = FileUtil.getFile("graphData.pbf");
         Assert.assertNotNull(graphDataio);
