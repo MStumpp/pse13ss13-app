@@ -39,21 +39,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
-                    <LinearLayout
+                    <ScrollView
                         android:id="@+id/tab_route"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
+                        android:layout_height="match_parent" >
 
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/routefavs"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical" >
+                        </LinearLayout>
 
-                    <LinearLayout
+                    </ScrollView>
+
+                    <ScrollView
                         android:id="@+id/tab_poi"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
+                        android:layout_height="match_parent" >
 
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/poifavs"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical" >
+                        </LinearLayout>
+                    </ScrollView>
+
                 </FrameLayout>
             </LinearLayout>
         </TabHost>

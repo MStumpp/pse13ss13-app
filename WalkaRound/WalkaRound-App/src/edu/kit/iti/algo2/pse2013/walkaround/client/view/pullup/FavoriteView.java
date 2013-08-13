@@ -56,10 +56,9 @@ public class FavoriteView extends Fragment {
 		tabHost.addTab(spec2);
 
 		favorite = (TextView) this.getActivity().findViewById(R.id.favorite);
-		favPois = (LinearLayout) this.getActivity().findViewById(R.id.tab_poi);
+		favPois = (LinearLayout) this.getActivity().findViewById(R.id.poifavs);
 		favRoutes = (LinearLayout) this.getActivity().findViewById(
-				R.id.tab_route);
-
+				R.id.routefavs);
 		tabHost.setVisibility(View.VISIBLE);
 
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
@@ -133,7 +132,8 @@ public class FavoriteView extends Fragment {
 			tv.setText(current);
 			// TODO TextSize relativieren
 			tv.setOnTouchListener(new favLocationTouch(current, tv));
-			delete.setOnTouchListener(new favLocationDeleteTouch(current, delete));
+			delete.setOnTouchListener(new favLocationDeleteTouch(current,
+					delete));
 			tv.setTextSize(30);
 			delete.setLayoutParams(deleteParams);
 			tv.setLayoutParams(textParams);
@@ -233,7 +233,7 @@ public class FavoriteView extends Fragment {
 			return false;
 		}
 	}
-	
+
 	private class favRouteDeleteTouch implements OnTouchListener {
 
 		private String name;
