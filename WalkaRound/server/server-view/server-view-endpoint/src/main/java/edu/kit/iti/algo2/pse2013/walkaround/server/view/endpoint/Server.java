@@ -127,8 +127,10 @@ public class Server {
 
         RouteInfoTransfer transfer = new RouteInfoTransfer();
 
+        return transfer;
+
         // check input
-        if (coordinate == null || profile == null || length == null) {
+        /*if (coordinate == null || profile == null || length == null) {
             transfer.setError("coordinate, profile and length must not be null");
             return transfer;
         }
@@ -187,7 +189,7 @@ public class Server {
                     vertex.getLongitude(),
                     computeCrossingInformation(vertex)));
 
-        return transfer;
+        return transfer;   */
     }
 
 
