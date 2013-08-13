@@ -46,7 +46,7 @@ public class Initialization implements ServletContextListener {
         LocationDataIO locationDataIO = getLocationDataIO();
 
         try {
-            ShortestPathProcessor.init(graphDataIO, 2);
+            ShortestPathProcessor.init(graphDataIO, 5);
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         }
