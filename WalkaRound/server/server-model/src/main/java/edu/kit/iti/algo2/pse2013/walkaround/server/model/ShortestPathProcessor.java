@@ -85,6 +85,8 @@ public class ShortestPathProcessor {
      *
      * @param graphDataIO GraphDataIO used for shortest path computation.
      * @return ShortestPathProcessor.
+     * @throws IllegalArgumentException If some input parameter are missing.
+     * @throws EmptyListOfEdgesException If there are no edges.
      */
     public static ShortestPathProcessor init(GraphDataIO graphDataIO)
             throws IllegalArgumentException, EmptyListOfEdgesException {
@@ -98,6 +100,8 @@ public class ShortestPathProcessor {
      * @param graphDataIO GraphDataIO used for shortest path computation.
      * @param numberThreads The number of threads for parallel computation.
      * @return ShortestPathProcessor.
+     * @throws IllegalArgumentException If some input parameter are missing.
+     * @throws EmptyListOfEdgesException If there are no edges.
      */
     public static ShortestPathProcessor init(GraphDataIO graphDataIO, int numberThreads)
             throws IllegalArgumentException, EmptyListOfEdgesException {
@@ -221,14 +225,18 @@ public class ShortestPathProcessor {
      * @param source Source of the route to be computed.
      * @param target Target of the route to be computed.
      * @return RouteInfoTransfer.
+     * @throws IllegalArgumentException Some input parameter is missing.
+     * @throws ShortestPathComputationNoSlotsException If no slots available for computing shortest path.
      * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
      * @throws ShortestPathComputeException If something during computation goes wrong.
-     * @throws ShortestPathComputationNoSlotsException If no slots available for computing shortest path.
      */
     public List<Vertex> computeShortestPath(Vertex source,
                                             Vertex target)
             throws NoShortestPathExistsException, ShortestPathComputeException,
             ShortestPathComputationNoSlotsException {
+
+        if (source == null || target == null)
+            throw new IllegalArgumentException("source and/or target must not be null");
 
         logger.info("computeShortestPath: Source: " + source.toString() + " Target: " + target.toString());
         Future<List<Vertex>> future = executor.submit(new ShortestPathTask(source, target));

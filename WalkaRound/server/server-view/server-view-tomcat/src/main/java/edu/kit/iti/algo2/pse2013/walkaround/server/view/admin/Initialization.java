@@ -43,7 +43,6 @@ public class Initialization implements ServletContextListener {
     private void setUpProcessors() {
 
         GraphDataIO graphDataIO = getGraphDataIO();
-        LocationDataIO locationDataIO = getLocationDataIO();
 
         try {
             ShortestPathProcessor.init(graphDataIO, 2);
@@ -51,8 +50,7 @@ public class Initialization implements ServletContextListener {
             e.printStackTrace();
         }
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
-        GeometryProcessor.init(geometryDataIO);
+        GeometryProcessor.init(getGeometryDataIO(), 2);
 
         try {
             RoundtripProcessor.init(graphDataIO, GeometryProcessor.getInstance());
