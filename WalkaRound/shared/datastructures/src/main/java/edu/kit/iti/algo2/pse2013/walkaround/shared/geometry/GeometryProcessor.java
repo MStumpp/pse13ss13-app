@@ -1,12 +1,23 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+
+
+import java.util.ArrayDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
 /**
  * GeometryProcessor provides some api to query nearest Edges and Vertices based on Coordinates.

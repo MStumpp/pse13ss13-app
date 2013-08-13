@@ -175,8 +175,7 @@ public class Coordinate implements Geometrizable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((crossInfo == null) ? 0 : crossInfo.hashCode());
+		result = prime * result + ((crossInfo == null) ? 0 : crossInfo.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(latitude);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -217,5 +216,4 @@ public class Coordinate implements Geometrizable {
 		}
 		return true;
 	}
-
 }
