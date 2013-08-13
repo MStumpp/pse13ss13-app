@@ -47,8 +47,6 @@ public class Route implements RouteInfo {
 		return false;
 	}
 
-
-
 	/**
 	 *
 	 */
@@ -551,6 +549,7 @@ public class Route implements RouteInfo {
 
 		try {
 			output = this.routeProcessor.computeShortestPath(start, end);
+			Log.d(TAG_ROUTE, "computeShortestPath() returning Route: " + output);
 		} catch (Exception e) {
 			Log.d(TAG_ROUTE,
 					"computeShortestPath() - RETURN TO SENDER, ADDRESS UNKNOWN.");

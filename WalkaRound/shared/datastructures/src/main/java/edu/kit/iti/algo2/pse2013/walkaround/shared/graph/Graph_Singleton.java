@@ -8,7 +8,13 @@ import java.util.Set;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Graph {
+public final class Graph_Singleton {
+
+    /**
+     * Graph instance.
+     */
+    private static Graph_Singleton instance;
+
 
     /**
      * Array of Vertices.
@@ -19,50 +25,61 @@ public final class Graph {
     /**
      * Creates an instance of Graph.
      *
-     * @param graphDataIO GaphDataIO data.
-     * @throws EmptyListOfEdgesException if list of edges is empty.
-     * @throws EmptyListOfEdgesException if list of edges is empty.
+     * @param edges Set of Edges to build a Graph.
      */
-    public Graph(GraphDataIO graphDataIO) throws IllegalArgumentException,
-            EmptyListOfEdgesException {
-
-        if (graphDataIO == null)
-            throw new IllegalArgumentException("GraphDataIO must not be null");
-
-        Set<Edge> edges = graphDataIO.getEdges();
-
-        if (edges.size() == 0)
-            throw new EmptyListOfEdgesException("list of edges must be at least of size 1");
-
+    private Graph_Singleton(Set<Edge> edges) {
         vertices = new Vertex[edges.size()*2];
         Vertex currentForTail, currentForHead;
         for (Edge edge : edges) {
-            if (vertices.length <= edge.getTail().getID())
+            currentForTail = edge.getTail();
+            if (vertices.length <= currentForTail.getID())
                 vertices = increaseArray(vertices, 100000);
-
-            currentForTail = vertices[edge.getTail().getID()];
-            if (currentForTail == null) {
-                currentForTail = new Vertex(edge.getTail());
+            if (vertices[currentForTail.getID()] == null)
                 vertices[currentForTail.getID()] = currentForTail;
-            }
-
-            if (vertices.length <= edge.getHead().getID())
+            currentForHead = edge.getHead();
+            if (vertices.length <= currentForHead.getID())
                 vertices = increaseArray(vertices, 100000);
-
-            currentForHead = vertices[edge.getHead().getID()];
-            if (currentForHead == null) {
-                currentForHead = new Vertex(edge.getHead());
+            if (vertices[currentForHead.getID()] == null)
                 vertices[currentForHead.getID()] = currentForHead;
-            }
 
             // for tail, reuse current edge object
-            Edge newEdge = new Edge(currentForTail, currentForHead, edge.getID());
-            currentForTail.addOutgoingEdge(newEdge);
-            currentForHead.addOutgoingEdge(newEdge);
+            currentForTail.addOutgoingEdge(edge);
             // instantiate new Edge object for reverse egde
-            // Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
-            // currentForHead.addOutgoingEdge(inverseEdge);
+            Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
+            currentForHead.addOutgoingEdge(inverseEdge);
         }
+    }
+
+
+    /**
+     * Instantiates and/or returns a singleton instance of Graph.
+     *
+     * @return Graph.
+     * @throws InstantiationException If class is not instatiated.
+     */
+    public static Graph_Singleton getInstance() throws InstantiationException {
+        if (instance == null)
+            throw new InstantiationException("singleton must be initialized first");
+        return instance;
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of Graph.
+     *
+     * @param edges List of Edges to build a Graph.
+     * @return Graph.
+     * @throws edu.kit.iti.algo2.pse2013.walkaround.shared.graph.EmptyListOfEdgesException if list of edges is empty.
+     */
+    public static Graph_Singleton init(Set<Edge> edges) throws EmptyListOfEdgesException {
+        if (edges == null)
+            throw new IllegalArgumentException("list of edges must not be null");
+        if (edges.size() == 0)
+            throw new EmptyListOfEdgesException("list of edges must be at least of size 1");
+        if (instance != null)
+            throw new IllegalArgumentException("GeometryProcessor already initialized");
+        instance = new Graph_Singleton(edges);
+        return instance;
     }
 
 
@@ -84,7 +101,7 @@ public final class Graph {
      *
      * @param id The id of the Vertex to be returned.
      * @return Vertex the Vertex with the given id.
-     * @throws NoVertexForIDExistsException if no Vertex for given ID exists.
+     * @throws edu.kit.iti.algo2.pse2013.walkaround.shared.graph.NoVertexForIDExistsException if no Vertex for given ID exists.
      */
     public Vertex getVertexByID(int id) throws NoVertexForIDExistsException {
         if (id < 0)
@@ -110,5 +127,6 @@ public final class Graph {
         System.arraycopy(array, 0, newArray, 0, array.length);
         return newArray;
     }
+
 
 }

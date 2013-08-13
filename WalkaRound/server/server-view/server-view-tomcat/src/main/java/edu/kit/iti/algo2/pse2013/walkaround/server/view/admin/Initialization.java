@@ -43,25 +43,17 @@ public class Initialization implements ServletContextListener {
     private void setUpProcessors() {
 
         GraphDataIO graphDataIO = getGraphDataIO();
-        LocationDataIO locationDataIO = getLocationDataIO();
 
         try {
-            Graph.init(graphDataIO.getEdges());
+            ShortestPathProcessor.init(graphDataIO, 2);
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         }
 
-        try {
-            ShortestPathProcessor.init(Graph.getInstance());
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
-        GeometryProcessor.init(geometryDataIO);
+        GeometryProcessor.init(getGeometryDataIO(), 2);
 
         try {
-            RoundtripProcessor.init(Graph.getInstance(), GeometryProcessor.getInstance());
+            RoundtripProcessor.init(graphDataIO, GeometryProcessor.getInstance());
         } catch (InstantiationException e) {
             e.printStackTrace();
         }

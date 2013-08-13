@@ -57,13 +57,23 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
         this.head = head;
         id = idCounter;
         idCounter += 1;
-        //length = computeLength();
+        length = computeLength();
         //System.out.println(String.format("Creates edge %d->%d", tail.getID(), head.getID()));
     }
 
     public Edge(Vertex tail, Vertex head, int id) {
     	this(tail, head);
     	this.id = id;
+    }
+
+    /**
+     * Duplicate an Edge. Doesn't duplicate the Vertices contained
+     * in the Edge.
+     *
+     * @param edge The Edge to be duplicated.
+     */
+    public Edge(Edge edge) {
+        this(edge.getTail(), edge.getHead(), edge.getID());
     }
 
     /**
@@ -97,6 +107,18 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
 
 
     /**
+     * Returns the other end of the Egde than the given Vertex.
+     *
+     * @return Vertex.
+     */
+    public Vertex getOtherVertex(Vertex vertex) {
+        if (tail == vertex)
+            return head;
+        return tail;
+    }
+
+
+    /**
      * Returns tail and head as list.
      *
      * @return List<Vertex>.
@@ -115,7 +137,7 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
      * @return double.
      */
     public double getLength() {
-        return computeLength(); //length;
+        return length;
     }
 
 

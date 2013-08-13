@@ -26,11 +26,7 @@ public class ShortestPathProcessorTest {
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field instance = Graph.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(null, null);
-
-        instance = ShortestPathProcessor.class.getDeclaredField("instance");
+        Field instance = ShortestPathProcessor.class.getDeclaredField("instance");
         instance.setAccessible(true);
         instance.set(null, null);
 
@@ -46,15 +42,23 @@ public class ShortestPathProcessorTest {
 
     @Test
     public void testInit() {
-        Graph graph = getGraph();
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        GraphDataIO graphDataIO = getGraph();
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Test
     public void testGetInstance() throws InstantiationException {
-        Graph graph = getGraph();
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        GraphDataIO graphDataIO = getGraph();
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
         Assert.assertNotNull(ShortestPathProcessor.getInstance());
     }
 
@@ -62,7 +66,17 @@ public class ShortestPathProcessorTest {
     @Test
     public void testComputesShortestPath() throws InstantiationException {
 
-        Graph graph = getGraph();
+        GraphDataIO graphDataIO = getGraph();
+        Assert.assertNotNull(graphDataIO);
+
+        Graph graph = null;
+        try {
+            graph = new Graph(graphDataIO);
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(graph);
+
         Vertex source = null;
         Vertex target = null;
         try {
@@ -72,7 +86,11 @@ public class ShortestPathProcessorTest {
             e.printStackTrace();
         }
 
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 5));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
         ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
         List<Vertex> route = null;
         try {
@@ -81,10 +99,12 @@ public class ShortestPathProcessorTest {
             e.printStackTrace();
         } catch (ShortestPathComputeException e) {
             e.printStackTrace();
+        } catch (ShortestPathComputationNoSlotsException e) {
+            e.printStackTrace();
         }
 
         Assert.assertNotNull(route);
-        Assert.assertEquals(route.size(), 3);
+        Assert.assertEquals(3, route.size());
 
         Assert.assertEquals(0, (route.get(0)).getID());
         Assert.assertEquals(2, (route.get(1)).getID());
@@ -105,14 +125,125 @@ public class ShortestPathProcessorTest {
 
         Graph graph = null;
         try {
-            Graph.init(graphDataIO.getEdges());
-            graph = Graph.getInstance();
+            graph = new Graph(graphDataIO);
         } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
         Assert.assertNotNull(graph);
+
+        Vertex[] pair1 = null;
+        Vertex[] pair2 = null;
+        Vertex[] pair3 = null;
+        Vertex[] pair4 = null;
+        Vertex[] pair5 = null;
+        Vertex[] pair6 = null;
+        Vertex[] pair7 = null;
+        Vertex[] pair8 = null;
+        Vertex[] pair9 = null;
+        Vertex[] pair10 = null;
+
+        while(pair1 == null)
+            pair1 = getRoute(graphDataIO, graph);
+
+        while(pair2 == null)
+            pair2 = getRoute(graphDataIO, graph);
+
+        while(pair3 == null)
+            pair3 = getRoute(graphDataIO, graph);
+
+        while(pair4 == null)
+            pair4 = getRoute(graphDataIO, graph);
+
+        while(pair5 == null)
+            pair5 = getRoute(graphDataIO, graph);
+
+        while(pair6 == null)
+            pair6 = getRoute(graphDataIO, graph);
+
+        while(pair7 == null)
+            pair7 = getRoute(graphDataIO, graph);
+
+        while(pair8 == null)
+            pair8 = getRoute(graphDataIO, graph);
+
+        while(pair9 == null)
+            pair9 = getRoute(graphDataIO, graph);
+
+        while(pair10 == null)
+            pair10 = getRoute(graphDataIO, graph);
+
+        try {
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 2));
+        } catch (EmptyListOfEdgesException e) {
+            e.printStackTrace();
+        }
+        ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
+
+        List<Vertex> route1 = null;
+        List<Vertex> route2 = null;
+        List<Vertex> route3 = null;
+        List<Vertex> route4 = null;
+        List<Vertex> route5 = null;
+        List<Vertex> route6 = null;
+        List<Vertex> route7 = null;
+        List<Vertex> route8 = null;
+        List<Vertex> route9 = null;
+        List<Vertex> route10 = null;
+        try {
+            route1 = shortestPathProcessor.computeShortestPath(pair1[0], pair1[1]);
+            route2 = shortestPathProcessor.computeShortestPath(pair2[0], pair2[1]);
+            route3 = shortestPathProcessor.computeShortestPath(pair3[0], pair3[1]);
+            route4 = shortestPathProcessor.computeShortestPath(pair4[0], pair4[1]);
+            route5 = shortestPathProcessor.computeShortestPath(pair5[0], pair5[1]);
+            route6 = shortestPathProcessor.computeShortestPath(pair6[0], pair6[1]);
+            route7 = shortestPathProcessor.computeShortestPath(pair7[0], pair7[1]);
+            route8 = shortestPathProcessor.computeShortestPath(pair8[0], pair8[1]);
+            route9 = shortestPathProcessor.computeShortestPath(pair9[0], pair9[1]);
+            route10 = shortestPathProcessor.computeShortestPath(pair10[0], pair10[1]);
+
+        } catch (NoShortestPathExistsException e) {
+            e.printStackTrace();
+        } catch (ShortestPathComputeException e) {
+            e.printStackTrace();
+        } catch (ShortestPathComputationNoSlotsException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private GraphDataIO getGraph() {
+
+        GraphDataIO graphDataIO = new GraphDataIO();
+        Vertex vertex0 = new Vertex(0.d, 0.d);
+        Vertex vertex1 = new Vertex(0.d, 1.d);
+        Vertex vertex2 = new Vertex(0.d, 2.d);
+        Vertex vertex3 = new Vertex(0.d, 3.d);
+        Vertex vertex4 = new Vertex(0.d, 4.d);
+        Vertex vertex5 = new Vertex(0.d, 5.d);
+
+        Edge edge1 = new Edge(vertex0, vertex1);
+        Edge edge2 = new Edge(vertex0, vertex2);
+        Edge edge5 = new Edge(vertex2, vertex3);
+        Edge edge6 = new Edge(vertex2, vertex5);
+        Edge edge7 = new Edge(vertex3, vertex0);
+        Edge edge8 = new Edge(vertex4, vertex2);
+        Edge edge9 = new Edge(vertex4, vertex5);
+        Edge edge10 = new Edge(vertex5, vertex3);
+
+        graphDataIO.addEdge(edge1);
+        graphDataIO.addEdge(edge2);
+        graphDataIO.addEdge(edge5);
+        graphDataIO.addEdge(edge6);
+        graphDataIO.addEdge(edge7);
+        graphDataIO.addEdge(edge8);
+        graphDataIO.addEdge(edge9);
+        graphDataIO.addEdge(edge10);
+
+        return graphDataIO;
+    }
+
+
+    private Vertex[] getRoute(GraphDataIO graphDataIO, Graph graph) {
 
         Random rand = new Random();
         int min = 0;
@@ -165,62 +296,10 @@ public class ShortestPathProcessorTest {
 
         // if no vertices found, silently quit
         if (source == null || target == null)
-            return;
+            return null;
 
-        Assert.assertNotNull(ShortestPathProcessor.init(graph));
-        ShortestPathProcessor shortestPathProcessor = ShortestPathProcessor.getInstance();
-        List<Vertex> route = null;
-        try {
-            route = shortestPathProcessor.computeShortestPath(source, target);
-        } catch (NoShortestPathExistsException e) {
-            e.printStackTrace();
-        } catch (ShortestPathComputeException e) {
-            e.printStackTrace();
-        }
-
-        //Assert.assertEquals(route.size(), numVerticesOnRoute);
-    }
-
-
-    private Graph getGraph() {
-
-        GraphDataIO graphDataIO = new GraphDataIO();
-        Vertex vertex0 = new Vertex(0.d, 0.d);
-        Vertex vertex1 = new Vertex(0.d, 1.d);
-        Vertex vertex2 = new Vertex(0.d, 2.d);
-        Vertex vertex3 = new Vertex(0.d, 3.d);
-        Vertex vertex4 = new Vertex(0.d, 4.d);
-        Vertex vertex5 = new Vertex(0.d, 5.d);
-
-        Edge edge1 = new Edge(vertex0, vertex1);
-        Edge edge2 = new Edge(vertex0, vertex2);
-        Edge edge5 = new Edge(vertex2, vertex3);
-        Edge edge6 = new Edge(vertex2, vertex5);
-        Edge edge7 = new Edge(vertex3, vertex0);
-        Edge edge8 = new Edge(vertex4, vertex2);
-        Edge edge9 = new Edge(vertex4, vertex5);
-        Edge edge10 = new Edge(vertex5, vertex3);
-
-        graphDataIO.addEdge(edge1);
-        graphDataIO.addEdge(edge2);
-        graphDataIO.addEdge(edge5);
-        graphDataIO.addEdge(edge6);
-        graphDataIO.addEdge(edge7);
-        graphDataIO.addEdge(edge8);
-        graphDataIO.addEdge(edge9);
-        graphDataIO.addEdge(edge10);
-
-        Graph graph = null;
-        try {
-            Graph.init(graphDataIO.getEdges());
-            graph = Graph.getInstance();
-        } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-
-        return graph;
+        // otherwise return the computed route
+        return new Vertex[] {source, target};
     }
 
 }

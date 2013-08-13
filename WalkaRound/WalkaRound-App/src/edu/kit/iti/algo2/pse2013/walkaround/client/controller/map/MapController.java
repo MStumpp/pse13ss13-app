@@ -331,17 +331,17 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
-	public void onZoom(float delta) {
+	public void onZoom(final float delta) {
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
 				+ " will be forwarding to MapModel");
 
-		if (this.coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
+		if (coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
 				.getCurrentMapStyle().getMaxLevelOfDetail()
-				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
+				&& coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getMinLevelOfDetail()) {
 
-			this.coorBox.setLevelOfDetailByADelta(delta);
-			this.updateAll();
+			coorBox.setLevelOfDetailByADelta(delta);
+			updateAll();
 		}
 
 	}

@@ -25,42 +25,42 @@ import android.location.Location;
 import android.preference.PreferenceManager;
 
 public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
-	
+
 	private static String TAG_NAVI = NaviModel.class.getSimpleName();
 
 	private SharedPreferences sharedPrefs;
 	private Context applicationContext;
-	
+
 	private static NaviModel naviModel;
-	
+
 	// References to listeners and HeadUpController:
 	private LinkedList<NaviOutput> naviOutputs;
 	private HeadUpController headUpControllerInstance;
-	
+
 	private boolean naviIsActive;
-	
+
 	// Current information, used as input for navi-calculations:
 	private Location lastKnownUserLocation;
 	private Coordinate nextCrossing;
 	private Coordinate nextNextCrossing;
 	private RouteInfo lastKnownRoute;
-	
+
 	// Navigation information for NaviOutput-Classes
 	private double turnAngle;
 	private double distToTurn;
-	
+
 	// additional information for head up display.
 	private int distOnRouteInMeters;
 	private int distLeftOnRouteInMeter;
 	private int timeOnRouteInSec;
 	private int timeLeftOnRouteInSec;
 	private double speed;
-	
+
 	public void initialize(Context context) {
 		Log.d(TAG_NAVI, "NavigationModel initialize(Context)");
 		this.applicationContext = context.getApplicationContext();
 	}
-	
+
 	private NaviModel() {
 		Log.d(TAG_NAVI, "NavigationModel Contructor");
 		if (this.applicationContext != null) {
@@ -81,7 +81,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			Log.e(TAG_NAVI, "Navigtaion Model has to be initialized first.");
 		}
 	}
-	
+
 	public NaviModel getInstance() {
 		Log.d(TAG_NAVI, "getInstance()");
 		if (naviModel == null) {
@@ -90,8 +90,8 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		naviModel.sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 		return naviModel;
 	}
-	
-	
+
+
 	private void notifyAllNaviOutputs() {
 		Log.e(TAG_NAVI, "notifyAllNaviOutputs() METHOD START");
 		// Sending information to controller of headUp display:
@@ -107,30 +107,25 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			naviOutput.deliverOutput(this.turnAngle, this.distToTurn);
 		}
 	}
-	
-	
+
 	// 2 Strategy-Pattern methods:
-	private boolean addOutputStrategy(NaviOutput naviOutput) {
+	public boolean addOutputStrategy(NaviOutput naviOutput) {
 		Log.d(TAG_NAVI, "addOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.add(naviOutput);
 		return true;
 	}
-	
-	private boolean removeOutputStrategy(NaviOutput naviOutput) {
+
+	public boolean removeOutputStrategy(NaviOutput naviOutput) {
 		Log.d(TAG_NAVI, "removeOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.remove(naviOutput);
 		return true;
 	}
-	
-	
-	
-	
-	
+
 	public boolean isRunning() {
 		Log.d(TAG_NAVI, "isRunning()");
 		return this.naviIsActive;
 	}
-	
+
 	public boolean toggleNavigation() {
 		Log.d(TAG_NAVI, "toggleNavigation()");
 		if (this.naviIsActive == false) {
@@ -140,10 +135,10 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		}
 		return this.naviIsActive;
 	}
-	
-	
-	
-	
+
+
+
+
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
@@ -163,7 +158,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		Log.d(TAG_NAVI, "onCompassChange(float)");
 		// TODO: für Stereo Navi relevant
 		// this.lastKnownUserLocation.setBearing(direction);
-		
+
 	}
 
 	@Override
@@ -178,7 +173,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		Log.d(TAG_NAVI, "onRouteCHange(RouteInfo)");
 		this.computeNavi();
 	}
-	
+
 	private void computeNavi() {
 		Log.e(TAG_NAVI, "computeNavi()");
 		this.computeNextTurnCoordinate();
@@ -186,41 +181,41 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		this.computeNewDistanceToTurn();
 		this.notifyAllNaviOutputs();
 	}
-	
-	
+
+
 	private void computeNextTurnCoordinate() {
 		Coordinate tempNearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
-		
+
 		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
 		Coordinate tempCoord = null;
-		
+
 		// Forward iterator to nearestCoordinate:
 		while (coordsIter.hasNext() && !tempNearestCoordOnRoute.equals(tempCoord)) {
 			tempCoord = coordsIter.next();
 		}
-		
+
 		// TODO: In case of the closest coordinate on route being a crossing, check if it is before the user:
 		if (tempNearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1) {
-			
+
 		}
-		
+
 		tempCoord = null;
 		while (coordsIter.hasNext()) {
 			tempCoord = coordsIter.next();
 			if (tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
-				
+
 			}
 		}
-		
-		
+
+
 		// Crossing Info wird überall hinzugefügt, also sind nur die mit mehr als einer TurnAngle relevant!
 		// TODO: iteriere Coords der Route von hier aus durch, bis nächster Turn gefunden.
 		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord
-		
+
 		// Compute NextNextTurnCoord now that you know the next turn
-		
+
 	}
-	
+
 	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
 		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + androidLocation.toString());
 		Coordinate nearestCoordinate = null;
@@ -235,7 +230,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		}
 		return nearestCoordinate;
 	}
-	
+
 	private void computeNewTurnAngle() {
 		Log.e(TAG_NAVI, "computeNewTurnAngle()");
 		double result = 0.00;
@@ -243,7 +238,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		if (this.nextNextCrossing != null) {
 			double[] vectorPosToNextCrossing = new double[2];
 			double[] vectorNextCrossingToNextNextCrossing = new double[2];
-			
+
 			// Calculating x and y components of Vectors.
 			// TODO: Check if this method works:
 			// otherwise use CoordinateUtility.calculateDifferenceInMeters(c1, c2)
@@ -251,29 +246,29 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			vectorPosToNextCrossing[1] = this.nextCrossing.getLatitude() - this.lastKnownUserLocation.getLatitude();
 			vectorNextCrossingToNextNextCrossing[0] = this.nextNextCrossing.getLongitude() - this.nextCrossing.getLongitude();
 			vectorNextCrossingToNextNextCrossing[1] = this.nextNextCrossing.getLatitude() - this.nextCrossing.getLatitude();
-			
+
 			double angleOfvectorPosToNextCrossingToXAxis = Math.cos(vectorPosToNextCrossing[1] / vectorPosToNextCrossing[0]);
 			double angleOfvectorNextCrossingToNextNextCrossingToXAxis = Math.cos(vectorNextCrossingToNextNextCrossing[1] / vectorNextCrossingToNextNextCrossing[0]);
-			
+
 			this.turnAngle = angleOfvectorPosToNextCrossingToXAxis - angleOfvectorNextCrossingToNextNextCrossingToXAxis;
 		}
-		
+
 		this.turnAngle = result;
 	}
-	
+
 
 	private void computeNewDistanceToTurn() {
 		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	// Some old stuff:
-	
+
 	/*
 	private Coordinate getNearestCoordinateWithRelevantCrossingInfo(Location androidLocation) {
 		Log.d(TAG_NAVI, "getNearestCoordinateWithRelevantCrossingInfo(Location) METHOD START input Coordinate: " + androidLocation.toString());
@@ -283,42 +278,42 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
 			//TODO zweites Argument in if einbauen für relevante Crossings Prüfung, PRÜFUNG nach Reihenfolge
 			if (coord.getCrossingInformation().getNumCrossroads() > 2) {
-				
+
 				Log.d(TAG_NAVI, "getNearestCoordinateWithRelevantCrossingInfo(Location) setting new nearest Coordinate");
-				
+
 				Location.distanceBetween(androidLocation.getLatitude(), androidLocation.getLongitude(), coord.getLatitude(), coord.getLongitude(), results);
-				
+
 				if (results[0] < smallestDifference) {
 					closestCoordinate = coord;
 				}
 			}
 		}
-		
+
 		Log.d(TAG_NAVI, "getNearestCoordinate(Location) METHOD END return Coordinate: " + closestCoordinate.toString());
 		return closestCoordinate;
 	}
 	*/
-	
-	
-	
-	
-	
+
+
+
+
+
 	/*
 	private void flagRelevantCrossingAngle(RouteInfo ri) {
-		// TODO: Gehe alle Knoten durch, berechne 
+		// TODO: Gehe alle Knoten durch, berechne
 		CrossingInformation[] crossingAngleOfRouteCoordinates = new CrossingInformation[ri.getCoordinates().size()];
 		for (int i = 0; i < crossingAngleOfRouteCoordinates.length; i++) {
 			crossingAngleOfRouteCoordinates[i] = ri.getCoordinates().get(i).getCrossingInformation();
 		}
-		
+
 		for (int i = 0; i < crossingAngleOfRouteCoordinates.length; i++) {
-			
+
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	*/
-	
+
 }
