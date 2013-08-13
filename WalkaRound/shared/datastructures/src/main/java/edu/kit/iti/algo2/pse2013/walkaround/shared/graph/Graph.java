@@ -37,22 +37,31 @@ public final class Graph {
         vertices = new Vertex[edges.size()*2];
         Vertex currentForTail, currentForHead;
         for (Edge edge : edges) {
-            currentForTail = edge.getTail();
-            if (vertices.length <= currentForTail.getID())
+            if (vertices.length <= edge.getTail().getID())
                 vertices = increaseArray(vertices, 100000);
-            if (vertices[currentForTail.getID()] == null)
+
+            currentForTail = vertices[edge.getTail().getID()];
+            if (currentForTail == null) {
+                currentForTail = new Vertex(edge.getTail());
                 vertices[currentForTail.getID()] = currentForTail;
-            currentForHead = edge.getHead();
-            if (vertices.length <= currentForHead.getID())
+            }
+
+            if (vertices.length <= edge.getHead().getID())
                 vertices = increaseArray(vertices, 100000);
-            if (vertices[currentForHead.getID()] == null)
+
+            currentForHead = vertices[edge.getHead().getID()];
+            if (currentForHead == null) {
+                currentForHead = new Vertex(edge.getHead());
                 vertices[currentForHead.getID()] = currentForHead;
+            }
 
             // for tail, reuse current edge object
-            currentForTail.addOutgoingEdge(edge);
+            Edge newEdge = new Edge(currentForTail, currentForHead, edge.getID());
+            currentForTail.addOutgoingEdge(newEdge);
+            currentForHead.addOutgoingEdge(newEdge);
             // instantiate new Edge object for reverse egde
-            Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
-            currentForHead.addOutgoingEdge(inverseEdge);
+            // Edge inverseEdge = new Edge(edge.getHead(), edge.getTail());
+            // currentForHead.addOutgoingEdge(inverseEdge);
         }
     }
 

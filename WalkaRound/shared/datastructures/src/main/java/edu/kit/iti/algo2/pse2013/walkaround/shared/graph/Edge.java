@@ -67,6 +67,16 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
     }
 
     /**
+     * Duplicate an Edge. Doesn't duplicate the Vertices contained
+     * in the Edge.
+     *
+     * @param edge The Edge to be duplicated.
+     */
+    public Edge(Edge edge) {
+        this(edge.getTail(), edge.getHead(), edge.getID());
+    }
+
+    /**
      * Returns id of this Edge.
      *
      * @return int.
@@ -93,6 +103,18 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
      */
     public Vertex getHead() {
         return head;
+    }
+
+
+    /**
+     * Returns the other end of the Egde than the given Vertex.
+     *
+     * @return Vertex.
+     */
+    public Vertex getOtherVertex(Vertex vertex) {
+        if (tail == vertex)
+            return head;
+        return tail;
     }
 
 

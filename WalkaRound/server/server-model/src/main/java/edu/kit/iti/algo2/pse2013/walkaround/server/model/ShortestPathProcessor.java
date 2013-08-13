@@ -145,7 +145,8 @@ public class ShortestPathProcessor {
             Thread t = new ThreadCustom(group, r,
                     namePrefix + threadNumber.getAndIncrement(),
                     0, shortestPathComputerQueue.getFirst());
-            logger.info("New Thread: " + t.getName());
+            logger.info("New Thread: " + t.getName() + " Reference: " +
+                    t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -202,8 +203,10 @@ public class ShortestPathProcessor {
         protected void afterExecute(Runnable r, Throwable t) {
             ShortestPathComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() +
-                    " and ShortestPathComputer: " + computer.getId());
+            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+                    " and ShortestPathComputer: " + computer.getId() + " Reference: "
+                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null)
                 logger.info("ShortestPathComputer is null in ThreadPoolExecutorCustom");
             shortestPathComputerQueue.add(computer);
@@ -268,8 +271,10 @@ public class ShortestPathProcessor {
         public List<Vertex> call() throws Exception {
             ShortestPathComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            logger.info("call(): Thread: " + Thread.currentThread().getName() +
-                    " and ShortestPathComputer: " + computer.getId());
+            logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+                    " and ShortestPathComputer: " + computer.getId() + " Reference: "
+                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null)
                 throw new ShortestPathComputeException(
                         "ShortestPathComputer is null in ShortestPathTask");
@@ -373,7 +378,7 @@ public class ShortestPathProcessor {
                     break;
 
                 for (Edge edge : current.getOutgoingEdges()) {
-                    currentHead = edge.getHead();
+                    currentHead = edge.getOtherVertex(current);
                     distance = current.getCurrentLength() + edge.getLength();
 
                     // not yet visited during current run

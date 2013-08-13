@@ -73,6 +73,16 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
 	}
 
 
+    /**
+     * Duplicate a Vertex.
+     *
+     * @param vertex The Vertex to be duplicated.
+     */
+    public Vertex(Vertex vertex) {
+        this(vertex.getLatitude(), vertex.getLongitude(), vertex.getID());
+    }
+
+
 	/**
      * Returns id of this Vertex.
      *
