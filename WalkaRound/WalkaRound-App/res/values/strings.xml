@@ -42,4 +42,6 @@
     <string name="suggestions" translatable="true">Suggestions</string>
     <string name="monument">Monuments and churches</string>
     <string name="castle">Castles</string>
+    <string name="delete_dialog" translatable="true">Do you really want to delete this?</string>
+    <string name="delete_dialog_header" translatable="true">Delete</string>
 </resources>

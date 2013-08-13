@@ -2,10 +2,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothClass.Device.Major;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -400,8 +402,31 @@ public class RoutingView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "delete waypoint gedrückt");
-				// TODO: metho zum löschen eines bestimmten wegpunktes
-				// RouteController.getInstance().
+
+				// dialog erstellen
+				AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+						getActivity());
+				alertDialog.setTitle(R.string.delete_dialog_header);
+				alertDialog.setMessage(R.string.delete_dialog);
+				alertDialog.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO: metho zum löschen eines bestimmten
+								// wegpunktes
+								// RouteController.getInstance().
+							}
+						});
+				alertDialog.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+							}
+						});
+				alertDialog.show();
 			}
 			return false;
 		}

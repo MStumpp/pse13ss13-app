@@ -39,5 +39,7 @@
     <string name="monument" >Monumente &amp; Kirchen</string>
     <string name="castle" >Schlösser &amp; Burgen</string>
     <string name="loading" >Lade</string>
-    <string name="suggestions" translatable="true">Vorschläge</string>
+    <string name="suggestions" >Vorschläge</string>
+    <string name="delete_dialog" >Willst du das wirklich löschen?</string>
+    <string name="delete_dialog_header" >Löschen</string>
 </resources>
