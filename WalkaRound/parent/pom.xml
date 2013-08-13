@@ -98,7 +98,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.14.1</version>
                 <configuration>
-                    <argLine>-Xms1024m -Xss64m</argLine>
+                    <argLine>-Xms1500m -Xss64m</argLine>
                 </configuration>
             </plugin>
 		</plugins>
