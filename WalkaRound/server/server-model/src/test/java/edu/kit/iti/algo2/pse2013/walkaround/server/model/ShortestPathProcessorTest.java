@@ -173,7 +173,7 @@ public class ShortestPathProcessorTest {
             pair10 = getRoute(graphDataIO, graph);
 
         try {
-            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 5));
+            Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 2));
         } catch (EmptyListOfEdgesException e) {
             e.printStackTrace();
         }
