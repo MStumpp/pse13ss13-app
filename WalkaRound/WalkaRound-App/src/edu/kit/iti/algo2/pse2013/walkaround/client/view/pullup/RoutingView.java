@@ -18,6 +18,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -249,31 +250,55 @@ public class RoutingView extends Fragment {
 				// lastKnownRoute = currentRoute;
 				layout.removeAllViews();
 
+				Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+				Display display = this.getActivity().getWindowManager()
+						.getDefaultDisplay();
+				Point size = new Point();
+				display.getSize(size);
+
+				// set layout margins for Text
+				LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+						3 * size.x / 5,
+						LinearLayout.LayoutParams.WRAP_CONTENT);
+				myParams.setMargins(0, 10, 0, 0);
+
+				// set layout margins for delete bu tton
+				// TODO: größe des delete buttons generisch an text größe
+				// anpassen
+				LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
+						size.x / 5, 135);
+				deleteParams.setMargins(0, 10, 0, 0);
+
+				// set layout margins for delete bu tton
+				// TODO: größe des delete buttons generisch an text größe
+				// anpassen
+				LinearLayout.LayoutParams saveFavParams = new LinearLayout.LayoutParams(
+						size.x / 5, 135);
+				saveFavParams.setMargins(0, 10, 0, 0);
+
 				for (Waypoint value : currentRoute.getWaypoints()) {
-					final TextView waypoint = new TextView(context);
+					LinearLayout waypoint = new LinearLayout(getActivity());
+					waypoint.setOrientation(LinearLayout.HORIZONTAL);
+					TextView waypointText = new TextView(context);
+					ImageButton delete = new ImageButton(getActivity());
+					delete.setImageResource(R.drawable.delete);
+					ImageButton saveFav = new ImageButton(getActivity());
+					saveFav.setImageResource(R.drawable.favorite);
 					Log.d("routingView: ",
 							" " + value.getName() + " " + value.getId());
-					waypoint.setText(value.getName() + " " + value.getId());
+					waypointText.setText(value.getName() + " " + value.getId());
 					// TODO TextSize relativieren
-					waypoint.setTextSize(30);
-					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-							LinearLayout.LayoutParams.MATCH_PARENT,
-							LinearLayout.LayoutParams.WRAP_CONTENT);
-					myParams.setMargins(0, 10, 0, 0);
-					waypoint.setLayoutParams(myParams);
-					waypoint.setBackgroundColor(MapGen.defaultBackground);
-					waypoint.setOnTouchListener(new OnTouchListener() {
-
-						GestureDetector gestDect = new GestureDetector(
-								new WaypointTextGestureListener(waypoint));
-
-						@Override
-						public boolean onTouch(View v, MotionEvent event) {
-							gestDect.onTouchEvent(event);
-							return false;
-						}
-					});
-
+					waypointText.setTextSize(30);
+					delete.setLayoutParams(deleteParams);
+					waypointText.setLayoutParams(myParams);
+					waypointText.setBackgroundColor(MapGen.defaultBackground);
+					delete.setOnTouchListener(new WaypointDeleteTouch(value,
+							delete));
+					saveFav.setOnTouchListener(new WaypointSaveTouch(value,
+							saveFav));
+					waypoint.addView(waypointText);
+					waypoint.addView(delete);
+					waypoint.addView(saveFav);
 					layout.addView(waypoint);
 				}
 			} else {
@@ -304,59 +329,42 @@ public class RoutingView extends Fragment {
 		}
 	}
 
-	private class WaypointTextGestureListener implements OnGestureListener {
+	private class WaypointSaveTouch implements OnTouchListener {
 
-		TextView tv;
+		private Waypoint value;
+		private View view;
 
-		public WaypointTextGestureListener(TextView tv) {
-			this.tv = tv;
+		public WaypointSaveTouch(Waypoint value, View view) {
+			this.value = value;
+			this.view = view;
 		}
 
 		@Override
-		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
-			Log.d(TAG_PULLUP_CONTENT, "GESTURE!!!!");
-
-			float velocity = (float) Math.sqrt((double) Math.pow(
-					Math.abs(arg2), 2) + (double) Math.pow(Math.abs(arg3), 2));
-			
-			if (velocity > 400) {
-				Log.d(TAG_PULLUP_CONTENT, "GESTURE!!!!");
-				
-				RouteController.getInstance().resetRoute();
-				layout.removeView(tv);
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				// RouteController.getInstance().addLocationToFavorites(value,
+				// name);
 			}
 			return false;
 		}
+	}
 
-		@Override
-		public void onLongPress(MotionEvent arg0) {
-			// TODO Auto-generated method stub
+	private class WaypointDeleteTouch implements OnTouchListener {
 
+		private Waypoint value;
+		private View view;
+
+		public WaypointDeleteTouch(Waypoint value, View view) {
+			this.value = value;
+			this.view = view;
 		}
 
 		@Override
-		public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void onShowPress(MotionEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent arg0) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean onDown(MotionEvent e) {
-			// TODO Auto-generated method stub
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				// TODO: metho zum löschen eines bestimmten wegpunktes
+				// RouteController.getInstance().
+			}
 			return false;
 		}
 	}

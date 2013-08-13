@@ -279,9 +279,9 @@ public class PullUpView extends Fragment implements RouteListener {
 				//ft.remove(pullUpContent);
 				//pullUpContent = new RoutingView();
 				ft.replace(R.id.pullupContent, routingView).commit();
-				if(routingView != null && route != null){
-					routingView.onRouteChange(route, this.getActivity());
-				}
+				//if(routingView != null && route != null){
+					//routingView.onRouteChange(route, this.getActivity());
+				//}
 				routingViewRun = true;
 			}
 			break;
