@@ -48,7 +48,7 @@ public class RoutingView extends Fragment {
 
 	private Button reset;
 	private ImageView invert;
-	private ImageView tsp;
+	// private ImageView tsp;
 	// private ImageView load;
 	private ImageView save;
 	private Button addFavorite;
@@ -69,7 +69,7 @@ public class RoutingView extends Fragment {
 
 		reset = (Button) this.getActivity().findViewById(R.id.reset);
 		invert = (ImageView) this.getActivity().findViewById(R.id.invert);
-		tsp = (ImageView) this.getActivity().findViewById(R.id.tsp);
+		// tsp = (ImageView) this.getActivity().findViewById(R.id.tsp);
 		// load = (ImageView) this.getActivity().findViewById(R.id.load);
 		save = (ImageView) this.getActivity().findViewById(R.id.save);
 		addFavorite = (Button) this.getActivity().findViewById(
@@ -88,23 +88,23 @@ public class RoutingView extends Fragment {
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der sizes");
 		// reset.setX(size.x / 5 * 0);
-		reset.getLayoutParams().width = size.x / 4;
+		reset.getLayoutParams().width = size.x / 3;
 		reset.getLayoutParams().height = size.y / 8;
 
 		// invert.setX(size.x / 5 * 1);
-		invert.getLayoutParams().width = size.x / 4;
+		invert.getLayoutParams().width = size.x / 3;
 		invert.getLayoutParams().height = size.y / 8;
 
 		// tsp.setX(size.x / 5 * 2);
-		tsp.getLayoutParams().width = size.x / 4;
-		tsp.getLayoutParams().height = size.y / 8;
+		// tsp.getLayoutParams().width = size.x / 4;
+		// tsp.getLayoutParams().height = size.y / 8;
 
 		// load.setX(size.x / 5 * 3);
 		// load.getLayoutParams().width = size.x / 5;
 		// load.getLayoutParams().height = size.y / 8;
 
 		// save.setX(size.x / 5 * 4);
-		save.getLayoutParams().width = size.x / 4;
+		save.getLayoutParams().width = size.x / 3;
 		save.getLayoutParams().height = size.y / 8;
 
 		// addFavorite.setX(size.x * 0);
@@ -116,7 +116,7 @@ public class RoutingView extends Fragment {
 		Log.d(TAG_PULLUP_CONTENT, "Zuweisung der Listener");
 		reset.setOnTouchListener(new resetListener());
 		invert.setOnTouchListener(new invertListener());
-		tsp.setOnTouchListener(new tspListener());
+		// tsp.setOnTouchListener(new tspListener());
 		// load.setOnTouchListener(new loadListener());
 		save.setOnTouchListener(new saveListener());
 		addFavorite.setOnTouchListener(new favoriteListener());
@@ -173,18 +173,16 @@ public class RoutingView extends Fragment {
 
 	}
 
-	private class tspListener implements OnTouchListener {
-
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(tsp) && event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedr�ckt");
-				RouteController.getInstance().optimizeRoute();
-			}
-			return false;
-		}
-
-	}
+	/*
+	 * private class tspListener implements OnTouchListener {
+	 * 
+	 * @Override public boolean onTouch(View v, MotionEvent event) { if
+	 * (v.equals(tsp) && event.getAction() == MotionEvent.ACTION_DOWN) {
+	 * Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedr�ckt");
+	 * RouteController.getInstance().optimizeRoute(); } return false; }
+	 * 
+	 * }
+	 */
 
 	/*
 	 * private class loadListener implements OnTouchListener {

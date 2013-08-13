@@ -40,13 +40,6 @@
                 android:src="@drawable/invert" />
 
             <ImageButton
-                android:id="@+id/tsp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
-                android:src="@drawable/tsp" />
-
-            <ImageButton
                 android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
