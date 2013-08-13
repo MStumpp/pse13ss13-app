@@ -12,22 +12,22 @@ public class Profile {
 	/**
 	 * Jogging profile.
 	 */
-	public static Profile PROFILE_JOGGING;
+	public static Profile PROFILE_JOGGING = new Profile(1, new int[]{100, 101}, null);
 
 	/**
 	 * Sightseeing profile.
 	 */
-	public static Profile PROFILE_SIGHTSEEING;
+	public static Profile PROFILE_SIGHTSEEING = new Profile(2, null, new int[]{12, 13});;
 
 	/**
 	 * Shopping profile.
 	 */
-	public static Profile PROFILE_SHOPPING;
+	public static Profile PROFILE_SHOPPING = new Profile(3, null, new int[]{8});
 
 	/**
 	 * Clubbing profile.
 	 */
-	public static Profile PROFILE_CLUBBING;
+	public static Profile PROFILE_CLUBBING = new Profile(4, null, new int[]{1, 3});
 
 	/**
 	 * IDs of all Profiles. (0 is default ID for empty Profile)
