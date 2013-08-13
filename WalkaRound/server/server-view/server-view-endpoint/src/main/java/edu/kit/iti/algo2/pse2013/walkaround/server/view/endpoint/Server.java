@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -54,6 +55,9 @@ public class Server {
             return transfer;
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
+            return transfer;
+        } catch (GeometryComputationNoSlotsException e) {
+            transfer.setError("GeometryComputationNoSlotsException");
             return transfer;
         }
 
@@ -138,6 +142,9 @@ public class Server {
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
             return transfer;
+        } catch (GeometryComputationNoSlotsException e) {
+            transfer.setError("GeometryComputationNoSlotsException");
+            return transfer;
         }
 
         System.out.println("source: " + source.toString());
@@ -220,11 +227,16 @@ public class Server {
         Vertex vertex;
         try {
             vertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
-        } catch (GeometryProcessorException e) {
-            return null;
         } catch (InstantiationException e) {
             return null;
+        } catch (GeometryProcessorException e) {
+            return null;
+        } catch (GeometryComputationNoSlotsException e) {
+            return null;
         }
+
+        if (vertex == null)
+            return null;
 
         return new Coordinate(vertex.getLatitude(),
                 vertex.getLongitude(), null);
