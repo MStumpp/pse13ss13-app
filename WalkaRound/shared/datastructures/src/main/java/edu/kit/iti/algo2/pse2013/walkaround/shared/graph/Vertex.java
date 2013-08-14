@@ -45,6 +45,12 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
 
 
     /**
+     * Current weighted distance to source.
+     */
+    private double currentWeightedLength;
+
+
+    /**
      * Stores the current run.
      */
     private int run;
@@ -146,6 +152,26 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
      */
     public void setCurrentLength(double currentLength) {
         this.currentLength = currentLength;
+    }
+
+
+    /**
+     * Returns the current weighted length.
+     *
+     * @return currentWeightedLength.
+     */
+    public double getCurrentWeightedLength() {
+        return currentWeightedLength;
+    }
+
+
+    /**
+     * Sets the current weigthed length.
+     *
+     * @param currentWeightedLength The current length from source.
+     */
+    public void setCurrentWeightedLength(double currentWeightedLength) {
+        this.currentWeightedLength = currentWeightedLength;
     }
 
 

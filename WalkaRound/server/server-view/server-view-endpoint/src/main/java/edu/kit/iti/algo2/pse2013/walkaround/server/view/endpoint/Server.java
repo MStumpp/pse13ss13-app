@@ -1,11 +1,14 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +25,12 @@ import java.util.List;
  */
 @Path("/processor")
 public class Server {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
+
 
     /**
      * Endpoint method for computation of a shortest path between any given two Coordinates.
@@ -114,10 +123,14 @@ public class Server {
                                               @PathParam("profile") String profile,
                                               @PathParam("length") String length) {
 
+        logger.info("computeRoundtrip: Coordinate: " + coordinate + " Profile: " + profile + " Length: " + length);
+
         RouteInfoTransfer transfer = new RouteInfoTransfer();
 
+        return transfer;
+
         // check input
-        if (coordinate == null || profile == null || length == null) {
+        /*if (coordinate == null || profile == null || length == null) {
             transfer.setError("coordinate, profile and length must not be null");
             return transfer;
         }
@@ -151,15 +164,16 @@ public class Server {
 
         List<Vertex> route;
         try {
-            route = RoundtripProcessor.getInstance().computeRoundtrip(source, profileAsInt, lengthAsInt);
-        } catch (ShortestPathComputeException e) {
-            transfer.setError("ShortestPathComputeException");
-            return transfer;
-        } catch (NoShortestPathExistsException e) {
-            transfer.setError("NoShortestPathExistsException");
-            return transfer;
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source,
+                    Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
             transfer.setError("InstantiationException");
+            return transfer;
+        } catch (RoundtripComputationNoSlotsException e) {
+            transfer.setError("RoundtripComputationNoSlotsException");
+            return transfer;
+        } catch (RoundtripComputeException e) {
+            transfer.setError("RoundtripComputeException");
             return transfer;
         }
 
@@ -175,7 +189,7 @@ public class Server {
                     vertex.getLongitude(),
                     computeCrossingInformation(vertex)));
 
-        return transfer;
+        return transfer;   */
     }
 
 
