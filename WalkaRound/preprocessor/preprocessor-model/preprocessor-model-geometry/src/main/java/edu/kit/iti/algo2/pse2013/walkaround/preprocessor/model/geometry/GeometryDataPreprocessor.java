@@ -98,7 +98,7 @@ public class GeometryDataPreprocessor {
             throw new IllegalArgumentException("list of vertices must be greater than 0");
 
         // build tree
-        GeometryNode node = buildTree(data, null, 0, 0, data[0].length-1);
+        GeometryNode node = buildTree(data, null, 0, 0, data[0].length-1, numberGeomPerNode);
         return new GeometryDataIO(node, data.length);
     }
 
@@ -113,7 +113,8 @@ public class GeometryDataPreprocessor {
      * @param end End index for current processing.
      * @return GeometryNode Node.
      */
-    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end) {
+    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent,
+                                          int depth, int start, int end, int numberGeomPerNode) {
 
         final int dim = depth % data.length;
 
@@ -121,7 +122,7 @@ public class GeometryDataPreprocessor {
 
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
-        if (size <= NUMBER_GEOMETRIZABLES_PER_NODE)
+        if (size <= numberGeomPerNode)
             return new GeometryNode(parent, depth,
                 Arrays.copyOfRange(data[dim], start, end+1));
 
@@ -182,8 +183,8 @@ public class GeometryDataPreprocessor {
         }
 
         GeometryNode node = new GeometryNode(parent, depth, (data[dim][median].valueForDimension(dim)));
-        node.setLeftNode(buildTree(data, node, depth+1, start, median));
-        node.setRightNode(buildTree(data, node, depth+1, median+1, end));
+        node.setLeftNode(buildTree(data, node, depth+1, start, median, numberGeomPerNode));
+        node.setRightNode(buildTree(data, node, depth+1, median+1, end, numberGeomPerNode));
         return node;
     }
 
