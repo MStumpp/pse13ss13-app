@@ -14,33 +14,135 @@ public class TestRoute {
 	private final int minNumberOfWaypoints = 0;
 	private final int maxNumberOfWaypoints = 15;
 	
+	private final int testIterations = 10;
 	
 	@Test
 	public void testSetActiveWaypointByID() {
-		
+		// TODO:
 	}
 	
 	@Test
 	public void testSetActiveWaypointByReference() {
-		
+		// TODO:
 	}
 	
 	@Test
 	public void testResetActiveWaypoint() {
-		
+		// TODO:
 	}
 	
 	@Test
-	public void moveActiveWaypointInOrder() {
-		
+	public void testMoveActiveWaypointInOrder() {
+		// Not important!
 	}
 	
+	@Test
+	public void testAddWaypoint() {
+			Route randomRoute = this.getRandomKarlsruheRoute();
+			Coordinate randomCoord = this.getRandomKarlsruheCoordinate();
+			
+			Route testRoute = randomRoute;
+			testRoute.setActiveWaypoint(testRoute.getEnd());
+			
+			Waypoint wp = new Waypoint(randomCoord.getLatitude(), randomCoord.getLongitude(), "");
+			testRoute.addWaypoint(wp);
+			
+			assertTrue(randomRoute.getWaypoints().size() + 1 == testRoute.getWaypoints().size());
+	}
+	
+	@Test
+	public void testAddRoundtripAtActiveWaypoint() {
+		// TODO:
+	}
+	
+	@Test
+	public void testAddRoute() {
+		// TODO:
+	}
+	
+	
+	@Test
+	public void testMoveActiveWaypoint() {
+		// TODO:
+	}
+	
+	
+	@Test
+	public void testDeleteActiveWaypoint() {
+		// TODO:
+	}
+	
+	
+	@Test
+	public void testInvertRoute() {
+		// TODO:
+	}
+	
+	
+	@Test
+	public void testResetRoute() {
+		// TODO:
+	}
+	
+	@Test
+	public void testOptimizeRoute() {
+		// TODO:
+	}
+	
+	@Test
+	public void testGetName() {
+		// TODO:
+	}
+	
+	@Test
+	public void testGetStart() {
+		// TODO:
+	}
+	
+	@Test
+	public void testGetEnd() {
+		// TODO:
+	}
+	
+	@Test
+	public void testGetActiveWaypoint() {
+		// TODO:
+	}
+	
+	@Test
+	public void testGetWaypoints() {
+		// TODO:
+	}
+	
+	@Test
+	public void testIsFavorite() {
+		// TODO:
+	}
+	
+	@Test
+	public void testContainsWaypoint() {
+		// TODO:
+	}
+	
+	@Test
+	public void testGetCoordinates() {
+		// TODO:
+	}
+	
+	@Test
+	public void testToString() {
+		// TODO:
+		
+		
+	}
 	
 	
 	
 	
 	@Test
 	public void testClone() {
+		// TODO:
+		/*
 		LinkedList<Coordinate> coordList = new LinkedList<Coordinate>();
 		Waypoint wp1 = new Waypoint(47.00234, 8.023240, "name 1");
 		Coordinate cor1 = new Coordinate(47.02234, 8.3240);
@@ -60,6 +162,7 @@ public class TestRoute {
 			assertTrue(testRoute.getCoordinates().get(i) != clonedTestroute.getCoordinates().get(i));
 			
 		}
+		*/
 		
 	}
 	

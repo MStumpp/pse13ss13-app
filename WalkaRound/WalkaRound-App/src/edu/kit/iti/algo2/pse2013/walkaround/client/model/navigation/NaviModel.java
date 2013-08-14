@@ -176,46 +176,45 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 
 	private void computeNavi() {
 		Log.e(TAG_NAVI, "computeNavi()");
-		this.computeNextTurnCoordinate();
+		this.computeNextTurnCoordinates();
 		this.computeNewTurnAngle();
 		this.computeNewDistanceToTurn();
 		this.notifyAllNaviOutputs();
 	}
 
+	
 
-	private void computeNextTurnCoordinate() {
-		Coordinate tempNearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
+	private void computeNextTurnCoordinates() {
+		Coordinate nearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
 
 		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
 		Coordinate tempCoord = null;
 
-		// Forward iterator to nearestCoordinate:
-		while (coordsIter.hasNext() && !tempNearestCoordOnRoute.equals(tempCoord)) {
+		// Forward the iterator to the nearestCoordinate:
+		while (coordsIter.hasNext() && !nearestCoordOnRoute.equals(tempCoord)) {
 			tempCoord = coordsIter.next();
-		}
-
-		if (tempNearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1) {
-			// TODO: In case of the closest coordinate on route being a crossing, check if it is before the user:
-			this.checkIfBeforeUser(tempNearestCoordOnRoute);
 		}
 		
-		tempCoord = null;
-		while (coordsIter.hasNext()) {
-			tempCoord = coordsIter.next();
-			if (tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
-				
+		// Check if the nearest Coordinate represents a relevant crossing:
+		if (nearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1
+				&& !this.coordinateOnRouteIsInfrontOfUserPos(tempCoord)) {
+			// If the nearest Coordinate does not represent a crossing, look for the next crossing on route:
+			while (coordsIter.hasNext() && !(tempCoord.getCrossingInformation().getCrossingAngles().length > 1)) {
+				tempCoord = coordsIter.next();
 			}
 		}
-
-
-		// Crossing Info wird überall hinzugefügt, also sind nur die mit mehr als einer TurnAngle relevant!
-		// TODO: iteriere Coords der Route von hier aus durch, bis nächster Turn gefunden.
-		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord vor dem User liegt
-
-		// Compute NextNextTurnCoord now that you know the next turn
-
+		
+		this.nextCrossing = tempCoord;
+		tempCoord = null;
+		while (coordsIter.hasNext() && tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
+			tempCoord = coordsIter.next();
+		}
+		this.nextNextCrossing = tempCoord;
 	}
 
+	
+	
+	
 	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
 		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + androidLocation.toString());
 		Coordinate nearestCoordinate = null;
@@ -261,11 +260,14 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 	}
 	
-	private boolean checkIfBeforeUser(Coordinate nearestCoordWithTurn) {
+	private boolean coordinateOnRouteIsInfrontOfUserPos(Coordinate coordinateOnRoute) {
 		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
 		Coordinate tempCoord = null;
-		while (coordsIter.hasNext() && !nearestCoordWithTurn.equals(tempCoord)) {
-			tempCoord = coordsIter.next();
+		if (coordinateOnRoute != null) {
+			
+			while (coordsIter.hasNext() && !coordinateOnRoute.equals(tempCoord)) {
+				tempCoord = coordsIter.next();
+			}
 		}
 		
 		

@@ -13,7 +13,7 @@ import android.util.Log;
  * This class hold and return the last known detected Position from the android
  * file System
  * 
- * @author Lukas M�ller, Ludwig Biermann
+ * @author Lukas Müller, Ludwig Biermann
  * 
  */
 public class PositionManager implements Listener {
@@ -49,13 +49,10 @@ public class PositionManager implements Listener {
 	 * @param context
 	 */
 	private PositionManager(Context context) {
-
+		
 		positionListeners = new LinkedList<PositionListener>();
 		
-		locationManager = (LocationManager) context.getApplicationContext()
-				.getSystemService(LocationManager.KEY_LOCATION_CHANGED);
-		
-		
+		locationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 		
 		locationManager.addGpsStatusListener(positionManager);
 		this.getLastKnownPositionFromAndroid();
@@ -159,17 +156,19 @@ public class PositionManager implements Listener {
 	private void getLastKnownPositionFromAndroid() {
 		Log.d(TAG_POSITION_MANAGER, "getLastKnownPosition");
 		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			lastKnownLocation = locationManager
-					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			Log.d(TAG_POSITION_MANAGER, "GPS");
+			Log.d(TAG_POSITION_MANAGER, "getLastKnownPositionFromAndroid() - GPS is enabled");
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			notifyAllPositionListeners();
-		} else if (locationManager
-				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			lastKnownLocation = locationManager
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		} else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			Log.d(TAG_POSITION_MANAGER, "getLastKnownPositionFromAndroid() - GPS is enabled");
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			Log.d(TAG_POSITION_MANAGER, "GPS");
 			notifyAllPositionListeners();
 		}
 	}
 
 }
+
+
+
+
