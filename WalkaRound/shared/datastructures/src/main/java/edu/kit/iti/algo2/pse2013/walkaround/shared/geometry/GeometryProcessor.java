@@ -468,7 +468,9 @@ public class GeometryProcessor {
                             currentBest.getGeometrizable().valueForDimension(dim))
                         currentBest.setGeometrizable(currentGeometrizable);
                 }
-                searchTreeUp(node.getParent(), search, currentBest, node);
+
+                if (node.getParent() != null)
+                    searchTreeUp(node.getParent(), search, currentBest, node);
 
             // otherwise, traverse further down the tree
             } else {
@@ -476,9 +478,11 @@ public class GeometryProcessor {
                 // either further visit left or right child
                 // here we check for less or equal
                 if (search.valueForDimension(dim) <= node.getSplitValue())
-                    searchTreeDown(node.getLeftNode(), search, currentBest);
+                    if (node.getLeftNode() != null)
+                        searchTreeDown(node.getLeftNode(), search, currentBest);
                 else
-                    searchTreeDown(node.getRightNode(), search, currentBest);
+                    if (node.getRightNode() != null)
+                        searchTreeDown(node.getRightNode(), search, currentBest);
             }
 
             return;
@@ -519,12 +523,15 @@ public class GeometryProcessor {
 
             if (distSearchAndCurrentNode < distSearchAndCurrentBest)
                 if (child == node.getLeftNode())
-                    searchTreeDown(node.getRightNode(), search, currentBest);
+                    if (node.getRightNode() != null)
+                        searchTreeDown(node.getRightNode(), search, currentBest);
                 else
-                    searchTreeDown(node.getLeftNode(), search, currentBest);
+                    if (node.getLeftNode() != null)
+                        searchTreeDown(node.getLeftNode(), search, currentBest);
 
             if (!node.isRoot())
-                searchTreeUp(node.getParent(), search, currentBest, node);
+                if (node.getParent() != null)
+                    searchTreeUp(node.getParent(), search, currentBest, node);
 
             return;
         }
