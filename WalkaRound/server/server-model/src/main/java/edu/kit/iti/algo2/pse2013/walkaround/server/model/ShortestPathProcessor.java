@@ -34,7 +34,7 @@ public class ShortestPathProcessor {
     /**
      * ExecutorService.
      */
-    private ExecutorService executor;
+    private ThreadPoolExecutor executor;
 
 
     /**
@@ -61,9 +61,10 @@ public class ShortestPathProcessor {
             idCounter++;
         }
 
-        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 1,
-                TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
+        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,
+                TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(shortestPathComputerQueue), shortestPathComputerQueue);
+        executor.allowCoreThreadTimeOut(false);
     }
 
 

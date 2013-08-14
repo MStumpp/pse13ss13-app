@@ -54,7 +54,7 @@ public class GeometryProcessor {
     /**
      * ExecutorService.
      */
-    private ExecutorService executor;
+    private ThreadPoolExecutor executor;
 
 
     /**
@@ -81,9 +81,10 @@ public class GeometryProcessor {
             idCounter++;
         }
 
-        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 1,
-                TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
+        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,
+                TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(geometryComputerQueue), geometryComputerQueue);
+        executor.allowCoreThreadTimeOut(false);
 
     }
 

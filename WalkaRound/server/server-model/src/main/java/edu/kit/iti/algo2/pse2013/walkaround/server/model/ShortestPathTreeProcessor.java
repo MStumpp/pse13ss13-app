@@ -31,7 +31,7 @@ public class ShortestPathTreeProcessor {
     /**
      * ExecutorService.
      */
-    private ExecutorService executor;
+    private ThreadPoolExecutor executor;
 
 
     /**
@@ -58,9 +58,11 @@ public class ShortestPathTreeProcessor {
             idCounter++;
         }
 
-        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 1,
-                TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
+        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,
+                TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(shortestPathTreeComputerQueue), shortestPathTreeComputerQueue);
+        // avoid termination of core threads
+        executor.allowCoreThreadTimeOut(false);
     }
 
 
