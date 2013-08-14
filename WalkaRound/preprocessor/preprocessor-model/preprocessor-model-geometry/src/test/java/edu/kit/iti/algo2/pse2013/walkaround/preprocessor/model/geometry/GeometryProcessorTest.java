@@ -117,10 +117,6 @@ public class GeometryProcessorTest {
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = FileUtil.getFile("locationData.pbf");
-        Assert.assertNotNull(locationDataio);
-        Assert.assertTrue(locationDataio.exists());
-
         GraphDataIO graphDataIO = null;
         try {
             graphDataIO = GraphDataIO.load(graphDataio);
@@ -131,14 +127,6 @@ public class GeometryProcessorTest {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
-
-        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
-        try {
-			GeometryDataIO.save(geometryDataIO, geometryDataio);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
@@ -250,10 +238,6 @@ public class GeometryProcessorTest {
         Assert.assertNotNull(graphDataio);
         Assert.assertTrue(graphDataio.exists());
 
-        File locationDataio = FileUtil.getFile("locationData.pbf");
-        Assert.assertNotNull(locationDataio);
-        Assert.assertTrue(locationDataio.exists());
-
         GraphDataIO graphDataIO = null;
         try {
             graphDataIO = GraphDataIO.load(graphDataio);
@@ -264,14 +248,6 @@ public class GeometryProcessorTest {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
-
-        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
-        try {
-            GeometryDataIO.save(geometryDataIO, geometryDataio);
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
@@ -388,7 +364,7 @@ public class GeometryProcessorTest {
         locationDataIO.addPOI(new POI(5.d, 7.d, "poi 1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 0, 1 }));
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 2);
         return geometryDataIO;
     }
 

@@ -82,7 +82,6 @@ public class GeometryProcessor {
                 TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(geometryComputerQueue), geometryComputerQueue);
         executor.allowCoreThreadTimeOut(false);
-
     }
 
 
@@ -230,7 +229,7 @@ public class GeometryProcessor {
                     + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null)
             	   logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
-            geometryComputerQueue.add(computer);
+            //geometryComputerQueue.add(computer);
         }
     }
 
