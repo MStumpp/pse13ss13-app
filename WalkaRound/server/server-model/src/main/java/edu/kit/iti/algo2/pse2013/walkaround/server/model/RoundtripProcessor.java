@@ -170,34 +170,38 @@ public class RoundtripProcessor {
             logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
                     Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()));
 
+            long startTime = System.currentTimeMillis();
+
             // get the initial set of Vertices
-            RouteSet ring_s = ShortestPathTreeProcessor.getInstance().
-                    computeShortestPathTree(source, categories, length/3, eps, null);
+            RouteSet ring_s = ShortestPathTreeProcessor.getInstance().computeShortestPathTree(source, categories, length/3, eps, null);
+
+            logger.info("ring_s: " + ring_s.getTargets().size());
 
             // for all Vertices
             RouteSet ring_u;
             Set<Vertex> intersect;
 
-            Vertex currentBestU = null,
-                   currentBestV = null;
+            Vertex currentBestU = null, currentBestV = null;
             List<Vertex> currentRouteUV = null;
-            double weigthedLenghtSU, weightedLengthUVS,
-                   badLowerBound, badBestRoute = Double.POSITIVE_INFINITY,
-                   bestTotalWeightedLength = Double.POSITIVE_INFINITY;
+            double weigthedLenghtSU, weightedLengthUVS, badLowerBound, badBestRoute = Double.POSITIVE_INFINITY, bestTotalWeightedLength = Double.POSITIVE_INFINITY;
 
             for (Vertex vertexU : ring_s.getTargets()) {
                 // stopping criterion #2 (route edges)
-                ring_u = ShortestPathTreeProcessor.getInstance().
-                        computeShortestPathTree(vertexU, categories, length/3, eps, ring_s.getRouteEdges(vertexU));
+                ring_u = ShortestPathTreeProcessor.getInstance().computeShortestPathTree(vertexU, categories, length/3, eps, ring_s.getRouteEdges(vertexU));
+
+                logger.info("ring_u of size: " + ring_u.getTargets().size() + " for target: " + vertexU);
+
                 weigthedLenghtSU = ring_s.getWeigthedLength(vertexU);
 
                 // stopping criterion #1
-                badLowerBound = (2*weigthedLenghtSU)/((1+eps)*length);
-                if (badLowerBound > badBestRoute)
-                    break;
+                //badLowerBound = (2*weigthedLenghtSU)/((1+eps)*length);
+                //if (badLowerBound > badBestRoute)
+                //    break;
 
                 // compute intersection
                 intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
+
+                logger.info("intersect of size: " + intersect.size());
 
                 // of the intersection, only consider the ones having greater weighted length
                 // then vertex_u
@@ -205,31 +209,38 @@ public class RoundtripProcessor {
 
                     // skip if Puv and Pvs share at least one Edge
                     // stopping criterion #2
-                    if (!Sets.intersection(ring_u.getRouteEdges(vertexV), ring_s.getRouteEdges(vertexV)).isEmpty())
+                    if (!Sets.intersection(ring_u.getRouteEdges(vertexV), ring_s.getRouteEdges(vertexV)).isEmpty()) {
                         continue;
+                    }
 
                     weightedLengthUVS = ring_u.getWeigthedLength(vertexV) + ring_s.getWeigthedLength(vertexV);
                     // stopping criterion #1
                     if (ring_s.getWeigthedLength(vertexU) <= ring_s.getWeigthedLength(vertexV)) {
-                        if (currentBestU == null ||
-                            weigthedLenghtSU + weightedLengthUVS < bestTotalWeightedLength) {
+                        if (currentBestU == null || (weigthedLenghtSU + weightedLengthUVS < bestTotalWeightedLength)) {
                             currentBestU = vertexU;
                             currentBestV = vertexV;
                             currentRouteUV = ring_u.getRouteVertices(vertexV);
-                            badBestRoute = badLowerBound;
+                            //badBestRoute = badLowerBound;
                             bestTotalWeightedLength = weigthedLenghtSU + weightedLengthUVS;
                         }
                     }
                 }
             }
 
-            if (currentBestU == null || currentBestV == null || currentRouteUV == null)
+            if (currentBestU == null || currentBestV == null || currentRouteUV == null) {
                 throw new NoRoundtripExistsException("no roundtrip exists");
+            }
 
             List<Vertex> roundtrip = new LinkedList<Vertex>();
             roundtrip.addAll(ring_s.getRouteVertices(currentBestU));
             roundtrip.addAll(currentRouteUV);
             roundtrip.addAll(reverseList(ring_s.getRouteVertices(currentBestV)));
+
+            long stopTime = System.currentTimeMillis();
+            long runTime = stopTime - startTime;
+
+            logger.info("computeRoundtrip: Source: " + source.toString() +
+                    " Routetrip Size: " + roundtrip.size() + " Run time: " + runTime);
 
             return roundtrip;
         }
