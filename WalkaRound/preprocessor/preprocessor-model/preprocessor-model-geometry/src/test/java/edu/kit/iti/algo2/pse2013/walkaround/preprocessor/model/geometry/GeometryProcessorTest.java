@@ -38,10 +38,10 @@ public class GeometryProcessorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorTest.class);
 
-    private GraphDataIO graphDataIO;
+    private static GraphDataIO graphDataIO;
 
     @BeforeClass
-    public void setUp() {
+    public static void doSetUp() {
         File graphDataio = FileUtil.getFile("graphData.pbf");
         try {
             graphDataIO = GraphDataIO.load(graphDataio);
