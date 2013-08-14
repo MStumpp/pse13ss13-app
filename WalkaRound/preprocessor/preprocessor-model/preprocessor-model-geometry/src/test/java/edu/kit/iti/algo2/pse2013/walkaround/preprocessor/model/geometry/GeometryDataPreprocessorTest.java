@@ -12,6 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
@@ -44,6 +45,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessGraphDataIO() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
@@ -149,6 +151,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessGraphDataIO2() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
@@ -159,6 +162,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessGraphDataIOWithRealDataSet() throws InstantiationException {
 
         File graphDataio = FileUtil.getFile("graphData.pbf");

@@ -35,6 +35,7 @@ public class GraphDataIOTest {
 	}
 
 	@Test
+    @Ignore
 	public void testSaveAndLoad() {
 		GraphDataIO graphDataIO = getGraphDataIO();
 
@@ -59,6 +60,7 @@ public class GraphDataIOTest {
 	}
 
     @Test
+    @Ignore
     public void testSaveAndLoad2() {
         GraphDataIO graphDataIO = getGraphDataIO();
         int size = graphDataIO.getEdges().size();
@@ -113,6 +115,7 @@ public class GraphDataIOTest {
     }
 
 	@Test
+    @Ignore
     public void testSaveAndLoadWithRealDataSet() throws IOException {
 		System.out.println("### TestSaveAndLoadWithRealDataSet() ###");
 		System.out.println(REAL_GRAPH_DATA_FILE);

@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -26,6 +27,7 @@ public class GraphTest {
 
 
     @Test
+    @Ignore
     public void testInit() {
 
         GraphDataIO graphDataIO = getGraphDataIO();
@@ -58,6 +60,7 @@ public class GraphTest {
 
 
     @Test
+    @Ignore
     public void testInitGraphWithRealDataSet() {
 
         File file = FileUtil.getFile("graphData.pbf");
