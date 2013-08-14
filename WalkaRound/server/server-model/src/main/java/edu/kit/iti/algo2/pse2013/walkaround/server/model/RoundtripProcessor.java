@@ -39,7 +39,7 @@ public class RoundtripProcessor {
     /**
      * Epsilon.
      */
-    private final static double eps = 0.05;
+    private final static double eps = 0.1;
 
 
     /**
