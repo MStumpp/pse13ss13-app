@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -178,8 +179,7 @@ public class MapView extends Activity {
 		flag = this.getResources().getDrawable(DEFAULT_FLAG);
 		flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);
 		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);
-		flagTargetActive = this.getResources().getDrawable(
-				DEFAULT_FLAG_TARGET_ACTIVE);
+		flagTargetActive = this.getResources().getDrawable(DEFAULT_FLAG_TARGET_ACTIVE);
 		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);
 		waypointActive = this.getResources().getDrawable(
 				DEFAULT_WAYPOINT_ACTIVE);
@@ -366,17 +366,14 @@ public class MapView extends Activity {
 					for (DisplayWaypoint dw : displayPoints) {
 
 						ImageView iv = new ImageView(context);
-						iv.setImageDrawable(waypoint);
-						iv.setY(dw.getY() - sizeOfPoints);
-						iv.setX(dw.getX() - sizeOfPoints / 2);
+						iv.setY(dw.getY() - 145);
+						iv.setX(dw.getX() - 75);
 
 						iv.setVisibility(View.VISIBLE);
-						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
-								(int) sizeOfPoints));
+						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints, (int) sizeOfPoints));
 						iv.setScaleType(ImageView.ScaleType.FIT_XY);
 						iv.setTag(dw.getId());
-						iv.setOnTouchListener(new WaypointTouchListener(iv,
-								dw.getId()));
+						iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));
 						routeList.addView(iv);
 					}
 
@@ -783,7 +780,7 @@ public class MapView extends Activity {
 				if (waypointGestureDetector.onTouchEvent(event)) {
 	                return true;
 	            }
-				
+
 				if(event.getAction() == MotionEvent.ACTION_UP){
 					if(mIsScrolling){
 					Log.d("fuck", "Action Up");
@@ -792,7 +789,7 @@ public class MapView extends Activity {
 					mc.pushMovedWaypoint();
 					}
 				}
-				
+
 			}
 			return false;
 		}
@@ -847,14 +844,14 @@ public class MapView extends Activity {
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
-			
+
 			//routeList.removeView(currentView);
 			currentView.setX(currentView.getX() - deltaX);
 			currentView.setY(currentView.getY() - deltaY);
 			mc.onMovePoint(-deltaX, -deltaY, currentId);
 			//routeList.addView(currentView);
 			mIsScrolling = true;
-			
+
 			return true;
 		}
 

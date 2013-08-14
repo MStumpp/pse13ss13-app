@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>FileUtil.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared</a> &gt; <span class="el_source">FileUtil.java</span></div><h1>FileUtil.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared;
+
+import java.io.File;
+
+<span class="nc" id="L5">public class FileUtil {</span>
+
+	public static File getFile(String file) {
+        // special cake for Mr. Lukas
+<span class="pc bpc" id="L9" title="1 of 2 branches missed.">		if (&quot;Lukas&quot;.equals(System.getProperty(&quot;user.name&quot;)))</span>
+<span class="nc" id="L10">			return new File(System.getProperty(&quot;user.home&quot;) + File.separatorChar + &quot;Desktop&quot; + File.separatorChar + &quot;Dropbox&quot; + File.separatorChar + &quot;Studium&quot; + File.separatorChar + &quot;PSE&quot; + File.separatorChar + file);</span>
+
+        // check dropbox dir
+<span class="fc" id="L13">        File path = new File(System.getProperty(&quot;user.home&quot;) + File.separatorChar + &quot;Dropbox&quot; + File.separatorChar + &quot;Studium&quot; + File.separatorChar + &quot;PSE&quot; + File.separatorChar + file);</span>
+<span class="pc bpc" id="L14" title="1 of 2 branches missed.">        if (path.getParentFile().exists())</span>
+<span class="fc" id="L15">		    return path;</span>
+
+        // check resources dir (server only)
+<span class="nc" id="L18">        path = new File(System.getProperty(&quot;user.home&quot;) + File.separatorChar + &quot;resources&quot; + File.separatorChar + file);</span>
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (path.exists())</span>
+<span class="nc" id="L20">            return path;</span>
+
+        // check resources dir
+<span class="nc" id="L23">        path = new File(FileUtil.class.getResource(File.separatorChar + file).getFile());</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        if (path.getParentFile().exists())</span>
+<span class="nc" id="L25">            return path;</span>
+
+<span class="nc" id="L27">        throw new RuntimeException(&quot;file not available&quot;);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

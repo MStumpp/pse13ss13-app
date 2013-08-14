@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -149,11 +150,14 @@ public class ProtobufConverter {
 			.setID(e.getID());
 	}
 
-	public static Geometrizable getGeometrizable(SaveGeometrizable geometrizable) {
-		if (geometrizable.getCoordinate() != null) {
-			return getCoordinate(geometrizable.getCoordinate());
-		} else if (geometrizable.getEdge() != null) {
-			return getEdge(geometrizable.getEdge());
+	public static List<Geometrizable> getGeometrizables(List<SaveGeometrizable> saveGeoms) {
+		ArrayList<Geometrizable> geoms = new ArrayList<Geometrizable>();
+		for (SaveGeometrizable saveGeom : saveGeoms) {
+			if (saveGeom.getCoordinate() != null) {
+				geoms.add(getCoordinate(saveGeom.getCoordinate()));
+			} else if (saveGeom.getEdge() != null) {
+				geoms.add(getEdge(saveGeom.getEdge()));
+			}
 		}
 		return null;
 	}
@@ -185,8 +189,12 @@ public class ProtobufConverter {
 			return null;
 		}
 		GeometryNode node;
+		List<Geometrizable> geoms;
+		if (saveNode.getGeometrizableCount() > 0) {
+			geoms = getGeometrizables(saveNode.getGeometrizableList());
+		}
 		if (parent == null) {
-			node = new GeometryNode(saveNode.getSplitValue());
+			node = new GeometryNode(saveNode.getSplitValue(), geoms);
 		} else {
 			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
 		}
@@ -195,9 +203,6 @@ public class ProtobufConverter {
 		}
 		if (saveNode.hasRight()) {
 			node.setRightNode(getGeometryNode(node, saveNode.getRight(), depth + 1));
-		}
-		if (saveNode.hasGeometrizable()) {
-			node.setGeometrizable(getGeometrizable(saveNode.getGeometrizable()));
 		}
 		return node;
 	}
@@ -214,8 +219,10 @@ public class ProtobufConverter {
 		if (node.getRightNode() != null) {
 			builder.setRight(getGeometryNodeBuilder(node.getLeftNode()));
 		}
-		if (node.getGeometrizable() != null) {
-			builder.setGeometrizable(getGeometrizableBuilder(node.getGeometrizable()));
+		if (node.getGeometrizables() != null && node.getGeometrizables().length > 0) {
+			for (Geometrizable g : node.getGeometrizables()) {
+				builder.addGeometrizable(getGeometrizableBuilder(g));
+			}
 		}
 		return builder;
 	}

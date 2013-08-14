@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LocationDataIOTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">LocationDataIOTest.java</span></div><h1>LocationDataIOTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
+/**
+ * LocationDataIOTest.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+<span class="fc" id="L28">public class LocationDataIOTest {</span>
+
+<span class="fc" id="L30">	private static final File TMP_LOCATIONDATA_FILE = new File(System.getProperty(&quot;java.io.tmpdir&quot;) + File.separator + &quot;locationData.pbf&quot;);</span>
+<span class="fc" id="L31">	private static final File REAL_LOCATIONDATA_FILE = FileUtil.getFile(&quot;locationData.pbf&quot;);</span>
+
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+<span class="fc" id="L35">        Field idCounter = Vertex.class.getDeclaredField(&quot;idCounter&quot;);</span>
+<span class="fc" id="L36">        idCounter.setAccessible(true);</span>
+<span class="fc" id="L37">        idCounter.setInt(null, 0);</span>
+<span class="fc" id="L38">    }</span>
+
+
+	@Test
+	public void testSaveAndLoad() throws MalformedURLException {
+<span class="fc" id="L43">		LocationDataIO writeLocationData = getLocationDataIO();</span>
+<span class="fc" id="L44">		int size = writeLocationData.getPOIs().size();</span>
+		try {
+<span class="fc" id="L46">			LocationDataIO.save(writeLocationData, TMP_LOCATIONDATA_FILE);</span>
+<span class="pc" id="L47">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L48">			e.printStackTrace();</span>
+<span class="nc" id="L49">		} catch (IOException e) {</span>
+<span class="nc" id="L50">			e.printStackTrace();</span>
+		}
+
+<span class="fc" id="L53">		Assert.assertTrue(TMP_LOCATIONDATA_FILE.exists());</span>
+
+<span class="fc" id="L55">		LocationDataIO readLocationData = null;</span>
+		try {
+<span class="fc" id="L57">			readLocationData = LocationDataIO.load(TMP_LOCATIONDATA_FILE);</span>
+<span class="pc" id="L58">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L59">			e.printStackTrace();</span>
+<span class="nc" id="L60">		} catch (IOException e) {</span>
+<span class="nc" id="L61">			e.printStackTrace();</span>
+		}
+
+		// Check, if something was read
+<span class="fc" id="L65">		Assert.assertNotNull(readLocationData);</span>
+		// Check, if the same number of POI was written and read
+<span class="fc" id="L67">		Assert.assertEquals(size, readLocationData.getPOIs().size());</span>
+
+		// Check, if the POIs are really the same
+<span class="fc" id="L70">		List&lt;POI&gt; oldPOIs = writeLocationData.getPOIs();</span>
+<span class="fc" id="L71">		List&lt;POI&gt; newPOIs = readLocationData.getPOIs();</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">		for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L73">			Assert.assertEquals(oldPOIs.get(i).getLatitude(), newPOIs.get(i).getLatitude(), 0.d);</span>
+<span class="fc" id="L74">			Assert.assertEquals(oldPOIs.get(i).getLongitude(), newPOIs.get(i).getLongitude(), 0.d);</span>
+		}
+<span class="fc" id="L76">	}</span>
+
+
+    @Test
+    public void testSaveAndLoadWithRealDataSet() throws IOException {
+<span class="fc" id="L81">        Assert.assertNotNull(REAL_LOCATIONDATA_FILE);</span>
+<span class="fc" id="L82">        Assert.assertTrue(REAL_LOCATIONDATA_FILE.exists());</span>
+
+<span class="fc" id="L84">        LocationDataIO readLocationData = null;</span>
+<span class="fc" id="L85">        readLocationData = LocationDataIO.load(REAL_LOCATIONDATA_FILE);</span>
+
+        // Check, if something was read
+<span class="fc" id="L88">        Assert.assertNotNull(readLocationData);</span>
+
+<span class="fc" id="L90">        Set&lt;Integer&gt; ids = new TreeSet&lt;Integer&gt;();</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (POI p : readLocationData.getPOIs()) {</span>
+<span class="fc" id="L92">        	Assert.assertTrue(ids.add(p.getId()));</span>
+        }
+
+<span class="fc" id="L95">        LocationDataIO.save(readLocationData, REAL_LOCATIONDATA_FILE);</span>
+<span class="fc" id="L96">    }</span>
+
+
+	private LocationDataIO getLocationDataIO() throws MalformedURLException {
+
+<span class="fc" id="L101">		LocationDataIO locationDataIO = new LocationDataIO();</span>
+
+<span class="fc" id="L103">		POI poi1 = new POI(1.d, 2.d, &quot;poi 1&quot;, &quot;info 1&quot;, new URL(&quot;https://de.wikipedia.org/w/index.php?printable=yes&amp;title=Wikipedia&quot;), new int[] { 0, 1 });</span>
+<span class="fc" id="L104">		POI poi2 = new POI(3.d, 4.d, &quot;poi 2&quot;, &quot;info 2&quot;, new URL(&quot;https://de.wikipedia.org/w/index.php?printable=yes&amp;title=KIT&quot;), new int[] { 0, 1 });</span>
+
+<span class="fc" id="L106">		locationDataIO.addPOI(poi1);</span>
+<span class="fc" id="L107">		locationDataIO.addPOI(poi2);</span>
+
+<span class="fc" id="L109">		return locationDataIO;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

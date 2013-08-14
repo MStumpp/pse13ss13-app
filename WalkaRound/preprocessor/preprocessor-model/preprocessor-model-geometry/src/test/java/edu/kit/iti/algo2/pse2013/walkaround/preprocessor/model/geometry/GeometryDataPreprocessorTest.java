@@ -30,7 +30,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  */
 public class GeometryDataPreprocessorTest {
 
-
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException,
             IllegalArgumentException, IllegalAccessException {

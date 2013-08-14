@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestProtobufConverter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.pbf</a> &gt; <span class="el_source">TestProtobufConverter.java</span></div><h1>TestProtobufConverter.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.LinkedList;
+
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
+
+<span class="fc" id="L15">public class TestProtobufConverter {</span>
+
+	@Test
+	public void testConvertAddress() {
+<span class="fc" id="L19">		assertEquals(null, ProtobufConverter.getAddressBuilder(null));</span>
+<span class="fc" id="L20">		assertEquals(null, ProtobufConverter.getAddress(null));</span>
+<span class="fc" id="L21">		Address a = new Address(null, null, null, Address.NO_POSTAL_CODE);</span>
+<span class="fc" id="L22">		Address a2 = new Address(&quot;Am Fasanengarten&quot;, &quot;5&quot;, &quot;Karlsruhe&quot;, 76131);</span>
+<span class="fc" id="L23">		assertEquals(a, ProtobufConverter.getAddress(ProtobufConverter.getAddressBuilder(a).build()));</span>
+<span class="fc" id="L24">		assertEquals(a2, ProtobufConverter.getAddress(ProtobufConverter.getAddressBuilder(a2).build()));</span>
+<span class="fc" id="L25">	}</span>
+
+	@Test
+	public void testConvertArea() {
+<span class="fc" id="L29">		assertEquals(null, ProtobufConverter.getAreaBuilder(null));</span>
+<span class="fc" id="L30">		assertEquals(null, ProtobufConverter.getArea(null));</span>
+<span class="fc" id="L31">		LinkedList&lt;Coordinate&gt; coords = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="fc" id="L32">		coords.add(new Coordinate(48, 8));</span>
+<span class="fc" id="L33">		coords.add(new Coordinate(49, 8));</span>
+<span class="fc" id="L34">		coords.add(new Coordinate(49, 9));</span>
+<span class="fc" id="L35">		Area a = new Area(Category.getAllAreaCategories(), coords);</span>
+<span class="fc" id="L36">		assertEquals(a, ProtobufConverter.getArea(ProtobufConverter.getAreaBuilder(a).build()));</span>
+<span class="fc" id="L37">	}</span>
+
+	@Test
+	public void testConvertCoordinate() {
+<span class="fc" id="L41">		assertEquals(null, ProtobufConverter.getCoordinate(null));</span>
+<span class="fc" id="L42">		assertEquals(null, ProtobufConverter.getCoordinateBuilder(null));</span>
+<span class="fc" id="L43">		Coordinate c = new Coordinate(48, 8, new CrossingInformation(new float[]{1.0f, 2.0f, 42.0f}));</span>
+<span class="fc" id="L44">		System.out.println(c.getCrossingInformation().getCrossingAngles());</span>
+<span class="fc" id="L45">		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));</span>
+<span class="fc" id="L46">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
