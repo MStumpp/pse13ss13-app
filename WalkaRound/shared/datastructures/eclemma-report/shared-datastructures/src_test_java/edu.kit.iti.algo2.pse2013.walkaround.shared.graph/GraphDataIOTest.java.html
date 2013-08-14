@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GraphDataIOTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">GraphDataIOTest.java</span></div><h1>GraphDataIOTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+
+/**
+ * GraphDataIOTest.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+<span class="fc" id="L23">public class GraphDataIOTest {</span>
+
+
+<span class="fc" id="L26">	private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile(&quot;graphData.pbf&quot;);</span>
+<span class="fc" id="L27">	private static final File TMP_GRAPH_DATA_FILE = new File(System.getProperty(&quot;java.io.tmpdir&quot;) + File.separatorChar + &quot;graphData.pbf&quot;);</span>
+
+	@Before
+	public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+<span class="fc" id="L31">		Field idCounter = Vertex.class.getDeclaredField(&quot;idCounter&quot;);</span>
+<span class="fc" id="L32">		idCounter.setAccessible(true);</span>
+<span class="fc" id="L33">		idCounter.setInt(null, 0);</span>
+<span class="fc" id="L34">	}</span>
+
+	@Test
+	public void testSaveAndLoad() {
+<span class="fc" id="L38">		GraphDataIO graphDataIO = getGraphDataIO();</span>
+
+		try {
+<span class="fc" id="L41">			GraphDataIO.save(graphDataIO, TMP_GRAPH_DATA_FILE);</span>
+<span class="pc" id="L42">		} catch (IOException e) {</span>
+<span class="nc" id="L43">			e.printStackTrace();</span>
+		}
+
+<span class="fc" id="L46">		assertTrue(TMP_GRAPH_DATA_FILE.exists());</span>
+
+<span class="fc" id="L48">		GraphDataIO reload = null;</span>
+		try {
+<span class="fc" id="L50">			reload = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="pc" id="L51">		} catch (IOException e) {</span>
+<span class="nc" id="L52">			e.printStackTrace();</span>
+		}
+
+<span class="fc" id="L55">		assertNotNull(graphDataIO);</span>
+<span class="fc" id="L56">		assertTrue(graphDataIO.getEdges().containsAll(reload.getEdges()));</span>
+<span class="fc" id="L57">		assertTrue(reload.getEdges().containsAll(graphDataIO.getEdges()));</span>
+<span class="fc" id="L58">	}</span>
+
+    @Test
+    public void testSaveAndLoad2() {
+<span class="fc" id="L62">        GraphDataIO graphDataIO = getGraphDataIO();</span>
+<span class="fc" id="L63">        int size = graphDataIO.getEdges().size();</span>
+
+        try {
+<span class="fc" id="L66">            GraphDataIO.save(graphDataIO, TMP_GRAPH_DATA_FILE);</span>
+<span class="pc" id="L67">        } catch (IOException e) {</span>
+<span class="nc" id="L68">            e.printStackTrace();</span>
+        }
+
+<span class="fc" id="L71">        Assert.assertTrue(TMP_GRAPH_DATA_FILE.exists());</span>
+
+<span class="fc" id="L73">        graphDataIO = null;</span>
+        try {
+<span class="fc" id="L75">            graphDataIO = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="pc" id="L76">        } catch (IOException e) {</span>
+<span class="nc" id="L77">            e.printStackTrace();</span>
+        }
+
+<span class="fc" id="L80">        GraphDataIO graphDataIO2 = null;</span>
+        try {
+<span class="fc" id="L82">            graphDataIO2 = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="pc" id="L83">        } catch (IOException e) {</span>
+<span class="nc" id="L84">            e.printStackTrace();</span>
+        }
+
+<span class="fc" id="L87">        Assert.assertNotNull(graphDataIO);</span>
+<span class="fc" id="L88">        Assert.assertEquals(graphDataIO.getEdges().size(), size);</span>
+<span class="fc" id="L89">        Assert.assertEquals(graphDataIO2.getEdges().size(), size);</span>
+
+<span class="fc" id="L91">        Vertex tail_1 = null, head_1 = null, tail_2 = null, head_2 = null;</span>
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (Edge edge : graphDataIO.getEdges()) {</span>
+<span class="fc" id="L94">            System.out.println(edge.getTail().getClass().getName() + &quot;@&quot; + Integer.toHexString(edge.getTail().hashCode()));</span>
+<span class="fc" id="L95">            System.out.println(edge.getHead().getClass().getName() + &quot;@&quot; + Integer.toHexString(edge.getHead().hashCode()));</span>
+<span class="fc" id="L96">            tail_1 = edge.getTail();</span>
+<span class="fc" id="L97">            head_1 = edge.getHead();</span>
+        }
+
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (Edge edge : graphDataIO2.getEdges()) {</span>
+<span class="fc" id="L101">            System.out.println(edge.getTail().getClass().getName() + &quot;@&quot; + Integer.toHexString(edge.getTail().hashCode()));</span>
+<span class="fc" id="L102">            System.out.println(edge.getHead().getClass().getName() + &quot;@&quot; + Integer.toHexString(edge.getHead().hashCode()));</span>
+<span class="fc" id="L103">            tail_2 = edge.getTail();</span>
+<span class="fc" id="L104">            head_2 = edge.getHead();</span>
+        }
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (tail_1 == tail_2)</span>
+<span class="nc" id="L108">            System.out.println(&quot;test&quot;);</span>
+
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (head_1 == head_2)</span>
+<span class="nc" id="L111">            System.out.println(&quot;test&quot;);</span>
+<span class="fc" id="L112">    }</span>
+
+	@Test
+    public void testSaveAndLoadWithRealDataSet() throws IOException {
+<span class="fc" id="L116">		System.out.println(&quot;### TestSaveAndLoadWithRealDataSet() ###&quot;);</span>
+<span class="fc" id="L117">		System.out.println(REAL_GRAPH_DATA_FILE);</span>
+
+<span class="fc" id="L119">		Assert.assertNotNull(REAL_GRAPH_DATA_FILE);</span>
+<span class="fc" id="L120">		Assert.assertTrue(REAL_GRAPH_DATA_FILE.exists());</span>
+<span class="fc" id="L121">		Assert.assertTrue(REAL_GRAPH_DATA_FILE.canWrite());</span>
+<span class="fc" id="L122">		Assert.assertTrue(REAL_GRAPH_DATA_FILE.canRead());</span>
+
+<span class="fc" id="L124">		long stopwatch = System.currentTimeMillis();</span>
+<span class="fc" id="L125">		System.out.print(&quot;Load real graph-dataset... &quot;);</span>
+<span class="fc" id="L126">		GraphDataIO graphData = GraphDataIO.load(REAL_GRAPH_DATA_FILE);</span>
+<span class="fc" id="L127">		System.out.println(System.currentTimeMillis() - stopwatch + &quot; ms&quot;);</span>
+
+<span class="fc" id="L129">		int numEdges = graphData.getEdges().size();</span>
+<span class="fc" id="L130">		int numVertices = graphData.getVertices().size();</span>
+<span class="fc" id="L131">		System.out.println(numEdges + &quot; edges and &quot; + numVertices + &quot; vertices&quot;);</span>
+
+<span class="fc" id="L133">		stopwatch = System.currentTimeMillis();</span>
+<span class="fc" id="L134">		System.out.print(&quot;Save to temporary file... &quot;);</span>
+<span class="fc" id="L135">		GraphDataIO.save(graphData, TMP_GRAPH_DATA_FILE);</span>
+<span class="fc" id="L136">		System.out.println(System.currentTimeMillis() - stopwatch + &quot; ms&quot;);</span>
+
+<span class="fc" id="L138">		stopwatch = System.currentTimeMillis();</span>
+<span class="fc" id="L139">		System.out.print(&quot;Load again... &quot;);</span>
+<span class="fc" id="L140">		graphData = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="fc" id="L141">		System.out.println(System.currentTimeMillis() - stopwatch + &quot; ms&quot;);</span>
+
+<span class="fc" id="L143">		System.out.println(numEdges + &quot; edges and &quot; + numVertices + &quot; vertices&quot;);</span>
+<span class="fc" id="L144">		Assert.assertEquals(numEdges, graphData.getEdges().size());</span>
+<span class="fc" id="L145">		Assert.assertEquals(numVertices, graphData.getVertices().size());</span>
+<span class="fc" id="L146">	}</span>
+
+
+	private GraphDataIO getGraphDataIO() {
+<span class="fc" id="L150">		GraphDataIO graphDataIO = new GraphDataIO();</span>
+<span class="fc" id="L151">		Edge edge1 = new Edge(new Vertex(1.d, 2.d), new Vertex(3.d, 4.d));</span>
+<span class="fc" id="L152">		Edge edge2 = new Edge(new Vertex(1.d, 2.d), new Vertex(3.d, 4.d));</span>
+<span class="fc" id="L153">		graphDataIO.addEdge(edge1);</span>
+<span class="fc" id="L154">		graphDataIO.addEdge(edge2);</span>
+<span class="fc" id="L155">		return graphDataIO;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

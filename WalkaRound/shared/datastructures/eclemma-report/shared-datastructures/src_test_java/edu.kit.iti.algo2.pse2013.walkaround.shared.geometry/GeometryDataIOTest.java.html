@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometryDataIOTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometryDataIOTest.java</span></div><h1>GeometryDataIOTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
+/**
+ * GeometryDataIOTest.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+<span class="fc" id="L21">public class GeometryDataIOTest {</span>
+
+<span class="fc" id="L23">    private static File file = new File(System.getProperty(&quot;java.io.tmpdir&quot;) + File.separator + &quot;geometryData.pbf&quot;);</span>
+
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+<span class="fc" id="L27">        Field idCounter = Vertex.class.getDeclaredField(&quot;idCounter&quot;);</span>
+<span class="fc" id="L28">        idCounter.setAccessible(true);</span>
+<span class="fc" id="L29">        idCounter.setInt(null, 0);</span>
+<span class="fc" id="L30">    }</span>
+
+
+    @Test
+    public void testSaveAndLoad() {
+<span class="fc" id="L35">		GeometryDataIO writeGeometryDataIO = getGeometryDataIO();</span>
+<span class="fc" id="L36">		int numDimensions = writeGeometryDataIO.getNumDimensions();</span>
+		try {
+<span class="fc" id="L38">			GeometryDataIO.save(writeGeometryDataIO, file);</span>
+<span class="pc" id="L39">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L40">			e.printStackTrace();</span>
+<span class="nc" id="L41">		} catch (IOException e) {</span>
+<span class="nc" id="L42">			e.printStackTrace();</span>
+		}
+
+<span class="fc" id="L45">		Assert.assertTrue(file.exists());</span>
+
+<span class="fc" id="L47">		GeometryDataIO readGeometryDataIO = null;</span>
+		try {
+<span class="nc" id="L49">			readGeometryDataIO = GeometryDataIO.load(file);</span>
+<span class="nc" id="L50">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L51">			e.printStackTrace();</span>
+<span class="nc" id="L52">		} catch (IOException e) {</span>
+<span class="nc" id="L53">			e.printStackTrace();</span>
+		}
+
+		// Check, if something was read
+<span class="nc" id="L57">		Assert.assertNotNull(readGeometryDataIO);</span>
+		// Check, if the same number of POI was written and read
+<span class="nc" id="L59">		Assert.assertNotNull(readGeometryDataIO.getRoot());</span>
+		// Check, if the same number of POI was written and read
+<span class="nc" id="L61">		Assert.assertNotNull(readGeometryDataIO.getRoot().getGeometrizable());</span>
+		// Check, if value for dimension 0 is the same
+<span class="nc" id="L63">		Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable()</span>
+<span class="nc" id="L64">				.valueForDimension(0), writeGeometryDataIO.getRoot()</span>
+<span class="nc" id="L65">				.getGeometrizable().valueForDimension(0), 0.d);</span>
+		// Check, if value for dimension 1 is the same
+<span class="nc" id="L67">		Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable()</span>
+<span class="nc" id="L68">				.valueForDimension(1), writeGeometryDataIO.getRoot()</span>
+<span class="nc" id="L69">				.getGeometrizable().valueForDimension(1), 0.d);</span>
+
+		// Check, if number of dimensions is the same
+<span class="nc" id="L72">		Assert.assertEquals(readGeometryDataIO.getNumDimensions(), numDimensions);</span>
+<span class="nc" id="L73">	}</span>
+
+
+	private GeometryDataIO getGeometryDataIO() {
+<span class="fc" id="L77">        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d)), 2);</span>
+<span class="fc" id="L78">        return geometryDataIO;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
