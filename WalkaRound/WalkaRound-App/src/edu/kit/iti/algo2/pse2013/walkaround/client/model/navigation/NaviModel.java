@@ -194,23 +194,23 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			tempCoord = coordsIter.next();
 		}
 
-		// TODO: In case of the closest coordinate on route being a crossing, check if it is before the user:
 		if (tempNearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1) {
-
+			// TODO: In case of the closest coordinate on route being a crossing, check if it is before the user:
+			this.checkIfBeforeUser(tempNearestCoordOnRoute);
 		}
-
+		
 		tempCoord = null;
 		while (coordsIter.hasNext()) {
 			tempCoord = coordsIter.next();
 			if (tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
-
+				
 			}
 		}
 
 
 		// Crossing Info wird überall hinzugefügt, also sind nur die mit mehr als einer TurnAngle relevant!
 		// TODO: iteriere Coords der Route von hier aus durch, bis nächster Turn gefunden.
-		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord
+		// Ausnahme: temp ist bereits ein Turn. Dann muss festgestellt werden, ob die Coord vor dem User liegt
 
 		// Compute NextNextTurnCoord now that you know the next turn
 
@@ -240,7 +240,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			double[] vectorNextCrossingToNextNextCrossing = new double[2];
 
 			// Calculating x and y components of Vectors.
-			// TODO: Check if this method works:
+			// TODO: Test if this method works:
 			// otherwise use CoordinateUtility.calculateDifferenceInMeters(c1, c2)
 			vectorPosToNextCrossing[0] = this.nextCrossing.getLongitude() - this.lastKnownUserLocation.getLongitude();
 			vectorPosToNextCrossing[1] = this.nextCrossing.getLatitude() - this.lastKnownUserLocation.getLatitude();
@@ -260,10 +260,32 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	private void computeNewDistanceToTurn() {
 		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 	}
+	
+	private boolean checkIfBeforeUser(Coordinate nearestCoordWithTurn) {
+		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
+		Coordinate tempCoord = null;
+		while (coordsIter.hasNext() && !nearestCoordWithTurn.equals(tempCoord)) {
+			tempCoord = coordsIter.next();
+		}
+		
+		
+		
+		return true;
+	}
 
 
 
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
