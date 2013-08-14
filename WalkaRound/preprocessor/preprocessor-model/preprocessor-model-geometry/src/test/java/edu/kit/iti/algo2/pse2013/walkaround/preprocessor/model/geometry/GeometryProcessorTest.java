@@ -12,7 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +37,18 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 public class GeometryProcessorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorTest.class);
+
+    private static GraphDataIO graphDataIO;
+
+    @BeforeClass
+    public static void doSetUp() {
+        File graphDataio = FileUtil.getFile("graphData.pbf");
+        try {
+            graphDataIO = GraphDataIO.load(graphDataio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Before
     public void resetSingletonBefore() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -74,8 +86,6 @@ public class GeometryProcessorTest {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
 
-        logger.info(geometryDataIO.getRoot().toString());
-
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
         Coordinate search = new Coordinate(5.5, 3.9);
@@ -94,7 +104,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
@@ -116,7 +125,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
@@ -138,7 +146,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
@@ -160,23 +167,12 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
-    public void testGetNearestVertexDefaultPerNodeWithRealDataSetOneThread() throws InstantiationException {
+    public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
-        File graphDataio = FileUtil.getFile("graphData.pbf");
-        Assert.assertNotNull(graphDataio);
-        Assert.assertTrue(graphDataio.exists());
-
-        GraphDataIO graphDataIO = null;
-        try {
-            graphDataIO = GraphDataIO.load(graphDataio);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Assert.assertNotNull(graphDataIO);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
@@ -282,23 +278,12 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
-    public void testGetNearestVertexDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
+    public void testGetNearestVertexOnePerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
-        File graphDataio = FileUtil.getFile("graphData.pbf");
-        Assert.assertNotNull(graphDataio);
-        Assert.assertTrue(graphDataio.exists());
-
-        GraphDataIO graphDataIO = null;
-        try {
-            graphDataIO = GraphDataIO.load(graphDataio);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Assert.assertNotNull(graphDataIO);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();

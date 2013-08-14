@@ -451,47 +451,41 @@ public class GeometryProcessor {
             numberMethodCalls++;
 
             // compute dim
-            //logger.info("geometryDataIO.getNumDimensions(): " +  numberDimensions);
             int dim = node.getDepth() % numberDimensions;
-            //logger.info("dim: " + dim);
 
             // if leaf, then check whether vertex of this node is better then current best
             // traverse up the tree
             Geometrizable currentGeometrizable;
             if (node.isLeaf()) {
-                logger.info("!!!!!!!!!!!!!!!!!!!!!!!! is leaf " + node);
 
-                if (currentBest.getGeometrizable() == null)
+                if (currentBest.getGeometrizable() == null) {
                     currentGeometrizable = node.getNearestGeometrizable(search, dim);
-                else
+                } else {
                     currentGeometrizable = node.getNearestGeometrizable(currentBest.getGeometrizable(), dim);
-                logger.info("!!!!!!!!!!!!!!!!!!!!!!!! " + currentGeometrizable);
-                if (currentGeometrizable == null)
-                    logger.info("!!!!!!!!!!!!!!!!!!!!!!!! currentGeometrizable is null, obwohl isLeaf = true");
-                if (currentGeometrizable != null) {
-                    if (currentBest.getGeometrizable() == null)
-                        currentBest.setGeometrizable(currentGeometrizable);
-                    else if (currentGeometrizable.valueForDimension(dim) <
-                            currentBest.getGeometrizable().valueForDimension(dim))
-                        currentBest.setGeometrizable(currentGeometrizable);
                 }
 
-                if (node.getParent() != null)
+                if (currentGeometrizable != null) {
+                    if (currentBest.getGeometrizable() == null) {
+                        currentBest.setGeometrizable(currentGeometrizable);
+                    } else if (currentBest.getGeometrizable() != null && currentGeometrizable.valueForDimension(dim) < currentBest.getGeometrizable().valueForDimension(dim) ) {
+                        currentBest.setGeometrizable(currentGeometrizable);
+                    }
+                }
+
+                if (!node.isRoot()) {
                     searchTreeUp(node.getParent(), search, currentBest, node);
+                }
 
             // otherwise, traverse further down the tree
             } else {
 
-                logger.info("!!!!!!!!!!!!!!!!!!!!!!!! no leaf " + node);
-
                 // either further visit left or right child
                 // here we check for less or equal
-                if (search.valueForDimension(dim) <= node.getSplitValue())
-                    if (node.getLeftNode() != null)
-                        searchTreeDown(node.getLeftNode(), search, currentBest);
-                else
-                    if (node.getRightNode() != null)
-                        searchTreeDown(node.getRightNode(), search, currentBest);
+                if (search.valueForDimension(dim) <= node.getSplitValue() && node.getLeftNode() != null) {
+                    searchTreeDown(node.getLeftNode(), search, currentBest);
+                } else if (node.getRightNode() != null) {
+                    searchTreeDown(node.getRightNode(), search, currentBest);
+                }
             }
 
             return;
@@ -521,26 +515,25 @@ public class GeometryProcessor {
             int dim = node.getDepth() % numberDimensions;
 
             // distance between the splitting coordinate of search point and current node
-            if (node.getSplitValue() == Double.NaN)
+            if (node.getSplitValue() == Double.NaN) {
                 throw new GeometryProcessorException("searchTreeUp: split value is NaN");
-            double distSearchAndCurrentNode = Math.abs(search.valueForDimension(dim) -
-                    node.getSplitValue());
+            }
+            double distSearchAndCurrentNode = Math.abs(search.valueForDimension(dim) - node.getSplitValue());
 
             // distance between the splitting coordinate of search point end current best
-            double distSearchAndCurrentBest = Math.abs(search.valueForDimension(dim) -
-                    currentBest.getGeometrizable().valueForDimension(dim));
+            double distSearchAndCurrentBest = Math.abs(search.valueForDimension(dim) - currentBest.getGeometrizable().valueForDimension(dim));
 
-            if (distSearchAndCurrentNode < distSearchAndCurrentBest)
-                if (child == node.getLeftNode())
-                    if (node.getRightNode() != null)
-                        searchTreeDown(node.getRightNode(), search, currentBest);
-                else
-                    if (node.getLeftNode() != null)
-                        searchTreeDown(node.getLeftNode(), search, currentBest);
+            if (distSearchAndCurrentNode < distSearchAndCurrentBest) {
+                if (child == node.getLeftNode() && node.getRightNode() != null) {
+                    searchTreeDown(node.getRightNode(), search, currentBest);
+                } else if (node.getLeftNode() != null) {
+                    searchTreeDown(node.getLeftNode(), search, currentBest);
+                }
+            }
 
-            if (!node.isRoot())
-                if (node.getParent() != null)
-                    searchTreeUp(node.getParent(), search, currentBest, node);
+            if (!node.isRoot()) {
+                searchTreeUp(node.getParent(), search, currentBest, node);
+            }
 
             return;
         }

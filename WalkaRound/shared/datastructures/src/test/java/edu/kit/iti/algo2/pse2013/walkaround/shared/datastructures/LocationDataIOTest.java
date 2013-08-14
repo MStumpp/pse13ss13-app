@@ -39,7 +39,7 @@ public class LocationDataIOTest {
 
 
 	@Test
-	public void testSaveAndLoad() throws MalformedURLException {
+    public void testSaveAndLoad() throws MalformedURLException {
 		LocationDataIO writeLocationData = getLocationDataIO();
 		int size = writeLocationData.getPOIs().size();
 		try {

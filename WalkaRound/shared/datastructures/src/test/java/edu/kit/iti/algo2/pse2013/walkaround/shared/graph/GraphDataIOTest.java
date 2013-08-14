@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -10,7 +9,6 @@ import java.lang.reflect.Field;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;

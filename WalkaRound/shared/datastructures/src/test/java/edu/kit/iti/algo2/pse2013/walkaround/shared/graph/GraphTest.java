@@ -79,9 +79,6 @@ public class GraphTest {
             e.printStackTrace();
         }
         Assert.assertNotNull(graph);
-
-//        for (int i = 0; i <= graph.vertices.length; i++)
-//            System.out.println("i: " + i + " vertex: " + graph.vertices[i]);
     }
 
 
