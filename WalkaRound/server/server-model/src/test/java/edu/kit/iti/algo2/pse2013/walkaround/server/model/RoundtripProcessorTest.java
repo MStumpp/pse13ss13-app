@@ -102,7 +102,7 @@ public class RoundtripProcessorTest {
 
         List<Vertex> route = null;
         try {
-            route = roundtripProcessor.computeRoundtrip(source, new int[] { 1 }, 1000);
+            route = roundtripProcessor.computeRoundtrip(source, new int[] { 1 }, 5000);
         } catch (RoundtripComputationNoSlotsException e) {
             e.printStackTrace();
         } catch (RoundtripComputeException e) {
