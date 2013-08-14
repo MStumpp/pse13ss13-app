@@ -103,7 +103,7 @@ public class Address {
 
     	String clonedHouseNumber = "";
     	if (this.getHouseNumber() != null) {
-    	houseNumber = this.getHouseNumber().toString();
+    	clonedHouseNumber = this.getHouseNumber().toString();
     	}
 
     	String clonedCity = "";
