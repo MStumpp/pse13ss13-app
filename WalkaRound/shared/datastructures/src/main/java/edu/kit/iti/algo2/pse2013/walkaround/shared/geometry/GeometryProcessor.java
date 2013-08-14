@@ -452,9 +452,9 @@ public class GeometryProcessor {
             numberMethodCalls++;
 
             // compute dim
-            logger.info("geometryDataIO.getNumDimensions(): " +  numberDimensions);
+            //logger.info("geometryDataIO.getNumDimensions(): " +  numberDimensions);
             int dim = node.getDepth() % numberDimensions;
-            logger.info("dim: " + dim);
+            //logger.info("dim: " + dim);
 
             // if leaf, then check whether vertex of this node is better then current best
             // traverse up the tree

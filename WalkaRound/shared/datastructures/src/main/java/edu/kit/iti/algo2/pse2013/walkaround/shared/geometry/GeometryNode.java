@@ -216,10 +216,15 @@ public class GeometryNode {
             return geometrizables.get(0);
 
         Geometrizable currentBest = geometrizables.get(0);
+        double minDistance = Math.abs(currentBest.valueForDimension(dim)
+                - geometrizable.valueForDimension(dim));
         for (Geometrizable geom : geometrizables) {
-            if (geom.valueForDimension(dim) <
-                    currentBest.valueForDimension(dim))
+            double currentDistance = Math.abs(geom.valueForDimension(dim)
+                    - geometrizable.valueForDimension(dim));
+            if (currentDistance < minDistance) {
                 currentBest = geom;
+                minDistance = currentDistance;
+            }
         }
 
         return currentBest;
