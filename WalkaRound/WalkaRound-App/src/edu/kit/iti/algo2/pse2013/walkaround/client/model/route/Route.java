@@ -375,12 +375,6 @@ public class Route implements RouteInfo {
 	}
 
 	@Override
-	public boolean isFavorite() {
-		Log.d(TAG_ROUTE, "isFavorite()");
-		return FavoriteManager.getInstance().containsRoute(this);
-	}
-
-	@Override
 	public boolean containsWaypoint(Waypoint wp) {
 		Log.d(TAG_ROUTE, "containsWaypoint(Waypoint)");
 		if (this.getWaypoints().contains(wp)) {

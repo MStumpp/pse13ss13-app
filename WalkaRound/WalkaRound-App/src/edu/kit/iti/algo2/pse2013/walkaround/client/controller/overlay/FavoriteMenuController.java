@@ -30,24 +30,6 @@ public class FavoriteMenuController {
 	}
 
 	/**
-	 * @return the list of favorite routes as returned by
-	 *         {@link FavoriteManager#getFavoriteRoutes()}
-	 * @see FavoriteManager#getFavoriteRoutes()
-	 */
-	public List<RouteInfo> getFavoriteRoutes() {
-		return FavoriteManager.getInstance().getFavoriteRoutes();
-	}
-
-	/**
-	 * @return the list of favorite locations as returned by
-	 *         {@link FavoriteManager#getFavoriteLocations()}
-	 * @see FavoriteManager#getFavoriteLocations()
-	 */
-	public List<Location> getFavoriteLocations() {
-		return FavoriteManager.getInstance().getFavoriteLocations();
-	}
-
-	/**
 	 *
 	 * @return names of all favorite routes
 	 */

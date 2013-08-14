@@ -20,8 +20,6 @@ public interface RouteInfo {
 	public LinkedList<Coordinate> getCoordinates();
 
 	public boolean containsWaypoint(Waypoint wp);
-
-	public boolean isFavorite();
 	
 	public RouteInfo clone();
 

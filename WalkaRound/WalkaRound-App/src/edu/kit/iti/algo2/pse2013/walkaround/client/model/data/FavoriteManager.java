@@ -121,30 +121,6 @@ public class FavoriteManager {
 	}
 
 	/**
-	 * Returns a list of all saved routes.
-	 *
-	 * @return a list of all saved routes
-	 */
-	public List<RouteInfo> getFavoriteRoutes() {
-		ArrayList<RouteInfo> list = new ArrayList<RouteInfo>();
-		list.addAll(savedRoutes.values());
-		return list;
-	}
-
-	// obere und untere Methode von nöten? (Thomas)
-
-	/**
-	 * Returns a list of all saved locations.
-	 *
-	 * @return a list of all saved locations
-	 */
-	public List<Location> getFavoriteLocations() {
-		ArrayList<Location> list = new ArrayList<Location>();
-		list.addAll(savedLocations.values());
-		return list;
-	}
-
-	/**
 	 * Returns a list of all names of saved routes.
 	 *
 	 * @return a list of all names of saved routes
@@ -257,26 +233,6 @@ public class FavoriteManager {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns whether the given RouteInfo is a favorite.
-	 *
-	 * @param routeInfo RouteInfo to check
-	 * @return true if it is a favorite, false otherwise
-	 */
-	public boolean containsRoute(RouteInfo routeInfo) {
-		return savedRoutes.containsValue(routeInfo);
-	}
-
-	/**
-	 * Returns whether the given Location is a favorite.
-	 *
-	 * @param location Location to check
-	 * @return true if it is a favorite, false otherwise
-	 */
-	public boolean containsLocation(Location location) {
-		return savedLocations.containsValue(location);
 	}
 
 	/**

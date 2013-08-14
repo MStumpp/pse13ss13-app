@@ -100,15 +100,6 @@ public class POIManager {
 		return instance;
 	}
 
-	/**
-	 * Returns the IDs of all active categories.
-	 *
-	 * @return int[] of IDs of all active categories
-	 */
-	public int[] getActiveCategories() {
-		return activeCategories;
-	}
-
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying within a rectangle.
