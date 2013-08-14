@@ -39,7 +39,7 @@ public class RoundtripProcessor {
     /**
      * Epsilon.
      */
-    private final static double eps = 0.05;
+    private final static double eps = 0.01;
 
 
     /**
@@ -194,9 +194,9 @@ public class RoundtripProcessor {
                 weigthedLenghtSU = ring_s.getWeigthedLength(vertexU);
 
                 // stopping criterion #1
-                //badLowerBound = (2*weigthedLenghtSU)/((1+eps)*length);
-                //if (badLowerBound > badBestRoute)
-                //    break;
+                badLowerBound = (2*weigthedLenghtSU)/((1+eps)*length);
+                if (badLowerBound > badBestRoute)
+                    break;
 
                 // compute intersection
                 intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
@@ -220,7 +220,7 @@ public class RoundtripProcessor {
                             currentBestU = vertexU;
                             currentBestV = vertexV;
                             currentRouteUV = ring_u.getRouteVertices(vertexV);
-                            //badBestRoute = badLowerBound;
+                            badBestRoute = badLowerBound;
                             bestTotalWeightedLength = weigthedLenghtSU + weightedLengthUVS;
                         }
                     }
