@@ -4,6 +4,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -41,6 +42,7 @@ public class ShortestPathProcessorTest {
 
 
     @Test
+    @Ignore
     public void testInit() {
         GraphDataIO graphDataIO = getGraph();
         try {
@@ -52,6 +54,7 @@ public class ShortestPathProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetInstance() throws InstantiationException {
         GraphDataIO graphDataIO = getGraph();
         try {
@@ -64,6 +67,7 @@ public class ShortestPathProcessorTest {
 
 
     @Test
+    @Ignore
     public void testComputesShortestPath() throws InstantiationException {
 
         GraphDataIO graphDataIO = getGraph();
@@ -113,6 +117,7 @@ public class ShortestPathProcessorTest {
 
 
     @Test
+    @Ignore
     public void testComputesShortestPathWithRealDataSet() throws InstantiationException {
 
         GraphDataIO graphDataIO = null;
