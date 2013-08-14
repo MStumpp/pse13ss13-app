@@ -165,7 +165,7 @@ public class GeometryProcessor {
                 return null;
             Thread t = new ThreadCustom(group, r,
                     namePrefix + threadNumber.getAndIncrement(),
-                    0, geometryComputerQueue.getFirst());
+                    0, geometryComputerQueue.pollFirst());
             logger.info("New Thread: " + t.getName() + " Reference: " +
                     t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
             if (t.isDaemon())
@@ -527,7 +527,6 @@ public class GeometryProcessor {
 
             return;
         }
-
 
         private int getId() {
             return id;
