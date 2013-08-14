@@ -190,21 +190,23 @@ public class ProtobufConverter {
 		}
 		GeometryNode node;
 		List<Geometrizable> geoms;
-		if (saveNode.getGeometrizableCount() > 0) {
-			geoms = getGeometrizables(saveNode.getGeometrizableList());
-		}
+        // TODO Check
+//		if (saveNode.getGeometrizables().size() > 0) {
+//			geoms = getGeometrizables(saveNode.getGeometrizables());
+//		}
 		if (parent == null) {
-			node = new GeometryNode(saveNode.getSplitValue(), geoms);
+//			node = new GeometryNode(saveNode.getSplitValue(), geoms);
 		} else {
 			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
 		}
 		if (saveNode.hasLeft()) {
-			node.setLeftNode(getGeometryNode(node, saveNode.getLeft(), depth + 1));
+//			node.setLeftNode(getGeometryNode(node, saveNode.getLeft(), depth + 1));
 		}
 		if (saveNode.hasRight()) {
-			node.setRightNode(getGeometryNode(node, saveNode.getRight(), depth + 1));
+//			node.setRightNode(getGeometryNode(node, saveNode.getRight(), depth + 1));
 		}
-		return node;
+//		return node;
+        return null;
 	}
 	public static SaveGeometryNode.Builder getGeometryNodeBuilder(GeometryNode node) {
 		if (node == null) {
@@ -219,9 +221,10 @@ public class ProtobufConverter {
 		if (node.getRightNode() != null) {
 			builder.setRight(getGeometryNodeBuilder(node.getLeftNode()));
 		}
-		if (node.getGeometrizables() != null && node.getGeometrizables().length > 0) {
+		if (node.getGeometrizables() != null && node.getGeometrizables().size() > 0) {
 			for (Geometrizable g : node.getGeometrizables()) {
-				builder.addGeometrizable(getGeometrizableBuilder(g));
+        // TODO
+//				builder.addGeometrizable(getGeometrizableBuilder(g));
 			}
 		}
 		return builder;

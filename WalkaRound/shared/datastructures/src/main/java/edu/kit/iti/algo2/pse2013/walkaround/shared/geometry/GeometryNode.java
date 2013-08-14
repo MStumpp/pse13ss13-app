@@ -1,12 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
-<<<<<<< HEAD
 
 import java.util.ArrayList;
 import java.util.List;
-=======
->>>>>>> f7809f87d490d26758a3cfe0578c7df0173bb8e9
 
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
