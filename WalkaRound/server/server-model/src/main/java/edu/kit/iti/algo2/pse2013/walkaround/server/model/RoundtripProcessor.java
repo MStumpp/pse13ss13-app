@@ -182,12 +182,19 @@ public class RoundtripProcessor {
                    currentBestV = null;
             List<Vertex> currentRouteUV = null;
             double weigthedLenghtSU, weightedLengthUVS,
+                   badLowerBound, badBestRoute = Double.POSITIVE_INFINITY,
                    bestTotalWeightedLength = Double.POSITIVE_INFINITY;
 
             for (Vertex vertexU : ring_s.getTargets()) {
+                // stopping criterion #2 (route edges)
                 ring_u = ShortestPathTreeProcessor.getInstance().
                         computeShortestPathTree(vertexU, categories, length/3, eps, ring_s.getRouteEdges(vertexU));
                 weigthedLenghtSU = ring_s.getWeigthedLength(vertexU);
+
+                // stopping criterion #1
+                badLowerBound = (2*weigthedLenghtSU)/((1+eps)*length);
+                if (badLowerBound > badBestRoute)
+                    break;
 
                 // compute intersection
                 intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
@@ -195,17 +202,21 @@ public class RoundtripProcessor {
                 // of the intersection, only consider the ones having greater weighted length
                 // then vertex_u
                 for (Vertex vertexV : intersect) {
+
                     // skip if Puv and Pvs share at least one Edge
+                    // stopping criterion #2
                     if (!Sets.intersection(ring_u.getRouteEdges(vertexV), ring_s.getRouteEdges(vertexV)).isEmpty())
                         continue;
 
                     weightedLengthUVS = ring_u.getWeigthedLength(vertexV) + ring_s.getWeigthedLength(vertexV);
+                    // stopping criterion #1
                     if (ring_s.getWeigthedLength(vertexU) <= ring_s.getWeigthedLength(vertexV)) {
                         if (currentBestU == null ||
                             weigthedLenghtSU + weightedLengthUVS < bestTotalWeightedLength) {
                             currentBestU = vertexU;
                             currentBestV = vertexV;
                             currentRouteUV = ring_u.getRouteVertices(vertexV);
+                            badBestRoute = badLowerBound;
                             bestTotalWeightedLength = weigthedLenghtSU + weightedLengthUVS;
                         }
                     }

@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
@@ -13,7 +14,7 @@ public class GeometryNode {
 	/**
 	 * Geometrizable.
 	 */
-	private Geometrizable geometrizable;
+	private Geometrizable[] geometrizables;
 
 	/**
 	 * Value for split plane.
@@ -51,11 +52,28 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public GeometryNode(GeometryNode parent, int depth, Geometrizable geometrizable) {
-		this.geometrizable = geometrizable;
+		this.geometrizables = new Geometrizable[] { geometrizable };
 		this.splitValue = Double.NaN;
 		this.parent = parent;
 		this.depth = depth;
 	}
+
+    /**
+     * Initializes GeometryNode as leaf node.
+     *
+     * @param parent
+     *            Parent GeometryNode.
+     * @param depth
+     *            Depth of this GeometryNode.
+     * @param geometrizables
+     *            Geometrizable.
+     */
+    public GeometryNode(GeometryNode parent, int depth, Geometrizable[] geometrizables) {
+        this.geometrizables = geometrizables;
+        this.splitValue = Double.NaN;
+        this.parent = parent;
+        this.depth = depth;
+    }
 
 	/**
 	 * Initializes GeometryNode as inner node.
@@ -68,7 +86,7 @@ public class GeometryNode {
 	 *            Split value.
 	 */
 	public GeometryNode(GeometryNode parent, int depth, double splitValue) {
-		this.geometrizable = null;
+		this.geometrizables = null;
 		this.splitValue = splitValue;
 		this.parent = parent;
 		this.depth = depth;
@@ -81,7 +99,7 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public GeometryNode(Geometrizable geometrizable) {
-		this.geometrizable = geometrizable;
+		this.geometrizables = new Geometrizable[] { geometrizable };
 		this.splitValue = Double.NaN;
 		this.parent = null;
 		this.depth = -1;
@@ -94,7 +112,7 @@ public class GeometryNode {
 	 *            Split value.
 	 */
 	public GeometryNode(double splitValue) {
-		this.geometrizable = null;
+		this.geometrizables = null;
 		this.splitValue = splitValue;
 		this.parent = null;
 		this.depth = -1;
@@ -171,8 +189,48 @@ public class GeometryNode {
 	 * @return Geometrizable.
 	 */
 	public Geometrizable getGeometrizable() {
-		return geometrizable;
+        if (geometrizables != null && geometrizables.length == 1)
+		    return geometrizables[0];
+        return null;
 	}
+
+    /**
+     * Returns the nearest Geometrizable.
+     *
+     * @return Geometrizable.
+     */
+    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, int dim) {
+
+        if (geometrizable == null || dim < 0)
+            throw new IllegalArgumentException("geometrizable must not " +
+                    "be null and/or dim greater or equal to 0");
+
+        if (geometrizables == null)
+            return null;
+
+        if (geometrizables.length == 1)
+            return geometrizables[0];
+
+        Geometrizable currentBest = geometrizables[0];
+        for (Geometrizable geom : geometrizables) {
+            if (geom.valueForDimension(dim) <
+                    currentBest.valueForDimension(dim))
+                currentBest = geom;
+        }
+
+        return currentBest;
+    }
+
+    /**
+     * Returns the Geometrizable.
+     *
+     * @return Geometrizable.
+     */
+    public Geometrizable[] getGeometrizables() {
+        if (geometrizables != null)
+            return geometrizables;
+        return new Geometrizable[] {};
+    }
 
 	/**
 	 * Sets the Geometrizable.
@@ -181,7 +239,7 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public void setGeometrizable(Geometrizable geometrizable) {
-		this.geometrizable = geometrizable;
+		this.geometrizables = new Geometrizable[] { geometrizable };
 	}
 
 	/**
@@ -199,7 +257,7 @@ public class GeometryNode {
 	 * @return true if leaf node, false otherwise.
 	 */
 	public boolean isLeaf() {
-		return geometrizable != null;
+		return geometrizables != null;
 	}
 
 	@Override
@@ -208,8 +266,8 @@ public class GeometryNode {
 		sb.append("\n\n -> depth: " + depth + "\n");
 		sb.append("-> split: " + splitValue + "\n");
 
-		if (geometrizable != null)
-			sb.append("\n geometrizable: " + geometrizable.toString() + "\n");
+		if (geometrizables != null)
+			sb.append("\n geometrizable: " + geometrizables.toString() + "\n");
 		else
 			sb.append("\n no vertex \n");
 

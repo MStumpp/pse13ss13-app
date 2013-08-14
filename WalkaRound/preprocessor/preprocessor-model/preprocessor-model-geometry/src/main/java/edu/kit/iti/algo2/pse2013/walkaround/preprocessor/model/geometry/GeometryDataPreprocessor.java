@@ -3,10 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 import java.util.*;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,33 +27,45 @@ public class GeometryDataPreprocessor {
     /**
      * TreeSet.
      */
+    private static final int NUMBER_GEOMETRIZABLES_PER_NODE = 1000;
+
+
+    /**
+     * TreeSet.
+     */
     private static final TreeSet<Geometrizable> treeSet = new TreeSet<Geometrizable>();
 
 
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
      *
-     * @param graphDataIO GraphDataIO object.
-     * @param locationDataIO LocationDataIO object.
+     * @param geometrizables GraphDataIO object.
      * @return GeometryDataIO.
      * @throw IllegalArgumentException If graphDataIO or locationDataIO args invalid.
      */
-    public static GeometryDataIO preprocessGeometryDataIO(GraphDataIO graphDataIO, LocationDataIO locationDataIO) {
-        if (graphDataIO == null || locationDataIO == null)
-            throw new IllegalArgumentException("graphDataIO and locationDataIO must be provided");
+    public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geometrizables) {
+        return preprocessGeometryDataIO(geometrizables, NUMBER_GEOMETRIZABLES_PER_NODE);
+    }
 
-        List<Geometrizable> geometrizables = new ArrayList<Geometrizable>(graphDataIO.getVertices());
 
-        // get all POIs from locationDataIO
-//        for (POI poi : locationDataIO.getPOIs())
-//            geometrizables.add(poi);
+    /**
+     * Preprocesses some data structure to be used by GeometryProcessor.
+     *
+     * @param geometrizables GraphDataIO object.
+     * @param numberGeomPerNode Number of the Geometrizables to be stored in a GeometryNode.
+     * @return GeometryDataIO.
+     * @throw IllegalArgumentException If graphDataIO or locationDataIO args invalid.
+     */
+    public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geometrizables,
+        int numberGeomPerNode) throws IllegalArgumentException {
 
         // throw exception if number of geometrizables is not greater than 0
-        if (geometrizables.size() == 0)
-            throw new IllegalArgumentException("number of geometrizables must be at least of size 1");
+        if (geometrizables == null || geometrizables.size() == 0)
+            throw new IllegalArgumentException("geometrizables must not be null and/or " +
+                    "number of geometrizables must be at least of size 1");
 
         // number of dimensions, use first element of geometrizables
-        int numDimensions = 2;
+        int numDimensions = geometrizables.get(0).numberDimensions();
 
         // set up data
         Geometrizable[][] data = new Geometrizable[numDimensions][];
@@ -106,8 +116,9 @@ public class GeometryDataPreprocessor {
 
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
-        if (size == 1)
-            return new GeometryNode(parent, depth, data[dim][start]);
+        if (size <= NUMBER_GEOMETRIZABLES_PER_NODE)
+            return new GeometryNode(parent, depth,
+                Arrays.copyOfRange(data[dim], start, end));
 
         // otherwise, compute median;
         int median;
