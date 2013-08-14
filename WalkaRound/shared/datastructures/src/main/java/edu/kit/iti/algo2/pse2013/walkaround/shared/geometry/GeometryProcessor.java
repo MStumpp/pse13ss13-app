@@ -458,14 +458,16 @@ public class GeometryProcessor {
 
             // if leaf, then check whether vertex of this node is better then current best
             // traverse up the tree
+            Geometrizable currentGeometrizable;
             if (node.isLeaf()) {
-                if (node.getGeometrizable() != null) {
+                currentGeometrizable = node.getNearestGeometrizable(search, dim);
+                if (currentGeometrizable != null) {
                     if (currentBest.getGeometrizable() == null)
                         currentBest.setGeometrizable(node.getNearestGeometrizable(search, dim));
                     else
-                    if (node.getGeometrizable().valueForDimension(dim) <
+                    if (currentGeometrizable.valueForDimension(dim) <
                             currentBest.getGeometrizable().valueForDimension(dim))
-                        currentBest.setGeometrizable(node.getGeometrizable());
+                        currentBest.setGeometrizable(currentGeometrizable);
                 }
                 searchTreeUp(node.getParent(), search, currentBest, node);
 
