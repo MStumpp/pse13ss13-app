@@ -1,15 +1,24 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +29,22 @@ import java.util.List;
  */
 public class RoundtripProcessorTest {
 
-
     private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
+
+    private static GraphDataIO graphDataIO;
+
+    @BeforeClass
+    public static void doSetUp() {
+        try {
+            graphDataIO = GraphDataIO.load(REAL_GRAPH_DATA_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+        GeometryProcessor.init(geometryDataIO);
+    }
 
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -69,28 +92,18 @@ public class RoundtripProcessorTest {
     @Test
     public void testComputesRoundtrip() throws InstantiationException {
 
-        GraphDataIO graphDataIO = null;
-        try {
-            graphDataIO = GraphDataIO.load(REAL_GRAPH_DATA_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Assert.assertNotNull(graphDataIO);
 
-        Graph graph = null;
-        try {
-            graph = new Graph(graphDataIO);
-        } catch (EmptyListOfEdgesException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(graph);
-
+        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
         Vertex source = null;
         try {
-            source = graph.getVertexByID(350005);
-        } catch (NoVertexForIDExistsException e) {
+            source = (Vertex) geometryProcessor.getNearestVertex(new Coordinate(49.009353,8.403983));
+        } catch (GeometryProcessorException e) {
+            e.printStackTrace();
+        } catch (GeometryComputationNoSlotsException e) {
             e.printStackTrace();
         }
+        Assert.assertNotNull(source);
 
         try {
             Assert.assertNotNull(RoundtripProcessor.init(graphDataIO, 2));
@@ -99,7 +112,6 @@ public class RoundtripProcessorTest {
         }
 
         RoundtripProcessor roundtripProcessor = RoundtripProcessor.getInstance();
-
         List<Vertex> route = null;
         try {
             route = roundtripProcessor.computeRoundtrip(source, new int[] { 1 }, 5000);
@@ -108,7 +120,6 @@ public class RoundtripProcessorTest {
         } catch (RoundtripComputeException e) {
             e.printStackTrace();
         }
-
         Assert.assertNotNull(route);
     }
 
