@@ -459,6 +459,8 @@ public class GeometryProcessor {
             // traverse up the tree
             Geometrizable currentGeometrizable;
             if (node.isLeaf()) {
+                logger.info("!!!!!!!!!!!!!!!!!!!!!!!! is leaf " + node);
+
                 if (currentBest.getGeometrizable() == null)
                     currentGeometrizable = node.getNearestGeometrizable(search, dim);
                 else
@@ -479,6 +481,8 @@ public class GeometryProcessor {
 
             // otherwise, traverse further down the tree
             } else {
+
+                logger.info("!!!!!!!!!!!!!!!!!!!!!!!! no leaf " + node);
 
                 // either further visit left or right child
                 // here we check for less or equal
