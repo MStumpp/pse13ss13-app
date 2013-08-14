@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Profile.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Profile.java</span></div><h1>Profile.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+/**
+ * This class represents a profile.
+ * 
+ * @author Thomas Kadow
+ * @version 1.0
+ */
+public class Profile {
+
+	//hard-coded
+	/**
+	 * Jogging profile.
+	 */
+<span class="nc" id="L15">	public static Profile PROFILE_JOGGING = new Profile(1, new int[]{100, 101}, null);</span>
+
+	/**
+	 * Sightseeing profile.
+	 */
+<span class="nc" id="L20">	public static Profile PROFILE_SIGHTSEEING = new Profile(2, null, new int[]{12, 13});;</span>
+
+	/**
+	 * Shopping profile.
+	 */
+<span class="nc" id="L25">	public static Profile PROFILE_SHOPPING = new Profile(3, null, new int[]{8});</span>
+
+	/**
+	 * Clubbing profile.
+	 */
+<span class="nc" id="L30">	public static Profile PROFILE_CLUBBING = new Profile(4, null, new int[]{1, 3});</span>
+
+	/**
+	 * IDs of all Profiles. (0 is default ID for empty Profile)
+	 */
+<span class="nc" id="L35">	public static final int[] ALL_PROFILE_IDS = new int[] { 1, 2, 3, 4 };</span>
+
+	// CHANGE ME!!!
+	// public static Profile PROFILE_RENAMEME;
+
+	/**
+	 * ID of the profile.
+	 */
+	private int id;
+	
+	/**
+	 * All area categories IDs belonging to the profile.
+	 */
+	private int[] areaCategories;
+
+	/**
+	 * All POI categories IDs belonging to the profile.
+	 */
+	private int[] poiCategories;
+
+<span class="nc" id="L55">	public Profile(int id, int[] areaCategories, int[] poiCategories) {</span>
+<span class="nc" id="L56">		id = this.id;</span>
+<span class="nc" id="L57">		getByID(id).setAreaCategories(areaCategories);</span>
+<span class="nc" id="L58">		getByID(id).setPoiCategories(poiCategories);</span>
+<span class="nc" id="L59">	}</span>
+
+	/**
+	 * Sets the poi categories of the profile.
+	 * 
+	 * @param poiCategories
+	 *            poi categories to set
+	 */
+	public void setPoiCategories(int[] poiCategories) {
+<span class="nc" id="L68">		this.poiCategories = poiCategories;</span>
+<span class="nc" id="L69">	}</span>
+
+	/**
+	 * Sets the area categories of the profile.
+	 * 
+	 * @param areaCategories
+	 *            area categories to set
+	 */
+	public void setAreaCategories(int[] areaCategories) {
+<span class="nc" id="L78">		this.areaCategories = areaCategories;</span>
+<span class="nc" id="L79">	}</span>
+
+	/**
+	 * Returns the ID of the profile.
+	 * 
+	 * @return the ID of the profile
+	 */
+	public int getID() {
+<span class="nc" id="L87">		return id;</span>
+	}
+
+	/**
+	 * Returns the profile to the given ID.
+	 * 
+	 * @param id
+	 *            id of the profile
+	 * @return a profile
+	 */
+	public static Profile getByID(int id) {
+<span class="nc bnc" id="L98" title="All 5 branches missed.">		switch (id) {</span>
+		case 1:
+<span class="nc" id="L100">			return PROFILE_JOGGING;</span>
+
+		case 2:
+<span class="nc" id="L103">			return PROFILE_SIGHTSEEING;</span>
+
+		case 3:
+<span class="nc" id="L106">			return PROFILE_SHOPPING;</span>
+
+		case 4:
+<span class="nc" id="L109">			return PROFILE_CLUBBING;</span>
+
+			// case 5 : return PROFILE_RENAMEME;
+
+		default:
+<span class="nc" id="L114">			throw new IllegalArgumentException(</span>
+<span class="nc" id="L115">					&quot;The profile for this ID is unknown.&quot;);</span>
+		}
+	}
+
+	/**
+	 * Returns the IDs of area categories belonging to the profile.
+	 * 
+	 * @return the IDs of area categories belonging to the profile
+	 */
+	public int[] getContainingAreaCategories() {
+<span class="nc" id="L125">		return areaCategories;</span>
+	}
+
+	/**
+	 * Returns the IDs of POI categories belonging to the profile.
+	 * 
+	 * @return the IDs of POI categories belonging to the profile
+	 */
+	public int[] getContainingPOICategories() {
+<span class="nc" id="L134">		return poiCategories;</span>
+	}
+
+	/**
+	 * Returns the IDs of all existing Profiles.
+	 * 
+	 * @return the IDs of all existing Profiles
+	 */
+	public static int[] getAllProfileIDs() {
+<span class="nc" id="L143">		return ALL_PROFILE_IDS;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

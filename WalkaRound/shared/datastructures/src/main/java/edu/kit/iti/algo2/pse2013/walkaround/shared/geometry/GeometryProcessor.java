@@ -1,12 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-
-
 import java.util.ArrayDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -14,8 +11,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
@@ -30,7 +27,7 @@ public class GeometryProcessor {
     /**
      * Logger.
      */
-	// private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
+	private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
 
 
     /**
@@ -77,7 +74,7 @@ public class GeometryProcessor {
             GeometryComputer computer = new GeometryComputer(idCounter,
                     geometryDataIO.getRoot(), geometryDataIO.getNumDimensions());
             geometryComputerQueue.add(computer);
-            //logger.info("Instantiated GeometryComputer: " + computer.getId());
+            logger.info("Instantiated GeometryComputer: " + computer.getId());
             idCounter++;
         }
 
@@ -144,7 +141,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-    	// private final Logger logger = LoggerFactory.getLogger(ThreadFactoryCustom.class);
+    	private final Logger logger = LoggerFactory.getLogger(ThreadFactoryCustom.class);
 
         final AtomicInteger poolNumber = new AtomicInteger(1);
         final ThreadGroup group;
@@ -168,9 +165,9 @@ public class GeometryProcessor {
                 return null;
             Thread t = new ThreadCustom(group, r,
                     namePrefix + threadNumber.getAndIncrement(),
-                    0, geometryComputerQueue.getFirst());
-            //logger.info("New Thread: " + t.getName() + " Reference: " +
-            //        t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
+                    0, geometryComputerQueue.pollFirst());
+            logger.info("New Thread: " + t.getName() + " Reference: " +
+                    t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -189,14 +186,14 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-    	//private final Logger logger = LoggerFactory.getLogger(ThreadCustom.class);
+    	private final Logger logger = LoggerFactory.getLogger(ThreadCustom.class);
 
         private GeometryComputer computer;
 
         ThreadCustom(ThreadGroup group, Runnable target, String name, long stackSize, GeometryComputer computer) {
             super(group, target, name, stackSize);
             this.computer = computer;
-            //logger.info("New Thread: " + name);
+            logger.info("New Thread: " + name);
         }
 
         private GeometryComputer getComputer() {
@@ -213,7 +210,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-    	//private final Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorCustom.class);
+    	private final Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorCustom.class);
 
         private ArrayDeque<GeometryComputer> geometryComputerQueue;
 
@@ -227,12 +224,12 @@ public class GeometryProcessor {
         protected void afterExecute(Runnable r, Throwable t) {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            //logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
-            // Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
-            //        " and GeometryComputer: " + computer.getId() + " Reference: "
-            //        + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
-            //if (computer == null)
-            	//   logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
+            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+            Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+                    " and GeometryComputer: " + computer.getId() + " Reference: "
+                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+            if (computer == null)
+            	   logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
             //geometryComputerQueue.add(computer);
         }
     }
@@ -269,7 +266,7 @@ public class GeometryProcessor {
         if (geometrizable == null)
             throw new IllegalArgumentException("geometrizable must not be null");
 
-        // logger.info("getNearestVertex:");
+        logger.info("getNearestVertex:");
         Future<Geometrizable> future = executor.submit(new GeometryNearestVertexTask(geometrizable));
 
         if (future.isCancelled())
@@ -293,7 +290,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-    	//private final Logger logger = LoggerFactory.getLogger(GeometryNearestVertexTask.class);
+    	private final Logger logger = LoggerFactory.getLogger(GeometryNearestVertexTask.class);
 
         private Geometrizable geometrizable;
 
@@ -305,13 +302,15 @@ public class GeometryProcessor {
         public Geometrizable call() throws Exception {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            //logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
-            //        Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
-            //        " and GeometryComputer: " + computer.getId() + " Reference: "
-            //       + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
-            if (computer == null)
+            logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+                    " and GeometryComputer: " + computer.getId() + " Reference: "
+                   + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+            if (computer == null) {
+                logger.info("GeometryComputer is null in GeometryNearestVertexTask");
                 throw new GeometryProcessorException(
                         "GeometryComputer is null in GeometryNearestVertexTask");
+            }
             return computer.getNearestVertex(geometrizable);
         }
     }
@@ -345,6 +344,12 @@ public class GeometryProcessor {
      * GeometryComputer.
      */
     private class GeometryComputer {
+
+        /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(GeometryComputer.class);
+
 
         /**
          * id.
@@ -404,7 +409,7 @@ public class GeometryProcessor {
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
 
-            // logger.info("getNearestVertex: Start: Run time: " + runTime);
+            logger.info("getNearestVertex: Start: Run time: " + runTime);
 
             return nearestVertex;
         }
@@ -433,11 +438,11 @@ public class GeometryProcessor {
          *
          * @param node Current node to be processed while searching down the tree.
          * @param search Geometrizable a projected Geometrizable to look for.
-         * @param geometrizable Current best Geometrizable.
+         * @param currentBest Current best Geometrizable.
          * @throws GeometryProcessorException If something goes wrong.
          */
         private void searchTreeDown(GeometryNode node, Geometrizable search,
-                                    GeometrizableWrapper geometrizable)
+                                    GeometrizableWrapper currentBest)
                 throws GeometryProcessorException {
 
             if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
@@ -447,32 +452,32 @@ public class GeometryProcessor {
             numberMethodCalls++;
 
             // compute dim
-            //logger.info("geometryDataIO.getNumDimensions(): " + geometryDataIO.getNumDimensions());
+            logger.info("geometryDataIO.getNumDimensions(): " +  numberDimensions);
             int dim = node.getDepth() % numberDimensions;
-            //logger.info("dim: " + dim);
+            logger.info("dim: " + dim);
 
             // if leaf, then check whether vertex of this node is better then current best
             // traverse up the tree
             if (node.isLeaf()) {
                 if (node.getGeometrizable() != null) {
-                    if (geometrizable.getGeometrizable() == null)
-                        geometrizable.setGeometrizable(node.getGeometrizable());
+                    if (currentBest.getGeometrizable() == null)
+                        currentBest.setGeometrizable(node.getNearestGeometrizable(search, dim));
                     else
                     if (node.getGeometrizable().valueForDimension(dim) <
-                            geometrizable.getGeometrizable().valueForDimension(dim))
-                        geometrizable.setGeometrizable(node.getGeometrizable());
+                            currentBest.getGeometrizable().valueForDimension(dim))
+                        currentBest.setGeometrizable(node.getGeometrizable());
                 }
-                searchTreeUp(node.getParent(), search, geometrizable, node);
+                searchTreeUp(node.getParent(), search, currentBest, node);
 
-                // otherwise, traverse further down the tree
+            // otherwise, traverse further down the tree
             } else {
 
                 // either further visit left or right child
                 // here we check for less or equal
                 if (search.valueForDimension(dim) <= node.getSplitValue())
-                    searchTreeDown(node.getLeftNode(), search, geometrizable);
+                    searchTreeDown(node.getLeftNode(), search, currentBest);
                 else
-                    searchTreeDown(node.getRightNode(), search, geometrizable);
+                    searchTreeDown(node.getRightNode(), search, currentBest);
             }
 
             return;
@@ -484,12 +489,12 @@ public class GeometryProcessor {
          *
          * @param node Current node to be processed while searching down the tree.
          * @param search Geometrizable a projected Geometrizable to look for.
-         * @param geometrizable Current best Geometrizable.
+         * @param currentBest Current best Geometrizable.
          * @param child Previously visited node while searching up the tree.
          * @throws GeometryProcessorException If something goes wrong.
          */
         private void searchTreeUp(GeometryNode node, Geometrizable search,
-                                  GeometrizableWrapper geometrizable, GeometryNode child)
+                                  GeometrizableWrapper currentBest, GeometryNode child)
                 throws GeometryProcessorException {
 
             if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
@@ -509,20 +514,19 @@ public class GeometryProcessor {
 
             // distance between the splitting coordinate of search point end current best
             double distSearchAndCurrentBest = Math.abs(search.valueForDimension(dim) -
-                    geometrizable.getGeometrizable().valueForDimension(dim));
+                    currentBest.getGeometrizable().valueForDimension(dim));
 
             if (distSearchAndCurrentNode < distSearchAndCurrentBest)
                 if (child == node.getLeftNode())
-                    searchTreeDown(node.getRightNode(), search, geometrizable);
+                    searchTreeDown(node.getRightNode(), search, currentBest);
                 else
-                    searchTreeDown(node.getLeftNode(), search, geometrizable);
+                    searchTreeDown(node.getLeftNode(), search, currentBest);
 
             if (!node.isRoot())
-                searchTreeUp(node.getParent(), search, geometrizable, node);
+                searchTreeUp(node.getParent(), search, currentBest, node);
 
             return;
         }
-
 
         private int getId() {
             return id;

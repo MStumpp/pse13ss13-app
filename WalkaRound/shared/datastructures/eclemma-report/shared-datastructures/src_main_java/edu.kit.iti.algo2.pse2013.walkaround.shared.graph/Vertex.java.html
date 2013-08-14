@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Vertex.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">Vertex.java</span></div><h1>Vertex.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * This class represents an vertex contained in a graph.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class Vertex extends Coordinate implements Comparable&lt;Vertex&gt; {
+
+    /**
+     * Internally used ID of that Vertex.
+     */
+    private int id;
+
+
+    /**
+     * ID counter for internal id.
+     */
+<span class="fc" id="L26">    private static int idCounter = 0;</span>
+
+
+    /**
+     * List of outgoing Edges.
+     */
+    private List&lt;Edge&gt; outgoingEdges;
+
+
+    /**
+     * Parent Vertex.
+     */
+    private Vertex parent;
+
+
+    /**
+     * Current distance to source.
+     */
+    private double currentLength;
+
+
+    /**
+     * Current weighted distance to source.
+     */
+    private double currentWeightedLength;
+
+
+    /**
+     * Stores the current run.
+     */
+    private int run;
+
+
+    /**
+     * Creates an instance of Vertex.
+     *
+     * @param lat Latitude of Vertex
+     * @param lon Longitude of Vertex.
+     */
+    public Vertex(double lat, double lon) {
+<span class="fc" id="L66">        super(lat, lon);</span>
+<span class="fc" id="L67">        id = idCounter;</span>
+<span class="fc" id="L68">        idCounter += 1;</span>
+<span class="fc" id="L69">        outgoingEdges = new ArrayList&lt;Edge&gt;();</span>
+<span class="fc" id="L70">        parent = null;</span>
+<span class="fc" id="L71">        currentLength = Double.POSITIVE_INFINITY;</span>
+<span class="fc" id="L72">        run = 0;</span>
+<span class="fc" id="L73">    }</span>
+
+
+    public Vertex(double latitude, double longitude, int id) {
+<span class="fc" id="L77">		this(latitude, longitude);</span>
+<span class="fc" id="L78">		this.id = id;</span>
+<span class="fc" id="L79">	}</span>
+
+
+    /**
+     * Duplicate a Vertex.
+     *
+     * @param vertex The Vertex to be duplicated.
+     */
+    public Vertex(Vertex vertex) {
+<span class="fc" id="L88">        this(vertex.getLatitude(), vertex.getLongitude(), vertex.getID());</span>
+<span class="fc" id="L89">    }</span>
+
+
+	/**
+     * Returns id of this Vertex.
+     *
+     * @return int.
+     */
+    public int getID() {
+<span class="fc" id="L98">        return id;</span>
+    }
+
+
+    /**
+     * Returns the list of outgoing Edges.
+     *
+     * @return List&lt;Edge&gt;.
+     */
+    public List&lt;Edge&gt; getOutgoingEdges() {
+<span class="fc" id="L108">        return outgoingEdges;</span>
+    }
+
+
+    /**
+     * Returns the Edge having the given
+     * Vertex and this as endpoints.
+     *
+     * @return Edge.
+     */
+    public Edge getOutgoingEdge(Vertex vertex) {
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        if (vertex == null || this.equals(vertex))</span>
+<span class="nc" id="L120">            return null;</span>
+
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        for (Edge edge : outgoingEdges) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            if (edge.getHead().equals(vertex) ||</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                edge.getTail().equals(vertex))</span>
+<span class="nc" id="L125">                return edge;</span>
+        }
+<span class="nc" id="L127">        return null;</span>
+    }
+
+
+    /**
+     * Adds an outgoing Edge to the list of outgoing Edges.
+     */
+    public void addOutgoingEdge(Edge edge) {
+<span class="fc" id="L135">        outgoingEdges.add(edge);</span>
+<span class="fc" id="L136">    }</span>
+
+
+    /**
+     * Returns the parent Vertex.
+     *
+     * @return Vertex.
+     */
+    public Vertex getParent() {
+<span class="nc" id="L145">        return parent;</span>
+    }
+
+
+    /**
+     * Sets the parent Vertex.
+     */
+    public void setParent(Vertex parent) {
+<span class="nc" id="L153">        this.parent = parent;</span>
+<span class="nc" id="L154">    }</span>
+
+
+    /**
+     * Returns the current length.
+     *
+     * @return double.
+     */
+    public double getCurrentLength() {
+<span class="nc" id="L163">        return currentLength;</span>
+    }
+
+
+    /**
+     * Sets the current length.
+     *
+     * @param currentLength The current length from source.
+     */
+    public void setCurrentLength(double currentLength) {
+<span class="nc" id="L173">        this.currentLength = currentLength;</span>
+<span class="nc" id="L174">    }</span>
+
+
+    /**
+     * Returns the current weighted length.
+     *
+     * @return currentWeightedLength.
+     */
+    public double getCurrentWeightedLength() {
+<span class="nc" id="L183">        return currentWeightedLength;</span>
+    }
+
+
+    /**
+     * Sets the current weigthed length.
+     *
+     * @param currentWeightedLength The current length from source.
+     */
+    public void setCurrentWeightedLength(double currentWeightedLength) {
+<span class="nc" id="L193">        this.currentWeightedLength = currentWeightedLength;</span>
+<span class="nc" id="L194">    }</span>
+
+
+    /**
+     * Returns the current run.
+     *
+     * @return int.
+     */
+    public int getRun() {
+<span class="nc" id="L203">        return run;</span>
+    }
+
+
+    /**
+     * Sets the current run.
+     *
+     * @param run Set the current run.
+     */
+    public void setRun(int run) {
+<span class="nc" id="L213">        this.run = run;</span>
+<span class="nc" id="L214">    }</span>
+
+
+    @Override
+    public String toString() {
+<span class="nc" id="L219">        return &quot;Vertex - id: &quot; + id + &quot; - lat: &quot; + getLatitude() + &quot; - lon: &quot; + getLongitude() + &quot; - current length: &quot; + getCurrentLength();</span>
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L226" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        if (!super.equals(o)) return false;</span>
+
+<span class="nc" id="L229">        Vertex vertex = (Vertex) o;</span>
+
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        if (id != vertex.id) return false;</span>
+
+<span class="nc" id="L233">        return true;</span>
+    }
+
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L239">        int result = super.hashCode();</span>
+<span class="fc" id="L240">        result = 31 * result + id;</span>
+<span class="fc" id="L241">        return result;</span>
+    }
+
+
+    @Override
+    public int compareTo(Vertex other) {
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (this.getID() &gt; other.getID()) {</span>
+<span class="fc" id="L248">            return 1;</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        } else if (this.getID() &lt; other.getID()) {</span>
+<span class="fc" id="L250">            return -1;</span>
+        }
+<span class="fc" id="L252">        return 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

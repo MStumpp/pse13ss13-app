@@ -131,7 +131,7 @@ public class ShortestPathTreeProcessor {
                 return null;
             Thread t = new ThreadCustom(group, r,
                     namePrefix + threadNumber.getAndIncrement(),
-                    0, shortestPathTreeComputerQueue.getFirst());
+                    0, shortestPathTreeComputerQueue.pollFirst());
             logger.info("New Thread: " + t.getName() + " Reference: " +
                     t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
             if (t.isDaemon())

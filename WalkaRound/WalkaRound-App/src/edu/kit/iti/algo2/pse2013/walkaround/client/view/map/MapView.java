@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
@@ -39,12 +39,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 // Walkaround Library
 
 /**
- * 
+ *
  * This class is the main activity of the Walkaround app. This class organize
  * the whole view and shows the drawing map and route.
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class MapView extends Activity {
 
@@ -179,8 +179,7 @@ public class MapView extends Activity {
 		flag = this.getResources().getDrawable(DEFAULT_FLAG);
 		flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);
 		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);
-		flagTargetActive = this.getResources().getDrawable(
-				DEFAULT_FLAG_TARGET_ACTIVE);
+		flagTargetActive = this.getResources().getDrawable(DEFAULT_FLAG_TARGET_ACTIVE);
 		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);
 		waypointActive = this.getResources().getDrawable(
 				DEFAULT_WAYPOINT_ACTIVE);
@@ -256,7 +255,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Updates the map
-	 * 
+	 *
 	 * @param b
 	 *            the new map bitmap
 	 */
@@ -278,7 +277,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the route
-	 * 
+	 *
 	 * @param b
 	 *            the new route bitmap
 	 */
@@ -303,22 +302,22 @@ public class MapView extends Activity {
 	}
 
 	/*
-	 * 
-	 * 
+	 *
+	 *
 	 * @param dip
-	 * 
+	 *
 	 * @return
-	 * 
+	 *
 	 * public int dipToPixel(float dip) { return (int)
 	 * (getResources().getDisplayMetrics().density * dip); }
-	 * 
+	 *
 	 * public float pixelToDip(int p) { return (p /
 	 * getResources().getDisplayMetrics().density); }
 	 */
 
 	/**
 	 * Change the position and the orientation of the user
-	 * 
+	 *
 	 * @param delta
 	 *            degree of the neew rotation
 	 */
@@ -337,7 +336,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the DisplayWaypoints
-	 * 
+	 *
 	 * @param displayPoints
 	 *            the new DisplayWaypoints
 	 */
@@ -364,20 +363,17 @@ public class MapView extends Activity {
 					fromX = displayPoints.get(0).getX();
 					fromY = displayPoints.get(0).getY();
 
-					for (DisplayWaypoint value : displayPoints) {
+					for (DisplayWaypoint dw : displayPoints) {
 
 						ImageView iv = new ImageView(context);
-						iv.setImageDrawable(waypoint);
-						iv.setY(value.getY() - sizeOfPoints);
-						iv.setX(value.getX() - sizeOfPoints / 2);
+						iv.setY(dw.getY() - 145);
+						iv.setX(dw.getX() - 75);
 
 						iv.setVisibility(View.VISIBLE);
-						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
-								(int) sizeOfPoints));
+						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints, (int) sizeOfPoints));
 						iv.setScaleType(ImageView.ScaleType.FIT_XY);
-						iv.setTag(value.getId());
-						iv.setOnTouchListener(new WaypointTouchListener(iv,
-								value.getId()));
+						iv.setTag(dw.getId());
+						iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));
 						routeList.addView(iv);
 					}
 
@@ -402,7 +398,7 @@ public class MapView extends Activity {
 
 	/**
 	 * updates the POI´s on the Display
-	 * 
+	 *
 	 * @param dp
 	 *            List of pois
 	 */
@@ -431,7 +427,7 @@ public class MapView extends Activity {
 
 	/**
 	 * Set an new Waypoint as active
-	 * 
+	 *
 	 * @param id
 	 *            the id of the waypoint
 	 */
@@ -480,12 +476,12 @@ public class MapView extends Activity {
 				}
 			}
 		});
-		
+
 	}
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 */
 	public void setUserPositionOverlayImage(final float x, final float y) {
 		runOnUiThread(new Runnable() {
@@ -499,7 +495,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -515,7 +511,7 @@ public class MapView extends Activity {
 
 	/**
 	 * shift the User Position arrow to an new position
-	 * 
+	 *
 	 * @param coor
 	 *            target coordinates
 	 * @param degree
@@ -558,9 +554,9 @@ public class MapView extends Activity {
 
 	/**
 	 * A Listener who listen to the user position animation
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserAnimationListener implements AnimatorListener {
 
@@ -607,9 +603,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This is a Gesture Detector which listen to the map touches.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapGestureDetector implements OnGestureListener {
 
@@ -715,9 +711,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class forwards the touch events to the gesture detector
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
@@ -736,9 +732,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This class intercept the touch events on the user arrow
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
 
@@ -755,9 +751,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class WaypointTouchListener implements OnTouchListener {
 
@@ -766,7 +762,7 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new Waypoint
-		 * 
+		 *
 		 * @param iv
 		 *            the new Imageview
 		 */
@@ -780,20 +776,35 @@ public class MapView extends Activity {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
 				currentId = id;
-				return waypointGestureDetector.onTouchEvent(event);
+				currentView = iv;
+				if (waypointGestureDetector.onTouchEvent(event)) {
+	                return true;
+	            }
+
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					if(mIsScrolling){
+					Log.d("fuck", "Action Up");
+                    mIsScrolling  = false;
+                    mIsScrolling = false;
+					mc.pushMovedWaypoint();
+					}
+				}
+
 			}
 			return false;
 		}
 	}
 
-	int currentId;
+	private int currentId;
 	private POI currentPOI;
+	private ImageView currentView;
+	private boolean mIsScrolling;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
 
@@ -834,7 +845,12 @@ public class MapView extends Activity {
 				float deltaX, float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
 
+			//routeList.removeView(currentView);
+			currentView.setX(currentView.getX() - deltaX);
+			currentView.setY(currentView.getY() - deltaY);
 			mc.onMovePoint(-deltaX, -deltaY, currentId);
+			//routeList.addView(currentView);
+			mIsScrolling = true;
 
 			return true;
 		}
@@ -855,9 +871,9 @@ public class MapView extends Activity {
 
 	/**
 	 * This Class intercept the touch to waypoints
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class POITouchListener implements OnTouchListener {
 
@@ -866,7 +882,7 @@ public class MapView extends Activity {
 
 		/**
 		 * Create a new POITouchListener
-		 * 
+		 *
 		 * @param iv
 		 *            the new Imageview
 		 */

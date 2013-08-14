@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Coordinate.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Coordinate.java</span></div><h1>Coordinate.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+/**
+ * This class represents a Coordinate consisting of longitude and latitude.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class Coordinate implements Geometrizable {
+
+	/**
+	 * latitude of this Coordinate.
+	 */
+	private double latitude;
+
+
+	/**
+	 * longitude of this Coordinate.
+	 */
+	private double longitude;
+
+
+	/**
+	 * CrossingInformation for this Coordinate.
+	 */
+	private final CrossingInformation crossInfo;
+
+
+	/**
+	 * Creates an instance of Coordinate.
+	 *
+	 * @param lat Latitude of the Coordinate.
+	 * @param lon Longitude of the Coordinate.
+	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
+	 */
+	public Coordinate(final double lat, final double lon) {
+<span class="fc" id="L37">		this(lat, lon, null);</span>
+<span class="fc" id="L38">	}</span>
+
+
+    /**
+     * Creates an instance of Coordinate based on a reference Coordinate
+     * and deltas for longitude and latitude.
+     *
+     * @param reference Reference Coordinate.
+     * @param latDelta Latitude delta of the Coordinate.
+     * @param lonDelta Longitude delta of the Coordinate.
+     */
+	public Coordinate(final Coordinate reference, final double latDelta, final double lonDelta) {
+<span class="fc" id="L50">		this(reference.getLatitude() + latDelta, reference.getLongitude() + lonDelta);</span>
+<span class="fc" id="L51">	}</span>
+
+
+	/**
+	 * Creates an instance of Coordinate.
+	 *
+	 * @param lat Latitude of the Coordinate.
+	 * @param lon Longtitude of the Coordinate.
+	 * @param crossInfo CrossingInformation for this Coordinate.
+	 * @throws IllegalArgumentException If longitude or latitude is not within some common range.
+	 */
+<span class="fc" id="L62">	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {</span>
+<span class="fc" id="L63">		setLatitude(lat);</span>
+<span class="fc" id="L64">		setLongitude(lon);</span>
+<span class="fc" id="L65">		this.crossInfo = crossInfo;</span>
+<span class="fc" id="L66">	}</span>
+
+
+	/**
+	 * Returns latitude of this Coordinate.
+	 *
+	 * @return double.
+	 */
+	public double getLatitude() {
+<span class="fc" id="L75">		return latitude;</span>
+	}
+
+
+	/**
+	 * Returns longitude of this Coordinate.
+	 *
+	 * @return double.
+	 */
+	public double getLongitude() {
+<span class="fc" id="L85">		return longitude;</span>
+	}
+
+
+	/**
+	 * Returns latitude of this Coordinate.
+	 *
+	 * @return double.
+	 */
+	public void setLatitude(double lat) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		if (lat &gt; 90) {</span>
+<span class="fc" id="L96">			this.latitude = -90 + lat % 90;</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		} else if (lat &lt; -90) {</span>
+<span class="fc" id="L98">			this.latitude = 90 + lat % 90;</span>
+<span class="fc" id="L99">		} else {</span>
+<span class="fc" id="L100">			this.latitude = lat;</span>
+		}
+<span class="fc" id="L102">	}</span>
+
+
+	/**
+	 * Sets the longitude attribute of this Coordinate.
+     *
+     * @param lon Longitude value.
+     */
+	public void setLongitude(double lon) {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">		if (lon &gt; 180) {</span>
+<span class="fc" id="L112">			this.longitude = -180 + lon % 180;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		} else if (lon &lt; -180) {</span>
+<span class="fc" id="L114">			this.longitude = 180 + lon % 180;</span>
+<span class="fc" id="L115">		} else {</span>
+<span class="fc" id="L116">			this.longitude = lon;</span>
+		}
+<span class="fc" id="L118">	}</span>
+
+
+	/**
+	 * Returns CrossingInformation for this Coordinate.
+	 *
+	 * @return CrossingInformation.
+	 */
+	public CrossingInformation getCrossingInformation() {
+<span class="fc" id="L127">		return crossInfo;</span>
+	}
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+<span class="fc" id="L135">        return 2;</span>
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (dim == 0)</span>
+<span class="fc" id="L144">            return getLatitude();</span>
+        else
+<span class="fc" id="L146">            return getLongitude();</span>
+    }
+
+
+	@Override
+	public String toString() {
+<span class="fc" id="L152">		String crossroads = &quot;&quot;;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">		if (getCrossingInformation() != null) {</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">			for (float cross : getCrossingInformation().getCrossingAngles()) {</span>
+<span class="fc" id="L155">				crossroads += cross + &quot; &quot;;</span>
+			}
+		}
+<span class="fc" id="L158">		return String.format(</span>
+<span class="fc" id="L159">			&quot;Coord(%.5f° %s %.5f° %s | Crossings: %s)&quot;,</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">			latitude,  latitude &gt; 0 ? &quot;N&quot; : &quot;S&quot;,</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">			longitude, longitude &gt; 0 ? &quot;E&quot; : &quot;W&quot;,</span>
+<span class="fc" id="L162">			crossroads.trim()</span>
+		);
+	}
+
+
+    @Override
+    public Coordinate clone() {
+    	Coordinate clonedCoordinate;
+<span class="fc bfc" id="L170" title="All 2 branches covered.">    	if (this.crossInfo == null) {</span>
+<span class="fc" id="L171">    		clonedCoordinate = new Coordinate (this.latitude, this.longitude);</span>
+<span class="fc" id="L172">    	} else {</span>
+<span class="fc" id="L173">    		clonedCoordinate = new Coordinate(this.latitude, this.longitude, this.crossInfo.clone());</span>
+    	}
+<span class="fc" id="L175">    	return clonedCoordinate;</span>
+    }
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="fc" id="L184">		final int prime = 31;</span>
+<span class="fc" id="L185">		int result = 1;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">		result = prime * result + ((crossInfo == null) ? 0 : crossInfo.hashCode());</span>
+		long temp;
+<span class="fc" id="L188">		temp = Double.doubleToLongBits(latitude);</span>
+<span class="fc" id="L189">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="fc" id="L190">		temp = Double.doubleToLongBits(longitude);</span>
+<span class="fc" id="L191">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="fc" id="L192">		return result;</span>
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L201" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L202">			return true;</span>
+		}
+<span class="fc bfc" id="L204" title="All 2 branches covered.">		if (obj == null) {</span>
+<span class="fc" id="L205">			return false;</span>
+		}
+<span class="fc bfc" id="L207" title="All 2 branches covered.">		if (!(obj instanceof Coordinate)) {</span>
+<span class="fc" id="L208">			return false;</span>
+		}
+<span class="fc" id="L210">		Coordinate other = (Coordinate) obj;</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">		if (crossInfo == null) {</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">			if (other.crossInfo != null) {</span>
+<span class="fc" id="L213">				return false;</span>
+			}
+<span class="fc bfc" id="L215" title="All 2 branches covered.">		} else if (!crossInfo.equals(other.crossInfo)) {</span>
+<span class="fc" id="L216">			return false;</span>
+		}
+<span class="fc" id="L218">		double epsilon = 1e-323;</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">		if (Math.abs(Math.abs(latitude) - Math.abs(other.latitude)) &gt; epsilon) {</span>
+<span class="fc" id="L220">			return false;</span>
+		}
+<span class="fc bfc" id="L222" title="All 2 branches covered.">		if (Math.abs(Math.abs(longitude) - Math.abs(other.longitude)) &gt; epsilon) {</span>
+<span class="fc" id="L223">			return false;</span>
+		}
+<span class="fc" id="L225">		return true;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

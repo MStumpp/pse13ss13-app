@@ -2,11 +2,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
@@ -24,7 +24,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
@@ -86,7 +85,7 @@ public class GeometryProcessorTest {
         }
 
         Assert.assertNotNull(geometrizable);
-        Assert.assertEquals(((Vertex) geometrizable).getID(), 1);
+        Assert.assertEquals(1, ((Vertex) geometrizable).getID());
     }
 
 
@@ -107,7 +106,7 @@ public class GeometryProcessorTest {
         }
 
         Assert.assertNotNull(geometrizable);
-        Assert.assertEquals(((Vertex) geometrizable).getID(), 1);
+        Assert.assertEquals(1, ((Vertex) geometrizable).getID());
     }
 
 
@@ -130,17 +129,8 @@ public class GeometryProcessorTest {
         }
         Assert.assertNotNull(graphDataIO);
 
-        LocationDataIO locationData = null;
-        try {
-            locationData = LocationDataIO.load(locationDataio);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(locationData);
-
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationData);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
 
         File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
         try {
@@ -272,17 +262,8 @@ public class GeometryProcessorTest {
         }
         Assert.assertNotNull(graphDataIO);
 
-        LocationDataIO locationData = null;
-        try {
-            locationData = LocationDataIO.load(locationDataio);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(locationData);
-
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationData);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
 
         File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
         try {
@@ -406,7 +387,8 @@ public class GeometryProcessorTest {
         locationDataIO.addPOI(new POI(3.d, 4.d, "poi 1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 0, 1 }));
         locationDataIO.addPOI(new POI(5.d, 7.d, "poi 1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 0, 1 }));
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
         return geometryDataIO;
     }
 

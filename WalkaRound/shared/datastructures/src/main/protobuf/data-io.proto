@@ -72,7 +72,7 @@ message SaveGeometrizable {
 message SaveGeometryNode {
 	optional SaveGeometryNode left = 1;
 	optional SaveGeometryNode right = 2;
-	optional SaveGeometrizable geometrizable = 3;
+	repeated SaveGeometrizable geometrizable = 3;
 	optional int32 depth = 4;
 	optional double split_value = 5;
 }

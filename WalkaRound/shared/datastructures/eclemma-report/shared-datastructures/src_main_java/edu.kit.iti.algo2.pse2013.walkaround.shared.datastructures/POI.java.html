@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>POI.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">POI.java</span></div><h1>POI.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+
+/**
+ * This class represents a POI.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class POI extends Location {
+
+	/**
+	 * text info of POI.
+	 */
+	private String textInfo;
+
+	/**
+	 * url of image of POI.
+	 */
+	private URL url;
+
+	/**
+	 * poi categories of POI.
+	 */
+	private int[] poiCategories;
+
+	/**
+	 * Creates an instance of POI.
+	 *
+	 * @param lat
+	 *            Latitude of POI.
+	 * @param lon
+	 *            Longitude of POI.
+	 * @param name
+	 *            Name of POI.
+	 * @param textInfo
+	 *            Text info of POI.
+	 * @param url
+	 *            URL of an image of POI.
+	 * @param categories
+	 *            Categories of POI.
+	 */
+	public POI(double lat, double lon, String name, String textInfo, URL url, int[] categories) {
+<span class="fc" id="L47">		this(lat, lon, name, textInfo, url, categories, null);</span>
+<span class="fc" id="L48">	}</span>
+
+	/**
+	 * Creates an instance of POI. This is for example useful when parsing from
+	 * a PBF-File.
+	 *
+	 * @param loc
+	 *            A prototype of the POI, which will be created. It contains all
+	 *            attributes, that are inherited by the superclass Location
+	 * @param textInfo
+	 *            Textinfo of POI
+	 * @param imageURL
+	 *            an URL to an image of the POI
+	 * @param poiCategories
+	 *            the POI-Categories, this POI belongs to
+	 */
+	public POI(Location loc, String textInfo, URL url, int[] poiCategories) {
+<span class="fc" id="L65">		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, url, poiCategories);</span>
+<span class="fc" id="L66">	}</span>
+
+	/**
+	 * Creates an instance of POI.
+	 *
+	 * @param lat
+	 *            Latitude of POI.
+	 * @param lon
+	 *            Longitude of POI.
+	 * @param name
+	 *            Name of POI.
+	 * @param textInfo
+	 *            Text info of POI.
+	 * @param url
+	 *            URL of an image of POI.
+	 * @param poiCategories
+	 *            Categories of POI.
+	 * @param address
+	 *            Address of POI.
+	 */
+	public POI(double lat, double lon, String name, String textInfo, URL url, int[] poiCategories, Address address) {
+<span class="fc" id="L87">		super(lat, lon, name, address);</span>
+<span class="fc" id="L88">		this.textInfo = textInfo;</span>
+<span class="fc" id="L89">		this.url = url;</span>
+<span class="fc" id="L90">		this.poiCategories = poiCategories;</span>
+<span class="fc" id="L91">	}</span>
+
+	/**
+	 * Sets the textual information of this POI.
+	 *
+	 * @param text
+	 *            text to set
+	 */
+	public void setTextInfo(String text) {
+<span class="fc" id="L100">		this.textInfo = text;</span>
+<span class="fc" id="L101">	}</span>
+
+	/**
+	 * Returns text info of POI.
+	 *
+	 * @return String.
+	 */
+	public String getTextInfo() {
+<span class="fc" id="L109">		return textInfo;</span>
+	}
+
+	/**
+	 * Sets the url of an image of this POI.
+	 *
+	 * @param url String
+	 */
+	public void setURL(URL url) {
+<span class="fc" id="L118">		this.url = url;</span>
+<span class="fc" id="L119">	}</span>
+
+	/**
+	 * Returns an url of the image for this POI.
+	 *
+	 * @return URL
+	 */
+	public URL getURL() {
+<span class="fc" id="L127">		return url;</span>
+	}
+
+	/**
+	 * Returns all categories of POI.
+	 *
+	 * @return A list of category-IDs
+	 */
+	public int[] getPOICategories() {
+<span class="fc" id="L136">		return poiCategories;</span>
+	}
+
+	public String toString() {
+<span class="fc" id="L140">		String result = &quot;POI:\n\t&quot;</span>
+<span class="fc" id="L141">				+ &quot;\n\tLocation: &quot; + super.toString()</span>
+<span class="fc" id="L142">				+ &quot;\n\tTextInfo: &quot; + getTextInfo()</span>
+<span class="fc" id="L143">				+ &quot;\n\tURL: &quot; + getURL().toExternalForm()</span>
+<span class="fc" id="L144">				+ &quot;\n\tPOI-Categories: &quot;;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">		for (int i : getPOICategories()) {</span>
+<span class="fc" id="L146">			result += &quot; &quot; + i;</span>
+		}
+<span class="fc" id="L148">		return result;</span>
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="fc" id="L157">		final int prime = 31;</span>
+<span class="fc" id="L158">		int result = super.hashCode();</span>
+<span class="fc" id="L159">		result = prime * result + Arrays.hashCode(poiCategories);</span>
+<span class="fc" id="L160">		result = prime * result</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">				+ ((textInfo == null) ? 0 : textInfo.hashCode());</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">		result = prime * result + ((url == null) ? 0 : url.hashCode());</span>
+<span class="fc" id="L163">		return result;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L171" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L172">			return true;</span>
+		}
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">		if (!super.equals(obj)) {</span>
+<span class="fc" id="L175">			return false;</span>
+		}
+<span class="nc bnc" id="L177" title="All 2 branches missed.">		if (!(obj instanceof POI)) {</span>
+<span class="nc" id="L178">			return false;</span>
+		}
+<span class="nc" id="L180">		POI other = (POI) obj;</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">		if (!Arrays.equals(poiCategories, other.poiCategories)) {</span>
+<span class="nc" id="L182">			return false;</span>
+		}
+<span class="nc bnc" id="L184" title="All 2 branches missed.">		if (textInfo == null) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">			if (other.textInfo != null) {</span>
+<span class="nc" id="L186">				return false;</span>
+			}
+<span class="nc bnc" id="L188" title="All 2 branches missed.">		} else if (!textInfo.equals(other.textInfo)) {</span>
+<span class="nc" id="L189">			return false;</span>
+		}
+<span class="nc bnc" id="L191" title="All 2 branches missed.">		if (url == null) {</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">			if (other.url != null) {</span>
+<span class="nc" id="L193">				return false;</span>
+			}
+<span class="nc bnc" id="L195" title="All 2 branches missed.">		} else if (!url.equals(other.url)) {</span>
+<span class="nc" id="L196">			return false;</span>
+		}
+<span class="nc" id="L198">		return true;</span>
+	}
+
+	@Override
+	public POI clone() {
+    	URL newURL;
+		try {
+<span class="fc" id="L205">			newURL = new URL(getURL().toExternalForm());</span>
+<span class="pc" id="L206">		} catch (MalformedURLException e) {</span>
+<span class="nc" id="L207">			newURL = null;</span>
+		}
+<span class="fc" id="L209">		return new POI(super.clone(), new String(getTextInfo()), newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

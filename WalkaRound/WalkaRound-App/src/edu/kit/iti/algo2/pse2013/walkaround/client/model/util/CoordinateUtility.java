@@ -166,24 +166,21 @@ public final class CoordinateUtility {
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayWaypoint> extractDisplayWaypointsOutOfRouteInfo(
-			RouteInfo currentRoute, Coordinate upperLeft, float levelOfDetail) {
+			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail) {
 
 		LinkedList<DisplayWaypoint> dw = new LinkedList<DisplayWaypoint>();
 		for (Waypoint value : currentRoute.getWaypoints()) {
 
-			float x = (float) (value.getLongitude() - upperLeft.getLongitude());
+			float x = (float) (value.getLongitude() - center.getLongitude());
 			Log.d("wtf", "" + x);
-			float y = (float) (value.getLatitude() - upperLeft.getLatitude());
+			float y = (float) (center.getLatitude() - value.getLatitude());
 			Log.d("wtf", "" + y);
 
 			dw.add(new DisplayWaypoint(
-
-			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
-
-			-CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
-					CoordinateUtility.DIRECTION_LATITUDE),
-
-			value.getId()));
+					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.02f,
+					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.78f,
+					value.getId()
+			));
 			Log.d("d x", "" + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
 					CoordinateUtility.DIRECTION_LONGITUDE));
 			Log.d("d y", "" + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
@@ -201,23 +198,18 @@ public final class CoordinateUtility {
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayCoordinate> extractDisplayCoordinatesOutOfRouteInfo(
-			RouteInfo currentRoute, Coordinate upperLeft, float levelOfDetail) {
+			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail) {
 
 		LinkedList<DisplayCoordinate> dw = new LinkedList<DisplayCoordinate>();
 
-		for (Coordinate value : currentRoute.getCoordinates()) {
+		for (Coordinate coordinate : currentRoute.getCoordinates()) {
 
-			float x = (float) (value.getLongitude() - upperLeft.getLongitude());
-			float y = (float) (upperLeft.getLatitude() - value.getLatitude()) ;
+			float x = (float) (coordinate.getLongitude() - center.getLongitude());
+			float y = (float) (center.getLatitude() - coordinate.getLatitude()) ;
 
 			dw.add(new DisplayCoordinate(
-
-			CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,
-					CoordinateUtility.DIRECTION_LONGITUDE),
-
-			CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,
-					CoordinateUtility.DIRECTION_LATITUDE)
-
+					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.04f,
+					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.8f
 			));
 		}
 

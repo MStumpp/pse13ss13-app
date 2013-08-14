@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometryProcessor.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometryProcessor.java</span></div><h1>GeometryProcessor.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+
+import java.util.ArrayDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+
+/**
+ * GeometryProcessor provides some api to query nearest Edges and Vertices based on Coordinates.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class GeometryProcessor {
+
+    /**
+     * Logger.
+     */
+<span class="nc" id="L30">	private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);</span>
+
+
+    /**
+     * TAG.
+     */
+    private static final String TAG = &quot;GeometryProcessor&quot;;
+
+
+    /**
+     * MAX_NUMBER_CALLS.
+     */
+    private final static int MAX_NUMBER_CALLS = 500;
+
+
+    /**
+     * GeometryProcessor instance.
+     */
+<span class="nc" id="L48">    private static GeometryProcessor instance;</span>
+
+
+    /**
+     * ExecutorService.
+     */
+    private ThreadPoolExecutor executor;
+
+
+    /**
+     * ID counter for GeometryComputer.
+     */
+    private int idCounter;
+
+
+    /**
+     * Creates an instance of GeometryProcessor.
+     *
+     * @param geometryDataIO GeometryDataIO used for geometry computation.
+     * @param numberThreads The number of threads for parallel computation.
+     */
+<span class="nc" id="L69">    private GeometryProcessor(GeometryDataIO geometryDataIO, int numberThreads) {</span>
+<span class="nc" id="L70">        ArrayDeque&lt;GeometryComputer&gt; geometryComputerQueue =</span>
+<span class="nc" id="L71">                new ArrayDeque&lt;GeometryComputer&gt;();</span>
+<span class="nc" id="L72">        idCounter = 0;</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for (int t=0; t&lt;numberThreads; t++) {</span>
+<span class="nc" id="L74">            GeometryComputer computer = new GeometryComputer(idCounter,</span>
+<span class="nc" id="L75">                    geometryDataIO.getRoot(), geometryDataIO.getNumDimensions());</span>
+<span class="nc" id="L76">            geometryComputerQueue.add(computer);</span>
+<span class="nc" id="L77">            logger.info(&quot;Instantiated GeometryComputer: &quot; + computer.getId());</span>
+<span class="nc" id="L78">            idCounter++;</span>
+        }
+
+<span class="nc" id="L81">        executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,</span>
+<span class="nc" id="L82">                TimeUnit.DAYS, new LinkedBlockingQueue&lt;Runnable&gt;(),</span>
+<span class="nc" id="L83">                new ThreadFactoryCustom(geometryComputerQueue), geometryComputerQueue);</span>
+<span class="nc" id="L84">        executor.allowCoreThreadTimeOut(false);</span>
+
+<span class="nc" id="L86">    }</span>
+
+
+    /**
+     * Returns a singleton instance of GeometryProcessor if available.
+     *
+     * @return GeometryProcessor.
+     * @throws InstantiationException If not instantiated
+     */
+    public static GeometryProcessor getInstance() throws InstantiationException {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (instance == null)</span>
+<span class="nc" id="L97">            throw new InstantiationException(&quot;singleton must be initialized first&quot;);</span>
+<span class="nc" id="L98">        return instance;</span>
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of GeometryProcessor.
+     *
+     * @param geometryDataIO GeometryDataIO containing relevant data.
+     * @return GeometryProcessor.
+     * @throws IllegalArgumentException If some input parameter are missing.
+     */
+    public static GeometryProcessor init(GeometryDataIO geometryDataIO)
+            throws IllegalArgumentException {
+<span class="nc" id="L111">        return init(geometryDataIO, 1);</span>
+    }
+
+
+    /**
+     * Instantiates and returns a singleton instance of GeometryProcessor.
+     *
+     * @param geometryDataIO GeometryDataIO containing relevant data.
+     * @param numberThreads The number of threads for parallel computation.
+     * @return GeometryProcessor.
+     * @throws IllegalArgumentException If some input parameter are missing.
+     */
+    public static GeometryProcessor init(GeometryDataIO geometryDataIO, int numberThreads)
+            throws IllegalArgumentException {
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (geometryDataIO == null)</span>
+<span class="nc" id="L126">            throw new IllegalArgumentException(&quot;GeometryDataIO must be provided&quot;);</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (numberThreads &lt; 1)</span>
+<span class="nc" id="L128">            throw new IllegalArgumentException(&quot;Number of threads must be greater or equal to 1&quot;);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (instance != null)</span>
+<span class="nc" id="L130">            throw new IllegalArgumentException(&quot;GeometryProcessor already initialized&quot;);</span>
+<span class="nc" id="L131">        instance = new GeometryProcessor(geometryDataIO, numberThreads);</span>
+<span class="nc" id="L132">        return instance;</span>
+    }
+
+
+    /**
+     * ThreadFactoryCustom.
+     */
+    private class ThreadFactoryCustom implements ThreadFactory {
+
+        /**
+         * Logger.
+         */
+<span class="nc" id="L144">    	private final Logger logger = LoggerFactory.getLogger(ThreadFactoryCustom.class);</span>
+
+<span class="nc" id="L146">        final AtomicInteger poolNumber = new AtomicInteger(1);</span>
+        final ThreadGroup group;
+<span class="nc" id="L148">        final AtomicInteger threadNumber = new AtomicInteger(1);</span>
+        final String namePrefix;
+        final ArrayDeque&lt;GeometryComputer&gt; geometryComputerQueue;
+
+<span class="nc" id="L152">        ThreadFactoryCustom(ArrayDeque&lt;GeometryComputer&gt; geometryComputerQueue) {</span>
+<span class="nc" id="L153">            SecurityManager s = System.getSecurityManager();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            group = (s != null)? s.getThreadGroup() :</span>
+<span class="nc" id="L155">                    Thread.currentThread().getThreadGroup();</span>
+<span class="nc" id="L156">            namePrefix = &quot;pool-&quot; +</span>
+<span class="nc" id="L157">                    poolNumber.getAndIncrement() +</span>
+<span class="nc" id="L158">                    &quot;-thread-&quot;;</span>
+<span class="nc" id="L159">            this.geometryComputerQueue = geometryComputerQueue;</span>
+<span class="nc" id="L160">        }</span>
+
+        @Override
+        public Thread newThread(Runnable r) {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            if (geometryComputerQueue.isEmpty())</span>
+<span class="nc" id="L165">                return null;</span>
+<span class="nc" id="L166">            Thread t = new ThreadCustom(group, r,</span>
+<span class="nc" id="L167">                    namePrefix + threadNumber.getAndIncrement(),</span>
+<span class="nc" id="L168">                    0, geometryComputerQueue.pollFirst());</span>
+<span class="nc" id="L169">            logger.info(&quot;New Thread: &quot; + t.getName() + &quot; Reference: &quot; +</span>
+<span class="nc" id="L170">                    t.getClass().getName() + &quot;@&quot; + Integer.toHexString(t.hashCode()));</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (t.isDaemon())</span>
+<span class="nc" id="L172">                t.setDaemon(false);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            if (t.getPriority() != Thread.NORM_PRIORITY)</span>
+<span class="nc" id="L174">                t.setPriority(Thread.NORM_PRIORITY);</span>
+
+<span class="nc" id="L176">            return t;</span>
+        }
+    }
+
+
+    /**
+     * ThreadCustom.
+     */
+    private class ThreadCustom extends Thread {
+
+        /**
+         * Logger.
+         */
+<span class="nc" id="L189">    	private final Logger logger = LoggerFactory.getLogger(ThreadCustom.class);</span>
+
+        private GeometryComputer computer;
+
+<span class="nc" id="L193">        ThreadCustom(ThreadGroup group, Runnable target, String name, long stackSize, GeometryComputer computer) {</span>
+<span class="nc" id="L194">            super(group, target, name, stackSize);</span>
+<span class="nc" id="L195">            this.computer = computer;</span>
+<span class="nc" id="L196">            logger.info(&quot;New Thread: &quot; + name);</span>
+<span class="nc" id="L197">        }</span>
+
+        private GeometryComputer getComputer() {
+<span class="nc" id="L200">            return computer;</span>
+        }
+    }
+
+
+    /**
+     * ThreadPoolExecutorCustom.
+     */
+    private class ThreadPoolExecutorCustom extends ThreadPoolExecutor {
+
+        /**
+         * Logger.
+         */
+<span class="nc" id="L213">    	private final Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorCustom.class);</span>
+
+        private ArrayDeque&lt;GeometryComputer&gt; geometryComputerQueue;
+
+        public ThreadPoolExecutorCustom(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+                                        TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, ThreadFactoryCustom threadFactory,
+<span class="nc" id="L219">                                        ArrayDeque&lt;GeometryComputer&gt; geometryComputerQueue) {</span>
+<span class="nc" id="L220">            super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);</span>
+<span class="nc" id="L221">            this.geometryComputerQueue = geometryComputerQueue;</span>
+<span class="nc" id="L222">        }</span>
+
+        protected void afterExecute(Runnable r, Throwable t) {
+<span class="nc" id="L225">            GeometryComputer computer =</span>
+<span class="nc" id="L226">                    ((ThreadCustom) Thread.currentThread()).getComputer();</span>
+<span class="nc" id="L227">            logger.info(&quot;afterExecute(): Thread: &quot; + Thread.currentThread().getName() + &quot; Reference: &quot; +</span>
+<span class="nc" id="L228">            Thread.currentThread().getClass().getName() + &quot;@&quot; + Integer.toHexString(Thread.currentThread().hashCode()) +</span>
+<span class="nc" id="L229">                    &quot; and GeometryComputer: &quot; + computer.getId() + &quot; Reference: &quot;</span>
+<span class="nc" id="L230">                    + computer.getClass().getName() + &quot;@&quot; + Integer.toHexString(computer.hashCode()));</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">            if (computer == null)</span>
+<span class="nc" id="L232">            	   logger.info(&quot;GeometryComputer is null in ThreadPoolExecutorCustom&quot;);</span>
+            //geometryComputerQueue.add(computer);
+<span class="nc" id="L234">        }</span>
+    }
+
+
+    /**
+     * Computes the nearest Edge for a given Geometrizable.
+     *
+     * @param geometrizable The Geometrizable the resulting Edge has to be closest to.
+     * @return Geometrizable Nearest Geometrizable Edge.
+     * @throws GeometryProcessorException If something goes wrong.
+     * @throws IllegalArgumentException If geometrizable is null.
+     */
+    public Geometrizable getNearestEdge(Geometrizable geometrizable)
+            throws GeometryProcessorException {
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        if (geometrizable == null)</span>
+<span class="nc" id="L249">            throw new IllegalArgumentException(&quot;geometrizable must not be null&quot;);</span>
+
+<span class="nc" id="L251">        return null;</span>
+    }
+
+
+    /**
+     * Computes the nearest Geometrizable for a given Geometrizable.
+     *
+     * @param geometrizable The Geometrizable the resulting Vertex has to be closest to.
+     * @return Geometrizable Nearest Geometrizable Vertex.
+     * @throws GeometryProcessorException If something goes wrong.
+     * @throws IllegalArgumentException If geometrizable is null.
+     */
+    public Geometrizable getNearestVertex(Geometrizable geometrizable)
+            throws GeometryProcessorException, GeometryComputationNoSlotsException,
+            IllegalArgumentException {
+<span class="nc bnc" id="L266" title="All 2 branches missed.">        if (geometrizable == null)</span>
+<span class="nc" id="L267">            throw new IllegalArgumentException(&quot;geometrizable must not be null&quot;);</span>
+
+<span class="nc" id="L269">        logger.info(&quot;getNearestVertex:&quot;);</span>
+<span class="nc" id="L270">        Future&lt;Geometrizable&gt; future = executor.submit(new GeometryNearestVertexTask(geometrizable));</span>
+
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        if (future.isCancelled())</span>
+<span class="nc" id="L273">            throw new GeometryComputationNoSlotsException(&quot;no slots available&quot;);</span>
+
+        try {
+<span class="nc" id="L276">            return future.get();</span>
+<span class="nc" id="L277">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L278">            throw new GeometryProcessorException(e.getMessage());</span>
+<span class="nc" id="L279">        } catch (ExecutionException e) {</span>
+<span class="nc" id="L280">            throw new GeometryProcessorException(e.getMessage());</span>
+        }
+    }
+
+
+    /**
+     * Represents a task for nearest vertex computation.
+     */
+    private class GeometryNearestVertexTask implements Callable&lt;Geometrizable&gt; {
+
+        /**
+         * Logger.
+         */
+<span class="nc" id="L293">    	private final Logger logger = LoggerFactory.getLogger(GeometryNearestVertexTask.class);</span>
+
+        private Geometrizable geometrizable;
+
+<span class="nc" id="L297">        GeometryNearestVertexTask(Geometrizable geometrizable) {</span>
+<span class="nc" id="L298">            this.geometrizable = geometrizable;</span>
+<span class="nc" id="L299">        }</span>
+
+        @Override
+        public Geometrizable call() throws Exception {
+<span class="nc" id="L303">            GeometryComputer computer =</span>
+<span class="nc" id="L304">                    ((ThreadCustom) Thread.currentThread()).getComputer();</span>
+<span class="nc" id="L305">            logger.info(&quot;call(): Thread: &quot; + Thread.currentThread().getName() + &quot; Reference: &quot; +</span>
+<span class="nc" id="L306">                    Thread.currentThread().getClass().getName() + &quot;@&quot; + Integer.toHexString(Thread.currentThread().hashCode()) +</span>
+<span class="nc" id="L307">                    &quot; and GeometryComputer: &quot; + computer.getId() + &quot; Reference: &quot;</span>
+<span class="nc" id="L308">                   + computer.getClass().getName() + &quot;@&quot; + Integer.toHexString(computer.hashCode()));</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            if (computer == null) {</span>
+<span class="nc" id="L310">                logger.info(&quot;GeometryComputer is null in GeometryNearestVertexTask&quot;);</span>
+<span class="nc" id="L311">                throw new GeometryProcessorException(</span>
+<span class="nc" id="L312">                        &quot;GeometryComputer is null in GeometryNearestVertexTask&quot;);</span>
+            }
+<span class="nc" id="L314">            return computer.getNearestVertex(geometrizable);</span>
+        }
+    }
+
+
+    /**
+     * Computes the distance between an Edge and the nearest POI of a certain Category.
+     *
+     * @param edge ID of the Edge.
+     * @param category ID of the Category of the POI.
+     * @return float Distance.
+     */
+    public float getDistanceToNearestPOIForEdge(int edge, int category) {
+<span class="nc" id="L327">        return 1.f;</span>
+    }
+
+
+    /**
+     * Computes whether and Edge is contained in an Area of a certain Category..
+     *
+     * @param edge ID of the Edge.
+     * @param category ID of the Category of the Area.
+     * @return boolean True if contained, false otherwise.
+     */
+    public boolean isEdgeInArea(int edge, int category) {
+<span class="nc" id="L339">        return false;</span>
+    }
+
+
+    /**
+     * GeometryComputer.
+     */
+    private class GeometryComputer {
+
+        /**
+         * Logger.
+         */
+<span class="nc" id="L351">        private final Logger logger = LoggerFactory.getLogger(GeometryComputer.class);</span>
+
+
+        /**
+         * id.
+         */
+        private int id;
+
+
+        /**
+         * Graph instance.
+         */
+        private GeometryNode root;
+
+
+        /**
+         * Number dimensions.
+         */
+        private int numberDimensions;
+
+
+        /**
+         * NumberMethodCalls.
+         */
+        private int numberMethodCalls;
+
+
+        /**
+         * Stop flag.
+         */
+<span class="nc" id="L381">        private boolean stop = false;</span>
+
+
+        /**
+         * GeometryComputer.
+         */
+<span class="nc" id="L387">        GeometryComputer(int id, GeometryNode root, int numberDimensions) {</span>
+<span class="nc" id="L388">            this.id = id;</span>
+<span class="nc" id="L389">            this.root = root;</span>
+<span class="nc" id="L390">            this.numberDimensions = numberDimensions;</span>
+<span class="nc" id="L391">            numberMethodCalls = 0;</span>
+<span class="nc" id="L392">        }</span>
+
+
+        /**
+         * Computes the nearest Geometrizable for a given Geometrizable.
+         *
+         * @param geometrizable The Geometrizable the resulting Vertex has to be closest to.
+         * @return Geometrizable Nearest Geometrizable Vertex.
+         * @throws GeometryProcessorException If something goes wrong.
+         */
+        public Geometrizable getNearestVertex(Geometrizable geometrizable)
+                throws GeometryProcessorException {
+
+<span class="nc" id="L405">            long startTime = System.currentTimeMillis();</span>
+
+<span class="nc" id="L407">            Geometrizable nearestVertex = search(root, geometrizable);</span>
+
+<span class="nc" id="L409">            long stopTime = System.currentTimeMillis();</span>
+<span class="nc" id="L410">            long runTime = stopTime - startTime;</span>
+
+<span class="nc" id="L412">            logger.info(&quot;getNearestVertex: Start: Run time: &quot; + runTime);</span>
+
+<span class="nc" id="L414">            return nearestVertex;</span>
+        }
+
+
+        /**
+         * Computes whether and Edge is contained in an Area of a certain Category..
+         *
+         * @param root Root node of search tree.
+         * @param search Geometrizable a projected Geometrizable to look for.
+         * @return Geometrizable Projected Geometrizable.
+         * @throws GeometryProcessorException If something goes wrong.
+         */
+        private Geometrizable search(GeometryNode root, Geometrizable search)
+                throws GeometryProcessorException {
+<span class="nc" id="L428">            numberMethodCalls = 0;</span>
+<span class="nc" id="L429">            stop = false;</span>
+<span class="nc" id="L430">            GeometrizableWrapper wrapper = new GeometrizableWrapper(null);</span>
+<span class="nc" id="L431">            searchTreeDown(root, search, wrapper);</span>
+<span class="nc" id="L432">            return wrapper.getGeometrizable();</span>
+        }
+
+
+        /**
+         * Computes whether and Edge is contained in an Area of a certain Category..
+         *
+         * @param node Current node to be processed while searching down the tree.
+         * @param search Geometrizable a projected Geometrizable to look for.
+         * @param currentBest Current best Geometrizable.
+         * @throws GeometryProcessorException If something goes wrong.
+         */
+        private void searchTreeDown(GeometryNode node, Geometrizable search,
+                                    GeometrizableWrapper currentBest)
+                throws GeometryProcessorException {
+
+<span class="nc bnc" id="L448" title="All 4 branches missed.">            if (stop || numberMethodCalls &gt; MAX_NUMBER_CALLS) {</span>
+<span class="nc" id="L449">                stop = true;</span>
+<span class="nc" id="L450">                return;</span>
+            }
+<span class="nc" id="L452">            numberMethodCalls++;</span>
+
+            // compute dim
+<span class="nc" id="L455">            logger.info(&quot;geometryDataIO.getNumDimensions(): &quot; +  numberDimensions);</span>
+<span class="nc" id="L456">            int dim = node.getDepth() % numberDimensions;</span>
+<span class="nc" id="L457">            logger.info(&quot;dim: &quot; + dim);</span>
+
+            // if leaf, then check whether vertex of this node is better then current best
+            // traverse up the tree
+<span class="nc bnc" id="L461" title="All 2 branches missed.">            if (node.isLeaf()) {</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">                if (node.getGeometrizable() != null) {</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">                    if (currentBest.getGeometrizable() == null)</span>
+<span class="nc" id="L464">                        currentBest.setGeometrizable(node.getNearestGeometrizable(search, dim));</span>
+                    else
+<span class="nc" id="L466">                    if (node.getGeometrizable().valueForDimension(dim) &lt;</span>
+<span class="nc bnc" id="L467" title="All 2 branches missed.">                            currentBest.getGeometrizable().valueForDimension(dim))</span>
+<span class="nc" id="L468">                        currentBest.setGeometrizable(node.getGeometrizable());</span>
+                }
+<span class="nc" id="L470">                searchTreeUp(node.getParent(), search, currentBest, node);</span>
+
+            // otherwise, traverse further down the tree
+<span class="nc" id="L473">            } else {</span>
+
+                // either further visit left or right child
+                // here we check for less or equal
+<span class="nc bnc" id="L477" title="All 2 branches missed.">                if (search.valueForDimension(dim) &lt;= node.getSplitValue())</span>
+<span class="nc" id="L478">                    searchTreeDown(node.getLeftNode(), search, currentBest);</span>
+                else
+<span class="nc" id="L480">                    searchTreeDown(node.getRightNode(), search, currentBest);</span>
+            }
+
+<span class="nc" id="L483">            return;</span>
+        }
+
+
+        /**
+         * Computes whether and Edge is contained in an Area of a certain Category..
+         *
+         * @param node Current node to be processed while searching down the tree.
+         * @param search Geometrizable a projected Geometrizable to look for.
+         * @param currentBest Current best Geometrizable.
+         * @param child Previously visited node while searching up the tree.
+         * @throws GeometryProcessorException If something goes wrong.
+         */
+        private void searchTreeUp(GeometryNode node, Geometrizable search,
+                                  GeometrizableWrapper currentBest, GeometryNode child)
+                throws GeometryProcessorException {
+
+<span class="nc bnc" id="L500" title="All 4 branches missed.">            if (stop || numberMethodCalls &gt; MAX_NUMBER_CALLS) {</span>
+<span class="nc" id="L501">                stop = true;</span>
+<span class="nc" id="L502">                return;</span>
+            }
+<span class="nc" id="L504">            numberMethodCalls++;</span>
+
+            // compute dim
+<span class="nc" id="L507">            int dim = node.getDepth() % numberDimensions;</span>
+
+            // distance between the splitting coordinate of search point and current node
+<span class="nc bnc" id="L510" title="All 2 branches missed.">            if (node.getSplitValue() == Double.NaN)</span>
+<span class="nc" id="L511">                throw new GeometryProcessorException(&quot;searchTreeUp: split value is NaN&quot;);</span>
+<span class="nc" id="L512">            double distSearchAndCurrentNode = Math.abs(search.valueForDimension(dim) -</span>
+<span class="nc" id="L513">                    node.getSplitValue());</span>
+
+            // distance between the splitting coordinate of search point end current best
+<span class="nc" id="L516">            double distSearchAndCurrentBest = Math.abs(search.valueForDimension(dim) -</span>
+<span class="nc" id="L517">                    currentBest.getGeometrizable().valueForDimension(dim));</span>
+
+<span class="nc bnc" id="L519" title="All 2 branches missed.">            if (distSearchAndCurrentNode &lt; distSearchAndCurrentBest)</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">                if (child == node.getLeftNode())</span>
+<span class="nc" id="L521">                    searchTreeDown(node.getRightNode(), search, currentBest);</span>
+                else
+<span class="nc" id="L523">                    searchTreeDown(node.getLeftNode(), search, currentBest);</span>
+
+<span class="nc bnc" id="L525" title="All 2 branches missed.">            if (!node.isRoot())</span>
+<span class="nc" id="L526">                searchTreeUp(node.getParent(), search, currentBest, node);</span>
+
+<span class="nc" id="L528">            return;</span>
+        }
+
+        private int getId() {
+<span class="nc" id="L532">            return id;</span>
+        }
+    }
+
+
+    /**
+     * A wrapper class the keep the current best Geometrizable.
+     */
+    private class GeometrizableWrapper {
+
+        private Geometrizable geometrizable;
+
+<span class="nc" id="L544">        GeometrizableWrapper (Geometrizable geometrizable) {</span>
+<span class="nc" id="L545">            this.geometrizable = geometrizable;</span>
+<span class="nc" id="L546">        }</span>
+
+        Geometrizable getGeometrizable() {
+<span class="nc" id="L549">            return geometrizable;</span>
+        }
+
+        void setGeometrizable(Geometrizable geometrizable) {
+<span class="nc" id="L553">            this.geometrizable = geometrizable;</span>
+<span class="nc" id="L554">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>

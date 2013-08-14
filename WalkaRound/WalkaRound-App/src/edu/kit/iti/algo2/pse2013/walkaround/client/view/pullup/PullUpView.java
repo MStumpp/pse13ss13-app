@@ -137,7 +137,7 @@ public class PullUpView extends Fragment implements RouteListener {
 		display.getSize(size);
 
 		minHeight = 0;
-		maxHeight = size.y - size.y / 10 - size.y / 40;
+		maxHeight = size.y;
 		halfHeight = (maxHeight / 2);
 		minBorderHeight = halfHeight / 2;
 		maxBorderHeight = halfHeight / 2 + halfHeight;
@@ -151,21 +151,28 @@ public class PullUpView extends Fragment implements RouteListener {
 
 		routing.setX(size.x / 5 * 0);
 		routing.getLayoutParams().width = size.x / 5;
+		routing.getLayoutParams().height = size.y / 10;
 
 		favorite.setX(size.x / 5 * 1);
 		favorite.getLayoutParams().width = size.x / 5;
+		favorite.getLayoutParams().height = size.y / 10;
 
 		roundtrip.setX(size.x / 5 * 2);
 		roundtrip.getLayoutParams().width = size.x / 5;
+		roundtrip.getLayoutParams().height = size.y / 10;
 
 		poi.setX(size.x / 5 * 3);
 		poi.getLayoutParams().width = size.x / 5;
+		poi.getLayoutParams().height = size.y / 10;
 
 		search.setX(size.x / 5 * 4);
 		search.getLayoutParams().width = size.x / 5;
+		search.getLayoutParams().height = size.y / 10;
 
-		regulator.getLayoutParams().height = size.y / 20;
+		regulator.getLayoutParams().height = size.y / 10;
 
+		maxHeight = maxHeight - size.y/5;
+		
 		Log.d(TAG_PULLUP, "allocate Listener");
 		routing.setOnTouchListener(new RoutingListener());
 		favorite.setOnTouchListener(new FavoriteListener());

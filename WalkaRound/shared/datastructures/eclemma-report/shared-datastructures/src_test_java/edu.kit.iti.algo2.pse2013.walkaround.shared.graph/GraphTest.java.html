@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GraphTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">GraphTest.java</span></div><h1>GraphTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * GraphDataIOTest.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+<span class="fc" id="L18">public class GraphTest {</span>
+
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+<span class="fc" id="L22">        Field idCounter = Vertex.class.getDeclaredField(&quot;idCounter&quot;);</span>
+<span class="fc" id="L23">        idCounter.setAccessible(true);</span>
+<span class="fc" id="L24">        idCounter.setInt(null, 0);</span>
+<span class="fc" id="L25">    }</span>
+
+
+    @Test
+    public void testInit() {
+
+<span class="fc" id="L31">        GraphDataIO graphDataIO = getGraphDataIO();</span>
+<span class="fc" id="L32">        Graph graph = null;</span>
+        try {
+<span class="fc" id="L34">            graph = new Graph(graphDataIO);</span>
+<span class="pc" id="L35">        } catch (EmptyListOfEdgesException e) {</span>
+<span class="nc" id="L36">            e.printStackTrace();</span>
+        }
+
+        try {
+<span class="fc" id="L40">            Assert.assertNotNull(graph.getVertexByID(0));</span>
+<span class="fc" id="L41">            Assert.assertNotNull(graph.getVertexByID(1));</span>
+<span class="fc" id="L42">            Assert.assertNotNull(graph.getVertexByID(2));</span>
+<span class="fc" id="L43">            Assert.assertNotNull(graph.getVertexByID(3));</span>
+<span class="fc" id="L44">            Assert.assertNotNull(graph.getVertexByID(4));</span>
+<span class="fc" id="L45">            Assert.assertNotNull(graph.getVertexByID(5));</span>
+
+<span class="fc" id="L47">            Assert.assertEquals(3, graph.getVertexByID(0).getOutgoingEdges().size());</span>
+<span class="fc" id="L48">            Assert.assertEquals(3, graph.getVertexByID(1).getOutgoingEdges().size());</span>
+<span class="fc" id="L49">            Assert.assertEquals(5, graph.getVertexByID(2).getOutgoingEdges().size());</span>
+<span class="fc" id="L50">            Assert.assertEquals(3, graph.getVertexByID(3).getOutgoingEdges().size());</span>
+<span class="fc" id="L51">            Assert.assertEquals(3, graph.getVertexByID(4).getOutgoingEdges().size());</span>
+<span class="fc" id="L52">            Assert.assertEquals(3, graph.getVertexByID(5).getOutgoingEdges().size());</span>
+
+<span class="pc" id="L54">        } catch (NoVertexForIDExistsException e) {</span>
+<span class="nc" id="L55">            e.printStackTrace();</span>
+        }
+<span class="fc" id="L57">    }</span>
+
+
+    @Test
+    public void testInitGraphWithRealDataSet() {
+
+<span class="fc" id="L63">        File file = FileUtil.getFile(&quot;graphData.pbf&quot;);</span>
+<span class="fc" id="L64">        Assert.assertNotNull(file);</span>
+<span class="fc" id="L65">        Assert.assertTrue(file.exists());</span>
+
+<span class="fc" id="L67">        GraphDataIO graphDataIO = null;</span>
+        try {
+<span class="fc" id="L69">            graphDataIO = GraphDataIO.load(file);</span>
+<span class="pc" id="L70">        } catch (IOException e) {</span>
+<span class="nc" id="L71">            e.printStackTrace();</span>
+        }
+<span class="fc" id="L73">        Assert.assertNotNull(graphDataIO);</span>
+
+<span class="fc" id="L75">        Graph graph = null;</span>
+        try {
+<span class="fc" id="L77">            graph = new Graph(graphDataIO);</span>
+<span class="pc" id="L78">        } catch (EmptyListOfEdgesException e) {</span>
+<span class="nc" id="L79">            e.printStackTrace();</span>
+        }
+<span class="fc" id="L81">        Assert.assertNotNull(graph);</span>
+
+//        for (int i = 0; i &lt;= graph.vertices.length; i++)
+//            System.out.println(&quot;i: &quot; + i + &quot; vertex: &quot; + graph.vertices[i]);
+<span class="fc" id="L85">    }</span>
+
+
+    private GraphDataIO getGraphDataIO() {
+
+<span class="fc" id="L90">        GraphDataIO graphDataIO = new GraphDataIO();</span>
+<span class="fc" id="L91">        Vertex vertex1 = new Vertex(1.d, 1.d);</span>
+<span class="fc" id="L92">        Vertex vertex2 = new Vertex(1.d, 2.d);</span>
+<span class="fc" id="L93">        Vertex vertex3 = new Vertex(1.d, 3.d);</span>
+<span class="fc" id="L94">        Vertex vertex4 = new Vertex(1.d, 4.d);</span>
+<span class="fc" id="L95">        Vertex vertex5 = new Vertex(1.d, 5.d);</span>
+<span class="fc" id="L96">        Vertex vertex6 = new Vertex(1.d, 6.d);</span>
+
+<span class="fc" id="L98">        Edge edge1 = new Edge(vertex1, vertex2);</span>
+<span class="fc" id="L99">        Edge edge2 = new Edge(vertex1, vertex3);</span>
+<span class="fc" id="L100">        Edge edge3 = new Edge(vertex2, vertex5);</span>
+<span class="fc" id="L101">        Edge edge4 = new Edge(vertex3, vertex2);</span>
+<span class="fc" id="L102">        Edge edge5 = new Edge(vertex3, vertex4);</span>
+<span class="fc" id="L103">        Edge edge6 = new Edge(vertex3, vertex6);</span>
+<span class="fc" id="L104">        Edge edge7 = new Edge(vertex4, vertex1);</span>
+<span class="fc" id="L105">        Edge edge8 = new Edge(vertex5, vertex3);</span>
+<span class="fc" id="L106">        Edge edge9 = new Edge(vertex5, vertex6);</span>
+<span class="fc" id="L107">        Edge edge10 = new Edge(vertex6, vertex4);</span>
+
+<span class="fc" id="L109">        graphDataIO.addEdge(edge1);</span>
+<span class="fc" id="L110">        graphDataIO.addEdge(edge2);</span>
+<span class="fc" id="L111">        graphDataIO.addEdge(edge3);</span>
+<span class="fc" id="L112">        graphDataIO.addEdge(edge4);</span>
+<span class="fc" id="L113">        graphDataIO.addEdge(edge5);</span>
+<span class="fc" id="L114">        graphDataIO.addEdge(edge6);</span>
+<span class="fc" id="L115">        graphDataIO.addEdge(edge7);</span>
+<span class="fc" id="L116">        graphDataIO.addEdge(edge8);</span>
+<span class="fc" id="L117">        graphDataIO.addEdge(edge9);</span>
+<span class="fc" id="L118">        graphDataIO.addEdge(edge10);</span>
+
+<span class="fc" id="L120">        return graphDataIO;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
