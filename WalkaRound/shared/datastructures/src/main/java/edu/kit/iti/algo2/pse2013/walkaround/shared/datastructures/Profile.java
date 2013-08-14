@@ -53,9 +53,9 @@ public class Profile {
 	private int[] poiCategories;
 
 	public Profile(int id, int[] areaCategories, int[] poiCategories) {
-		id = this.id;
-		getByID(id).setAreaCategories(areaCategories);
-		getByID(id).setPoiCategories(poiCategories);
+		this.id = id;
+		this.areaCategories = areaCategories;
+		this.poiCategories = poiCategories;
 	}
 
 	/**
