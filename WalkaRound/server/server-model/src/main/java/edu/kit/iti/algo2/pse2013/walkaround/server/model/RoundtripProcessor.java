@@ -121,12 +121,15 @@ public class RoundtripProcessor {
             throws IllegalArgumentException, RoundtripComputationNoSlotsException,
             RoundtripComputeException {
 
-        if (source == null || categories == null)
-            throw new IllegalArgumentException("source and/or categories must not be null");
-        if (length < 100)
-            throw new IllegalArgumentException("length must be at least 100 meters");
+        if (source == null)
+            throw new IllegalArgumentException("source must not be null");
+        if (categories == null || categories.length == 0)
+            throw new IllegalArgumentException("categories must not be null and/or of length 0");
+        if (length < 1)
+            throw new IllegalArgumentException("length must be at least 1 meter");
 
-        logger.info("computeRoundtrip: Source: " + source.toString());
+        logger.info("computeRoundtrip: Source: " + source.toString() +
+                " Categories: " + categories + " Length: " + length);
         Future<List<Vertex>> future = executor.submit(new RoundtripTask(source, categories, length));
 
         if (future.isCancelled())
@@ -177,14 +180,14 @@ public class RoundtripProcessor {
 
             Vertex currentBestU = null,
                    currentBestV = null;
-            List<Vertex> currentRouteUToV = null;
-            double weigthedLenghtU, weightedLengthV,
-                    bestTotalWeightedLength = Double.POSITIVE_INFINITY;
+            List<Vertex> currentRouteUV = null;
+            double weigthedLenghtSU, weightedLengthUVS,
+                   bestTotalWeightedLength = Double.POSITIVE_INFINITY;
 
             for (Vertex vertexU : ring_s.getTargets()) {
                 ring_u = ShortestPathTreeProcessor.getInstance().
                         computeShortestPathTree(vertexU, categories, length/3, eps);
-                weigthedLenghtU = ring_s.getWeithedLength(vertexU);
+                weigthedLenghtSU = ring_s.getWeithedLength(vertexU);
 
                 // compute intersection
                 intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
@@ -192,36 +195,38 @@ public class RoundtripProcessor {
                 // of the intersection, only consider the ones having greater weighted length
                 // then vertex_u
                 for (Vertex vertexV : intersect) {
-                    weightedLengthV = ring_u.getWeithedLength(vertexV) + ring_s.getWeithedLength(vertexV);
+                    weightedLengthUVS = ring_u.getWeithedLength(vertexV) + ring_s.getWeithedLength(vertexV);
                     if (ring_s.getWeithedLength(vertexU) <= ring_s.getWeithedLength(vertexV)) {
-                        if (currentBestU == null) {
+                        if (currentBestU == null ||
+                            weigthedLenghtSU + weightedLengthUVS < bestTotalWeightedLength) {
                             currentBestU = vertexU;
                             currentBestV = vertexV;
-                            currentRouteUToV = ring_u.getRoute(vertexV);
-                            bestTotalWeightedLength = weigthedLenghtU + weightedLengthV;
-
-                        } else if (weigthedLenghtU + weightedLengthV < bestTotalWeightedLength) {
-                            currentBestU = vertexU;
-                            currentBestV = vertexV;
-                            currentRouteUToV = ring_u.getRoute(vertexV);
-                            bestTotalWeightedLength = weigthedLenghtU + weightedLengthV;
+                            currentRouteUV = ring_u.getRoute(vertexV);
+                            bestTotalWeightedLength = weigthedLenghtSU + weightedLengthUVS;
                         }
                     }
                 }
             }
 
-            if (currentBestU == null || currentBestU == null || currentRouteUToV == null)
+            if (currentBestU == null || currentBestU == null || currentRouteUV == null)
                 throw new NoRoundtripExistsException("no roundtrip exists");
 
             List<Vertex> roundtrip = new LinkedList<Vertex>();
             roundtrip.addAll(ring_s.getRoute(currentBestU));
-            roundtrip.addAll(currentRouteUToV);
+            roundtrip.addAll(currentRouteUV);
             roundtrip.addAll(reverseList(ring_s.getRoute(currentBestV)));
 
             return roundtrip;
         }
     }
 
+
+    /**
+     * Reverses a list of Vertices.
+     *
+     * @param list List of Vertices to be reversed.
+     * @return List of Vertices.
+     */
     private List<Vertex> reverseList(List<Vertex> list) {
         List<Vertex> invertedList = new LinkedList<Vertex>();
         for (int i = list.size() - 1; i >= 0; i--) {
