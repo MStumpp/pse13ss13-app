@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -68,7 +69,12 @@ public class RoundtripProcessorTest {
     @Test
     public void testComputesRoundtrip() throws InstantiationException {
 
-        GraphDataIO graphDataIO = getGraph();
+        GraphDataIO graphDataIO = null;
+        try {
+            graphDataIO = GraphDataIO.load(REAL_GRAPH_DATA_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Assert.assertNotNull(graphDataIO);
 
         Graph graph = null;
@@ -81,7 +87,7 @@ public class RoundtripProcessorTest {
 
         Vertex source = null;
         try {
-            source = graph.getVertexByID(0);
+            source = graph.getVertexByID(350005);
         } catch (NoVertexForIDExistsException e) {
             e.printStackTrace();
         }
@@ -96,8 +102,7 @@ public class RoundtripProcessorTest {
 
         List<Vertex> route = null;
         try {
-            route = roundtripProcessor.computeRoundtrip(source,
-                    Profile.getByID(1).getContainingPOICategories(), 7);
+            route = roundtripProcessor.computeRoundtrip(source, Profile.getByID(1).getContainingPOICategories(), 1000);
         } catch (RoundtripComputationNoSlotsException e) {
             e.printStackTrace();
         } catch (RoundtripComputeException e) {
@@ -105,11 +110,6 @@ public class RoundtripProcessorTest {
         }
 
         Assert.assertNotNull(route);
-//        Assert.assertEquals(3, route.size());
-//
-//        Assert.assertEquals(0, (route.get(0)).getID());
-//        Assert.assertEquals(2, (route.get(1)).getID());
-//        Assert.assertEquals(4, (route.get(2)).getID());
     }
 
     private GraphDataIO getGraph() {
