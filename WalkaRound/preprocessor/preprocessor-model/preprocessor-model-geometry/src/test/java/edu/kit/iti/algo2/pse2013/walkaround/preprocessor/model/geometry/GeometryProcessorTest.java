@@ -73,6 +73,9 @@ public class GeometryProcessorTest {
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
+
+        logger.info(geometryDataIO.getRoot().toString());
+
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
         Coordinate search = new Coordinate(5.5, 3.9);
