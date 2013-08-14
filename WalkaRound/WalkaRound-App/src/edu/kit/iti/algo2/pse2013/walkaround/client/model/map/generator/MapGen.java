@@ -92,6 +92,11 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 *
 	 */
 	private DisplayCoordinate mapOffset;
+	
+	/**
+	 * the Points per Offset Point
+	 */
+	float pPerDiff;
 
 	/**
 	 * the index of the tile on the top Left corner
@@ -166,7 +171,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_VERTICAL);
-
+		
+		yDiff = yDiff * pPerDiff;
+		Log.d(TAG, "RealOffset: x " + xDiff + " y: " + yDiff);
 
 		//yDiff = (currentTileWidth - 1) - yDiff;
 
@@ -174,8 +181,6 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		yDiff = size.y / 2 - Math.abs(yDiff);
 
 		//yDiff = (yDiff - 25) % this.currentTileWidth;
-
-		Log.d("wrong", " " + coorBox.getCenter().getLatitude() + " |x " + index[0] + " |y " + index[1]);
 
 		Log.d(TAG, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
@@ -191,6 +196,8 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	private void computeAmountOfTiles() {
 		this.currentTileWidth = CoordinateUtility
 				.computeCurrentTileWidthInPixels(this.coorBox.getLevelOfDetail());
+
+		this.pPerDiff = currentTileWidth / 334;
 
 		this.amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
 				(int) Math.ceil(size.y / currentTileWidth) + 1);
@@ -218,9 +225,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		// Tiles requesten
 		tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), this.coorBox.getTopLeft(),
 				this.coorBox.getBottomRight(), this);
-		//tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), indexXY[0], indexXY[1], indexXY[0], indexXY[1], this);
-		fix = false;
-
+		//tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(), indexXY[0]-1, indexXY[1]-1, indexXY[0]+1, indexXY[1]+1, this);
 	}
 
 	/**
