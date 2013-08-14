@@ -39,7 +39,7 @@ public class RoundtripProcessor {
     /**
      * Epsilon.
      */
-    private final static double eps = 0.1;
+    private final static double eps = 0.05;
 
 
     /**
@@ -170,6 +170,8 @@ public class RoundtripProcessor {
             logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
                     Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()));
 
+            long startTime = System.currentTimeMillis();
+
             // get the initial set of Vertices
             RouteSet ring_s = ShortestPathTreeProcessor.getInstance().computeShortestPathTree(source, categories, length/3, eps, null);
 
@@ -233,6 +235,12 @@ public class RoundtripProcessor {
             roundtrip.addAll(ring_s.getRouteVertices(currentBestU));
             roundtrip.addAll(currentRouteUV);
             roundtrip.addAll(reverseList(ring_s.getRouteVertices(currentBestV)));
+
+            long stopTime = System.currentTimeMillis();
+            long runTime = stopTime - startTime;
+
+            logger.info("computeRoundtrip: Source: " + source.toString() +
+                    " Routetrip Size: " + roundtrip.size() + " Run time: " + runTime);
 
             return roundtrip;
         }
