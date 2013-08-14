@@ -207,16 +207,15 @@ public class ShortestPathTreeProcessor {
      * @param source The starting Coordinate of the roundtrip to be computed.
      * @param categories The categories the badness to be computed for.
      * @param length The length of the roundtrip in meter to be computed.
-     * @return A set of Vertices.
+     * @return RouteSet.
+     * @throws ShortestPathTreeComputationNoSlotsException If no slot is available.
+     * @throws ShortestPathTreeComputeException If something goes wrong internally.
      */
-    public RouteSet computeShortestPathTree(Vertex source, int[] categories, int length, double eps)
+    public RouteSet computeShortestPathTree(Vertex source, int[] categories, int length, double eps, Set<Edge> forbiddenEdges)
             throws ShortestPathTreeComputationNoSlotsException, ShortestPathTreeComputeException {
 
-        if (source == null || categories == null)
-            throw new IllegalArgumentException("source and/or categories must not be null");
-
         logger.info("computeShortestPathTree: Source: " + source.toString() + " Categories: " + categories.toString());
-        Future<RouteSet> future = executor.submit(new ShortestPathTreeTask(source, categories, length, eps));
+        Future<RouteSet> future = executor.submit(new ShortestPathTreeTask(source, categories, length, eps, forbiddenEdges));
 
         if (future.isCancelled())
             throw new ShortestPathTreeComputationNoSlotsException("no slots available");
@@ -245,12 +244,14 @@ public class ShortestPathTreeProcessor {
         private int[] categories;
         private int length;
         private double eps;
+        private Set<Edge> forbiddenEdges;
 
-        ShortestPathTreeTask(Vertex source, int[] categories, int length, double eps) {
+        ShortestPathTreeTask(Vertex source, int[] categories, int length, double eps, Set<Edge> forbiddenEdges) {
             this.source = source;
             this.categories = categories;
             this.length = length;
             this.eps = eps;
+            this.forbiddenEdges = forbiddenEdges;
         }
 
         @Override
@@ -264,7 +265,7 @@ public class ShortestPathTreeProcessor {
             if (computer == null)
                 throw new ShortestPathTreeComputeException(
                         "ShortestPathTreeComputer is null in ShortestPathTreeTask");
-            return computer.computeShortestPathTree(source, categories, length, eps);
+            return computer.computeShortestPathTree(source, categories, length, eps, forbiddenEdges);
         }
     }
 
@@ -299,7 +300,7 @@ public class ShortestPathTreeProcessor {
 
 
         /**
-         * ShortestPathWorker.
+         * ShortestPathTreeComputer.
          */
         ShortestPathTreeComputer(int id, Graph graphIO) {
             this.id = id;
@@ -328,19 +329,20 @@ public class ShortestPathTreeProcessor {
          * @param categories The categories the badness to be computed for.
          * @param length The length of the roundtrip in meter to be computed.
          * @return A set of Vertices.
+         * @throws ShortestPathTreeComputeException If something goes wrong internally.
          */
-        public RouteSet computeShortestPathTree(Vertex source, int[] categories, int length, double eps)
-                throws NoRoundtripExistsException, RoundtripComputeException {
+        public RouteSet computeShortestPathTree(Vertex source, int[] categories, int length, double eps, Set<Edge> forbiddenEdges)
+                throws ShortestPathTreeComputeException {
 
             Vertex sourceVertex;
             try {
                 sourceVertex = graph.getVertexByID(source.getID());
             } catch (NoVertexForIDExistsException e) {
-                throw new RoundtripComputeException("source vertex provided not in graph contained");
+                throw new ShortestPathTreeComputeException("source vertex provided not in graph contained");
             }
 
             if (sourceVertex == null)
-                throw new RoundtripComputeException("source provided not in graph contained");
+                throw new ShortestPathTreeComputeException("source provided not in graph contained");
 
             // some init
             runCounter += 1;
@@ -352,7 +354,7 @@ public class ShortestPathTreeProcessor {
             Set<Vertex> ring = new TreeSet<Vertex>(new Comparator<Vertex>() {
                 @Override
                 public int compare(Vertex v1, Vertex v2) {
-                    if (v1.getCurrentWeightedLength() >  v2.getCurrentWeightedLength()){
+                    if (v1.getCurrentWeightedLength() > v2.getCurrentWeightedLength()){
                         return 1;
                     } else if (v1.getCurrentWeightedLength() < v2.getCurrentWeightedLength()){
                         return -1;
@@ -371,6 +373,11 @@ public class ShortestPathTreeProcessor {
                     continue;
 
                 for (Edge edge : current.getOutgoingEdges()) {
+
+                    // check if edge is contained in forbidden edges
+                    if (forbiddenEdges != null && forbiddenEdges.contains(edge))
+                        continue;
+
                     currentHead = edge.getOtherVertex(current);
                     distance = current.getCurrentLength() + edge.getLength();
                     weightedDistance = current.getCurrentWeightedLength() + edge.getWeightedLength(categories);

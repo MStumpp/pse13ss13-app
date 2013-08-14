@@ -110,6 +110,25 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
 
 
     /**
+     * Returns the Edge having the given
+     * Vertex and this as endpoints.
+     *
+     * @return Edge.
+     */
+    public Edge getOutgoingEdge(Vertex vertex) {
+        if (vertex == null || this.equals(vertex))
+            return null;
+
+        for (Edge edge : outgoingEdges) {
+            if (edge.getHead().equals(vertex) ||
+                edge.getTail().equals(vertex))
+                return edge;
+        }
+        return null;
+    }
+
+
+    /**
      * Adds an outgoing Edge to the list of outgoing Edges.
      */
     public void addOutgoingEdge(Edge edge) {

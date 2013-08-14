@@ -172,7 +172,7 @@ public class RoundtripProcessor {
 
             // get the initial set of Vertices
             RouteSet ring_s = ShortestPathTreeProcessor.getInstance().
-                    computeShortestPathTree(source, categories, length/3, eps);
+                    computeShortestPathTree(source, categories, length/3, eps, null);
 
             // for all Vertices
             RouteSet ring_u;
@@ -186,8 +186,8 @@ public class RoundtripProcessor {
 
             for (Vertex vertexU : ring_s.getTargets()) {
                 ring_u = ShortestPathTreeProcessor.getInstance().
-                        computeShortestPathTree(vertexU, categories, length/3, eps);
-                weigthedLenghtSU = ring_s.getWeithedLength(vertexU);
+                        computeShortestPathTree(vertexU, categories, length/3, eps, ring_s.getRouteEdges(vertexU));
+                weigthedLenghtSU = ring_s.getWeigthedLength(vertexU);
 
                 // compute intersection
                 intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
@@ -195,26 +195,30 @@ public class RoundtripProcessor {
                 // of the intersection, only consider the ones having greater weighted length
                 // then vertex_u
                 for (Vertex vertexV : intersect) {
-                    weightedLengthUVS = ring_u.getWeithedLength(vertexV) + ring_s.getWeithedLength(vertexV);
-                    if (ring_s.getWeithedLength(vertexU) <= ring_s.getWeithedLength(vertexV)) {
+                    // skip if Puv and Pvs share at least one Edge
+                    if (!Sets.intersection(ring_u.getRouteEdges(vertexV), ring_s.getRouteEdges(vertexV)).isEmpty())
+                        continue;
+
+                    weightedLengthUVS = ring_u.getWeigthedLength(vertexV) + ring_s.getWeigthedLength(vertexV);
+                    if (ring_s.getWeigthedLength(vertexU) <= ring_s.getWeigthedLength(vertexV)) {
                         if (currentBestU == null ||
                             weigthedLenghtSU + weightedLengthUVS < bestTotalWeightedLength) {
                             currentBestU = vertexU;
                             currentBestV = vertexV;
-                            currentRouteUV = ring_u.getRoute(vertexV);
+                            currentRouteUV = ring_u.getRouteVertices(vertexV);
                             bestTotalWeightedLength = weigthedLenghtSU + weightedLengthUVS;
                         }
                     }
                 }
             }
 
-            if (currentBestU == null || currentBestU == null || currentRouteUV == null)
+            if (currentBestU == null || currentBestV == null || currentRouteUV == null)
                 throw new NoRoundtripExistsException("no roundtrip exists");
 
             List<Vertex> roundtrip = new LinkedList<Vertex>();
-            roundtrip.addAll(ring_s.getRoute(currentBestU));
+            roundtrip.addAll(ring_s.getRouteVertices(currentBestU));
             roundtrip.addAll(currentRouteUV);
-            roundtrip.addAll(reverseList(ring_s.getRoute(currentBestV)));
+            roundtrip.addAll(reverseList(ring_s.getRouteVertices(currentBestV)));
 
             return roundtrip;
         }
