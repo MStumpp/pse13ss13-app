@@ -474,11 +474,11 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	private void updateRouteOverlay() {
 
 		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
-				currentRoute, coorBox.getTopLeft(), this.coorBox.getLevelOfDetail());
+				currentRoute, coorBox.getCenter(), size, this.coorBox.getLevelOfDetail());
 
 		this.displayPoints = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
-						coorBox.getTopLeft(), this.coorBox.getLevelOfDetail());
+						coorBox.getCenter(), size, this.coorBox.getLevelOfDetail());
 
 		mapView.updateDisplayWaypoints(displayPoints);
 

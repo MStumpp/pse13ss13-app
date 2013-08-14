@@ -112,7 +112,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		CrossingInformation crossInfo = null;
-		if (saveCoord.getCrossingAngleCount() > 0) {
+		if (saveCoord.getCrossingAngleCount() > 1) {
 			crossInfo = new CrossingInformation(saveCoord.getCrossingAngleList());
 		}
 		return new Coordinate(saveCoord.getLatitude(), saveCoord.getLongitude(), crossInfo);
@@ -124,7 +124,7 @@ public class ProtobufConverter {
 		SaveCoordinate.Builder saveCoord = SaveCoordinate.newBuilder()
 				.setLatitude(c.getLatitude())
 				.setLongitude(c.getLongitude());
-		if (c.getCrossingInformation() != null && c.getCrossingInformation().getCrossingAngles() != null) {
+		if (c.getCrossingInformation() != null && c.getCrossingInformation().getCrossingAngles() != null && c.getCrossingInformation().getNumCrossroads() > 1) {
 			for (float angle : c.getCrossingInformation().getCrossingAngles()) {
 				saveCoord.addCrossingAngle(angle);
 			}
