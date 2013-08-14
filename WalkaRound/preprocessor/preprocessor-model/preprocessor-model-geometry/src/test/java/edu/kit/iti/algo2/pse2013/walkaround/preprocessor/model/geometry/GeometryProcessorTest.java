@@ -168,7 +168,7 @@ public class GeometryProcessorTest {
         Assert.assertNotNull(graphDataIO);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
@@ -289,7 +289,7 @@ public class GeometryProcessorTest {
         Assert.assertNotNull(graphDataIO);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
