@@ -85,7 +85,7 @@ public class GeometryProcessorTest {
         }
 
         Assert.assertNotNull(geometrizable);
-        Assert.assertEquals(((Vertex) geometrizable).getID(), 1);
+        Assert.assertEquals(1, ((Vertex) geometrizable).getID());
     }
 
 
@@ -106,7 +106,7 @@ public class GeometryProcessorTest {
         }
 
         Assert.assertNotNull(geometrizable);
-        Assert.assertEquals(((Vertex) geometrizable).getID(), 1);
+        Assert.assertEquals(1, ((Vertex) geometrizable).getID());
     }
 
 
