@@ -220,7 +220,7 @@ public class GeometryNode {
             return null;
 
         if (geometrizables.size() == 1) {
-            logger.info("Size = 1: " + geometrizables.get(0));
+            logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Size = 1: " + geometrizables.get(0));
             return geometrizables.get(0);
         }
 
@@ -236,7 +236,7 @@ public class GeometryNode {
             }
         }
 
-        logger.info("Size > 1: " + currentBest);
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Size > 1: " + currentBest);
 
         return currentBest;
     }
