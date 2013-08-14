@@ -780,14 +780,29 @@ public class MapView extends Activity {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
 				currentId = id;
-				return waypointGestureDetector.onTouchEvent(event);
+				currentView = iv;
+				if (waypointGestureDetector.onTouchEvent(event)) {
+	                return true;
+	            }
+				
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					if(mIsScrolling){
+					Log.d("fuck", "Action Up");
+                    mIsScrolling  = false;
+                    mIsScrolling = false;
+					mc.pushMovedWaypoint();
+					}
+				}
+				
 			}
 			return false;
 		}
 	}
 
-	int currentId;
+	private int currentId;
 	private POI currentPOI;
+	private ImageView currentView;
+	private boolean mIsScrolling;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
@@ -833,9 +848,14 @@ public class MapView extends Activity {
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
-
+			
+			//routeList.removeView(currentView);
+			currentView.setX(currentView.getX() - deltaX);
+			currentView.setY(currentView.getY() - deltaY);
 			mc.onMovePoint(-deltaX, -deltaY, currentId);
-
+			//routeList.addView(currentView);
+			mIsScrolling = true;
+			
 			return true;
 		}
 
