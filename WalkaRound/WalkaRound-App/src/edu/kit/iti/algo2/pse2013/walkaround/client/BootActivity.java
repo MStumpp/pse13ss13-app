@@ -89,7 +89,7 @@ public class BootActivity extends Activity {
 				finish();
 			}
 		});
-		alertDialog.setIcon(R.drawable.ic_launcher);
+		alertDialog.setIcon(R.drawable.large_logo);
 		alertDialog.show();
 	}
 

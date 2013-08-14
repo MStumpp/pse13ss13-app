@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,11 @@ import java.util.List;
  * @version 1.0
  */
 public class GeometryNode {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
 
 	/**
 	 * Geometrizable.
@@ -192,11 +199,11 @@ public class GeometryNode {
 	 *
 	 * @return Geometrizable.
 	 */
-	public Geometrizable getGeometrizable() {
-        if (geometrizables != null && geometrizables.size() == 1)
-		    return geometrizables.get(0);
-        return null;
-	}
+//	public Geometrizable getGeometrizable() {
+//        if (geometrizables != null && geometrizables.size() == 1)
+//		    return geometrizables.get(0);
+//        return null;
+//	}
 
     /**
      * Returns the nearest Geometrizable.
@@ -205,15 +212,23 @@ public class GeometryNode {
      */
     public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, int dim) {
 
-        if (geometrizable == null || dim < 0)
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! getNearestGeometrizable");
+
+        if (geometrizable == null || dim < 0) {
+            logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! geometrizable == null || dim < 0");
             throw new IllegalArgumentException("geometrizable must not " +
                     "be null and/or dim greater or equal to 0");
+        }
 
-        if (geometrizables == null)
+        if (geometrizables == null) {
+            logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! geometrizables == null");
             return null;
+        }
 
-        if (geometrizables.size() == 1)
+        if (geometrizables.size() == 1) {
+            logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Size = 1: " + geometrizables.get(0));
             return geometrizables.get(0);
+        }
 
         Geometrizable currentBest = geometrizables.get(0);
         double minDistance = Math.abs(currentBest.valueForDimension(dim)
@@ -226,6 +241,8 @@ public class GeometryNode {
                 minDistance = currentDistance;
             }
         }
+
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Size > 1: " + currentBest);
 
         return currentBest;
     }
