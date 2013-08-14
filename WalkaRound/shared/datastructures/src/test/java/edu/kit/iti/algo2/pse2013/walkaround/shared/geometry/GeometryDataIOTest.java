@@ -7,10 +7,8 @@ import java.lang.reflect.Field;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
@@ -32,7 +30,6 @@ public class GeometryDataIOTest {
 
 
     @Test
-    @Ignore
     public void testSaveAndLoad() {
 		GeometryDataIO writeGeometryDataIO = getGeometryDataIO();
 		int numDimensions = writeGeometryDataIO.getNumDimensions();
@@ -60,11 +57,11 @@ public class GeometryDataIOTest {
 		// Check, if the same number of POI was written and read
 		Assert.assertNotNull(readGeometryDataIO.getRoot());
 		// Check, if the same number of POI was written and read
-		//Assert.assertNotNull(readGeometryDataIO.getRoot().getGeometrizable());
+		Assert.assertNotNull(readGeometryDataIO.getRoot().getGeometrizable());
 		// Check, if value for dimension 0 is the same
-		//Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable().valueForDimension(0), writeGeometryDataIO.getRoot().getGeometrizable().valueForDimension(0), 0.d);
+		Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable().valueForDimension(0), writeGeometryDataIO.getRoot().getGeometrizable().valueForDimension(0), 0.d);
 		// Check, if value for dimension 1 is the same
-		//Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable().valueForDimension(1), writeGeometryDataIO.getRoot().getGeometrizable().valueForDimension(1), 0.d);
+		Assert.assertEquals(readGeometryDataIO.getRoot().getGeometrizable().valueForDimension(1), writeGeometryDataIO.getRoot().getGeometrizable().valueForDimension(1), 0.d);
 
 		// Check, if number of dimensions is the same
 		Assert.assertEquals(readGeometryDataIO.getNumDimensions(), numDimensions);

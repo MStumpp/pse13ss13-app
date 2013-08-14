@@ -39,7 +39,6 @@ public class LocationDataIOTest {
 
 
 	@Test
-    @Ignore
     public void testSaveAndLoad() throws MalformedURLException {
 		LocationDataIO writeLocationData = getLocationDataIO();
 		int size = writeLocationData.getPOIs().size();
@@ -78,7 +77,6 @@ public class LocationDataIOTest {
 
 
     @Test
-    @Ignore
     public void testSaveAndLoadWithRealDataSet() throws IOException {
         Assert.assertNotNull(REAL_LOCATIONDATA_FILE);
         Assert.assertTrue(REAL_LOCATIONDATA_FILE.exists());

@@ -451,26 +451,18 @@ public class GeometryProcessor {
             numberMethodCalls++;
 
             // compute dim
-            //logger.info("geometryDataIO.getNumDimensions(): " +  numberDimensions);
             int dim = node.getDepth() % numberDimensions;
-            //logger.info("dim: " + dim);
 
             // if leaf, then check whether vertex of this node is better then current best
             // traverse up the tree
             Geometrizable currentGeometrizable;
             if (node.isLeaf()) {
-                //logger.info("!!!!!!!!!!!!!!!!!!!!!!!! is leaf " + node);
 
                 if (currentBest.getGeometrizable() == null) {
                     currentGeometrizable = node.getNearestGeometrizable(search, dim);
                 } else {
                     currentGeometrizable = node.getNearestGeometrizable(currentBest.getGeometrizable(), dim);
                 }
-
-                //logger.info("!!!!!!!!!!!!!!!!!!!!!!!! " + currentGeometrizable);
-                //if (currentGeometrizable == null) {
-                    //logger.info("!!!!!!!!!!!!!!!!!!!!!!!! currentGeometrizable is null, obwohl isLeaf = true");
-                //}
 
                 if (currentGeometrizable != null) {
                     if (currentBest.getGeometrizable() == null) {
@@ -486,8 +478,6 @@ public class GeometryProcessor {
 
             // otherwise, traverse further down the tree
             } else {
-
-                //logger.info("!!!!!!!!!!!!!!!!!!!!!!!! no leaf " + node);
 
                 // either further visit left or right child
                 // here we check for less or equal
@@ -520,8 +510,6 @@ public class GeometryProcessor {
                 return;
             }
             numberMethodCalls++;
-
-            //logger.info("!!!!!!!!!!!!!!!!!!!!!!!! searchTreeUp");
 
             // compute dim
             int dim = node.getDepth() % numberDimensions;

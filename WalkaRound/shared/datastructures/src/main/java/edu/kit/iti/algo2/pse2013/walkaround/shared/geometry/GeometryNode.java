@@ -199,11 +199,11 @@ public class GeometryNode {
 	 *
 	 * @return Geometrizable.
 	 */
-//	public Geometrizable getGeometrizable() {
-//        if (geometrizables != null && geometrizables.size() == 1)
-//		    return geometrizables.get(0);
-//        return null;
-//	}
+	public Geometrizable getGeometrizable() {
+        if (geometrizables != null && geometrizables.size() == 1)
+		    return geometrizables.get(0);
+        return null;
+	}
 
     /**
      * Returns the nearest Geometrizable.
@@ -212,21 +212,16 @@ public class GeometryNode {
      */
     public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, int dim) {
 
-        //logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! getNearestGeometrizable");
-
         if (geometrizable == null || dim < 0) {
-            //logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! geometrizable == null || dim < 0");
             throw new IllegalArgumentException("geometrizable must not " +
                     "be null and/or dim greater or equal to 0");
         }
 
         if (geometrizables == null) {
-            //logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! geometrizables == null");
             return null;
         }
 
         if (geometrizables.size() == 1) {
-            //logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Size = 1: " + geometrizables.get(0));
             return geometrizables.get(0);
         }
 
@@ -239,8 +234,6 @@ public class GeometryNode {
                 minDistance = currentDistance;
             }
         }
-
-        //logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Size > 1: " + currentBest);
 
         return currentBest;
     }
