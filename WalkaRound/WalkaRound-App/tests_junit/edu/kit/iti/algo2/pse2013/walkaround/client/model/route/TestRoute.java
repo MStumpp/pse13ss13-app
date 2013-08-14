@@ -11,6 +11,31 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class TestRoute {
 	
+	private final int minNumberOfWaypoints = 0;
+	private final int maxNumberOfWaypoints = 15;
+	
+	
+	@Test
+	public void testSetActiveWaypointByID() {
+		
+	}
+	
+	@Test
+	public void testSetActiveWaypointByReference() {
+		
+	}
+	
+	@Test
+	public void testResetActiveWaypoint() {
+		
+	}
+	
+	@Test
+	public void moveActiveWaypointInOrder() {
+		
+	}
+	
+	
 	
 	
 	
@@ -36,8 +61,63 @@ public class TestRoute {
 			
 		}
 		
+	}
+	
+	
+	
+	
+	
+	public Route getRandomKarlsruheRoute() {
+		LinkedList<Coordinate> coordsList = new LinkedList<Coordinate>();
+		double randomNumberOfWaypoints = this.getRandomNumberWithinBounds(this.minNumberOfWaypoints, this.maxNumberOfWaypoints);
+		
+		for (int i = 0; i < randomNumberOfWaypoints; i++) {
+			Coordinate tempCoord = this.getRandomKarlsruheCoordinate();
+			coordsList.add(new Waypoint(tempCoord.getLatitude(), tempCoord.getLongitude(), ""));
+		}
+		
+		return new Route(coordsList);
+	}
+	
+	
+	
+	
+	
+	private Coordinate getRandomKarlsruheCoordinate() {
+		double randomLatitude;
+		double randomLongitude;
+		
+		// UpperLeftBound:
+		double upperLeftLimitLatitude = 49.039668;
+		double upperLeftLimitLongitude = 8.346176;
+		
+		// LowerRightBound:
+		double lowerRightLimitLatitude = 48.972104;
+		double lowerRightLimitLongitude = 8.471145;
+		
+		double latitudeDifference = upperLeftLimitLatitude - lowerRightLimitLatitude;
+		double longitudeDifference = upperLeftLimitLongitude - lowerRightLimitLongitude;
+		
+		randomLatitude = upperLeftLimitLatitude + Math.random() * latitudeDifference;
+		randomLongitude = upperLeftLimitLongitude + Math.random() * longitudeDifference;
+		
+		return new Coordinate(randomLatitude, randomLongitude);
+	}
+	
+	private int getRandomNumberWithinBounds(int lowerBound, int upperBound) {
+		int output = 0;
+		
+		if (lowerBound < 0 || upperBound < 0) {
+			return output;
+		}
+		
+		double difference = upperBound - lowerBound;
+		
+		return lowerBound + (int) (difference *	Math.random());
 		
 	}
+	
+	
 	
 	
 	
