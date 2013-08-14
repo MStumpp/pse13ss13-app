@@ -1,12 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-
-
 import java.util.ArrayDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -433,11 +430,11 @@ public class GeometryProcessor {
          *
          * @param node Current node to be processed while searching down the tree.
          * @param search Geometrizable a projected Geometrizable to look for.
-         * @param geometrizable Current best Geometrizable.
+         * @param currentBest Current best Geometrizable.
          * @throws GeometryProcessorException If something goes wrong.
          */
         private void searchTreeDown(GeometryNode node, Geometrizable search,
-                                    GeometrizableWrapper geometrizable)
+                                    GeometrizableWrapper currentBest)
                 throws GeometryProcessorException {
 
             if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
@@ -455,24 +452,24 @@ public class GeometryProcessor {
             // traverse up the tree
             if (node.isLeaf()) {
                 if (node.getGeometrizable() != null) {
-                    if (geometrizable.getGeometrizable() == null)
-                        geometrizable.setGeometrizable(node.getGeometrizable());
+                    if (currentBest.getGeometrizable() == null)
+                        currentBest.setGeometrizable(node.getNearestGeometrizable(search, dim));
                     else
                     if (node.getGeometrizable().valueForDimension(dim) <
-                            geometrizable.getGeometrizable().valueForDimension(dim))
-                        geometrizable.setGeometrizable(node.getGeometrizable());
+                            currentBest.getGeometrizable().valueForDimension(dim))
+                        currentBest.setGeometrizable(node.getGeometrizable());
                 }
-                searchTreeUp(node.getParent(), search, geometrizable, node);
+                searchTreeUp(node.getParent(), search, currentBest, node);
 
-                // otherwise, traverse further down the tree
+            // otherwise, traverse further down the tree
             } else {
 
                 // either further visit left or right child
                 // here we check for less or equal
                 if (search.valueForDimension(dim) <= node.getSplitValue())
-                    searchTreeDown(node.getLeftNode(), search, geometrizable);
+                    searchTreeDown(node.getLeftNode(), search, currentBest);
                 else
-                    searchTreeDown(node.getRightNode(), search, geometrizable);
+                    searchTreeDown(node.getRightNode(), search, currentBest);
             }
 
             return;
@@ -484,12 +481,12 @@ public class GeometryProcessor {
          *
          * @param node Current node to be processed while searching down the tree.
          * @param search Geometrizable a projected Geometrizable to look for.
-         * @param geometrizable Current best Geometrizable.
+         * @param currentBest Current best Geometrizable.
          * @param child Previously visited node while searching up the tree.
          * @throws GeometryProcessorException If something goes wrong.
          */
         private void searchTreeUp(GeometryNode node, Geometrizable search,
-                                  GeometrizableWrapper geometrizable, GeometryNode child)
+                                  GeometrizableWrapper currentBest, GeometryNode child)
                 throws GeometryProcessorException {
 
             if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
@@ -509,16 +506,16 @@ public class GeometryProcessor {
 
             // distance between the splitting coordinate of search point end current best
             double distSearchAndCurrentBest = Math.abs(search.valueForDimension(dim) -
-                    geometrizable.getGeometrizable().valueForDimension(dim));
+                    currentBest.getGeometrizable().valueForDimension(dim));
 
             if (distSearchAndCurrentNode < distSearchAndCurrentBest)
                 if (child == node.getLeftNode())
-                    searchTreeDown(node.getRightNode(), search, geometrizable);
+                    searchTreeDown(node.getRightNode(), search, currentBest);
                 else
-                    searchTreeDown(node.getLeftNode(), search, geometrizable);
+                    searchTreeDown(node.getLeftNode(), search, currentBest);
 
             if (!node.isRoot())
-                searchTreeUp(node.getParent(), search, geometrizable, node);
+                searchTreeUp(node.getParent(), search, currentBest, node);
 
             return;
         }

@@ -438,13 +438,18 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		double yDelta = CoordinateUtility.convertPixelsToDegrees(y,
 				getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_Y);
 
-		Coordinate c = this.getWaypointById(id);
-		c.setLatitude(c.getLatitude() - yDelta);
-		c.setLongitude(c.getLongitude() + xDelta);
-
-		this.routeController.moveActiveWaypoint(c);
+		currentWaypoint = this.getWaypointById(id);
+		currentWaypoint.setLatitude(currentWaypoint.getLatitude() - yDelta);
+		currentWaypoint.setLongitude(currentWaypoint.getLongitude() + xDelta);
+		
 	}
 
+	private Coordinate currentWaypoint;
+
+	public void pushMovedWaypoint() {
+		this.routeController.moveActiveWaypoint(currentWaypoint);
+	}
+	
 	/**
 	 * returns a Waypoint by his id
 	 *
@@ -621,5 +626,6 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	public POI getPOI() {
 		return mapView.getCurrentPOI();
 	}
+
 
 }

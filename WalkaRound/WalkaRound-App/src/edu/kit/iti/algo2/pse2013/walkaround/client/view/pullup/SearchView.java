@@ -220,7 +220,7 @@ public class SearchView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
 
 				String checkString = v.getText().toString()
-						.replaceAll(" ", null);
+						.replaceAll(" ", "");
 				if (!checkString.isEmpty()) {
 
 					List<POI> poiS = searchMenuController

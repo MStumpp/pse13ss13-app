@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +19,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
@@ -31,7 +32,8 @@ public class GeometryDataPreprocessorTest {
 
 
     @Before
-    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void resetSingleton() throws SecurityException, NoSuchFieldException,
+            IllegalArgumentException, IllegalAccessException {
         Field idCounter = Vertex.class.getDeclaredField("idCounter");
         idCounter.setAccessible(true);
         idCounter.setInt(null, 0);
@@ -44,7 +46,9 @@ public class GeometryDataPreprocessorTest {
 
     @Test
     public void testPreprocessGraphDataIO() throws MalformedURLException {
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO(), getLocationDataIO());
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+            preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 1);
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -147,7 +151,8 @@ public class GeometryDataPreprocessorTest {
 
     @Test
     public void testPreprocessGraphDataIO2() throws MalformedURLException {
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO2(), getLocationDataIO());
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -173,17 +178,8 @@ public class GeometryDataPreprocessorTest {
         }
         Assert.assertNotNull(graphDataIO);
 
-        LocationDataIO locationData = null;
-        try {
-            locationData = LocationDataIO.load(locationDataio);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(locationData);
-
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationData);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
