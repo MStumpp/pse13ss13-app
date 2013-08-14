@@ -149,9 +149,17 @@ public class Coordinate implements Geometrizable {
 
 	@Override
 	public String toString() {
+		String crossroads = "";
+		if (getCrossingInformation() != null) {
+			for (float cross : getCrossingInformation().getCrossingAngles()) {
+				crossroads += cross + " ";
+			}
+		}
 		return String.format(
-			"Coord(%.5f° %s %.5f° %s)",
-			latitude,latitude > 0 ? "N" : "S", longitude, longitude > 0 ? "E" : "W"
+			"Coord(%.5f° %s %.5f° %s | Crossings: %s)",
+			latitude,  latitude > 0 ? "N" : "S",
+			longitude, longitude > 0 ? "E" : "W",
+			crossroads.trim()
 		);
 	}
 

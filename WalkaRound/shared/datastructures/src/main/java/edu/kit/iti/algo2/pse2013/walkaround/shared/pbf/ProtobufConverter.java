@@ -43,7 +43,23 @@ public class ProtobufConverter {
 		if (saveAddress == null) {
 			return null;
 		}
-		return new Address(saveAddress.getStreet(), saveAddress.getHouseNumber(), saveAddress.getCity(), saveAddress.getPostalCode());
+		int zip = Address.NO_POSTAL_CODE;
+		String street = null;
+		String city = null;
+		String housenumber = null;
+		if (saveAddress.hasStreet()) {
+			street = saveAddress.getStreet();
+		}
+		if (saveAddress.hasPostalCode()) {
+			zip = saveAddress.getPostalCode();
+		}
+		if (saveAddress.hasCity()) {
+			city = saveAddress.getCity();
+		}
+		if (saveAddress.hasHouseNumber()) {
+			housenumber = saveAddress.getHouseNumber();
+		}
+		return new Address(street, housenumber, city, zip);
 	}
 	public static SaveAddress.Builder getAddressBuilder(Address addr) {
 		if (addr == null) {
@@ -60,11 +76,14 @@ public class ProtobufConverter {
 			builder.setPostalCode(addr.getPostalCode());
 		}
 		if (addr.getStreet() != null) {
-			builder.setPostalCode(addr.getPostalCode());
+			builder.setStreet(addr.getStreet());
 		}
-		return null;
+		return builder;
 	}
 	public static Area getArea(SaveArea saveArea) {
+		if (saveArea == null) {
+			return null;
+		}
 		int[] areaCats = new int[saveArea.getCategoryCount()];
 		for (int i = 0; i < areaCats.length; i++) {
 			areaCats[i] = saveArea.getCategory(i);
@@ -76,6 +95,9 @@ public class ProtobufConverter {
 		return new Area(areaCats, areaCoords);
 	}
 	public static SaveArea.Builder getAreaBuilder(Area area) {
+		if (area == null) {
+			return null;
+		}
 		SaveArea.Builder builder = SaveArea.newBuilder();
 		for (int cat : area.getAreaCategories()) {
 			builder.addCategory(cat);
@@ -117,7 +139,7 @@ public class ProtobufConverter {
 		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()), saveEdge.getID());
 		return e;
 	}
-	public static SaveEdge.Builder getEdgeBuilder(Edge e) {
+	private static SaveEdge.Builder getEdgeBuilder(Edge e) {
 		if (e == null) {
 			return null;
 		}

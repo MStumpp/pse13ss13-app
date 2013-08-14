@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -50,11 +51,11 @@ public final class CrossingInformation {
 
 
     /**
-     * Returns a certain crossroad angles at the a specific index.
+     * Returns a certain crossroad angle at the a specific index.
      *
      * @return float.
      */
-    public float getCrossroadAngle(int index) {
+    public float getCrossingAngle(int index) {
         if (index < 0 || index > angles.length-1)
             throw new IllegalArgumentException("index must be equal or greater " +
                     "than zero but not greater than " + (angles.length-1));
@@ -82,5 +83,41 @@ public final class CrossingInformation {
     	this.nextCrossingAngleOnRoute = index;
     	return true;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(angles);
+		result = prime * result + nextCrossingAngleOnRoute;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof CrossingInformation)) {
+			return false;
+		}
+		CrossingInformation other = (CrossingInformation) obj;
+		if (!Arrays.equals(angles, other.angles)) {
+			return false;
+		}
+		if (nextCrossingAngleOnRoute != other.nextCrossingAngleOnRoute) {
+			return false;
+		}
+		return true;
+	}
 
 }

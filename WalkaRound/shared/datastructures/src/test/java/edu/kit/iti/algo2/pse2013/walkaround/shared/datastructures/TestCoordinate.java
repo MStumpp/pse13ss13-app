@@ -124,11 +124,19 @@ public class TestCoordinate {
 		testToString(new Coordinate(-48.1234567, 9.987654321));
 		testToString(new Coordinate(48.1234567, -9.987654321));
 		testToString(new Coordinate(-48.1234567, -9.987654321));
+		testToString(new Coordinate(-48.1234567, -9.987654321, new CrossingInformation(new float[]{-1, 0, 1, 2, 42})));
 	}
 	private void testToString(Coordinate c) {
 		assertTrue(c.toString().contains(String.format("%.5f",c.getLatitude())));
 		assertTrue(c.toString().contains(String.format("%.5f",c.getLongitude())));
 		assertTrue(c.toString().contains("Coord"));
+		if (c.getCrossingInformation() != null) {
+			String angles = "";
+			for (float f : c.getCrossingInformation().getCrossingAngles()) {
+				angles += " " + f;
+			}
+			assertTrue(c.toString().contains(angles.trim()));
+		}
 	}
 
 	@Test

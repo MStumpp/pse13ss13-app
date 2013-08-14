@@ -1,14 +1,18 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 
 /**
  * GraphDataIOTest.
@@ -32,7 +36,6 @@ public class GraphDataIOTest {
 	@Test
 	public void testSaveAndLoad() {
 		GraphDataIO graphDataIO = getGraphDataIO();
-		int size = graphDataIO.getEdges().size();
 
 		try {
 			GraphDataIO.save(graphDataIO, TMP_GRAPH_DATA_FILE);
@@ -40,17 +43,18 @@ public class GraphDataIOTest {
 			e.printStackTrace();
 		}
 
-		Assert.assertTrue(TMP_GRAPH_DATA_FILE.exists());
+		assertTrue(TMP_GRAPH_DATA_FILE.exists());
 
-		graphDataIO = null;
+		GraphDataIO reload = null;
 		try {
-			graphDataIO = GraphDataIO.load(TMP_GRAPH_DATA_FILE);
+			reload = GraphDataIO.load(TMP_GRAPH_DATA_FILE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		Assert.assertNotNull(graphDataIO);
-		Assert.assertEquals(graphDataIO.getEdges().size(), size);
+		assertNotNull(graphDataIO);
+		assertTrue(graphDataIO.getEdges().containsAll(reload.getEdges()));
+		assertTrue(reload.getEdges().containsAll(graphDataIO.getEdges()));
 	}
 
     @Test
