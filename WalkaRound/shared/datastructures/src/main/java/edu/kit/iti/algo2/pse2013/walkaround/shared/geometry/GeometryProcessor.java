@@ -14,8 +14,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 
@@ -30,7 +30,7 @@ public class GeometryProcessor {
     /**
      * Logger.
      */
-    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
+	// private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
 
 
     /**
@@ -77,7 +77,7 @@ public class GeometryProcessor {
             GeometryComputer computer = new GeometryComputer(idCounter,
                     geometryDataIO.getRoot(), geometryDataIO.getNumDimensions());
             geometryComputerQueue.add(computer);
-            logger.info("Instantiated GeometryComputer: " + computer.getId());
+            //logger.info("Instantiated GeometryComputer: " + computer.getId());
             idCounter++;
         }
 
@@ -144,7 +144,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-        private final Logger logger = LoggerFactory.getLogger(ThreadFactoryCustom.class);
+    	// private final Logger logger = LoggerFactory.getLogger(ThreadFactoryCustom.class);
 
         final AtomicInteger poolNumber = new AtomicInteger(1);
         final ThreadGroup group;
@@ -169,8 +169,8 @@ public class GeometryProcessor {
             Thread t = new ThreadCustom(group, r,
                     namePrefix + threadNumber.getAndIncrement(),
                     0, geometryComputerQueue.getFirst());
-            logger.info("New Thread: " + t.getName() + " Reference: " +
-                    t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
+            //logger.info("New Thread: " + t.getName() + " Reference: " +
+            //        t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -189,14 +189,14 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-        private final Logger logger = LoggerFactory.getLogger(ThreadCustom.class);
+    	//private final Logger logger = LoggerFactory.getLogger(ThreadCustom.class);
 
         private GeometryComputer computer;
 
         ThreadCustom(ThreadGroup group, Runnable target, String name, long stackSize, GeometryComputer computer) {
             super(group, target, name, stackSize);
             this.computer = computer;
-            logger.info("New Thread: " + name);
+            //logger.info("New Thread: " + name);
         }
 
         private GeometryComputer getComputer() {
@@ -213,7 +213,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-        private final Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorCustom.class);
+    	//private final Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorCustom.class);
 
         private ArrayDeque<GeometryComputer> geometryComputerQueue;
 
@@ -227,12 +227,12 @@ public class GeometryProcessor {
         protected void afterExecute(Runnable r, Throwable t) {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
-                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
-                    " and GeometryComputer: " + computer.getId() + " Reference: "
-                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
-            if (computer == null)
-                logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
+            //logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+            // Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+            //        " and GeometryComputer: " + computer.getId() + " Reference: "
+            //        + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+            //if (computer == null)
+            	//   logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
             //geometryComputerQueue.add(computer);
         }
     }
@@ -269,7 +269,7 @@ public class GeometryProcessor {
         if (geometrizable == null)
             throw new IllegalArgumentException("geometrizable must not be null");
 
-        logger.info("getNearestVertex:");
+        // logger.info("getNearestVertex:");
         Future<Geometrizable> future = executor.submit(new GeometryNearestVertexTask(geometrizable));
 
         if (future.isCancelled())
@@ -293,7 +293,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-        private final Logger logger = LoggerFactory.getLogger(GeometryNearestVertexTask.class);
+    	//private final Logger logger = LoggerFactory.getLogger(GeometryNearestVertexTask.class);
 
         private Geometrizable geometrizable;
 
@@ -305,10 +305,10 @@ public class GeometryProcessor {
         public Geometrizable call() throws Exception {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
-                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
-                    " and GeometryComputer: " + computer.getId() + " Reference: "
-                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+            //logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+            //        Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+            //        " and GeometryComputer: " + computer.getId() + " Reference: "
+            //       + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null)
                 throw new GeometryProcessorException(
                         "GeometryComputer is null in GeometryNearestVertexTask");
@@ -404,7 +404,7 @@ public class GeometryProcessor {
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
 
-            logger.info("getNearestVertex: Start: Run time: " + runTime);
+            // logger.info("getNearestVertex: Start: Run time: " + runTime);
 
             return nearestVertex;
         }

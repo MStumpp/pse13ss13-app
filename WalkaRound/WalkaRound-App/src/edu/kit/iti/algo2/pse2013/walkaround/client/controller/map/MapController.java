@@ -129,9 +129,9 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 *            the mapView
 	 * @return the mapController
 	 */
-	public static MapController initialize(TileFetcher tileFetcher, Point size, BoundingBox coorBox, Coordinate user) {
+	public static MapController initialize(TileFetcher tileFetcher, BoundingBox coorBox, Coordinate user) {
 		if (mapController == null) {
-			mapController = new MapController(tileFetcher, size, coorBox, user);
+			mapController = new MapController(tileFetcher, coorBox, user);
 		}
 		return mapController;
 	}
@@ -170,7 +170,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.updateUserPosition();
 	}
 
-	private MapController(TileFetcher tileFetcher, Point size, BoundingBox coorBox, Coordinate user) {
+	private MapController(TileFetcher tileFetcher, BoundingBox coorBox, Coordinate user) {
 		this.user = user;
 
 		// initialize Vars
@@ -181,7 +181,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.routeGen = new Thread();
 		this.userPos = new Thread();
 
-		this.size = size;
+		this.size = coorBox.getDisplaySize();
 		this.coorBox = coorBox;
 
 		this.route = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
