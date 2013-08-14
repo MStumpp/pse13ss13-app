@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,11 @@ import java.util.List;
  * @version 1.0
  */
 public class GeometryNode {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
 
 	/**
 	 * Geometrizable.
@@ -212,8 +219,10 @@ public class GeometryNode {
         if (geometrizables == null)
             return null;
 
-        if (geometrizables.size() == 1)
+        if (geometrizables.size() == 1) {
+            logger.info("Size = 1: " + geometrizables.get(0));
             return geometrizables.get(0);
+        }
 
         Geometrizable currentBest = geometrizables.get(0);
         double minDistance = Math.abs(currentBest.valueForDimension(dim)
@@ -226,6 +235,8 @@ public class GeometryNode {
                 minDistance = currentDistance;
             }
         }
+
+        logger.info("Size > 1: " + currentBest);
 
         return currentBest;
     }
