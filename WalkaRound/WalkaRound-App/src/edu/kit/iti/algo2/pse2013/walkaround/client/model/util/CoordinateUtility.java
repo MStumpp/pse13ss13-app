@@ -177,8 +177,8 @@ public final class CoordinateUtility {
 			Log.d("wtf", "" + y);
 
 			dw.add(new DisplayWaypoint(
-					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.04f,
-					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.8f,
+					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.02f,
+					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.78f,
 					value.getId()
 			));
 			Log.d("d x", "" + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,

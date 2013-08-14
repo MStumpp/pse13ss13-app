@@ -21,10 +21,10 @@ public class OSMCategoryFactory {
 		footway.addTag("highway", "tertiary_link");
 		footway.addTag("highway", "secondary");
 		footway.addTag("highway", "secondary_link");
-		footway.addTag("highway", "primary");
-		footway.addTag("highway", "primary_link");
-		footway.addTag("highway", "motorway");
-		footway.addTag("highway", "motorway_link");
+		//footway.addTag("highway", "primary");
+		//footway.addTag("highway", "primary_link");
+		//footway.addTag("highway", "motorway");
+		//footway.addTag("highway", "motorway_link");
 		footway.addTag("sidewalk", "left");
 		footway.addTag("sidewalk", "right");
 		footway.addTag("sidewalk", "both");
