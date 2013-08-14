@@ -173,20 +173,22 @@ public class RoundtripProcessor {
             // get the initial set of Vertices
             RouteSet ring_s = ShortestPathTreeProcessor.getInstance().computeShortestPathTree(source, categories, length/3, eps, null);
 
+            logger.info("ring_s: " + ring_s.getTargets().size());
+
             // for all Vertices
             RouteSet ring_u;
             Set<Vertex> intersect;
 
-            Vertex currentBestU = null,
-                   currentBestV = null;
+            Vertex currentBestU = null, currentBestV = null;
             List<Vertex> currentRouteUV = null;
-            double weigthedLenghtSU, weightedLengthUVS,
-                   badLowerBound, badBestRoute = Double.POSITIVE_INFINITY,
-                   bestTotalWeightedLength = Double.POSITIVE_INFINITY;
+            double weigthedLenghtSU, weightedLengthUVS, badLowerBound, badBestRoute = Double.POSITIVE_INFINITY, bestTotalWeightedLength = Double.POSITIVE_INFINITY;
 
             for (Vertex vertexU : ring_s.getTargets()) {
                 // stopping criterion #2 (route edges)
                 ring_u = ShortestPathTreeProcessor.getInstance().computeShortestPathTree(vertexU, categories, length/3, eps, ring_s.getRouteEdges(vertexU));
+
+                logger.info("ring_u of size: " + ring_u.getTargets().size() + " for target: " + vertexU);
+
                 weigthedLenghtSU = ring_s.getWeigthedLength(vertexU);
 
                 // stopping criterion #1
@@ -196,6 +198,8 @@ public class RoundtripProcessor {
 
                 // compute intersection
                 intersect = Sets.intersection(ring_s.getTargets(), ring_u.getTargets());
+
+                logger.info("intersect of size: " + intersect.size());
 
                 // of the intersection, only consider the ones having greater weighted length
                 // then vertex_u
@@ -221,8 +225,9 @@ public class RoundtripProcessor {
                 }
             }
 
-            if (currentBestU == null || currentBestV == null || currentRouteUV == null)
+            if (currentBestU == null || currentBestV == null || currentRouteUV == null) {
                 throw new NoRoundtripExistsException("no roundtrip exists");
+            }
 
             List<Vertex> roundtrip = new LinkedList<Vertex>();
             roundtrip.addAll(ring_s.getRouteVertices(currentBestU));
