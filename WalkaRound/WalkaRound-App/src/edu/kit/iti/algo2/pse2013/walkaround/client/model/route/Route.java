@@ -348,8 +348,8 @@ public class Route implements RouteInfo {
 
 	@Override
 	public Waypoint getEnd() {
-		Log.d(TAG_ROUTE, "getEnd()");
-		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
+		LinkedList<Waypoint> waypoints = this.getWaypoints();
+		Log.d(TAG_ROUTE, "getEnd() on Waypoint list with size " + waypoints.size());
 		if (waypoints.size() > 0) {
 			return waypoints.getLast();
 		}
@@ -546,7 +546,7 @@ public class Route implements RouteInfo {
 
 	private RouteInfo computeShortestPath(Coordinate start, Coordinate end) {
 		RouteInfo output = null;
-
+		Log.d(TAG_ROUTE, "computeShortestPath(Start Coordinate: " + start + ", End Coordinate: " + end + ")");
 		try {
 			output = this.routeProcessor.computeShortestPath(start, end);
 			Log.d(TAG_ROUTE, "computeShortestPath() returning Route: " + output);
