@@ -18,7 +18,7 @@ public class GeometryNode {
     /**
      * Logger.
      */
-    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(GeometryNode.class);
 
 	/**
 	 * Geometrizable.
