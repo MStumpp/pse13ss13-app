@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
