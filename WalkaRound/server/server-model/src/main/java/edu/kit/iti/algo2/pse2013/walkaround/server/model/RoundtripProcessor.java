@@ -227,6 +227,7 @@ public class RoundtripProcessor {
                 }
             }
 
+            // if passed, at least 3 Vertices exist
             if (currentBestU == null || currentBestV == null || currentRouteUV == null) {
                 throw new NoRoundtripExistsException("no roundtrip exists");
             }
@@ -239,8 +240,10 @@ public class RoundtripProcessor {
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
 
-            logger.info("computeRoundtrip: Source: " + source.toString() +
-                    " Routetrip Size: " + roundtrip.size() + " Run time: " + runTime);
+            logger.info("==============================================================");
+            logger.info("computeRoundtrip: Source: " + roundtrip.get(0) + " Target: " + roundtrip.get(roundtrip.size()-1) +
+                    " Length: " + totalLength(roundtrip) + " Roundtrip Size: " + roundtrip.size() + " Run time: " + runTime);
+            logger.info("==============================================================");
 
             return roundtrip;
         }
@@ -259,6 +262,44 @@ public class RoundtripProcessor {
             invertedList.add(list.get(i));
         }
         return invertedList;
+    }
+
+
+    /**
+     * Computes the total length of a list of Vertices.
+     *
+     * @param vertices Computes the total length of a list of Vertices.
+     * @return Total length.
+     */
+    private double totalLength(List<Vertex> vertices) {
+        double totalLength = 0.d;
+        Iterator<Vertex> iter = vertices.iterator();
+        Vertex previous = iter.next(), next;
+        while (iter.hasNext()) {
+            next = iter.next();
+            totalLength += computeLength(previous, next);
+            previous = next;
+        }
+        return totalLength;
+    }
+
+
+    /**
+     * Returns distance between tail and head in meters using Haversine formula.
+     * Source: http://stackoverflow.com/questions/120283/working-with-latitude-longitude-values-in-java
+     *
+     * @return double.
+     */
+    private double computeLength(Vertex vertex1, Vertex vertex2) {
+        double earthRadius = 6371009;
+        double dLat = Math.toRadians(vertex2.getLatitude() - vertex1.getLatitude());
+        double dLng = Math.toRadians(vertex2.getLongitude() - vertex1.getLongitude());
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(vertex1.getLatitude())) * Math.cos(Math.toRadians(vertex2.getLatitude()));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadius * c;
     }
 
 }
