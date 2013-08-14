@@ -124,7 +124,7 @@ public class GeometryDataPreprocessor {
         // eventually put more than one point in leaf
         if (size <= numberGeomPerNode)
             return new GeometryNode(parent, depth,
-                Arrays.copyOfRange(data[dim], start, end+1));
+                Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
 
         // otherwise, compute median;
         int median;

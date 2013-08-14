@@ -1,7 +1,9 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
@@ -14,7 +16,7 @@ public class GeometryNode {
 	/**
 	 * Geometrizable.
 	 */
-	private Geometrizable[] geometrizables;
+	private List<Geometrizable> geometrizables;
 
 	/**
 	 * Value for split plane.
@@ -52,7 +54,8 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public GeometryNode(GeometryNode parent, int depth, Geometrizable geometrizable) {
-		this.geometrizables = new Geometrizable[] { geometrizable };
+		this.geometrizables = new ArrayList<Geometrizable>();
+        this.geometrizables.add(geometrizable);
 		this.splitValue = Double.NaN;
 		this.parent = parent;
 		this.depth = depth;
@@ -68,7 +71,7 @@ public class GeometryNode {
      * @param geometrizables
      *            Geometrizable.
      */
-    public GeometryNode(GeometryNode parent, int depth, Geometrizable[] geometrizables) {
+    public GeometryNode(GeometryNode parent, int depth, List<Geometrizable> geometrizables) {
         this.geometrizables = geometrizables;
         this.splitValue = Double.NaN;
         this.parent = parent;
@@ -99,7 +102,8 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public GeometryNode(Geometrizable geometrizable) {
-		this.geometrizables = new Geometrizable[] { geometrizable };
+		this.geometrizables = new ArrayList<Geometrizable>();
+        this.geometrizables.add(geometrizable);
 		this.splitValue = Double.NaN;
 		this.parent = null;
 		this.depth = -1;
@@ -189,8 +193,8 @@ public class GeometryNode {
 	 * @return Geometrizable.
 	 */
 	public Geometrizable getGeometrizable() {
-        if (geometrizables != null && geometrizables.length == 1)
-		    return geometrizables[0];
+        if (geometrizables != null && geometrizables.size() == 1)
+		    return geometrizables.get(0);
         return null;
 	}
 
@@ -208,10 +212,10 @@ public class GeometryNode {
         if (geometrizables == null)
             return null;
 
-        if (geometrizables.length == 1)
-            return geometrizables[0];
+        if (geometrizables.size() == 1)
+            return geometrizables.get(0);
 
-        Geometrizable currentBest = geometrizables[0];
+        Geometrizable currentBest = geometrizables.get(0);
         for (Geometrizable geom : geometrizables) {
             if (geom.valueForDimension(dim) <
                     currentBest.valueForDimension(dim))
@@ -226,10 +230,10 @@ public class GeometryNode {
      *
      * @return Geometrizable.
      */
-    public Geometrizable[] getGeometrizables() {
+    public List<Geometrizable> getGeometrizables() {
         if (geometrizables != null)
             return geometrizables;
-        return new Geometrizable[] {};
+        return new ArrayList<Geometrizable>();
     }
 
 	/**
@@ -239,7 +243,8 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public void setGeometrizable(Geometrizable geometrizable) {
-		this.geometrizables = new Geometrizable[] { geometrizable };
+		this.geometrizables = new ArrayList<Geometrizable>();
+        this.geometrizables.add(geometrizable);
 	}
 
 	/**
