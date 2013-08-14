@@ -54,7 +54,8 @@ public class RouteGen implements Runnable {
 		if (coords == null) {
 			throw new IllegalArgumentException("The coordinates to paint on the screen must not be null");
 		}
-		if (coords.size() <= 0) {
+		displayCoords = new float[0];
+		if (coords.size() > 0) {
 			this.displayCoords = new float[(coords.size() - 1) * 4];
 			for (int i = 0; i < coords.size() - 1; i++) {
 				displayCoords[4 * i] = coords.get(i).getX();
@@ -84,11 +85,13 @@ public class RouteGen implements Runnable {
 			Canvas canvas = new Canvas(routeImg);
 
 			Paint pinsel = new Paint();
-			pinsel.setColor(Color.argb(150, 64, 64, 255));
+			pinsel.setColor(Color.argb(100, 64, 64, 255));
 			pinsel.setStrokeWidth(this.strokeWidth);
 
-			Log.d(Tag_RouteGen, "ZEICHNE Route!");
-			canvas.drawLines(displayCoords, pinsel);
+			if (displayCoords.length >= 4) {
+				Log.d(Tag_RouteGen, "ZEICHNE Route!");
+				canvas.drawLines(displayCoords, pinsel);
+			}
 
 			MapController.getInstance().onRouteOverlayImageChange(routeImg);
 		}

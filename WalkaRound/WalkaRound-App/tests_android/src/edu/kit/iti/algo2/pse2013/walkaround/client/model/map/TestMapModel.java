@@ -32,7 +32,7 @@ public class TestMapModel extends ActivityInstrumentationTestCase2 {
 		TileFetcher tf = new TileFetcher();
 		Point size = new Point(1920, 1080);
 		BoundingBox bb = new BoundingBox(center, size, 18);
-		MapController.initialize(tf, size, bb, center);
+		MapController.initialize(tf, bb, center);
 		PositionManager.initialize(getActivity().getApplicationContext());
 		model = new MapGen(size, bb);
 	}
