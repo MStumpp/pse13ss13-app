@@ -52,13 +52,15 @@ public class GeometryDataPreprocessor {
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
      *
-     * @param geometrizables GraphDataIO object.
+     * @param geoms GraphDataIO object.
      * @param numberGeomPerNode Number of the Geometrizables to be stored in a GeometryNode.
      * @return GeometryDataIO.
      * @throw IllegalArgumentException If graphDataIO or locationDataIO args invalid.
      */
-    public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geometrizables,
+    public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geoms,
         int numberGeomPerNode) throws IllegalArgumentException {
+
+        List<Geometrizable> geometrizables = geoms;
 
         // throw exception if number of geometrizables is not greater than 0
         if (geometrizables == null || geometrizables.size() == 0)
@@ -85,6 +87,8 @@ public class GeometryDataPreprocessor {
             }
             geometrizables = geometrizablesWrapped;
         }
+
+        logger.info(""+geometrizables.get(0));
 
         // set up data
         Geometrizable[][] data = new Geometrizable[numDimensions][];
