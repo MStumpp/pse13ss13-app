@@ -2,8 +2,10 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -65,7 +67,8 @@ public class PreprocessorAdmin {
 			LocationDataIO.save(locData, locFile);
 
 			logger.info("Start building GeometryData...");
-			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(GraphDataIO.load(graphFile), LocationDataIO.load(locFile));
+			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(
+                    new ArrayList<Geometrizable>(GraphDataIO.load(graphFile).getVertices()));
 			GeometryDataIO.save(geomData, geomFile);
 			logger.info("Writing GeometryDataIO finished.");
 			return 0;

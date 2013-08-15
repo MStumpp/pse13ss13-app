@@ -60,13 +60,13 @@ public class Server {
             source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(0));
             target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(1));
         } catch (GeometryProcessorException e) {
-            transfer.setError("GeometryProcessorException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (InstantiationException e) {
-            transfer.setError("InstantiationException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (GeometryComputationNoSlotsException e) {
-            transfer.setError("GeometryComputationNoSlotsException");
+            transfer.setError(e.getMessage());
             return transfer;
         }
 
@@ -77,16 +77,16 @@ public class Server {
         try {
             route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
         } catch (ShortestPathComputeException e) {
-            transfer.setError("ShortestPathComputeException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (NoShortestPathExistsException e) {
-            transfer.setError("NoShortestPathExistsException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (InstantiationException e) {
-            transfer.setError("InstantiationException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (ShortestPathComputationNoSlotsException e) {
-            transfer.setError("ShortestPathComputationNoSlotsException");
+            transfer.setError(e.getMessage());
             return transfer;
         }
 
@@ -141,7 +141,7 @@ public class Server {
             profileAsInt = Integer.parseInt(profile);
             lengthAsInt = Integer.parseInt(length);
         } catch (NumberFormatException e) {
-            transfer.setError("NumberFormatException");
+            transfer.setError(e.getMessage());
             return transfer;
         }
 
@@ -150,13 +150,13 @@ public class Server {
         try {
             source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
         } catch (GeometryProcessorException e) {
-            transfer.setError("GeometryProcessorException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (InstantiationException e) {
-            transfer.setError("InstantiationException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (GeometryComputationNoSlotsException e) {
-            transfer.setError("GeometryComputationNoSlotsException");
+            transfer.setError(e.getMessage());
             return transfer;
         }
 
@@ -167,13 +167,16 @@ public class Server {
             route = RoundtripProcessor.getInstance().computeRoundtrip(source,
                     Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
-            transfer.setError("InstantiationException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (RoundtripComputationNoSlotsException e) {
-            transfer.setError("RoundtripComputationNoSlotsException");
+            transfer.setError(e.getMessage());
             return transfer;
         } catch (RoundtripComputeException e) {
-            transfer.setError("RoundtripComputeException");
+            transfer.setError(e.getMessage());
+            return transfer;
+        } catch (IllegalArgumentException e) {
+            transfer.setError(e.getMessage());
             return transfer;
         }
 
