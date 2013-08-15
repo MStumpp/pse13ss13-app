@@ -288,15 +288,6 @@ public class Vertex extends Coordinate implements Geometrizable {
     }
 
 
-    public int compareTo(Vertex other) {
-        if (this.getID() > other.getID()) {
-            return 1;
-        } else if (this.getID() < other.getID()) {
-            return -1;
-        }
-        return 0;
-    }
-
     @Override
     public int compareTo(Object o) {
         if (this.getID() > ((Vertex)o).getID()) {
