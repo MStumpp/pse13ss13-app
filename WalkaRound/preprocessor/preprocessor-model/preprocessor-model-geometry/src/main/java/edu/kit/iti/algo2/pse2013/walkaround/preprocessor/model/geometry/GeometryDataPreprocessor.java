@@ -36,6 +36,8 @@ public class GeometryDataPreprocessor {
      */
     private static final TreeSet<Geometrizable> treeSet = new TreeSet<>();
 
+    private static final ArrayList<Geometrizable> list = new ArrayList<>();
+
 
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
@@ -145,7 +147,7 @@ public class GeometryDataPreprocessor {
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
         if (size <= numberGeomPerNode)
-            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end + 1)));
+            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
 
         // otherwise, compute median;
         int median;
@@ -178,8 +180,11 @@ public class GeometryDataPreprocessor {
 //            }
         }
 
-        treeSet.clear();
-        treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+        //treeSet.clear();
+        //treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+
+        list.clear();
+        list.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
         Geometrizable[] currentBackupArray;
         int leftIndex;
@@ -192,8 +197,10 @@ public class GeometryDataPreprocessor {
             leftIndex = start;
             rightIndex = median+1;
             for (Geometrizable geometrizable : currentBackupArray) {
-                if (treeSet.contains(geometrizable)) {
-                    treeSet.remove(geometrizable);
+                //if (treeSet.contains(geometrizable)) {
+                //    treeSet.remove(geometrizable);
+                if (list.contains(geometrizable)) {
+                    list.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {
