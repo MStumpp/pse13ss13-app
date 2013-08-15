@@ -14,68 +14,68 @@ import android.util.Log;
 /**
  * This class hold and return the last known detected Position from the android
  * file System
- * 
+ *
  * @author Lukas Müller, Ludwig Biermann
- * 
+ *
  */
 public class PositionManager {
 
 	private final int minMilliSecondsBetweenUpdates = 5000;
 	private final int minMetersBetweenUpdates = 2;
-	
-	
+
+
 	/*
-	 * 
+	 *
 	 */
 	private static String TAG_POSITION_MANAGER = PositionManager.class
 			.getSimpleName();
 
 	/*
-	 * 
+	 *
 	 */
 	private LinkedList<PositionListener> positionListeners;
 
 	/*
-	 * 
+	 *
 	 */
 	private static PositionManager positionManager;
 
 	/*
-	 * 
+	 *
 	 */
 	private LocationManager locationManager;
 	private int lastGPSEvent;
 	private Location lastKnownLocation;
-	
+
 	private CompassManager compass;
 	private SpeedManager speed;
 
 	/**
-	 * 
+	 *
 	 * @param context
 	 */
 	private PositionManager(Context context) {
-		
+
 		positionListeners = new LinkedList<PositionListener>();
-		
+
 		locationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-		
+
 		Log.d(TAG_POSITION_MANAGER, "GPS enabled: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
-		
+
 		// TODO: Check if Position Manager really sends updates:
 		// Is this necessary?:
 		// locationManager.addGpsStatusListener(positionManager);
-		
+
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minMilliSecondsBetweenUpdates, minMetersBetweenUpdates, locListener);
 		this.getLastKnownPositionFromAndroid();
-		
+
 		//initialize other Sensors
 		compass = new CompassManager(context.getApplicationContext());
 		speed = new SpeedManager(this);
 	}
 
 	/**
-	 * 
+	 *
 	 * @param context
 	 */
 	public static void initialize(Context context) {
@@ -84,7 +84,7 @@ public class PositionManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static PositionManager getInstance() {
@@ -95,19 +95,19 @@ public class PositionManager {
 		}
 		return positionManager;
 	}
-	
+
 	/**
 	 * Return the SpeedManager
-	 * 
+	 *
 	 * @return SpeedManager
 	 */
 	public SpeedManager getSpeedManager(){
 		return speed;
 	}
-	
+
 	/**
 	 * Returns the CompassManager
-	 * 
+	 *
 	 * @return CompassManager
 	 */
 	public CompassManager getCompassManager(){
@@ -115,7 +115,7 @@ public class PositionManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param newPL
 	 */
 	public void registerPositionListener(PositionListener newPL) {
@@ -129,7 +129,7 @@ public class PositionManager {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void notifyAllPositionListeners() {
 		Log.d(TAG_POSITION_MANAGER,	"PositionManager.notifyAllPositionListeners() Position is not null: " + (lastKnownLocation != null));
@@ -145,9 +145,9 @@ public class PositionManager {
 	public Location getLastKnownPosition(){
 		return this.lastKnownLocation;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void onGpsStatusChanged(int event) {
 		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int " + event + ")");
@@ -174,47 +174,22 @@ public class PositionManager {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private final LocationListener locListener = new LocationListener() {
 
-		@Override
 		public void onLocationChanged(Location arg0) {
 			lastKnownLocation = arg0;
 		}
 
-		@Override
 		public void onProviderDisabled(String provider) {
 			// TODO Auto-generated method stub
-			
 		}
 
-		@Override
 		public void onProviderEnabled(String provider) {
 			// TODO Auto-generated method stub
-			
 		}
 
-		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 			// TODO Auto-generated method stub
-			
 		}
-		
-		
 	};
-	
-	
 }
-
-
-
-

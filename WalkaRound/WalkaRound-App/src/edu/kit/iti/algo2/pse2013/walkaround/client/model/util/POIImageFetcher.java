@@ -21,7 +21,6 @@ public final class POIImageFetcher implements Runnable {
 		this.listener = listener;
 	}
 
-	@Override
 	public void run() {
 		Thread t = new Thread() {
 			public void run() {

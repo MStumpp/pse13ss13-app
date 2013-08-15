@@ -8,19 +8,18 @@ public class ArrowNaviOutput implements NaviOutput {
 
 	private static ArrowNaviOutput arrowNaviOutput;
 	private HeadUpController headUpControllerInstance;
-	
+
 	private ArrowNaviOutput() {
 		this.headUpControllerInstance = HeadUpController.getInstance();
 	}
-	
+
 	public static NaviOutput getInstance() {
 		arrowNaviOutput = new ArrowNaviOutput();
 		return arrowNaviOutput;
 	}
 
-	@Override
 	public void deliverOutput(double turnAngle, double distToTurn) {
-		// TODO 
+		// TODO
 		// HeadUpView.ARROW_RIGHT
 	}
 
