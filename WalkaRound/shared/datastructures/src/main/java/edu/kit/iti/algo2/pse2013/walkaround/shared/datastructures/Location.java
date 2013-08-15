@@ -137,7 +137,8 @@ public class Location extends Coordinate {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + id;
+		result = prime * result + (isFavorite ? 1231 : 1237);
+		result = prime * result + (isMoveable ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -165,7 +166,10 @@ public class Location extends Coordinate {
 		} else if (!address.equals(other.address)) {
 			return false;
 		}
-		if (id != other.id) {
+		if (isFavorite != other.isFavorite) {
+			return false;
+		}
+		if (isMoveable != other.isMoveable) {
 			return false;
 		}
 		if (name == null) {

@@ -42,11 +42,11 @@ public class POI extends Location implements Geometrizable {
 	 *            Text info of POI.
 	 * @param url
 	 *            URL of an image of POI.
-	 * @param categories
+	 * @param poiCategories
 	 *            Categories of POI.
 	 */
-	public POI(double lat, double lon, String name, String textInfo, URL url, int[] categories) {
-		this(lat, lon, name, textInfo, url, categories, null);
+	public POI(double lat, double lon, String name, String textInfo, URL url, int[] poiCategories) {
+		this(lat, lon, name, textInfo, url, poiCategories = (poiCategories == null?new int[0]:poiCategories), null);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class POI extends Location implements Geometrizable {
 	 *            the POI-Categories, this POI belongs to
 	 */
 	public POI(Location loc, String textInfo, URL url, int[] poiCategories) {
-		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, url, poiCategories);
+		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, url, poiCategories = (poiCategories == null?new int[0]:poiCategories));
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class POI extends Location implements Geometrizable {
 		super(lat, lon, name, address);
 		this.textInfo = textInfo;
 		this.url = url;
-		this.poiCategories = poiCategories;
+		this.poiCategories = (poiCategories == null?new int[0]:poiCategories);
 	}
 
 	/**
@@ -144,8 +144,12 @@ public class POI extends Location implements Geometrizable {
 				+ "\n\tTextInfo: " + getTextInfo()
 				+ "\n\tURL: " + (getURL() != null ? getURL().toExternalForm() : "")
 				+ "\n\tPOI-Categories: ";
-		for (int i : getPOICategories()) {
-			result += " " + i;
+		if (poiCategories != null) {
+			for (int i : getPOICategories()) {
+				result += " " + i;
+			}
+		} else {
+			result += "none";
 		}
 		return result;
 	}

@@ -1,6 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +13,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
@@ -51,7 +52,29 @@ public class TestProtobufConverter {
 		System.out.println(c.getCrossingInformation().getCrossingAngles());
 		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));
 	}
-
+	@Test
+	public void testLocation() {
+		Location loc = new Location(0, 0, "LocName", new Address(null, null, null, null));
+		Location loc2 = new Location(0, 0, null, null);
+		assertEquals(loc, ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc).build()));
+		Location reload = ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc2).build());
+		System.out.println(loc2.getId() + " " + reload.getId());
+		System.out.println(loc2.getLatitude() + " " + reload.getLatitude());
+		System.out.println(loc2.getLongitude() + " " + reload.getLongitude());
+		System.out.println(loc2.getName() + " " + reload.getName());
+		System.out.println(loc2.getAddress() + "#" + reload.getAddress());
+		assertEquals(loc2, reload);
+	}
+	@Test
+	public void testPOI() throws MalformedURLException {
+		POI p = new POI(0, 0, null, null, null, null);
+		POI reload = ProtobufConverter.getPOI(ProtobufConverter.getPOIBuilder(p).build());
+		assertEquals(reload.getAddress(), reload.getAddress());
+		assertTrue(((Location) p).equals(reload));
+		assertEquals(p, reload);
+		p = new POI(0, 0, "Name", "TextInfo", new URL("http://www.wikipedia.org"), new int[]{1, 2, 3});
+		assertEquals(p, ProtobufConverter.getPOI(ProtobufConverter.getPOIBuilder(p).build()));
+	}
 
 	@Test
 	public void testConvertGeometryData() throws MalformedURLException {

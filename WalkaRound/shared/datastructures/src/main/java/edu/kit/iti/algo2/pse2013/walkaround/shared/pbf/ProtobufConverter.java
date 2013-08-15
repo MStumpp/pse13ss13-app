@@ -283,8 +283,8 @@ public class ProtobufConverter {
 		return new Location(
 			saveLoc.getParentCoordinate().getLatitude(),
 			saveLoc.getParentCoordinate().getLongitude(),
-			saveLoc.getName(),
-			getAddress(saveLoc.getAddress()));
+			saveLoc.hasName()? saveLoc.getName(): null,
+			saveLoc.hasAddress()?getAddress(saveLoc.getAddress()):null);
 	}
 	public static SaveLocation.Builder getLocationBuilder(Location loc) {
 		if (loc == null) {
@@ -292,8 +292,10 @@ public class ProtobufConverter {
 		}
 		SaveLocation.Builder builder = SaveLocation.newBuilder()
 				.setParentCoordinate(getCoordinateBuilder(loc))
-				.setID(loc.getId())
-				.setName(loc.getName());
+				.setID(loc.getId());
+		if (loc.getName() != null) {
+			builder.setName(loc.getName());
+		}
 		SaveAddress.Builder addr = getAddressBuilder(loc.getAddress());
 		if (addr != null) {
 			builder.setAddress(addr);
@@ -340,7 +342,11 @@ public class ProtobufConverter {
 		} catch (MalformedURLException e) {
 			url = null;
 		}
-		return new POI(getLocation(savePOI.getParentLocation()), savePOI.getTextInfo(), url, cats);
+		String textInfo = null;
+		if (savePOI.hasTextInfo()) {
+			textInfo = savePOI.getTextInfo();
+		}
+		return new POI(getLocation(savePOI.getParentLocation()), textInfo, url, cats);
 	}
 	public static SavePOI.Builder getPOIBuilder(POI p) {
 		if (p == null) {
@@ -348,7 +354,7 @@ public class ProtobufConverter {
 		}
 		int[] cats = p.getPOICategories();
 		ArrayList<Integer> poiList = new ArrayList<Integer>();
-		for (int i = 0; i < cats.length; i++) {
+		for (int i = 0; cats != null && i < cats.length; i++) {
 			poiList.add(cats[i]);
 		}
 		SavePOI.Builder builder = SavePOI.newBuilder()
