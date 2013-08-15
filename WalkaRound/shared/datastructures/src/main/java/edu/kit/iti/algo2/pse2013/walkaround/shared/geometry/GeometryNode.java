@@ -209,9 +209,10 @@ public class GeometryNode {
      *
      * @return Geometrizable.
      */
-    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, int dim) {
+    public Geometrizable getNearestGeometrizable(double value,
+        GeometrizableConstraint constraint, int dim) {
 
-        if (geometrizable == null || dim < 0) {
+        if (dim < 0) {
             throw new IllegalArgumentException("geometrizable must not " +
                     "be null and/or dim greater or equal to 0");
         }
@@ -225,9 +226,9 @@ public class GeometryNode {
         }
 
         Geometrizable currentBest = geometrizables.get(0);
-        double minDistance = Math.abs(currentBest.valueForDimension(dim) - geometrizable.valueForDimension(dim));
+        double minDistance = Math.abs(currentBest.valueForDimension(dim) - value);
         for (Geometrizable geom : geometrizables) {
-            double currentDistance = Math.abs(geom.valueForDimension(dim) - geometrizable.valueForDimension(dim));
+            double currentDistance = Math.abs(geom.valueForDimension(dim) - value);
             if (currentDistance < minDistance) {
                 currentBest = geom;
                 minDistance = currentDistance;

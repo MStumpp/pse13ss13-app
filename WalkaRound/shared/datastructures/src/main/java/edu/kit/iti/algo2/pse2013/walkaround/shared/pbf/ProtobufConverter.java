@@ -154,7 +154,8 @@ public class ProtobufConverter {
 		ArrayList<Geometrizable> geoms = new ArrayList<Geometrizable>();
 		for (SaveGeometrizable saveGeom : saveGeoms) {
 			if (saveGeom.getCoordinate() != null) {
-				geoms.add(getCoordinate(saveGeom.getCoordinate()));
+	    // TODO
+	//			geoms.add(getCoordinate(saveGeom.getCoordinate()));
 			} else if (saveGeom.getEdge() != null) {
 				geoms.add(getEdge(saveGeom.getEdge()));
 			}
