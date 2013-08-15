@@ -1,10 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import org.junit.runner.RunWith;
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.search.RobolectricTestRunner;
 import junit.framework.TestCase;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
 
 
 /**
@@ -17,7 +19,9 @@ import org.robolectric.RobolectricTestRunner;
 @RunWith(RobolectricTestRunner.class)
 public class TestTextToSpeechUtility extends TestCase {
 
-	public void testTextToSpeech() {
-		assertTrue(true);
+	@Test
+	public void testTextToSpeechInit() {
+		TextToSpeechUtility.initialize(new BootActivity().getApplicationContext(), true);
+		assertTrue(TextToSpeechUtility.getInstance().isReady());
 	}
 }

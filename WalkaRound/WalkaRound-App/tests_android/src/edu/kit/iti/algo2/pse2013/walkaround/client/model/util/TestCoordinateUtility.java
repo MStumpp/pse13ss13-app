@@ -1,9 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import org.junit.runner.RunWith;
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.search.RobolectricTestRunner;
 import junit.framework.TestCase;
+
+import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 

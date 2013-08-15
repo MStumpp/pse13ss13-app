@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
-import java.net.MalformedURLException;
-import java.util.LinkedList;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import android.graphics.Point;
-import android.test.AndroidTestCase;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
@@ -20,8 +18,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 
 @RunWith(RobolectricTestRunner.class)
-public class MapControllerTest extends AndroidTestCase {
-	private Coordinate center; 
+public class MapControllerTest {
+	private Coordinate center;
 	private float lod;
 	private Point display;
 	private TileFetcher tl;
@@ -29,11 +27,11 @@ public class MapControllerTest extends AndroidTestCase {
 	private MapController mc ;
 	private Route r;
 	private MapView mv;
-	
+
 
 	@Before
 	protected void setUp() {
-		center = new Coordinate(49.0145, 8.419); 
+		center = new Coordinate(49.0145, 8.419);
 		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
 		display =  new Point(1025, 600);
 		TileFetcher tl = new TileFetcher();
@@ -42,11 +40,9 @@ public class MapControllerTest extends AndroidTestCase {
 		mc =  MapController.initialize(tl, box, center);
 		mc.startController(mv);
 		mc.onRouteChange(r);
-		
-		super.setUp();
 	}
 	/**
-	 * 
+	 *
 	 */
 	@Test
 	public void testGeneral() {
@@ -57,5 +53,5 @@ public class MapControllerTest extends AndroidTestCase {
 		assertTrue(mc.getPOIById(0) == null);
 		assertTrue(mc.getInstance() != null);
 	}
-	
+
 }

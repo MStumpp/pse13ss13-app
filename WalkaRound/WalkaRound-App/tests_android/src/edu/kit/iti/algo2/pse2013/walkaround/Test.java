@@ -8,6 +8,7 @@ import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import android.graphics.Bitmap;
@@ -22,7 +23,7 @@ public class Test {
 
     @org.junit.Test
     public void shouldHaveHappySmiles() throws Exception {
-        String hello = new BootActivity().getResources().getString(R.string.address);
+        String hello = Robolectric.buildActivity(BootActivity.class).get().getResources().getString(R.string.address);
         assertThat(hello, equalTo("Address"));
     }
 
@@ -32,7 +33,6 @@ public class Test {
 
 			@Override
 			public void setImage(Bitmap b) {
-				System.out.println("Success!");
 				bitmap = b;
 
 			}
