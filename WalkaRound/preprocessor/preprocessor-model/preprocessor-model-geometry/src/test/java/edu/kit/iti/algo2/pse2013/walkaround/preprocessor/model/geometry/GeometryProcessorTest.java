@@ -71,15 +71,15 @@ public class GeometryProcessorTest {
     @Test
     public void testInit() throws MalformedURLException {
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
     }
 
 
     @Test
     public void testGetInstance() throws InstantiationException, MalformedURLException {
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
-        Assert.assertNotNull(GeometryProcessor.getInstance());
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
+        Assert.assertNotNull(GeometryProcessorEdge.getInstance());
     }
 
 
@@ -88,8 +88,8 @@ public class GeometryProcessorTest {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
 
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -108,8 +108,8 @@ public class GeometryProcessorTest {
     public void testgetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -128,8 +128,8 @@ public class GeometryProcessorTest {
     public void testgetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -148,8 +148,8 @@ public class GeometryProcessorTest {
     public void testgetNearestVertexDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -171,8 +171,8 @@ public class GeometryProcessorTest {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
 
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
         Coordinate search3 = new Coordinate(49.0145, 8.2424);
@@ -282,8 +282,8 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
 
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
         Coordinate search3 = new Coordinate(49.0145, 8.2424);
@@ -393,8 +393,8 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
 
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
         Coordinate search3 = new Coordinate(49.0145, 8.2424);
@@ -503,8 +503,8 @@ public class GeometryProcessorTest {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
 
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
 
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
@@ -622,8 +622,8 @@ public class GeometryProcessorTest {
         GeometrizablePOIConstraint constPOI_1_3 = new GeometrizablePOIConstraint(new int[] { 0, 4 });
         GeometrizablePOIConstraint constPOI_2_3 = new GeometrizablePOIConstraint(new int[] { 3, 4 });
 
-        Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
 
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
@@ -641,7 +641,7 @@ public class GeometryProcessorTest {
             long runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
             Assert.assertNotNull(poi);
-            Assert.assertEquals("POI_2", poi.getName());
+            Assert.assertEquals("POI_1", poi.getName());
             logger.info("project: " + search1 + " to: " + poi.toString());
 
             startTime = System.currentTimeMillis();

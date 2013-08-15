@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -11,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement
-public class Coordinate implements Geometrizable {
+public class Coordinate {
 
     /**
      * latitude of this Coordinate.
@@ -101,25 +99,6 @@ public class Coordinate implements Geometrizable {
 
     public void setCrossingInformation(CrossingInformation crossingInformation) {
         this.crossingInformation = crossingInformation;
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
-        return 2;
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
-        if (dim == 0)
-            return getLatitude();
-        else
-            return getLongitude();
     }
 
 }

@@ -41,12 +41,6 @@ public class GeometryProcessor {
 
 
     /**
-     * GeometryProcessor instance.
-     */
-    private static GeometryProcessor instance;
-
-
-    /**
      * ExecutorService.
      */
     private ThreadPoolExecutor executor;
@@ -58,7 +52,7 @@ public class GeometryProcessor {
      * @param geometryDataIO GeometryDataIO used for geometry computation.
      * @param numberThreads The number of threads for parallel computation.
      */
-    private GeometryProcessor(GeometryDataIO geometryDataIO, int numberThreads) {
+    public GeometryProcessor(GeometryDataIO geometryDataIO, int numberThreads) {
         ArrayDeque<GeometryComputer> geometryComputerQueue =
                 new ArrayDeque<GeometryComputer>();
         int idCounter = 0;
@@ -78,49 +72,47 @@ public class GeometryProcessor {
 
 
     /**
-     * Returns a singleton instance of GeometryProcessor if available.
+     * Computes the nearest Geometrizable for a given Geometrizable.
      *
-     * @return GeometryProcessor.
-     * @throws InstantiationException If not instantiated
+     * @param search The Geometrizable the resulting Vertex has to be closest to.
+     * @return Geometrizable Nearest Geometrizable Vertex.
+     * @throws GeometryProcessorException If something goes wrong.
+     * @throws IllegalArgumentException If geometrizable is null.
      */
-    public static GeometryProcessor getInstance() throws InstantiationException {
-        if (instance == null)
-            throw new InstantiationException("singleton must be initialized first");
-        return instance;
+    public Geometrizable getNearestGeometrizable(GeometrySearch search)
+            throws GeometryProcessorException, GeometryComputationNoSlotsException,
+            IllegalArgumentException {
+        return getNearestGeometrizable(search, null);
     }
 
 
     /**
-     * Instantiates and returns a singleton instance of GeometryProcessor.
+     * Computes the nearest Geometrizable for a given Geometrizable.
      *
-     * @param geometryDataIO GeometryDataIO containing relevant data.
-     * @return GeometryProcessor.
-     * @throws IllegalArgumentException If some input parameter are missing.
+     * @param search The Geometrizable the resulting Vertex has to be closest to.
+     * @return Geometrizable Nearest Geometrizable Vertex.
+     * @throws GeometryProcessorException If something goes wrong.
+     * @throws IllegalArgumentException If geometrizable is null.
      */
-    public static GeometryProcessor init(GeometryDataIO geometryDataIO)
-            throws IllegalArgumentException {
-        return init(geometryDataIO, 1);
-    }
+    public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
+            throws GeometryProcessorException, GeometryComputationNoSlotsException,
+            IllegalArgumentException {
+        if (search == null)
+            throw new IllegalArgumentException("geometrizable must not be null");
 
+        logger.info("getNearestGeometrizable:");
+        Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(search, constraint));
 
-    /**
-     * Instantiates and returns a singleton instance of GeometryProcessor.
-     *
-     * @param geometryDataIO GeometryDataIO containing relevant data.
-     * @param numberThreads The number of threads for parallel computation.
-     * @return GeometryProcessor.
-     * @throws IllegalArgumentException If some input parameter are missing.
-     */
-    public static GeometryProcessor init(GeometryDataIO geometryDataIO, int numberThreads)
-            throws IllegalArgumentException {
-        if (geometryDataIO == null)
-            throw new IllegalArgumentException("GeometryDataIO must be provided");
-        if (numberThreads < 1)
-            throw new IllegalArgumentException("Number of threads must be greater or equal to 1");
-        if (instance != null)
-            throw new IllegalArgumentException("GeometryProcessor already initialized");
-        instance = new GeometryProcessor(geometryDataIO, numberThreads);
-        return instance;
+        if (future.isCancelled())
+            throw new GeometryComputationNoSlotsException("no slots available");
+
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            throw new GeometryProcessorException(e.getMessage());
+        } catch (ExecutionException e) {
+            throw new GeometryProcessorException(e.getMessage());
+        }
     }
 
 
@@ -222,51 +214,6 @@ public class GeometryProcessor {
             if (computer == null)
             	logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
             //geometryComputerQueue.add(computer);
-        }
-    }
-
-
-    /**
-     * Computes the nearest Geometrizable for a given Geometrizable.
-     *
-     * @param search The Geometrizable the resulting Vertex has to be closest to.
-     * @return Geometrizable Nearest Geometrizable Vertex.
-     * @throws GeometryProcessorException If something goes wrong.
-     * @throws IllegalArgumentException If geometrizable is null.
-     */
-    public Geometrizable getNearestGeometrizable(GeometrySearch search)
-            throws GeometryProcessorException, GeometryComputationNoSlotsException,
-            IllegalArgumentException {
-        return getNearestGeometrizable(search, null);
-    }
-
-
-    /**
-     * Computes the nearest Geometrizable for a given Geometrizable.
-     *
-     * @param search The Geometrizable the resulting Vertex has to be closest to.
-     * @return Geometrizable Nearest Geometrizable Vertex.
-     * @throws GeometryProcessorException If something goes wrong.
-     * @throws IllegalArgumentException If geometrizable is null.
-     */
-    public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
-            throws GeometryProcessorException, GeometryComputationNoSlotsException,
-            IllegalArgumentException {
-        if (search == null)
-            throw new IllegalArgumentException("geometrizable must not be null");
-
-        logger.info("getNearestGeometrizable:");
-        Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(search, constraint));
-
-        if (future.isCancelled())
-            throw new GeometryComputationNoSlotsException("no slots available");
-
-        try {
-            return future.get();
-        } catch (InterruptedException e) {
-            throw new GeometryProcessorException(e.getMessage());
-        } catch (ExecutionException e) {
-            throw new GeometryProcessorException(e.getMessage());
         }
     }
 
