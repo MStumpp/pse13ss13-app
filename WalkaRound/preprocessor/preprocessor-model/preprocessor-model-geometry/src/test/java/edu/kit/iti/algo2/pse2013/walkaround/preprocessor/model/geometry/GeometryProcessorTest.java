@@ -54,7 +54,11 @@ public class GeometryProcessorTest {
 
     @Before
     public void resetSingletonBefore() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field instance = GeometryProcessor.class.getDeclaredField("instance");
+        Field instance = GeometryProcessorEdge.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        instance = GeometryProcessorPOI.class.getDeclaredField("instance");
         instance.setAccessible(true);
         instance.set(null, null);
 
