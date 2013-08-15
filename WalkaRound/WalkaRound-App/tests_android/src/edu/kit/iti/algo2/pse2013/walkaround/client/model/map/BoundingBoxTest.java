@@ -1,25 +1,29 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import static org.junit.Assert.*;
+
 import java.net.MalformedURLException;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.robolectric.RobolectricTestRunner;
+
 import android.graphics.Point;
-import android.test.AndroidTestCase;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 
-public class BoundingBoxTest extends AndroidTestCase {	
+public class BoundingBoxTest  {	
 	private Point display;
 	private Coordinate center; 
 	private float lod;
 	
-	@Override
-	protected void setUp() throws Exception{
+	@Before
+	protected void setUp() {
 		display = new Point(1025, 600);
 		center =  new Coordinate(49.0145, 8.419); 
 		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
-		super.setUp();
 	}
 	
 	/**
@@ -27,6 +31,7 @@ public class BoundingBoxTest extends AndroidTestCase {
 	 * 
 	 * @throws MalformedURLException
 	 */
+	@Test
 	public void testGeneral() {
 		
 		BoundingBox box = new BoundingBox(center, display, lod);
@@ -43,6 +48,7 @@ public class BoundingBoxTest extends AndroidTestCase {
 	/**
 	 * Testet das verändern des Zoomlevels
 	 */
+	@Test
 	public void testZoom() {
 
 		BoundingBox box = new BoundingBox(center, display, lod);
@@ -58,6 +64,7 @@ public class BoundingBoxTest extends AndroidTestCase {
 	/**
 	 * test das verändern der Center Coordinate
 	 */
+	@Test
 	public void testCenter(){
 
 		BoundingBox box = new BoundingBox(center, display, lod);

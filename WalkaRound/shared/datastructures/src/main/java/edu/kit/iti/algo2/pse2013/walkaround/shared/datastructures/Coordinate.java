@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *

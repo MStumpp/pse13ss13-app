@@ -1,7 +1,11 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
+import static org.junit.Assert.*;
+
 import java.util.LinkedList;
 import java.util.List;
+
+import org.junit.Test;
 
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
@@ -10,12 +14,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import android.test.AndroidTestCase;
 
-public class POIManagerTest extends AndroidTestCase {
+public class POIManagerTest  {
 
 	private POIManager poiManag = POIManager.getInstance();
 
+	@Test
 	public void testPersistence() {
 		assertTrue(poiManag.isEmpty());
 		poiManag.addActivePOICategory(1);
@@ -24,11 +28,13 @@ public class POIManagerTest extends AndroidTestCase {
 		assertTrue(poiManag.isEmpty());
 	}
 
+	@Test
 	public void testSearchByQuery() {
 		List<POI> suggestions = poiManag.searchPOIsByQuery("Schloss Karlsruhe");
 		assertEquals("Schloss Karlsruhe", suggestions.get(0).getName());
 	}
 
+	@Test
 	public void testSearchByAddress() {
 		Address testAddress = new Address("Kaiserstraße", "12", "Karlsruhe",
 				76133);
@@ -42,6 +48,7 @@ public class POIManagerTest extends AndroidTestCase {
 						.contains("" + 76133));
 	}
 
+	@Test
 	public void testPoisInaRectangle() {
 		poiManag.addActivePOICategory(1);
 		poiManag.addActivePOICategory(2);
@@ -53,6 +60,7 @@ public class POIManagerTest extends AndroidTestCase {
 		assertTrue(pois.isEmpty());
 	}
 
+	@Test
 	public void testPoisInAlongRoute() {
 		LinkedList<Coordinate> route = new LinkedList<Coordinate>();
 		route.add(new Coordinate(49.00179d, 8.41477d));

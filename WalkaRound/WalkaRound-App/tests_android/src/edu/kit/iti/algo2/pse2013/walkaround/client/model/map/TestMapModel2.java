@@ -4,17 +4,22 @@
 
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import org.junit.runner.RunWith;
+
 import android.graphics.Point;
+import org.robolectric.RobolectricTestRunner;
 import android.test.ActivityInstrumentationTestCase2;
 import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.search.RobolectricTestRunner;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
+@RunWith(RobolectricTestRunner.class)
 public class TestMapModel extends ActivityInstrumentationTestCase2 {
 
 	public TestMapModel() {

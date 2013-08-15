@@ -38,10 +38,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This Class controls the data flow between the System and the real View.
- *
+ * 
  * @author Ludwig Biermann
  */
-public class MapController implements RouteListener, PositionListener, CompassListener {
+public class MapController implements RouteListener, PositionListener,
+		CompassListener {
 
 	/**
 	 * default starting Coordinate if GPS is offline
@@ -88,11 +89,12 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	// Mutli fixes
 
 	private BoundingBox coorBox;
-	//private Coordinate center;
+
+	// private Coordinate center;
 
 	/**
 	 * gets the center Coordinate
-	 *
+	 * 
 	 * @return the Coordinate of the center
 	 */
 	public Coordinate getCenter() {
@@ -101,8 +103,9 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * sets the Center Coordinate
-	 *
-	 * @param center Coordinate
+	 * 
+	 * @param center
+	 *            Coordinate
 	 */
 	public void setCenter(Coordinate center) {
 		this.coorBox.setCenter(center);
@@ -110,9 +113,11 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * sets the Center Coordinate
-	 *
-	 * @param center Coordinate
-	 * @param lod Level Of Detail
+	 * 
+	 * @param center
+	 *            Coordinate
+	 * @param lod
+	 *            Level Of Detail
 	 */
 	public void setCenter(Coordinate center, float lod) {
 		this.coorBox.setCenter(center, lod);
@@ -124,29 +129,32 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 *
+	 * 
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
 	 */
-	public static MapController initialize(TileFetcher tileFetcher, BoundingBox coorBox, Coordinate user) {
+	public static MapController initialize(TileFetcher tileFetcher,
+			BoundingBox coorBox, Coordinate user) {
 		if (mapController == null) {
 			mapController = new MapController(tileFetcher, coorBox, user);
 		}
 		return mapController;
 	}
+
 	public static boolean isInitialized() {
 		return mapController != null;
 	}
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 *
+	 * 
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
 		if (mapController == null) {
-			Log.e(TAG_MAP_CONTROLLER, "getInstance(): you need to initialize MapController prior to getting an instance");
+			Log.e(TAG_MAP_CONTROLLER,
+					"getInstance(): you need to initialize MapController prior to getting an instance");
 			return null;
 		}
 		return mapController;
@@ -160,17 +168,20 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.mapView = mv;
 
 		PositionManager.getInstance().registerPositionListener(this);
-		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
+		PositionManager.getInstance().getCompassManager()
+				.registerCompassListener(this);
 
 		this.routeController.registerRouteListener(this);
 
-		PreferenceManager.getDefaultSharedPreferences(mv).registerOnSharedPreferenceChangeListener(map);
+		PreferenceManager.getDefaultSharedPreferences(mv)
+				.registerOnSharedPreferenceChangeListener(map);
 
 		this.map.generateMap(coorBox);
 		this.updateUserPosition();
 	}
 
-	private MapController(TileFetcher tileFetcher, BoundingBox coorBox, Coordinate user) {
+	private MapController(TileFetcher tileFetcher, BoundingBox coorBox,
+			Coordinate user) {
 		this.user = user;
 
 		// initialize Vars
@@ -184,18 +195,19 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.size = coorBox.getDisplaySize();
 		this.coorBox = coorBox;
 
-		this.route = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
+		this.route = Bitmap.createBitmap(size.x, size.y,
+				Bitmap.Config.ARGB_8888);
 
 		// initialize Threads
 
 		this.map = new MapGen(size, coorBox, tileFetcher);
 
 		this.poiGen = new POIGen();
-		//TODO poi Gen doesnt run as Thread ... why?
+		// TODO poi Gen doesnt run as Thread ... why?
 		Thread t = new Thread(poiGen);
 		t.setName("POI Generator");
 		t.setPriority(5);
-		//t.run();
+		// t.run();
 
 		// Controller
 
@@ -208,7 +220,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Gives the id of the current Active Waypoint back
-	 *
+	 * 
 	 * @return id of active Waypoint
 	 */
 	public int getActiveWaypointId() {
@@ -224,7 +236,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Gives back the current Level of Detail.
-	 *
+	 * 
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -233,7 +245,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Gives the current Route back.
-	 *
+	 * 
 	 * @return current Route
 	 */
 	public List<DisplayCoordinate> getCurrentRouteLines() {
@@ -246,7 +258,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Forward the Bitmap of the current Map
-	 *
+	 * 
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
@@ -257,7 +269,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Forward the Bitmap of the Route
-	 *
+	 * 
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
@@ -268,7 +280,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Forward poi list to MapView
-	 *
+	 * 
 	 * @param poiList
 	 *            the required list of pois
 	 */
@@ -283,14 +295,15 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 *
+	 * 
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
 	 *            the y delta distance
 	 */
 	public void onShift(float distanceX, float distanceY) {
-		Log.d(TAG_MAP_CONTROLLER, "onShift(x: " + distanceX + ", y: " + distanceY + ")");
+		Log.d(TAG_MAP_CONTROLLER, "onShift(x: " + distanceX + ", y: "
+				+ distanceY + ")");
 
 		if (this.lockUserPosition) {
 			this.toggleLockUserPosition();
@@ -303,31 +316,33 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
 	 *            the DisplayCoordinate
 	 */
 	public void onZoom(float delta, DisplayCoordinate dc) {
-		/*Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to "
-				+ dc.toString() + " will be forwarding to MapModel");
-		if (this.coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
-				.getCurrentMapStyle().getMaxLevelOfDetail()
-				&& this.coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
-						.getCurrentMapStyle().getMinLevelOfDetail()) {
-
-			// set center before zooming!
-			this.coorBox.setCenter(dc);
-			this.coorBox.setLevelOfDetail(delta);
-
-			this.updateAll();
-		}*/
+		/*
+		 * Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta + " to " +
+		 * dc.toString() + " will be forwarding to MapModel"); if
+		 * (this.coorBox.getLevelOfDetail() + delta <=
+		 * CurrentMapStyleModel.getInstance()
+		 * .getCurrentMapStyle().getMaxLevelOfDetail() &&
+		 * this.coorBox.getLevelOfDetail() + delta >=
+		 * CurrentMapStyleModel.getInstance()
+		 * .getCurrentMapStyle().getMinLevelOfDetail()) {
+		 * 
+		 * // set center before zooming! this.coorBox.setCenter(dc);
+		 * this.coorBox.setLevelOfDetail(delta);
+		 * 
+		 * this.updateAll(); }
+		 */
 	}
 
 	/**
 	 * Zoom by a delta.
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
@@ -335,10 +350,11 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		Log.d(TAG_MAP_CONTROLLER, "The given Zoom Delta: " + delta
 				+ " will be forwarding to MapModel");
 
-		if (coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel.getInstance()
-				.getCurrentMapStyle().getMaxLevelOfDetail()
-				&& coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel.getInstance()
-						.getCurrentMapStyle().getMinLevelOfDetail()) {
+		if (coorBox.getLevelOfDetail() + delta <= CurrentMapStyleModel
+				.getInstance().getCurrentMapStyle().getMaxLevelOfDetail()
+				&& coorBox.getLevelOfDetail() + delta >= CurrentMapStyleModel
+						.getInstance().getCurrentMapStyle()
+						.getMinLevelOfDetail()) {
 
 			coorBox.setLevelOfDetailByADelta(delta);
 			updateAll();
@@ -380,7 +396,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Delete the Active Waypoint
-	 *
+	 * 
 	 * @param currentId
 	 */
 	public void onDeletePoint(int currentId) {
@@ -396,7 +412,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * Creates a new Point.
-	 *
+	 * 
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
@@ -405,8 +421,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		Log.d(TAG_MAP_CONTROLLER, "onCreatePoint(" + dc + ")");
 
 		Coordinate next = CoordinateUtility
-				.convertDisplayCoordinateToCoordinate(dc,
-						coorBox.getTopLeft(),
+				.convertDisplayCoordinateToCoordinate(dc, coorBox.getTopLeft(),
 						coorBox.getLevelOfDetail());
 
 		try {
@@ -423,11 +438,12 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 			e.printStackTrace();
 		}
 
-		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next.getLongitude(), "PLACEHOLDER"));
+		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next
+				.getLongitude(), "PLACEHOLDER"));
 	}
 
 	/**
-	 *
+	 * 
 	 * @param x
 	 * @param y
 	 */
@@ -452,7 +468,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * returns a Waypoint by his id
-	 *
+	 * 
 	 * @param id
 	 *            of the Waypoint
 	 * @return null if no Waypoint is available
@@ -479,11 +495,13 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	private void updateRouteOverlay() {
 
 		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
-				currentRoute, coorBox.getCenter(), size, this.coorBox.getLevelOfDetail());
+				currentRoute, coorBox.getCenter(), size,
+				this.coorBox.getLevelOfDetail());
 
 		this.displayPoints = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
-						coorBox.getCenter(), size, this.coorBox.getLevelOfDetail());
+						coorBox.getCenter(), size,
+						this.coorBox.getLevelOfDetail());
 
 		mapView.updateDisplayWaypoints(displayPoints);
 
@@ -532,7 +550,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	/**
 	 *
 	 */
-	public void updateAll(){
+	public void updateAll() {
 		this.updateUserPosition();
 		this.updateRouteOverlay();
 		this.updatePOIView();
@@ -542,7 +560,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	/**
 	 *
 	 */
-	public void updatePOIView(){
+	public void updatePOIView() {
 		this.poiGen.generatePOIView(coorBox, size);
 	}
 
@@ -552,7 +570,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	 *
 	 */
 	public void updateUserPosition() {
-		if(userPos.isAlive()){
+		if (userPos.isAlive()) {
 			userPos.interrupt();
 		}
 		userPos = new Thread(new UserPos());
@@ -561,9 +579,9 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * This class sets the USer Arrwow
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserPos implements Runnable {
 
@@ -574,23 +592,47 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		}
 
 		public void run() {
+			/*
+			 * double lon = -coorBox.getTopLeft().getLongitude() +
+			 * user.getLongitude(); double lat = -user.getLatitude() +
+			 * coorBox.getTopLeft().getLatitude();
+			 * 
+			 * DisplayCoordinate pos = new DisplayCoordinate(
+			 * CoordinateUtility.convertDegreesToPixels(lon,
+			 * coorBox.getLevelOfDetail(),
+			 * CoordinateUtility.DIRECTION_LONGITUDE),
+			 * CoordinateUtility.convertDegreesToPixels(lat,
+			 * coorBox.getLevelOfDetail(),
+			 * CoordinateUtility.DIRECTION_LATITUDE));
+			 */
 
-			double lon = -coorBox.getTopLeft().getLongitude() + user.getLongitude();
-			double lat = -user.getLatitude() + coorBox.getTopLeft().getLatitude();
+			double lon = -coorBox.getCenter().getLongitude()
+					+ user.getLongitude();
+			double lat = -user.getLatitude()
+					+ coorBox.getCenter().getLatitude();
 
-			DisplayCoordinate pos = new DisplayCoordinate(
-					CoordinateUtility.convertDegreesToPixels(lon,
-							coorBox.getLevelOfDetail(),
-							CoordinateUtility.DIRECTION_LONGITUDE),
-					CoordinateUtility.convertDegreesToPixels(lat,
-							coorBox.getLevelOfDetail(),
-							CoordinateUtility.DIRECTION_LATITUDE));
+			float x = CoordinateUtility.convertDegreesToPixels(lon,
+					coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_LONGITUDE);
 
-			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(), "User Posi ist:" + user.toString());
+			float y = CoordinateUtility.convertDegreesToPixels(lat,
+					coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_LATITUDE);
+
+			Log.d("UserPos", " x: " + x + " y: " + y);
+			
+			x = coorBox.getDisplaySize().x/2 + x;
+			y = coorBox.getDisplaySize().y/2 + y;
+
+			Log.d("UserPos", " x: " + x + " y: " + y);
+			
+			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(),
+					"User Posi ist:" + user.toString());
 			try {
-				mapView.setUserPositionOverlayImage(pos.getX(), pos.getY());
-			} catch(NullPointerException e) {
-				Log.d(TAG_MAP_CONTROLLER, "mapView wurde noch nicht initialisiert");
+				mapView.setUserPositionOverlayImage(x, y);
+			} catch (NullPointerException e) {
+				Log.d(TAG_MAP_CONTROLLER,
+						"mapView wurde noch nicht initialisiert");
 			}
 		}
 
@@ -598,10 +640,10 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	/**
 	 * forwards a set active action to route controller
-	 *
+	 * 
 	 * @param id
 	 *            of the waypoint
-	 *
+	 * 
 	 */
 	public void setActive(int id) {
 		this.routeController.setActiveWaypoint(id);
@@ -612,7 +654,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	}
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public POI getPOIById(int id) {
@@ -622,6 +664,5 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	public POI getPOI() {
 		return mapView.getCurrentPOI();
 	}
-
 
 }

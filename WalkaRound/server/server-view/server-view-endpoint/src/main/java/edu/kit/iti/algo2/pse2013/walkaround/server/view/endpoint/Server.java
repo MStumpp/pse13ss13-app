@@ -2,9 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 import org.slf4j.Logger;
@@ -54,11 +52,13 @@ public class Server {
         }
 
         // project coordinate
-        Vertex source;
-        Vertex target;
+        Edge source;
+        Edge target;
         try {
-            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(0));
-            target = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinates.get(1));
+            source = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                    new GeometrySearch(new double[]{coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude()}));
+            target = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                    new GeometrySearch(new double[]{coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude()}));
         } catch (GeometryProcessorException e) {
             transfer.setError(e.getMessage());
             return transfer;
@@ -70,12 +70,11 @@ public class Server {
             return transfer;
         }
 
-        System.out.println("source: " + source.toString());
-        System.out.println("target: " + target.toString());
+        logger.info("computeShortestPath: Source: " + source.toString() + " Target: " + target.toString());
 
         List<Vertex> route;
         try {
-            route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
+            route = ShortestPathProcessor.getInstance().computeShortestPath(source.getHead(), target.getHead());
         } catch (ShortestPathComputeException e) {
             transfer.setError(e.getMessage());
             return transfer;
@@ -91,11 +90,10 @@ public class Server {
         }
 
         if (route == null) {
-            transfer.setError("route is null");
+            logger.info("computeShortestPath: No route computed");
+            transfer.setError("No route computed");
             return transfer;
         }
-
-        System.out.println("number nodes in route: " + route.size());
 
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
@@ -125,8 +123,6 @@ public class Server {
                                               @PathParam("profile") String profile,
                                               @PathParam("length") String length) {
 
-        logger.info("computeRoundtrip: Coordinate: " + coordinate + " Profile: " + profile + " Length: " + length);
-
         RouteInfoTransfer transfer = new RouteInfoTransfer();
 
         // check input
@@ -145,10 +141,13 @@ public class Server {
             return transfer;
         }
 
+        logger.info("computeRoundtrip: Source: " + coordinate + " Profile: " + profile + " Length: " + length);
+
         // project coordinate
-        Vertex source;
+        Edge source;
         try {
-            source = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+            source = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                    new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
         } catch (GeometryProcessorException e) {
             transfer.setError(e.getMessage());
             return transfer;
@@ -160,11 +159,9 @@ public class Server {
             return transfer;
         }
 
-        System.out.println("source: " + source.toString());
-
         List<Vertex> route;
         try {
-            route = RoundtripProcessor.getInstance().computeRoundtrip(source,
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source.getHead(),
                     Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
             transfer.setError(e.getMessage());
@@ -181,11 +178,10 @@ public class Server {
         }
 
         if (route == null) {
+            logger.info("computeRoundtrip: No roundtrip computed");
             transfer.setError("route is null");
             return transfer;
         }
-
-        System.out.println("number nodes in route: " + route.size());
 
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
@@ -219,6 +215,8 @@ public class Server {
             return transfer;
         }
 
+        logger.info("computeOptimizedRoute");
+
         transfer.setError("computeOptimizedRoute not yet implemented");
         return transfer;
     }
@@ -242,9 +240,10 @@ public class Server {
             return null;
 
         // project coordinate
-        Vertex vertex;
+        Edge edge;
         try {
-            vertex = (Vertex) GeometryProcessor.getInstance().getNearestVertex(coordinate);
+            edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                    new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
         } catch (InstantiationException e) {
             return null;
         } catch (GeometryProcessorException e) {
@@ -253,11 +252,10 @@ public class Server {
             return null;
         }
 
-        if (vertex == null)
+        if (edge == null)
             return null;
 
-        return new Coordinate(vertex.getLatitude(),
-                vertex.getLongitude(), null);
+        return new Coordinate(edge.getHead().getLatitude(), edge.getHead().getLongitude(), null);
     }
 
 

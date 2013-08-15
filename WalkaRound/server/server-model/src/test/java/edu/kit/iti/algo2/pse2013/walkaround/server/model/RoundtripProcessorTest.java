@@ -2,12 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,7 +37,7 @@ public class RoundtripProcessorTest {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
-        GeometryProcessor.init(geometryDataIO);
+        GeometryProcessorEdge.init(geometryDataIO);
     }
 
     @Before
@@ -93,10 +88,10 @@ public class RoundtripProcessorTest {
 
         Assert.assertNotNull(graphDataIO);
 
-        GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
         Vertex source = null;
         try {
-            source = (Vertex) geometryProcessor.getNearestVertex(new Coordinate(49.009353,8.403983));
+            source = (Vertex) geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {49.009353, 8.403983}));
         } catch (GeometryProcessorException e) {
             e.printStackTrace();
         } catch (GeometryComputationNoSlotsException e) {

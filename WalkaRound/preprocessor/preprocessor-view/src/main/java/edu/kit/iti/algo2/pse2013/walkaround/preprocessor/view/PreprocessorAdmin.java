@@ -36,8 +36,14 @@ public class PreprocessorAdmin {
 	@Option(name = "--graph_out", usage="Location of the GraphData-output")
 	public String graphOutput = FileUtil.getFile("graphData.pbf").getAbsolutePath();
 
-	@Option(name = "--geometry_out", usage="Location of the GeometryData-output")
-	public String geometryOutput = FileUtil.getFile("geometryData.pbf").getAbsolutePath();
+	@Option(name = "--geometry_vertices_out", usage="Location of the GeometryData-output Vertices")
+	public String geometryOutputVertices = FileUtil.getFile("geometryDataVertices.pbf").getAbsolutePath();
+
+    @Option(name = "--geometry_edges_out", usage="Location of the GeometryData-output Edges")
+    public String geometryOutputEdges = FileUtil.getFile("geometryDataEdges.pbf").getAbsolutePath();
+
+    @Option(name = "--geometry_pois_out", usage="Location of the GeometryData-output POIs")
+    public String geometryOutputPOIs = FileUtil.getFile("geometryDataPOIs.pbf").getAbsolutePath();
 
 	public static void main(String[] args) {
 		System.exit(new PreprocessorAdmin().run(args));
@@ -49,13 +55,17 @@ public class PreprocessorAdmin {
 			p.parseArgument(args);
 			run();
 			File osmFile = new File(input);
-			File geomFile = new File(geometryOutput);
-			File graphFile = new File(graphOutput);
+			File geomVerticesFile = new File(geometryOutputVertices);
+            File geomEdgesFile = new File(geometryOutputEdges);
+            File geomPOIsFile = new File(geometryOutputPOIs);
+            File graphFile = new File(graphOutput);
 			File locFile = new File(locationOutput);
 			OSMDataPreprocessor prep = new OSMDataPreprocessor(osmFile, locFile, graphFile);
 
-			geomFile.getParentFile().mkdirs();
-			graphFile.getParentFile().mkdirs();
+			geomVerticesFile.getParentFile().mkdirs();
+            geomEdgesFile.getParentFile().mkdirs();
+            geomPOIsFile.getParentFile().mkdirs();
+            graphFile.getParentFile().mkdirs();
 			locFile.getParentFile().mkdirs();
 
 			prep.parse();
@@ -66,11 +76,23 @@ public class PreprocessorAdmin {
 			logger.info("Writing LocationDataIo again with Wikipedia-Information...");
 			LocationDataIO.save(locData, locFile);
 
-			logger.info("Start building GeometryData...");
-			GeometryDataIO geomData = GeometryDataPreprocessor.preprocessGeometryDataIO(
+			logger.info("Start building GeometryData Vertices...");
+			GeometryDataIO geomDataVertices = GeometryDataPreprocessor.preprocessGeometryDataIO(
                     new ArrayList<Geometrizable>(GraphDataIO.load(graphFile).getVertices()));
-			GeometryDataIO.save(geomData, geomFile);
-			logger.info("Writing GeometryDataIO finished.");
+			GeometryDataIO.save(geomDataVertices, geomVerticesFile);
+			logger.info("Writing GeometryDataIO Vertices finished.");
+
+            logger.info("Start building GeometryData Edges...");
+            GeometryDataIO geomDataEdges = GeometryDataPreprocessor.preprocessGeometryDataIO(
+                    new ArrayList<Geometrizable>(GraphDataIO.load(graphFile).getEdges()));
+            GeometryDataIO.save(geomDataEdges, geomEdgesFile);
+            logger.info("Writing GeometryDataIO Edges finished.");
+
+            logger.info("Start building GeometryData POIs...");
+            GeometryDataIO geomDataPOIs = GeometryDataPreprocessor.preprocessGeometryDataIO(
+                    new ArrayList<Geometrizable>(LocationDataIO.load(locFile).getPOIs()));
+            GeometryDataIO.save(geomDataPOIs, geomPOIsFile);
+            logger.info("Writing GeometryDataIO POIs finished.");
 			return 0;
 		} catch (CmdLineException | IOException e) {
 			System.err.println(e.getMessage());
@@ -83,9 +105,11 @@ public class PreprocessorAdmin {
 		System.out.format(
 			"Input file:\n\t%s\n"
 			+ "Output files:\n"
-			+ "\tGeometryData: %s\n"
-			+ "\tGraphData:    %s\n"
+			+ "\tGeometryData Vertices: %s\n"
+            + "\tGeometryData Edges: %s\n"
+            + "\tGeometryData POIs: %s\n"
+            + "\tGraphData:    %s\n"
 			+ "\tLocationData: %s\n",
-			input, geometryOutput, graphOutput, locationOutput);
+			input, geometryOutputVertices, geometryOutputEdges, geometryOutputPOIs, graphOutput, locationOutput);
 	}
 }
