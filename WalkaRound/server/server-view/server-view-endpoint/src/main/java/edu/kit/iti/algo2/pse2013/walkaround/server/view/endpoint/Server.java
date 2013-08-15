@@ -52,12 +52,12 @@ public class Server {
         }
 
         // project coordinate
-        Vertex source;
-        Vertex target;
+        Edge source;
+        Edge target;
         try {
-            source = (Vertex) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            source = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude()}));
-            target = (Vertex) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            target = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude()}));
         } catch (GeometryProcessorException e) {
             transfer.setError(e.getMessage());
@@ -74,7 +74,7 @@ public class Server {
 
         List<Vertex> route;
         try {
-            route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
+            route = ShortestPathProcessor.getInstance().computeShortestPath(source.getHead(), target.getHead());
         } catch (ShortestPathComputeException e) {
             transfer.setError(e.getMessage());
             return transfer;
@@ -144,9 +144,9 @@ public class Server {
         logger.info("computeRoundtrip: Source: " + coordinate + " Profile: " + profile + " Length: " + length);
 
         // project coordinate
-        Vertex source;
+        Edge source;
         try {
-            source = (Vertex) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            source = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
         } catch (GeometryProcessorException e) {
             transfer.setError(e.getMessage());
@@ -161,7 +161,7 @@ public class Server {
 
         List<Vertex> route;
         try {
-            route = RoundtripProcessor.getInstance().computeRoundtrip(source,
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source.getHead(),
                     Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
             transfer.setError(e.getMessage());
@@ -240,9 +240,9 @@ public class Server {
             return null;
 
         // project coordinate
-        Vertex vertex;
+        Edge edge;
         try {
-            vertex = (Vertex) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
         } catch (InstantiationException e) {
             return null;
@@ -252,11 +252,10 @@ public class Server {
             return null;
         }
 
-        if (vertex == null)
+        if (edge == null)
             return null;
 
-        return new Coordinate(vertex.getLatitude(),
-                vertex.getLongitude(), null);
+        return new Coordinate(edge.getHead().getLatitude(), edge.getHead().getLongitude(), null);
     }
 
 
