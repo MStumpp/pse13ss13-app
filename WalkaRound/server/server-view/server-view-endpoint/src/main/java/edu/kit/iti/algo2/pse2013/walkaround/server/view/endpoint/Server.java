@@ -100,7 +100,9 @@ public class Server {
         for (Vertex vertex : route)
             transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
-                    new CrossingInformation(new float[]{50.f, 100.f})));
+                    computeCrossingInformation(vertex)));
+
+        transfer.setLength(RouteUtil.totalLength(route));
 
         return transfer;
     }
@@ -127,10 +129,8 @@ public class Server {
 
         RouteInfoTransfer transfer = new RouteInfoTransfer();
 
-        return transfer;
-
         // check input
-        /*if (coordinate == null || profile == null || length == null) {
+        if (coordinate == null || profile == null || length == null) {
             transfer.setError("coordinate, profile and length must not be null");
             return transfer;
         }
@@ -189,7 +189,9 @@ public class Server {
                     vertex.getLongitude(),
                     computeCrossingInformation(vertex)));
 
-        return transfer;   */
+        transfer.setLength(RouteUtil.totalLength(route));
+
+        return transfer;
     }
 
 
@@ -214,7 +216,6 @@ public class Server {
             return transfer;
         }
 
-//      return OptimizeRouteProcessor.getInstance().computeOptimizedRoute(routeInfoTransfer);
         transfer.setError("computeOptimizedRoute not yet implemented");
         return transfer;
     }
@@ -268,9 +269,9 @@ public class Server {
         List<Float> angles = new ArrayList<Float>();
         for (Edge edge : vertex.getOutgoingEdges()) {
             double angle1 = Math.atan2(vertex.getParent().getLongitude() - vertex.getLongitude(),
-                vertex.getParent().getLatitude() - vertex.getLatitude());
+                    vertex.getParent().getLatitude() - vertex.getLatitude());
             double angle2 = Math.atan2(vertex.getLongitude() - edge.getHead().getLongitude(),
-                vertex.getLatitude() - edge.getHead().getLatitude());
+                    vertex.getLatitude() - edge.getHead().getLatitude());
             angles.add(new Float(angle1-angle2));
         }
         float[] floatArray = new float[angles.size()];

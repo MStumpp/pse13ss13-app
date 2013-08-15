@@ -432,8 +432,11 @@ public class ShortestPathProcessor {
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
 
+            logger.info("==============================================================");
             logger.info("computeShortestPath: Start: " + sourceVertex.toString() +
-                    " End: " + targetVertex.toString() + " Route Size: " + route.size() + " Run time: " + runTime);
+                    " End: " + targetVertex.toString() + " Length: " + RouteUtil.totalLength(route) +
+                    " Route Size: " + route.size() + " Run time: " + runTime);
+            logger.info("==============================================================");
 
             return route;
         }

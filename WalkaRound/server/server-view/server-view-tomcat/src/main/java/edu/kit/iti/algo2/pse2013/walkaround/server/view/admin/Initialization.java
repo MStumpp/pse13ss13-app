@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
@@ -12,6 +13,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Initialization for Tomcat Server.
@@ -50,7 +52,8 @@ public class Initialization implements ServletContextListener {
             e.printStackTrace();
         }
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(getGraphDataIO(), getLocationDataIO());
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()));
         GeometryProcessor.init(geometryDataIO, 2);
 
         try {

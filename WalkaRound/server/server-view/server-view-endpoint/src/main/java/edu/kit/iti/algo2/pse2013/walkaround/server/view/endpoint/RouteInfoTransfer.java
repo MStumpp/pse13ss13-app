@@ -26,6 +26,12 @@ public final class RouteInfoTransfer {
 
 
     /**
+     * Route length.
+     */
+    private double length;
+
+
+    /**
      * Creates an instance of RouteInfoTransfer.
      */
     public RouteInfoTransfer() {
@@ -81,6 +87,26 @@ public final class RouteInfoTransfer {
      */
     public void setError(String error) {
         this.error = error;
+    }
+
+
+    /**
+     * Returns the length of the route.
+     *
+     * @return double Length of the route.
+     */
+    public double getLength() {
+        return length;
+    }
+
+
+    /**
+     * Set the length of the route.
+     *
+     * @param length Length of the route.
+     */
+    public void setLength(double length) {
+        this.length = length;
     }
 
 }

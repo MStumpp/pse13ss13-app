@@ -21,7 +21,7 @@ public final class CrossingInformation {
     /**
      * Creates an instance of CrossingInformation.
      *
-     * @param crossroadAngles An array of crossroad angles.
+     * @param angles An array of crossroad angles.
      */
     public CrossingInformation(float[] angles) {
         if (angles.length == 0)
