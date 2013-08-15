@@ -52,12 +52,12 @@ public class Server {
         }
 
         // project coordinate
-        Edge source;
-        Edge target;
+        Edge sourceEdge;
+        Edge targetEdge;
         try {
-            source = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            sourceEdge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude()}));
-            target = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            targetEdge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude()}));
         } catch (GeometryProcessorException e) {
             transfer.setError(e.getMessage());
@@ -70,11 +70,49 @@ public class Server {
             return transfer;
         }
 
-        logger.info("computeShortestPath: Source: " + source.toString() + " Target: " + target.toString());
+        logger.info("computeShortestPath: Source: " + sourceEdge.toString() + " Target: " + targetEdge.toString());
+
+        if (sourceEdge == null || targetEdge == null) {
+            String msg = "no projekted source and/or target edge for given coordinates found";
+            logger.info(msg);
+            transfer.setError(msg);
+        }
+
+        // get source point on source edge
+        double[] sourcePoint = RouteUtil.computePointOnLine(sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude(),
+                sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude(), coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude());
+
+        Vertex source = null;
+        // determine which edge endpoint is closer to point
+        if (RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude()) <
+                RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude())) {
+            source = sourceEdge.getTail();
+        }  else {
+            source = sourceEdge.getHead();
+        }
+
+        // get target point on target edge
+        double[] targetPoint = RouteUtil.computePointOnLine(targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude(),
+                targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude(), coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude());
+
+        Vertex target = null;
+        // determine which edge endpoint is closer to point
+        if (RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude()) <
+                RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude())) {
+            source = targetEdge.getTail();
+        }  else {
+            source = targetEdge.getHead();
+        }
+
+        if (source == null || target == null) {
+            String msg = "no source and/or target found for given coordinates";
+            logger.info(msg);
+            transfer.setError(msg);
+        }
 
         List<Vertex> route;
         try {
-            route = ShortestPathProcessor.getInstance().computeShortestPath(source.getHead(), target.getHead());
+            route = ShortestPathProcessor.getInstance().computeShortestPath(source, target);
         } catch (ShortestPathComputeException e) {
             transfer.setError(e.getMessage());
             return transfer;
@@ -90,15 +128,27 @@ public class Server {
         }
 
         if (route == null) {
-            logger.info("computeShortestPath: No route computed");
-            transfer.setError("No route computed");
+            String msg = "no route computed for given source and target";
+            logger.info(msg);
+            transfer.setError(msg);
             return transfer;
         }
 
-        for (Vertex vertex : route)
-            transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
+        for (Vertex vertex : route) {
+            transfer.appendCoordinate(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
                     computeCrossingInformation(vertex)));
+        }
+
+        // eventually add point as first coordinate of the route
+        Coordinate tail = new Coordinate(sourcePoint[0], sourcePoint[1]);
+        if (!tail.equals(transfer.getCoordinates().getFirst()))
+            transfer.prependCoordinate(tail);
+
+        // eventually add point as last coordinate of the route
+        Coordinate head = new Coordinate(targetPoint[0], targetPoint[1]);
+        if (!head.equals(transfer.getCoordinates().getLast()))
+            transfer.appendCoordinate(head);
 
         transfer.setLength(RouteUtil.totalLength(route));
 
@@ -144,9 +194,9 @@ public class Server {
         logger.info("computeRoundtrip: Source: " + coordinate + " Profile: " + profile + " Length: " + length);
 
         // project coordinate
-        Edge source;
+        Edge edge;
         try {
-            source = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+            edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
                     new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
         } catch (GeometryProcessorException e) {
             transfer.setError(e.getMessage());
@@ -159,10 +209,34 @@ public class Server {
             return transfer;
         }
 
+        if (edge == null) {
+            String msg = "no projekted edge for given coordinate found";
+            logger.info(msg);
+            transfer.setError(msg);
+        }
+
+        // get point on edge
+        double[] point = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
+                edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
+
+        Vertex source = null;
+        // determine which edge endpoint is closer to point
+        if (RouteUtil.computeDistance(point[0], point[1], edge.getTail().getLatitude(), edge.getTail().getLongitude()) <
+                RouteUtil.computeDistance(point[0], point[1], edge.getHead().getLatitude(), edge.getHead().getLongitude())) {
+            source = edge.getTail();
+        }  else {
+            source = edge.getHead();
+        }
+
+        if (source == null) {
+            String msg = "no source found for given edge";
+            logger.info(msg);
+            transfer.setError(msg);
+        }
+
         List<Vertex> route;
         try {
-            route = RoundtripProcessor.getInstance().computeRoundtrip(source.getHead(),
-                    Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source, Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
             transfer.setError(e.getMessage());
             return transfer;
@@ -178,15 +252,24 @@ public class Server {
         }
 
         if (route == null) {
-            logger.info("computeRoundtrip: No roundtrip computed");
-            transfer.setError("route is null");
+            String msg = "no roundtrip computed for given source";
+            logger.info(msg);
+            transfer.setError(msg);
             return transfer;
         }
 
-        for (Vertex vertex : route)
-            transfer.addCoordinates(new Coordinate(vertex.getLatitude(),
+        for (Vertex vertex : route) {
+            transfer.appendCoordinate(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
                     computeCrossingInformation(vertex)));
+        }
+
+        // eventually add point as first coordinate of the route
+        Coordinate begin = new Coordinate(point[0], point[1]);
+        if (!begin.equals(transfer.getCoordinates().getFirst())) {
+            transfer.prependCoordinate(begin);
+            transfer.prependCoordinate(begin);
+        }
 
         transfer.setLength(RouteUtil.totalLength(route));
 
@@ -252,10 +335,14 @@ public class Server {
             return null;
         }
 
-        if (edge == null)
+        if (edge == null) {
             return null;
+        }
 
-        return new Coordinate(edge.getHead().getLatitude(), edge.getHead().getLongitude(), null);
+        double[] point = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
+                edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
+
+        return new Coordinate(point[0], point[1], null);
     }
 
 
