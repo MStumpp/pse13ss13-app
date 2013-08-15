@@ -62,6 +62,8 @@ public class TestProtobufConverter {
 		left.addGeometrizable(new Edge(new Vertex(4, 5), new Vertex(6, 7)));
 		left.addGeometrizable(new POI(1, 2, "Name", "TextInfo", new URL("http://www.wikipedia.org"), new int[]{1, 2}));
 		GeometryNode right = new GeometryNode(6);
+		GeometryNode rightLeft = new GeometryNode(5.5);
+		right.setLeftNode(rightLeft);
 		root.setLeftNode(left);
 		root.setRightNode(right);
 
