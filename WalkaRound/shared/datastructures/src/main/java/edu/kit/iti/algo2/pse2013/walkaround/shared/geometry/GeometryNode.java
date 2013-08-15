@@ -54,9 +54,7 @@ public class GeometryNode {
 	 *
 	 * @param parent
 	 *            Parent GeometryNode.
-	 * @param depth
-	 *            Depth of this GeometryNode.
-	 * @param geometrizable
+	 * @param geometrizables
 	 *            Geometrizable.
 	 */
 	public GeometryNode(GeometryNode parent, List<Geometrizable> geometrizables) {
@@ -69,8 +67,6 @@ public class GeometryNode {
 	 *
 	 * @param parent
 	 *            Parent GeometryNode.
-	 * @param depth
-	 *            Depth of this GeometryNode.
 	 * @param splitValue
 	 *            Split value.
 	 */

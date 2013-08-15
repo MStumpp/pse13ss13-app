@@ -3,8 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 import org.junit.Test;
 
