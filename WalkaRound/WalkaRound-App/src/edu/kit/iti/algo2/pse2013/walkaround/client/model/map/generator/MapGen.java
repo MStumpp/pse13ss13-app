@@ -92,7 +92,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 *
 	 */
 	private DisplayCoordinate mapOffset;
-	
+
 	/**
 	 * the Points per Offset Point
 	 */
@@ -171,7 +171,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff, this.coorBox.getLevelOfDetail(),
 				CoordinateUtility.DIRECTION_VERTICAL);
-		
+
 		yDiff = yDiff * pPerDiff;
 		Log.d(TAG, "RealOffset: x " + xDiff + " y: " + yDiff);
 
@@ -256,7 +256,6 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	@Override
 	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
 		// starts a new Thread to draw the map
 		Thread t = new Thread(new TileDrawer(tile, x, y));
@@ -305,7 +304,6 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 			// Log.d("tt2", ""+ tile.isMutable());
 		}
 
-		@Override
 		public void run() {
 			Log.d(TAG, "Receive Tile!");
 
@@ -327,7 +325,6 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	@Override
 	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
 		Log.d("debugFu", "pref änderung " + key);
 		if(key.equals(PreferenceUtility.OPTION_MAP_TYP)){

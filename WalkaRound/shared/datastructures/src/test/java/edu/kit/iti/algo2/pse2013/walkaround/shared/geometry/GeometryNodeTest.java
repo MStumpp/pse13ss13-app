@@ -1,11 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Field;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * GeometryNodeTest.
@@ -25,15 +27,16 @@ public class GeometryNodeTest {
 
     @Test
     public void testInitialization1() {
-
         GeometryNode parent = new GeometryNode(1.d);
-        int depth = 0;
         Vertex vertex = new Vertex(1.d, 2.d);
-        GeometryNode node = new GeometryNode(parent, depth, vertex);
+        LinkedList<Geometrizable> list = new LinkedList<Geometrizable>();
+        list.add(vertex);
+        GeometryNode node = new GeometryNode(parent, list);
 
         Assert.assertEquals(node.getParent(), parent);
-        Assert.assertEquals(node.getDepth(), depth);
-        Assert.assertEquals(node.getGeometrizable(), vertex);
+        Assert.assertEquals(node.getDepth(), 0);
+        Assert.assertTrue(node.getGeometrizables().containsAll(list));
+        Assert.assertTrue(list.containsAll(node.getGeometrizables()));
         Assert.assertEquals(node.getSplitValue(), Double.NaN, 0.d);
     }
 
@@ -42,12 +45,11 @@ public class GeometryNodeTest {
     public void testInitialization2() {
 
         GeometryNode parent = new GeometryNode(1.d);
-        int depth = 0;
         double splitValue = 3.5;
-        GeometryNode node = new GeometryNode(parent, depth, splitValue);
+        GeometryNode node = new GeometryNode(parent, splitValue);
 
         Assert.assertEquals(node.getParent(), parent);
-        Assert.assertEquals(node.getDepth(), depth);
+        Assert.assertEquals(node.getDepth(), 0);
         Assert.assertNull(node.getGeometrizable());
         Assert.assertEquals(node.getSplitValue(), splitValue, 0.d);
     }

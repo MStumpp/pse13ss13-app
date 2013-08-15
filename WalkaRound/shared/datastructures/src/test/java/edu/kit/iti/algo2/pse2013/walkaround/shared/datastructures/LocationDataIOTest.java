@@ -13,10 +13,8 @@ import java.util.TreeSet;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Graph;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**

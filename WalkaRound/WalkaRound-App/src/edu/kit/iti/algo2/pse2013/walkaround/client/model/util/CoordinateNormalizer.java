@@ -27,7 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 /**
  * This class provides a method to normalize a coordinate to a coordinate on a
  * graph.
- * 
+ *
  * @author Thomas Kadow
  * @author Matthias Stumpp
  * @version 1.1
@@ -52,7 +52,7 @@ public final class CoordinateNormalizer {
 
 	/**
 	 * Normalizes a coordinate to a coordinate on a graph.
-	 * 
+	 *
 	 * @param coord
 	 *            coordinate to normalize
 	 * @param levelOfDetail
@@ -122,7 +122,6 @@ public final class CoordinateNormalizer {
 			this.url = url;
 		}
 
-		@Override
 		public void run() {
 			InputStream is;
 			try {

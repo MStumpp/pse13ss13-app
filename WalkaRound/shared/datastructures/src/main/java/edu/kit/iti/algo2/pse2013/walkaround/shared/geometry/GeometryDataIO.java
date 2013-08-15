@@ -73,8 +73,7 @@ public class GeometryDataIO {
 	 *            Location of output file on file system.
 	 * @throws java.io.IOException
 	 */
-	public static void save(GeometryDataIO objectToSave, File destination)
-			throws IOException {
+	public static void save(GeometryDataIO objectToSave, File destination) throws IOException {
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
 		ProtobufConverter.getGeometryDataBuilder(objectToSave).build().writeTo(out);
 		out.flush();
@@ -94,5 +93,45 @@ public class GeometryDataIO {
 		GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));
 		in.close();
 		return geom;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + numDimensions;
+		result = prime * result + ((root == null) ? 0 : root.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof GeometryDataIO)) {
+			return false;
+		}
+		GeometryDataIO other = (GeometryDataIO) obj;
+		if (numDimensions != other.numDimensions) {
+			return false;
+		}
+		if (root == null) {
+			if (other.root != null) {
+				return false;
+			}
+		} else if (!root.equals(other.root)) {
+			return false;
+		}
+		return true;
 	}
 }

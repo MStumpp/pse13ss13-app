@@ -172,6 +172,7 @@ public class BoundingBox {
 	 */
 	public void setLevelOfDetail(float levelOfDetail) {
 		this.levelOfDetail = levelOfDetail;
+		this.computeSize();
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();
 	}

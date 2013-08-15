@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -11,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement
-public class Coordinate implements Geometrizable {
+public class Coordinate {
 
     /**
      * latitude of this Coordinate.
@@ -103,23 +101,27 @@ public class Coordinate implements Geometrizable {
         this.crossingInformation = crossingInformation;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
-        return 2;
+        Coordinate that = (Coordinate) o;
+
+        if (Double.compare(that.latitude, latitude) != 0) return false;
+        if (Double.compare(that.longitude, longitude) != 0) return false;
+
+        return true;
     }
 
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
-        if (dim == 0)
-            return getLatitude();
-        else
-            return getLongitude();
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(latitude);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
-
 }

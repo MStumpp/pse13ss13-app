@@ -11,7 +11,7 @@ import android.util.Log;
 
 /**
  * This class provides text-to-speech.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -40,7 +40,7 @@ public final class TextToSpeechUtility implements OnInitListener,
 
 	/**
 	 * Speaks a String
-	 * 
+	 *
 	 * @param text
 	 */
 	public boolean speak(String text) {
@@ -58,7 +58,7 @@ public final class TextToSpeechUtility implements OnInitListener,
 
 	/**
 	 * Speaks a String
-	 * 
+	 *
 	 * @param text
 	 */
 	public boolean speak(String text, Locale language) {
@@ -83,7 +83,6 @@ public final class TextToSpeechUtility implements OnInitListener,
 		return ttsUtilInstance;
 	}
 
-	@Override
 	public void onInit(int status) {
 		if (status == TextToSpeech.SUCCESS) {
 			isReady = true;
@@ -102,7 +101,6 @@ public final class TextToSpeechUtility implements OnInitListener,
 		}
 	}
 
-	@Override
 	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
 		if (key.equals(PreferenceUtility.OPTION_SOUND)) {
 			sound = pref.getBoolean(key, true);

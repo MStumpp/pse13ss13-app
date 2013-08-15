@@ -98,7 +98,6 @@ public class RouteGen implements Runnable {
 
 	}
 
-	@Override
 	public void run() {
 		Log.d(Tag_RouteGen, "create Route Bitmap");
 		this.routeImg.eraseColor(defaultBackgroundEmpty);

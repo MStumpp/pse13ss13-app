@@ -31,7 +31,7 @@ public class TileFetcher {
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private FetchingQueue currentRunnable = new FetchingQueue();
 	private Thread currentThread = new Thread(currentRunnable);
-	
+
 	/**
 	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
 	 * <ul>
@@ -63,7 +63,7 @@ public class TileFetcher {
 
 	public void requestTiles(final int levelOfDetail, final int minX, final int minY, final int maxX, final int maxY, TileListener listener) {
 		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, %d, %d, %d, %d, %s)", levelOfDetail, minX, minY, maxX, maxY, listener));
-		
+
 		int minLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
 		int maxLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();
 
@@ -133,7 +133,6 @@ public class TileFetcher {
 			levelOfDetailList.clear();
 		}
 
-		@Override
 		public void run() {
 			while(xList.size() > 0) {
 				int x = xList.poll();

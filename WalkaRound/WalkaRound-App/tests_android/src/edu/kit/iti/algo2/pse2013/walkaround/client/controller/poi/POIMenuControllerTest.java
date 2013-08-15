@@ -1,11 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
 
+import org.junit.Test;
+
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
-import android.test.AndroidTestCase;
 
-public class POIMenuControllerTest extends AndroidTestCase {
+public class POIMenuControllerTest {
 
+	@Test
 	public void testAddRemoveCategory() {
 		POIMenuController.getInstance().addActiveCategory(1);
 		assertFalse(POIManager.getInstance().isEmpty());

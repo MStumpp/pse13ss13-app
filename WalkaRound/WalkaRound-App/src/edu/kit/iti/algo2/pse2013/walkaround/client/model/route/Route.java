@@ -205,7 +205,6 @@ public class Route implements RouteInfo {
 				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
 
 				Thread pathCalculator = new Thread (new Runnable() {
-					@Override
 					public void run() {
 						Log.d(TAG_ROUTE, "Thread.run() in moveActiveWaypoint(Coordinate)");
 						RouteInfo newRouteBeforeActiveWaypoint;
@@ -227,7 +226,6 @@ public class Route implements RouteInfo {
 				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
 
 				Thread pathCalculator = new Thread (new Runnable() {
-					@Override
 					public void run() {
 						Log.d(TAG_ROUTE, "Thread.run() in moveActiveWaypoint(Coordinate)");
 						RouteInfo newRoutePastActiveWaypoint;
@@ -331,13 +329,11 @@ public class Route implements RouteInfo {
 		}
 	}
 
-	@Override
 	public String getName() {
 		Log.d(TAG_ROUTE, "getName()");
 		return this.name;
 	}
 
-	@Override
 	public Waypoint getStart() {
 		Log.d(TAG_ROUTE, "getStart()");
 		if (this.routeCoordinates.size() > 0) {
@@ -346,7 +342,6 @@ public class Route implements RouteInfo {
 		return null;
 	}
 
-	@Override
 	public Waypoint getEnd() {
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Log.d(TAG_ROUTE, "getEnd() on Waypoint list with size " + waypoints.size());
@@ -356,13 +351,11 @@ public class Route implements RouteInfo {
 		return null;
 	}
 
-	@Override
 	public Waypoint getActiveWaypoint() {
 		Log.d(TAG_ROUTE, "getActiveWaypoint()");
 		return this.activeWaypoint;
 	}
 
-	@Override
 	public LinkedList<Waypoint> getWaypoints() {
 		Log.d(TAG_ROUTE, "getWaypoints()");
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
@@ -374,7 +367,6 @@ public class Route implements RouteInfo {
 		return waypoints;
 	}
 
-	@Override
 	public boolean containsWaypoint(Waypoint wp) {
 		Log.d(TAG_ROUTE, "containsWaypoint(Waypoint)");
 		if (this.getWaypoints().contains(wp)) {
@@ -383,7 +375,6 @@ public class Route implements RouteInfo {
 		return false;
 	}
 
-	@Override
 	public LinkedList<Coordinate> getCoordinates() {
 		Log.d(TAG_ROUTE, "getCoordinates()");
 		return this.routeCoordinates;

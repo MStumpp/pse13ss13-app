@@ -1,9 +1,14 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import android.test.AndroidTestCase;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import org.junit.runner.RunWith;
 
-public class CoordinateUtilityTest extends AndroidTestCase  {
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.search.RobolectricTestRunner;
+import junit.framework.TestCase;
+import org.robolectric.RobolectricTestRunner;
+
+
+@RunWith(RobolectricTestRunner.class)
+public class TestCoordinateUtility extends TestCase {
 	private final static double FRACTION_DELTA = 1e-4; // TODO: Can this be lowered any further by improving the conversion-method?
 	private final static double INTEGER_DELTA = 1e-64;
 	/**

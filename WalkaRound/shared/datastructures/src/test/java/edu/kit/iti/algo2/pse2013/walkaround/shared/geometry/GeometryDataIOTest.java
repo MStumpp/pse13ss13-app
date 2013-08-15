@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -71,7 +72,9 @@ public class GeometryDataIOTest {
 
 
 	private GeometryDataIO getGeometryDataIO() {
-        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(new Vertex(1.d, 2.d)), 2);
+		LinkedList<Geometrizable> list = new LinkedList<Geometrizable>();
+		list.add(new Vertex(1.d, 2.d));
+        GeometryDataIO geometryDataIO = new GeometryDataIO(new GeometryNode(null, list), 2);
         return geometryDataIO;
     }
 

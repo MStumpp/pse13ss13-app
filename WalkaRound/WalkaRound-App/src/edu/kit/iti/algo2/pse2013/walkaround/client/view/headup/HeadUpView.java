@@ -306,8 +306,6 @@ public class HeadUpView extends Fragment {
 	 *
 	 */
 	private class OptionListener implements OnTouchListener {
-
-		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(option)) {
 				Log.d(TAG_HEADUP_VIEW_TOUCH, "Optionen werden gestartet");
@@ -325,8 +323,6 @@ public class HeadUpView extends Fragment {
 	 *
 	 */
 	private class ZoomPlusListener implements OnTouchListener {
-
-		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(plus)) {
 				Log.d(TAG_HEADUP_VIEW_TOUCH, "plus i pressed");
@@ -344,8 +340,6 @@ public class HeadUpView extends Fragment {
 	 *
 	 */
 	private class ZoomMinusListener implements OnTouchListener {
-
-		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(minus)) {
 				Log.d(TAG_HEADUP_VIEW_TOUCH, "Minus is pressed");
@@ -363,8 +357,6 @@ public class HeadUpView extends Fragment {
 	 *
 	 */
 	private class NavigationControllListener implements OnTouchListener {
-
-		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(naviControll)) {
 				Log.d(TAG_HEADUP_VIEW_TOUCH, "Navigation wird aktiviert/deaktiviert");
@@ -383,8 +375,6 @@ public class HeadUpView extends Fragment {
 	 *
 	 */
 	private class UserLockListener implements OnTouchListener {
-
-		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(userLock)) {
 				Log.d(TAG_HEADUP_VIEW_TOUCH, "toggle UserLock");
@@ -392,6 +382,5 @@ public class HeadUpView extends Fragment {
 			}
 			return false;
 		}
-
 	}
 }

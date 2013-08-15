@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -153,20 +154,19 @@ public class ProtobufConverter {
 	public static List<Geometrizable> getGeometrizables(List<SaveGeometrizable> saveGeoms) {
 		ArrayList<Geometrizable> geoms = new ArrayList<Geometrizable>();
 		for (SaveGeometrizable saveGeom : saveGeoms) {
-			if (saveGeom.getCoordinate() != null) {
-	    // TODO
-	//			geoms.add(getCoordinate(saveGeom.getCoordinate()));
-			} else if (saveGeom.getEdge() != null) {
-				geoms.add(getEdge(saveGeom.getEdge()));
-			}
+//			if (saveGeom.getPOI() != null) {
+//				geoms.add(getPOI(saveGeom.getPOI()));
+//			} else if (saveGeom.getEdge() != null) {
+//				geoms.add(getEdge(saveGeom.getEdge()));
+//			}
 		}
 		return null;
 	}
 	public static SaveGeometrizable.Builder getGeometrizableBuilder(Geometrizable geometrizable) {
 		if (geometrizable instanceof Edge) {
 			return SaveGeometrizable.newBuilder().setEdge(getEdgeBuilder((Edge) geometrizable));
-		} else if (geometrizable instanceof Coordinate) {
-			return SaveGeometrizable.newBuilder().setCoordinate(getCoordinateBuilder((Coordinate) geometrizable));
+		} else if (geometrizable instanceof POI) {
+		//	return SaveGeometrizable.newBuilder().setPOI(getPOIBuilder((POI) geometrizable));
 		}
 		return null;
 	}
@@ -175,7 +175,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		tmp_vertices = new TreeMap<Integer, Vertex>();
-		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot(), saveGeometryData.getRoot().getDepth()), saveGeometryData.getNumDimensions());
+		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
 		if (geometryData == null || geometryData.getRoot() == null) {
@@ -185,47 +185,43 @@ public class ProtobufConverter {
 			.setRoot(getGeometryNodeBuilder(geometryData.getRoot()))
 			.setNumDimensions(geometryData.getNumDimensions());
 	}
-	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode, int depth) {
+	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode) {
 		if (saveNode == null) {
 			return null;
 		}
 		GeometryNode node;
-		List<Geometrizable> geoms;
-        // TODO Check
-//		if (saveNode.getGeometrizables().size() > 0) {
-//			geoms = getGeometrizables(saveNode.getGeometrizables());
-//		}
+		List<Geometrizable> geoms = new LinkedList<Geometrizable>();
+		if (saveNode.getGeometrizableCount() > 0) {
+			geoms = getGeometrizables(saveNode.getGeometrizableList());
+		}
 		if (parent == null) {
-//			node = new GeometryNode(saveNode.getSplitValue(), geoms);
+			node = new GeometryNode(saveNode.getSplitValue(), geoms);
 		} else {
-			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
+			node = new GeometryNode(parent, saveNode.getSplitValue());
 		}
 		if (saveNode.hasLeft()) {
-//			node.setLeftNode(getGeometryNode(node, saveNode.getLeft(), depth + 1));
+			node.setLeftNode(getGeometryNode(node, saveNode.getLeft()));
 		}
 		if (saveNode.hasRight()) {
-//			node.setRightNode(getGeometryNode(node, saveNode.getRight(), depth + 1));
+			node.setRightNode(getGeometryNode(node, saveNode.getRight()));
 		}
-//		return node;
-        return null;
+		return node;
 	}
 	public static SaveGeometryNode.Builder getGeometryNodeBuilder(GeometryNode node) {
 		if (node == null) {
 			return null;
 		}
 		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()
-			//.setDepth(node.getDepth())
 			.setSplitValue(node.getSplitValue());
 		if (node.getLeftNode() != null) {
 			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));
 		}
 		if (node.getRightNode() != null) {
-			builder.setRight(getGeometryNodeBuilder(node.getLeftNode()));
+			builder.setRight(getGeometryNodeBuilder(node.getRightNode()));
 		}
 		if (node.getGeometrizables() != null && node.getGeometrizables().size() > 0) {
 			for (Geometrizable g : node.getGeometrizables()) {
-        // TODO
-//				builder.addGeometrizable(getGeometrizableBuilder(g));
+				builder.addGeometrizable(getGeometrizableBuilder(g));
 			}
 		}
 		return builder;

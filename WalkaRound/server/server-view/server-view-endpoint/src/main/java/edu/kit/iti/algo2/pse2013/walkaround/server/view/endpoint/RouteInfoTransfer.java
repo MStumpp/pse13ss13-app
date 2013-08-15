@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public final class RouteInfoTransfer {
     /**
      * list of coordinates.
      */
-    private final List<Coordinate> coordinates;
+    private final LinkedList<Coordinate> coordinates;
 
 
     /**
@@ -35,7 +36,7 @@ public final class RouteInfoTransfer {
      * Creates an instance of RouteInfoTransfer.
      */
     public RouteInfoTransfer() {
-        coordinates = new ArrayList<Coordinate>();
+        coordinates = new LinkedList<Coordinate>();
     }
 
 
@@ -47,15 +48,23 @@ public final class RouteInfoTransfer {
     public RouteInfoTransfer(List<Coordinate> coordinates) {
         if (coordinates == null)
             throw new IllegalArgumentException("list of coordinates must be provided");
-        this.coordinates = new ArrayList<Coordinate>();
+        this.coordinates = new LinkedList<Coordinate>();
         this.coordinates.addAll(coordinates);
     }
 
 
     /**
-     * Adds a Coordinate to the list of Coordinates.
+     * Adds a Coordinate at the tail of the list of Coordinates.
      */
-    public void addCoordinates(Coordinate coordinate) {
+    public void prependCoordinate(Coordinate coordinate) {
+        coordinates.addFirst(coordinate);
+    }
+
+
+    /**
+     * Adds a Coordinate at the head of the list of Coordinates.
+     */
+    public void appendCoordinate(Coordinate coordinate) {
         coordinates.add(coordinate);
     }
 
@@ -65,7 +74,7 @@ public final class RouteInfoTransfer {
      *
      * @return List<Coordinate>.
      */
-    public List<Coordinate> getCoordinates() {
+    public LinkedList<Coordinate> getCoordinates() {
         return coordinates;
     }
 

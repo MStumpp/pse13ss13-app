@@ -136,10 +136,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		return this.naviIsActive;
 	}
 
-
-
-
-	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		Log.d(TAG_NAVI, "onSharedPreferenceChanged(SharedPreferences, String)");
@@ -147,13 +143,11 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		//TODO: Strategien an / abmelden, je nach dem, welche Prefs aktiv sind.
 	}
 
-	@Override
 	public void onSpeedChange(double speed) {
 		Log.d(TAG_NAVI, "onSpeedChange(double)");
 		this.speed = speed;
 	}
 
-	@Override
 	public void onCompassChange(float direction) {
 		Log.d(TAG_NAVI, "onCompassChange(float)");
 		// TODO: für Stereo Navi relevant
@@ -161,14 +155,12 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 
 	}
 
-	@Override
 	public void onPositionChange(Location androidLocation) {
 		Log.d(TAG_NAVI, "onPositionChange(Location)");
 		this.lastKnownUserLocation = androidLocation;
 		this.computeNavi();
 	}
 
-	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_NAVI, "onRouteCHange(RouteInfo)");
 		this.computeNavi();
@@ -182,53 +174,37 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		this.notifyAllNaviOutputs();
 	}
 
-	
+
 
 	private void computeNextTurnCoordinates() {
-		Coordinate nearestCoordOnRoute = this.getNearestCoordinateOnRoute(this.lastKnownUserLocation);
+		Coordinate tempNextCrossing = null;
+		Coordinate tempNextNextCrossing = null;
+		// Find the next crossing on Route:
+		tempNextCrossing = this.computeNextCrossing();
 
-		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
-		Coordinate tempCoord = null;
-
-		// Forward the iterator to the nearestCoordinate:
-		while (coordsIter.hasNext() && !nearestCoordOnRoute.equals(tempCoord)) {
-			tempCoord = coordsIter.next();
-		}
-		
-		// Check if the nearest Coordinate represents a relevant crossing:
-		if (nearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1
-				&& !this.coordinateOnRouteIsInfrontOfUserPos(tempCoord)) {
-			// If the nearest Coordinate does not represent a crossing, look for the next crossing on route:
-			while (coordsIter.hasNext() && !(tempCoord.getCrossingInformation().getCrossingAngles().length > 1)) {
+		// Determine the next next crossing. (Yes, that is two next. ;-))
+		if (tempNextCrossing != null) {
+			Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
+			Coordinate tempCoord = null;
+			while (coordsIter.hasNext() && !tempNextCrossing.equals(tempCoord)) {
 				tempCoord = coordsIter.next();
 			}
+			if (coordsIter.hasNext()) {
+				tempCoord = coordsIter.next();
+			}
+			while (coordsIter.hasNext() && !tempNextCrossing.equals(tempCoord) && !(tempCoord.getCrossingInformation().getCrossingAngles().length > 1)) {
+				tempCoord = coordsIter.next();
+			}
+			tempNextNextCrossing = tempCoord;
 		}
-		
-		this.nextCrossing = tempCoord;
-		tempCoord = null;
-		while (coordsIter.hasNext() && tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
-			tempCoord = coordsIter.next();
-		}
-		this.nextNextCrossing = tempCoord;
+
+		this.nextCrossing = tempNextCrossing;
+		this.nextNextCrossing = tempNextNextCrossing;
+
 	}
 
-	
-	
-	
-	private Coordinate getNearestCoordinateOnRoute(Location androidLocation) {
-		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + androidLocation.toString());
-		Coordinate nearestCoordinate = null;
-		float smallestDifference = Float.POSITIVE_INFINITY;
-		double tempDifference;
-		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
-			 tempDifference = CoordinateUtility.calculateDifferenceInMeters(new Coordinate(androidLocation.getLatitude(), androidLocation.getLongitude()), coord);
-			 if (tempDifference < smallestDifference) {
-				 smallestDifference = (float) tempDifference;
-				 nearestCoordinate = coord;
-			 }
-		}
-		return nearestCoordinate;
-	}
+
+
 
 	private void computeNewTurnAngle() {
 		Log.e(TAG_NAVI, "computeNewTurnAngle()");
@@ -259,35 +235,121 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	private void computeNewDistanceToTurn() {
 		this.distToTurn = CoordinateUtility.calculateDifferenceInMeters(this.nextCrossing, new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
 	}
-	
-	private boolean coordinateOnRouteIsInfrontOfUserPos(Coordinate coordinateOnRoute) {
-		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
-		Coordinate tempCoord = null;
-		if (coordinateOnRoute != null) {
-			
-			while (coordsIter.hasNext() && !coordinateOnRoute.equals(tempCoord)) {
-				tempCoord = coordsIter.next();
-			}
-		}
-		
-		
-		
-		return true;
+
+
+
+
+
+	private Coordinate computeNextCrossing() {
+		Coordinate output = null;
+		// Principle:
+
+
+
+		return output;
+	}
+
+
+	private double computeDistanceOfUserPositionToLine(Coordinate c1, Coordinate c2) {
+		double output = -1.00;
+		Coordinate user = new Coordinate(this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude());
+
+		double line = CoordinateUtility.calculateDifferenceInMeters(c1, c2);
+		double userToC1 = CoordinateUtility.calculateDifferenceInMeters(user, c1);
+		double userToC2 = CoordinateUtility.calculateDifferenceInMeters(user, c2);
+		// determining angle through law of cosine: a²=b²+c²-2bc*cos(alpha) or cos(alpha) = (b²+c²-a²) / 2bc
+		double angleAtC1 = Math.acos((Math.pow(line, 2) + Math.pow(userToC1, 2) - Math.pow(userToC2, 2)) / (2.00 * userToC1 * line));
+		// userToC1 can be seen as a hypotenuse. Since the angleAtC1 is now known, the height or distance of the user to the line can be calculated:
+		output = Math.sin(angleAtC1) * userToC1;
+		return output;
 	}
 
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+	/**
+	 * This method determines the closest coordinate to the user position on the current Route and it's neighbours, if such exist.
+	 */
+	private void computeClosestCoordinateToUserOnRoute() {
+		Coordinate previousCoord = null;
+		Coordinate closestCoord = this.getNearestCoordinateOnRoute(new Coordinate (this.lastKnownUserLocation.getLatitude(), this.lastKnownUserLocation.getLongitude()));
+		Coordinate nextCoord = null;
+
+		if (closestCoord != null) {
+			Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
+
+			Coordinate tempCoord = null;
+			while (coordsIter.hasNext() && !closestCoord.equals(tempCoord)) {
+				previousCoord = tempCoord;
+				tempCoord = coordsIter.next();
+			}
+
+			if (coordsIter.hasNext()) {
+				nextCoord = coordsIter.next();
+			}
+
+			// while (coordsIter.hasNext())
+		}
+
+		// Setze Attribute auf die 3 Werte.
+
+	}
+
+
+
+
+	private Coordinate getNearestCoordinateOnRoute(Coordinate inputCoord) {
+		Log.d(TAG_NAVI, "getNearestCoordinateOnRoute(Location) METHOD START input Coordinate: " + inputCoord.toString());
+		Coordinate nearestCoordinate = null;
+		float smallestDifference = Float.POSITIVE_INFINITY;
+		double tempDifference;
+		for (Coordinate coord : this.lastKnownRoute.getCoordinates()) {
+			 tempDifference = CoordinateUtility.calculateDifferenceInMeters(inputCoord, coord);
+			 if (tempDifference < smallestDifference) {
+				 smallestDifference = (float) tempDifference;
+				 nearestCoordinate = coord;
+			 }
+		}
+		return nearestCoordinate;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -339,5 +401,57 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	}
 
 	*/
+
+
+	/*
+
+	private boolean coordinateOnRouteIsInfrontOfUserPos(Coordinate coordinateOnRoute) {
+		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
+		Coordinate tempCoord = null;
+		if (coordinateOnRoute != null) {
+
+			while (coordsIter.hasNext() && !coordinateOnRoute.equals(tempCoord)) {
+				tempCoord = coordsIter.next();
+			}
+		}
+
+
+
+		return true;
+	}
+	 */
+
+
+
+
+
+	// OLD VERSION:
+	/*
+	Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
+	Coordinate tempCoord = null;
+
+	// Forward the iterator to the nearestCoordinate:
+	while (coordsIter.hasNext() && !nearestCoordOnRoute.equals(tempCoord)) {
+		tempCoord = coordsIter.next();
+	}
+
+	// Check if the nearest Coordinate represents a relevant crossing:
+	if (nearestCoordOnRoute.getCrossingInformation().getCrossingAngles().length > 1
+			&& !this.coordinateOnRouteIsInfrontOfUserPos(tempCoord)) {
+		// If the nearest Coordinate does not represent a crossing, look for the next crossing on route:
+		while (coordsIter.hasNext() && !(tempCoord.getCrossingInformation().getCrossingAngles().length > 1)) {
+			tempCoord = coordsIter.next();
+		}
+	}
+
+	this.nextCrossing = tempCoord;
+	tempCoord = null;
+	while (coordsIter.hasNext() && tempCoord.getCrossingInformation().getCrossingAngles().length > 1) {
+		tempCoord = coordsIter.next();
+	}
+	this.nextNextCrossing = tempCoord;
+	*/
+
+
 
 }

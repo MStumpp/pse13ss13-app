@@ -6,35 +6,35 @@ import android.location.Location;
 import android.util.Log;
 /**
  * This class hold and return the last known Speed.
- * 
- * @author Lukas Müller, Ludwig Biermann
+ *
+ * @author Lukas Mï¿½ller, Ludwig Biermann
  *
  */
 public class SpeedManager implements PositionListener {
 
 	/*
-	 * 
+	 *
 	 */
 	private static String TAG_SPEED_MANAGER = SpeedManager.class
 			.getSimpleName();
 
 	/*
-	 * 
+	 *
 	 */
 	private LinkedList<SpeedListener> speedListeners;
 
 	/*
-	 * 
+	 *
 	 */
 	//private static SpeedManager speedManager;
 
 	/*
-	 * 
+	 *
 	 */
 	private double lastKnownSpeed;
 
 	/**
-	 * 
+	 *
 	 */
 	public SpeedManager(PositionManager pm) {
 		speedListeners = new LinkedList<SpeedListener>();
@@ -43,7 +43,7 @@ public class SpeedManager implements PositionListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 *
 	public static SpeedManager getInstance() {
@@ -58,7 +58,7 @@ public class SpeedManager implements PositionListener {
 	/
 
 	/**
-	 * 
+	 *
 	 * @param newSL
 	 */
 	public void registerSpeedListener(SpeedListener newSL) {
@@ -72,7 +72,7 @@ public class SpeedManager implements PositionListener {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void notifyAllSpeedListeners() {
 		Log.d(TAG_SPEED_MANAGER, "SpeedManager.notifyAllCompassListeners()");
@@ -82,7 +82,6 @@ public class SpeedManager implements PositionListener {
 
 	}
 
-	@Override
 	public void onPositionChange(Location androidLocation) {
 		lastKnownSpeed = androidLocation.getSpeed();
 		this.notifyAllSpeedListeners();

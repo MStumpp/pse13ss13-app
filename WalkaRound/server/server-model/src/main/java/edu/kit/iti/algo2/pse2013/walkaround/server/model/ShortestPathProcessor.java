@@ -112,6 +112,42 @@ public class ShortestPathProcessor {
 
 
     /**
+     * Computes a shortest path between any given two Coordinates using the provided
+     * graph.
+     *
+     * @param source Source of the route to be computed.
+     * @param target Target of the route to be computed.
+     * @return RouteInfoTransfer.
+     * @throws IllegalArgumentException Some input parameter is missing.
+     * @throws ShortestPathComputationNoSlotsException If no slots available for computing shortest path.
+     * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
+     * @throws ShortestPathComputeException If something during computation goes wrong.
+     */
+    public List<Vertex> computeShortestPath(Vertex source,
+                                            Vertex target)
+            throws NoShortestPathExistsException, ShortestPathComputeException,
+            ShortestPathComputationNoSlotsException {
+
+        if (source == null || target == null)
+            throw new IllegalArgumentException("source and/or target must not be null");
+
+        logger.info("computeShortestPath: Source: " + source.toString() + " Target: " + target.toString());
+        Future<List<Vertex>> future = executor.submit(new ShortestPathTask(source, target));
+
+        if (future.isCancelled())
+            throw new ShortestPathComputationNoSlotsException("no slots available");
+
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            throw new ShortestPathComputeException(e.getMessage());
+        } catch (ExecutionException e) {
+            throw new ShortestPathComputeException(e.getMessage());
+        }
+    }
+
+
+    /**
      * ThreadFactoryCustom.
      */
     private class ThreadFactoryCustom implements ThreadFactory {
@@ -209,45 +245,6 @@ public class ShortestPathProcessor {
             if (computer == null)
                 logger.info("ShortestPathComputer is null in ThreadPoolExecutorCustom");
             //shortestPathComputerQueue.add(computer);
-        }
-    }
-
-
-    /**
-     * Computes a shortest path between any given two Coordinates using the provided
-     * graph.
-     *
-     * @param source Source of the route to be computed.
-     * @param target Target of the route to be computed.
-     * @return RouteInfoTransfer.
-     * @throws IllegalArgumentException Some input parameter is missing.
-     * @throws ShortestPathComputationNoSlotsException If no slots available for computing shortest path.
-     * @throws NoShortestPathExistsException If no shortest path between given Coordinates exists.
-     * @throws ShortestPathComputeException If something during computation goes wrong.
-     */
-    public List<Vertex> computeShortestPath(Vertex source,
-                                            Vertex target)
-            throws NoShortestPathExistsException, ShortestPathComputeException,
-            ShortestPathComputationNoSlotsException {
-
-        if (source == null || target == null)
-            throw new IllegalArgumentException("source and/or target must not be null");
-
-        logger.info("computeShortestPath: Source: " + source.toString() + " Target: " + target.toString());
-        Future<List<Vertex>> future = executor.submit(new ShortestPathTask(source, target));
-
-        if (future.isCancelled())
-            throw new ShortestPathComputationNoSlotsException("no slots available");
-
-//        if (!future.isDone())
-//            throw new ShortestPathComputeException("something went wrong internally");
-
-        try {
-            return future.get();
-        } catch (InterruptedException e) {
-            throw new ShortestPathComputeException(e.getMessage());
-        } catch (ExecutionException e) {
-            throw new ShortestPathComputeException(e.getMessage());
         }
     }
 

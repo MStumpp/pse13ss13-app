@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -10,7 +12,7 @@ import java.util.Arrays;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class POI extends Location {
+public class POI extends Location implements Geometrizable {
 
 	/**
 	 * text info of POI.
@@ -56,7 +58,7 @@ public class POI extends Location {
 	 *            attributes, that are inherited by the superclass Location
 	 * @param textInfo
 	 *            Textinfo of POI
-	 * @param imageURL
+	 * @param url
 	 *            an URL to an image of the POI
 	 * @param poiCategories
 	 *            the POI-Categories, this POI belongs to
@@ -140,7 +142,7 @@ public class POI extends Location {
 		String result = "POI:\n\t"
 				+ "\n\tLocation: " + super.toString()
 				+ "\n\tTextInfo: " + getTextInfo()
-				+ "\n\tURL: " + getURL().toExternalForm()
+				+ "\n\tURL: " + (getURL() != null ? getURL().toExternalForm() : "")
 				+ "\n\tPOI-Categories: ";
 		for (int i : getPOICategories()) {
 			result += " " + i;
@@ -208,4 +210,61 @@ public class POI extends Location {
 		}
 		return new POI(super.clone(), new String(getTextInfo()), newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));
 	}
+
+
+    // Geometrizable Interface
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+        return 2;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+
+        if (dim < 0 || dim > numberDimensions()-1)
+            throw new IllegalArgumentException("dim out of range");
+
+        if (dim == 0)
+            return getLatitude();
+        else
+            return getLongitude();
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
+     */
+    public int numberNodes() {
+        return 1;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
+     */
+    public Geometrizable getNode(int nodeNumber) {
+
+        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
+            throw new IllegalArgumentException("node number out of range");
+
+        return this;
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+        if (this.getId() > ((POI)o).getId()) {
+            return 1;
+        } else if (this.getId() < ((POI)o).getId()) {
+            return -1;
+        }
+        return 0;
+    }
+
 }

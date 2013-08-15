@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * Wrapper for Geometrizable to handle multiple points.

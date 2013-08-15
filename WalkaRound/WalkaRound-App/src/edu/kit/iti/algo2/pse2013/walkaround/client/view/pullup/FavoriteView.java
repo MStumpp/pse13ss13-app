@@ -3,11 +3,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 import java.util.Iterator;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -20,8 +18,6 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R.drawable;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R.layout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
@@ -180,7 +176,6 @@ public class FavoriteView extends Fragment {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG,
@@ -203,7 +198,6 @@ public class FavoriteView extends Fragment {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG, String.format("Add location '%s' to current route",
@@ -226,7 +220,6 @@ public class FavoriteView extends Fragment {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 
@@ -238,7 +231,6 @@ public class FavoriteView extends Fragment {
 						.setMessage(R.string.delete_dialog);
 				alertDialog.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
-							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
 								Log.d(TAG, String.format("delete fav location"));
@@ -249,10 +241,9 @@ public class FavoriteView extends Fragment {
 						});
 				alertDialog.setNegativeButton("No",
 						new DialogInterface.OnClickListener() {
-							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								
+
 							}
 						});
 				alertDialog.show();
@@ -271,7 +262,6 @@ public class FavoriteView extends Fragment {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG, String.format("delete fav location"));

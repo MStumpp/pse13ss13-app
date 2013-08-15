@@ -3,10 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.server.view.admin;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.RoundtripProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.server.model.ShortestPathProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 
 import javax.servlet.ServletContextEvent;
@@ -30,7 +28,7 @@ public class Initialization implements ServletContextListener {
 
 
     public void contextDestroyed(ServletContextEvent event) {
-        // Do stuff during webapp's shutdown.
+
     }
 
 
@@ -45,6 +43,7 @@ public class Initialization implements ServletContextListener {
     private void setUpProcessors() {
 
         GraphDataIO graphDataIO = getGraphDataIO();
+        LocationDataIO locationDataIO = getLocationDataIO();
 
         try {
             ShortestPathProcessor.init(graphDataIO, 2);
@@ -52,9 +51,15 @@ public class Initialization implements ServletContextListener {
             e.printStackTrace();
         }
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()));
-        GeometryProcessor.init(geometryDataIO, 2);
+        // set up GeometryProcessorEdge
+        GeometryDataIO edges = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+        GeometryProcessorEdge.init(edges, 2);
+
+        // set up GeometryProcessorPOI
+        GeometryDataIO pois = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
+        GeometryProcessorPOI.init(pois, 2);
 
         try {
             RoundtripProcessor.init(graphDataIO, 2);
@@ -91,21 +96,6 @@ public class Initialization implements ServletContextListener {
             e.printStackTrace();
         }
         return locationDataIO;
-    }
-
-
-    /**
-     * Loads GeometryDataIO
-     */
-    private GeometryDataIO getGeometryDataIO() {
-        File file = new File(getClass().getResource("/geometryData.pbf").getFile());
-        GeometryDataIO geometryDataIO = null;
-        try {
-            geometryDataIO = GeometryDataIO.load(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return geometryDataIO;
     }
 
 }
