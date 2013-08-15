@@ -96,21 +96,6 @@ public class TestCoordinate {
 		assertTrue(c.getCrossingInformation() == ci);
 	}
 
-//	@Test
-//	public void testNumberDimensions() {
-//		Coordinate c = new Coordinate(48.1234567, 9.987654321);
-//		Coordinate c2 = new Coordinate(48.1234567, 9.987654321, new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f}));
-//		assertTrue(c.numberDimensions() == 2);
-//		assertTrue(c2.numberDimensions() == 2);
-//	}
-//
-//	@Test
-//	public void testValueForDimension() {
-//		Coordinate c = new Coordinate(48.1234567, 9.987654321);
-//		assertTrue(c.valueForDimension(0) == c.getLatitude());
-//		assertTrue(c.valueForDimension(1) == c.getLongitude());
-//	}
-
 	@Test
 	public void testHashCode() {
 		Coordinate c = new Coordinate(48.1234567, 9.987654321);
