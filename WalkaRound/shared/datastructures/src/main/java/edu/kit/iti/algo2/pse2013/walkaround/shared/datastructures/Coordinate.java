@@ -243,12 +243,14 @@ public class Coordinate implements Geometrizable {
 
 
     /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
      */
-    public double valueForDimension(int nodeNumber, int dim) {
+    public Geometrizable getNode(int nodeNumber) {
+
         if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
             throw new IllegalArgumentException("node number out of range");
-        return valueForDimension(dim);
+
+        return this;
     }
 
 }
