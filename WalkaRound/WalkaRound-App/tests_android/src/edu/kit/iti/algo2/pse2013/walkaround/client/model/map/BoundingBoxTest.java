@@ -9,12 +9,18 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 
-public class BoundingBoxTest extends AndroidTestCase {
-	//private BoundingBox box;
+public class BoundingBoxTest extends AndroidTestCase {	
+	private Point display;
+	private Coordinate center; 
+	private float lod;
 	
-	private Point display = new Point(1025, 600);
-	private Coordinate center =  new Coordinate(49.0145, 8.419); 
-	private final float lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
+	@Override
+	protected void setUp() throws Exception{
+		display = new Point(1025, 600);
+		center =  new Coordinate(49.0145, 8.419); 
+		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
+		super.setUp();
+	}
 	
 	/**
 	 * Testet die BoundingBox auf allgemeine Funktionalität
