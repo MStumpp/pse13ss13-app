@@ -2,7 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import java.util.*;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import org.slf4j.Logger;
@@ -72,7 +73,19 @@ public class GeometryDataPreprocessor {
         // number of dimensions, use first element of geometrizables
         int numDimensions = geometrizables.get(0).numberDimensions();
 
+        // if number of nodes in given geometrizables greater than 1,
+        // wrap each geometrizable
+        int numberNodes = geometrizables.get(0).numberNodes();
+        if (numberNodes > 1) {
+            List<Geometrizable> geometrizablesWrapped = new ArrayList<>();
+            for (Geometrizable geometrizable : geometrizables) {
+                for (int n = 0; n < numberNodes; n++) {
+                    geometrizablesWrapped.add(new GeometrizableWrapper(geometrizable, n));
                 }
+            }
+            geometrizables = geometrizablesWrapped;
+        }
+
         // set up data
         Geometrizable[][] data = new Geometrizable[numDimensions][];
 
@@ -124,7 +137,7 @@ public class GeometryDataPreprocessor {
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
         if (size <= numberGeomPerNode)
-            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
+            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end + 1)));
 
         // otherwise, compute median;
         int median;
