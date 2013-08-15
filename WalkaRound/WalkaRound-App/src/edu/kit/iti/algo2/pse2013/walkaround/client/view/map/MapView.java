@@ -357,6 +357,9 @@ public class MapView extends Activity {
 
 			runOnUiThread(new Runnable() {
 				public void run() {
+					
+					Log.d("red", ""+displayPoints.size());
+					
 					currentActive = null;
 					routeList.removeAllViews();
 
@@ -374,6 +377,7 @@ public class MapView extends Activity {
 						iv.setScaleType(ImageView.ScaleType.FIT_XY);
 						iv.setTag(dw.getId());
 						iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));
+						iv.setImageDrawable(waypoint);
 						routeList.addView(iv);
 					}
 
