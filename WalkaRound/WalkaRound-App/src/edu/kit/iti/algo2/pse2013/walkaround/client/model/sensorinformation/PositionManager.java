@@ -6,7 +6,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import android.content.Context;
 import android.location.GpsStatus.Listener;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.util.Log;
 
 /**
@@ -16,8 +18,12 @@ import android.util.Log;
  * @author Lukas Müller, Ludwig Biermann
  * 
  */
-public class PositionManager implements Listener {
+public class PositionManager {
 
+	private final int minMilliSecondsBetweenUpdates = 5000;
+	private final int minMetersBetweenUpdates = 2;
+	
+	
 	/*
 	 * 
 	 */
@@ -54,7 +60,13 @@ public class PositionManager implements Listener {
 		
 		locationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 		
-		locationManager.addGpsStatusListener(positionManager);
+		Log.d(TAG_POSITION_MANAGER, "GPS enabled: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+		
+		// TODO: Check if Position Manager really sends updates:
+		// Is this necessary?:
+		// locationManager.addGpsStatusListener(positionManager);
+		
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minMilliSecondsBetweenUpdates, minMetersBetweenUpdates, locListener);
 		this.getLastKnownPositionFromAndroid();
 		
 		//initialize other Sensors
@@ -120,15 +132,11 @@ public class PositionManager implements Listener {
 	 * 
 	 */
 	private void notifyAllPositionListeners() {
-		Log.d(TAG_POSITION_MANAGER,
-				"PositionManager.notifyAllPositionListeners() " + (lastKnownLocation != null));
-		Log.d(TAG_POSITION_MANAGER,
-				"notify " + (positionListeners != null));
+		Log.d(TAG_POSITION_MANAGER,	"PositionManager.notifyAllPositionListeners() Position is not null: " + (lastKnownLocation != null));
 		if (this.lastKnownLocation != null) {
-			Log.d(TAG_POSITION_MANAGER, lastKnownLocation.toString());
+			Log.d(TAG_POSITION_MANAGER, "Sending the following Position to listeners: " + lastKnownLocation.toString());
 			for (PositionListener pl : this.positionListeners) {
-				Log.d(TAG_POSITION_MANAGER,
-						"notify " + (pl != null));
+				Log.d(TAG_POSITION_MANAGER,	"notify position listener - pl is not null: " + (pl != null));
 				pl.onPositionChange(lastKnownLocation);
 			}
 		}
@@ -142,8 +150,7 @@ public class PositionManager implements Listener {
 	 * 
 	 */
 	public void onGpsStatusChanged(int event) {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int "
-				+ event + ")");
+		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int " + event + ")");
 		lastGPSEvent = event;
 		if (lastGPSEvent == 3 || lastGPSEvent == 4) {
 			this.getLastKnownPositionFromAndroid();
@@ -167,6 +174,45 @@ public class PositionManager implements Listener {
 		}
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private final LocationListener locListener = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location arg0) {
+			lastKnownLocation = arg0;
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	};
+	
+	
 }
 
 
