@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,11 +15,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -29,6 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveArea;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveEdge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
@@ -163,10 +166,35 @@ public class ProtobufConverter {
 		return null;
 	}
 	public static SaveGeometrizable.Builder getGeometrizableBuilder(Geometrizable geometrizable) {
+		SaveGeometrizable.Builder builder = SaveGeometrizable.newBuilder();
 		if (geometrizable instanceof Edge) {
-			return SaveGeometrizable.newBuilder().setEdge(getEdgeBuilder((Edge) geometrizable));
+			return builder.setEdge(getEdgeBuilder((Edge) geometrizable));
 		} else if (geometrizable instanceof POI) {
-			return SaveGeometrizable.newBuilder().setPOI(getPOIBuilder((POI) geometrizable));
+			return builder.setPOI(getPOIBuilder((POI) geometrizable));
+		} else if (geometrizable instanceof Vertex) {
+			return builder.setVertex(getVertexBuilder((Vertex) geometrizable));
+		} else if (geometrizable instanceof Vertex) {
+			return builder.setWrapper(getWrapperBuilder((GeometrizableWrapper) geometrizable));
+		}
+		assert false;
+		return null;
+	}
+	private static SaveGeometrizableWrapper.Builder getWrapperBuilder(GeometrizableWrapper wrapper) {
+		if (wrapper == null) {
+			return null;
+		}
+		try {
+			Field numberField = wrapper.getClass().getField("nodeNumber");
+			numberField.setAccessible(true);
+			return SaveGeometrizableWrapper.newBuilder().setNumber(numberField.getInt(wrapper)).setGeometrizable(getGeometrizableBuilder(wrapper.getGeometrizable()));
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

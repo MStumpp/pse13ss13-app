@@ -68,6 +68,12 @@ message SaveGraphData {
 message SaveGeometrizable {
 	optional SaveEdge edge = 1;
 	optional SavePOI p_o_i = 2;
+	optional SaveVertex vertex = 3;
+	optional SaveGeometrizableWrapper wrapper = 4;
+}
+message SaveGeometrizableWrapper {
+	required int32 number = 1;
+	required SaveGeometrizable geometrizable = 2;
 }
 message SaveGeometryNode {
 	optional SaveGeometryNode left = 1;
