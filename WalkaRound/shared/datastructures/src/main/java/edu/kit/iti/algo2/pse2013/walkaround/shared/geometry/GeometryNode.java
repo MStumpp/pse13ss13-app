@@ -226,8 +226,9 @@ public class GeometryNode {
         Geometrizable currentBest = geometrizables.get(0);
         double minDistance = Math.abs(currentBest.valueForDimension(dim) - value);
         for (Geometrizable geom : geometrizables) {
-            if (constraint != null && !constraint.isValid(geom))
+            if (constraint != null && !constraint.isValid(geom)) {
                 continue;
+            }
 
             double currentDistance = Math.abs(geom.valueForDimension(dim) - value);
             if (currentDistance < minDistance) {
