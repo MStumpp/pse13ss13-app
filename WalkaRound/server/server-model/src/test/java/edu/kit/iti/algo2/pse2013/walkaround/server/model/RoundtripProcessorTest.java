@@ -4,10 +4,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.Geometry
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +18,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
+@Ignore
 public class RoundtripProcessorTest {
 
     private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
