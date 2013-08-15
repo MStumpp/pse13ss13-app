@@ -62,7 +62,6 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    @Ignore
     public void testPreprocessVertexGraphDataIOOnePerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
@@ -168,7 +167,6 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    @Ignore
     public void testPreprocessVerticesGraphDataOnePerNodeIO2() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
@@ -179,7 +177,6 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    @Ignore
     public void testPreprocessVerticesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
@@ -285,7 +282,6 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    @Ignore
     public void testPreprocessEdgesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
@@ -306,7 +302,6 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    @Ignore
     public void testPreprocessVerticesGraphDataIOVerticesDefaultPerNodeWithRealDataSet() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
