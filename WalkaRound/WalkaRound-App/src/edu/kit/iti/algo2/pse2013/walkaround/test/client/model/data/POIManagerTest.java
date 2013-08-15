@@ -1,10 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.test.client.model.data;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -54,6 +56,17 @@ public class POIManagerTest extends AndroidTestCase {
 		poiManag.addActivePOICategory(5);
 		List<POI> pois = poiManag.getPOIsWithinRectangle(new Coordinate(
 				49.00912d, 8.39872d), new Coordinate(49.00179d, 8.41477d), 16f);
+		assertTrue(pois.isEmpty());
+	}
+
+	public void testPoisInAlongRoute() {
+		LinkedList<Coordinate> route = new LinkedList<Coordinate>();
+		route.add(new Coordinate(49.00179d, 8.41477d));
+		route.add(new Coordinate(49.00579d, 8.21477d));
+		route.add(new Coordinate(49.00179d, 8.41477d));
+		route.add(new Coordinate(49.00279d, 8.44477d));
+		route.add(new Coordinate(49.00129d, 8.41299d));
+		List<POI> pois = poiManag.getPOIsAlongRoute(new Route(route), 16f);
 		assertFalse(pois.isEmpty());
 	}
 }
