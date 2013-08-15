@@ -54,7 +54,11 @@ public class GeometryProcessorTest {
 
     @Before
     public void resetSingletonBefore() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field instance = GeometryProcessorEdge.class.getDeclaredField("instance");
+        Field instance = GeometryProcessorVertex.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
+
+        instance = GeometryProcessorEdge.class.getDeclaredField("instance");
         instance.setAccessible(true);
         instance.set(null, null);
 
@@ -73,27 +77,57 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testInit() throws MalformedURLException {
-        GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
+    public void testInitVertex() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
         Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
     }
 
 
     @Test
-    public void testGetInstance() throws InstantiationException, MalformedURLException {
-        GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
+    public void testGetInstanceVertex() throws InstantiationException, MalformedURLException {
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO));
+        Assert.assertNotNull(GeometryProcessorVertex.getInstance());
+    }
+
+
+    @Test
+    public void testInitEdge() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = getGeometryDataIOEdgesOnePerNode();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
+    }
+
+
+    @Test
+    public void testGetInstanceEdge() throws InstantiationException, MalformedURLException {
+        GeometryDataIO geometryDataIO = getGeometryDataIOEdgesOnePerNode();
         Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
         Assert.assertNotNull(GeometryProcessorEdge.getInstance());
     }
 
 
     @Test
+    public void testInitPOI() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
+        Assert.assertNotNull(GeometryProcessorPOI.init(geometryDataIO));
+    }
+
+
+    @Test
+    public void testGetInstancePOI() throws InstantiationException, MalformedURLException {
+        GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
+        Assert.assertNotNull(GeometryProcessorPOI.init(geometryDataIO));
+        Assert.assertNotNull(GeometryProcessorPOI.getInstance());
+    }
+
+
+    @Test
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
 
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO));
+        GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -109,11 +143,12 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO, 5));
+        GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -129,11 +164,12 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO));
+        GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -149,11 +185,12 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestVertexDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO, 5));
+        GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Geometrizable geometrizable = null;
         try {
             geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
@@ -169,14 +206,15 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
 
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO));
+        GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
         Coordinate search3 = new Coordinate(49.0145, 8.2424);
@@ -279,6 +317,7 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestVertexDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -286,8 +325,8 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
 
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO, 5));
+        GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
         Coordinate search3 = new Coordinate(49.0145, 8.2424);
@@ -390,6 +429,47 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
+    public void testGetNearestEdgeOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
+
+        GeometryDataIO geometryDataIO = getGeometryDataIOEdgesOnePerNode();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Geometrizable geometrizable = null;
+        try {
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
+        } catch (GeometryProcessorException e) {
+            e.printStackTrace();
+        } catch (GeometryComputationNoSlotsException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertNotNull(geometrizable);
+    }
+
+
+    @Test
+    @Ignore
+    public void testGetNearestEdgeDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
+
+        GeometryDataIO geometryDataIO = getGeometryDataIOEdgesDefaultPerNode();
+        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
+        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Geometrizable geometrizable = null;
+        try {
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
+        } catch (GeometryProcessorException e) {
+            e.printStackTrace();
+        } catch (GeometryComputationNoSlotsException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertNotNull(geometrizable);
+    }
+
+
+    @Test
+    @Ignore
     public void testGetNearestEdgeDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -501,14 +581,15 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestPOIDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(locationDataIO);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
 
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Assert.assertNotNull(GeometryProcessorPOI.init(geometryDataIO, 5));
+        GeometryProcessorPOI geometryProcessor = GeometryProcessorPOI.getInstance();
 
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
@@ -613,9 +694,10 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestPOIWithCategoryDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryLocationDataIODefaultPerNode();
+        GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
         Assert.assertNotNull(geometryDataIO);
 
         GeometrizablePOIConstraint constPOI_1 = new GeometrizablePOIConstraint(new int[] { 0 });
@@ -626,8 +708,8 @@ public class GeometryProcessorTest {
         GeometrizablePOIConstraint constPOI_1_3 = new GeometrizablePOIConstraint(new int[] { 0, 4 });
         GeometrizablePOIConstraint constPOI_2_3 = new GeometrizablePOIConstraint(new int[] { 3, 4 });
 
-        Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
-        GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
+        Assert.assertNotNull(GeometryProcessorPOI.init(geometryDataIO, 5));
+        GeometryProcessorPOI geometryProcessor = GeometryProcessorPOI.getInstance();
 
         Coordinate search1 = new Coordinate(49.2323, 8.2334);
         Coordinate search2 = new Coordinate(49.004, 8.345345);
@@ -708,7 +790,7 @@ public class GeometryProcessorTest {
     }
 
 
-    private GeometryDataIO getGeometryDataIOOnePerNode() throws MalformedURLException {
+    private GeometryDataIO getGeometryDataIOVerticesOnePerNode() throws MalformedURLException {
         GraphDataIO graphDataIO = new GraphDataIO();
         graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
@@ -720,7 +802,7 @@ public class GeometryProcessorTest {
     }
 
 
-    private GeometryDataIO getGeometryDataIODefaultPerNode() throws MalformedURLException {
+    private GeometryDataIO getGeometryDataIOVerticesDefaultPerNode() throws MalformedURLException {
         GraphDataIO graphDataIO = new GraphDataIO();
         graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
@@ -732,7 +814,31 @@ public class GeometryProcessorTest {
     }
 
 
-    private GeometryDataIO getGeometryLocationDataIODefaultPerNode() throws MalformedURLException {
+    private GeometryDataIO getGeometryDataIOEdgesOnePerNode() throws MalformedURLException {
+        GraphDataIO graphDataIO = new GraphDataIO();
+        graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
+        graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
+        graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()), 1);
+        return geometryDataIO;
+    }
+
+
+    private GeometryDataIO getGeometryDataIOEdgesDefaultPerNode() throws MalformedURLException {
+        GraphDataIO graphDataIO = new GraphDataIO();
+        graphDataIO.addEdge(new Edge(new Vertex(2.d, 3.d), new Vertex(5.d, 4.d)));
+        graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
+        graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
+        return geometryDataIO;
+    }
+
+
+    private GeometryDataIO getGeometryDataPOIIODefaultPerNode() throws MalformedURLException {
         LocationDataIO locationDataIO = new LocationDataIO();
         locationDataIO.addPOI(new POI(49.2334, 8.2356, "POI_1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 0, 1, 2 }));
         locationDataIO.addPOI(new POI(50.2323, 8.3454, "POI_2", "info 2", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 1, 2, 3 }));
