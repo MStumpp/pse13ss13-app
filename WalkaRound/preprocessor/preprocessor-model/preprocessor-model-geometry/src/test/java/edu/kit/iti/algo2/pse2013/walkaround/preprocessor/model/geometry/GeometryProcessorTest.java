@@ -27,7 +27,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  * @author Matthias Stumpp
  * @version 1.0
  */
-@Ignore
 public class GeometryProcessorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorTest.class);
