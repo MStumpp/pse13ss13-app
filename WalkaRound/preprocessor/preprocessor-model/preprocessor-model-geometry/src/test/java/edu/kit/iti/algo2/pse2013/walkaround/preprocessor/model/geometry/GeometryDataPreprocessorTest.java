@@ -319,6 +319,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessEdgesGraphDataIOEdgesDefaultPerNodeWithRealDataSet() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
