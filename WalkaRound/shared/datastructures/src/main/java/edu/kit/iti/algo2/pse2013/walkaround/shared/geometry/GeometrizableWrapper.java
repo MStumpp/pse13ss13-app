@@ -53,7 +53,7 @@ public class GeometrizableWrapper implements Geometrizable, Comparable<Geometriz
     }
 
     public String toString() {
-        return getNode().toString();
+        return geometrizable.toString();
     }
 
 }
