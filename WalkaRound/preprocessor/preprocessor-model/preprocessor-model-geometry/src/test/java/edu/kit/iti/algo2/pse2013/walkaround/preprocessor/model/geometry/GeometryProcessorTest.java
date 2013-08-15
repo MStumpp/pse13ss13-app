@@ -88,7 +88,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testgetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
+    public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
 
@@ -109,7 +109,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testgetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
+    public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
         Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
@@ -129,7 +129,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testgetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
+    public void testGetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
         Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO));
@@ -149,7 +149,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testgetNearestVertexDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
+    public void testGetNearestVertexDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
         Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
@@ -169,7 +169,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testgetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
+    public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
 
@@ -279,7 +279,7 @@ public class GeometryProcessorTest {
 
 
     @Test
-    public void testgetNearestVertexDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
+    public void testGetNearestVertexDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
 

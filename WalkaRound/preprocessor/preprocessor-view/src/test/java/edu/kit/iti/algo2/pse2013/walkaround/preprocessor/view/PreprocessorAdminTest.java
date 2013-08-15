@@ -1,24 +1,31 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
-import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * PreprocessorAdminTest.
@@ -27,22 +34,15 @@ import java.util.Map;
  * @version 1.0
  */
 public class PreprocessorAdminTest {
-	private static final File GRAPH_DATA_FILE = new File(
-			System.getProperty("java.io.tmpdir") + File.separatorChar
-					+ "walkaround" + File.separatorChar + "graphData.io");
-	private static final File GEOMETRY_DATA_FILE = new File(
-			System.getProperty("java.io.tmpdir") + File.separatorChar
-					+ "walkaround" + File.separatorChar + "geometryData.io");
-	private static final File LOCATION_DATA_FILE = new File(
-			System.getProperty("java.io.tmpdir") + File.separatorChar
-					+ "walkaround" + File.separatorChar + "locationData.io");
+	private static final File GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
+	private static final File GEOMETRY_DATA_FILE = FileUtil.getFile("geometryData.pbf");
+	private static final File LOCATION_DATA_FILE = FileUtil.getFile("locationData.pbf");
 
 	@Test
 	@Ignore
 	public void testPreprocessGraphDataIO() {
 
-		File verticesFile = new File(
-				"/Users/Matthias/Workspace/PSE/data/_nodes.txt");
+		File verticesFile = FileUtil.getFile("_nodes.txt");
 		FileReader input;
 		try {
 			input = new FileReader(verticesFile);
@@ -80,8 +80,7 @@ public class PreprocessorAdminTest {
 
         Map<Long, String> geometry = new HashMap<>();*/
 
-		File edgesFile = new File(
-				"/Users/Matthias/Workspace/PSE/data/_edges.txt");
+		File edgesFile = FileUtil.getFile("_edges.txt");
 		try {
 			input = new FileReader(edgesFile);
 		} catch (FileNotFoundException e) {
@@ -103,12 +102,8 @@ public class PreprocessorAdminTest {
 			e.printStackTrace();
 			return;
 		}
-
 		try {
-			OutputStream fileOut = new BufferedOutputStream(new FileOutputStream(GRAPH_DATA_FILE));
-			ProtobufConverter.getGraphDataBuilder(graphDataIO).build().writeTo(fileOut);
-			fileOut.flush();
-			fileOut.close();
+			GraphDataIO.save(graphDataIO, GRAPH_DATA_FILE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,7 +112,7 @@ public class PreprocessorAdminTest {
 	@Test
 	public void testPreprocessLocationDataIO() {
 
-		File verticesFile = new File("/Users/Matthias/Workspace/PSE/data/restaurant.csv");
+		File verticesFile = FileUtil.getFile("restaurant.csv");
 		FileReader input;
 		try {
 			input = new FileReader(verticesFile);
@@ -146,7 +141,7 @@ public class PreprocessorAdminTest {
         }
 
         try {
-            LocationDataIO.save(locationDataIO, new File("/Users/Matthias/Workspace/PSE/data/locationDataIO"));
+            LocationDataIO.save(locationDataIO, LOCATION_DATA_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -158,23 +153,22 @@ public class PreprocessorAdminTest {
 
         GraphDataIO graphDataIO = null;
         try {
-            graphDataIO = GraphDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/graphDataIO"));
+            graphDataIO = GraphDataIO.load(GRAPH_DATA_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         LocationDataIO locationDataIO = null;
         try {
-            locationDataIO = LocationDataIO.load(new File("/Users/Matthias/Workspace/PSE/data/locationDataIO"));
+            locationDataIO = LocationDataIO.load(LOCATION_DATA_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(graphDataIO, locationDataIO);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new LinkedList<Geometrizable>(graphDataIO.getEdges()));
 
         try {
-            GeometryDataIO.save(geometryDataIO, new File("/Users/Matthias/Workspace/PSE/data/geometryDataIO"));
+            GeometryDataIO.save(geometryDataIO, GEOMETRY_DATA_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }

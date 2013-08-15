@@ -18,23 +18,23 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 /**
  * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs
  * kümmert.
- *  
- * 
+ *
+ *
  * Dieses Fragment beöntigt folgende xml Files: #xml.optionen - Das xml File aus
- * dem automatisch die Grapische Oberfäche entsteht. 
+ * dem automatisch die Grapische Oberfäche entsteht.
  * #string.options_array - Sprachdatei für Listen
  * #string.options - Sprachdatei
  * #layout.options_view
  * Info: Unter values-de werden die deutschsprachigen Dateien gespeichert.
- * 
+ *
  * Die hier gespeicherten und veränderten Informationen kann man mithilfe dieses
  * Befehls abrufen:
- * 
+ *
  * import android.preference.PreferenceManager; SharedPreferences sharedPrefs =
  * PreferenceManager.getDefaultSharedPreferences(this);
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class OptionView extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
@@ -66,7 +66,7 @@ public class OptionView extends PreferenceFragment implements OnSharedPreference
 	}
 
 	/**
-	 * 
+	 *
 	 * @param f
 	 * @return
 	 */
@@ -77,9 +77,8 @@ public class OptionView extends PreferenceFragment implements OnSharedPreference
 		return false;
 	}
 
-	@Override
 	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
-		
+
 	}
 
 }

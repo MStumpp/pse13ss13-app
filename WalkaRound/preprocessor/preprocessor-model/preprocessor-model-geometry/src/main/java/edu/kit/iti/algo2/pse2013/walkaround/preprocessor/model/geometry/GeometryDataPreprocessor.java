@@ -135,8 +135,7 @@ public class GeometryDataPreprocessor {
      * @param end End index for current processing.
      * @return GeometryNode Node.
      */
-    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent,
-                                          int depth, int start, int end, int numberGeomPerNode) {
+    private static GeometryNode buildTree(Geometrizable[][] data, GeometryNode parent, int depth, int start, int end, int numberGeomPerNode) {
 
         final int dim = depth % data.length;
 
@@ -145,7 +144,7 @@ public class GeometryDataPreprocessor {
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
         if (size <= numberGeomPerNode)
-            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
+            return new GeometryNode(parent, Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
 
         // otherwise, compute median;
         int median;
@@ -208,7 +207,7 @@ public class GeometryDataPreprocessor {
             }
         }
 
-        GeometryNode node = new GeometryNode(parent, depth, (data[dim][median].valueForDimension(dim)));
+        GeometryNode node = new GeometryNode(parent, (data[dim][median].valueForDimension(dim)));
         node.setLeftNode(buildTree(data, node, depth+1, start, median, numberGeomPerNode));
         node.setRightNode(buildTree(data, node, depth+1, median+1, end, numberGeomPerNode));
         return node;

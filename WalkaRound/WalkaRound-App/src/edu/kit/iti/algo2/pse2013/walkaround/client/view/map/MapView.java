@@ -155,7 +155,7 @@ public class MapView extends Activity {
 		return size;
 	}
 
-	@Override
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		System.gc();
@@ -357,9 +357,9 @@ public class MapView extends Activity {
 
 			runOnUiThread(new Runnable() {
 				public void run() {
-					
+
 					Log.d("red", ""+displayPoints.size());
-					
+
 					currentActive = null;
 					routeList.removeAllViews();
 
@@ -572,12 +572,12 @@ public class MapView extends Activity {
 			this.coor = coor;
 		}
 
-		@Override
+
 		public void onAnimationCancel(Animator animation) {
 			Log.d(TAG_MAPVIEW_ANIMATION, "Animation Cancel");
 		}
 
-		@Override
+
 		public void onAnimationEnd(Animator animation) {
 			user.clearAnimation();
 			startDelay -= 1000;
@@ -590,13 +590,13 @@ public class MapView extends Activity {
 					+ " Grad");
 		}
 
-		@Override
+
 		public void onAnimationRepeat(Animator animation) {
 			Log.d(TAG_MAPVIEW_ANIMATION, "Animation Repeat");
 
 		}
 
-		@Override
+
 		public void onAnimationStart(Animator animation) {
 			Log.d(TAG_MAPVIEW_ANIMATION, "Animation Start");
 		}
@@ -624,14 +624,12 @@ public class MapView extends Activity {
 			oldY = 0.0F;
 		}
 
-		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Fling");
 			return false;
 		}
 
-		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "SCROLL EVENT");
@@ -686,13 +684,11 @@ public class MapView extends Activity {
 			return true;
 		}
 
-		@Override
 		public void onLongPress(MotionEvent event) {
 			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Long Touch");
 			mc.onCreatePoint(new DisplayCoordinate(event.getX(), event.getY()));
 		}
 
-		@Override
 		public boolean onDown(MotionEvent e) {
 			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Down");
 			this.oldX = e.getX();
@@ -700,12 +696,10 @@ public class MapView extends Activity {
 			return false;
 		}
 
-		@Override
 		public void onShowPress(MotionEvent e) {
 			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch Show Press");
 		}
 
-		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			Log.d(TAG_MAPVIEW_GESTURE, "MapTouch TapUp");
 			return false;
@@ -721,7 +715,6 @@ public class MapView extends Activity {
 	 */
 	private class MapTouchEventListener implements OnTouchListener {
 
-		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (map.equals(view)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "TOUCH!" + view.toString());
@@ -741,8 +734,6 @@ public class MapView extends Activity {
 	 *
 	 */
 	private class UserTouchEventListener implements OnTouchListener {
-
-		@Override
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			if (arg0.equals(user)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch on User Arrow");
@@ -750,7 +741,6 @@ public class MapView extends Activity {
 			}
 			return false;
 		}
-
 	}
 
 	/**
@@ -775,7 +765,6 @@ public class MapView extends Activity {
 			this.id = id;
 		}
 
-		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf View ID:" + id);
@@ -811,18 +800,13 @@ public class MapView extends Activity {
 	 *
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
-
-		@Override
 		public boolean onDown(MotionEvent event) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onDown " + currentId);
 			mc.setActive(currentId);
 			// mc.getActiveWaypointId();
 			return true;
 		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
 			Log.d(TAG_MAPVIEW_GESTURE, "Fling! " + velocityY + " " + e2.getY()
 					+ " " + currentId);
@@ -839,12 +823,10 @@ public class MapView extends Activity {
 			return false;
 		}
 
-		@Override
 		public void onLongPress(MotionEvent event) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onLongPress " + currentId);
 		}
 
-		@Override
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onScroll " + currentId);
@@ -859,13 +841,11 @@ public class MapView extends Activity {
 			return true;
 		}
 
-		@Override
 		public void onShowPress(MotionEvent arg0) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onShowPress " + currentId);
 
 		}
 
-		@Override
 		public boolean onSingleTapUp(MotionEvent arg0) {
 			Log.d(TAG_MAPVIEW_GESTURE, "Waypoint onSingleTapUp " + currentId);
 			return false;
@@ -895,7 +875,6 @@ public class MapView extends Activity {
 			this.id = id;
 		}
 
-		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf POI ID:" + id);
@@ -907,7 +886,7 @@ public class MapView extends Activity {
 		}
 	}
 
-	@Override
+
 	public void onLowMemory() {
 		super.onLowMemory();
 		System.gc();
@@ -927,14 +906,14 @@ public class MapView extends Activity {
 		Log.d(TAG_MAPVIEW, "Destroy View MapView");
 	}
 
-	@Override
+
 	public void onDestroy() {
 		super.onDestroy();
 		TextToSpeechUtility.getInstance().shutdown();
 		Log.d(TAG_MAPVIEW, "Destroy MapView");
 	}
 
-	@Override
+
 	public void onBackPressed() {
 		MapController.getInstance().getPullUpView().setNullSizeHeight();
 	}

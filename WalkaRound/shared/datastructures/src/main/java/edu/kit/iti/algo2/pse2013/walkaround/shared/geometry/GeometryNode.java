@@ -22,22 +22,22 @@ public class GeometryNode {
 	/**
 	 * Geometrizable.
 	 */
-	private List<Geometrizable> geometrizables;
+	private List<Geometrizable> geometrizables = new ArrayList<Geometrizable>();
 
 	/**
 	 * Value for split plane.
 	 */
-	private double splitValue;
+	private double splitValue = Double.NaN;
 
 	/**
 	 * Parent GeometryNode.
 	 */
-	private GeometryNode parent;
+	private GeometryNode parent = null;
 
 	/**
 	 * Depth of node.
 	 */
-	private int depth;
+	private int depth = 0;
 
 	/**
 	 * Left GeometryNode.
@@ -59,30 +59,10 @@ public class GeometryNode {
 	 * @param geometrizable
 	 *            Geometrizable.
 	 */
-	public GeometryNode(GeometryNode parent, int depth, Geometrizable geometrizable) {
-		this.geometrizables = new ArrayList<Geometrizable>();
-        this.geometrizables.add(geometrizable);
-		this.splitValue = Double.NaN;
+	public GeometryNode(GeometryNode parent, List<Geometrizable> geometrizables) {
+		this.geometrizables = geometrizables;
 		this.parent = parent;
-		this.depth = depth;
 	}
-
-    /**
-     * Initializes GeometryNode as leaf node.
-     *
-     * @param parent
-     *            Parent GeometryNode.
-     * @param depth
-     *            Depth of this GeometryNode.
-     * @param geometrizables
-     *            Geometrizable.
-     */
-    public GeometryNode(GeometryNode parent, int depth, List<Geometrizable> geometrizables) {
-        this.geometrizables = geometrizables;
-        this.splitValue = Double.NaN;
-        this.parent = parent;
-        this.depth = depth;
-    }
 
 	/**
 	 * Initializes GeometryNode as inner node.
@@ -94,25 +74,9 @@ public class GeometryNode {
 	 * @param splitValue
 	 *            Split value.
 	 */
-	public GeometryNode(GeometryNode parent, int depth, double splitValue) {
-		this.geometrizables = null;
+	public GeometryNode(GeometryNode parent, double splitValue) {
 		this.splitValue = splitValue;
 		this.parent = parent;
-		this.depth = depth;
-	}
-
-	/**
-	 * Initializes GeometryNode.
-	 *
-	 * @param geometrizable
-	 *            Geometrizable.
-	 */
-	public GeometryNode(Geometrizable geometrizable) {
-		this.geometrizables = new ArrayList<Geometrizable>();
-        this.geometrizables.add(geometrizable);
-		this.splitValue = Double.NaN;
-		this.parent = null;
-		this.depth = -1;
 	}
 
 	/**
@@ -122,10 +86,17 @@ public class GeometryNode {
 	 *            Split value.
 	 */
 	public GeometryNode(double splitValue) {
-		this.geometrizables = null;
 		this.splitValue = splitValue;
-		this.parent = null;
-		this.depth = -1;
+	}
+	/**
+	 * Initializes GeometryNode.
+	 *
+	 * @param splitValue
+	 *            Split value.
+	 */
+	public GeometryNode(double splitValue, List<Geometrizable> geometrizables) {
+		this.splitValue = splitValue;
+		this.geometrizables = geometrizables;
 	}
 
 	/**
@@ -146,6 +117,11 @@ public class GeometryNode {
 		return parent;
 	}
 
+	private void setParent(GeometryNode parent) {
+		this.parent = parent;
+		setDepth(parent.getDepth() + 1);
+	}
+
 	/**
 	 * Returns the depth.
 	 *
@@ -153,6 +129,16 @@ public class GeometryNode {
 	 */
 	public int getDepth() {
 		return depth;
+	}
+
+	public void setDepth(int depth) {
+		this.depth = depth;
+		if (leftNode != null) {
+			leftNode.setDepth(depth + 1);
+		}
+		if (rightNode != null) {
+			rightNode.setDepth(depth + 1);
+		}
 	}
 
 	/**
@@ -181,6 +167,7 @@ public class GeometryNode {
 	 */
 	public void setLeftNode(GeometryNode leftNode) {
 		this.leftNode = leftNode;
+		leftNode.setParent(this);
 	}
 
 	/**
@@ -191,6 +178,7 @@ public class GeometryNode {
 	 */
 	public void setRightNode(GeometryNode rightNode) {
 		this.rightNode = rightNode;
+		rightNode.setParent(this);
 	}
 
 	/**
@@ -258,8 +246,7 @@ public class GeometryNode {
 	 * @param geometrizable
 	 *            Geometrizable.
 	 */
-	public void setGeometrizable(Geometrizable geometrizable) {
-		this.geometrizables = new ArrayList<Geometrizable>();
+	public void addGeometrizable(Geometrizable geometrizable) {
         this.geometrizables.add(geometrizable);
 	}
 
@@ -304,4 +291,77 @@ public class GeometryNode {
 		return sb.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + depth;
+		result = prime * result
+				+ ((geometrizables == null) ? 0 : geometrizables.hashCode());
+		result = prime * result
+				+ ((leftNode == null) ? 0 : leftNode.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		result = prime * result
+				+ ((rightNode == null) ? 0 : rightNode.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(splitValue);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof GeometryNode)) {
+			return false;
+		}
+		GeometryNode other = (GeometryNode) obj;
+		if (depth != other.depth) {
+			return false;
+		}
+		if (geometrizables == null) {
+			if (other.geometrizables != null) {
+				return false;
+			}
+		} else if (!geometrizables.equals(other.geometrizables)) {
+			return false;
+		}
+		if (leftNode == null) {
+			if (other.leftNode != null) {
+				return false;
+			}
+		} else if (!leftNode.equals(other.leftNode)) {
+			return false;
+		}
+		if (parent == null) {
+			if (other.parent != null) {
+				return false;
+			}
+		} else if (!parent.equals(other.parent)) {
+			return false;
+		}
+		if (rightNode == null) {
+			if (other.rightNode != null) {
+				return false;
+			}
+		} else if (!rightNode.equals(other.rightNode)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(splitValue) != Double
+				.doubleToLongBits(other.splitValue)) {
+			return false;
+		}
+		return true;
+	}
 }

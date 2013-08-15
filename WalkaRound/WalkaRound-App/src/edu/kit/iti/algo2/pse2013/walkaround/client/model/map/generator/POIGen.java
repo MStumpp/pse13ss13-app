@@ -14,9 +14,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This Class compute and generate the POI Points on the map
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class POIGen implements Runnable {
 
@@ -37,7 +37,6 @@ public class POIGen implements Runnable {
 
 	}
 
-	@Override
 	public void run() {
 		// running endless
 		while (true)
@@ -46,7 +45,7 @@ public class POIGen implements Runnable {
 
 	/**
 	 * Gives the POI Information by their ids back
-	 * 
+	 *
 	 * @param id
 	 *            id of the POI
 	 * @return the POI and its Informations
