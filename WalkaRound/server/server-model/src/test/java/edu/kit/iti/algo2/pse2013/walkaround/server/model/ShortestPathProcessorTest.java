@@ -167,15 +167,11 @@ public class ShortestPathProcessorTest {
         List<Vertex> route1 = null;
         List<Vertex> route2 = null;
         List<Vertex> route3 = null;
-        List<Vertex> route4 = null;
-        List<Vertex> route5 = null;
 
         try {
             route1 = shortestPathProcessor.computeShortestPath(pair1[0], pair1[1]);
             route2 = shortestPathProcessor.computeShortestPath(pair2[0], pair2[1]);
             route3 = shortestPathProcessor.computeShortestPath(pair3[0], pair3[1]);
-            route4 = shortestPathProcessor.computeShortestPath(pair4[0], pair4[1]);
-            route5 = shortestPathProcessor.computeShortestPath(pair5[0], pair5[1]);
 
         } catch (NoShortestPathExistsException e) {
             e.printStackTrace();
