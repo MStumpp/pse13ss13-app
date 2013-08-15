@@ -154,11 +154,11 @@ public class ProtobufConverter {
 	public static List<Geometrizable> getGeometrizables(List<SaveGeometrizable> saveGeoms) {
 		ArrayList<Geometrizable> geoms = new ArrayList<Geometrizable>();
 		for (SaveGeometrizable saveGeom : saveGeoms) {
-			if (saveGeom.getPOI() != null) {
-				geoms.add(getPOI(saveGeom.getPOI()));
-			} else if (saveGeom.getEdge() != null) {
-				geoms.add(getEdge(saveGeom.getEdge()));
-			}
+//			if (saveGeom.getPOI() != null) {
+//				geoms.add(getPOI(saveGeom.getPOI()));
+//			} else if (saveGeom.getEdge() != null) {
+//				geoms.add(getEdge(saveGeom.getEdge()));
+//			}
 		}
 		return null;
 	}
@@ -166,7 +166,7 @@ public class ProtobufConverter {
 		if (geometrizable instanceof Edge) {
 			return SaveGeometrizable.newBuilder().setEdge(getEdgeBuilder((Edge) geometrizable));
 		} else if (geometrizable instanceof POI) {
-			return SaveGeometrizable.newBuilder().setPOI(getPOIBuilder((POI) geometrizable));
+		//	return SaveGeometrizable.newBuilder().setPOI(getPOIBuilder((POI) geometrizable));
 		}
 		return null;
 	}
