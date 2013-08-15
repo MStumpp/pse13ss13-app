@@ -109,9 +109,7 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		route = new Route(new LinkedList<Coordinate>());
-
 		Log.d(TAG_PULLUP, "allocate views");
 		main = (RelativeLayout) this.getActivity()
 				.findViewById(R.id.pullUpMain);
