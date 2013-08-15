@@ -13,12 +13,11 @@ public class GeometrySearch {
 
     private Map<Integer, Double> search;
 
-    public GeometrySearch() {
+    public GeometrySearch(double[] values) {
         search = new HashMap<Integer, Double>();
-    }
-
-    public void add(Integer dim, double value) {
-        search.put(dim, value);
+        for (int dim = 0; dim < values.length; dim++) {
+            search.put(dim, values[dim]);
+        }
     }
 
     public int getNumberDimensions() {
