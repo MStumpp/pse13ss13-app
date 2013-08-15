@@ -1,10 +1,13 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,7 +63,8 @@ public class TestPOI {
 		Location loc = new Location(DEFAULT_LAT, DEFAULT_LON, DEFAULT_NAME);
 		POI poiA = new POI(loc, null, null, null);
 		POI poiB = new POI(loc, null, null, null);
-		assertFalse(poiA.equals(poiB));
+		assertFalse(poiA == poiB);
+		assertTrue(poiA.equals(poiB));
 
 		assertTrue(DEFAULT_POI.equals(DEFAULT_POI));
 	}
@@ -69,24 +73,21 @@ public class TestPOI {
 	public void testClone() {
 		POI clone = DEFAULT_POI.clone();
 		POI clone2 = clone.clone();
-		assertNotEquals(DEFAULT_POI, clone);
-		assertNotEquals(clone, clone2);
-		assertNotEquals(clone2, DEFAULT_POI);
+		assertEquals(DEFAULT_POI, clone);
+		assertEquals(clone, clone2);
+		assertEquals(clone2, DEFAULT_POI);
 
-		assertTrue(DEFAULT_POI.getPOICategories() != clone.getPOICategories());
-		assertTrue(Arrays.equals(DEFAULT_POI.getPOICategories(), clone.getPOICategories()));
-		assertTrue(DEFAULT_POI.getURL() != clone.getURL());
-		assertEquals(DEFAULT_POI.getURL(), clone.getURL());
-		assertTrue(DEFAULT_POI.getTextInfo() != clone.getTextInfo());
-		assertEquals(DEFAULT_POI.getTextInfo(), clone.getTextInfo());
+		assertTrue(DEFAULT_POI != clone);
+		assertTrue(clone2 != clone);
+		assertTrue(DEFAULT_POI != clone2);
 	}
 
 	@Test
 	public void testHash() {
 		int hashA = DEFAULT_POI.hashCode();
 		int hashB = DEFAULT_POI.clone().hashCode();
-		int hashC = new POI(DEFAULT_LAT, DEFAULT_LON, DEFAULT_NAME, null, null, null).hashCode();
-		assertNotEquals(hashA, hashB);
+		int hashC = new POI(DEFAULT_LAT + 1, DEFAULT_LON, DEFAULT_NAME, null, null, null).hashCode();
+		assertEquals(hashA, hashB);
 		assertNotEquals(hashB, hashC);
 		assertNotEquals(hashA, hashC);
 	}

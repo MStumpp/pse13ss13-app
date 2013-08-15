@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LocationTest {
+public class TestLocation {
 
 	private Location testLocation;
 	private double testLat;
@@ -56,6 +56,7 @@ public class LocationTest {
 		Location locationA = new Location(2d, 2d, "test", testAddress);
 		Location locationB = new Location(2d, 2d, "test", testAddress);
 		assertTrue(locationA.equals(locationB));
+		assertFalse(locationA == locationB);
 
 		assertTrue(testLocation.equals(testLocation));
 	}
