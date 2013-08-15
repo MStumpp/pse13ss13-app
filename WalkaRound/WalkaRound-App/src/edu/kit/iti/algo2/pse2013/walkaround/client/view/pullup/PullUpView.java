@@ -199,6 +199,8 @@ public class PullUpView extends Fragment implements RouteListener {
 		main.setOnTouchListener(new MainListener());
 		
 		RouteController.getInstance().registerRouteListener(this);
+		
+		this.changeView(CONTENT_ROUTING);
 
 	}
 
