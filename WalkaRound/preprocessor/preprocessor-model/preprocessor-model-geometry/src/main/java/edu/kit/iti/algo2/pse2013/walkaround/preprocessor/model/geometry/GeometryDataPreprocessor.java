@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import java.util.*;
 
+import com.google.common.collect.Multiset;
+import com.google.common.collect.TreeMultiset;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
@@ -35,6 +37,8 @@ public class GeometryDataPreprocessor {
      * TreeSet.
      */
     private static final TreeSet<Geometrizable> treeSet = new TreeSet<>();
+
+    private static Multiset<Geometrizable> treeMultiset = TreeMultiset.create();
 
     private static final ArrayList<Geometrizable> list = new ArrayList<>();
 
@@ -183,8 +187,8 @@ public class GeometryDataPreprocessor {
         //treeSet.clear();
         //treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
-        list.clear();
-        list.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+        treeMultiset.clear();
+        treeMultiset.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
         Geometrizable[] currentBackupArray;
         int leftIndex;
@@ -199,8 +203,8 @@ public class GeometryDataPreprocessor {
             for (Geometrizable geometrizable : currentBackupArray) {
                 //if (treeSet.contains(geometrizable)) {
                 //    treeSet.remove(geometrizable);
-                if (list.contains(geometrizable)) {
-                    list.remove(geometrizable);
+                if (treeMultiset.contains(geometrizable)) {
+                    treeMultiset.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {

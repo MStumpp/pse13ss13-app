@@ -8,7 +8,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class GeometrizableWrapper implements Geometrizable, Comparable<GeometrizableWrapper> {
+public class GeometrizableWrapper implements Geometrizable {
 
     private Geometrizable geometrizable;
 
@@ -48,8 +48,8 @@ public class GeometrizableWrapper implements Geometrizable, Comparable<Geometriz
     }
 
     @Override
-    public int compareTo(GeometrizableWrapper o) {
-        return ((Vertex)getNode()).compareTo((Vertex)o.getNode());
+    public int compareTo(Object o) {
+        return getNode().compareTo(((GeometrizableWrapper)o).getNode());
     }
 
     public String toString() {

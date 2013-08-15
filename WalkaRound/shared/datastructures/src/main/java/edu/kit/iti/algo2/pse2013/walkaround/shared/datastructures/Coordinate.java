@@ -8,7 +8,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Coordinate implements Geometrizable {
+public class Coordinate {
 
 	/**
 	 * latitude of this Coordinate.
@@ -207,50 +207,5 @@ public class Coordinate implements Geometrizable {
 		}
 		return true;
 	}
-
-
-    // Geometrizable Interface
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
-        return 2;
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
-
-        if (dim < 0 || dim > numberDimensions()-1)
-            throw new IllegalArgumentException("dim out of range");
-
-        if (dim == 0)
-            return getLatitude();
-        else
-            return getLongitude();
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
-     */
-    public int numberNodes() {
-        return 1;
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
-     */
-    public Geometrizable getNode(int nodeNumber) {
-
-        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
-            throw new IllegalArgumentException("node number out of range");
-
-        return this;
-    }
 
 }
