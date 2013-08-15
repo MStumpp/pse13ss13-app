@@ -20,7 +20,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.OverlayController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
@@ -106,7 +105,6 @@ public class BootActivity extends Activity {
 				// Controller initialisierung
 
 				FavoriteMenuController.getInstance();
-				OverlayController.getInstance();
 				POIMenuController.getInstance();
 				RouteController.getInstance();
 				SearchMenuController.getInstance();
