@@ -88,7 +88,7 @@ public class GeometryDataPreprocessor {
             geometrizables = geometrizablesWrapped;
         }
 
-        logger.info(""+geometrizables.get(0));
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + geometrizables.get(0));
 
         // set up data
         Geometrizable[][] data = new Geometrizable[numDimensions][];
