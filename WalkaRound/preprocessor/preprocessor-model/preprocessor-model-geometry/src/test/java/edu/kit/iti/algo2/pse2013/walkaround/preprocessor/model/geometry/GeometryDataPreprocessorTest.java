@@ -9,10 +9,7 @@ import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -65,6 +62,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessVertexGraphDataIOOnePerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
@@ -170,6 +168,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessVerticesGraphDataOnePerNodeIO2() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
@@ -180,6 +179,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessVerticesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
@@ -285,6 +285,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessEdgesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
