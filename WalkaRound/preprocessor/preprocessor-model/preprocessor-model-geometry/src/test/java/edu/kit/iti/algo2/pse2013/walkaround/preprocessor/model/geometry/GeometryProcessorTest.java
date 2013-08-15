@@ -617,10 +617,10 @@ public class GeometryProcessorTest {
         GeometrizablePOIConstraint constPOI_1 = new GeometrizablePOIConstraint(new int[] { 0 });
         GeometrizablePOIConstraint constPOI_2 = new GeometrizablePOIConstraint(new int[] { 3 });
         GeometrizablePOIConstraint constPOI_3 = new GeometrizablePOIConstraint(new int[] { 4 });
+        GeometrizablePOIConstraint constPOI_NONE = new GeometrizablePOIConstraint(new int[] { 8 });
         GeometrizablePOIConstraint constPOI_1_2 = new GeometrizablePOIConstraint(new int[] { 1 });
         GeometrizablePOIConstraint constPOI_1_3 = new GeometrizablePOIConstraint(new int[] { 0, 4 });
         GeometrizablePOIConstraint constPOI_2_3 = new GeometrizablePOIConstraint(new int[] { 3, 4 });
-        GeometrizablePOIConstraint constPOI_NONE = new GeometrizablePOIConstraint(new int[] { 8 });
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
@@ -731,8 +731,8 @@ public class GeometryProcessorTest {
     private GeometryDataIO getGeometryLocationDataIODefaultPerNode() throws MalformedURLException {
         LocationDataIO locationDataIO = new LocationDataIO();
         locationDataIO.addPOI(new POI(49.2334, 8.2356, "POI_1", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 0, 1, 2 }));
-        locationDataIO.addPOI(new POI(50.2323, 8.3454, "POI_2", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 1, 2, 3 }));
-        locationDataIO.addPOI(new POI(48.9792, 8.6863, "POI_3", "info 1", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 4, 5, 6 }));
+        locationDataIO.addPOI(new POI(50.2323, 8.3454, "POI_2", "info 2", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 1, 2, 3 }));
+        locationDataIO.addPOI(new POI(48.9792, 8.6863, "POI_3", "info 3", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 4, 5, 6 }));
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
