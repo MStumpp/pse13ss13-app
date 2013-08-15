@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.test.client.controller.map;
 
 import java.net.MalformedURLException;
 
+import org.junit.Before;
+
 import android.graphics.Point;
 import android.test.AndroidTestCase;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
@@ -12,9 +14,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 public class BoundingBoxTest extends AndroidTestCase {
 	//private BoundingBox box;
 	
-	private final Point display = new Point(1025, 600);
-	private final Coordinate center = new Coordinate(49.0145, 8.419); 
+	private Point display;
+	private Coordinate center; 
 	private final float lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
+	
+	@Before
+	public void setUp() {
+		display = new Point(1025, 600);
+		center = new Coordinate(49.0145, 8.419); 
+	}
+	
 	/**
 	 * Testet die BoundingBox auf allgemeine Funktionalität
 	 * 

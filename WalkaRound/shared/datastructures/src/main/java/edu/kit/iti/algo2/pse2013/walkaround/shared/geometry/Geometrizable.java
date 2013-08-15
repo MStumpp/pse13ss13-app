@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
 /**
  * Interface for GeometryProcessor.
  *
@@ -34,10 +36,11 @@ public interface Geometrizable {
 
 
     /**
-     * Returns the value for a certain dimension.
+     * Returns the number of relevant points to be
+     * inserted as separate nodes into the geometry tree.
      *
-     * @return double value.
+     * @return int Number of nodes.
      */
-    public double valueForDimension(int nodeNumber, int dim);
+    public Geometrizable getNode(int nodeNumber);
 
 }

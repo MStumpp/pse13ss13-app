@@ -231,23 +231,17 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
 
 
     /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int nodeNumber, int dim)()
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
      */
-    public double valueForDimension(int nodeNumber, int dim) {
-        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1) ||
-                dim < 0 || (dim > numberDimensions()-1))
-            throw new IllegalArgumentException("node number and/or dim out of range");
+    public Geometrizable getNode(int nodeNumber) {
 
-        if (nodeNumber == 0 && dim == 0)
-            return tail.getLatitude();
-        else if (nodeNumber == 0 && dim == 1)
-            return tail.getLongitude();
-        else if (nodeNumber == 1 && dim == 0)
-            return head.getLongitude();
-        else if (nodeNumber == 1 && dim == 1)
-            return head.getLongitude();
+        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
+            throw new IllegalArgumentException("node number out of range");
 
-        throw new RuntimeException("something went wrong internally");
+        if (nodeNumber == 0)
+            return tail;
+        else
+            return head;
     }
 
 }

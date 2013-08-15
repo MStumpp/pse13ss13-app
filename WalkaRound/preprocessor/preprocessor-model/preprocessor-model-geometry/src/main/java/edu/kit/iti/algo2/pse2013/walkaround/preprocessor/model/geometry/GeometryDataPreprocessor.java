@@ -34,7 +34,9 @@ public class GeometryDataPreprocessor {
     /**
      * TreeSet.
      */
-    private static final TreeSet<Geometrizable> treeSet = new TreeSet<Geometrizable>();
+    private static final TreeSet<Geometrizable> treeSet = new TreeSet<>();
+
+    private static final ArrayList<Geometrizable> list = new ArrayList<>();
 
 
     /**
@@ -52,13 +54,15 @@ public class GeometryDataPreprocessor {
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
      *
-     * @param geometrizables GraphDataIO object.
+     * @param geoms GraphDataIO object.
      * @param numberGeomPerNode Number of the Geometrizables to be stored in a GeometryNode.
      * @return GeometryDataIO.
      * @throw IllegalArgumentException If graphDataIO or locationDataIO args invalid.
      */
-    public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geometrizables,
+    public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geoms,
         int numberGeomPerNode) throws IllegalArgumentException {
+
+        List<Geometrizable> geometrizables = geoms;
 
         // throw exception if number of geometrizables is not greater than 0
         if (geometrizables == null || geometrizables.size() == 0)
@@ -73,6 +77,8 @@ public class GeometryDataPreprocessor {
         // number of dimensions, use first element of geometrizables
         int numDimensions = geometrizables.get(0).numberDimensions();
 
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! number geometrizables before: " + geometrizables.size());
+
         // if number of nodes in given geometrizables greater than 1,
         // wrap each geometrizable
         int numberNodes = geometrizables.get(0).numberNodes();
@@ -85,6 +91,10 @@ public class GeometryDataPreprocessor {
             }
             geometrizables = geometrizablesWrapped;
         }
+
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! number geometrizables after: " + geometrizables.size());
+
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + geometrizables.get(0));
 
         // set up data
         Geometrizable[][] data = new Geometrizable[numDimensions][];
@@ -137,7 +147,7 @@ public class GeometryDataPreprocessor {
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
         if (size <= numberGeomPerNode)
-            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end + 1)));
+            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
 
         // otherwise, compute median;
         int median;
@@ -170,8 +180,11 @@ public class GeometryDataPreprocessor {
 //            }
         }
 
-        treeSet.clear();
-        treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+        //treeSet.clear();
+        //treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+
+        list.clear();
+        list.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
         Geometrizable[] currentBackupArray;
         int leftIndex;
@@ -184,8 +197,10 @@ public class GeometryDataPreprocessor {
             leftIndex = start;
             rightIndex = median+1;
             for (Geometrizable geometrizable : currentBackupArray) {
-                if (treeSet.contains(geometrizable)) {
-                    treeSet.remove(geometrizable);
+                //if (treeSet.contains(geometrizable)) {
+                //    treeSet.remove(geometrizable);
+                if (list.contains(geometrizable)) {
+                    list.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {

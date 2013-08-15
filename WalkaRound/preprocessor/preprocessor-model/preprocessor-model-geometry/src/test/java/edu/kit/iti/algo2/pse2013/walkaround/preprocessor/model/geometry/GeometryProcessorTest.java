@@ -10,10 +10,7 @@ import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  * @author Matthias Stumpp
  * @version 1.0
  */
+@Ignore
 public class GeometryProcessorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorTest.class);
