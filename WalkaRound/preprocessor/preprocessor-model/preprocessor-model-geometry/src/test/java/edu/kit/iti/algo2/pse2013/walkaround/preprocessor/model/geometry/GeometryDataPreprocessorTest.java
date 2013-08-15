@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

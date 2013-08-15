@@ -2,10 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 
 /**
  * This class represents an egde contained in a graph. An edge has two coordinates,
@@ -155,22 +153,6 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
     }
 
 
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
-        throw new RuntimeException("not yet supported");
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
-        throw new RuntimeException("not yet supported");
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -222,4 +204,50 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
         }
         return 0;
 	}
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+        return 2;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+        throw new RuntimeException("not supported");
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
+     */
+    public int numberNodes() {
+        return 2;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int nodeNumber, int dim)()
+     */
+    public double valueForDimension(int nodeNumber, int dim) {
+        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1) ||
+                dim < 0 || (dim > numberDimensions()-1))
+            throw new IllegalArgumentException("node number and/or dim out of range");
+
+        if (nodeNumber == 0 && dim == 0)
+            return tail.getLatitude();
+        else if (nodeNumber == 0 && dim == 1)
+            return tail.getLongitude();
+        else if (nodeNumber == 1 && dim == 0)
+            return head.getLongitude();
+        else if (nodeNumber == 1 && dim == 1)
+            return head.getLongitude();
+
+        throw new RuntimeException("something went wrong internally");
+    }
+
 }

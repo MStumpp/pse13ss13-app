@@ -1,6 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.view.endpoint;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -105,7 +105,7 @@ public class Coordinate implements Geometrizable {
 
 
     /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
      */
     public int numberDimensions() {
         return 2;
@@ -113,7 +113,7 @@ public class Coordinate implements Geometrizable {
 
 
     /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension(int)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
      */
     public double valueForDimension(int dim) {
         if (dim == 0)

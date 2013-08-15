@@ -14,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
-
 /**
  * GeometryProcessor provides some api to query nearest Edges and Vertices based on Coordinates.
  *
@@ -55,12 +53,6 @@ public class GeometryProcessor {
 
 
     /**
-     * ID counter for GeometryComputer.
-     */
-    private int idCounter;
-
-
-    /**
      * Creates an instance of GeometryProcessor.
      *
      * @param geometryDataIO GeometryDataIO used for geometry computation.
@@ -69,7 +61,7 @@ public class GeometryProcessor {
     private GeometryProcessor(GeometryDataIO geometryDataIO, int numberThreads) {
         ArrayDeque<GeometryComputer> geometryComputerQueue =
                 new ArrayDeque<GeometryComputer>();
-        idCounter = 0;
+        int idCounter = 0;
         for (int t=0; t<numberThreads; t++) {
             GeometryComputer computer = new GeometryComputer(idCounter,
                     geometryDataIO.getRoot(), geometryDataIO.getNumDimensions());
@@ -426,9 +418,14 @@ public class GeometryProcessor {
                 throws GeometryProcessorException {
             numberMethodCalls = 0;
             stop = false;
-            GeometrizableWrapper wrapper = new GeometrizableWrapper(null);
-            searchTreeDown(root, search, wrapper);
-            return wrapper.getGeometrizable();
+            GeometrizableHolder holder = new GeometrizableHolder(null);
+            searchTreeDown(root, search, holder);
+
+            if (holder.getGeometrizable() instanceof GeometrizableHolder) {
+                return ((GeometrizableWrapper) holder.getGeometrizable()).getGeometrizable();
+            } else {
+                return holder.getGeometrizable();
+            }
         }
 
 
@@ -441,7 +438,7 @@ public class GeometryProcessor {
          * @throws GeometryProcessorException If something goes wrong.
          */
         private void searchTreeDown(GeometryNode node, Geometrizable search,
-                                    GeometrizableWrapper currentBest)
+                                    GeometrizableHolder currentBest)
                 throws GeometryProcessorException {
 
             if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
@@ -502,7 +499,7 @@ public class GeometryProcessor {
          * @throws GeometryProcessorException If something goes wrong.
          */
         private void searchTreeUp(GeometryNode node, Geometrizable search,
-                                  GeometrizableWrapper currentBest, GeometryNode child)
+                                  GeometrizableHolder currentBest, GeometryNode child)
                 throws GeometryProcessorException {
 
             if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
@@ -547,11 +544,11 @@ public class GeometryProcessor {
     /**
      * A wrapper class the keep the current best Geometrizable.
      */
-    private class GeometrizableWrapper {
+    private class GeometrizableHolder {
 
         private Geometrizable geometrizable;
 
-        GeometrizableWrapper (Geometrizable geometrizable) {
+        GeometrizableHolder (Geometrizable geometrizable) {
             this.geometrizable = geometrizable;
         }
 

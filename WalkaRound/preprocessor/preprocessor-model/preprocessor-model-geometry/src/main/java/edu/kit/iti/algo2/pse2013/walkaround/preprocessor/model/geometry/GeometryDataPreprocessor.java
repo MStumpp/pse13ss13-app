@@ -72,6 +72,7 @@ public class GeometryDataPreprocessor {
         // number of dimensions, use first element of geometrizables
         int numDimensions = geometrizables.get(0).numberDimensions();
 
+                }
         // set up data
         Geometrizable[][] data = new Geometrizable[numDimensions][];
 

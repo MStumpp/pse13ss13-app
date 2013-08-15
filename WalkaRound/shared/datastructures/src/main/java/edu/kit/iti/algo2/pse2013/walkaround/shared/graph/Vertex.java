@@ -251,4 +251,5 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
         }
         return 0;
     }
+
 }

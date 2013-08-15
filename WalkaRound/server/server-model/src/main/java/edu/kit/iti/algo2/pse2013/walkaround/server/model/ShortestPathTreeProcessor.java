@@ -35,12 +35,6 @@ public class ShortestPathTreeProcessor {
 
 
     /**
-     * ID counter for ShortestPathTreeComputer.
-     */
-    private int idCounter;
-
-
-    /**
      * Creates an instance of ShortestPathTreeProcessor.
      *
      * @param graphDataIO GraphDataIO used for shortest path computation.
@@ -50,7 +44,7 @@ public class ShortestPathTreeProcessor {
             throws EmptyListOfEdgesException {
         ArrayDeque<ShortestPathTreeComputer> shortestPathTreeComputerQueue =
                 new ArrayDeque<ShortestPathTreeComputer>();
-        idCounter = 0;
+        int idCounter = 0;
         for (int t=0; t<numberThreads; t++) {
             ShortestPathTreeComputer computer = new ShortestPathTreeComputer(idCounter, new Graph(graphDataIO));
             shortestPathTreeComputerQueue.add(computer);

@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
  *
@@ -128,25 +130,6 @@ public class Coordinate implements Geometrizable {
 	}
 
 
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
-        return 2;
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
-        if (dim == 0)
-            return getLatitude();
-        else
-            return getLongitude();
-    }
-
-
 	@Override
 	public String toString() {
 		String crossroads = "";
@@ -224,4 +207,48 @@ public class Coordinate implements Geometrizable {
 		}
 		return true;
 	}
+
+
+    // Geometrizable Interface
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+        return 2;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+
+        if (dim < 0 || dim > numberDimensions()-1)
+            throw new IllegalArgumentException("dim out of range");
+
+        if (dim == 0)
+            return getLatitude();
+        else
+            return getLongitude();
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
+     */
+    public int numberNodes() {
+        return 1;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     */
+    public double valueForDimension(int nodeNumber, int dim) {
+        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
+            throw new IllegalArgumentException("node number out of range");
+        return valueForDimension(dim);
+    }
+
 }

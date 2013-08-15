@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Geometrizable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
