@@ -1,12 +1,14 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
 /**
  * Wrapper for Geometrizable to handle multiple points.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class GeometrizableWrapper implements Geometrizable {
+public class GeometrizableWrapper implements Geometrizable, Comparable<GeometrizableWrapper> {
 
     private Geometrizable geometrizable;
 
@@ -24,7 +26,7 @@ public class GeometrizableWrapper implements Geometrizable {
 
     @Override
     public double valueForDimension(int dim) {
-        return geometrizable.valueForDimension(nodeNumber, dim);
+        return geometrizable.getNode(nodeNumber).valueForDimension(dim);
     }
 
     @Override
@@ -33,11 +35,8 @@ public class GeometrizableWrapper implements Geometrizable {
     }
 
     @Override
-    public double valueForDimension(int nodeNumber, int dim) {
-        if (this.nodeNumber != nodeNumber)
-            throw new IllegalArgumentException("wrapper configured for nodeNumber " +
-                    this.nodeNumber + ", but " + nodeNumber + " requested");
-        return geometrizable.valueForDimension(this.nodeNumber, dim);
+    public Geometrizable getNode(int nodeNumber) {
+        return geometrizable.getNode(nodeNumber);
     }
 
     public Geometrizable getGeometrizable() {
@@ -46,6 +45,11 @@ public class GeometrizableWrapper implements Geometrizable {
 
     public int getNodeNumber() {
         return nodeNumber;
+    }
+
+    @Override
+    public int compareTo(GeometrizableWrapper o) {
+        return ((Vertex)geometrizable.getNode(nodeNumber)).compareTo((Vertex)o.getGeometrizable());
     }
 
 }

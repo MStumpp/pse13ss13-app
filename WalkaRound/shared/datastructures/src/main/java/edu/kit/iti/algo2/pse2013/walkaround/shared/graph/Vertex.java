@@ -242,7 +242,6 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
     }
 
 
-    @Override
     public int compareTo(Vertex other) {
         if (this.getID() > other.getID()) {
             return 1;

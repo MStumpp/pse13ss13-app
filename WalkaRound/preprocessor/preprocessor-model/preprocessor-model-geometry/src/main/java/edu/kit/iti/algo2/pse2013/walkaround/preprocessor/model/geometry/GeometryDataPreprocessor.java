@@ -34,7 +34,7 @@ public class GeometryDataPreprocessor {
     /**
      * TreeSet.
      */
-    private static final TreeSet<Geometrizable> treeSet = new TreeSet<Geometrizable>();
+    private static final TreeSet<Geometrizable> treeSet = new TreeSet<>();
 
 
     /**
