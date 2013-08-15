@@ -1,9 +1,8 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.model.data;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Before;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
@@ -15,12 +14,7 @@ import android.test.AndroidTestCase;
 
 public class POIManagerTest extends AndroidTestCase {
 
-	private POIManager poiManag;
-
-	@Before
-	public void setUp() {
-		poiManag = POIManager.getInstance();
-	}
+	private POIManager poiManag = POIManager.getInstance();
 
 	public void testPersistence() {
 		assertTrue(poiManag.isEmpty());

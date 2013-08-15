@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.controller.search;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.search;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
