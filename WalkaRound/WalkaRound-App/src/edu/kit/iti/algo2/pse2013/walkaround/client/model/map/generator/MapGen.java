@@ -142,8 +142,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 
 		this.amount = new Point();
 
-		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
-				Bitmap.Config.ARGB_8888);
+		this.map = Bitmap.createBitmap(this.size.x, this.size.y, Bitmap.Config.ARGB_8888);
 	}
 
 	/**
@@ -239,7 +238,9 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	private void clearBitmap() {
 		Log.d(TAG, "clear Map Bitmap");
 
-		this.map.eraseColor(defaultBackground);
+		if (this.map.isMutable()) {
+			map.eraseColor(defaultBackground);
+		}
 		this.pushMap();
 		this.map.prepareToDraw();
 	}

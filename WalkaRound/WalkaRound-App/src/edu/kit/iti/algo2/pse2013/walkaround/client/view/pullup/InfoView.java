@@ -48,7 +48,7 @@ public class InfoView extends Fragment implements POIImageListener {
 		this.text = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
-		
+
 		iv.setVisibility(View.GONE);
 
 		final POI poi = MapController.getInstance().getPOI();
@@ -165,7 +165,6 @@ public class InfoView extends Fragment implements POIImageListener {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(save) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "save wurde gedrückt");

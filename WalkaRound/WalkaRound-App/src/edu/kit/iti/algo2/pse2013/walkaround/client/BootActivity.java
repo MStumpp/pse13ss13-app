@@ -235,11 +235,9 @@ public class BootActivity extends Activity {
 			}
 		}
 
-		@Override
 		public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
 			progress += stepSize;
 			tiles++;
 		}
-
 	}
 }

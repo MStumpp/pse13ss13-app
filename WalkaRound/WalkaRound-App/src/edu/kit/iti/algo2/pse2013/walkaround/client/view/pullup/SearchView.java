@@ -154,7 +154,6 @@ public class SearchView extends Fragment {
 
 	private class GoListener implements OnTouchListener {
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
 			if (v.equals(goButton)
@@ -214,7 +213,6 @@ public class SearchView extends Fragment {
 
 	private class QueryActionListener implements OnEditorActionListener {
 
-		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (v.equals(query)) {
 				Log.d(TAG_PULLUP_CONTENT, "Eine query wurde eingegeben");
@@ -262,7 +260,6 @@ public class SearchView extends Fragment {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
 				RouteController.getInstance().addWaypoint(
@@ -290,7 +287,6 @@ public class SearchView extends Fragment {
 			this.view = view;
 		}
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
 				RouteController.getInstance().addWaypoint(

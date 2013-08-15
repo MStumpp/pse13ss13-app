@@ -36,6 +36,7 @@ public final class TextToSpeechUtility implements OnInitListener,
 	private TextToSpeechUtility(Context context, boolean sound) {
 		tts = new TextToSpeech(context, this);
 		this.sound = sound;
+		isReady = true;
 	}
 
 	/**

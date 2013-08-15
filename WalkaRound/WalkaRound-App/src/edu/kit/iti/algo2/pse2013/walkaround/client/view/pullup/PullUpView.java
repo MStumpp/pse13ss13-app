@@ -31,13 +31,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
- * 
+ *
  * This class creates a variant of a pull down menu. Instead of pulling down you
  * can pull this menu up. This Class enables us to integrate a different
  * fragments to display different menus.
- * 
+ *
  * @author Ludwig Biermann
- * 
+ *
  */
 public class PullUpView extends Fragment implements RouteListener {
 
@@ -92,26 +92,26 @@ public class PullUpView extends Fragment implements RouteListener {
 	private float maxBorderHeight;
 	private float maxHeight;
 	private boolean animationRun = false;
-	
+
 	/**
-	 * 
+	 *
 	 */
 
 	private RouteInfo route;
 	private boolean routingViewRun = false;
 	private boolean poiViewRun = false;
-	
+
 	/**
 	 * Gestik
 	 */
 	private GestureDetector gestureDetector;
 
-	@Override
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		route = new Route(new LinkedList<Coordinate>());
-		
+
 		Log.d(TAG_PULLUP, "allocate views");
 		main = (RelativeLayout) this.getActivity()
 				.findViewById(R.id.pullUpMain);
@@ -172,7 +172,7 @@ public class PullUpView extends Fragment implements RouteListener {
 		regulator.getLayoutParams().height = size.y / 10;
 
 		maxHeight = maxHeight - size.y/5;
-		
+
 		Log.d(TAG_PULLUP, "allocate Listener");
 		routing.setOnTouchListener(new RoutingListener());
 		favorite.setOnTouchListener(new FavoriteListener());
@@ -197,9 +197,9 @@ public class PullUpView extends Fragment implements RouteListener {
 		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
 		//ft.add(R.id.pullupContent, pullUpContent).commit();
 		main.setOnTouchListener(new MainListener());
-		
+
 		RouteController.getInstance().registerRouteListener(this);
-		
+
 		this.changeView(CONTENT_ROUTING);
 
 	}
@@ -229,7 +229,7 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * change the height
-	 * 
+	 *
 	 * @param delta
 	 *            to the new height
 	 */
@@ -239,7 +239,7 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * change the height in a time
-	 * 
+	 *
 	 * @param delta
 	 *            to the new height
 	 * @param duration
@@ -258,7 +258,7 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Gives the height back
-	 * 
+	 *
 	 * @return height of the PullUpMenüs
 	 */
 	public float getHeight() {
@@ -269,7 +269,7 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * change the content of the pullup
-	 * 
+	 *
 	 * @param id
 	 *            of content
 	 */
@@ -386,12 +386,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Routing button Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RoutingListener implements OnTouchListener {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(routing)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -406,12 +406,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Favorite button listener.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class FavoriteListener implements OnTouchListener {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(favorite)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -426,12 +426,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * roundtrip button listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RoundtripListener implements OnTouchListener {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 
 			if (v.equals(roundtrip)
@@ -447,12 +447,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * poi button listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class POIListener implements OnTouchListener {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 
 			if (v.equals(poi) && event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -467,12 +467,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Listener to get general touch events
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class MainListener implements OnTouchListener {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 
 			if (!v.equals(main) && event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -486,12 +486,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Listener zur änderung des Content des Menüs.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class SearchListener implements OnTouchListener {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 
 			if (v.equals(search)
@@ -507,13 +507,13 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Implements the listener of height regulator button
-	 * 
+	 *
 	 * @author ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RegulatorListener implements OnTouchListener {
 
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 
 			int action = MotionEventCompat.getActionMasked(event);
@@ -548,9 +548,9 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Implements the Animation listener of the transaction of the pullupview
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class RegulatorAnimationListener implements AnimationListener {
 
@@ -560,7 +560,7 @@ public class PullUpView extends Fragment implements RouteListener {
 			this.height = height;
 		}
 
-		@Override
+
 		public void onAnimationEnd(Animation anim) {
 
 			main.setY(height);
@@ -593,13 +593,13 @@ public class PullUpView extends Fragment implements RouteListener {
 
 		}
 
-		@Override
+
 		public void onAnimationRepeat(Animation arg0) {
 			Log.d(TAG_PULLUP_ANIMATIOn, "Repeat Animation");
 
 		}
 
-		@Override
+
 		public void onAnimationStart(Animation arg0) {
 			Log.d(TAG_PULLUP_ANIMATIOn, "Repeat Animation");
 		}
@@ -608,12 +608,12 @@ public class PullUpView extends Fragment implements RouteListener {
 
 	/**
 	 * Detect fling events on the pull up menu
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class FlingDetector extends SimpleOnGestureListener {
-		@Override
+
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 
@@ -629,9 +629,9 @@ public class PullUpView extends Fragment implements RouteListener {
 		}
 	}
 
-	@Override
+
 	public void onRouteChange(final RouteInfo currentRoute) {
-		
+
 		getActivity().runOnUiThread(new Runnable() {
 			public void run() {
 				route = currentRoute;

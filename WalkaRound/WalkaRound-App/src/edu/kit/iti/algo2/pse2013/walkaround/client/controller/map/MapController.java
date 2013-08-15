@@ -38,7 +38,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This Class controls the data flow between the System and the real View.
- * 
+ *
  * @author Ludwig Biermann
  */
 public class MapController implements RouteListener, PositionListener,
@@ -94,7 +94,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * gets the center Coordinate
-	 * 
+	 *
 	 * @return the Coordinate of the center
 	 */
 	public Coordinate getCenter() {
@@ -103,7 +103,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * sets the Center Coordinate
-	 * 
+	 *
 	 * @param center
 	 *            Coordinate
 	 */
@@ -113,7 +113,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * sets the Center Coordinate
-	 * 
+	 *
 	 * @param center
 	 *            Coordinate
 	 * @param lod
@@ -129,7 +129,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 * 
+	 *
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
@@ -148,7 +148,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 * 
+	 *
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
@@ -220,7 +220,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives the id of the current Active Waypoint back
-	 * 
+	 *
 	 * @return id of active Waypoint
 	 */
 	public int getActiveWaypointId() {
@@ -236,7 +236,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives back the current Level of Detail.
-	 * 
+	 *
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
@@ -245,7 +245,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives the current Route back.
-	 * 
+	 *
 	 * @return current Route
 	 */
 	public List<DisplayCoordinate> getCurrentRouteLines() {
@@ -258,7 +258,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Forward the Bitmap of the current Map
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
@@ -269,7 +269,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Forward the Bitmap of the Route
-	 * 
+	 *
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
@@ -280,7 +280,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Forward poi list to MapView
-	 * 
+	 *
 	 * @param poiList
 	 *            the required list of pois
 	 */
@@ -295,7 +295,7 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 * 
+	 *
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
@@ -316,7 +316,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
@@ -332,17 +332,17 @@ public class MapController implements RouteListener, PositionListener,
 		 * this.coorBox.getLevelOfDetail() + delta >=
 		 * CurrentMapStyleModel.getInstance()
 		 * .getCurrentMapStyle().getMinLevelOfDetail()) {
-		 * 
+		 *
 		 * // set center before zooming! this.coorBox.setCenter(dc);
 		 * this.coorBox.setLevelOfDetail(delta);
-		 * 
+		 *
 		 * this.updateAll(); }
 		 */
 	}
 
 	/**
 	 * Zoom by a delta.
-	 * 
+	 *
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
@@ -396,7 +396,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Delete the Active Waypoint
-	 * 
+	 *
 	 * @param currentId
 	 */
 	public void onDeletePoint(int currentId) {
@@ -412,7 +412,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Creates a new Point.
-	 * 
+	 *
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
@@ -443,7 +443,7 @@ public class MapController implements RouteListener, PositionListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 */
@@ -468,7 +468,7 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * returns a Waypoint by his id
-	 * 
+	 *
 	 * @param id
 	 *            of the Waypoint
 	 * @return null if no Waypoint is available
@@ -579,9 +579,9 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * This class sets the USer Arrwow
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class UserPos implements Runnable {
 
@@ -596,7 +596,7 @@ public class MapController implements RouteListener, PositionListener,
 			 * double lon = -coorBox.getTopLeft().getLongitude() +
 			 * user.getLongitude(); double lat = -user.getLatitude() +
 			 * coorBox.getTopLeft().getLatitude();
-			 * 
+			 *
 			 * DisplayCoordinate pos = new DisplayCoordinate(
 			 * CoordinateUtility.convertDegreesToPixels(lon,
 			 * coorBox.getLevelOfDetail(),
@@ -620,12 +620,12 @@ public class MapController implements RouteListener, PositionListener,
 					CoordinateUtility.DIRECTION_LATITUDE);
 
 			Log.d("UserPos", " x: " + x + " y: " + y);
-			
+
 			x = coorBox.getDisplaySize().x/2 + x;
 			y = coorBox.getDisplaySize().y/2 + y;
 
 			Log.d("UserPos", " x: " + x + " y: " + y);
-			
+
 			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(),
 					"User Posi ist:" + user.toString());
 			try {
@@ -640,10 +640,10 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * forwards a set active action to route controller
-	 * 
+	 *
 	 * @param id
 	 *            of the waypoint
-	 * 
+	 *
 	 */
 	public void setActive(int id) {
 		this.routeController.setActiveWaypoint(id);
@@ -654,7 +654,7 @@ public class MapController implements RouteListener, PositionListener,
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public POI getPOIById(int id) {

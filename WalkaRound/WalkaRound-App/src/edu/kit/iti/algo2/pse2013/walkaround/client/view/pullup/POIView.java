@@ -109,7 +109,6 @@ public class POIView extends Fragment {
 
 	private class onCategoryTouch implements OnTouchListener {
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(category1)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {

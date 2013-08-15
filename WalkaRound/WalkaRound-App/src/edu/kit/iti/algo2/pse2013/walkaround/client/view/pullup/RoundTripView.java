@@ -127,7 +127,6 @@ public class RoundTripView extends Fragment {
 
 	private class RoundtripComputeListener implements OnTouchListener {
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(computeRoundtrip)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -168,7 +167,6 @@ public class RoundTripView extends Fragment {
 
 	private class OnProfileTouch implements OnTouchListener {
 
-		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(jogging)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
