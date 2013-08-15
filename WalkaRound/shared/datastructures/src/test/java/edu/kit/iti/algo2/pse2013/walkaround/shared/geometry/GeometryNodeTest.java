@@ -50,7 +50,7 @@ public class GeometryNodeTest {
 
         Assert.assertEquals(node.getParent(), parent);
         Assert.assertEquals(node.getDepth(), 0);
-        Assert.assertNull(node.getGeometrizable());
+        Assert.assertTrue(node.getGeometrizables().size() <= 0);
         Assert.assertEquals(node.getSplitValue(), splitValue, 0.d);
     }
 

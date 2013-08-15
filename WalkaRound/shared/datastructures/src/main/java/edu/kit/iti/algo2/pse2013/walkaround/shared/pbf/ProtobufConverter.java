@@ -15,7 +15,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -158,13 +157,26 @@ public class ProtobufConverter {
 	public static List<Geometrizable> getGeometrizables(List<SaveGeometrizable> saveGeoms) {
 		ArrayList<Geometrizable> geoms = new ArrayList<Geometrizable>();
 		for (SaveGeometrizable saveGeom : saveGeoms) {
-			if (saveGeom.getPOI() != null) {
-				geoms.add(getPOI(saveGeom.getPOI()));
-			} else if (saveGeom.getEdge() != null) {
-				geoms.add(getEdge(saveGeom.getEdge()));
+			if (saveGeom != null) {
+				geoms.add(getGeometrizable(saveGeom));
 			}
 		}
+		return geoms;
+	}
+	private static Geometrizable getGeometrizable(SaveGeometrizable saveGeom) {
+		if (saveGeom.hasPOI()) {
+			return getPOI(saveGeom.getPOI());
+		} else if (saveGeom.hasEdge()) {
+			return getEdge(saveGeom.getEdge());
+		} else if (saveGeom.hasVertex()) {
+			return getVertex(saveGeom.getVertex());
+		} else if (saveGeom.hasWrapper()) {
+			return getGeometrizableWrapper(saveGeom.getWrapper());
+		}
 		return null;
+	}
+	private static Geometrizable getGeometrizableWrapper(SaveGeometrizableWrapper wrapper) {
+		return new GeometrizableWrapper(getGeometrizable(wrapper.getGeometrizable()), wrapper.getNumber());
 	}
 	public static SaveGeometrizable.Builder getGeometrizableBuilder(Geometrizable geometrizable) {
 		SaveGeometrizable.Builder builder = SaveGeometrizable.newBuilder();
@@ -185,7 +197,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		try {
-			Field numberField = wrapper.getClass().getField("nodeNumber");
+			Field numberField = wrapper.getClass().getDeclaredField("nodeNumber");
 			numberField.setAccessible(true);
 			return SaveGeometrizableWrapper.newBuilder().setNumber(numberField.getInt(wrapper)).setGeometrizable(getGeometrizableBuilder(wrapper.getGeometrizable()));
 		} catch (IllegalArgumentException e) {
@@ -226,7 +238,7 @@ public class ProtobufConverter {
 		if (parent == null) {
 			node = new GeometryNode(saveNode.getSplitValue(), geoms);
 		} else {
-			node = new GeometryNode(parent, saveNode.getSplitValue());
+			node = new GeometryNode(parent, saveNode.getSplitValue(), geoms);
 		}
 		if (saveNode.hasLeft()) {
 			node.setLeftNode(getGeometryNode(node, saveNode.getLeft()));
@@ -240,8 +252,7 @@ public class ProtobufConverter {
 		if (node == null) {
 			return null;
 		}
-		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()
-			.setSplitValue(node.getSplitValue());
+		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder().setSplitValue(node.getSplitValue());
 		if (node.getLeftNode() != null) {
 			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));
 		}

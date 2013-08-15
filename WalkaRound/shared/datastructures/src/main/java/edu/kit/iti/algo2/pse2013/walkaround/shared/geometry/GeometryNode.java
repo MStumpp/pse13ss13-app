@@ -76,6 +76,22 @@ public class GeometryNode {
 	}
 
 	/**
+	 * Initializes GeometryNode as inner node.
+	 *
+	 * @param parent
+	 *            Parent GeometryNode.
+	 * @param splitValue
+	 *            Split value.
+	 * @param geometrizables
+	 *           the geometrizable-list.
+	 */
+	public GeometryNode(GeometryNode parent, double splitValue, List<Geometrizable> geometrizables) {
+		this.splitValue = splitValue;
+		this.parent = parent;
+		this.geometrizables = geometrizables;
+	}
+
+	/**
 	 * Initializes GeometryNode.
 	 *
 	 * @param splitValue
@@ -177,17 +193,6 @@ public class GeometryNode {
 		rightNode.setParent(this);
 	}
 
-	/**
-	 * Returns the Geometrizable.
-	 *
-	 * @return Geometrizable.
-	 */
-	public Geometrizable getGeometrizable() {
-        if (geometrizables != null && geometrizables.size() == 1)
-		    return geometrizables.get(0);
-        return null;
-	}
-
     /**
      * Returns the nearest Geometrizable.
      *
@@ -231,9 +236,10 @@ public class GeometryNode {
      * @return Geometrizable.
      */
     public List<Geometrizable> getGeometrizables() {
-        if (geometrizables != null)
-            return geometrizables;
-        return new ArrayList<Geometrizable>();
+    	if (geometrizables == null) {
+    		geometrizables = new ArrayList<Geometrizable>();
+    	}
+        return geometrizables;
     }
 
 	/**
