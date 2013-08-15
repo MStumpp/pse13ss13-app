@@ -441,7 +441,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		currentWaypoint = this.getWaypointById(id);
 		currentWaypoint.setLatitude(currentWaypoint.getLatitude() - yDelta);
 		currentWaypoint.setLongitude(currentWaypoint.getLongitude() + xDelta);
-		
+
 	}
 
 	private Coordinate currentWaypoint;
@@ -449,7 +449,7 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 	public void pushMovedWaypoint() {
 		this.routeController.moveActiveWaypoint(currentWaypoint);
 	}
-	
+
 	/**
 	 * returns a Waypoint by his id
 	 *
@@ -501,7 +501,6 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	}
 
-	@Override
 	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change! "
 				+ currentRoute.getWaypoints().size());
@@ -515,7 +514,6 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 
 	private Coordinate user;
 
-	@Override
 	public void onPositionChange(Location androidLocation) {
 		Log.d(TAG_MAP_CONTROLLER, "Position Change!");
 
@@ -575,7 +573,6 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		public UserPos() {
 		}
 
-		@Override
 		public void run() {
 
 			double lon = -coorBox.getTopLeft().getLongitude() + user.getLongitude();
@@ -610,7 +607,6 @@ public class MapController implements RouteListener, PositionListener, CompassLi
 		this.routeController.setActiveWaypoint(id);
 	}
 
-	@Override
 	public void onCompassChange(float direction) {
 		this.mapView.setUserPositionOverlayImage(direction);
 	}
