@@ -17,7 +17,7 @@ public class GeometryProcessorPOI {
     /**
      * GeometryProcessorPOI instance.
      */
-    private static GeometryProcessor processor;
+    private GeometryProcessor processor;
 
 
     /**

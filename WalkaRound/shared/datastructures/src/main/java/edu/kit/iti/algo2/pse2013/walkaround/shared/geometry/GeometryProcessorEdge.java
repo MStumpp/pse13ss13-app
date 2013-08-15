@@ -17,7 +17,7 @@ public class GeometryProcessorEdge {
     /**
      * GeometryProcessor instance.
      */
-    private static GeometryProcessor processor;
+    private GeometryProcessor processor;
 
 
     /**
