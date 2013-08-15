@@ -501,8 +501,7 @@ public class GeometryProcessorTest {
 
         Assert.assertNotNull(locationDataIO);
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();

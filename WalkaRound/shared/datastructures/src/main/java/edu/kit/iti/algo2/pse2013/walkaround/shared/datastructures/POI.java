@@ -142,7 +142,7 @@ public class POI extends Location implements Geometrizable {
 		String result = "POI:\n\t"
 				+ "\n\tLocation: " + super.toString()
 				+ "\n\tTextInfo: " + getTextInfo()
-				+ "\n\tURL: " + getURL().toExternalForm()
+				+ "\n\tURL: " + (getURL() != null ? getURL().toExternalForm() : "")
 				+ "\n\tPOI-Categories: ";
 		for (int i : getPOICategories()) {
 			result += " " + i;
