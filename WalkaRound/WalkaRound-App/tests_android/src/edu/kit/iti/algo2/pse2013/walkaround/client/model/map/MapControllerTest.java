@@ -3,6 +3,11 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import android.graphics.Point;
 import android.test.AndroidTestCase;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
@@ -14,6 +19,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 
+@RunWith(RobolectricTestRunner.class)
 public class MapControllerTest extends AndroidTestCase {
 	private Coordinate center; 
 	private float lod;
@@ -25,8 +31,8 @@ public class MapControllerTest extends AndroidTestCase {
 	private MapView mv;
 	
 
-	@Override
-	protected void setUp() throws Exception{
+	@Before
+	protected void setUp() {
 		center = new Coordinate(49.0145, 8.419); 
 		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
 		display =  new Point(1025, 600);
@@ -42,6 +48,7 @@ public class MapControllerTest extends AndroidTestCase {
 	/**
 	 * 
 	 */
+	@Test
 	public void testGeneral() {
 		assertTrue(mc.getCenter() == center);
 		//assertTrue(mc.getActiveWaypointId() == 0);

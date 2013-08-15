@@ -3,9 +3,15 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.search.RobolectricTestRunner;
+
 import junit.framework.TestCase;
 import android.graphics.Bitmap;
 
+@RunWith(RobolectricTestRunner.class)
 public class TestPOIImageFetcher extends TestCase {
 	public static Bitmap bitmap;
 	private POIImageListener listener = new POIImageListener() {

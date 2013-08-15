@@ -1,16 +1,24 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
+import static org.junit.Assert.*;
+import org.robolectric.RobolectricTestRunner;
+
 import java.util.LinkedList;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi.RobolectricTestRunner;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
-import android.test.AndroidTestCase;
 
-public class FavoriteManagerTest extends AndroidTestCase {
+@RunWith(RobolectricTestRunner.class)
+public class FavoriteManagerTest {
 
+	@Test
 	public void testPersistence() {
 		RouteInfo testRoute = new Route(new LinkedList<Coordinate>());
 		Location testLoc = new Location(2d, 5d, "abc");

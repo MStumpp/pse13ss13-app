@@ -10,7 +10,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import android.test.AndroidTestCase;
 
 @RunWith(RobolectricTestRunner.class)
-public class SearchMenuControllerTest extends AndroidTestCase {
+public class SearchMenuControllerTest {
 
 	@Test
 	public void testRequestByAddress() {
