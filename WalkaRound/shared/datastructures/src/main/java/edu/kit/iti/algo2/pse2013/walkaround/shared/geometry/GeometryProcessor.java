@@ -227,19 +227,17 @@ public class GeometryProcessor {
 
 
     /**
-     * Computes the nearest Edge for a given Geometrizable.
+     * Computes the nearest Geometrizable for a given Geometrizable.
      *
-     * @param geometrizable The Geometrizable the resulting Edge has to be closest to.
-     * @return Geometrizable Nearest Geometrizable Edge.
+     * @param geometrizable The Geometrizable the resulting Vertex has to be closest to.
+     * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws GeometryProcessorException If something goes wrong.
      * @throws IllegalArgumentException If geometrizable is null.
      */
-    public Geometrizable getNearestEdge(Geometrizable geometrizable)
-            throws GeometryProcessorException {
-        if (geometrizable == null)
-            throw new IllegalArgumentException("geometrizable must not be null");
-
-        return null;
+    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable)
+            throws GeometryProcessorException, GeometryComputationNoSlotsException,
+            IllegalArgumentException {
+        return getNearestGeometrizable(geometrizable, null);
     }
 
 
@@ -251,14 +249,14 @@ public class GeometryProcessor {
      * @throws GeometryProcessorException If something goes wrong.
      * @throws IllegalArgumentException If geometrizable is null.
      */
-    public Geometrizable getNearestVertex(Geometrizable geometrizable)
+    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, GeometrizableConstraint constraint)
             throws GeometryProcessorException, GeometryComputationNoSlotsException,
             IllegalArgumentException {
         if (geometrizable == null)
             throw new IllegalArgumentException("geometrizable must not be null");
 
         logger.info("getNearestVertex:");
-        Future<Geometrizable> future = executor.submit(new GeometryNearestVertexTask(geometrizable));
+        Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(geometrizable, constraint));
 
         if (future.isCancelled())
             throw new GeometryComputationNoSlotsException("no slots available");
@@ -276,17 +274,20 @@ public class GeometryProcessor {
     /**
      * Represents a task for nearest vertex computation.
      */
-    private class GeometryNearestVertexTask implements Callable<Geometrizable> {
+    private class GeometryNearestGeometrizableTask implements Callable<Geometrizable> {
 
         /**
          * Logger.
          */
-    	private final Logger logger = LoggerFactory.getLogger(GeometryNearestVertexTask.class);
+    	private final Logger logger = LoggerFactory.getLogger(GeometryNearestGeometrizableTask.class);
 
         private Geometrizable geometrizable;
 
-        GeometryNearestVertexTask(Geometrizable geometrizable) {
+        private GeometrizableConstraint constraint;
+
+        GeometryNearestGeometrizableTask(Geometrizable geometrizable, GeometrizableConstraint constraint) {
             this.geometrizable = geometrizable;
+            this.constraint = constraint;
         }
 
         @Override
@@ -302,32 +303,8 @@ public class GeometryProcessor {
                 throw new GeometryProcessorException(
                         "GeometryComputer is null in GeometryNearestVertexTask");
             }
-            return computer.getNearestVertex(geometrizable);
+            return computer.getNearestGeometrizable(geometrizable);
         }
-    }
-
-
-    /**
-     * Computes the distance between an Edge and the nearest POI of a certain Category.
-     *
-     * @param edge ID of the Edge.
-     * @param category ID of the Category of the POI.
-     * @return float Distance.
-     */
-    public float getDistanceToNearestPOIForEdge(int edge, int category) {
-        return 1.f;
-    }
-
-
-    /**
-     * Computes whether and Edge is contained in an Area of a certain Category..
-     *
-     * @param edge ID of the Edge.
-     * @param category ID of the Category of the Area.
-     * @return boolean True if contained, false otherwise.
-     */
-    public boolean isEdgeInArea(int edge, int category) {
-        return false;
     }
 
 
@@ -390,7 +367,7 @@ public class GeometryProcessor {
          * @return Geometrizable Nearest Geometrizable Vertex.
          * @throws GeometryProcessorException If something goes wrong.
          */
-        public Geometrizable getNearestVertex(Geometrizable geometrizable)
+        public Geometrizable getNearestGeometrizable(Geometrizable geometrizable)
                 throws GeometryProcessorException {
 
             long startTime = System.currentTimeMillis();

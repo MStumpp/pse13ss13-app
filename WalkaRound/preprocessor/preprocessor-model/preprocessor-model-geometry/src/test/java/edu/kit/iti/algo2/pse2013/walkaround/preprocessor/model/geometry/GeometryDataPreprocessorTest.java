@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
@@ -12,6 +11,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
@@ -30,6 +30,27 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  */
 public class GeometryDataPreprocessorTest {
 
+    private static GraphDataIO graphDataIO;
+
+    private static LocationDataIO locationDataIO;
+
+    @BeforeClass
+    public static void doSetUp() {
+        File graphDataio = FileUtil.getFile("graphData.pbf");
+        try {
+            graphDataIO = GraphDataIO.load(graphDataio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File locationDataio = FileUtil.getFile("locationData.pbf");
+        try {
+            locationDataIO = LocationDataIO.load(locationDataio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException,
             IllegalArgumentException, IllegalAccessException {
@@ -44,7 +65,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    public void testPreprocessGraphDataIO() throws MalformedURLException {
+    public void testPreprocessVertexGraphDataIOOnePerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
             preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 1);
@@ -149,7 +170,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    public void testPreprocessGraphDataIO2() throws MalformedURLException {
+    public void testPreprocessVerticesGraphDataOnePerNodeIO2() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
                 preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
 
@@ -159,41 +180,153 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
-    public void testPreprocessGraphDataIOWithRealDataSet() throws InstantiationException {
-
-        File graphDataio = FileUtil.getFile("graphData.pbf");
-        Assert.assertNotNull(graphDataio);
-        Assert.assertTrue(graphDataio.exists());
-
-        File locationDataio = FileUtil.getFile("locationData.pbf");
-        Assert.assertNotNull(locationDataio);
-        Assert.assertTrue(locationDataio.exists());
-
-        GraphDataIO graphDataIO = null;
-        try {
-            graphDataIO = GraphDataIO.load(graphDataio);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(graphDataIO);
+    public void testPreprocessVerticesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1000);
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()));
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
 
-        File geometryDataio = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + "geometryData.pbf");
+        // check number of dimensions is 2
+        Assert.assertEquals(geometryDataIO.getNumDimensions(), 2);
 
-        try {
-            GeometryDataIO.save(geometryDataIO, geometryDataio);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        GeometryNode root_1 = geometryDataIO.getRoot();
+        Assert.assertEquals(5.d, root_1.getSplitValue(), 0.d);
+        Assert.assertNull(root_1.getGeometrizable());
+        Assert.assertNull(root_1.getParent());
+        Assert.assertNotNull(root_1.getLeftNode());
+        Assert.assertNotNull(root_1.getRightNode());
 
-        Assert.assertTrue(geometryDataio.exists());
+        GeometryNode depth_1_root_left_2 = root_1.getLeftNode();
+        Assert.assertEquals(4.d, depth_1_root_left_2.getSplitValue(), 0.d);
+        Assert.assertNull(depth_1_root_left_2.getGeometrizable());
+        Assert.assertEquals(depth_1_root_left_2.getParent(), root_1);
+        Assert.assertNotNull(depth_1_root_left_2.getLeftNode());
+        Assert.assertNotNull(depth_1_root_left_2.getRightNode());
+
+        GeometryNode depth_1_root_right_3 = root_1.getRightNode();
+        Assert.assertEquals(2.d, depth_1_root_right_3.getSplitValue(), 0.d);
+        Assert.assertNull(depth_1_root_right_3.getGeometrizable());
+        Assert.assertEquals(depth_1_root_right_3.getParent(), root_1);
+        Assert.assertNotNull(depth_1_root_right_3.getLeftNode());
+        Assert.assertNotNull(depth_1_root_right_3.getRightNode());
+
+        GeometryNode depth_2_2_left_4 = depth_1_root_left_2.getLeftNode();
+        Assert.assertEquals(2.d, depth_2_2_left_4.getSplitValue(), 0.d);
+        Assert.assertNull(depth_2_2_left_4.getGeometrizable());
+        Assert.assertEquals(depth_2_2_left_4.getParent(), depth_1_root_left_2);
+        Assert.assertNotNull(depth_2_2_left_4.getLeftNode());
+        Assert.assertNotNull(depth_2_2_left_4.getRightNode());
+
+        GeometryNode depth_2_2_right_5 = depth_1_root_left_2.getRightNode();
+        Assert.assertEquals(Double.NaN, depth_2_2_right_5.getSplitValue(), 0.d);
+        Assert.assertNotNull(depth_2_2_right_5.getGeometrizable());
+        Assert.assertEquals(depth_2_2_right_5.getParent(), depth_1_root_left_2);
+        Assert.assertNull(depth_2_2_right_5.getLeftNode());
+        Assert.assertNull(depth_2_2_right_5.getRightNode());
+        Assert.assertEquals(4.d, depth_2_2_right_5.getGeometrizable().valueForDimension(0), 0.d);
+        Assert.assertEquals(7.d, depth_2_2_right_5.getGeometrizable().valueForDimension(1), 0.d);
+        Assert.assertNotNull(depth_2_2_right_5.getGeometrizable());
+
+        GeometryNode depth_3_4_right_6 = depth_2_2_left_4.getLeftNode();
+        Assert.assertEquals(Double.NaN, depth_3_4_right_6.getSplitValue(), 0.d);
+        Assert.assertNotNull(depth_3_4_right_6.getGeometrizable());
+        Assert.assertEquals(2.d, depth_3_4_right_6.getGeometrizable().valueForDimension(0), 0.d);
+        Assert.assertEquals(3.d, depth_3_4_right_6.getGeometrizable().valueForDimension(1), 0.d);
+        Assert.assertEquals(depth_3_4_right_6.getParent(), depth_2_2_left_4);
+        Assert.assertNull(depth_3_4_right_6.getLeftNode());
+        Assert.assertNull(depth_3_4_right_6.getRightNode());
+
+        GeometryNode depth_3_4_right_7 = depth_2_2_left_4.getRightNode();
+        Assert.assertEquals(Double.NaN, depth_3_4_right_7.getSplitValue(), 0.d);
+        Assert.assertNotNull(depth_3_4_right_7.getGeometrizable());
+        Assert.assertEquals(5.d, depth_3_4_right_7.getGeometrizable().valueForDimension(0), 0.d);
+        Assert.assertEquals(4.d, depth_3_4_right_7.getGeometrizable().valueForDimension(1), 0.d);
+        Assert.assertEquals(depth_3_4_right_7.getParent(), depth_2_2_left_4);
+        Assert.assertNull(depth_3_4_right_7.getLeftNode());
+        Assert.assertNull(depth_3_4_right_7.getRightNode());
+
+        GeometryNode depth_2_3_left_8 = depth_1_root_right_3.getLeftNode();
+        Assert.assertEquals(7.d, depth_2_3_left_8.getSplitValue(), 0.d);
+        Assert.assertNull(depth_2_3_left_8.getGeometrizable());
+        Assert.assertEquals(depth_2_3_left_8.getParent(), depth_1_root_right_3);
+        Assert.assertNotNull(depth_2_3_left_8.getLeftNode());
+        Assert.assertNotNull(depth_2_3_left_8.getRightNode());
+
+        GeometryNode depth_2_3_right_9 = depth_1_root_right_3.getRightNode();
+        Assert.assertEquals(Double.NaN, depth_2_3_right_9.getSplitValue(), 0.d);
+        Assert.assertNotNull(depth_2_3_right_9.getGeometrizable());
+        Assert.assertEquals(depth_2_3_right_9.getParent(), depth_1_root_right_3);
+        Assert.assertNull(depth_2_3_right_9.getLeftNode());
+        Assert.assertNull(depth_2_3_right_9.getRightNode());
+        Assert.assertEquals(9.d, depth_2_3_right_9.getGeometrizable().valueForDimension(0), 0.d);
+        Assert.assertEquals(6.d, depth_2_3_right_9.getGeometrizable().valueForDimension(1), 0.d);
+        Assert.assertNotNull(depth_2_3_right_9.getGeometrizable());
+
+        GeometryNode depth_3_8_right_10 = depth_2_3_left_8.getLeftNode();
+        Assert.assertEquals(Double.NaN, depth_3_8_right_10.getSplitValue(), 0.d);
+        Assert.assertNotNull(depth_3_8_right_10.getGeometrizable());
+        Assert.assertEquals(7.d, depth_3_8_right_10.getGeometrizable().valueForDimension(0), 0.d);
+        Assert.assertEquals(2.d, depth_3_8_right_10.getGeometrizable().valueForDimension(1), 0.d);
+        Assert.assertEquals(depth_3_8_right_10.getParent(), depth_2_3_left_8);
+        Assert.assertNull(depth_3_8_right_10.getLeftNode());
+        Assert.assertNull(depth_3_8_right_10.getRightNode());
+
+        GeometryNode depth_3_8_right_11 = depth_2_3_left_8.getRightNode();
+        Assert.assertEquals(Double.NaN, depth_3_8_right_11.getSplitValue(), 0.d);
+        Assert.assertNotNull(depth_3_8_right_11.getGeometrizable());
+        Assert.assertEquals(8.d, depth_3_8_right_11.getGeometrizable().valueForDimension(0), 0.d);
+        Assert.assertEquals(1.d, depth_3_8_right_11.getGeometrizable().valueForDimension(1), 0.d);
+        Assert.assertEquals(depth_3_8_right_11.getParent(), depth_2_3_left_8);
+        Assert.assertNull(depth_3_8_right_11.getLeftNode());
+        Assert.assertNull(depth_3_8_right_11.getRightNode());
+    }
+
+
+    @Test
+    public void testPreprocessEdgesGraphDataIODefaultPerNode() throws MalformedURLException {
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getEdges()));
+
+        // check that root is not null
+        Assert.assertNotNull(geometryDataIO.getRoot());
+
+        // check number of dimensions is 2
+        Assert.assertEquals(geometryDataIO.getNumDimensions(), 2);
+
+        GeometryNode root_1 = geometryDataIO.getRoot();
+        Assert.assertNull(root_1.getGeometrizable());
+        Assert.assertNull(root_1.getParent());
+        Assert.assertNotNull(root_1.getLeftNode());
+        Assert.assertNotNull(root_1.getRightNode());
+    }
+
+
+    @Test
+    public void testPreprocessVerticesGraphDataIOVerticesDefaultPerNodeWithRealDataSet() throws InstantiationException {
+
+        Assert.assertNotNull(graphDataIO);
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+
+        // check that root is not null
+        Assert.assertNotNull(geometryDataIO.getRoot());
+    }
+
+
+    @Test
+    public void testPreprocessEdgesGraphDataIOEdgesDefaultPerNodeWithRealDataSet() throws InstantiationException {
+
+        Assert.assertNotNull(graphDataIO);
+
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
+
+        // check that root is not null
+        Assert.assertNotNull(geometryDataIO.getRoot());
     }
 
 
