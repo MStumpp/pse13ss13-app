@@ -174,7 +174,7 @@ public class ProtobufConverter {
 			return builder.setPOI(getPOIBuilder((POI) geometrizable));
 		} else if (geometrizable instanceof Vertex) {
 			return builder.setVertex(getVertexBuilder((Vertex) geometrizable));
-		} else if (geometrizable instanceof Vertex) {
+		} else if (geometrizable instanceof GeometrizableWrapper) {
 			return builder.setWrapper(getWrapperBuilder((GeometrizableWrapper) geometrizable));
 		}
 		assert false;
