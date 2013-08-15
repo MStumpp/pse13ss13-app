@@ -30,7 +30,6 @@ public class POIGen implements Runnable {
 	 */
 	private List<POI> poiList = new LinkedList<POI>();
 
-
 	/**
 	 * Construckts a new POIGen
 	 */
@@ -66,23 +65,38 @@ public class POIGen implements Runnable {
 	 */
 	public void generatePOIView(BoundingBox coorBox, Point size) {
 		if (!POIManager.getInstance().isEmpty()) {
-			
-			poiList = POIManager.getInstance().getPOIsWithinRectangle(coorBox.getTopLeft(),
-					coorBox.getBottomRight(),  coorBox.getLevelOfDetail());
+
+			poiList = POIManager.getInstance().getPOIsWithinRectangle(
+					coorBox.getTopLeft(), coorBox.getBottomRight(),
+					coorBox.getLevelOfDetail());
 
 			Log.d(TAG_POIGen, "POI Anzahl" + poiList.size());
 
 			LinkedList<DisplayPOI> poi = new LinkedList<DisplayPOI>();
 
 			for (POI value : poiList) {
-				poi.add(new DisplayPOI(CoordinateUtility
-						.convertDegreesToPixels(
-								value.getLongitude() - coorBox.getTopLeft().getLongitude(),
-								 coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_X),
-						CoordinateUtility.convertDegreesToPixels(
-								coorBox.getTopLeft().getLatitude() - value.getLatitude(),
-								 coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_Y), value
-								.getId()));
+
+				double lon = -coorBox.getCenter().getLongitude()
+						+ value.getLongitude();
+				double lat = -value.getLatitude()
+						+ coorBox.getCenter().getLatitude();
+
+				float x = CoordinateUtility.convertDegreesToPixels(lon,
+						coorBox.getLevelOfDetail(),
+						CoordinateUtility.DIRECTION_LONGITUDE);
+
+				float y = CoordinateUtility.convertDegreesToPixels(lat,
+						coorBox.getLevelOfDetail(),
+						CoordinateUtility.DIRECTION_LATITUDE);
+
+				Log.d("UserPos", " x: " + x + " y: " + y);
+
+				x = coorBox.getDisplaySize().x / 2 + x;
+				y = coorBox.getDisplaySize().y / 2 + y;
+
+				Log.d("UserPos", " x: " + x + " y: " + y);
+
+				poi.add(new DisplayPOI(x, y, value.getId()));
 			}
 			if (MapController.getInstance() != null) {
 				MapController.getInstance().onPOIChange(poi);
