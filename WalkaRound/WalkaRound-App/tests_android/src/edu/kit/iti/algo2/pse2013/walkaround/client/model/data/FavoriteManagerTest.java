@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.model.data;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
 import java.util.LinkedList;
 

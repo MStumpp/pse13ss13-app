@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.controller.favorite;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.favorite;
 
 import java.util.LinkedList;
 

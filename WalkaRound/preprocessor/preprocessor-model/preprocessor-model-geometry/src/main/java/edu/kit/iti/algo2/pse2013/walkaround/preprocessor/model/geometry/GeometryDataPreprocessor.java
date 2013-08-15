@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import java.util.*;
 
+import com.google.common.collect.Multiset;
+import com.google.common.collect.TreeMultiset;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
@@ -35,6 +37,10 @@ public class GeometryDataPreprocessor {
      * TreeSet.
      */
     private static final TreeSet<Geometrizable> treeSet = new TreeSet<>();
+
+    private static Multiset<Geometrizable> treeMultiset = TreeMultiset.create();
+
+    private static final ArrayList<Geometrizable> list = new ArrayList<>();
 
 
     /**
@@ -145,7 +151,7 @@ public class GeometryDataPreprocessor {
         // only one point in range, then take as leaf
         // eventually put more than one point in leaf
         if (size <= numberGeomPerNode)
-            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end + 1)));
+            return new GeometryNode(parent, depth, Arrays.asList(Arrays.copyOfRange(data[dim], start, end+1)));
 
         // otherwise, compute median;
         int median;
@@ -178,8 +184,11 @@ public class GeometryDataPreprocessor {
 //            }
         }
 
-        treeSet.clear();
-        treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+        //treeSet.clear();
+        //treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+
+        treeMultiset.clear();
+        treeMultiset.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
         Geometrizable[] currentBackupArray;
         int leftIndex;
@@ -192,8 +201,10 @@ public class GeometryDataPreprocessor {
             leftIndex = start;
             rightIndex = median+1;
             for (Geometrizable geometrizable : currentBackupArray) {
-                if (treeSet.contains(geometrizable)) {
-                    treeSet.remove(geometrizable);
+                //if (treeSet.contains(geometrizable)) {
+                //    treeSet.remove(geometrizable);
+                if (treeMultiset.contains(geometrizable)) {
+                    treeMultiset.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {

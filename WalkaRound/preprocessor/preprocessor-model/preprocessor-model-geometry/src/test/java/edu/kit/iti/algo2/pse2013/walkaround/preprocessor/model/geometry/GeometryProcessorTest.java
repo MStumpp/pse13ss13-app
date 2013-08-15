@@ -9,18 +9,14 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryComputationNoSlotsException;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessor;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -31,7 +27,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
  * @author Matthias Stumpp
  * @version 1.0
  */
-@Ignore
 public class GeometryProcessorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorTest.class);
@@ -95,10 +90,9 @@ public class GeometryProcessorTest {
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
-        Coordinate search = new Coordinate(5.5, 3.9);
         Geometrizable geometrizable = null;
         try {
-            geometrizable = geometryProcessor.getNearestGeometrizable(search);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
         } catch (GeometryProcessorException e) {
             e.printStackTrace();
         } catch (GeometryComputationNoSlotsException e) {
@@ -116,10 +110,9 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = getGeometryDataIOOnePerNode();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
-        Coordinate search = new Coordinate(5.5, 3.9);
         Geometrizable geometrizable = null;
         try {
-            geometrizable = geometryProcessor.getNearestGeometrizable(search);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
         } catch (GeometryProcessorException e) {
             e.printStackTrace();
         } catch (GeometryComputationNoSlotsException e) {
@@ -137,10 +130,9 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
-        Coordinate search = new Coordinate(5.5, 3.9);
         Geometrizable geometrizable = null;
         try {
-            geometrizable = geometryProcessor.getNearestGeometrizable(search);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
         } catch (GeometryProcessorException e) {
             e.printStackTrace();
         } catch (GeometryComputationNoSlotsException e) {
@@ -158,10 +150,9 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = getGeometryDataIODefaultPerNode();
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO, 5));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
-        Coordinate search = new Coordinate(5.5, 3.9);
         Geometrizable geometrizable = null;
         try {
-            geometrizable = geometryProcessor.getNearestGeometrizable(search);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {5.5, 3.9}));
         } catch (GeometryProcessorException e) {
             e.printStackTrace();
         } catch (GeometryComputationNoSlotsException e) {
@@ -178,8 +169,7 @@ public class GeometryProcessorTest {
 
         Assert.assertNotNull(graphDataIO);
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
 
         Assert.assertNotNull(GeometryProcessor.init(geometryDataIO));
         GeometryProcessor geometryProcessor = GeometryProcessor.getInstance();
@@ -197,7 +187,7 @@ public class GeometryProcessorTest {
         Geometrizable geometrizable = null;
         try {
             long startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search1);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search1.getLatitude(), search1.getLongitude()}));
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -205,7 +195,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search1 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search2);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search2.getLatitude(), search2.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -213,7 +203,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search2 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search3);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search3.getLatitude(), search3.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -221,7 +211,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search3 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search4);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search4.getLatitude(), search4.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -229,7 +219,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search4 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search5);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search5.getLatitude(), search5.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -237,7 +227,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search5 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search6);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search6.getLatitude(), search6.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -245,7 +235,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search6 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search7);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search7.getLatitude(), search7.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -253,7 +243,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search7 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search8);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search8.getLatitude(), search8.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -261,7 +251,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search8 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search9);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search9.getLatitude(), search9.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -269,7 +259,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search9 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search10);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search10.getLatitude(), search10.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -281,7 +271,7 @@ public class GeometryProcessorTest {
         } catch (GeometryComputationNoSlotsException e) {
             e.printStackTrace();
         }
-    }
+     }
 
 
     @Test
@@ -308,7 +298,7 @@ public class GeometryProcessorTest {
         Geometrizable geometrizable = null;
         try {
             long startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search1);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search1.getLatitude(), search1.getLongitude()}));
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -316,7 +306,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search1 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search2);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search2.getLatitude(), search2.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -324,7 +314,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search2 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search3);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search3.getLatitude(), search3.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -332,7 +322,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search3 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search4);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search4.getLatitude(), search4.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -340,7 +330,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search4 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search5);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search5.getLatitude(), search5.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -348,7 +338,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search5 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search6);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search6.getLatitude(), search6.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -356,7 +346,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search6 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search7);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search7.getLatitude(), search7.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -364,7 +354,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search7 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search8);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search8.getLatitude(), search8.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -372,7 +362,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search8 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search9);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search9.getLatitude(), search9.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -380,7 +370,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search9 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search10);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search10.getLatitude(), search10.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -419,7 +409,7 @@ public class GeometryProcessorTest {
         Geometrizable geometrizable = null;
         try {
             long startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search1);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search1.getLatitude(), search1.getLongitude()}));
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -427,7 +417,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search1 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search2);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search2.getLatitude(), search2.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -435,7 +425,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search2 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search3);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search3.getLatitude(), search3.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -443,7 +433,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search3 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search4);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search4.getLatitude(), search4.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -451,7 +441,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search4 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search5);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search5.getLatitude(), search5.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -459,7 +449,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search5 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search6);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search6.getLatitude(), search6.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -467,7 +457,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search6 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search7);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search7.getLatitude(), search7.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -475,7 +465,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search7 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search8);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search8.getLatitude(), search8.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -483,7 +473,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search8 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search9);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search9.getLatitude(), search9.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
@@ -491,7 +481,7 @@ public class GeometryProcessorTest {
             logger.info("project: " + search9 + " to: " + geometrizable.toString());
 
             startTime = System.currentTimeMillis();
-            geometrizable = geometryProcessor.getNearestGeometrizable(search10);
+            geometrizable = geometryProcessor.getNearestGeometrizable(new GeometrySearch(new double[] {search10.getLatitude(), search10.getLongitude()}));
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);

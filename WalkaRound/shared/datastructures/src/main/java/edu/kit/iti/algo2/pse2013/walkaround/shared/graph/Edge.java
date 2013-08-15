@@ -12,7 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Edge implements Geometrizable, Comparable<Edge> {
+public final class Edge implements Geometrizable {
 
     /**
      * Internally used ID of Edge.
@@ -196,10 +196,10 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
     }
 
 	@Override
-	public int compareTo(Edge other) {
-        if (this.getID() > other.getID()) {
+	public int compareTo(Object o) {
+        if (this.getID() > ((Edge)o).getID()) {
             return 1;
-        } else if (this.getID() < other.getID()) {
+        } else if (this.getID() < ((Edge)o).getID()) {
             return -1;
         }
         return 0;

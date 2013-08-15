@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.model.util;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
 import android.test.AndroidTestCase;
 

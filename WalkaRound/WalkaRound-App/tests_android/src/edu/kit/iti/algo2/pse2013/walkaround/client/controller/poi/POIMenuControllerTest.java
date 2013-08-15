@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.controller.poi;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;

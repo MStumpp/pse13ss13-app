@@ -1,8 +1,6 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test.client.controller.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
 import java.net.MalformedURLException;
-
-import org.junit.Before;
 
 import android.graphics.Point;
 import android.test.AndroidTestCase;
@@ -14,20 +12,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 
 public class MapControllerTest extends AndroidTestCase {
-	private Coordinate center; 
+	private Coordinate center = new Coordinate(49.0145, 8.419);; 
 	private final float lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
-	private Point display;
+	private Point display =  new Point(1025, 600);;
 	private final TileFetcher tl = new TileFetcher();
-	private BoundingBox box;
-	private MapController mc;
+	private BoundingBox box = new BoundingBox(center, display, lod);;
+	private MapController mc =  MapController.initialize(tl, box, center);;
 	
-	@Before
-	public void setUp() {
-		center = new Coordinate(49.0145, 8.419);
-		display = new Point(1025, 600);
-		box = new BoundingBox(center, display, lod);
-		mc = MapController.initialize(tl, box, center);
-	}
 
 	/**
 	 * Testet die BoundingBox auf allgemeine Funktionalität

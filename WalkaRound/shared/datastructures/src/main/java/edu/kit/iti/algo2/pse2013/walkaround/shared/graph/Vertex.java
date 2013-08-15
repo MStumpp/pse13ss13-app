@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Vertex extends Coordinate implements Comparable<Vertex> {
+public class Vertex extends Coordinate implements Geometrizable {
 
     /**
      * Internally used ID of that Vertex.
@@ -242,10 +243,65 @@ public class Vertex extends Coordinate implements Comparable<Vertex> {
     }
 
 
+    // Geometrizable Interface
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+        return 2;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+
+        if (dim < 0 || dim > numberDimensions()-1)
+            throw new IllegalArgumentException("dim out of range");
+
+        if (dim == 0)
+            return getLatitude();
+        else
+            return getLongitude();
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
+     */
+    public int numberNodes() {
+        return 1;
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
+     */
+    public Geometrizable getNode(int nodeNumber) {
+
+        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
+            throw new IllegalArgumentException("node number out of range");
+
+        return this;
+    }
+
+
     public int compareTo(Vertex other) {
         if (this.getID() > other.getID()) {
             return 1;
         } else if (this.getID() < other.getID()) {
+            return -1;
+        }
+        return 0;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (this.getID() > ((Vertex)o).getID()) {
+            return 1;
+        } else if (this.getID() < ((Vertex)o).getID()) {
             return -1;
         }
         return 0;

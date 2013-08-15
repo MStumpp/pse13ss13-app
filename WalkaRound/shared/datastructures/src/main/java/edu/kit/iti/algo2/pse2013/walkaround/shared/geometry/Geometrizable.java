@@ -1,14 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
-
 /**
  * Interface for GeometryProcessor.
  *
  * @author Matthias Stumpp
  * @version 1.0
  */
-public interface Geometrizable {
+public interface Geometrizable extends Comparable<Object> {
 
     /**
      * Returns the number of dimensions.
