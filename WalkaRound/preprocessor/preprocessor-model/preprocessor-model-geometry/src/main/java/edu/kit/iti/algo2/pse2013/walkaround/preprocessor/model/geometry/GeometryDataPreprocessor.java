@@ -75,6 +75,8 @@ public class GeometryDataPreprocessor {
         // number of dimensions, use first element of geometrizables
         int numDimensions = geometrizables.get(0).numberDimensions();
 
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! number geometrizables before: " + geometrizables.size());
+
         // if number of nodes in given geometrizables greater than 1,
         // wrap each geometrizable
         int numberNodes = geometrizables.get(0).numberNodes();
@@ -87,6 +89,8 @@ public class GeometryDataPreprocessor {
             }
             geometrizables = geometrizablesWrapped;
         }
+
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! number geometrizables after: " + geometrizables.size());
 
         logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + geometrizables.get(0));
 
