@@ -693,7 +693,7 @@ public class GeometryProcessorTest {
             stopTime = System.currentTimeMillis();
             runTime = stopTime - startTime;
             logger.info("Run time: " + runTime);
-            Assert.assertEquals("POI_2", poi.getName());
+            Assert.assertEquals("POI_3", poi.getName());
             Assert.assertNotNull(poi);
             logger.info("project: " + search7 + " to: " + poi.toString());
 
