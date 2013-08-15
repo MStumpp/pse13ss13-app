@@ -39,6 +39,10 @@ public class GeometrizableWrapper implements Geometrizable, Comparable<Geometriz
         return geometrizable.getNode(nodeNumber);
     }
 
+    public Geometrizable getNode() {
+        return geometrizable.getNode(nodeNumber);
+    }
+
     public Geometrizable getGeometrizable() {
         return geometrizable;
     }
@@ -49,7 +53,7 @@ public class GeometrizableWrapper implements Geometrizable, Comparable<Geometriz
 
     @Override
     public int compareTo(GeometrizableWrapper o) {
-        return ((Vertex)geometrizable.getNode(nodeNumber)).compareTo((Vertex)o.getGeometrizable());
+        return ((Vertex)getNode()).compareTo((Vertex)o.getNode());
     }
 
 }
