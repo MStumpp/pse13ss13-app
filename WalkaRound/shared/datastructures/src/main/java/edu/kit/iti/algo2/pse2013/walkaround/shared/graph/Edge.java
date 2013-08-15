@@ -12,7 +12,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public final class Edge implements Geometrizable, Comparable<Edge> {
+public final class Edge implements Geometrizable {
 
     /**
      * Internally used ID of Edge.
@@ -196,10 +196,10 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
     }
 
 	@Override
-	public int compareTo(Edge other) {
-        if (this.getID() > other.getID()) {
+	public int compareTo(Object o) {
+        if (this.getID() > ((Edge)o).getID()) {
             return 1;
-        } else if (this.getID() < other.getID()) {
+        } else if (this.getID() < ((Edge)o).getID()) {
             return -1;
         }
         return 0;
@@ -231,23 +231,17 @@ public final class Edge implements Geometrizable, Comparable<Edge> {
 
 
     /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int nodeNumber, int dim)()
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
      */
-    public double valueForDimension(int nodeNumber, int dim) {
-        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1) ||
-                dim < 0 || (dim > numberDimensions()-1))
-            throw new IllegalArgumentException("node number and/or dim out of range");
+    public Geometrizable getNode(int nodeNumber) {
 
-        if (nodeNumber == 0 && dim == 0)
-            return tail.getLatitude();
-        else if (nodeNumber == 0 && dim == 1)
-            return tail.getLongitude();
-        else if (nodeNumber == 1 && dim == 0)
-            return head.getLongitude();
-        else if (nodeNumber == 1 && dim == 1)
-            return head.getLongitude();
+        if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
+            throw new IllegalArgumentException("node number out of range");
 
-        throw new RuntimeException("something went wrong internally");
+        if (nodeNumber == 0)
+            return tail;
+        else
+            return head;
     }
 
 }

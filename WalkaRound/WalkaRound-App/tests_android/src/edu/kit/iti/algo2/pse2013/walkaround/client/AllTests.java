@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.test;
+package edu.kit.iti.algo2.pse2013.walkaround.client;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

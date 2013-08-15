@@ -6,7 +6,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public interface Geometrizable {
+public interface Geometrizable extends Comparable<Object> {
 
     /**
      * Returns the number of dimensions.
@@ -34,10 +34,11 @@ public interface Geometrizable {
 
 
     /**
-     * Returns the value for a certain dimension.
+     * Returns the number of relevant points to be
+     * inserted as separate nodes into the geometry tree.
      *
-     * @return double value.
+     * @return int Number of nodes.
      */
-    public double valueForDimension(int nodeNumber, int dim);
+    public Geometrizable getNode(int nodeNumber);
 
 }

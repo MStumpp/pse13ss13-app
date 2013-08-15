@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
 /**
  * Wrapper for Geometrizable to handle multiple points.
  *
@@ -24,7 +26,7 @@ public class GeometrizableWrapper implements Geometrizable {
 
     @Override
     public double valueForDimension(int dim) {
-        return geometrizable.valueForDimension(nodeNumber, dim);
+        return geometrizable.getNode(nodeNumber).valueForDimension(dim);
     }
 
     @Override
@@ -33,19 +35,25 @@ public class GeometrizableWrapper implements Geometrizable {
     }
 
     @Override
-    public double valueForDimension(int nodeNumber, int dim) {
-        if (this.nodeNumber != nodeNumber)
-            throw new IllegalArgumentException("wrapper configured for nodeNumber " +
-                    this.nodeNumber + ", but " + nodeNumber + " requested");
-        return geometrizable.valueForDimension(this.nodeNumber, dim);
+    public Geometrizable getNode(int nodeNumber) {
+        return geometrizable.getNode(nodeNumber);
+    }
+
+    public Geometrizable getNode() {
+        return geometrizable.getNode(nodeNumber);
     }
 
     public Geometrizable getGeometrizable() {
         return geometrizable;
     }
 
-    public int getNodeNumber() {
-        return nodeNumber;
+    @Override
+    public int compareTo(Object o) {
+        return getNode().compareTo(((GeometrizableWrapper)o).getNode());
+    }
+
+    public String toString() {
+        return geometrizable.toString();
     }
 
 }

@@ -158,7 +158,7 @@ public class GeometryProcessor {
                     namePrefix + threadNumber.getAndIncrement(),
                     0, geometryComputerQueue.pollFirst());
             logger.info("New Thread: " + t.getName() + " Reference: " +
-                    t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
+                     t.getClass().getName() + "@" + Integer.toHexString(t.hashCode()));
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -218,9 +218,9 @@ public class GeometryProcessor {
             logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
             Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
                     " and GeometryComputer: " + computer.getId() + " Reference: "
-                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+                   + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null)
-            	   logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
+            	logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
             //geometryComputerQueue.add(computer);
         }
     }
@@ -229,34 +229,34 @@ public class GeometryProcessor {
     /**
      * Computes the nearest Geometrizable for a given Geometrizable.
      *
-     * @param geometrizable The Geometrizable the resulting Vertex has to be closest to.
+     * @param search The Geometrizable the resulting Vertex has to be closest to.
      * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws GeometryProcessorException If something goes wrong.
      * @throws IllegalArgumentException If geometrizable is null.
      */
-    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable)
+    public Geometrizable getNearestGeometrizable(GeometrySearch search)
             throws GeometryProcessorException, GeometryComputationNoSlotsException,
             IllegalArgumentException {
-        return getNearestGeometrizable(geometrizable, null);
+        return getNearestGeometrizable(search, null);
     }
 
 
     /**
      * Computes the nearest Geometrizable for a given Geometrizable.
      *
-     * @param geometrizable The Geometrizable the resulting Vertex has to be closest to.
+     * @param search The Geometrizable the resulting Vertex has to be closest to.
      * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws GeometryProcessorException If something goes wrong.
      * @throws IllegalArgumentException If geometrizable is null.
      */
-    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, GeometrizableConstraint constraint)
+    public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
             throws GeometryProcessorException, GeometryComputationNoSlotsException,
             IllegalArgumentException {
-        if (geometrizable == null)
+        if (search == null)
             throw new IllegalArgumentException("geometrizable must not be null");
 
-        logger.info("getNearestVertex:");
-        Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(geometrizable, constraint));
+        logger.info("getNearestGeometrizable:");
+        Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(search, constraint));
 
         if (future.isCancelled())
             throw new GeometryComputationNoSlotsException("no slots available");
@@ -281,12 +281,12 @@ public class GeometryProcessor {
          */
     	private final Logger logger = LoggerFactory.getLogger(GeometryNearestGeometrizableTask.class);
 
-        private Geometrizable geometrizable;
+        private GeometrySearch search;
 
         private GeometrizableConstraint constraint;
 
-        GeometryNearestGeometrizableTask(Geometrizable geometrizable, GeometrizableConstraint constraint) {
-            this.geometrizable = geometrizable;
+        GeometryNearestGeometrizableTask(GeometrySearch search, GeometrizableConstraint constraint) {
+            this.search = search;
             this.constraint = constraint;
         }
 
@@ -299,11 +299,11 @@ public class GeometryProcessor {
                     " and GeometryComputer: " + computer.getId() + " Reference: "
                    + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             if (computer == null) {
-                logger.info("GeometryComputer is null in GeometryNearestVertexTask");
+            	logger.info("GeometryComputer is null in GeometryNearestVertexTask");
                 throw new GeometryProcessorException(
                         "GeometryComputer is null in GeometryNearestVertexTask");
             }
-            return computer.getNearestGeometrizable(geometrizable);
+            return computer.getNearestGeometrizable(search, constraint);
         }
     }
 
@@ -316,7 +316,7 @@ public class GeometryProcessor {
         /**
          * Logger.
          */
-        private final Logger logger = LoggerFactory.getLogger(GeometryComputer.class);
+    	private final Logger logger = LoggerFactory.getLogger(GeometryComputer.class);
 
 
         /**
@@ -363,23 +363,23 @@ public class GeometryProcessor {
         /**
          * Computes the nearest Geometrizable for a given Geometrizable.
          *
-         * @param geometrizable The Geometrizable the resulting Vertex has to be closest to.
+         * @param search The Geometrizable the resulting Vertex has to be closest to.
          * @return Geometrizable Nearest Geometrizable Vertex.
          * @throws GeometryProcessorException If something goes wrong.
          */
-        public Geometrizable getNearestGeometrizable(Geometrizable geometrizable)
+        public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
                 throws GeometryProcessorException {
 
             long startTime = System.currentTimeMillis();
 
-            Geometrizable nearestVertex = search(root, geometrizable);
+            Geometrizable nearestGeometrizable = search(root, search, constraint);
 
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
 
-            logger.info("getNearestVertex: Start: Run time: " + runTime);
+            logger.info("getNearestGeometrizable: Start: Run time: " + runTime);
 
-            return nearestVertex;
+            return nearestGeometrizable;
         }
 
 
@@ -391,12 +391,13 @@ public class GeometryProcessor {
          * @return Geometrizable Projected Geometrizable.
          * @throws GeometryProcessorException If something goes wrong.
          */
-        private Geometrizable search(GeometryNode root, Geometrizable search)
+        private Geometrizable search(GeometryNode root, GeometrySearch search,
+                                     GeometrizableConstraint constraint)
                 throws GeometryProcessorException {
             numberMethodCalls = 0;
             stop = false;
             GeometrizableHolder holder = new GeometrizableHolder(null);
-            searchTreeDown(root, search, holder);
+            searchTreeDown(root, search, constraint, holder);
 
             if (holder.getGeometrizable() instanceof GeometrizableHolder) {
                 return ((GeometrizableWrapper) holder.getGeometrizable()).getGeometrizable();
@@ -414,7 +415,7 @@ public class GeometryProcessor {
          * @param currentBest Current best Geometrizable.
          * @throws GeometryProcessorException If something goes wrong.
          */
-        private void searchTreeDown(GeometryNode node, Geometrizable search,
+        private void searchTreeDown(GeometryNode node, GeometrySearch search, GeometrizableConstraint constraint,
                                     GeometrizableHolder currentBest)
                 throws GeometryProcessorException {
 
@@ -433,9 +434,11 @@ public class GeometryProcessor {
             if (node.isLeaf()) {
 
                 if (currentBest.getGeometrizable() == null) {
-                    currentGeometrizable = node.getNearestGeometrizable(search, dim);
+                    currentGeometrizable = node.getNearestGeometrizable(
+                            search.valueForDimension(dim), constraint, dim);
                 } else {
-                    currentGeometrizable = node.getNearestGeometrizable(currentBest.getGeometrizable(), dim);
+                    currentGeometrizable = node.getNearestGeometrizable(
+                            currentBest.getGeometrizable().valueForDimension(dim), constraint, dim);
                 }
 
                 if (currentGeometrizable != null) {
@@ -447,7 +450,7 @@ public class GeometryProcessor {
                 }
 
                 if (!node.isRoot()) {
-                    searchTreeUp(node.getParent(), search, currentBest, node);
+                    searchTreeUp(node.getParent(), search, constraint, currentBest, node);
                 }
 
             // otherwise, traverse further down the tree
@@ -456,9 +459,9 @@ public class GeometryProcessor {
                 // either further visit left or right child
                 // here we check for less or equal
                 if (search.valueForDimension(dim) <= node.getSplitValue() && node.getLeftNode() != null) {
-                    searchTreeDown(node.getLeftNode(), search, currentBest);
+                    searchTreeDown(node.getLeftNode(), search, constraint, currentBest);
                 } else if (node.getRightNode() != null) {
-                    searchTreeDown(node.getRightNode(), search, currentBest);
+                    searchTreeDown(node.getRightNode(), search, constraint, currentBest);
                 }
             }
 
@@ -475,7 +478,7 @@ public class GeometryProcessor {
          * @param child Previously visited node while searching up the tree.
          * @throws GeometryProcessorException If something goes wrong.
          */
-        private void searchTreeUp(GeometryNode node, Geometrizable search,
+        private void searchTreeUp(GeometryNode node, GeometrySearch search, GeometrizableConstraint constraint,
                                   GeometrizableHolder currentBest, GeometryNode child)
                 throws GeometryProcessorException {
 
@@ -499,14 +502,14 @@ public class GeometryProcessor {
 
             if (distSearchAndCurrentNode < distSearchAndCurrentBest) {
                 if (child == node.getLeftNode() && node.getRightNode() != null) {
-                    searchTreeDown(node.getRightNode(), search, currentBest);
+                    searchTreeDown(node.getRightNode(), search, constraint, currentBest);
                 } else if (node.getLeftNode() != null) {
-                    searchTreeDown(node.getLeftNode(), search, currentBest);
+                    searchTreeDown(node.getLeftNode(), search, constraint, currentBest);
                 }
             }
 
             if (!node.isRoot()) {
-                searchTreeUp(node.getParent(), search, currentBest, node);
+                searchTreeUp(node.getParent(), search, constraint, currentBest, node);
             }
 
             return;
