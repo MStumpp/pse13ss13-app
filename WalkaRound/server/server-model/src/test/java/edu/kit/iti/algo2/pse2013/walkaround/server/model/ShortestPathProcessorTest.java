@@ -4,6 +4,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -20,6 +21,7 @@ import java.util.Random;
  * @author Matthias Stumpp
  * @version 1.0
  */
+@Ignore
 public class ShortestPathProcessorTest {
 
     private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
