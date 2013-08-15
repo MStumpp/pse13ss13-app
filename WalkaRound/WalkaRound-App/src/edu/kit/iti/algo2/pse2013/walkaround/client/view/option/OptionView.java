@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 // Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
@@ -39,15 +41,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 public class OptionView extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
+	private static boolean on = false;
 
 	private int switcher = R.id.pullupOptionSwitcher;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		if(!on){
 		Log.d(TAG_PULLUP_CONTENT, "Create FavoriteView");
-
+		on = false;
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 		Log.d("Options",
 				"Optionen.xml wird als default Preference Manager ausgef�hrt.");
@@ -56,8 +59,9 @@ public class OptionView extends PreferenceFragment implements OnSharedPreference
 		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		Log.d("Options", "Optionen werden gestartet.");
 		addPreferencesFromResource(R.xml.options);
+		}
 	}
-
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
