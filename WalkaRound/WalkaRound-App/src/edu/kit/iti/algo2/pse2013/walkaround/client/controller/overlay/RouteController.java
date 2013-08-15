@@ -103,7 +103,7 @@ public class RouteController {
 			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 				final Route newCurrentRoute = this.currentRoute;
 				RouteController.routeChanger = new Thread (new Runnable() {
-					@Override
+
 					public void run() {
 						Log.d(TAG_ROUTE_CONTROLLER, "Thread.run() in setActiveWaypoint(id)");
 						newCurrentRoute.setActiveWaypoint(id);
@@ -126,7 +126,6 @@ public class RouteController {
 			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 				final Route newCurrentRoute = this.currentRoute;
 				RouteController.routeChanger = new Thread (new Runnable() {
-					@Override
 					public void run() {
 						Log.d(TAG, "Thread.run() in setActiveWaypoint(wp)");
 						newCurrentRoute.setActiveWaypoint(wp);
@@ -146,7 +145,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in resetActiveWaypoint()");
 					newCurrentRoute.resetActiveWaypoint();
@@ -166,7 +165,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in moveActiveWaypointInOrder(int)");
 					newCurrentRoute.moveActiveWaypointInOrder(i);
@@ -185,7 +184,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, String.format("Thread.run() in RouteController.addWaypoint(%s)", w.toString()));
 					newCurrentRoute.addWaypoint(w);
@@ -206,7 +205,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in addRoundtrip(int profile, int length)");
 					newCurrentRoute.addRoundtripAtActiveWaypoint(profileID, length);
@@ -225,7 +224,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in addRoute(RouteInfo)");
 					newCurrentRoute.addRoute(ri);
@@ -257,7 +256,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in deleteActiveWaypoint()");
 					newCurrentRoute.deleteActiveWaypoint();
@@ -275,7 +274,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in invertRoute()");
 					newCurrentRoute.invertRoute();
@@ -293,7 +292,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in resetRoute()");
 					newCurrentRoute.resetRoute();
@@ -312,7 +311,7 @@ public class RouteController {
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
-				@Override
+
 				public void run() {
 					Log.d(TAG, "Thread.run() in optimizeRoute()");
 					newCurrentRoute.optimizeRoute();
