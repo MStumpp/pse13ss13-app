@@ -30,36 +30,32 @@ public class LocationTest {
 	public void testClone() {
 		Location clone = testLocation.clone();
 		Location clone2 = clone.clone();
-		assertNotEquals(testLocation, clone);
-		assertNotEquals(clone, clone2);
-		assertNotEquals(clone2, testLocation);
+		assertTrue(testLocation != clone);
+		assertTrue(clone !=clone2);
+		assertTrue(clone2 != testLocation);
 
-		assertTrue(testLocation.getLatitude() == clone.getLatitude());
-		assertTrue(testLocation.getLongitude() == clone.getLongitude());
-		assertEquals(testLocation.getName(), clone.getName());
-		assertTrue(testLocation.getId() != clone.getId());
-		assertTrue(testLocation.getAddress() != clone.getAddress());
+		assertEquals(testLocation, clone);
+		assertEquals(clone2, clone);
+		assertEquals(testLocation, clone2);
 	}
 
 	@Test
 	public void testHash() {
 		int hashA = testLocation.hashCode();
 		int hashB = testLocation.clone().hashCode();
-		int hashC = new Location(testLat, testLon, testName, testAddress)
-				.hashCode();
-		assertNotEquals(hashA, hashB);
+		int hashC = new Location(testLat + 1, testLon, testName, testAddress).hashCode();
+		assertEquals(hashA, hashB);
 		assertNotEquals(hashB, hashC);
 		assertNotEquals(hashA, hashC);
 	}
 
 	@Test
-	public void testEquals() throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	public void testEquals() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		assertFalse(testLocation.equals(null));
 		assertFalse(testLocation.equals("Hello world"));
 		Location locationA = new Location(2d, 2d, "test", testAddress);
 		Location locationB = new Location(2d, 2d, "test", testAddress);
-		assertFalse(locationA.equals(locationB));
+		assertTrue(locationA.equals(locationB));
 
 		assertTrue(testLocation.equals(testLocation));
 	}
