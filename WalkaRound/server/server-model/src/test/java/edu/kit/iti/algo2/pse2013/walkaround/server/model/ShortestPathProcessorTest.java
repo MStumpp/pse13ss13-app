@@ -151,12 +151,6 @@ public class ShortestPathProcessorTest {
         while(pair3 == null)
             pair3 = getRoute(graphDataIO, graph);
 
-        while(pair4 == null)
-            pair4 = getRoute(graphDataIO, graph);
-
-        while(pair5 == null)
-            pair5 = getRoute(graphDataIO, graph);
-
         try {
             Assert.assertNotNull(ShortestPathProcessor.init(graphDataIO, 2));
         } catch (EmptyListOfEdgesException e) {
