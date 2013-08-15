@@ -1,5 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * GeometryProcessorVertex provides some api to query nearest Edges and Vertices based on Coordinates.
  *
@@ -7,6 +10,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
  * @version 1.0
  */
 public class GeometryProcessorVertex {
+
+    /**
+     * Logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorVertex.class);
+
 
     /**
      * GeometryProcessorVertex instance.
@@ -89,6 +98,7 @@ public class GeometryProcessorVertex {
     public Geometrizable getNearestGeometrizable(GeometrySearch search)
             throws GeometryProcessorException, GeometryComputationNoSlotsException,
             IllegalArgumentException {
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + processor);
         return processor.getNearestGeometrizable(search, null);
     }
 
