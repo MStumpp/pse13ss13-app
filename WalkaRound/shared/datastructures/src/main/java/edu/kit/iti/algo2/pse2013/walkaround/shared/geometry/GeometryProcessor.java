@@ -346,6 +346,8 @@ public class GeometryProcessor {
             GeometrizableHolder holder = new GeometrizableHolder(null);
             searchTreeDown(root, search, constraint, holder);
 
+            logger.info("!!!!!!!!!!!!!!" + holder.getGeometrizable());
+
             if (holder.getGeometrizable() == null) {
                 return null;
             } else if (holder.getGeometrizable() instanceof GeometrizableHolder) {
@@ -383,11 +385,9 @@ public class GeometryProcessor {
             if (node.isLeaf()) {
 
                 if (currentBest.getGeometrizable() == null) {
-                    currentGeometrizable = node.getNearestGeometrizable(
-                            search.valueForDimension(dim), constraint, dim);
+                    currentGeometrizable = node.getNearestGeometrizable(search.valueForDimension(dim), constraint, dim);
                 } else {
-                    currentGeometrizable = node.getNearestGeometrizable(
-                            currentBest.getGeometrizable().valueForDimension(dim), constraint, dim);
+                    currentGeometrizable = node.getNearestGeometrizable(currentBest.getGeometrizable().valueForDimension(dim), constraint, dim);
                 }
 
                 if (currentGeometrizable != null) {
