@@ -1,13 +1,9 @@
-package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import java.util.*;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.TreeMultiset;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,11 +32,11 @@ public class GeometryDataPreprocessor {
     /**
      * TreeSet.
      */
-    private static final TreeSet<Geometrizable> treeSet = new TreeSet<>();
+    private static final TreeSet<Geometrizable> treeSet = new TreeSet<Geometrizable>();
 
     private static Multiset<Geometrizable> treeMultiset = TreeMultiset.create();
 
-    private static final ArrayList<Geometrizable> list = new ArrayList<>();
+    private static final ArrayList<Geometrizable> list = new ArrayList<Geometrizable>();
 
 
     /**
@@ -83,7 +79,7 @@ public class GeometryDataPreprocessor {
         // wrap each geometrizable
         int numberNodes = geoms.get(0).numberNodes();
         if (numberNodes > 1) {
-            List<Geometrizable> geometrizablesWrapped = new ArrayList<>();
+            List<Geometrizable> geometrizablesWrapped = new ArrayList<Geometrizable>();
             for (Geometrizable geometrizable : geoms) {
                 for (int n = 0; n < numberNodes; n++) {
                     geometrizablesWrapped.add(new GeometrizableWrapper(geometrizable, n));

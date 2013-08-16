@@ -32,7 +32,7 @@ public class GeometrizablePOIConstraintTest {
     @Test
     public void testIsNotValidMethod() {
         GeometrizablePOIConstraint instance = new GeometrizablePOIConstraint(new int[] {1, 2, 3, 4, 5});
-        Assert.assertTrue(instance.isValid(new POI(1.d, 2.d, "name", "info", null, new int[] { 6 }, null)));
+        Assert.assertTrue(!instance.isValid(new POI(1.d, 2.d, "name", "info", null, new int[] { 6 }, null)));
     }
 
 }

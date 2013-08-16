@@ -26,20 +26,6 @@ public class GeometrizableWrapperTest {
     }
 
     @Test
-    public void testValueForDimension1() {
-        POI poi = new POI(1.d, 2.d, "name", "info", null, new int[]{1}, null);
-        GeometrizableWrapper instance = new GeometrizableWrapper(poi, 1);
-        Assert.assertEquals(1.d, instance.valueForDimension(0), 0.d);
-    }
-
-    @Test
-    public void testValueForDimension2() {
-        POI poi = new POI(1.d, 2.d, "name", "info", null, new int[]{1}, null);
-        GeometrizableWrapper instance = new GeometrizableWrapper(poi, 1);
-        Assert.assertEquals(2.d, instance.valueForDimension(1), 0.d);
-    }
-
-    @Test
     public void testNumberNodes() {
         POI poi = new POI(1.d, 2.d, "name", "info", null, new int[]{1}, null);
         GeometrizableWrapper instance = new GeometrizableWrapper(poi, 1);
@@ -51,13 +37,6 @@ public class GeometrizableWrapperTest {
         POI poi = new POI(1.d, 2.d, "name", "info", null, new int[]{1}, null);
         GeometrizableWrapper instance = new GeometrizableWrapper(poi, 1);
         Assert.assertNotNull(instance.getNode(0));
-    }
-
-    @Test
-    public void testNodeNotNull2() {
-        POI poi = new POI(1.d, 2.d, "name", "info", null, new int[]{1}, null);
-        GeometrizableWrapper instance = new GeometrizableWrapper(poi, 1);
-        Assert.assertNotNull(instance.getNode());
     }
 
     @Test

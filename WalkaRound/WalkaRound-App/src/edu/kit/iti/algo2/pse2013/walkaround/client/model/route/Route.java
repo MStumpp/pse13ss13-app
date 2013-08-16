@@ -4,7 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -109,6 +112,23 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, String.format(
 				"addWaypoint(%s) to route with Coordinates", w,
 				this.routeCoordinates.size()));
+		if (w != null) {
+			try {
+				w = (Waypoint) CoordinateNormalizer.normalizeCoordinate(w,
+						(int) MapController.getInstance().getCurrentLevelOfDetail());
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG_ROUTE,
+						"Coordinate konnte nicht normalisiert werden!");
+			} catch (CoordinateNormalizerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 		if (this.routeCoordinates.size() != 0) {
 			Log.d(TAG_ROUTE, String.format(
 					"addWaypoint(%s) -> computing shortest path", w.toString()));
