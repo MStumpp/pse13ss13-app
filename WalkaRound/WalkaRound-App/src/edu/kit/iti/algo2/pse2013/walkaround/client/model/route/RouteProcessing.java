@@ -301,9 +301,9 @@ public class RouteProcessing {
 	 * @throws RouteProcessingException
 	 *             If something goes wrong.
 	 */
-	public RouteInfo computeOptimizedRoute(RouteInfo routeInfo)
+	/*public RouteInfo computeOptimizedRoute(RouteInfo routeInfo)
 			throws RouteProcessingException {
 		throw new RouteProcessingException("not yet implemented");
-	}
+	}*/
 
 }

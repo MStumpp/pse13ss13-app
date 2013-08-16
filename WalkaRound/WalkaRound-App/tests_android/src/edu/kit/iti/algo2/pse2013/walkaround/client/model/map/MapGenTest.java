@@ -45,7 +45,7 @@ public class MapGenTest {
 	@Test
 	public void testShift() {
 		MapController.getInstance().onShift(10, 10);
-		Assert.assertNotEquals(MapController.getInstance().getCenter(),(fixture1));
+		Assert.assertTrue(!MapController.getInstance().getCenter().equals(fixture1));
 
 	}
 
