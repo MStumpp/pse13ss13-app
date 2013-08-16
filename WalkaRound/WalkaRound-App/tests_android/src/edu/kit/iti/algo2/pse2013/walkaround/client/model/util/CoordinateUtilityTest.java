@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+
 
 @RunWith(RobolectricTestRunner.class)
 public class CoordinateUtilityTest extends TestCase {
@@ -62,5 +65,17 @@ public class CoordinateUtilityTest extends TestCase {
 			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);
 			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);
 		}
+	}
+	
+	@Test
+	public void testCalculateDifferenceInMeters(){
+		assertTrue(CoordinateUtility.calculateDifferenceInMeters(new Coordinate(0,0), new Coordinate(0,0)) == 0);
+	}
+	
+	@Test
+	public void convertDisplayCoordinates(){
+		CoordinateUtility.convertDisplayCoordinateToCoordinate(new DisplayCoordinate(0,0), new Coordinate(0,0), 5);
+		CoordinateUtility.convertCoordinateToDisplayCoordinate(new Coordinate(0,0), new Coordinate(0,0), 6);
+		assertTrue(true);
 	}
 }
