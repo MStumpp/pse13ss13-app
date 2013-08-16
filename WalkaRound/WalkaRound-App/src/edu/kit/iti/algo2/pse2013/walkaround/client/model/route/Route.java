@@ -169,16 +169,22 @@ public class Route implements RouteInfo {
 							+ this.getEnd() + ", new Route start"
 							+ newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate route");
-			// Calculate the intermediate route:
-			RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());
-			intermediateRoute.getCoordinates().removeFirst();
-			this.addCoordinatesToRoute(intermediateRoute.getCoordinates());
+			// Calculate and add the intermediate route:
+			RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());			
+			this.addRoute(intermediateRoute);
 		}
 		
-		assert(newRoute.getCoordinates().size() > 0);
 		
+		assert(newRoute.getCoordinates().size() > 0);
 		newRoute.getCoordinates().removeFirst();
-		this.addCoordinatesToRoute(newRoute.getCoordinates());
+		
+		Iterator<Coordinate> coordsIter = newRoute.getCoordinates().iterator();
+		Coordinate tempCoord = null;
+		
+		while (coordsIter.hasNext()) {
+			tempCoord = coordsIter.next();
+			this.routeCoordinates.addLast(tempCoord);
+		}
 		
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
@@ -572,13 +578,6 @@ public class Route implements RouteInfo {
 			e.printStackTrace();
 		}
 		return output;
-	}
-	
-	private void addCoordinatesToRoute(LinkedList<Coordinate> coordsList) {
-		Iterator<Coordinate> coordsIter = this.getCoordinates().iterator();
-		while (coordsIter.hasNext()) {
-			this.routeCoordinates.addLast(coordsIter.next());
-		}
 	}
 	
 	
