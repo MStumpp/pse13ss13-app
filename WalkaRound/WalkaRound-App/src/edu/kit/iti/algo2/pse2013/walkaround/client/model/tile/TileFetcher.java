@@ -6,15 +6,14 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.preference.PreferenceManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -29,8 +28,7 @@ public class TileFetcher {
 	private static final String TAG = TileFetcher.class.getSimpleName();
 	private static final int MAX_CACHE_SIZE = 500;
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
-	private FetchingQueue currentRunnable = new FetchingQueue();
-	private Thread currentThread = new Thread(currentRunnable);
+	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(3, 10, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
 	/**
 	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
@@ -74,8 +72,7 @@ public class TileFetcher {
 		}
 		Log.d(TAG, "LoD valid!");
 		if (listener != null) {
-			currentRunnable.clearQueue();
-			currentRunnable.setListener(listener);
+			tpe.getQueue().clear();
 			Log.d(TAG, "Cleared fetching-queue");
 		}
 
@@ -96,76 +93,54 @@ public class TileFetcher {
 						listener.receiveTile(bmpFromCache, x, y, levelOfDetail);
 					}
 				} else {
-					currentRunnable.offerQueue(urlString, x, y, levelOfDetail);
-					if (!currentThread.isAlive()) {
-						currentThread = new Thread(currentRunnable);
-						currentThread.start();
-					}
+					tpe.execute(new SingleFetcher(urlString, x, y, levelOfDetail, listener));
 				}
 			}
 		}
 	}
 
 
-	private class FetchingQueue implements Runnable {
-		private Queue<String> urlList = new LinkedList<String>();
-		private Queue<Integer> xList = new LinkedList<Integer>();
-		private Queue<Integer> yList = new LinkedList<Integer>();
-		private Queue<Integer> levelOfDetailList = new LinkedList<Integer>();
+	private class SingleFetcher implements Runnable {
+		private String url;
+		private int x;
+		private int y;
+		private int levelOfDetail;
 		private TileListener listener;
 
-		public FetchingQueue() { }
-
-		public void setListener(TileListener listener) {
+		public SingleFetcher(String url, int x, int y, int levelOfDetail, TileListener listener) {
+			this.url = url;
+			this.x = x;
+			this.y = y;
+			this.levelOfDetail = levelOfDetail;
 			this.listener = listener;
 		}
 
-		public void offerQueue(String url, int x, int y, int levelOfDetail) {
-			urlList.offer(url);
-			xList.offer(x);
-			yList.offer(y);
-			levelOfDetailList.offer(levelOfDetail);
-		}
-		public void clearQueue() {
-			xList.clear();
-			yList.clear();
-			urlList.clear();
-			levelOfDetailList.clear();
-		}
-
 		public void run() {
-			while(xList.size() > 0) {
-				int x = xList.poll();
-				int y = yList.poll();
-				String urlString = urlList.poll();
-				int levelOfDetail = levelOfDetailList.poll();
-
-				try {
-					URLConnection conn = new URL(urlString).openConnection();
-					conn.connect();
-					InputStream inStream = conn.getInputStream();
-					BufferedInputStream bis = new BufferedInputStream(inStream);
-					Bitmap result = BitmapFactory.decodeStream(bis);
-					bis.close();
-					inStream.close();
-					Log.d(TAG, String.format("Send to TileListener: %s (%s/%s/%s.png)", result, levelOfDetail, x, y));
-					listener.receiveTile(result, x, y, levelOfDetail);
-					cache.put(urlString, result);
-				} catch (MalformedURLException e) {
-					Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, urlString));
-					Log.e(TAG, e.getLocalizedMessage());
-				} catch (IOException e) {
-					Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, urlString));
-					Log.e(TAG, e.getLocalizedMessage());
-				} catch (OutOfMemoryError e) {
-					Log.e(TAG, "Out of Memory! Clearing cache...");
-					Log.e(TAG, e.toString());
-					cache.evictAll();
-					System.gc();
-				} catch (NullPointerException e){
-					Log.e(TAG, "Try to cache Null Pointer!");
-					Log.e(TAG, e.toString());
-				}
+			try {
+				URLConnection conn = new URL(url).openConnection();
+				conn.connect();
+				InputStream inStream = conn.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(inStream);
+				Bitmap result = BitmapFactory.decodeStream(bis);
+				bis.close();
+				inStream.close();
+				Log.d(TAG, String.format("Send to TileListener: %s (%s/%s/%s.png)", result, levelOfDetail, x, y));
+				listener.receiveTile(result, x, y, levelOfDetail);
+				cache.put(url, result);
+			} catch (MalformedURLException e) {
+				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url));
+				Log.e(TAG, e.getLocalizedMessage());
+			} catch (IOException e) {
+				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, url));
+				Log.e(TAG, e.getLocalizedMessage());
+			} catch (OutOfMemoryError e) {
+				Log.e(TAG, "Out of Memory! Clearing cache...");
+				Log.e(TAG, e.toString());
+				cache.evictAll();
+				System.gc();
+			} catch (NullPointerException e){
+				Log.e(TAG, "Try to cache Null Pointer!");
+				Log.e(TAG, e.toString());
 			}
 		}
 	}

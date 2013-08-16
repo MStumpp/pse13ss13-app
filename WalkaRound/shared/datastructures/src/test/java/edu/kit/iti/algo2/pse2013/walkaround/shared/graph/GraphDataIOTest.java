@@ -6,9 +6,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
@@ -120,6 +122,19 @@ public class GraphDataIOTest {
 		System.out.println(numEdges + " edges and " + numVertices + " vertices");
 		Assert.assertEquals(numEdges, graphData.getEdges().size());
 		Assert.assertEquals(numVertices, graphData.getVertices().size());
+	}
+
+	@Test
+	public void testAddEdges() {
+		GraphDataIO gdio = getGraphDataIO();
+		gdio.addEdges(new LinkedList<Edge>());
+	}
+
+	@Test
+	public void testHashCode() {
+		GraphDataIO gdio = getGraphDataIO();
+		GraphDataIO gdio2 = new GraphDataIO();
+		assertTrue(gdio.hashCode() != gdio2.hashCode());
 	}
 
 

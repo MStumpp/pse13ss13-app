@@ -39,7 +39,7 @@ public class InfoView extends Fragment implements POIImageListener {
 		Log.d(TAG_PULLUP_CONTENT, "Create InfoView");
 
 		speak = false;
-		
+
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 
 		this.title = (TextView) this.getActivity().findViewById(
@@ -185,7 +185,7 @@ public class InfoView extends Fragment implements POIImageListener {
 			return false;
 		}
 	}
-	
+
 	private void toogleSpeaking(){
 		if(this.speak){
 			this.speak = false;
@@ -201,7 +201,7 @@ public class InfoView extends Fragment implements POIImageListener {
 	private class playListener implements OnTouchListener {
 
 		String text;
-		
+
 		public playListener(String text){
 			this.text = text;
 		}

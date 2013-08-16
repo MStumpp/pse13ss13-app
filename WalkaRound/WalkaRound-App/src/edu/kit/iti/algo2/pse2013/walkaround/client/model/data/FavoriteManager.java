@@ -209,7 +209,7 @@ public class FavoriteManager {
 	 */
 	public boolean addRouteToFavorites(RouteInfo routeToSave, String name) {
 		if (!savedRoutes.containsKey(name)) {
-			savedRoutes.put(name, routeToSave);
+			savedRoutes.put(name, routeToSave.clone());
 			this.save();
 			return true;
 		}
@@ -228,7 +228,7 @@ public class FavoriteManager {
 	 */
 	public boolean addLocationToFavorites(Location locationToSave, String name) {
 		if (!savedLocations.containsKey(name)) {
-			savedLocations.put(name, locationToSave);
+			savedLocations.put(name, locationToSave.clone());
 			this.save();
 			return true;
 		}

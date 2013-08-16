@@ -67,19 +67,6 @@ public final class Graph {
 
 
     /**
-     * Returns the Edge with the given id.
-     *
-     * @param id The id of the Edge to be returned.
-     * @return Edge the Edge with the given id.
-     */
-    public Edge getEdgeByID(int id) {
-        if (id < 0)
-            throw new IllegalArgumentException("id must not be smaller then 0");
-        return null;
-    }
-
-
-    /**
      * Returns the Vertex with the given id.
      *
      * @param id The id of the Vertex to be returned.

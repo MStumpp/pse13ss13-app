@@ -30,7 +30,6 @@ public class Test {
     public void test2() throws MalformedURLException, InterruptedException {
     	POIImageListener list = new POIImageListener() {
 
-			@Override
 			public void setImage(Bitmap b) {
 				bitmap = b;
 
