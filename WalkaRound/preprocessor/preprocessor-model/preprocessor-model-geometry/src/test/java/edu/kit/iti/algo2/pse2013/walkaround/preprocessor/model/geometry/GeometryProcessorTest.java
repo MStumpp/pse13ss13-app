@@ -122,7 +122,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -144,7 +143,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -206,7 +204,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -428,7 +425,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestEdgeOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOEdgesOnePerNode();
@@ -690,7 +686,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestPOIWithCategoryDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
