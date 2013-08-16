@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TestFileUtil {
 
 	@Test
-	public void test() {
+	public void testFileUtil() {
 		String s = FileUtil.getFile(null).getAbsolutePath();
 		assertTrue(s.contains(System.getProperty("user.home")));
 		assertTrue(s.contains("Dropbox"));
