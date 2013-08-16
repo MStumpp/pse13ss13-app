@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CompassManager.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation</a> &gt; <span class="el_source">CompassManager.java</span></div><h1>CompassManager.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
+
+import java.util.LinkedList;
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.util.Log;
+
+/**
+ * This class hold and compare the last known orientation of the device
+ *
+ * @author Lukas Müller, Ludwig Biermann
+ *
+ */
+public class CompassManager implements SensorEventListener {
+
+	/*
+	 *
+	 */
+<span class="fc" id="L23">	private static String TAG_COMPASS_MANAGER = CompassManager.class</span>
+<span class="fc" id="L24">			.getSimpleName();</span>
+
+	/*
+	 *
+	 */
+	private LinkedList&lt;CompassListener&gt; compassListeners;
+
+	/*
+	 *
+	 */
+	private float lastKnownBearing;
+
+	private SensorManager sensorManager;
+	private Sensor accellerometer;
+	private Sensor magneticFieldSensor;
+	private float[] accellerometerReadout;
+	private float[] magneticFieldSensorReadout;
+<span class="fc" id="L41">	private static int messagesPosted = 0;</span>
+<span class="fc" id="L42">	private static int messagePostingInterval = 1000;</span>
+
+	/**
+	 *
+	 */
+<span class="fc" id="L47">	public CompassManager(Context context) {</span>
+<span class="fc" id="L48">		Log.d(TAG_COMPASS_MANAGER, &quot;Compass Manager Constructor&quot;);</span>
+<span class="fc" id="L49">		lastKnownBearing = 0.0f;</span>
+<span class="fc" id="L50">		compassListeners = new LinkedList&lt;CompassListener&gt;();</span>
+
+<span class="fc" id="L52">		this.sensorManager = (SensorManager) context.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);</span>
+
+<span class="fc" id="L54">		Log.d(TAG_COMPASS_MANAGER, &quot;&quot; + sensorManager.getSensorList(Sensor.TYPE_ALL));</span>
+
+<span class="fc" id="L56">		this.accellerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);</span>
+<span class="fc" id="L57">		this.magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);</span>
+
+<span class="fc" id="L59">		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_NORMAL);</span>
+<span class="fc" id="L60">		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);</span>
+<span class="fc" id="L61">	}</span>
+
+
+	/**
+	 *
+	 * @param newCL
+	 */
+	public void registerCompassListener(CompassListener newCL) {
+<span class="nc" id="L69">		Log.d(TAG_COMPASS_MANAGER,</span>
+<span class="nc" id="L70">				&quot;CompassManager.registerCompassListener(CompassListener &quot;</span>
+<span class="nc" id="L71">						+ newCL.getClass().getSimpleName() + &quot;)&quot;);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		if (!this.compassListeners.contains(newCL)) {</span>
+<span class="nc" id="L73">			this.compassListeners.add(newCL);</span>
+		}
+<span class="nc" id="L75">		this.notifyAllCompassListeners();</span>
+<span class="nc" id="L76">	}</span>
+
+	/**
+	 *
+	 */
+	private void notifyAllCompassListeners() {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if (this.messagesPosted % this.messagePostingInterval == 0) {</span>
+<span class="nc" id="L83">			Log.d(TAG_COMPASS_MANAGER, &quot;CompassManager.notifyAllCompassListeners() sending onCompassChange(&quot; + this.lastKnownBearing + &quot;) to listeners&quot;);</span>
+		}
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		for (CompassListener cl : this.compassListeners) {</span>
+<span class="nc" id="L86">			cl.onCompassChange(this.lastKnownBearing);</span>
+		}
+<span class="nc" id="L88">		this.messagesPosted++;</span>
+<span class="nc" id="L89">	}</span>
+
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L93">	}</span>
+
+	public void onSensorChanged(SensorEvent event) {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		if (this.messagesPosted % this.messagePostingInterval == 0) {</span>
+<span class="nc" id="L97">			Log.d(TAG_COMPASS_MANAGER, &quot;Compass Manager onSensorChanged(SensorEvent)&quot;);</span>
+		}
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		if (event.sensor.getType() == this.accellerometer.getType()) {</span>
+<span class="nc" id="L100">			this.accellerometerReadout = event.values.clone();</span>
+		}
+<span class="nc bnc" id="L102" title="All 2 branches missed.">		if (event.sensor.getType() == this.magneticFieldSensor.getType()) {</span>
+<span class="nc" id="L103">			this.magneticFieldSensorReadout = event.values;</span>
+		}
+
+<span class="nc bnc" id="L106" title="All 4 branches missed.">		if (this.accellerometerReadout != null &amp;&amp; this.magneticFieldSensorReadout != null) {</span>
+<span class="nc" id="L107">			float[] R = new float[9];</span>
+<span class="nc" id="L108">			float[] I = new float[9];</span>
+<span class="nc" id="L109">			boolean processed = SensorManager.getRotationMatrix(R, I, this.accellerometerReadout, this.magneticFieldSensorReadout);</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">			if (processed) {</span>
+<span class="nc" id="L111">				float[] orientation = new float[3];</span>
+<span class="nc" id="L112">				SensorManager.getOrientation(R, orientation);</span>
+<span class="nc" id="L113">				this.lastKnownBearing = (float) Math.toDegrees(orientation[0]);</span>
+			}
+		}
+<span class="nc" id="L116">		this.notifyAllCompassListeners();</span>
+<span class="nc" id="L117">	}</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

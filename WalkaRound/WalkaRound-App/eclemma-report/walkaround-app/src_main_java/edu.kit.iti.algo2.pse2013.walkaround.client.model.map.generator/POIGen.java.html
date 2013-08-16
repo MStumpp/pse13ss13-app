@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>POIGen.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator</a> &gt; <span class="el_source">POIGen.java</span></div><h1>POIGen.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import android.graphics.Point;
+import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+
+/**
+ * This Class compute and generate the POI Points on the map
+ *
+ * @author Ludwig Biermann
+ *
+ */
+public class POIGen implements Runnable {
+
+	/**
+	 * Debug Tag
+	 */
+<span class="nc" id="L26">	private static String TAG_POIGen = POIGen.class.getSimpleName();</span>
+
+	/**
+	 * The List of POI´s on the map
+	 */
+<span class="nc" id="L31">	private List&lt;POI&gt; poiList = new LinkedList&lt;POI&gt;();</span>
+
+	/**
+	 * Construckts a new POIGen
+	 */
+<span class="nc" id="L36">	public POIGen() {</span>
+
+<span class="nc" id="L38">	}</span>
+
+	public void run() {
+		// running endless
+<span class="nc" id="L42">		while (true)</span>
+			;
+	}
+
+	/**
+	 * Gives the POI Information by their ids back
+	 *
+	 * @param id
+	 *            id of the POI
+	 * @return the POI and its Informations
+	 */
+	public POI getPOIInformationById(int id) {
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		for (POI value : this.poiList) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">			if (value.getId() == id) {</span>
+<span class="nc" id="L56">				return value;</span>
+			}
+		}
+<span class="nc" id="L59">		return null;</span>
+	}
+
+	/**
+	 * update the POI of the Display
+	 */
+	public void generatePOIView(BoundingBox coorBox, Point size) {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		if (!POIManager.getInstance().isEmpty()) {</span>
+
+<span class="nc" id="L68">			poiList = POIManager.getInstance().getPOIsWithinRectangle(</span>
+<span class="nc" id="L69">					coorBox.getTopLeft(), coorBox.getBottomRight(),</span>
+<span class="nc" id="L70">					coorBox.getLevelOfDetail());</span>
+
+<span class="nc" id="L72">			Log.d(TAG_POIGen, &quot;POI Anzahl&quot; + poiList.size());</span>
+
+<span class="nc" id="L74">			LinkedList&lt;DisplayPOI&gt; poi = new LinkedList&lt;DisplayPOI&gt;();</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">			for (POI value : poiList) {</span>
+
+<span class="nc" id="L78">				double lon = -coorBox.getCenter().getLongitude()</span>
+<span class="nc" id="L79">						+ value.getLongitude();</span>
+<span class="nc" id="L80">				double lat = -value.getLatitude()</span>
+<span class="nc" id="L81">						+ coorBox.getCenter().getLatitude();</span>
+
+<span class="nc" id="L83">				float x = CoordinateUtility.convertDegreesToPixels(lon,</span>
+<span class="nc" id="L84">						coorBox.getLevelOfDetail(),</span>
+<span class="nc" id="L85">						CoordinateUtility.DIRECTION_LONGITUDE);</span>
+
+<span class="nc" id="L87">				float y = CoordinateUtility.convertDegreesToPixels(lat,</span>
+<span class="nc" id="L88">						coorBox.getLevelOfDetail(),</span>
+<span class="nc" id="L89">						CoordinateUtility.DIRECTION_LATITUDE);</span>
+
+<span class="nc" id="L91">				Log.d(&quot;UserPos&quot;, &quot; x: &quot; + x + &quot; y: &quot; + y);</span>
+
+<span class="nc" id="L93">				x = coorBox.getDisplaySize().x / 2 + x;</span>
+<span class="nc" id="L94">				y = coorBox.getDisplaySize().y / 2 + y;</span>
+
+<span class="nc" id="L96">				Log.d(&quot;UserPos&quot;, &quot; x: &quot; + x + &quot; y: &quot; + y);</span>
+
+<span class="nc" id="L98">				poi.add(new DisplayPOI(x, y, value.getId()));</span>
+			}
+<span class="nc bnc" id="L100" title="All 2 branches missed.">			if (MapController.getInstance() != null) {</span>
+<span class="nc" id="L101">				MapController.getInstance().onPOIChange(poi);</span>
+			}
+		}
+<span class="nc" id="L104">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

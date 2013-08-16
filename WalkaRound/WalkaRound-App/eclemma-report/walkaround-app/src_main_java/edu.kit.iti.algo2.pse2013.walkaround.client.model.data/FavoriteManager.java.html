@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>FavoriteManager.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.data</a> &gt; <span class="el_source">FavoriteManager.java</span></div><h1>FavoriteManager.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveFavLocation;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveFavorite;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveRoute;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveRoutepoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
+
+/**
+ * This class manages all saved locations and routes.
+ *
+ * @author Thomas Kadow, Florian Sch&amp;auml;fer
+ * @version 1.0
+ */
+<span class="nc bnc" id="L37" title="All 2 branches missed.">public class FavoriteManager {</span>
+
+<span class="nc" id="L39">	private static final String TAG = FavoriteManager.class.getSimpleName();</span>
+
+	/**
+	 * Instance of the FavoritesManager.
+	 */
+	private static FavoriteManager instance;
+
+	/**
+	 * List of all saved routes.
+	 */
+	private TreeMap&lt;String, RouteInfo&gt; savedRoutes;
+
+	/**
+	 * List of all saved locations.
+	 */
+	private TreeMap&lt;String, Location&gt; savedLocations;
+
+	private static Context applicationContext;
+
+<span class="nc" id="L58">	private final static String FILENAME = &quot;Favorites_Save&quot;;</span>
+
+	/**
+	 * Constructs a new manager for the favorites.
+	 */
+<span class="nc" id="L63">	private FavoriteManager() {</span>
+<span class="nc" id="L64">		savedRoutes = new TreeMap&lt;String, RouteInfo&gt;();</span>
+<span class="nc" id="L65">		savedLocations = new TreeMap&lt;String, Location&gt;();</span>
+<span class="nc" id="L66">	}</span>
+
+	public static void initialize(Context context) {
+<span class="nc" id="L69">		applicationContext = context.getApplicationContext();</span>
+<span class="nc" id="L70">	}</span>
+
+	/**
+	 * Singleton getInstance method.
+	 *
+	 * @return an instance of the FavoritesManager
+	 */
+	public static FavoriteManager getInstance() {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (instance == null) {</span>
+			try {
+<span class="nc" id="L80">				loadInstanceFromFile();</span>
+<span class="nc" id="L81">			} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L82">				instance = new FavoriteManager();</span>
+<span class="nc" id="L83">			} catch (InvalidProtocolBufferException e) {</span>
+<span class="nc" id="L84">				Log.e(TAG, &quot;The favorite-file was either obsolete or corrupted, I'll delete it now.&quot;);</span>
+<span class="nc" id="L85">				applicationContext.deleteFile(FILENAME);</span>
+<span class="nc" id="L86">				instance = new FavoriteManager();</span>
+<span class="nc" id="L87">			} catch (IOException e) {</span>
+<span class="nc" id="L88">				Log.e(TAG, &quot;Error loading favorites&quot;, e);</span>
+			}
+		}
+<span class="nc bnc" id="L91" title="All 4 branches missed.">		assert instance != null;</span>
+<span class="nc" id="L92">		return instance;</span>
+	}
+
+	private static void loadInstanceFromFile() throws IOException {
+<span class="nc" id="L96">		BufferedInputStream bis = new BufferedInputStream(applicationContext.openFileInput(FILENAME));</span>
+<span class="nc" id="L97">		SaveFavorite saveFav = Protos.SaveFavorite.parseFrom(bis);</span>
+<span class="nc" id="L98">		bis.close();</span>
+<span class="nc" id="L99">		instance = new FavoriteManager();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">		for (SaveRoute sr : saveFav.getRouteList()) {</span>
+<span class="nc" id="L101">			LinkedList&lt;Coordinate&gt; coordinates = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">			for (SaveRoutepoint saCo : sr.getRoutepointList()) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">				if (saCo.hasCoord()) {</span>
+<span class="nc" id="L104">					coordinates.add(ProtobufConverter.getCoordinate(saCo.getCoord()));</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">				} else if (saCo.hasWP()) {</span>
+<span class="nc" id="L106">					coordinates.add(ProtobufConverter.getWaypoint(saCo.getWP()));</span>
+				}
+			}
+<span class="nc" id="L109">			RouteInfo r = new Route(coordinates);</span>
+<span class="nc" id="L110">			instance.savedRoutes.put(sr.getName(), r);</span>
+		}
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		for (SaveFavLocation saveFavLoc : saveFav.getLocationList()) {</span>
+<span class="nc" id="L113">			instance.addLocationToFavorites(ProtobufConverter.getLocation(saveFavLoc.getLocation()), saveFavLoc.getName());</span>
+		}
+<span class="nc" id="L115">		Log.d(TAG,</span>
+<span class="nc" id="L116">			String.format(</span>
+<span class="nc" id="L117">				&quot;The favorites (%d routes and %d locations) were loaded successfully&quot;,</span>
+<span class="nc" id="L118">				saveFav.getRouteCount(), saveFav.getLocationCount()</span>
+			)
+		);
+<span class="nc" id="L121">	}</span>
+
+	/**
+	 * Returns a list of all names of saved routes.
+	 *
+	 * @return a list of all names of saved routes
+	 */
+	public List&lt;String&gt; getNamesOfFavoriteRoutes() {
+<span class="nc" id="L129">		ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L130">		list.addAll(savedRoutes.keySet());</span>
+<span class="nc" id="L131">		return list;</span>
+	}
+
+	/**
+	 * Returns a list of all names of saved routes.
+	 *
+	 * @return a list of all names of saved routes
+	 */
+	public List&lt;String&gt; getNamesOfFavoriteLocations() {
+<span class="nc" id="L140">		ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L141">		list.addAll(savedLocations.keySet());</span>
+<span class="nc" id="L142">		return list;</span>
+	}
+
+	/**
+	 * Returns a favorite route by ID.
+	 *
+	 * @param index
+	 *            index of the favorite route.
+	 * @return RouteInfo
+	 */
+	public RouteInfo getFavoriteRoute(String name) {
+<span class="nc bnc" id="L153" title="All 2 branches missed.">		if(savedRoutes.get(name).clone() == null) {</span>
+<span class="nc" id="L154">			Log.d(TAG, &quot;Klon ist null&quot;);</span>
+		}
+<span class="nc" id="L156">		return savedRoutes.get(name).clone();</span>
+	}
+
+	/**
+	 * Returns a favorite location by ID.
+	 *
+	 * @param index
+	 *            index of the favorite location.
+	 * @return Location
+	 */
+	public Location getFavoriteLocation(String name) {
+<span class="nc" id="L167">		return savedLocations.get(name).clone();</span>
+	}
+
+	/**
+	 * Removes a favorite route from the list.
+	 *
+	 * @param index
+	 *            index of the favorite route
+	 * @return
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public boolean deleteRoute(String name) {
+<span class="nc" id="L180">		RouteInfo result = savedRoutes.remove(name);</span>
+<span class="nc" id="L181">		this.save();</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">		return result != null;</span>
+	}
+
+	/**
+	 * Removes a favorite location from the list.
+	 *
+	 * @param index
+	 *            index of the favorite location
+	 * @return
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public boolean deleteLocation(String name) {
+<span class="nc" id="L195">		Location result = savedLocations.remove(name);</span>
+<span class="nc" id="L196">		this.save();</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		return result != null;</span>
+	}
+
+	/**
+	 * Adds a route to the list of favorite routes.
+	 *
+	 * @param routeToSave
+	 *            RouteInfo to be saved
+	 * @param name
+	 *            name for the favorite
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public boolean addRouteToFavorites(RouteInfo routeToSave, String name) {
+<span class="nc bnc" id="L211" title="All 2 branches missed.">		if (!savedRoutes.containsKey(name)) {</span>
+<span class="nc" id="L212">			savedRoutes.put(name, routeToSave);</span>
+<span class="nc" id="L213">			this.save();</span>
+<span class="nc" id="L214">			return true;</span>
+		}
+<span class="nc" id="L216">		return false;</span>
+	}
+
+	/**
+	 * Adds a location to the list of favorite locations.
+	 *
+	 * @param locationToSave
+	 *            Location to be saved
+	 * @param name
+	 *            name for the favorite
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public boolean addLocationToFavorites(Location locationToSave, String name) {
+<span class="nc bnc" id="L230" title="All 2 branches missed.">		if (!savedLocations.containsKey(name)) {</span>
+<span class="nc" id="L231">			savedLocations.put(name, locationToSave);</span>
+<span class="nc" id="L232">			this.save();</span>
+<span class="nc" id="L233">			return true;</span>
+		}
+<span class="nc" id="L235">		return false;</span>
+	}
+
+	/**
+	 * Returns whether the given name already exists.
+	 *
+	 * @param name name to check
+	 * @return true if it exists, false otherwise
+	 */
+	public boolean containsName(String name) {
+<span class="nc bnc" id="L245" title="All 4 branches missed.">		if (savedRoutes.keySet().contains(name) || savedLocations.keySet().contains(name)) {</span>
+<span class="nc" id="L246">			return true;</span>
+		}
+<span class="nc" id="L248">		return false;</span>
+	}
+
+	/**
+	 * Saves the FavoritesManager object to an external file.
+	 *
+	 * @param objectToSave
+	 *            FavoritesManager object to save.
+	 * @param destination
+	 *            Location of output file on file system.
+	 * @throws java.io.IOException
+	 */
+	private void save() {
+<span class="nc" id="L261">		SaveFavorite.Builder favBuilder = Protos.SaveFavorite.newBuilder();</span>
+<span class="nc" id="L262">		Iterator&lt;String&gt; keys = savedRoutes.keySet().iterator();</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		while (keys.hasNext()) {</span>
+<span class="nc" id="L264">			String nextKey = keys.next();</span>
+<span class="nc" id="L265">			RouteInfo nextRoute = savedRoutes.get(nextKey);</span>
+<span class="nc" id="L266">			SaveRoute.Builder routeBuilder = Protos.SaveRoute.newBuilder().setName(nextKey);</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">			for (Coordinate c : nextRoute.getCoordinates()) {</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">				if (c instanceof Waypoint) {</span>
+<span class="nc" id="L269">					SaveWaypoint.Builder wp = SaveWaypoint.newBuilder()</span>
+<span class="nc" id="L270">						.setParentLocation(ProtobufConverter.getLocationBuilder((Location) c))</span>
+<span class="nc" id="L271">						.setProfile(((Waypoint) c).getProfile())</span>
+<span class="nc" id="L272">						.setFavorite(((Waypoint) c).isFavorite());</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">					if (((Waypoint) c).getPOI() != null) {</span>
+<span class="nc" id="L274">						wp.setPOI(ProtobufConverter.getPOIBuilder(((Waypoint) c).getPOI()));</span>
+					}
+<span class="nc" id="L276">					routeBuilder.addRoutepoint(SaveRoutepoint.newBuilder().setWP(wp));</span>
+<span class="nc" id="L277">				} else {</span>
+<span class="nc" id="L278">					routeBuilder.addRoutepoint(SaveRoutepoint.newBuilder().setCoord(ProtobufConverter.getCoordinateBuilder(c)));</span>
+				}
+			}
+<span class="nc" id="L281">			favBuilder.addRoute(routeBuilder.build());</span>
+		}
+<span class="nc bnc" id="L283" title="All 2 branches missed.">		for (String name : savedLocations.keySet()) {</span>
+<span class="nc" id="L284">			favBuilder.addLocation(SaveFavLocation.newBuilder().setLocation(ProtobufConverter.getLocationBuilder(savedLocations.get(name))).setName(name));</span>
+		}
+		BufferedOutputStream bos;
+		try {
+<span class="nc" id="L288">			bos = new BufferedOutputStream(applicationContext.openFileOutput(FILENAME, Context.MODE_PRIVATE));</span>
+<span class="nc" id="L289">			favBuilder.build().writeTo(bos);</span>
+<span class="nc" id="L290">			bos.flush();</span>
+<span class="nc" id="L291">			bos.close();</span>
+<span class="nc" id="L292">			Log.d(TAG, &quot;The favorites were loaded successfully&quot;);</span>
+<span class="nc" id="L293">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L294">			Log.e(TAG, &quot;The file &quot; + FILENAME + &quot; was not found!&quot;, e);</span>
+<span class="nc" id="L295">		} catch (IOException e) {</span>
+<span class="nc" id="L296">			Log.e(TAG, &quot;The file &quot; + FILENAME + &quot; could not be read successfully!&quot;, e);</span>
+		}
+<span class="nc" id="L298">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

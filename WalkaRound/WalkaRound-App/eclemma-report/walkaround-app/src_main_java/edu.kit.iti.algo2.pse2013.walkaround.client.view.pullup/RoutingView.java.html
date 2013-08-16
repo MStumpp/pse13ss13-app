@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RoutingView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">RoutingView.java</span></div><h1>RoutingView.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;</span>
+
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothClass.Device.Major;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+
+<span class="nc" id="L39">public class RoutingView extends Fragment {</span>
+
+<span class="nc" id="L41">	private final String TAG_PULLUP_CONTENT = &quot;PULLUP_CONTENT&quot;;</span>
+
+<span class="nc" id="L43">	private int switcher = R.id.pullupRoutingSwitcher;</span>
+
+	private FavoriteMenuController favController;
+
+	private RouteInfo lastKnownRoute;
+
+	private Button reset;
+	private ImageView invert;
+	// private ImageView tsp;
+	// private ImageView load;
+	private ImageView save;
+	private Button addFavorite;
+	private Button goToMap;
+	private LinearLayout layout;
+	private EditText favoriteName;
+
+<span class="nc" id="L59">	private static boolean isListener = false;</span>
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+<span class="nc" id="L64">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L65">		Log.d(TAG_PULLUP_CONTENT, &quot;Create RoutingView&quot;);</span>
+
+<span class="nc" id="L67">		favController = FavoriteMenuController.getInstance();</span>
+		// RouteController.getInstance().registerRouteListener(this);
+
+<span class="nc" id="L70">		reset = (Button) this.getActivity().findViewById(R.id.reset);</span>
+<span class="nc" id="L71">		invert = (ImageView) this.getActivity().findViewById(R.id.invert);</span>
+		// tsp = (ImageView) this.getActivity().findViewById(R.id.tsp);
+		// load = (ImageView) this.getActivity().findViewById(R.id.load);
+<span class="nc" id="L74">		save = (ImageView) this.getActivity().findViewById(R.id.save);</span>
+<span class="nc" id="L75">		addFavorite = (Button) this.getActivity().findViewById(</span>
+<span class="nc" id="L76">				R.id.add_favorite);</span>
+<span class="nc" id="L77">		goToMap = (Button) this.getActivity().findViewById(R.id.go_to_map);</span>
+<span class="nc" id="L78">		layout = (LinearLayout) getActivity().findViewById(R.id.waylist);</span>
+
+<span class="nc" id="L80">		favoriteName = (EditText) this.getActivity().findViewById(</span>
+<span class="nc" id="L81">				R.id.favorite_name);</span>
+
+<span class="nc" id="L83">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L84">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L85">				.getDefaultDisplay();</span>
+<span class="nc" id="L86">		Point size = new Point();</span>
+<span class="nc" id="L87">		display.getSize(size);</span>
+
+<span class="nc" id="L89">		Log.d(TAG_PULLUP_CONTENT, &quot;Einstellen der sizes&quot;);</span>
+		// reset.setX(size.x / 5 * 0);
+<span class="nc" id="L91">		reset.getLayoutParams().width = size.x / 3;</span>
+<span class="nc" id="L92">		reset.getLayoutParams().height = size.y / 8;</span>
+
+		// invert.setX(size.x / 5 * 1);
+<span class="nc" id="L95">		invert.getLayoutParams().width = size.x / 3;</span>
+<span class="nc" id="L96">		invert.getLayoutParams().height = size.y / 8;</span>
+
+		// tsp.setX(size.x / 5 * 2);
+		// tsp.getLayoutParams().width = size.x / 4;
+		// tsp.getLayoutParams().height = size.y / 8;
+
+		// load.setX(size.x / 5 * 3);
+		// load.getLayoutParams().width = size.x / 5;
+		// load.getLayoutParams().height = size.y / 8;
+
+		// save.setX(size.x / 5 * 4);
+<span class="nc" id="L107">		save.getLayoutParams().width = size.x / 3;</span>
+<span class="nc" id="L108">		save.getLayoutParams().height = size.y / 8;</span>
+
+		// addFavorite.setX(size.x * 0);
+<span class="nc" id="L111">		addFavorite.getLayoutParams().width = size.x / 2;</span>
+
+		// goToMap.setX(size.x / 2);
+<span class="nc" id="L114">		goToMap.getLayoutParams().width = size.x / 2;</span>
+
+<span class="nc" id="L116">		Log.d(TAG_PULLUP_CONTENT, &quot;Zuweisung der Listener&quot;);</span>
+<span class="nc" id="L117">		reset.setOnTouchListener(new resetListener());</span>
+<span class="nc" id="L118">		invert.setOnTouchListener(new invertListener());</span>
+		// tsp.setOnTouchListener(new tspListener());
+		// load.setOnTouchListener(new loadListener());
+<span class="nc" id="L121">		save.setOnTouchListener(new saveListener());</span>
+<span class="nc" id="L122">		addFavorite.setOnTouchListener(new favoriteListener());</span>
+<span class="nc" id="L123">		goToMap.setOnTouchListener(new backToMapListener());</span>
+
+<span class="nc" id="L125">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L126">	}</span>
+
+	public void onDestroyView() {
+<span class="nc" id="L129">		super.onDestroyView();</span>
+		// routeController.unregisterRouteListener(this);
+<span class="nc" id="L131">	}</span>
+
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L135">		super.onDestroy();</span>
+		// Log.d(TAG_PULLUP_CONTENT, &quot;Destroy RoutingView&quot;);
+<span class="nc" id="L137">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+<span class="nc" id="L138">	}</span>
+
+	public boolean equals(Fragment f) {
+<span class="nc bnc" id="L141" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_ROUTING)) {</span>
+<span class="nc" id="L142">			return true;</span>
+		}
+<span class="nc" id="L144">		return false;</span>
+	}
+
+<span class="nc" id="L147">	private class resetListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L150" title="All 4 branches missed.">			if (v.equals(reset) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L151">				Log.d(TAG_PULLUP_CONTENT, &quot;reset wurde gedr�ckt&quot;);</span>
+<span class="nc" id="L152">				RouteController.getInstance().resetRoute();</span>
+			}
+			// TODO: refresh activity?
+<span class="nc" id="L155">			return false;</span>
+		}
+
+	}
+
+<span class="nc" id="L160">	private class invertListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">			if (v.equals(invert)</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L165">				Log.d(TAG_PULLUP_CONTENT, &quot;invert was pressed&quot;);</span>
+<span class="nc" id="L166">				RouteController.getInstance().invertRoute();</span>
+			}
+			// TODO: refresh activity?
+<span class="nc" id="L169">			return false;</span>
+		}
+
+	}
+
+	/*
+	 * private class tspListener implements OnTouchListener {
+	 *
+	 * @Override public boolean onTouch(View v, MotionEvent event) { if
+	 * (v.equals(tsp) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {
+	 * Log.d(TAG_PULLUP_CONTENT, &quot;tsp button wurde gedr�ckt&quot;);
+	 * RouteController.getInstance().optimizeRoute(); } return false; }
+	 *
+	 * }
+	 */
+
+	/*
+	 * private class loadListener implements OnTouchListener {
+	 *
+	 * @Override public boolean onTouch(View v, MotionEvent event) { if
+	 * (v.equals(load) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {
+	 * Log.d(TAG_PULLUP_CONTENT, &quot;load wurde gedr�ckt&quot;); // TODO: ansicht
+	 * wechselt in die liste der !!!!favorisierten // routen!!!!
+	 * MapController.getInstance().getPullUpView()
+	 * .changeView(PullUpView.CONTENT_FAVORITE); } return false; }
+	 *
+	 * }
+	 */
+
+<span class="nc" id="L198">	private class saveListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L201" title="All 4 branches missed.">			if (v.equals(save) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L202">				Log.d(TAG_PULLUP_CONTENT, &quot;save wurde gedr�ckt&quot;);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">				if (layout.getChildCount() != 0) {</span>
+<span class="nc" id="L204">					favoriteName</span>
+<span class="nc" id="L205">							.setOnEditorActionListener(new FavoriteNameActionListener());</span>
+<span class="nc" id="L206">					favoriteName.setVisibility(View.VISIBLE);</span>
+				}
+			}
+<span class="nc" id="L209">			return false;</span>
+		}
+	}
+
+<span class="nc" id="L213">	private class favoriteListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if (v.equals(addFavorite)</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L218">				Log.d(TAG_PULLUP_CONTENT, &quot;add favorite wurde gedr�ckt&quot;);</span>
+				// TODO: ansicht wechselt in die liste der !!!favorisierten
+				// orte!!!!
+<span class="nc" id="L221">				MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L222">						.changeView(PullUpView.CONTENT_FAVORITE);</span>
+			}
+<span class="nc" id="L224">			return false;</span>
+		}
+
+	}
+
+<span class="nc" id="L229">	private class backToMapListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L232" title="All 2 branches missed.">			if (v.equals(goToMap)</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L234">				Log.d(TAG_PULLUP_CONTENT, &quot;go to map wurde gedr�ckt&quot;);</span>
+<span class="nc" id="L235">				MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
+			}
+<span class="nc" id="L237">			return false;</span>
+		}
+
+	}
+
+	public void onRouteChange(final RouteInfo currentRoute, Context context) {
+
+<span class="nc bnc" id="L244" title="All 2 branches missed.">		if (currentRoute != null) {</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">			if (layout != null) {</span>
+				// lastKnownRoute = currentRoute;
+<span class="nc" id="L247">				layout.removeAllViews();</span>
+
+<span class="nc" id="L249">				Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L250">				Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L251">						.getDefaultDisplay();</span>
+<span class="nc" id="L252">				Point size = new Point();</span>
+<span class="nc" id="L253">				display.getSize(size);</span>
+
+				// set layout margins for Text
+<span class="nc" id="L256">				LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L257">						3 * size.x / 5, LinearLayout.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L258">				myParams.setMargins(0, 10, 0, 0);</span>
+
+				// set layout margins for delete bu tton
+				// TODO: größe des delete buttons generisch an text größe
+				// anpassen
+<span class="nc" id="L263">				LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L264">						size.x / 5, 135);</span>
+<span class="nc" id="L265">				deleteParams.setMargins(0, 10, 0, 0);</span>
+
+				// set layout margins for delete bu tton
+				// TODO: größe des delete buttons generisch an text größe
+				// anpassen
+<span class="nc" id="L270">				LinearLayout.LayoutParams saveFavParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L271">						size.x / 5, 135);</span>
+<span class="nc" id="L272">				saveFavParams.setMargins(0, 10, 0, 0);</span>
+
+<span class="nc bnc" id="L274" title="All 2 branches missed.">				for (Waypoint value : currentRoute.getWaypoints()) {</span>
+<span class="nc" id="L275">					LinearLayout waypoint = new LinearLayout(getActivity());</span>
+<span class="nc" id="L276">					waypoint.setOrientation(LinearLayout.HORIZONTAL);</span>
+<span class="nc" id="L277">					TextView waypointText = new TextView(context);</span>
+<span class="nc" id="L278">					ImageButton delete = new ImageButton(getActivity());</span>
+<span class="nc" id="L279">					delete.setImageResource(R.drawable.delete);</span>
+<span class="nc" id="L280">					ImageButton saveFav = new ImageButton(getActivity());</span>
+<span class="nc" id="L281">					saveFav.setImageResource(R.drawable.favorite);</span>
+<span class="nc" id="L282">					Log.d(&quot;routingView: &quot;,</span>
+<span class="nc" id="L283">							&quot; &quot; + value.getName() + &quot; &quot; + value.getId());</span>
+<span class="nc" id="L284">					waypointText.setText(value.getName() + &quot; &quot; + value.getId());</span>
+					// TODO TextSize relativieren
+<span class="nc" id="L286">					waypointText.setTextSize(30);</span>
+<span class="nc" id="L287">					delete.setLayoutParams(deleteParams);</span>
+<span class="nc" id="L288">					waypointText.setLayoutParams(myParams);</span>
+<span class="nc" id="L289">					waypointText.setBackgroundColor(MapGen.defaultBackground);</span>
+<span class="nc" id="L290">					delete.setOnTouchListener(new WaypointDeleteTouch(value,</span>
+<span class="nc" id="L291">							delete));</span>
+<span class="nc" id="L292">					saveFav.setOnTouchListener(new WaypointSaveTouch(value,</span>
+<span class="nc" id="L293">							saveFav));</span>
+<span class="nc" id="L294">					waypoint.addView(waypointText);</span>
+<span class="nc" id="L295">					waypoint.addView(delete);</span>
+<span class="nc" id="L296">					waypoint.addView(saveFav);</span>
+<span class="nc" id="L297">					layout.addView(waypoint);</span>
+				}
+<span class="nc" id="L299">			} else {</span>
+<span class="nc" id="L300">				Log.d(TAG_PULLUP_CONTENT, &quot;route ist null&quot;);</span>
+			}
+		}
+<span class="nc" id="L303">	}</span>
+
+<span class="nc" id="L305">	private class FavoriteNameActionListener implements OnEditorActionListener {</span>
+
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+<span class="nc bnc" id="L308" title="All 2 branches missed.">			if (v.equals(favoriteName)) {</span>
+<span class="nc" id="L309">				Log.d(TAG_PULLUP_CONTENT, &quot;Ein name wurde eingegeben&quot;);</span>
+				// TODO: ansicht wechselt in die liste der !!!!favorisierten
+				// routen!!!!
+<span class="nc" id="L312">				String checkString = v.getText().toString()</span>
+<span class="nc" id="L313">						.replaceAll(&quot; &quot;, null);</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">				if (!checkString.isEmpty()) {</span>
+<span class="nc" id="L315">					RouteController.getInstance().addRouteToFavorites(</span>
+<span class="nc" id="L316">							v.getText().toString());</span>
+<span class="nc" id="L317">					favoriteName.setVisibility(View.GONE);</span>
+<span class="nc" id="L318">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L319">							.changeView(PullUpView.CONTENT_FAVORITE);</span>
+				}
+			}
+<span class="nc" id="L322">			return false;</span>
+		}
+	}
+
+	private class WaypointSaveTouch implements OnTouchListener {
+
+		private Waypoint value;
+		private View view;
+
+<span class="nc" id="L331">		public WaypointSaveTouch(Waypoint value, View view) {</span>
+<span class="nc" id="L332">			this.value = value;</span>
+<span class="nc" id="L333">			this.view = view;</span>
+<span class="nc" id="L334">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L337" title="All 4 branches missed.">			if (v.equals(view) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L338">				Log.d(TAG_PULLUP_CONTENT, &quot;save waypoint gedrückt&quot;);</span>
+<span class="nc" id="L339">				favoriteName</span>
+<span class="nc" id="L340">						.setOnEditorActionListener(new FavoriteNameForWaypointsActionListener(</span>
+<span class="nc" id="L341">								value));</span>
+<span class="nc" id="L342">				favoriteName.setVisibility(View.VISIBLE);</span>
+			}
+<span class="nc" id="L344">			return false;</span>
+		}
+	}
+
+	private class FavoriteNameForWaypointsActionListener implements
+			OnEditorActionListener {
+
+		Waypoint value;
+
+<span class="nc" id="L353">		public FavoriteNameForWaypointsActionListener(Waypoint value) {</span>
+<span class="nc" id="L354">			this.value = value;</span>
+<span class="nc" id="L355">		}</span>
+
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+<span class="nc bnc" id="L358" title="All 2 branches missed.">			if (v.equals(favoriteName)) {</span>
+<span class="nc" id="L359">				Log.d(TAG_PULLUP_CONTENT, &quot;Ein name wurde eingegeben&quot;);</span>
+				// TODO: ansicht wechselt in die liste der !!!!favorisierten
+				// pois!!!!
+				// RouteController.getInstance().addLocationToFavorites(value,
+				// name);
+<span class="nc" id="L364">				String checkString = v.getText().toString()</span>
+<span class="nc" id="L365">						.replaceAll(&quot; &quot;, null);</span>
+<span class="nc bnc" id="L366" title="All 2 branches missed.">				if (!checkString.isEmpty()) {</span>
+<span class="nc" id="L367">					RouteController.getInstance().addLocationToFavorites(</span>
+<span class="nc" id="L368">							new Location(value.getLatitude(),</span>
+<span class="nc" id="L369">									value.getLongitude(), v.getText()</span>
+<span class="nc" id="L370">											.toString()),</span>
+<span class="nc" id="L371">							v.getText().toString());</span>
+<span class="nc" id="L372">					favoriteName.setVisibility(View.GONE);</span>
+<span class="nc" id="L373">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L374">							.changeView(PullUpView.CONTENT_FAVORITE);</span>
+				}
+			}
+<span class="nc" id="L377">			return false;</span>
+		}
+	}
+
+	private class WaypointDeleteTouch implements OnTouchListener {
+
+		private Waypoint value;
+		private View view;
+
+<span class="nc" id="L386">		public WaypointDeleteTouch(Waypoint value, View view) {</span>
+<span class="nc" id="L387">			this.value = value;</span>
+<span class="nc" id="L388">			this.view = view;</span>
+<span class="nc" id="L389">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L392" title="All 4 branches missed.">			if (v.equals(view) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L393">				Log.d(TAG_PULLUP_CONTENT, &quot;delete waypoint gedrückt&quot;);</span>
+
+				// dialog erstellen
+<span class="nc" id="L396">				AlertDialog.Builder alertDialog = new AlertDialog.Builder(</span>
+<span class="nc" id="L397">						getActivity());</span>
+<span class="nc" id="L398">				alertDialog.setTitle(R.string.delete_dialog_header);</span>
+<span class="nc" id="L399">				alertDialog.setMessage(R.string.delete_dialog);</span>
+<span class="nc" id="L400">				alertDialog.setPositiveButton(&quot;Yes&quot;,</span>
+<span class="nc" id="L401">						new DialogInterface.OnClickListener() {</span>
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO: metho zum löschen eines bestimmten
+								// wegpunktes
+								// RouteController.getInstance().
+<span class="nc" id="L406">							}</span>
+						});
+<span class="nc" id="L408">				alertDialog.setNegativeButton(&quot;No&quot;,</span>
+<span class="nc" id="L409">						new DialogInterface.OnClickListener() {</span>
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+<span class="nc" id="L413">							}</span>
+						});
+<span class="nc" id="L415">				alertDialog.show();</span>
+			}
+<span class="nc" id="L417">			return false;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

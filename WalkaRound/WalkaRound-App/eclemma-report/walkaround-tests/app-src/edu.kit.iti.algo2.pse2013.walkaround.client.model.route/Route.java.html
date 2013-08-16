@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Route.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">Route.java</span></div><h1>Route.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;</span>
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+
+<span class="pc bpc" id="L11" title="1 of 2 branches missed.">public class Route implements RouteInfo {</span>
+
+<span class="fc" id="L13">	private static String TAG_ROUTE = Route.class.getSimpleName();</span>
+
+	private String name;
+	private Waypoint activeWaypoint;
+	private LinkedList&lt;Coordinate&gt; routeCoordinates;
+	private RouteProcessing routeProcessor;
+
+	/**
+	 *
+	 */
+<span class="fc" id="L23">	public Route(LinkedList&lt;Coordinate&gt; coordsOfNewRoute) {</span>
+<span class="fc" id="L24">		Log.d(TAG_ROUTE, &quot;Route Constructor&quot;);</span>
+<span class="fc" id="L25">		this.routeCoordinates = coordsOfNewRoute;</span>
+<span class="fc" id="L26">		this.activeWaypoint = null;</span>
+<span class="fc" id="L27">		this.name = &quot;&quot;;</span>
+<span class="fc" id="L28">		this.routeProcessor = RouteProcessing.getInstance();</span>
+<span class="fc" id="L29">	}</span>
+
+
+
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	public boolean setActiveWaypoint(int id) {
+<span class="nc" id="L39">		Log.d(TAG_ROUTE, &quot;setActiveWaypoint(id)&quot;);</span>
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		for (Waypoint wp : this.getWaypoints()) {</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">			if (wp.getId() == id) {</span>
+<span class="nc" id="L43">				this.setActiveWaypoint(wp);</span>
+<span class="nc" id="L44">				return true;</span>
+			}
+		}
+<span class="nc" id="L47">		return false;</span>
+	}
+
+	/**
+	 *
+	 */
+	public boolean setActiveWaypoint(Waypoint newActiveWP) {
+<span class="nc" id="L54">		Log.d(TAG_ROUTE, &quot;setActiveWaypoint(Waypoint)&quot;);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if (this.containsWaypoint(newActiveWP)) {</span>
+<span class="nc" id="L56">			this.activeWaypoint = newActiveWP;</span>
+<span class="nc" id="L57">			return true;</span>
+		}
+<span class="nc" id="L59">		return false;</span>
+	}
+
+	/**
+	 *
+	 */
+	public void resetActiveWaypoint() {
+<span class="nc" id="L66">		Log.d(TAG_ROUTE, &quot;resetActiveWaypoint()&quot;);</span>
+<span class="nc" id="L67">		this.activeWaypoint = null;</span>
+<span class="nc" id="L68">	}</span>
+
+	/**
+	 * Moves the coordinate represented by the active waypoint to the given
+	 * waypoint-position within the route.
+	 */
+	public void moveActiveWaypointInOrder(int newPos) {
+<span class="nc" id="L75">		Log.d(TAG_ROUTE, &quot;moveActiveWaypointInOrder(&quot; + newPos + &quot;)&quot;);</span>
+
+<span class="nc" id="L77">		LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
+<span class="nc" id="L78">		Waypoint activeWaypoint = this.activeWaypoint;</span>
+
+		// TODO: bestimme vorherigen und nächsten WP an neuer Position
+
+<span class="nc bnc" id="L82" title="All 6 branches missed.">		assert (newPos &gt;= 0 &amp;&amp; newPos &lt;= waypoints.size());</span>
+
+<span class="nc" id="L84">		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);</span>
+<span class="nc" id="L85">		waypoints.add(newPos, activeWaypoint);</span>
+<span class="nc" id="L86">		Waypoint nextWaypoint = this.getNextWaypoint(newPos);</span>
+
+<span class="nc" id="L88">		this.deletePathBetweenTwoWaypoints(previousWaypoint, nextWaypoint);</span>
+<span class="nc" id="L89">		this.routeCoordinates.add(</span>
+<span class="nc" id="L90">				this.routeCoordinates.indexOf(previousWaypoint) + 1,</span>
+<span class="nc" id="L91">				activeWaypoint);</span>
+
+<span class="nc" id="L93">		this.deleteActiveWaypoint();</span>
+
+		// this.computeShortestPath(coordinate1, coordinate2)
+
+		// this.addRouteBetweenTwoCoords(route, one, two)
+
+		// Füge den aktiven WP an der übergebenen Position in die Route ein.
+
+<span class="nc" id="L101">		this.setActiveWaypoint(activeWaypoint);</span>
+<span class="nc" id="L102">		this.cleanRouteOfDuplicateCoordinatePairs();</span>
+<span class="nc" id="L103">	}</span>
+
+	/**
+	 * Adds a new waypoint at the given coordinate to the end of the route.
+	 */
+	public void addWaypoint(Waypoint w) {
+<span class="nc" id="L109">		Log.d(TAG_ROUTE, String.format(&quot;addWaypoint(%s) METHOD START&quot;, w.toString()));</span>
+<span class="nc" id="L110">		Log.d(TAG_ROUTE, String.format(&quot;addWaypoint(%s) to route with Coordinates&quot;, w, this.routeCoordinates.size()));</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		if (this.routeCoordinates.size() != 0) {</span>
+<span class="nc" id="L112">			Log.d(TAG_ROUTE, String.format(&quot;addWaypoint(%s) -&gt; computing shortest path&quot;, w.toString()));</span>
+			RouteInfo routeExtension;
+<span class="nc" id="L114">			routeExtension = this.computeShortestPath(this.getEnd(), w);</span>
+
+<span class="nc" id="L116">			Log.d(TAG_ROUTE, String.format(&quot;addWaypoint(%s) -&gt; addingRoute with %d Coordinates&quot;,</span>
+<span class="nc" id="L117">					w.toString(), routeExtension.getCoordinates().size()));</span>
+<span class="nc" id="L118">			this.addRoute(routeExtension);</span>
+<span class="nc" id="L119">		} else {</span>
+<span class="nc" id="L120">			this.routeCoordinates.add(w);</span>
+		}
+
+<span class="nc" id="L123">		this.setActiveWaypoint(w);</span>
+<span class="nc" id="L124">		this.cleanRouteOfDuplicateCoordinatePairs();</span>
+<span class="nc" id="L125">		Log.d(TAG_ROUTE, String.format(&quot;addWaypoint(%s) - new size of route: %d&quot;, w.toString(), this.routeCoordinates.size()));</span>
+<span class="nc" id="L126">		Log.d(TAG_ROUTE, String.format(&quot;addWaypoint(%s) METHOD END&quot;, w.toString()));</span>
+<span class="nc" id="L127">	}</span>
+
+	/**
+	 *
+	 */
+	public void addRoundtripAtActiveWaypoint(int profile, int length) {
+<span class="nc" id="L133">		Log.d(TAG_ROUTE, &quot;addRoundtripAtActiveWaypoint(profile, length()&quot;);</span>
+		RouteInfo newRoundtrip;
+		try {
+<span class="nc" id="L136">			newRoundtrip = this.routeProcessor.computeRoundtrip(</span>
+<span class="nc" id="L137">					this.getActiveWaypoint(), profile, length);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">			if (newRoundtrip != null) {</span>
+<span class="nc" id="L139">				this.addRoute(newRoundtrip);</span>
+			}
+<span class="nc" id="L141">		} catch (RouteProcessingException e) {</span>
+<span class="nc" id="L142">			e.printStackTrace();</span>
+<span class="nc" id="L143">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L144">			e.printStackTrace();</span>
+<span class="nc" id="L145">		} catch (IllegalArgumentException ille) {</span>
+<span class="nc" id="L146">			Log.d(TAG_ROUTE, &quot;coordinate 1 and coordinate 2 must be provided&quot;);</span>
+		}
+<span class="nc" id="L148">	}</span>
+
+	/**
+	 * Adds the given RouteInfo to the end of the route.
+	 */
+	public void addRoute(RouteInfo newRoute) {
+<span class="nc" id="L154">		Log.d(TAG_ROUTE, &quot;addRoute(RouteInfo) METHOD START&quot;);</span>
+<span class="nc" id="L155">		Log.d(TAG_ROUTE, &quot;addRoute(RouteInfo) adding route with the following coordinates: &quot; + newRoute);</span>
+
+<span class="nc" id="L157">		Iterator&lt;Coordinate&gt; newRouteCoordsIter = newRoute.getCoordinates().iterator();</span>
+
+<span class="nc bnc" id="L159" title="All 4 branches missed.">		if (this.getEnd() != null &amp;&amp; !this.getEnd().equals(newRoute.getStart())) {</span>
+<span class="nc" id="L160">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L161">					&quot;intermediate path has to be computed. Current Route end: &quot;</span>
+<span class="nc" id="L162">							+ this.getEnd() + &quot;, new Route start&quot;</span>
+<span class="nc" id="L163">							+ newRoute.getStart());</span>
+<span class="nc" id="L164">			Log.d(TAG_ROUTE, &quot;addRoute(RouteInfo) -&gt; computing shortest path&quot;);</span>
+<span class="nc" id="L165">			this.computeShortestPath(this.getEnd(), newRoute.getStart());</span>
+		}
+
+<span class="nc" id="L168">		newRouteCoordsIter.next();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">		while (newRouteCoordsIter.hasNext()) {</span>
+<span class="nc" id="L170">			this.routeCoordinates.addLast(newRouteCoordsIter.next());</span>
+		}
+<span class="nc" id="L172">		this.cleanRouteOfDuplicateCoordinatePairs();</span>
+<span class="nc" id="L173">	}</span>
+
+	/**
+	 * Moves the active waypoint to the position of the given coordinate.
+	 */
+	public void moveActiveWaypoint(final Coordinate coord) {
+<span class="nc" id="L179">		Log.d(TAG_ROUTE, &quot;moveActiveWaypoint(Coordinate &quot; + coord</span>
+<span class="nc" id="L180">				+ &quot;) METHOD START &quot;);</span>
+
+		//TODO:
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		if (this.activeWaypoint != null) {</span>
+<span class="nc" id="L184">			Log.d(TAG_ROUTE, &quot;moveActiveWaypoint(Coordinate) Active Waypoint is &quot;</span>
+<span class="nc" id="L185">					+ this.activeWaypoint.toString());</span>
+<span class="nc" id="L186">			LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
+<span class="nc" id="L187">			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());</span>
+<span class="nc" id="L188">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L189">					&quot;moveActiveWaypoint(coord) Active Waypoint is Nr. &quot;</span>
+<span class="nc" id="L190">							+ (indexOfActiveWaypoint + 1) + &quot; of &quot;</span>
+<span class="nc" id="L191">							+ waypoints.size() + &quot; Waypoints in route.&quot;);</span>
+
+<span class="nc" id="L193">			final Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);</span>
+<span class="nc" id="L194">			final Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);</span>
+
+<span class="nc" id="L196">			final Waypoint activeWP = this.activeWaypoint;</span>
+<span class="nc" id="L197">			final Route tempCurrentRoute = this;</span>
+
+<span class="nc bnc" id="L199" title="All 2 branches missed.">			if (beforeActive != null) {</span>
+<span class="nc" id="L200">				Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L201">						&quot;moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. &quot;</span>
+<span class="nc" id="L202">								+ (waypoints.indexOf(beforeActive) + 1) + &quot; / &quot;</span>
+<span class="nc" id="L203">								+ waypoints.size() + &quot; in route&quot;);</span>
+
+<span class="nc" id="L205">				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);</span>
+
+<span class="nc" id="L207">				Thread pathCalculator = new Thread (new Runnable() {</span>
+					public void run() {
+<span class="nc" id="L209">						Log.d(TAG_ROUTE, &quot;Thread.run() in moveActiveWaypoint(Coordinate)&quot;);</span>
+						RouteInfo newRouteBeforeActiveWaypoint;
+
+<span class="nc" id="L212">						newRouteBeforeActiveWaypoint = tempCurrentRoute.computeShortestPath(beforeActive, coord);</span>
+<span class="nc" id="L213">						tempCurrentRoute.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, activeWP);</span>
+
+<span class="nc" id="L215">					}</span>
+				});
+<span class="nc" id="L217">				pathCalculator.start();</span>
+			}
+
+<span class="nc bnc" id="L220" title="All 2 branches missed.">			if (afterActive != null) {</span>
+<span class="nc" id="L221">				Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L222">						&quot;moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. &quot;</span>
+<span class="nc" id="L223">								+ (waypoints.indexOf(afterActive) + 1) + &quot; / &quot;</span>
+<span class="nc" id="L224">								+ waypoints.size() + &quot; in route&quot;);</span>
+
+<span class="nc" id="L226">				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);</span>
+
+<span class="nc" id="L228">				Thread pathCalculator = new Thread (new Runnable() {</span>
+					public void run() {
+<span class="nc" id="L230">						Log.d(TAG_ROUTE, &quot;Thread.run() in moveActiveWaypoint(Coordinate)&quot;);</span>
+						RouteInfo newRoutePastActiveWaypoint;
+
+<span class="nc" id="L233">						newRoutePastActiveWaypoint = tempCurrentRoute.computeShortestPath(coord, afterActive);</span>
+<span class="nc" id="L234">						tempCurrentRoute.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);</span>
+
+<span class="nc" id="L236">					}</span>
+				});
+<span class="nc" id="L238">				pathCalculator.start();</span>
+			}
+
+<span class="nc" id="L241">			this.activeWaypoint.setLongitude(coord.getLongitude());</span>
+<span class="nc" id="L242">			this.activeWaypoint.setLatitude(coord.getLatitude());</span>
+
+		}
+
+<span class="nc" id="L246">		this.cleanRouteOfDuplicateCoordinatePairs();</span>
+<span class="nc" id="L247">	}</span>
+
+	public void deleteActiveWaypoint() {
+<span class="nc" id="L250">		Log.d(TAG_ROUTE, &quot;deleteActiveWaypoint() METHOD START&quot;);</span>
+<span class="nc" id="L251">		int indexOfActiveWaypoint = this.getWaypoints().indexOf(</span>
+<span class="nc" id="L252">				this.getActiveWaypoint());</span>
+<span class="nc" id="L253">		Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);</span>
+<span class="nc" id="L254">		Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);</span>
+<span class="nc" id="L255">		Log.d(TAG_ROUTE, &quot;deleteActiveWaypoint(coord) Active Waypoint is Nr. &quot;</span>
+<span class="nc" id="L256">				+ (indexOfActiveWaypoint + 1) + &quot; of &quot;</span>
+<span class="nc" id="L257">				+ this.getWaypoints().size() + &quot; Waypoints in route.&quot;);</span>
+<span class="nc" id="L258">		Log.d(TAG_ROUTE, &quot;deleteActiveWaypoint() beforeActive is &quot;</span>
+<span class="nc" id="L259">				+ beforeActive + &quot;, afterActive is &quot; + afterActive);</span>
+
+<span class="nc bnc" id="L261" title="All 4 branches missed.">		if (beforeActive == null &amp;&amp; afterActive == null) {</span>
+<span class="nc" id="L262">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L263">					&quot;deleteActiveWaypoint() case beforeActive == null &amp;&amp; afterActive == null&quot;);</span>
+<span class="nc" id="L264">			this.resetRoute();</span>
+<span class="nc bnc" id="L265" title="All 4 branches missed.">		} else if (beforeActive == null &amp;&amp; afterActive != null) {</span>
+<span class="nc" id="L266">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L267">					&quot;deleteActiveWaypoint() case beforeActive == null &amp;&amp; afterActive != null&quot;);</span>
+<span class="nc" id="L268">			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);</span>
+<span class="nc" id="L269">			this.routeCoordinates.remove(this.activeWaypoint);</span>
+<span class="nc bnc" id="L270" title="All 4 branches missed.">		} else if (beforeActive != null &amp;&amp; afterActive == null) {</span>
+<span class="nc" id="L271">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L272">					&quot;deleteActiveWaypoint() case beforeActive != null &amp;&amp; afterActive == null&quot;);</span>
+<span class="nc" id="L273">			this.deletePathBetweenTwoWaypoints(beforeActive,</span>
+<span class="nc" id="L274">					this.activeWaypoint);</span>
+<span class="nc" id="L275">			this.routeCoordinates.remove(this.activeWaypoint);</span>
+<span class="nc bnc" id="L276" title="All 4 branches missed.">		} else if (beforeActive != null &amp;&amp; afterActive != null) {</span>
+<span class="nc" id="L277">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L278">					&quot;deleteActiveWaypoint() case beforeActive != null &amp;&amp; afterActive != null&quot;);</span>
+<span class="nc" id="L279">			this.deletePathBetweenTwoWaypoints(beforeActive,</span>
+<span class="nc" id="L280">					this.activeWaypoint);</span>
+<span class="nc" id="L281">			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);</span>
+<span class="nc" id="L282">			this.routeCoordinates.remove(this.activeWaypoint);</span>
+
+			RouteInfo route;
+
+<span class="nc" id="L286">			route = this.computeShortestPath(beforeActive, afterActive);</span>
+<span class="nc" id="L287">			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);</span>
+		}
+<span class="nc" id="L289">		this.resetActiveWaypoint();</span>
+<span class="nc" id="L290">		this.cleanRouteOfDuplicateCoordinatePairs();</span>
+<span class="nc" id="L291">	}</span>
+
+	/*
+	 * Inverts all Coordinates in the route.
+	 */
+	public void invertRoute() {
+<span class="nc" id="L297">		Log.d(TAG_ROUTE, &quot;invertRoute()&quot;);</span>
+<span class="nc" id="L298">		LinkedList&lt;Coordinate&gt; revertedRoute = new LinkedList&lt;Coordinate&gt;();</span>
+
+<span class="nc" id="L300">		Iterator&lt;Coordinate&gt; routeCoordsDecIter = this.routeCoordinates.descendingIterator();</span>
+
+<span class="nc bnc" id="L302" title="All 2 branches missed.">		while (routeCoordsDecIter.hasNext()) {</span>
+<span class="nc" id="L303">			revertedRoute.add(routeCoordsDecIter.next());</span>
+		}
+
+<span class="nc" id="L306">		this.routeCoordinates = revertedRoute;</span>
+<span class="nc" id="L307">	}</span>
+
+	/*
+	 *
+	 */
+	public void resetRoute() {
+<span class="nc" id="L313">		Log.d(TAG_ROUTE, &quot;resetRoute()&quot;);</span>
+<span class="nc" id="L314">		this.routeCoordinates = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L315">	}</span>
+
+	/*
+	 *
+	 */
+	public void optimizeRoute() {
+<span class="nc" id="L321">		Log.d(TAG_ROUTE, &quot;optimizeRoute()&quot;);</span>
+		RouteInfo optimizedRoute;
+		try {
+<span class="nc" id="L324">			optimizedRoute = this.routeProcessor</span>
+<span class="nc" id="L325">					.computeOptimizedRoute((RouteInfo) this);</span>
+<span class="nc" id="L326">			this.routeCoordinates = optimizedRoute.getCoordinates();</span>
+<span class="nc" id="L327">		} catch (RouteProcessingException e) {</span>
+<span class="nc" id="L328">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L330">	}</span>
+
+	public String getName() {
+<span class="nc" id="L333">		Log.d(TAG_ROUTE, &quot;getName()&quot;);</span>
+<span class="nc" id="L334">		return this.name;</span>
+	}
+
+	public Waypoint getStart() {
+<span class="nc" id="L338">		Log.d(TAG_ROUTE, &quot;getStart()&quot;);</span>
+<span class="nc bnc" id="L339" title="All 2 branches missed.">		if (this.routeCoordinates.size() &gt; 0) {</span>
+<span class="nc" id="L340">			return this.getWaypoints().getFirst();</span>
+		}
+<span class="nc" id="L342">		return null;</span>
+	}
+
+	public Waypoint getEnd() {
+<span class="nc" id="L346">		LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
+<span class="nc" id="L347">		Log.d(TAG_ROUTE, &quot;getEnd() on Waypoint list with size &quot; + waypoints.size());</span>
+<span class="nc bnc" id="L348" title="All 2 branches missed.">		if (waypoints.size() &gt; 0) {</span>
+<span class="nc" id="L349">			return waypoints.getLast();</span>
+		}
+<span class="nc" id="L351">		return null;</span>
+	}
+
+	public Waypoint getActiveWaypoint() {
+<span class="fc" id="L355">		Log.d(TAG_ROUTE, &quot;getActiveWaypoint()&quot;);</span>
+<span class="fc" id="L356">		return this.activeWaypoint;</span>
+	}
+
+	public LinkedList&lt;Waypoint&gt; getWaypoints() {
+<span class="fc" id="L360">		Log.d(TAG_ROUTE, &quot;getWaypoints()&quot;);</span>
+<span class="fc" id="L361">		LinkedList&lt;Waypoint&gt; waypoints = new LinkedList&lt;Waypoint&gt;();</span>
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">		for (Coordinate coord : this.routeCoordinates) {</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">			if (coord instanceof Waypoint) {</span>
+<span class="nc" id="L364">				waypoints.add((Waypoint) coord);</span>
+			}
+		}
+<span class="fc" id="L367">		return waypoints;</span>
+	}
+
+	public boolean containsWaypoint(Waypoint wp) {
+<span class="nc" id="L371">		Log.d(TAG_ROUTE, &quot;containsWaypoint(Waypoint)&quot;);</span>
+<span class="nc bnc" id="L372" title="All 2 branches missed.">		if (this.getWaypoints().contains(wp)) {</span>
+<span class="nc" id="L373">			return true;</span>
+		}
+<span class="nc" id="L375">		return false;</span>
+	}
+
+	public LinkedList&lt;Coordinate&gt; getCoordinates() {
+<span class="fc" id="L379">		Log.d(TAG_ROUTE, &quot;getCoordinates()&quot;);</span>
+<span class="fc" id="L380">		return this.routeCoordinates;</span>
+	}
+
+	/**
+	 *
+	 * @param waypointNr
+	 * @return
+	 */
+	private Waypoint getPreviousWaypoint(int waypointNr) {
+<span class="nc" id="L389">		Log.d(TAG_ROUTE, &quot;getPreviousWaypoint(int &quot; + waypointNr + &quot;)&quot;);</span>
+<span class="nc" id="L390">		LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
+<span class="nc bnc" id="L391" title="All 2 branches missed.">		if (waypointNr == 0) {</span>
+<span class="nc" id="L392">			return null;</span>
+		} else {
+<span class="nc" id="L394">			return (waypoints.get(waypointNr - 1));</span>
+		}
+	}
+
+	/**
+	 *
+	 * @param waypointNr
+	 * @return
+	 */
+	private Waypoint getNextWaypoint(int waypointNr) {
+<span class="nc" id="L404">		Log.d(TAG_ROUTE, &quot;getNextNextWaypoint(int &quot; + waypointNr + &quot;)&quot;);</span>
+<span class="nc" id="L405">		LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
+<span class="nc bnc" id="L406" title="All 2 branches missed.">		if (waypointNr == (waypoints.size() - 1)) {</span>
+<span class="nc" id="L407">			return null;</span>
+		} else {
+<span class="nc" id="L409">			return (waypoints.get(waypointNr + 1));</span>
+		}
+	}
+
+	/**
+	 *
+	 * @param one
+	 * @param two
+	 * @return
+	 */
+	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
+<span class="nc" id="L420">		Log.d(TAG_ROUTE, &quot;deletePathBetweenTwoWaypoints(Waypoint &quot; + one</span>
+<span class="nc" id="L421">				+ &quot;, Waypoint &quot; + two + &quot;) METHOD START&quot;);</span>
+<span class="nc" id="L422">		Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L423">				&quot;deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: &quot;</span>
+<span class="nc" id="L424">						+ this.routeCoordinates.size());</span>
+<span class="nc" id="L425">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
+
+<span class="nc" id="L427">		Coordinate tempCoord = null;</span>
+<span class="nc bnc" id="L428" title="All 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !one.equals(tempCoord)) {</span>
+<span class="nc" id="L429">			tempCoord = routeCoordsIter.next();</span>
+		}
+<span class="nc" id="L431">		tempCoord = routeCoordsIter.next();</span>
+
+<span class="nc bnc" id="L433" title="All 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !two.equals(tempCoord)) {</span>
+<span class="nc" id="L434">			routeCoordsIter.remove();</span>
+<span class="nc" id="L435">			tempCoord = routeCoordsIter.next();</span>
+		}
+<span class="nc" id="L437">		Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L438">				&quot;deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: &quot;</span>
+<span class="nc" id="L439">						+ this.routeCoordinates.size());</span>
+<span class="nc" id="L440">		return true;</span>
+	}
+
+	/**
+	 *
+	 * @param route
+	 * @param one
+	 * @param two
+	 * @return
+	 */
+	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one,
+			Coordinate two) {
+<span class="nc" id="L452">		Log.d(TAG_ROUTE, &quot;addRouteBetweenTwoCoords(RouteInfo, Coordinate : &quot;</span>
+<span class="nc" id="L453">				+ one + &quot;, Coordinate: &quot; + two + &quot;)&quot;);</span>
+<span class="nc" id="L454">		Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L455">				&quot;addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size &quot;</span>
+<span class="nc" id="L456">						+ this.routeCoordinates.size()</span>
+<span class="nc" id="L457">						+ &quot;, adding route size: &quot;</span>
+<span class="nc" id="L458">						+ route.getCoordinates().size());</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates</span>
+<span class="nc bnc" id="L460" title="All 2 branches missed.">				.indexOf(two));</span>
+<span class="nc bnc" id="L461" title="All 6 branches missed.">		assert (route.getStart().equals(one) &amp;&amp; route.getEnd().equals(two));</span>
+<span class="nc" id="L462">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
+
+<span class="nc" id="L464">		Coordinate tempCoord = null;</span>
+<span class="nc bnc" id="L465" title="All 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !one.equals(tempCoord)) {</span>
+<span class="nc" id="L466">			tempCoord = routeCoordsIter.next();</span>
+		}
+
+<span class="nc" id="L469">		LinkedList&lt;Coordinate&gt; bridgingCoords = route.getCoordinates();</span>
+<span class="nc" id="L470">		bridgingCoords.removeFirst();</span>
+<span class="nc" id="L471">		bridgingCoords.removeLast();</span>
+<span class="nc" id="L472">		int indexOfInsertion = this.routeCoordinates.indexOf(one);</span>
+<span class="nc" id="L473">		Log.d(TAG_ROUTE, &quot;size of Route: &quot; + this.routeCoordinates.size()</span>
+<span class="nc" id="L474">				+ &quot;, indexOfInsertion: &quot; + indexOfInsertion</span>
+<span class="nc" id="L475">				+ &quot;, route contains one &quot; + this.routeCoordinates.contains(one));</span>
+
+<span class="nc bnc" id="L477" title="All 2 branches missed.">		for (Coordinate coord : bridgingCoords) {</span>
+<span class="nc" id="L478">			this.routeCoordinates.add(indexOfInsertion, coord);</span>
+<span class="nc" id="L479">			indexOfInsertion++;</span>
+		}
+<span class="nc" id="L481">		Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L482">				&quot;addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: &quot;</span>
+<span class="nc" id="L483">						+ this.routeCoordinates.size());</span>
+
+<span class="nc" id="L485">		return true;</span>
+	}
+
+	/**
+	 *
+	 */
+	private void cleanRouteOfDuplicateCoordinatePairs() {
+<span class="nc" id="L492">		Log.d(TAG_ROUTE, &quot;cleanRouteOfDuplicateCoordinatePairs()&quot;);</span>
+<span class="nc" id="L493">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
+<span class="nc" id="L494">		Coordinate previousCoord = null;</span>
+		Coordinate tempCoord;
+
+<span class="nc bnc" id="L497" title="All 2 branches missed.">		if (routeCoordsIter.hasNext()) {</span>
+<span class="nc" id="L498">			previousCoord = routeCoordsIter.next();</span>
+		}
+
+<span class="nc bnc" id="L501" title="All 2 branches missed.">		while (routeCoordsIter.hasNext()) {</span>
+<span class="nc" id="L502">			tempCoord = routeCoordsIter.next();</span>
+<span class="nc bnc" id="L503" title="All 2 branches missed.">			if (tempCoord.equals(previousCoord)) {</span>
+<span class="nc" id="L504">				routeCoordsIter.remove();</span>
+			}
+<span class="nc" id="L506">			previousCoord = tempCoord;</span>
+		}
+<span class="nc" id="L508">	}</span>
+
+	/**
+	 *
+	 */
+	public String toString() {
+<span class="nc" id="L514">		Log.d(TAG_ROUTE, &quot;toString()&quot;);</span>
+<span class="nc" id="L515">		String output = &quot;&quot;;</span>
+<span class="nc bnc" id="L516" title="All 2 branches missed.">		for (int i = 0; i &lt; this.routeCoordinates.size(); i++) {</span>
+<span class="nc" id="L517">			output += i + &quot;. &quot; + this.routeCoordinates.get(i) + &quot;, &quot;;</span>
+		}
+<span class="nc" id="L519">		return output;</span>
+	}
+
+	@Override
+	public RouteInfo clone() {
+<span class="nc" id="L524">		Log.d(TAG_ROUTE, &quot;clone()&quot;);</span>
+<span class="nc" id="L525">		LinkedList&lt;Coordinate&gt; clonedCoords = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc bnc" id="L526" title="All 2 branches missed.">		for (Coordinate coord : this.routeCoordinates) {</span>
+<span class="nc" id="L527">			clonedCoords.add(coord.clone());</span>
+		}
+<span class="nc" id="L529">		return new Route(clonedCoords);</span>
+	}
+
+	private RouteInfo computeShortestPath(Coordinate start, Coordinate end) {
+<span class="nc" id="L533">		RouteInfo output = null;</span>
+<span class="nc" id="L534">		Log.d(TAG_ROUTE, &quot;computeShortestPath(Start Coordinate: &quot; + start + &quot;, End Coordinate: &quot; + end + &quot;)&quot;);</span>
+		try {
+<span class="nc" id="L536">			output = this.routeProcessor.computeShortestPath(start, end);</span>
+<span class="nc" id="L537">			Log.d(TAG_ROUTE, &quot;computeShortestPath() returning Route: &quot; + output);</span>
+<span class="nc" id="L538">		} catch (Exception e) {</span>
+<span class="nc" id="L539">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L540">					&quot;computeShortestPath() - RETURN TO SENDER, ADDRESS UNKNOWN.&quot;);</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">			if (output == null) {</span>
+<span class="nc" id="L542">				LinkedList&lt;Coordinate&gt; coordinatesOfOutputRoute = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L543">				coordinatesOfOutputRoute.add(start);</span>
+<span class="nc" id="L544">				coordinatesOfOutputRoute.add(end);</span>
+<span class="nc" id="L545">				output = (RouteInfo) new Route(coordinatesOfOutputRoute);</span>
+			}
+<span class="nc" id="L547">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L549">		return output;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

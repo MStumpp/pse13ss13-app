@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>HeadUpView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.headup</a> &gt; <span class="el_source">HeadUpView.java</span></div><h1>HeadUpView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.headup;
+
+import android.app.Fragment;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
+
+/**
+ * Diese Klasse ist für die Anzeige der sogenannten HeadUp Elemente zuständig.
+ *
+ * Darunter fallen: Option Button Vergrößern/ Verkleinern Button Play Button
+ * PlayerLock Button statische Navigationsanzeige
+ *
+ * @author Ludwig Biermann
+ *
+ */
+<span class="nc" id="L26">public class HeadUpView extends Fragment {</span>
+
+<span class="nc" id="L28">	private final static String TAG_HEADUP_VIEW = HeadUpView.class.getSimpleName();</span>
+<span class="nc" id="L29">	private final static String TAG_HEADUP_VIEW_TOUCH = TAG_HEADUP_VIEW + &quot;_touch&quot;;</span>
+
+	private final static int user_lock = R.drawable.user_arrow_lock;
+	private final static int user_unlock = R.drawable.user_arrow_unlock;
+
+	private final static int play = R.drawable.play;
+	private final static int pause = R.drawable.pause;
+
+	private final static boolean defaultLockPosition = true;
+
+	// Mögliche Piktogramme
+<span class="nc" id="L40">	public final static int ARROW_RIGHT = R.drawable.pikto_rechts;</span>
+
+	HeadUpController headUpController;
+
+	// Lock Bilder
+	private Drawable lock;
+	private Drawable unlock;
+	private boolean lockPosition;
+
+	// Steuerelemente
+
+	private ImageView plus;
+	private ImageView minus;
+	private ImageView option;
+	private ImageView userLock;
+
+	// Navigations Elemente
+
+	private ImageView naviControll;
+
+	private TextView naviText;
+	private TextView speed;
+	private TextView wayPassed;
+	private TextView timePassed;
+	private TextView wayToGo;
+	private TextView timeToGo;
+
+	private ImageView pikto;
+
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L70">		super.onCreate(savedInstanceState);</span>
+
+		// -----------------------------------------------
+<span class="nc" id="L73">		Log.d(TAG_HEADUP_VIEW, &quot;Es wird mit dem headUpController verbunden&quot;);</span>
+<span class="nc" id="L74">		HeadUpController.getInstance().setHeadUpView(this);</span>
+<span class="nc" id="L75">		headUpController = HeadUpController.getInstance();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		Log.d(TAG_HEADUP_VIEW, &quot;Controller wurde initialisiert: &quot; + (headUpController != null));</span>
+
+<span class="nc" id="L78">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L79">				.getDefaultDisplay();</span>
+<span class="nc" id="L80">		Point size = new Point();</span>
+<span class="nc" id="L81">		display.getSize(size);</span>
+
+<span class="nc" id="L83">		float height = (size.y - size.y / 10) - 50;</span>
+
+<span class="nc" id="L85">		Log.d(TAG_HEADUP_VIEW, &quot;High of the HeadUP &quot; + height);</span>
+<span class="nc" id="L86">		this.getActivity().findViewById(R.id.headup_container)</span>
+<span class="nc" id="L87">				.getLayoutParams().height = (int) height;</span>
+
+		// -----------------------------------------------
+<span class="nc" id="L90">		Log.d(TAG_HEADUP_VIEW,</span>
+<span class="nc" id="L91">				&quot;Die Views werden den entsprechenden Variablen zugeteilt.&quot;);</span>
+
+<span class="nc" id="L93">		plus = (ImageView) this.getActivity()</span>
+<span class="nc" id="L94">				.findViewById(R.id.headup_lupeplus);</span>
+<span class="nc" id="L95">		minus = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L96">				R.id.headup_lupeminus);</span>
+<span class="nc" id="L97">		option = (ImageView) this.getActivity()</span>
+<span class="nc" id="L98">				.findViewById(R.id.headup_option);</span>
+<span class="nc" id="L99">		userLock = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L100">				R.id.headup_userlock);</span>
+<span class="nc" id="L101">		naviControll = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L102">				R.id.headup_controll);</span>
+<span class="nc" id="L103">		naviText = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L104">				R.id.headup_navitext);</span>
+<span class="nc" id="L105">		speed = (TextView) this.getActivity().findViewById(R.id.headup_speed);</span>
+<span class="nc" id="L106">		wayPassed = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L107">				R.id.headup_waypassed);</span>
+<span class="nc" id="L108">		timePassed = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L109">				R.id.headup_timepassed);</span>
+<span class="nc" id="L110">		wayToGo = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L111">				R.id.headup_waytogo);</span>
+<span class="nc" id="L112">		timeToGo = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L113">				R.id.headup_timetogo);</span>
+
+		// -----------------------------------------------
+<span class="nc" id="L116">		pikto = (ImageView) this.getActivity().findViewById(R.id.headup_pikto);</span>
+
+<span class="nc" id="L118">		Log.d(TAG_HEADUP_VIEW, &quot;View wird angepasst&quot;);</span>
+
+<span class="nc" id="L120">		plus.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L121">		plus.getLayoutParams().height = size.x / 10;</span>
+
+<span class="nc" id="L123">		minus.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L124">		minus.getLayoutParams().height = size.x / 10;</span>
+
+<span class="nc" id="L126">		option.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L127">		option.getLayoutParams().height = size.x / 5;</span>
+
+<span class="nc" id="L129">		userLock.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L130">		userLock.getLayoutParams().height = size.x / 5;</span>
+
+		// Navi Bar
+<span class="nc" id="L133">		naviControll.getLayoutParams().height = size.y / 10;</span>
+<span class="nc" id="L134">		naviText.getLayoutParams().height = size.y / 10;</span>
+<span class="nc" id="L135">		pikto.getLayoutParams().height = size.y / 10;</span>
+
+		// zusatz Text
+<span class="nc" id="L138">		speed.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L139">		wayPassed.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L140">		timePassed.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L141">		wayToGo.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L142">		timeToGo.getLayoutParams().width = size.x / 5;</span>
+
+		// -----------------------------------------------
+<span class="nc" id="L145">		Log.d(TAG_HEADUP_VIEW, &quot;Listener werden hinzugef�gt&quot;);</span>
+
+<span class="nc" id="L147">		plus.setOnTouchListener(new ZoomPlusListener());</span>
+<span class="nc" id="L148">		minus.setOnTouchListener(new ZoomMinusListener());</span>
+
+<span class="nc" id="L150">		option.setOnTouchListener(new OptionListener());</span>
+<span class="nc" id="L151">		userLock.setOnTouchListener(new UserLockListener());</span>
+
+		// anfangs pausiert also nach Play listen
+<span class="nc" id="L154">		naviControll.setOnTouchListener(new NavigationControllListener());</span>
+
+		// -----------------------------------------------
+<span class="nc" id="L157">		Log.d(TAG_HEADUP_VIEW, &quot;initialisiere die Lock Position&quot;);</span>
+<span class="nc" id="L158">		lock = this.getActivity().getResources().getDrawable(user_lock);</span>
+<span class="nc" id="L159">		unlock = this.getActivity().getResources().getDrawable(user_unlock);</span>
+
+<span class="nc" id="L161">		lockPosition = defaultLockPosition;</span>
+
+		//headUpController.toggleUserPositionLock();
+
+		// -----------------------------------------------
+<span class="nc" id="L166">		Log.d(TAG_HEADUP_VIEW, &quot;initialisiere die Navigation Position&quot;);</span>
+		// TODO
+<span class="nc" id="L168">	}</span>
+
+	/**
+	 * zeigt die NavigationsElemente
+	 */
+	public void showNavigationElements() {
+
+		// aktualisiere die Steuerung
+<span class="nc" id="L176">		naviControll.setImageDrawable(this.getActivity().getResources()</span>
+<span class="nc" id="L177">				.getDrawable(pause));</span>
+
+		// zeige Elemente
+<span class="nc" id="L180">		naviText.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L181">		pikto.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L182">		speed.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L183">		wayPassed.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L184">		timePassed.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L185">		wayToGo.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L186">		timeToGo.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L187">	}</span>
+
+	/**
+	 * versteckt die NavigationsElemente
+	 */
+	public void hideNavigationElements() {
+
+		// aktualisiere die Steuerung
+<span class="nc" id="L195">		naviControll.setImageDrawable(this.getActivity().getResources()</span>
+<span class="nc" id="L196">				.getDrawable(play));</span>
+
+		// verstecke Elemente
+<span class="nc" id="L199">		naviText.setVisibility(View.GONE);</span>
+<span class="nc" id="L200">		pikto.setVisibility(View.GONE);</span>
+<span class="nc" id="L201">		speed.setVisibility(View.GONE);</span>
+<span class="nc" id="L202">		wayPassed.setVisibility(View.GONE);</span>
+<span class="nc" id="L203">		timePassed.setVisibility(View.GONE);</span>
+<span class="nc" id="L204">		wayToGo.setVisibility(View.GONE);</span>
+<span class="nc" id="L205">		timeToGo.setVisibility(View.GONE);</span>
+<span class="nc" id="L206">	}</span>
+
+	/**
+	 * �ndert das Piktogramm anhand einer ID
+	 *
+	 * @param id
+	 *            des Piktogramms
+	 */
+	public void updatePiktogram(int id) {
+<span class="nc" id="L215">		this.pikto.setImageDrawable(this.getActivity().getResources()</span>
+<span class="nc" id="L216">				.getDrawable(id));</span>
+<span class="nc" id="L217">	}</span>
+
+	/**
+	 * Updatet den Navigationstext.
+	 *
+	 * @param text
+	 *            neuer Text
+	 */
+	public void updateNavigationsText(String text) {
+		// TODO
+<span class="nc" id="L227">		naviText.setText(text);</span>
+<span class="nc" id="L228">	}</span>
+
+	/**
+	 * Updatet die Geschwindigkeit. Eingabe in m/s
+	 *
+	 * @param speed
+	 *            neue Geschwindigkeit
+	 */
+	public void updateSpeed(double speed) {
+		// TODO
+<span class="nc" id="L238">		this.speed.setText(speed + &quot;m/s&quot;);</span>
+<span class="nc" id="L239">	}</span>
+
+	/**
+	 * Updatet den noch zulaufenden Weg. Eingabe in m
+	 *
+	 * @param waytogo
+	 *            noch zulaufenenden Weg.
+	 */
+	public void updateWayToGo(int way) {
+		// TODO
+<span class="nc" id="L249">		this.wayToGo.setText(way + &quot;m&quot;);</span>
+<span class="nc" id="L250">	}</span>
+
+	/**
+	 * Updatet die gelaufenden Weg Eingabe in m
+	 *
+	 * @param wayPassed
+	 *            gelaufender Weg
+	 */
+	public void updateWayPassed(int way) {
+		// TODO
+<span class="nc" id="L260">		this.wayPassed.setText(way + &quot;m&quot;);</span>
+
+<span class="nc" id="L262">	}</span>
+
+	/**
+	 * Updatet die noch zu laufende Zeit Eingabe in s
+	 *
+	 * @param timeToGo
+	 *            noch zu laufende zeit
+	 */
+	public void updateTimeToGo(double time) {
+		// TODO
+<span class="nc" id="L272">		this.timeToGo.setText(time + &quot;s&quot;);</span>
+<span class="nc" id="L273">	}</span>
+
+	/**
+	 * updatet die vergangene Zeit. Eingabe in s
+	 *
+	 * @param timePassed
+	 *            vergangene Zeit
+	 */
+	public void updateTimePassed(int time) {
+		// TODO
+<span class="nc" id="L283">		this.timePassed.setText(time + &quot;s&quot;);</span>
+<span class="nc" id="L284">	}</span>
+
+	/**
+	 * wechselt zwischen den Ansichts Modi. true Karte ist auf User
+	 * zentriert(default) false Karte ist frei beweglich
+	 *
+	 * @param Modi
+	 */
+	public void setUserPositionLock(boolean status) {
+<span class="nc bnc" id="L293" title="All 2 branches missed.">		if(status){</span>
+<span class="nc" id="L294">			userLock.setImageDrawable(lock);</span>
+<span class="nc" id="L295">			Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;UNLOCK&quot;);</span>
+<span class="nc" id="L296">		} else {</span>
+<span class="nc" id="L297">			userLock.setImageDrawable(unlock);</span>
+<span class="nc" id="L298">			Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;LOCK&quot;);</span>
+		}
+<span class="nc" id="L300">	}</span>
+
+	/**
+	 * Ein Listener der auf eine Optionen Eingabe wartet.
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L308">	private class OptionListener implements OnTouchListener {</span>
+		public boolean onTouch(View view, MotionEvent arg1) {
+<span class="nc bnc" id="L310" title="All 2 branches missed.">			if (view.equals(option)) {</span>
+<span class="nc" id="L311">				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;Optionen werden gestartet&quot;);</span>
+<span class="nc" id="L312">				headUpController.startOption();</span>
+			}
+<span class="nc" id="L314">			return false;</span>
+		}
+
+	}
+
+	/**
+	 * Ein Listener der auf eine Vergrößern Eingabe wartet.
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L325">	private class ZoomPlusListener implements OnTouchListener {</span>
+		public boolean onTouch(View view, MotionEvent arg1) {
+<span class="nc bnc" id="L327" title="All 2 branches missed.">			if (view.equals(plus)) {</span>
+<span class="nc" id="L328">				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;plus i pressed&quot;);</span>
+<span class="nc" id="L329">				headUpController.zoomInOneLevel();</span>
+			}
+<span class="nc" id="L331">			return false;</span>
+		}
+
+	}
+
+	/**
+	 * Ein Listener der auf eine Verkleinern Eingabe wartet.
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L342">	private class ZoomMinusListener implements OnTouchListener {</span>
+		public boolean onTouch(View view, MotionEvent arg1) {
+<span class="nc bnc" id="L344" title="All 2 branches missed.">			if (view.equals(minus)) {</span>
+<span class="nc" id="L345">				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;Minus is pressed&quot;);</span>
+<span class="nc" id="L346">				headUpController.zoomOutOneLevel();</span>
+			}
+<span class="nc" id="L348">			return false;</span>
+		}
+
+	}
+
+	/**
+	 * Ein Listener der die Navigation einblendet oder ausblendet
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L359">	private class NavigationControllListener implements OnTouchListener {</span>
+		public boolean onTouch(View view, MotionEvent arg1) {
+<span class="nc bnc" id="L361" title="All 2 branches missed.">			if (view.equals(naviControll)) {</span>
+<span class="nc" id="L362">				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;Navigation wird aktiviert/deaktiviert&quot;);</span>
+<span class="nc" id="L363">				headUpController.toggleNavigation();</span>
+			}
+<span class="nc" id="L365">			return false;</span>
+		}
+
+	}
+
+
+	/**
+	 * Ein listener der auf eine UserLockEingabe wartet.
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L377">	private class UserLockListener implements OnTouchListener {</span>
+		public boolean onTouch(View view, MotionEvent arg1) {
+<span class="nc bnc" id="L379" title="All 2 branches missed.">			if (view.equals(userLock)) {</span>
+<span class="nc" id="L380">				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;toggle UserLock&quot;);</span>
+<span class="nc" id="L381">				headUpController.toggleUserPositionLock();</span>
+			}
+<span class="nc" id="L383">			return false;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

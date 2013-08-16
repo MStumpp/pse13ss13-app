@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>OptionView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.option</a> &gt; <span class="el_source">OptionView.java</span></div><h1>OptionView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.option;
+
+// Android Library
+import android.app.Fragment;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+// Walkaround Library
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+
+/**
+ * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs
+ * kümmert.
+ *
+ *
+ * Dieses Fragment beöntigt folgende xml Files: #xml.optionen - Das xml File aus
+ * dem automatisch die Grapische Oberfäche entsteht.
+ * #string.options_array - Sprachdatei für Listen
+ * #string.options - Sprachdatei
+ * #layout.options_view
+ * Info: Unter values-de werden die deutschsprachigen Dateien gespeichert.
+ *
+ * Die hier gespeicherten und veränderten Informationen kann man mithilfe dieses
+ * Befehls abrufen:
+ *
+ * import android.preference.PreferenceManager; SharedPreferences sharedPrefs =
+ * PreferenceManager.getDefaultSharedPreferences(this);
+ *
+ * @author Ludwig Biermann
+ *
+ */
+<span class="nc" id="L41">public class OptionView extends PreferenceFragment implements OnSharedPreferenceChangeListener {</span>
+
+<span class="nc" id="L43">	public String TAG_PULLUP_CONTENT = &quot;PULLUP_CONTENT&quot;;</span>
+<span class="nc" id="L44">	private static boolean on = false;</span>
+
+<span class="nc" id="L46">	private int switcher = R.id.pullupOptionSwitcher;</span>
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L50">		super.onCreate(savedInstanceState);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		if(!on){</span>
+<span class="nc" id="L52">		Log.d(TAG_PULLUP_CONTENT, &quot;Create FavoriteView&quot;);</span>
+<span class="nc" id="L53">		on = false;</span>
+<span class="nc" id="L54">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L55">		Log.d(&quot;Options&quot;,</span>
+<span class="nc" id="L56">				&quot;Optionen.xml wird als default Preference Manager ausgef�hrt.&quot;);</span>
+
+<span class="nc" id="L58">		PreferenceManager.setDefaultValues(getActivity(), R.xml.options, false);</span>
+<span class="nc" id="L59">		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);</span>
+<span class="nc" id="L60">		Log.d(&quot;Options&quot;, &quot;Optionen werden gestartet.&quot;);</span>
+<span class="nc" id="L61">		addPreferencesFromResource(R.xml.options);</span>
+		}
+<span class="nc" id="L63">	}</span>
+	
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L67">		super.onDestroy();</span>
+<span class="nc" id="L68">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy OptionView&quot;);</span>
+<span class="nc" id="L69">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+<span class="nc" id="L70">	}</span>
+
+	/**
+	 *
+	 * @param f
+	 * @return
+	 */
+	public boolean equals(Fragment f) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_FAVORITE)) {</span>
+<span class="nc" id="L79">			return true;</span>
+		}
+<span class="nc" id="L81">		return false;</span>
+	}
+
+	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
+
+<span class="nc" id="L86">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

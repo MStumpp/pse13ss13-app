@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay</a> &gt; <span class="el_source">RouteController.java</span></div><h1>RouteController.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;</span>
+
+import java.util.LinkedList;
+
+import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+
+public class RouteController {
+
+<span class="nc" id="L15">	public class Routelistener {</span>
+
+	}
+
+<span class="nc" id="L19">	private static final String TAG = RouteController.class.getSimpleName();</span>
+	private LinkedList&lt;RouteListener&gt; routeListeners;
+	private Route currentRoute;
+	private static Thread routeChanger;
+
+<span class="nc" id="L24">	private static RouteController routeMC;</span>
+
+<span class="nc" id="L26">	private RouteController() {</span>
+<span class="nc" id="L27">		Log.d(TAG, &quot;RouteController Constructor&quot;);</span>
+<span class="nc" id="L28">		this.routeListeners = new LinkedList&lt;RouteListener&gt;();</span>
+<span class="nc" id="L29">		LinkedList&lt;Coordinate&gt; coordinateList = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L30">		this.currentRoute = new Route(coordinateList);</span>
+<span class="nc" id="L31">	}</span>
+
+	public static RouteController getInstance() {
+<span class="nc" id="L34">		Log.d(TAG, &quot;RouteController.getInstance()&quot;);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		if (routeMC == null) {</span>
+<span class="nc" id="L36">			routeMC = new RouteController();</span>
+		}
+<span class="nc" id="L38">		return routeMC;</span>
+	}
+
+	public void registerRouteListener(RouteListener newRL) {
+<span class="nc" id="L42">		Log.d(TAG,</span>
+<span class="nc" id="L43">				&quot;RouteController.registerRouteListener(RouteListener &quot;</span>
+<span class="nc" id="L44">						+ newRL.getClass().getSimpleName() + &quot;)&quot;);</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		if (!this.routeListeners.contains(newRL)) {</span>
+<span class="nc" id="L46">			this.routeListeners.add(newRL);</span>
+		}
+<span class="nc" id="L48">		this.notifyAllRouteListeners();</span>
+<span class="nc" id="L49">	}</span>
+
+	public void unregisterRouteListener(RouteListener formerRL) {
+<span class="nc" id="L52">		Log.d(TAG, &quot;RouteController.unregisterRouteListener(RouteListener &quot;</span>
+<span class="nc" id="L53">						+ formerRL.getClass().getSimpleName() + &quot;)&quot;);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (!this.routeListeners.contains(formerRL)) {</span>
+<span class="nc" id="L55">			this.routeListeners.remove(formerRL);</span>
+		}
+<span class="nc" id="L57">	}</span>
+
+	private void notifyAllRouteListeners() {
+<span class="nc" id="L60">		Log.d(TAG,</span>
+<span class="nc" id="L61">			String.format(</span>
+<span class="nc" id="L62">				&quot;RouteController.notifyAllRouteListeners() - sending Route with %d Coordinates and %d Waypoints to %d listeners.&quot;,</span>
+<span class="nc" id="L63">				currentRoute.getCoordinates().size(),</span>
+<span class="nc" id="L64">				currentRoute.getWaypoints().size(),</span>
+<span class="nc" id="L65">				routeListeners.size()</span>
+			)
+		);
+<span class="nc" id="L68">		Log.d(TAG, &quot;Coordinates of Route: &quot;</span>
+<span class="nc" id="L69">				+ this.currentRoute);</span>
+<span class="nc" id="L70">		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">		if (this.currentRoute != null &amp;&amp; activeWaypoint != null) {</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">			for (RouteListener rl : routeListeners) {</span>
+<span class="nc" id="L73">				Log.d(TAG, &quot;Notify &quot; + rl.getClass().getSimpleName());</span>
+<span class="nc" id="L74">				rl.onRouteChange((RouteInfo) currentRoute);</span>
+			}
+<span class="nc" id="L76">		} else {</span>
+<span class="nc" id="L77">			Log.d(</span>
+<span class="nc" id="L78">				TAG,</span>
+<span class="nc" id="L79">				String.format(</span>
+<span class="nc" id="L80">					&quot;No RouteListener was notified, because %s!&quot;,</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">					currentRoute == null ? &quot;currentRoute is null&quot; : activeWaypoint == null ? &quot;activeWaypoint is null&quot; : &quot;no RouteListener is registered&quot;</span>
+				)
+			);
+		}
+<span class="nc" id="L85">	}</span>
+
+	/**
+	 * Sets a Waypoint active by his id
+	 *
+	 * @param id	ID of the Waypoint
+	 */
+	public boolean setActiveWaypoint(int id) {
+<span class="nc" id="L93">		Log.d(TAG, &quot;Routecontroller.setActiveWaypoint(id)&quot;);</span>
+
+<span class="nc bnc" id="L95" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L96">			this.currentRoute.setActiveWaypoint(id);</span>
+<span class="nc" id="L97">			this.notifyAllRouteListeners();</span>
+<span class="nc" id="L98">			return true;</span>
+		}
+
+		/* OLD VERSION
+		if (this.currentRoute.getActiveWaypoint().getId() != id) {
+			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+				final Route newCurrentRoute = this.currentRoute;
+				RouteController.routeChanger = new Thread (new Runnable() {
+
+					public void run() {
+						Log.d(TAG_ROUTE_CONTROLLER, &quot;Thread.run() in setActiveWaypoint(id)&quot;);
+						newCurrentRoute.setActiveWaypoint(id);
+						RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+					}
+				});
+				RouteController.routeChanger.start();
+				return true;
+			}
+		}*/
+
+<span class="nc" id="L118">		return false;</span>
+	}
+
+
+	public boolean setActiveWaypoint(final Waypoint wp) {
+<span class="nc" id="L123">		Log.d(TAG, &quot;RouteController.setActiveWaypoint(Waypoint)&quot;);</span>
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		if (!this.currentRoute.getActiveWaypoint().equals(wp)) {</span>
+<span class="nc bnc" id="L126" title="All 4 branches missed.">			if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L127">				final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L128">				RouteController.routeChanger = new Thread (new Runnable() {</span>
+					public void run() {
+<span class="nc" id="L130">						Log.d(TAG, &quot;Thread.run() in setActiveWaypoint(wp)&quot;);</span>
+<span class="nc" id="L131">						newCurrentRoute.setActiveWaypoint(wp);</span>
+<span class="nc" id="L132">						RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L133">					}</span>
+				});
+<span class="nc" id="L135">				RouteController.routeChanger.start();</span>
+<span class="nc" id="L136">				return true;</span>
+			}
+		}
+<span class="nc" id="L139">		return false;</span>
+	}
+
+	public boolean resetActiveWaypoint() {
+<span class="nc" id="L143">		Log.d(TAG, &quot;RouteController.resetActiveWaypoint()&quot;);</span>
+
+<span class="nc bnc" id="L145" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L146">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L147">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L150">					Log.d(TAG, &quot;Thread.run() in resetActiveWaypoint()&quot;);</span>
+<span class="nc" id="L151">					newCurrentRoute.resetActiveWaypoint();</span>
+<span class="nc" id="L152">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L153">				}</span>
+			});
+<span class="nc" id="L155">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L156">			return true;</span>
+		}
+<span class="nc" id="L158">		return false;</span>
+
+	}
+
+	public boolean moveActiveWaypointInOrder(final int i) {
+<span class="nc" id="L163">		Log.d(TAG,</span>
+<span class="nc" id="L164">				&quot;RouteController.moveActiveWaypointInOrder(int)&quot;);</span>
+<span class="nc bnc" id="L165" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L166">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L167">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L170">					Log.d(TAG, &quot;Thread.run() in moveActiveWaypointInOrder(int)&quot;);</span>
+<span class="nc" id="L171">					newCurrentRoute.moveActiveWaypointInOrder(i);</span>
+<span class="nc" id="L172">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L173">				}</span>
+			});
+<span class="nc" id="L175">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L176">			return true;</span>
+		}
+<span class="nc" id="L178">		return false;</span>
+	}
+
+	public boolean addWaypoint(final Waypoint w) {
+<span class="nc" id="L182">		Log.d(TAG, String.format(&quot;RouteController.addWaypoint(%s)&quot;, w.toString()));</span>
+
+<span class="nc bnc" id="L184" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L185">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L186">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L189">					Log.d(TAG, String.format(&quot;Thread.run() in RouteController.addWaypoint(%s)&quot;, w.toString()));</span>
+<span class="nc" id="L190">					newCurrentRoute.addWaypoint(w);</span>
+<span class="nc" id="L191">					replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L192">				}</span>
+			});
+<span class="nc" id="L194">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L195">			return true;</span>
+		}
+<span class="nc" id="L197">		Log.e(TAG, String.format(&quot;%s wurde NICHT der Route hinzugefügt! Der routeChanger ist gerade beschäftigt.&quot;, w.toString()));</span>
+<span class="nc" id="L198">		return false;</span>
+	}
+
+	public boolean addRoundtrip(final int profileID, final int length) {
+<span class="nc" id="L202">		Log.d(TAG, &quot;RouteController.addRoundtrip(int-profile &quot;</span>
+<span class="nc" id="L203">				+ profileID + &quot;, int-length &quot; + length + &quot;)&quot;);</span>
+
+<span class="nc bnc" id="L205" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L206">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L207">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L210">					Log.d(TAG, &quot;Thread.run() in addRoundtrip(int profile, int length)&quot;);</span>
+<span class="nc" id="L211">					newCurrentRoute.addRoundtripAtActiveWaypoint(profileID, length);</span>
+<span class="nc" id="L212">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L213">				}</span>
+			});
+<span class="nc" id="L215">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L216">			return true;</span>
+		}
+<span class="nc" id="L218">		return false;</span>
+	}
+
+	public boolean addRoute(final RouteInfo ri) {
+<span class="nc" id="L222">		Log.d(TAG, &quot;RouteController.addRoute(RouteInfo)&quot;);</span>
+
+<span class="nc bnc" id="L224" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L225">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L226">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L229">					Log.d(TAG, &quot;Thread.run() in addRoute(RouteInfo)&quot;);</span>
+<span class="nc" id="L230">					newCurrentRoute.addRoute(ri);</span>
+<span class="nc" id="L231">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L232">				}</span>
+			});
+<span class="nc" id="L234">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L235">			return true;</span>
+		}
+<span class="nc" id="L237">		return false;</span>
+	}
+
+	public boolean moveActiveWaypoint(Coordinate c) {
+<span class="nc" id="L241">		Log.d(TAG,	&quot;RouteController.moveActiveWaypoint(Coordinate) METHOD START&quot;);</span>
+
+<span class="nc bnc" id="L243" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L244">			this.currentRoute.moveActiveWaypoint(c);</span>
+<span class="nc" id="L245">			this.notifyAllRouteListeners();</span>
+<span class="nc" id="L246">			return true;</span>
+		}
+
+<span class="nc" id="L249">		Log.d(TAG,	&quot;RouteController.moveActiveWaypoint(Coordinate) returning false&quot;);</span>
+<span class="nc" id="L250">		return false;</span>
+	}
+
+	public boolean deleteActiveWaypoint() {
+<span class="nc" id="L254">		Log.d(TAG, &quot;RouteController.deleteActiveWaypoint()&quot;);</span>
+
+<span class="nc bnc" id="L256" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L257">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L258">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L261">					Log.d(TAG, &quot;Thread.run() in deleteActiveWaypoint()&quot;);</span>
+<span class="nc" id="L262">					newCurrentRoute.deleteActiveWaypoint();</span>
+<span class="nc" id="L263">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L264">				}</span>
+			});
+<span class="nc" id="L266">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L267">			return true;</span>
+		}
+<span class="nc" id="L269">		return false;</span>
+	}
+
+	public boolean invertRoute() {
+<span class="nc" id="L273">		Log.d(TAG, &quot;invertRoute()&quot;);</span>
+<span class="nc bnc" id="L274" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L275">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L276">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L279">					Log.d(TAG, &quot;Thread.run() in invertRoute()&quot;);</span>
+<span class="nc" id="L280">					newCurrentRoute.invertRoute();</span>
+<span class="nc" id="L281">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L282">				}</span>
+			});
+<span class="nc" id="L284">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L285">			return true;</span>
+		}
+<span class="nc" id="L287">		return false;</span>
+	}
+
+	public boolean resetRoute() {
+<span class="nc" id="L291">		Log.d(TAG, &quot;RouteController.resetRoute()&quot;);</span>
+<span class="nc bnc" id="L292" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L293">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L294">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L297">					Log.d(TAG, &quot;Thread.run() in resetRoute()&quot;);</span>
+<span class="nc" id="L298">					newCurrentRoute.resetRoute();</span>
+<span class="nc" id="L299">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L300">				}</span>
+			});
+<span class="nc" id="L302">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L303">			return true;</span>
+		}
+<span class="nc" id="L305">		return false;</span>
+	}
+
+	public boolean optimizeRoute() {
+<span class="nc" id="L309">		Log.d(TAG, &quot;RouteController.optimizeRoute()&quot;);</span>
+
+<span class="nc bnc" id="L311" title="All 4 branches missed.">		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {</span>
+<span class="nc" id="L312">			final Route newCurrentRoute = this.currentRoute;</span>
+<span class="nc" id="L313">			RouteController.routeChanger = new Thread (new Runnable() {</span>
+
+				public void run() {
+<span class="nc" id="L316">					Log.d(TAG, &quot;Thread.run() in optimizeRoute()&quot;);</span>
+<span class="nc" id="L317">					newCurrentRoute.optimizeRoute();</span>
+<span class="nc" id="L318">					RouteController.getInstance().replaceFullRoute(newCurrentRoute);</span>
+<span class="nc" id="L319">				}</span>
+			});
+<span class="nc" id="L321">			RouteController.routeChanger.start();</span>
+<span class="nc" id="L322">			return true;</span>
+		}
+<span class="nc" id="L324">		return false;</span>
+	}
+
+	public void replaceFullRoute(RouteInfo r) {
+<span class="nc" id="L328">		Log.d(TAG, &quot;RouteController.replaceFullRoute(Route)&quot;);</span>
+<span class="nc" id="L329">		this.currentRoute = (Route) r;</span>
+<span class="nc" id="L330">		this.notifyAllRouteListeners();</span>
+<span class="nc" id="L331">	}</span>
+
+	public boolean containsWaypoint(Waypoint w) {
+<span class="nc" id="L334">		Log.d(TAG,</span>
+<span class="nc" id="L335">				&quot;RouteController.containsWaypoint(Waypoint)&quot;);</span>
+<span class="nc" id="L336">		return this.currentRoute.containsWaypoint(w);</span>
+	}
+
+	public boolean addRouteToFavorites(String name) {
+<span class="nc" id="L340">		Log.d(TAG, &quot;RouteController.addRouteToFavorites(RouteInfo, String)&quot;);</span>
+<span class="nc" id="L341">		return FavoriteManager.getInstance().addRouteToFavorites(currentRoute, name);</span>
+	}
+
+	public boolean addLocationToFavorites(Location ri, String name) {
+<span class="nc" id="L345">		Log.d(TAG,</span>
+<span class="nc" id="L346">				&quot;RouteController.addLocationToFavorites(Location, String)&quot;);</span>
+<span class="nc" id="L347">		return FavoriteManager.getInstance().addLocationToFavorites(ri, name);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

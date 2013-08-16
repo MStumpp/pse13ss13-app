@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>FavoriteView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">FavoriteView.java</span></div><h1>FavoriteView.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;</span>
+
+import java.util.Iterator;
+
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.content.DialogInterface;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+
+<span class="nc" id="L25">public class FavoriteView extends Fragment {</span>
+
+<span class="nc" id="L27">	private final String TAG_PULLUP_CONTENT = &quot;PULLUP_CONTENT&quot;;</span>
+
+<span class="nc" id="L29">	private int switcher = R.id.pullupFavoriteSwitcher;</span>
+
+<span class="nc" id="L31">	private String TAG = FavoriteView.class.getSimpleName();</span>
+
+	private TabHost tabHost;
+
+	private TextView favorite;
+	private LinearLayout favPois;
+	private LinearLayout favRoutes;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L41">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L42">		Log.d(TAG_PULLUP_CONTENT, &quot;Create FavoriteView&quot;);</span>
+
+<span class="nc" id="L44">		Log.d(TAG_PULLUP_CONTENT, &quot;Create Tabs&quot;);</span>
+<span class="nc" id="L45">		tabHost = (TabHost) this.getActivity().findViewById(R.id.tabhost_favs);</span>
+<span class="nc" id="L46">		tabHost.setup();</span>
+
+<span class="nc" id="L48">		TabSpec spec1 = tabHost.newTabSpec(&quot;route_favorites_tab&quot;);</span>
+<span class="nc" id="L49">		spec1.setContent(R.id.tab_route);</span>
+<span class="nc" id="L50">		spec1.setIndicator(&quot;Routes&quot;);</span>
+<span class="nc" id="L51">		TabSpec spec2 = tabHost.newTabSpec(&quot;poi_favorites_tab&quot;);</span>
+<span class="nc" id="L52">		spec2.setContent(R.id.tab_poi);</span>
+<span class="nc" id="L53">		spec2.setIndicator(&quot;POIs&quot;);</span>
+<span class="nc" id="L54">		tabHost.addTab(spec1);</span>
+<span class="nc" id="L55">		tabHost.addTab(spec2);</span>
+
+<span class="nc" id="L57">		favorite = (TextView) this.getActivity().findViewById(R.id.favorite);</span>
+<span class="nc" id="L58">		favPois = (LinearLayout) this.getActivity().findViewById(R.id.poifavs);</span>
+<span class="nc" id="L59">		favRoutes = (LinearLayout) this.getActivity().findViewById(</span>
+<span class="nc" id="L60">				R.id.routefavs);</span>
+<span class="nc" id="L61">		tabHost.setVisibility(View.VISIBLE);</span>
+
+<span class="nc" id="L63">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L64">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L65">				.getDefaultDisplay();</span>
+<span class="nc" id="L66">		Point size = new Point();</span>
+<span class="nc" id="L67">		display.getSize(size);</span>
+
+<span class="nc" id="L69">		Log.d(TAG_PULLUP_CONTENT, &quot;Einstellen der Größenverhältnisse&quot;);</span>
+		// favorite.setX((float) (size.x / 2.5));
+		// favorite.getLayoutParams().width = size.x;
+		// tabHost.setX(size.x * 0);
+		// tabHost.getLayoutParams().width = size.x;
+		// tabHost.getLayoutParams().height = size.y / 5;
+
+<span class="nc" id="L76">		Log.d(TAG_PULLUP_CONTENT, &quot;Favoriten laden&quot;);</span>
+<span class="nc" id="L77">		updateFavorties();</span>
+
+<span class="nc" id="L79">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L80">	}</span>
+
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L84">		super.onDestroy();</span>
+<span class="nc" id="L85">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy FavoriteView&quot;);</span>
+<span class="nc" id="L86">		tabHost.getTabWidget().removeAllViews();</span>
+<span class="nc" id="L87">		favPois.removeAllViews();</span>
+<span class="nc" id="L88">		favRoutes.removeAllViews();</span>
+<span class="nc" id="L89">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+
+<span class="nc" id="L91">	}</span>
+
+	public boolean equals(Fragment f) {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_FAVORITE)) {</span>
+<span class="nc" id="L95">			return true;</span>
+		}
+<span class="nc" id="L97">		return false;</span>
+	}
+
+	private boolean updateFavorties() {
+
+<span class="nc" id="L102">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L103">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L104">				.getDefaultDisplay();</span>
+<span class="nc" id="L105">		Point size = new Point();</span>
+<span class="nc" id="L106">		display.getSize(size);</span>
+
+		// set layout margins for Text
+<span class="nc" id="L109">		LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L110">				4 * size.x / 5, LinearLayout.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L111">		textParams.setMargins(0, 10, 0, 0);</span>
+
+		// set layout margins for delete bu tton
+		// TODO: größe des delete buttons generisch an text größe anpassen
+<span class="nc" id="L115">		LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L116">				size.x / 5, 135);</span>
+<span class="nc" id="L117">		deleteParams.setMargins(0, 10, 0, 0);</span>
+
+<span class="nc" id="L119">		favPois.removeAllViews();</span>
+<span class="nc" id="L120">		favRoutes.removeAllViews();</span>
+
+		// locations
+<span class="nc" id="L123">		for (Iterator&lt;String&gt; iter = FavoriteMenuController.getInstance()</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">				.getNamesOfFavoriteLocations().iterator(); iter.hasNext();) {</span>
+<span class="nc" id="L125">			String current = iter.next();</span>
+<span class="nc" id="L126">			LinearLayout poi = new LinearLayout(getActivity());</span>
+<span class="nc" id="L127">			poi.setOrientation(LinearLayout.HORIZONTAL);</span>
+<span class="nc" id="L128">			TextView tv = new TextView(getActivity());</span>
+<span class="nc" id="L129">			ImageButton delete = new ImageButton(getActivity());</span>
+<span class="nc" id="L130">			delete.setImageResource(R.drawable.delete);</span>
+<span class="nc" id="L131">			tv.setText(current);</span>
+			// TODO TextSize relativieren
+<span class="nc" id="L133">			tv.setOnTouchListener(new favLocationTouch(current, tv));</span>
+<span class="nc" id="L134">			delete.setOnTouchListener(new favLocationDeleteTouch(current,</span>
+<span class="nc" id="L135">					delete));</span>
+<span class="nc" id="L136">			tv.setTextSize(30);</span>
+<span class="nc" id="L137">			delete.setLayoutParams(deleteParams);</span>
+<span class="nc" id="L138">			tv.setLayoutParams(textParams);</span>
+<span class="nc" id="L139">			tv.setBackgroundColor(MapGen.defaultBackground);</span>
+<span class="nc" id="L140">			poi.addView(tv);</span>
+<span class="nc" id="L141">			poi.addView(delete);</span>
+<span class="nc" id="L142">			favPois.addView(poi);</span>
+		}
+
+		// routes
+<span class="nc" id="L146">		for (Iterator&lt;String&gt; iter = FavoriteMenuController.getInstance()</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">				.getNamesOfFavoriteRoutes().iterator(); iter.hasNext();) {</span>
+<span class="nc" id="L148">			String current = iter.next();</span>
+<span class="nc" id="L149">			LinearLayout poi = new LinearLayout(getActivity());</span>
+<span class="nc" id="L150">			poi.setOrientation(LinearLayout.HORIZONTAL);</span>
+<span class="nc" id="L151">			TextView tv = new TextView(getActivity());</span>
+<span class="nc" id="L152">			ImageButton delete = new ImageButton(getActivity());</span>
+<span class="nc" id="L153">			delete.setImageResource(R.drawable.delete);</span>
+<span class="nc" id="L154">			tv.setText(current);</span>
+			// TODO TextSize relativieren
+<span class="nc" id="L156">			tv.setOnTouchListener(new favRouteTouch(current, tv));</span>
+<span class="nc" id="L157">			delete.setOnTouchListener(new favRouteDeleteTouch(current, delete));</span>
+<span class="nc" id="L158">			tv.setTextSize(30);</span>
+<span class="nc" id="L159">			delete.setLayoutParams(deleteParams);</span>
+<span class="nc" id="L160">			tv.setLayoutParams(textParams);</span>
+<span class="nc" id="L161">			tv.setBackgroundColor(MapGen.defaultBackground);</span>
+<span class="nc" id="L162">			poi.addView(tv);</span>
+<span class="nc" id="L163">			poi.addView(delete);</span>
+<span class="nc" id="L164">			favRoutes.addView(poi);</span>
+		}
+<span class="nc" id="L166">		return false;</span>
+	}
+
+	private class favRouteTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+<span class="nc" id="L174">		public favRouteTouch(String name, View view) {</span>
+<span class="nc" id="L175">			this.name = name;</span>
+<span class="nc" id="L176">			this.view = view;</span>
+<span class="nc" id="L177">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L180" title="All 4 branches missed.">			if (v.equals(view) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L181">				Log.d(TAG,</span>
+<span class="nc" id="L182">						String.format(&quot;Add route '%s' to current route&quot;, name));</span>
+<span class="nc" id="L183">				FavoriteMenuController.getInstance()</span>
+<span class="nc" id="L184">						.appendFavoriteRouteToRoute(name);</span>
+<span class="nc" id="L185">				MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
+			}
+<span class="nc" id="L187">			return false;</span>
+		}
+	}
+
+	private class favLocationTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+<span class="nc" id="L196">		public favLocationTouch(String name, View view) {</span>
+<span class="nc" id="L197">			this.name = name;</span>
+<span class="nc" id="L198">			this.view = view;</span>
+<span class="nc" id="L199">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L202" title="All 4 branches missed.">			if (v.equals(view) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L203">				Log.d(TAG, String.format(&quot;Add location '%s' to current route&quot;,</span>
+<span class="nc" id="L204">						name));</span>
+<span class="nc" id="L205">				FavoriteMenuController.getInstance()</span>
+<span class="nc" id="L206">						.appendFavoriteLocationToRoute(name);</span>
+<span class="nc" id="L207">				MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
+			}
+<span class="nc" id="L209">			return false;</span>
+		}
+	}
+
+	private class favLocationDeleteTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+<span class="nc" id="L218">		public favLocationDeleteTouch(String name, View view) {</span>
+<span class="nc" id="L219">			this.name = name;</span>
+<span class="nc" id="L220">			this.view = view;</span>
+<span class="nc" id="L221">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L224" title="All 4 branches missed.">			if (v.equals(view) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+
+				// dialog erstellen
+<span class="nc" id="L227">				AlertDialog.Builder alertDialog = new AlertDialog.Builder(</span>
+<span class="nc" id="L228">						getActivity());</span>
+<span class="nc" id="L229">				alertDialog.setTitle(R.string.delete_dialog_header);</span>
+<span class="nc" id="L230">				alertDialog</span>
+<span class="nc" id="L231">						.setMessage(R.string.delete_dialog);</span>
+<span class="nc" id="L232">				alertDialog.setPositiveButton(&quot;Yes&quot;,</span>
+<span class="nc" id="L233">						new DialogInterface.OnClickListener() {</span>
+							public void onClick(DialogInterface dialog,
+									int which) {
+<span class="nc" id="L236">								Log.d(TAG, String.format(&quot;delete fav location&quot;));</span>
+<span class="nc" id="L237">								FavoriteMenuController.getInstance()</span>
+<span class="nc" id="L238">										.deleteLocation(name);</span>
+<span class="nc" id="L239">								updateFavorties();</span>
+<span class="nc" id="L240">							}</span>
+						});
+<span class="nc" id="L242">				alertDialog.setNegativeButton(&quot;No&quot;,</span>
+<span class="nc" id="L243">						new DialogInterface.OnClickListener() {</span>
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+<span class="nc" id="L247">							}</span>
+						});
+<span class="nc" id="L249">				alertDialog.show();</span>
+			}
+<span class="nc" id="L251">			return false;</span>
+		}
+	}
+
+	private class favRouteDeleteTouch implements OnTouchListener {
+
+		private String name;
+		private View view;
+
+<span class="nc" id="L260">		public favRouteDeleteTouch(String name, View view) {</span>
+<span class="nc" id="L261">			this.name = name;</span>
+<span class="nc" id="L262">			this.view = view;</span>
+<span class="nc" id="L263">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L266" title="All 4 branches missed.">			if (v.equals(view) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L267">				Log.d(TAG, String.format(&quot;delete fav location&quot;));</span>
+<span class="nc" id="L268">				FavoriteMenuController.getInstance().deleteRoute(name);</span>
+<span class="nc" id="L269">				updateFavorties();</span>
+			}
+<span class="nc" id="L271">			return false;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

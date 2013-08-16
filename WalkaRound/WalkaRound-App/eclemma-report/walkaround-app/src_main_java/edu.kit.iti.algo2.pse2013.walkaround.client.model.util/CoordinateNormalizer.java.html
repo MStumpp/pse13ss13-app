@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CoordinateNormalizer.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.util</a> &gt; <span class="el_source">CoordinateNormalizer.java</span></div><h1>CoordinateNormalizer.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+/**
+ * This class provides a method to normalize a coordinate to a coordinate on a
+ * graph.
+ *
+ * @author Thomas Kadow
+ * @author Matthias Stumpp
+ * @version 1.1
+ */
+public final class CoordinateNormalizer {
+
+	private static final int timeout = 2000;
+
+<span class="nc" id="L39">	private static final String TAG = CoordinateNormalizer.class</span>
+<span class="nc" id="L40">			.getSimpleName();</span>
+
+	/**
+	 * URL for roundtrip computation.
+	 */
+<span class="nc" id="L45">	private static String URL_NEARESTVERTEX = &quot;http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex&quot;;</span>
+
+	/**
+	 * This class is an utility class which is not instantiated.
+	 */
+<span class="nc" id="L50">	private CoordinateNormalizer() {</span>
+<span class="nc" id="L51">	}</span>
+
+	/**
+	 * Normalizes a coordinate to a coordinate on a graph.
+	 *
+	 * @param coord
+	 *            coordinate to normalize
+	 * @param levelOfDetail
+	 *            the &quot;tile zoom level&quot; for which the calculation should be made
+	 * @return a normalized coordinate on a graph
+	 * @throws CoordinateNormalizerException
+	 *             If something goes wrong.
+	 * @throws InterruptedException
+	 */
+	public static Coordinate normalizeCoordinate(Coordinate coordinate,
+			float levelOfDetail) throws CoordinateNormalizerException,
+			InterruptedException {
+
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		if (coordinate == null)</span>
+<span class="nc" id="L70">			throw new IllegalArgumentException(&quot;coordinate must be provided&quot;);</span>
+
+<span class="nc" id="L72">		Log.d(TAG, &quot;normalizeCoordinate(Coordinate &quot; + coordinate + &quot;, float &quot;</span>
+<span class="nc" id="L73">				+ levelOfDetail + &quot;)&quot;);</span>
+
+<span class="nc" id="L75">		GsonBuilder gsonb = new GsonBuilder();</span>
+<span class="nc" id="L76">		Gson gson = gsonb.create();</span>
+
+<span class="nc" id="L78">		Coordinate normalizedCoordinate = null;</span>
+
+<span class="nc" id="L80">		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,</span>
+<span class="nc" id="L81">				new Coordinate(coordinate.getLatitude(),</span>
+<span class="nc" id="L82">						coordinate.getLongitude()), new HttpPost(</span>
+<span class="nc" id="L83">						URL_NEARESTVERTEX));</span>
+<span class="nc" id="L84">		Log.d(TAG, &quot;normalizeCoordinate() - pre Thread&quot;);</span>
+<span class="nc" id="L85">		Thread thread = new Thread(gsonAnswerer);</span>
+<span class="nc" id="L86">		thread.start();</span>
+<span class="nc" id="L87">		thread.join();</span>
+<span class="nc" id="L88">		Log.d(TAG, &quot;normalizeCoordinate() - post Thread&quot;);</span>
+
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		if (gsonAnswerer.getException() != null) {</span>
+<span class="nc" id="L91">			Log.e(TAG, &quot;HTTP-Connection caused exception&quot;,</span>
+<span class="nc" id="L92">					gsonAnswerer.getException());</span>
+<span class="nc" id="L93">			throw new CoordinateNormalizerException(gsonAnswerer.getException()</span>
+<span class="nc" id="L94">					.toString());</span>
+		} else {
+<span class="nc" id="L96">			Log.d(TAG, &quot;Answered JSON: &quot; + gsonAnswerer.getJSONAnswer());</span>
+<span class="nc" id="L97">			normalizedCoordinate = gson.fromJson(gsonAnswerer.getJSONAnswer(),</span>
+<span class="nc" id="L98">					Coordinate.class);</span>
+		}
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		if (normalizedCoordinate == null)</span>
+<span class="nc" id="L102">			throw new CoordinateNormalizerException(</span>
+<span class="nc" id="L103">					&quot;normalizedCoordinate is null&quot;);</span>
+
+<span class="nc" id="L105">		Log.d(TAG,</span>
+<span class="nc" id="L106">				&quot;normalizeCoordinate(Coordinate coordinate, float levelOfDetail) returning Coordinate: &quot;</span>
+<span class="nc" id="L107">						+ coordinate);</span>
+
+<span class="nc" id="L109">		return coordinate;</span>
+	}
+
+	private static class JSONAnswerGetter implements Runnable {
+		private Gson gson;
+<span class="nc" id="L114">		private String json = &quot;&quot;;</span>
+		private Object objectToSend;
+		private HttpPost url;
+		private Exception exception;
+
+<span class="nc" id="L119">		public JSONAnswerGetter(Gson gson, Object objectToSend, HttpPost url) {</span>
+<span class="nc" id="L120">			this.gson = gson;</span>
+<span class="nc" id="L121">			this.objectToSend = objectToSend;</span>
+<span class="nc" id="L122">			this.url = url;</span>
+<span class="nc" id="L123">		}</span>
+
+		public void run() {
+			InputStream is;
+			try {
+<span class="nc" id="L128">				HttpParams httpParameters = new BasicHttpParams();</span>
+<span class="nc" id="L129">				HttpConnectionParams.setConnectionTimeout(httpParameters,</span>
+<span class="nc" id="L130">						timeout);</span>
+<span class="nc" id="L131">				HttpConnectionParams.setSoTimeout(httpParameters, timeout);</span>
+
+<span class="nc" id="L133">				DefaultHttpClient httpClient = new DefaultHttpClient(</span>
+<span class="nc" id="L134">						httpParameters);</span>
+<span class="nc" id="L135">				HttpPost httpPost = url;</span>
+<span class="nc" id="L136">				httpPost.setHeader(&quot;Accept&quot;, &quot;application/json&quot;);</span>
+<span class="nc" id="L137">				httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+
+<span class="nc" id="L139">				String requestAsJSON = gson.toJson(objectToSend);</span>
+
+<span class="nc" id="L141">				Log.d(TAG, &quot;Built JSON: &quot; + requestAsJSON);</span>
+
+<span class="nc" id="L143">				httpPost.setEntity(new StringEntity(requestAsJSON));</span>
+
+<span class="nc" id="L145">				HttpResponse httpResponse = httpClient.execute(httpPost);</span>
+
+<span class="nc" id="L147">				HttpEntity httpEntity = httpResponse.getEntity();</span>
+<span class="nc" id="L148">				is = httpEntity.getContent();</span>
+
+<span class="nc" id="L150">				Log.d(TAG, &quot;Sent JSON: &quot; + requestAsJSON);</span>
+
+<span class="nc" id="L152">				BufferedReader reader = new BufferedReader(</span>
+<span class="nc" id="L153">						new InputStreamReader(is, &quot;iso-8859-1&quot;), 8);</span>
+<span class="nc" id="L154">				StringBuilder sb = new StringBuilder();</span>
+				String line;
+<span class="nc bnc" id="L156" title="All 2 branches missed.">				while ((line = reader.readLine()) != null)</span>
+<span class="nc" id="L157">					sb.append(line + &quot;\n&quot;);</span>
+<span class="nc" id="L158">				is.close();</span>
+<span class="nc" id="L159">				json = sb.toString();</span>
+
+<span class="nc" id="L161">			} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L162">				exception = new CoordinateNormalizerException(</span>
+<span class="nc" id="L163">						&quot;UnsupportedEncodingException&quot;);</span>
+<span class="nc" id="L164">			} catch (ClientProtocolException e) {</span>
+<span class="nc" id="L165">				exception = new CoordinateNormalizerException(</span>
+<span class="nc" id="L166">						&quot;ClientProtocolException&quot;);</span>
+<span class="nc" id="L167">			} catch (IOException e) {</span>
+<span class="nc" id="L168">				exception = new CoordinateNormalizerException(&quot;IOException&quot;);</span>
+			}
+<span class="nc" id="L170">		}</span>
+
+		public Exception getException() {
+<span class="nc" id="L173">			return exception;</span>
+		}
+
+		public String getJSONAnswer() {
+<span class="nc" id="L177">			return json;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

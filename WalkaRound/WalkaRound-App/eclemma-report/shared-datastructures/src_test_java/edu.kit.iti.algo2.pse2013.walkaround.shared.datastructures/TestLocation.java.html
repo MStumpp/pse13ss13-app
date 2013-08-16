@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestLocation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">TestLocation.java</span></div><h1>TestLocation.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
+<span class="nc" id="L11">public class TestLocation {</span>
+
+	private Location testLocation;
+	private double testLat;
+	private double testLon;
+	private String testName;
+	private Address testAddress;
+
+	@Before
+	public void setUp() {
+<span class="nc" id="L21">		testLat = 2d;</span>
+<span class="nc" id="L22">		testLon = 5d;</span>
+<span class="nc" id="L23">		testName = &quot;Test-name&quot;;</span>
+<span class="nc" id="L24">		testAddress = new Address(&quot;Test-street&quot;, &quot;Test-city&quot;, &quot;Test-number&quot;,</span>
+<span class="nc" id="L25">				54321);</span>
+<span class="nc" id="L26">		testLocation = new Location(testLat, testLon, testName, testAddress);</span>
+<span class="nc" id="L27">	}</span>
+
+	@Test
+	public void testClone() {
+<span class="nc" id="L31">		Location clone = testLocation.clone();</span>
+<span class="nc" id="L32">		Location clone2 = clone.clone();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		assertTrue(testLocation != clone);</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		assertTrue(clone !=clone2);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		assertTrue(clone2 != testLocation);</span>
+
+<span class="nc" id="L37">		assertEquals(testLocation, clone);</span>
+<span class="nc" id="L38">		assertEquals(clone2, clone);</span>
+<span class="nc" id="L39">		assertEquals(testLocation, clone2);</span>
+<span class="nc" id="L40">	}</span>
+
+	@Test
+	public void testHash() {
+<span class="nc" id="L44">		int hashA = testLocation.hashCode();</span>
+<span class="nc" id="L45">		int hashB = testLocation.clone().hashCode();</span>
+<span class="nc" id="L46">		int hashC = new Location(testLat + 1, testLon, testName, testAddress).hashCode();</span>
+<span class="nc" id="L47">		assertEquals(hashA, hashB);</span>
+<span class="nc" id="L48">		assertNotEquals(hashB, hashC);</span>
+<span class="nc" id="L49">		assertNotEquals(hashA, hashC);</span>
+<span class="nc" id="L50">	}</span>
+
+	@Test
+	public void testEquals() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+<span class="nc" id="L54">		assertFalse(testLocation.equals(null));</span>
+<span class="nc" id="L55">		assertFalse(testLocation.equals(&quot;Hello world&quot;));</span>
+<span class="nc" id="L56">		Location locationA = new Location(2d, 2d, &quot;test&quot;, testAddress);</span>
+<span class="nc" id="L57">		Location locationB = new Location(2d, 2d, &quot;test&quot;, testAddress);</span>
+<span class="nc" id="L58">		assertTrue(locationA.equals(locationB));</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		assertFalse(locationA == locationB);</span>
+
+<span class="nc" id="L61">		assertTrue(testLocation.equals(testLocation));</span>
+<span class="nc" id="L62">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteGen.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator</a> &gt; <span class="el_source">RouteGen.java</span></div><h1>RouteGen.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator;
+
+import java.util.List;
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+
+/**
+ * Thos Class draw and compute the Path between two Points.
+ *
+ * @author Ludwig Biermann
+ *
+ */
+public class RouteGen implements Runnable {
+
+	/**
+	 * Debug Tag
+	 */
+<span class="nc" id="L24">	public static String Tag_RouteGen = RouteGen.class.getSimpleName();</span>
+
+	/**
+	 * default Background Empty
+	 */
+	// TODO some static content is double pls merge
+<span class="nc" id="L30">	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);</span>
+
+	/**
+	 * the route bitmap
+	 */
+	public Bitmap routeImg;
+
+	/**
+	 * The stroke of the bitmap
+	 */
+<span class="nc" id="L40">	private int strokeWidth = 8;</span>
+
+	/**
+	 * the List of lines
+	 */
+	private float[] displayCoords;
+
+	/**
+	 * creats a new Route Gen
+	 *
+	 * @param coords
+	 *            the needed List of Lines
+	 */
+<span class="nc" id="L53">	public RouteGen(List&lt;DisplayCoordinate&gt; coords, Bitmap routeImg) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (coords == null) {</span>
+<span class="nc" id="L55">			throw new IllegalArgumentException(&quot;The coordinates to paint on the screen must not be null&quot;);</span>
+		}
+<span class="nc" id="L57">		displayCoords = new float[0];</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		if (coords.size() &gt; 0) {</span>
+<span class="nc" id="L59">			this.displayCoords = new float[(coords.size() - 1) * 4];</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">			for (int i = 0; i &lt; coords.size() - 1; i++) {</span>
+<span class="nc" id="L61">				displayCoords[4 * i] = coords.get(i).getX();</span>
+<span class="nc" id="L62">				displayCoords[4 * i + 1] = coords.get(i).getY();</span>
+<span class="nc" id="L63">				displayCoords[4 * i + 2] = coords.get(i + 1).getX();</span>
+<span class="nc" id="L64">				displayCoords[4 * i + 3] = coords.get(i + 1).getY();</span>
+			}
+		}
+<span class="nc" id="L67">		this.routeImg = routeImg;</span>
+<span class="nc" id="L68">	}</span>
+
+	/**
+	 * Draw a Line between two points.
+	 *
+	 * @param fromX
+	 *            from x
+	 * @param fromY
+	 *            from y
+	 * @param toX
+	 *            to x
+	 * @param toY
+	 *            to y
+	 */
+	private void drawRouteLines() {
+
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		if (!routeImg.isRecycled()) {</span>
+<span class="nc" id="L85">			Canvas canvas = new Canvas(routeImg);</span>
+
+<span class="nc" id="L87">			Paint pinsel = new Paint();</span>
+<span class="nc" id="L88">			pinsel.setColor(Color.argb(100, 64, 64, 255));</span>
+<span class="nc" id="L89">			pinsel.setStrokeWidth(this.strokeWidth);</span>
+
+<span class="nc bnc" id="L91" title="All 2 branches missed.">			if (displayCoords.length &gt;= 4) {</span>
+<span class="nc" id="L92">				Log.d(Tag_RouteGen, &quot;ZEICHNE Route!&quot;);</span>
+<span class="nc" id="L93">				canvas.drawLines(displayCoords, pinsel);</span>
+			}
+
+<span class="nc" id="L96">			MapController.getInstance().onRouteOverlayImageChange(routeImg);</span>
+		}
+
+<span class="nc" id="L99">	}</span>
+
+	public void run() {
+<span class="nc" id="L102">		Log.d(Tag_RouteGen, &quot;create Route Bitmap&quot;);</span>
+<span class="nc" id="L103">		this.routeImg.eraseColor(defaultBackgroundEmpty);</span>
+<span class="nc" id="L104">		this.routeImg.prepareToDraw();</span>
+
+<span class="nc" id="L106">		this.drawRouteLines();</span>
+<span class="nc" id="L107">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>POIManagerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.data</a> &gt; <span class="el_source">POIManagerTest.java</span></div><h1>POIManagerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+
+@RunWith(RobolectricTestRunner.class)
+<span class="fc" id="L24">public class POIManagerTest  {</span>
+
+<span class="fc" id="L26">	private POIManager poiManag = POIManager.getInstance();</span>
+
+	@Before
+	public void reset() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+<span class="fc" id="L30">		Field loc = POIManager.class.getDeclaredField(&quot;locationDataIO&quot;);</span>
+<span class="fc" id="L31">		loc.setAccessible(true);</span>
+<span class="fc" id="L32">		loc.set(null, null);</span>
+<span class="fc" id="L33">		Field ins = POIManager.class.getDeclaredField(&quot;instance&quot;);</span>
+<span class="fc" id="L34">		ins.setAccessible(true);</span>
+<span class="fc" id="L35">		ins.set(null, null);</span>
+<span class="fc" id="L36">		POIManager.initialize(new BootActivity().getApplicationContext());</span>
+<span class="fc" id="L37">		poiManag = POIManager.getInstance();</span>
+<span class="fc" id="L38">	}</span>
+
+	@Test
+	public void testPersistence() {
+<span class="nc" id="L42">		assertTrue(poiManag.isEmpty());</span>
+<span class="nc" id="L43">		poiManag.addActivePOICategory(1);</span>
+<span class="nc" id="L44">		assertFalse(poiManag.isEmpty());</span>
+<span class="nc" id="L45">		poiManag.removeActivePOICategory(1);</span>
+<span class="nc" id="L46">		assertTrue(poiManag.isEmpty());</span>
+<span class="nc" id="L47">	}</span>
+
+	@Test
+	public void testSearchByQuery() {
+<span class="nc" id="L51">		List&lt;POI&gt; suggestions = poiManag.searchPOIsByQuery(&quot;Schloss Karlsruhe&quot;);</span>
+<span class="nc" id="L52">		assertEquals(&quot;Schloss Karlsruhe&quot;, suggestions.get(0).getName());</span>
+<span class="nc" id="L53">	}</span>
+
+	@Test
+	public void testSearchByAddress() {
+<span class="fc" id="L57">		Address testAddress = new Address(&quot;Kaiserstraße&quot;, &quot;12&quot;, &quot;Karlsruhe&quot;,</span>
+<span class="fc" id="L58">				76133);</span>
+<span class="fc" id="L59">		List&lt;Location&gt; suggestions = poiManag.searchPOIsByAddress(testAddress);</span>
+<span class="pc" id="L60">		assertTrue(suggestions.get(0).getAddress().toString()</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">				.contains(&quot;Kaiserstraße&quot;)</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">				&amp;&amp; suggestions.get(0).getAddress().toString().contains(&quot;12&quot;)</span>
+<span class="nc" id="L63">				&amp;&amp; suggestions.get(0).getAddress().toString()</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">						.contains(&quot;Karlsruhe&quot;)</span>
+<span class="nc" id="L65">				&amp;&amp; suggestions.get(0).getAddress().toString()</span>
+<span class="pc bnc" id="L66" title="All 2 branches missed.">						.contains(&quot;&quot; + 76133));</span>
+<span class="nc" id="L67">	}</span>
+
+	@Test
+	public void testPoisInaRectangle() {
+<span class="fc" id="L71">		poiManag.addActivePOICategory(1);</span>
+<span class="fc" id="L72">		poiManag.addActivePOICategory(2);</span>
+<span class="fc" id="L73">		poiManag.addActivePOICategory(3);</span>
+<span class="fc" id="L74">		poiManag.addActivePOICategory(4);</span>
+<span class="fc" id="L75">		poiManag.addActivePOICategory(5);</span>
+<span class="fc" id="L76">		List&lt;POI&gt; pois = poiManag.getPOIsWithinRectangle(new Coordinate(</span>
+<span class="fc" id="L77">				49.00912d, 8.39872d), new Coordinate(49.00179d, 8.41477d), 16f);</span>
+<span class="fc" id="L78">		assertTrue(pois.isEmpty());</span>
+<span class="fc" id="L79">	}</span>
+
+	@Test
+	public void testPoisInAlongRoute() {
+<span class="nc" id="L83">		LinkedList&lt;Coordinate&gt; route = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L84">		route.add(new Coordinate(49.00179d, 8.41477d));</span>
+<span class="nc" id="L85">		route.add(new Coordinate(49.00579d, 8.21477d));</span>
+<span class="nc" id="L86">		route.add(new Coordinate(49.00179d, 8.41477d));</span>
+<span class="nc" id="L87">		route.add(new Coordinate(49.00279d, 8.44477d));</span>
+<span class="nc" id="L88">		route.add(new Coordinate(49.00129d, 8.41299d));</span>
+<span class="nc" id="L89">		List&lt;POI&gt; pois = poiManag.getPOIsAlongRoute(new Route(route), 16f);</span>
+<span class="nc" id="L90">		assertFalse(pois.isEmpty());</span>
+<span class="nc" id="L91">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

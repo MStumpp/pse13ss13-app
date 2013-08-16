@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestCategory.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">TestCategory.java</span></div><h1>TestCategory.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+<span class="nc" id="L9">public class TestCategory {</span>
+
+	@Test
+	public void testPersistence() {
+<span class="nc" id="L13">		int id = 42;</span>
+<span class="nc" id="L14">		Category c = new Category(id);</span>
+<span class="nc" id="L15">		assertEquals(id, c.getID());</span>
+<span class="nc" id="L16">	}</span>
+
+	@Test
+	public void testPOICategories() {
+<span class="nc" id="L20">		int[] cats = Category.getAllPOICategories();</span>
+<span class="nc" id="L21">		ArrayList&lt;Integer&gt; catList = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">		for (int i = 0; i &lt; cats.length; i++) {</span>
+<span class="nc" id="L23">			catList.add(cats[i]);</span>
+		}
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		for(int i = 1; i &lt;= 13; i++){</span>
+<span class="nc" id="L26">			assertTrue(catList.contains(i));</span>
+		}
+<span class="nc" id="L28">	}</span>
+	@Test
+	public void testAreaCategories() {
+<span class="nc" id="L31">		int[] cats = Category.getAllAreaCategories();</span>
+<span class="nc" id="L32">		ArrayList&lt;Integer&gt; catList = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		for (int i = 0; i &lt; cats.length; i++) {</span>
+<span class="nc" id="L34">			catList.add(cats[i]);</span>
+		}
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		for(int i = 100; i &lt;= 101; i++){</span>
+<span class="nc" id="L37">			assertTrue(catList.contains(i));</span>
+		}
+<span class="nc" id="L39">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

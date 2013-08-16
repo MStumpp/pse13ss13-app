@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>POIMenuControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi</a> &gt; <span class="el_source">POIMenuControllerTest.java</span></div><h1>POIMenuControllerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import android.test.AndroidTestCase;
+
+@RunWith(RobolectricTestRunner.class)
+<span class="nc" id="L12">public class POIMenuControllerTest extends AndroidTestCase {</span>
+
+	@Test
+	public void testAddRemoveCategory() {
+<span class="nc" id="L16">		POIMenuController.getInstance().addActiveCategory(1);</span>
+<span class="nc" id="L17">		assertFalse(POIManager.getInstance().isEmpty());</span>
+<span class="nc" id="L18">		POIMenuController.getInstance().removeActiveCategory(1);</span>
+<span class="nc" id="L19">		assertTrue(POIManager.getInstance().isEmpty());</span>
+<span class="nc" id="L20">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

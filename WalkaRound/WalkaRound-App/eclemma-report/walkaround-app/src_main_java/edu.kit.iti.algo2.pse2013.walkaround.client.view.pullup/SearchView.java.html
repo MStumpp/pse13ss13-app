@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SearchView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">SearchView.java</span></div><h1>SearchView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
+
+import java.util.List;
+
+import android.app.Fragment;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+
+<span class="nc" id="L31">public class SearchView extends Fragment {</span>
+
+<span class="nc" id="L33">	private final String TAG_PULLUP_CONTENT = &quot;PULLUP_CONTENT&quot;;</span>
+
+<span class="nc" id="L35">	private int switcher = R.id.pullupSearchSwitcher;</span>
+
+	private SearchMenuController searchMenuController;
+
+	private TabHost tabHost;
+
+	private TextView postalCode;
+	private TextView city;
+	private TextView street;
+	private TextView number;
+	private TextView suggestions;
+	private EditText postalCodeSearch;
+	private EditText citySearch;
+	private EditText streetSearch;
+	private EditText numberSearch;
+	private EditText query;
+	private Button goButton;
+	private LinearLayout result;
+	private LinearLayout searchLayout;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L57">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L58">		Log.d(TAG_PULLUP_CONTENT, &quot;Create SearchView&quot;);</span>
+
+<span class="nc" id="L60">		searchMenuController = SearchMenuController.getInstance();</span>
+
+<span class="nc" id="L62">		Log.d(TAG_PULLUP_CONTENT, &quot;Create Tabs&quot;);</span>
+<span class="nc" id="L63">		tabHost = (TabHost) this.getActivity()</span>
+<span class="nc" id="L64">				.findViewById(R.id.tabhost_search);</span>
+<span class="nc" id="L65">		tabHost.setup();</span>
+
+<span class="nc" id="L67">		TabSpec spec1 = tabHost.newTabSpec(&quot;address_tab&quot;);</span>
+<span class="nc" id="L68">		spec1.setContent(R.id.address_search);</span>
+<span class="nc" id="L69">		spec1.setIndicator(&quot;Address&quot;);</span>
+<span class="nc" id="L70">		TabSpec spec2 = tabHost.newTabSpec(&quot;poi_tab&quot;);</span>
+<span class="nc" id="L71">		spec2.setContent(R.id.poi_search);</span>
+<span class="nc" id="L72">		spec2.setIndicator(&quot;POI&quot;);</span>
+<span class="nc" id="L73">		tabHost.addTab(spec1);</span>
+<span class="nc" id="L74">		tabHost.addTab(spec2);</span>
+
+<span class="nc" id="L76">		postalCode = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L77">				R.id.postal_code);</span>
+<span class="nc" id="L78">		city = (TextView) this.getActivity().findViewById(R.id.city);</span>
+<span class="nc" id="L79">		street = (TextView) this.getActivity().findViewById(R.id.street);</span>
+<span class="nc" id="L80">		number = (TextView) this.getActivity().findViewById(R.id.number);</span>
+<span class="nc" id="L81">		postalCodeSearch = (EditText) this.getActivity().findViewById(</span>
+<span class="nc" id="L82">				R.id.postal_code_search);</span>
+<span class="nc" id="L83">		citySearch = (EditText) this.getActivity().findViewById(</span>
+<span class="nc" id="L84">				R.id.city_search);</span>
+<span class="nc" id="L85">		streetSearch = (EditText) this.getActivity().findViewById(</span>
+<span class="nc" id="L86">				R.id.street_search);</span>
+<span class="nc" id="L87">		numberSearch = (EditText) this.getActivity().findViewById(</span>
+<span class="nc" id="L88">				R.id.number_search);</span>
+<span class="nc" id="L89">		query = (EditText) this.getActivity().findViewById(R.id.query);</span>
+<span class="nc" id="L90">		goButton = (Button) this.getActivity().findViewById(R.id.go_button);</span>
+<span class="nc" id="L91">		suggestions = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L92">				R.id.suggestions);</span>
+
+<span class="nc" id="L94">		searchLayout = (LinearLayout) this.getActivity().findViewById(</span>
+<span class="nc" id="L95">				R.id.searchlayout);</span>
+<span class="nc" id="L96">		result = (LinearLayout) this.getActivity().findViewById(</span>
+<span class="nc" id="L97">				R.id.search_result);</span>
+
+<span class="nc" id="L99">		result.setVisibility(View.GONE);</span>
+<span class="nc" id="L100">		tabHost.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L101">		searchLayout.setVisibility(View.VISIBLE);</span>
+
+<span class="nc" id="L103">		citySearch.setText(&quot;Karlsruhe&quot;);</span>
+
+<span class="nc" id="L105">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L106">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L107">				.getDefaultDisplay();</span>
+<span class="nc" id="L108">		Point size = new Point();</span>
+<span class="nc" id="L109">		display.getSize(size);</span>
+
+<span class="nc" id="L111">		Log.d(TAG_PULLUP_CONTENT, &quot;Einstellen der Größenverhältnisse&quot;);</span>
+		/*
+		 * city.setX(size.x / 18); city.getLayoutParams().width = size.x / 12;
+		 * street.setX(size.x / 18); street.getLayoutParams().width = size.x /
+		 * 12; number.setX(size.x / 18); number.getLayoutParams().width = size.x
+		 * / 12; postalCode.setX(size.x / 18);
+		 * postalCode.getLayoutParams().width = size.x / 12;
+		 * postalCodeSearch.setX(size.x / 4);
+		 * postalCodeSearch.getLayoutParams().width = size.x / 3 * 2;
+		 * citySearch.setX(size.x / 4); citySearch.getLayoutParams().width =
+		 * size.x / 3 * 2; streetSearch.setX(size.x / 4);
+		 * streetSearch.getLayoutParams().width = size.x / 3 * 2;
+		 * numberSearch.setX(size.x / 4); numberSearch.getLayoutParams().width =
+		 * size.x / 3 * 2; query.setX(0); query.getLayoutParams().width =
+		 * size.x; goButton.setX(size.x / 4); goButton.getLayoutParams().width =
+		 * size.x / 2;
+		 */
+<span class="nc" id="L128">		goButton.getLayoutParams().width = size.x / 2;</span>
+
+<span class="nc" id="L130">		Log.d(TAG_PULLUP_CONTENT, &quot;Listener werden hinzugef�gt&quot;);</span>
+
+<span class="nc" id="L132">		goButton.setOnTouchListener(new GoListener());</span>
+<span class="nc" id="L133">		query.setOnEditorActionListener(new QueryActionListener());</span>
+
+<span class="nc" id="L135">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L136">	}</span>
+
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L140">		super.onDestroy();</span>
+<span class="nc" id="L141">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy SearchView&quot;);</span>
+<span class="nc" id="L142">		tabHost.getTabWidget().removeAllViews();</span>
+<span class="nc" id="L143">		result.removeAllViews();</span>
+<span class="nc" id="L144">		result.addView(suggestions);</span>
+<span class="nc" id="L145">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+<span class="nc" id="L146">	}</span>
+
+	public boolean equals(Fragment f) {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_SEARCH)) {</span>
+<span class="nc" id="L150">			return true;</span>
+		}
+<span class="nc" id="L152">		return false;</span>
+	}
+
+<span class="nc" id="L155">	private class GoListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+<span class="nc bnc" id="L159" title="All 2 branches missed.">			if (v.equals(goButton)</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+				List&lt;Location&gt; locations;
+<span class="nc" id="L162">				Log.d(TAG_PULLUP_CONTENT, &quot;Go wurde gedr�ckt&quot;);</span>
+<span class="nc" id="L163">				Log.d(TAG_PULLUP_CONTENT, &quot;&quot;</span>
+<span class="nc" id="L164">						+ postalCodeSearch.getText().toString());</span>
+<span class="nc" id="L165">				String checkStringPostalCode = postalCodeSearch.getText()</span>
+<span class="nc" id="L166">						.toString().replaceAll(&quot; &quot;, null);</span>
+<span class="nc" id="L167">				String checkStringCity = citySearch.getText().toString().replaceAll(&quot; &quot;, null);</span>
+<span class="nc" id="L168">				String checkStringStreet = streetSearch.getText().toString().replaceAll(&quot; &quot;, null);</span>
+<span class="nc" id="L169">				String checkStringNumber = numberSearch.getText().toString().replaceAll(&quot; &quot;, null);</span>
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">				if (checkStringPostalCode.isEmpty()) {</span>
+<span class="nc" id="L172">					locations = searchMenuController</span>
+<span class="nc" id="L173">							.requestSuggestionsByAddress(0, citySearch</span>
+<span class="nc" id="L174">									.getText().toString(), streetSearch</span>
+<span class="nc" id="L175">									.getText().toString(), numberSearch</span>
+<span class="nc" id="L176">									.getText().toString());</span>
+<span class="nc" id="L177">				} else {</span>
+<span class="nc" id="L178">					locations = searchMenuController</span>
+<span class="nc" id="L179">							.requestSuggestionsByAddress(Integer</span>
+<span class="nc" id="L180">									.parseInt(postalCodeSearch.getText()</span>
+<span class="nc" id="L181">											.toString()), citySearch.getText()</span>
+<span class="nc" id="L182">									.toString(), streetSearch.getText()</span>
+<span class="nc" id="L183">									.toString(), numberSearch.getText()</span>
+<span class="nc" id="L184">									.toString());</span>
+				}
+				// TODO: bei keinem ergebnis meldung anzeigen
+				// TODO: bei ergebnis ort anzeigen
+
+<span class="nc" id="L189">				result.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L190">				searchLayout.setVisibility(View.GONE);</span>
+
+<span class="nc bnc" id="L192" title="All 2 branches missed.">				for (Location value : locations) {</span>
+<span class="nc" id="L193">					TextView location = new TextView(getActivity());</span>
+<span class="nc" id="L194">					Log.d(&quot;routingView: &quot;,</span>
+<span class="nc" id="L195">							&quot; &quot; + value.getName() + &quot; &quot; + value.getId());</span>
+<span class="nc" id="L196">					location.setText(value.getAddress().toString());</span>
+<span class="nc" id="L197">					location.setOnTouchListener(new locationTouch(value,</span>
+<span class="nc" id="L198">							location));</span>
+					// TODO TextSize relativieren
+<span class="nc" id="L200">					location.setTextSize(30);</span>
+<span class="nc" id="L201">					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L202">							LinearLayout.LayoutParams.MATCH_PARENT,</span>
+<span class="nc" id="L203">							LinearLayout.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L204">					myParams.setMargins(0, 10, 0, 0);</span>
+<span class="nc" id="L205">					location.setLayoutParams(myParams);</span>
+<span class="nc" id="L206">					location.setBackgroundColor(MapGen.defaultBackground);</span>
+<span class="nc" id="L207">					result.addView(location);</span>
+				}
+			}
+<span class="nc" id="L210">			return false;</span>
+		}
+	}
+
+<span class="nc" id="L214">	private class QueryActionListener implements OnEditorActionListener {</span>
+
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+<span class="nc bnc" id="L217" title="All 2 branches missed.">			if (v.equals(query)) {</span>
+<span class="nc" id="L218">				Log.d(TAG_PULLUP_CONTENT, &quot;Eine query wurde eingegeben&quot;);</span>
+
+<span class="nc" id="L220">				String checkString = v.getText().toString()</span>
+<span class="nc" id="L221">						.replaceAll(&quot; &quot;, &quot;&quot;);</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">				if (!checkString.isEmpty()) {</span>
+
+<span class="nc" id="L224">					List&lt;POI&gt; poiS = searchMenuController</span>
+<span class="nc" id="L225">							.requestSuggestionsByText(v.getText().toString());</span>
+
+<span class="nc" id="L227">					result.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L228">					searchLayout.setVisibility(View.GONE);</span>
+
+<span class="nc bnc" id="L230" title="All 2 branches missed.">					for (POI value : poiS) {</span>
+<span class="nc" id="L231">						TextView poi = new TextView(getActivity());</span>
+<span class="nc" id="L232">						Log.d(&quot;routingView: &quot;, &quot; &quot; + value.getName() + &quot; &quot;</span>
+<span class="nc" id="L233">								+ value.getId());</span>
+<span class="nc" id="L234">						poi.setText(value.getName());</span>
+<span class="nc" id="L235">						poi.setOnTouchListener(new poiTouch(value, poi));</span>
+						// TODO TextSize relativieren
+<span class="nc" id="L237">						poi.setTextSize(30);</span>
+<span class="nc" id="L238">						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(</span>
+<span class="nc" id="L239">								LinearLayout.LayoutParams.MATCH_PARENT,</span>
+<span class="nc" id="L240">								LinearLayout.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L241">						myParams.setMargins(0, 10, 0, 0);</span>
+<span class="nc" id="L242">						poi.setLayoutParams(myParams);</span>
+<span class="nc" id="L243">						poi.setBackgroundColor(MapGen.defaultBackground);</span>
+<span class="nc" id="L244">						result.addView(poi);</span>
+					}
+				}
+			}
+<span class="nc" id="L248">			return false;</span>
+		}
+
+	}
+
+	private class poiTouch implements OnTouchListener {
+
+		private POI poi;
+		private View view;
+
+<span class="nc" id="L258">		public poiTouch(POI p, View view) {</span>
+<span class="nc" id="L259">			this.poi = p;</span>
+<span class="nc" id="L260">			this.view = view;</span>
+<span class="nc" id="L261">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L264" title="All 2 branches missed.">			if (v.equals(view)) {</span>
+<span class="nc" id="L265">				RouteController.getInstance().addWaypoint(</span>
+<span class="nc" id="L266">						new Waypoint(poi.getLatitude(), poi.getLongitude(), poi</span>
+<span class="nc" id="L267">								.getName()));</span>
+
+<span class="nc" id="L269">				MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
+<span class="nc" id="L270">				MapController.getInstance().setCenter(</span>
+<span class="nc" id="L271">						new Coordinate(poi.getLatitude(), poi.getLongitude()));</span>
+<span class="nc" id="L272">				MapController.getInstance().updateAll();</span>
+
+			}
+<span class="nc" id="L275">			return false;</span>
+		}
+
+	}
+
+	private class locationTouch implements OnTouchListener {
+
+		private Location location;
+		private View view;
+
+<span class="nc" id="L285">		public locationTouch(Location p, View view) {</span>
+<span class="nc" id="L286">			this.location = p;</span>
+<span class="nc" id="L287">			this.view = view;</span>
+<span class="nc" id="L288">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L291" title="All 2 branches missed.">			if (v.equals(view)) {</span>
+<span class="nc" id="L292">				RouteController.getInstance().addWaypoint(</span>
+<span class="nc" id="L293">						new Waypoint(location.getLatitude(), location</span>
+<span class="nc" id="L294">								.getLongitude(), location.getName()));</span>
+
+<span class="nc" id="L296">				MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
+<span class="nc" id="L297">				MapController.getInstance().setCenter(</span>
+<span class="nc" id="L298">						new Coordinate(location.getLatitude(), location</span>
+<span class="nc" id="L299">								.getLongitude()));</span>
+<span class="nc" id="L300">				MapController.getInstance().updateAll();</span>
+
+			}
+<span class="nc" id="L303">			return false;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

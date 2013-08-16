@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PullUpView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">PullUpView.java</span></div><h1>PullUpView.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;</span>
+
+// Android Library
+import java.util.LinkedList;
+
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+// Walkaround Library
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+/**
+ *
+ * This class creates a variant of a pull down menu. Instead of pulling down you
+ * can pull this menu up. This Class enables us to integrate a different
+ * fragments to display different menus.
+ *
+ * @author Ludwig Biermann
+ *
+ */
+<span class="nc" id="L42">public class PullUpView extends Fragment implements RouteListener {</span>
+
+	/**
+	 * Debug Information
+	 */
+<span class="nc" id="L47">	private static final String TAG_PULLUP = PullUpView.class.getSimpleName();</span>
+<span class="nc" id="L48">	private static final String TAG_PULLUP_ANIMATIOn = PullUpView.class</span>
+<span class="nc" id="L49">			.getSimpleName() + &quot;_animate&quot;;</span>
+<span class="nc" id="L50">	private static final String TAG_PULLUP_TOUCH = PullUpView.class</span>
+<span class="nc" id="L51">			.getSimpleName() + &quot;_touch&quot;;</span>
+
+	/**
+	 * Content ID
+	 */
+	public static final int CONTENT_ROUTING = 0;
+	public static final int CONTENT_FAVORITE = 1;
+	public static final int CONTENT_ROUNDTRIP = 2;
+	public static final int CONTENT_POI = 3;
+	public static final int CONTENT_SEARCH = 4;
+	public static final int CONTENT_INFO = 5;
+<span class="nc" id="L62">	public static final int CONTENT_OPTION = 6;</span>
+
+	private RoutingView routingView;
+	private FavoriteView favoriteView;
+	private RoundTripView roundtripView;
+	private POIView poiView;
+	private SearchView searchView;
+	private InfoView infoView;
+	private OptionView optionView;
+
+	/**
+	 * Views
+	 */
+	private RelativeLayout main;
+
+	private RelativeLayout menu;
+	private ImageView routing;
+	private ImageView favorite;
+	private ImageView roundtrip;
+	private ImageView poi;
+	private ImageView search;
+
+	private ImageView regulator;
+
+	/**
+	 * Permanent values
+	 */
+	private float minHeight;
+	private float minBorderHeight;
+	private float halfHeight;
+	private float maxBorderHeight;
+	private float maxHeight;
+<span class="nc" id="L94">	private boolean animationRun = false;</span>
+
+	/**
+	 *
+	 */
+
+	private RouteInfo route;
+<span class="nc" id="L101">	private boolean routingViewRun = false;</span>
+<span class="nc" id="L102">	private boolean poiViewRun = false;</span>
+
+	/**
+	 * Gestik
+	 */
+	private GestureDetector gestureDetector;
+
+
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L111">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L112">		route = new Route(new LinkedList&lt;Coordinate&gt;());</span>
+<span class="nc" id="L113">		Log.d(TAG_PULLUP, &quot;allocate views&quot;);</span>
+<span class="nc" id="L114">		main = (RelativeLayout) this.getActivity()</span>
+<span class="nc" id="L115">				.findViewById(R.id.pullUpMain);</span>
+<span class="nc" id="L116">		menu = (RelativeLayout) this.getActivity()</span>
+<span class="nc" id="L117">				.findViewById(R.id.staticMenu);</span>
+<span class="nc" id="L118">		routing = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L119">				R.id.routingMenuButton);</span>
+<span class="nc" id="L120">		favorite = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L121">				R.id.favoriteMenuButton);</span>
+<span class="nc" id="L122">		roundtrip = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L123">				R.id.roundtripMenuButton);</span>
+<span class="nc" id="L124">		poi = (ImageView) this.getActivity().findViewById(R.id.poiMenuButton);</span>
+<span class="nc" id="L125">		search = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L126">				R.id.searchMenuButton);</span>
+
+<span class="nc" id="L128">		regulator = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L129">				R.id.pullupOpenClose);</span>
+
+<span class="nc" id="L131">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;get display size&quot;);</span>
+<span class="nc" id="L132">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L133">				.getDefaultDisplay();</span>
+<span class="nc" id="L134">		Point size = new Point();</span>
+<span class="nc" id="L135">		display.getSize(size);</span>
+
+<span class="nc" id="L137">		minHeight = 0;</span>
+<span class="nc" id="L138">		maxHeight = size.y;</span>
+<span class="nc" id="L139">		halfHeight = (maxHeight / 2);</span>
+<span class="nc" id="L140">		minBorderHeight = halfHeight / 2;</span>
+<span class="nc" id="L141">		maxBorderHeight = halfHeight / 2 + halfHeight;</span>
+
+<span class="nc" id="L143">		Log.d(TAG_PULLUP, &quot;Max = &quot; + maxHeight);</span>
+<span class="nc" id="L144">		Log.d(TAG_PULLUP, &quot;Min = &quot; + minHeight);</span>
+
+<span class="nc" id="L146">		Log.d(TAG_PULLUP, &quot;Resize views&quot;);</span>
+<span class="nc" id="L147">		menu.getLayoutParams().width = size.x;</span>
+<span class="nc" id="L148">		menu.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L150">		routing.setX(size.x / 5 * 0);</span>
+<span class="nc" id="L151">		routing.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L152">		routing.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L154">		favorite.setX(size.x / 5 * 1);</span>
+<span class="nc" id="L155">		favorite.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L156">		favorite.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L158">		roundtrip.setX(size.x / 5 * 2);</span>
+<span class="nc" id="L159">		roundtrip.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L160">		roundtrip.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L162">		poi.setX(size.x / 5 * 3);</span>
+<span class="nc" id="L163">		poi.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L164">		poi.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L166">		search.setX(size.x / 5 * 4);</span>
+<span class="nc" id="L167">		search.getLayoutParams().width = size.x / 5;</span>
+<span class="nc" id="L168">		search.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L170">		regulator.getLayoutParams().height = size.y / 10;</span>
+
+<span class="nc" id="L172">		maxHeight = maxHeight - size.y/5;</span>
+
+<span class="nc" id="L174">		Log.d(TAG_PULLUP, &quot;allocate Listener&quot;);</span>
+<span class="nc" id="L175">		routing.setOnTouchListener(new RoutingListener());</span>
+<span class="nc" id="L176">		favorite.setOnTouchListener(new FavoriteListener());</span>
+<span class="nc" id="L177">		roundtrip.setOnTouchListener(new RoundtripListener());</span>
+<span class="nc" id="L178">		poi.setOnTouchListener(new POIListener());</span>
+<span class="nc" id="L179">		search.setOnTouchListener(new SearchListener());</span>
+<span class="nc" id="L180">		regulator.setOnTouchListener(new RegulatorListener());</span>
+<span class="nc" id="L181">		gestureDetector = new GestureDetector(getActivity(),</span>
+<span class="nc" id="L182">				new FlingDetector());</span>
+<span class="nc" id="L183">		main.setY(maxHeight);</span>
+
+<span class="nc" id="L185">		Log.d(TAG_PULLUP, &quot;allocate fragments&quot;);</span>
+
+<span class="nc" id="L187">		routingView = new RoutingView();</span>
+<span class="nc" id="L188">		favoriteView = new FavoriteView();</span>
+<span class="nc" id="L189">		roundtripView = new RoundTripView();</span>
+<span class="nc" id="L190">		poiView = new POIView();</span>
+<span class="nc" id="L191">		searchView = new SearchView();</span>
+<span class="nc" id="L192">		infoView = new InfoView();</span>
+<span class="nc" id="L193">		optionView = new OptionView();</span>
+
+<span class="nc" id="L195">		FragmentTransaction ft = this.getFragmentManager().beginTransaction();</span>
+		//ft.add(R.id.pullupContent, pullUpContent).commit();
+<span class="nc" id="L197">		main.setOnTouchListener(new MainListener());</span>
+
+<span class="nc" id="L199">		RouteController.getInstance().registerRouteListener(this);</span>
+
+<span class="nc" id="L201">		this.changeView(CONTENT_ROUTING);</span>
+
+<span class="nc" id="L203">	}</span>
+
+	/**
+	 * Set the height to FullSize
+	 */
+	public void setFullSizeHeight() {
+<span class="nc" id="L209">		this.setHeight(main.getY() * -1, 1000);</span>
+		// this.duration = 0;
+<span class="nc" id="L211">	}</span>
+
+	/**
+	 * Set the height to HalfSize
+	 */
+	public void setHalfSizeHeight() {
+<span class="nc" id="L217">		this.setHeight(halfHeight - main.getY(), 500);</span>
+		// this.duration = 0;
+<span class="nc" id="L219">	}</span>
+
+	/**
+	 * Set the height to minimum
+	 */
+	public void setNullSizeHeight() {
+<span class="nc" id="L225">		this.setHeight(maxHeight - main.getY(), 800);</span>
+<span class="nc" id="L226">	}</span>
+
+	/**
+	 * change the height
+	 *
+	 * @param delta
+	 *            to the new height
+	 */
+	private void setHeight(float delta) {
+<span class="nc" id="L235">		setHeight(delta, 1);</span>
+<span class="nc" id="L236">	}</span>
+
+	/**
+	 * change the height in a time
+	 *
+	 * @param delta
+	 *            to the new height
+	 * @param duration
+	 *            of the animation
+	 */
+	private void setHeight(float delta, long duration) {
+<span class="nc bnc" id="L247" title="All 2 branches missed.">		if(poiViewRun){</span>
+<span class="nc" id="L248">			poiView.setHeight((int)(maxHeight - main.getY() + delta));</span>
+		}
+<span class="nc" id="L250">		TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delta);</span>
+<span class="nc" id="L251">		anim.setDuration(duration);</span>
+<span class="nc" id="L252">		anim.setAnimationListener(new RegulatorAnimationListener(delta</span>
+<span class="nc" id="L253">				+ main.getY()));</span>
+<span class="nc" id="L254">		main.startAnimation(anim);</span>
+<span class="nc" id="L255">	}</span>
+
+	/**
+	 * Gives the height back
+	 *
+	 * @return height of the PullUpMenüs
+	 */
+	public float getHeight() {
+<span class="nc" id="L263">		return main.getY();</span>
+	}
+
+	Fragment pullUpContent;
+
+	/**
+	 * change the content of the pullup
+	 *
+	 * @param id
+	 *            of content
+	 */
+	public void changeView(int id) {
+<span class="nc" id="L275">		Log.d(TAG_PULLUP, &quot;Content Change&quot;);</span>
+<span class="nc" id="L276">		routingViewRun = false;</span>
+<span class="nc" id="L277">		this.poiViewRun = false;</span>
+<span class="nc bnc" id="L278" title="All 7 branches missed.">		switch (id) {</span>
+		case PullUpView.CONTENT_ROUTING:
+
+<span class="nc bnc" id="L281" title="All 2 branches missed.">			if (!(this.pullUpContent == routingView)) {</span>
+<span class="nc" id="L282">				pullUpContent = routingView;</span>
+<span class="nc" id="L283">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L284">						.beginTransaction();</span>
+<span class="nc" id="L285">				Log.d(TAG_PULLUP, &quot;routing starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new RoutingView();
+<span class="nc" id="L288">				ft.replace(R.id.pullupContent, routingView).commit();</span>
+				//if(routingView != null &amp;&amp; route != null){
+					//routingView.onRouteChange(route, this.getActivity());
+				//}
+<span class="nc" id="L292">				routingViewRun = true;</span>
+			}
+<span class="nc" id="L294">			break;</span>
+		case PullUpView.CONTENT_FAVORITE:
+
+<span class="nc bnc" id="L297" title="All 2 branches missed.">			if (!(this.pullUpContent == favoriteView)) {</span>
+<span class="nc" id="L298">				pullUpContent = favoriteView;</span>
+<span class="nc" id="L299">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L300">						.beginTransaction();</span>
+<span class="nc" id="L301">				Log.d(TAG_PULLUP, &quot;favorite starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new FavoriteView();
+<span class="nc" id="L304">				ft.replace(R.id.pullupContent, favoriteView).commit();</span>
+			}
+
+<span class="nc" id="L307">			break;</span>
+		case PullUpView.CONTENT_ROUNDTRIP:
+
+<span class="nc bnc" id="L310" title="All 2 branches missed.">			if (!(this.pullUpContent == roundtripView)) {</span>
+<span class="nc" id="L311">				pullUpContent = roundtripView;</span>
+<span class="nc" id="L312">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L313">						.beginTransaction();</span>
+<span class="nc" id="L314">				Log.d(TAG_PULLUP, &quot;roundtrip starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new RoundTripView();
+<span class="nc" id="L317">				ft.replace(R.id.pullupContent, this.roundtripView).commit();</span>
+			}
+
+<span class="nc" id="L320">			break;</span>
+		case PullUpView.CONTENT_POI:
+
+<span class="nc bnc" id="L323" title="All 2 branches missed.">			if (!(this.pullUpContent == poiView)) {</span>
+<span class="nc" id="L324">				pullUpContent = poiView;</span>
+<span class="nc" id="L325">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L326">						.beginTransaction();</span>
+<span class="nc" id="L327">				Log.d(TAG_PULLUP, &quot;poi starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new POIView();
+<span class="nc" id="L330">				ft.replace(R.id.pullupContent, poiView).commit();</span>
+<span class="nc" id="L331">				poiView.setHeight((int)halfHeight);</span>
+<span class="nc" id="L332">				this.poiViewRun = true;</span>
+			}
+
+<span class="nc" id="L335">			break;</span>
+		case PullUpView.CONTENT_SEARCH:
+
+<span class="nc bnc" id="L338" title="All 2 branches missed.">			if (!(this.pullUpContent == searchView)) {</span>
+<span class="nc" id="L339">				pullUpContent = searchView;</span>
+<span class="nc" id="L340">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L341">						.beginTransaction();</span>
+<span class="nc" id="L342">				Log.d(TAG_PULLUP, &quot;search starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new SearchView();
+<span class="nc" id="L345">				ft.replace(R.id.pullupContent, searchView).commit();</span>
+			}
+
+<span class="nc" id="L348">			break;</span>
+		case PullUpView.CONTENT_OPTION:
+
+<span class="nc bnc" id="L351" title="All 2 branches missed.">			if (!(this.pullUpContent == optionView)) {</span>
+<span class="nc" id="L352">				pullUpContent = optionView;</span>
+<span class="nc" id="L353">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L354">						.beginTransaction();</span>
+<span class="nc" id="L355">				Log.d(TAG_PULLUP, &quot;optionen starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new OptionView();
+<span class="nc" id="L358">				ft.replace(R.id.pullupContent, optionView).commit();</span>
+			}
+
+<span class="nc" id="L361">			break;</span>
+		default:
+
+<span class="nc bnc" id="L364" title="All 2 branches missed.">			if (!(this.pullUpContent == infoView)) {</span>
+<span class="nc" id="L365">				pullUpContent = infoView;</span>
+<span class="nc" id="L366">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L367">						.beginTransaction();</span>
+<span class="nc" id="L368">				Log.d(TAG_PULLUP, &quot;InfoView starts&quot;);</span>
+				//ft.remove(pullUpContent);
+				//pullUpContent = new InfoView();
+<span class="nc" id="L371">				ft.replace(R.id.pullupContent, infoView).commit();</span>
+<span class="nc" id="L372">			} else {</span>
+<span class="nc" id="L373">				infoView = new InfoView();</span>
+<span class="nc" id="L374">				pullUpContent = infoView;</span>
+<span class="nc" id="L375">				FragmentTransaction ft = this.getFragmentManager()</span>
+<span class="nc" id="L376">						.beginTransaction();</span>
+<span class="nc" id="L377">				ft.replace(R.id.pullupContent, infoView).commit();</span>
+			}
+
+			break;
+		}
+
+<span class="nc" id="L383">	}</span>
+
+	/**
+	 * Routing button Listener
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L391">	private class RoutingListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L394" title="All 2 branches missed.">			if (v.equals(routing)</span>
+<span class="nc bnc" id="L395" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L396">				Log.d(TAG_PULLUP_TOUCH, &quot;routing starts&quot;);</span>
+<span class="nc" id="L397">				changeView(PullUpView.CONTENT_ROUTING);</span>
+<span class="nc" id="L398">				setFullSizeHeight();</span>
+<span class="nc" id="L399">				return false;</span>
+			}
+<span class="nc" id="L401">			return true;</span>
+		}
+	}
+
+	/**
+	 * Favorite button listener.
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L411">	private class FavoriteListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L414" title="All 2 branches missed.">			if (v.equals(favorite)</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L416">				Log.d(TAG_PULLUP_TOUCH, &quot;Favorite starts&quot;);</span>
+<span class="nc" id="L417">				changeView(PullUpView.CONTENT_FAVORITE);</span>
+<span class="nc" id="L418">				setFullSizeHeight();</span>
+<span class="nc" id="L419">				return false;</span>
+			}
+<span class="nc" id="L421">			return true;</span>
+		}
+	}
+
+	/**
+	 * roundtrip button listener
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L431">	private class RoundtripListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+<span class="nc bnc" id="L435" title="All 2 branches missed.">			if (v.equals(roundtrip)</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L437">				Log.d(TAG_PULLUP_TOUCH, &quot;roundtrip starts&quot;);</span>
+<span class="nc" id="L438">				changeView(PullUpView.CONTENT_ROUNDTRIP);</span>
+<span class="nc" id="L439">				setFullSizeHeight();</span>
+<span class="nc" id="L440">				return false;</span>
+			}
+<span class="nc" id="L442">			return true;</span>
+		}
+	}
+
+	/**
+	 * poi button listener
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L452">	private class POIListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+<span class="nc bnc" id="L456" title="All 4 branches missed.">			if (v.equals(poi) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L457">				Log.d(TAG_PULLUP_TOUCH, &quot;poi starts&quot;);</span>
+<span class="nc" id="L458">				changeView(PullUpView.CONTENT_POI);</span>
+<span class="nc" id="L459">				setHalfSizeHeight();</span>
+<span class="nc" id="L460">				return false;</span>
+			}
+<span class="nc" id="L462">			return true;</span>
+		}
+	}
+
+	/**
+	 * Listener to get general touch events
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L472">	private class MainListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+<span class="nc bnc" id="L476" title="All 4 branches missed.">			if (!v.equals(main) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L477">				return false;</span>
+			}
+
+<span class="nc" id="L480">			Log.d(TAG_PULLUP_TOUCH, &quot;main starts&quot;);</span>
+<span class="nc" id="L481">			return true;</span>
+		}
+	}
+
+	/**
+	 * Listener zur änderung des Content des Menüs.
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L491">	private class SearchListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+<span class="nc bnc" id="L495" title="All 2 branches missed.">			if (v.equals(search)</span>
+<span class="nc bnc" id="L496" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L497">				Log.d(TAG_PULLUP_TOUCH, &quot;search starts&quot;);</span>
+<span class="nc" id="L498">				changeView(PullUpView.CONTENT_SEARCH);</span>
+<span class="nc" id="L499">				setFullSizeHeight();</span>
+<span class="nc" id="L500">				return false;</span>
+			}
+<span class="nc" id="L502">			return true;</span>
+		}
+	}
+
+	/**
+	 * Implements the listener of height regulator button
+	 *
+	 * @author ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L512">	private class RegulatorListener implements OnTouchListener {</span>
+
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+<span class="nc" id="L517">			int action = MotionEventCompat.getActionMasked(event);</span>
+<span class="nc bnc" id="L518" title="All 6 branches missed.">			switch (action) {</span>
+			case (MotionEvent.ACTION_DOWN):
+<span class="nc" id="L520">				Log.d(TAG_PULLUP_TOUCH, &quot;Action was DOWN&quot;);</span>
+<span class="nc" id="L521">				return true;</span>
+			case (MotionEvent.ACTION_MOVE):
+<span class="nc" id="L523">				Log.d(TAG_PULLUP_TOUCH, &quot;Action was MOVE&quot;);</span>
+<span class="nc bnc" id="L524" title="All 2 branches missed.">				if (!animationRun) {</span>
+<span class="nc" id="L525">					animationRun = true;</span>
+<span class="nc" id="L526">					float delta = event.getY() - regulator.getY();</span>
+<span class="nc" id="L527">					setHeight(delta);</span>
+				}
+<span class="nc" id="L529">				return gestureDetector.onTouchEvent(event);</span>
+			case (MotionEvent.ACTION_UP):
+<span class="nc" id="L531">				Log.d(TAG_PULLUP_TOUCH, &quot;Action was UP&quot;);</span>
+<span class="nc" id="L532">				return gestureDetector.onTouchEvent(event);</span>
+
+			case (MotionEvent.ACTION_CANCEL):
+<span class="nc" id="L535">				Log.d(TAG_PULLUP_TOUCH, &quot;Action was CANCEL&quot;);</span>
+<span class="nc" id="L536">				return gestureDetector.onTouchEvent(event);</span>
+			case (MotionEvent.ACTION_OUTSIDE):
+<span class="nc" id="L538">				Log.d(TAG_PULLUP_TOUCH, &quot;Movement occurred outside bounds &quot;</span>
+						+ &quot;of current screen element&quot;);
+<span class="nc" id="L540">				return gestureDetector.onTouchEvent(event);</span>
+			default:
+<span class="nc" id="L542">				return gestureDetector.onTouchEvent(event);</span>
+			}
+		}
+	}
+
+	/**
+	 * Implements the Animation listener of the transaction of the pullupview
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+	private class RegulatorAnimationListener implements AnimationListener {
+
+		float height;
+
+<span class="nc" id="L557">		public RegulatorAnimationListener(float height) {</span>
+<span class="nc" id="L558">			this.height = height;</span>
+<span class="nc" id="L559">		}</span>
+
+
+		public void onAnimationEnd(Animation anim) {
+
+<span class="nc" id="L564">			main.setY(height);</span>
+<span class="nc" id="L565">			animationRun = false;</span>
+<span class="nc" id="L566">			main.clearAnimation();</span>
+
+<span class="nc bnc" id="L568" title="All 4 branches missed.">			if (main.getY() != halfHeight &amp;&amp; main.getY() &lt;= maxBorderHeight</span>
+<span class="nc bnc" id="L569" title="All 2 branches missed.">					&amp;&amp; main.getY() &gt;= minBorderHeight) {</span>
+<span class="nc" id="L570">				float delta = (main.getY() - halfHeight) * -1;</span>
+<span class="nc" id="L571">				Log.d(TAG_PULLUP_ANIMATIOn, &quot;Correct to halfSize&quot;);</span>
+<span class="nc" id="L572">				setHeight(delta, 1000);</span>
+			}
+
+<span class="nc bnc" id="L575" title="All 4 branches missed.">			if (main.getY() &gt; maxBorderHeight &amp;&amp; main.getY() != maxHeight) {</span>
+
+<span class="nc" id="L577">				float delta = (main.getY() - maxHeight) * -1;</span>
+<span class="nc" id="L578">				Log.d(TAG_PULLUP_ANIMATIOn,</span>
+<span class="nc" id="L579">						&quot;Correct to Out of Bound Max delta: &quot; + delta);</span>
+<span class="nc" id="L580">				setHeight(delta, 1000);</span>
+
+<span class="nc bnc" id="L582" title="All 4 branches missed.">			} else if (main.getY() &lt; minBorderHeight &amp;&amp; main.getY() != 0.0F) {</span>
+<span class="nc" id="L583">				float delta = main.getY() * -1;</span>
+<span class="nc" id="L584">				Log.d(TAG_PULLUP_ANIMATIOn, &quot;Correct to Out of Bound Min delta&quot;</span>
+<span class="nc" id="L585">						+ delta);</span>
+<span class="nc" id="L586">				setHeight(delta, 1000);</span>
+			}
+<span class="nc bnc" id="L588" title="All 2 branches missed.">			if(poiViewRun){</span>
+<span class="nc" id="L589">				poiView.setHeight((int)(maxHeight - main.getY()));</span>
+			}
+
+<span class="nc" id="L592">		}</span>
+
+
+		public void onAnimationRepeat(Animation arg0) {
+<span class="nc" id="L596">			Log.d(TAG_PULLUP_ANIMATIOn, &quot;Repeat Animation&quot;);</span>
+
+<span class="nc" id="L598">		}</span>
+
+
+		public void onAnimationStart(Animation arg0) {
+<span class="nc" id="L602">			Log.d(TAG_PULLUP_ANIMATIOn, &quot;Repeat Animation&quot;);</span>
+<span class="nc" id="L603">		}</span>
+
+	}
+
+	/**
+	 * Detect fling events on the pull up menu
+	 *
+	 * @author Ludwig Biermann
+	 *
+	 */
+<span class="nc" id="L613">	private class FlingDetector extends SimpleOnGestureListener {</span>
+
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+
+<span class="nc" id="L618">			Log.d(TAG_PULLUP_TOUCH, &quot;Fling! &quot; + velocityY + &quot; &quot; + e2.getY());</span>
+<span class="nc bnc" id="L619" title="All 2 branches missed.">			if (Math.abs(velocityY) &gt; 1000) {</span>
+<span class="nc bnc" id="L620" title="All 2 branches missed.">				if (e2.getY() &lt; 0) {</span>
+<span class="nc" id="L621">					setFullSizeHeight();</span>
+<span class="nc" id="L622">				} else {</span>
+<span class="nc" id="L623">					setNullSizeHeight();</span>
+				}
+			}
+<span class="nc" id="L626">			return false;</span>
+		}
+	}
+
+
+	public void onRouteChange(final RouteInfo currentRoute) {
+
+<span class="nc" id="L633">		getActivity().runOnUiThread(new Runnable() {</span>
+			public void run() {
+<span class="nc" id="L635">				route = currentRoute;</span>
+<span class="nc bnc" id="L636" title="All 2 branches missed.">				if(routingViewRun){</span>
+<span class="nc" id="L637">					Log.d(TAG_PULLUP_TOUCH, &quot;Route Change: &quot; + currentRoute.getWaypoints().size());</span>
+<span class="nc" id="L638">					routingView.onRouteChange(route,  getActivity());</span>
+				}
+<span class="nc" id="L640">			}</span>
+		});
+<span class="nc" id="L642">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

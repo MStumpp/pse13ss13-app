@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>POIView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">POIView.java</span></div><h1>POIView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
+
+import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
+
+<span class="nc" id="L17">public class POIView extends Fragment {</span>
+
+<span class="nc" id="L19">	private final String TAG_PULLUP_CONTENT = &quot;PULLUP_CONTENT&quot;;</span>
+
+<span class="nc" id="L21">	private int switcher = R.id.pullupPOISwitcher;</span>
+
+	private TextView pois;
+	private TextView category1;
+	private TextView category2;
+	private TextView category3;
+	private TextView category4;
+	private TextView category5;
+	private TextView category6;
+	private TextView category7;
+	private TextView category8;
+	private TextView category9;
+	private TextView category10;
+	private TextView category11;
+	private TextView category12;
+	private TextView category13;
+
+	private POIMenuController poiController;
+
+	private ScrollView sc;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L44">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L45">		Log.d(TAG_PULLUP_CONTENT, &quot;Create POIView&quot;);</span>
+
+<span class="nc" id="L47">		poiController = POIMenuController.getInstance();</span>
+
+<span class="nc" id="L49">		pois = (TextView) this.getActivity().findViewById(R.id.pois);</span>
+<span class="nc" id="L50">		category1 = (TextView) this.getActivity().findViewById(R.id.category_1);</span>
+<span class="nc" id="L51">		category2 = (TextView) this.getActivity().findViewById(R.id.category_2);</span>
+<span class="nc" id="L52">		category3 = (TextView) this.getActivity().findViewById(R.id.category_3);</span>
+<span class="nc" id="L53">		category4 = (TextView) this.getActivity().findViewById(R.id.category_4);</span>
+<span class="nc" id="L54">		category5 = (TextView) this.getActivity().findViewById(R.id.category_5);</span>
+<span class="nc" id="L55">		category6 = (TextView) this.getActivity().findViewById(R.id.category_6);</span>
+<span class="nc" id="L56">		category7 = (TextView) this.getActivity().findViewById(R.id.category_7);</span>
+<span class="nc" id="L57">		category8 = (TextView) this.getActivity().findViewById(R.id.category_8);</span>
+<span class="nc" id="L58">		category9 = (TextView) this.getActivity().findViewById(R.id.category_9);</span>
+<span class="nc" id="L59">		category10 = (TextView) this.getActivity().findViewById(R.id.category_10);</span>
+<span class="nc" id="L60">		category11 = (TextView) this.getActivity().findViewById(R.id.category_11);</span>
+<span class="nc" id="L61">		category12 = (TextView) this.getActivity().findViewById(R.id.category_12);</span>
+<span class="nc" id="L62">		category13 = (TextView) this.getActivity().findViewById(R.id.category_13);</span>
+
+<span class="nc" id="L64">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L65">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L66">				.getDefaultDisplay();</span>
+<span class="nc" id="L67">		Point size = new Point();</span>
+<span class="nc" id="L68">		display.getSize(size);</span>
+
+
+<span class="nc" id="L71">		Log.d(TAG_PULLUP_CONTENT, &quot;Listener werden hinzugefügt&quot;);</span>
+<span class="nc" id="L72">		category1.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L73">		category2.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L74">		category3.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L75">		category4.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L76">		category5.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L77">		category6.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L78">		category7.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L79">		category8.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L80">		category9.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L81">		category10.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L82">		category11.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L83">		category12.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L84">		category13.setOnTouchListener(new onCategoryTouch());</span>
+<span class="nc" id="L85">		sc = (ScrollView) this.getActivity().findViewById(R.id.poi_menu_scroll);</span>
+
+<span class="nc" id="L87">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L88">	}</span>
+
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L92">		super.onDestroy();</span>
+<span class="nc" id="L93">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy POIView&quot;);</span>
+<span class="nc" id="L94">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+<span class="nc" id="L95">	}</span>
+
+	public boolean equals(Fragment f) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_POI)) {</span>
+<span class="nc" id="L99">			return true;</span>
+		}
+<span class="nc" id="L101">		return false;</span>
+	}
+
+	public void setHeight(int height) {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">		if(sc != null){</span>
+<span class="nc" id="L106">			sc.getLayoutParams().height = height;</span>
+		}
+<span class="nc" id="L108">	}</span>
+
+<span class="nc" id="L110">	private class onCategoryTouch implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">			if (v.equals(category1)</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">				if (!category1.isSelected()) {</span>
+<span class="nc" id="L116">					setSelected(category1);</span>
+<span class="nc" id="L117">				} else {</span>
+<span class="nc" id="L118">					setUnselected(category1);</span>
+				}
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			} else if (v.equals(category2)</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">				if (!category2.isSelected()) {</span>
+<span class="nc" id="L123">					setSelected(category2);</span>
+<span class="nc" id="L124">				} else {</span>
+<span class="nc" id="L125">					setUnselected(category2);</span>
+				}
+<span class="nc bnc" id="L127" title="All 2 branches missed.">			} else if (v.equals(category3)</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">				if (!category3.isSelected()) {</span>
+<span class="nc" id="L130">					setSelected(category3);</span>
+<span class="nc" id="L131">				} else {</span>
+<span class="nc" id="L132">					setUnselected(category3);</span>
+				}
+<span class="nc bnc" id="L134" title="All 2 branches missed.">			} else if (v.equals(category4)</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">				if (!category4.isSelected()) {</span>
+<span class="nc" id="L137">					setSelected(category4);</span>
+<span class="nc" id="L138">				} else {</span>
+<span class="nc" id="L139">					setUnselected(category4);</span>
+				}
+<span class="nc bnc" id="L141" title="All 2 branches missed.">			} else if (v.equals(category5)</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">				if (!category5.isSelected()) {</span>
+<span class="nc" id="L144">					setSelected(category5);</span>
+<span class="nc" id="L145">				} else {</span>
+<span class="nc" id="L146">					setUnselected(category5);</span>
+				}
+<span class="nc bnc" id="L148" title="All 2 branches missed.">			} else if (v.equals(category6)</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">				if (!category6.isSelected()) {</span>
+<span class="nc" id="L151">					setSelected(category6);</span>
+<span class="nc" id="L152">				} else {</span>
+<span class="nc" id="L153">					setUnselected(category6);</span>
+				}
+<span class="nc bnc" id="L155" title="All 2 branches missed.">			} else if (v.equals(category7)</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">				if (!category7.isSelected()) {</span>
+<span class="nc" id="L158">					setSelected(category7);</span>
+<span class="nc" id="L159">				} else {</span>
+<span class="nc" id="L160">					setUnselected(category7);</span>
+				}
+<span class="nc bnc" id="L162" title="All 2 branches missed.">			} else if (v.equals(category8)</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">				if (!category8.isSelected()) {</span>
+<span class="nc" id="L165">					setSelected(category8);</span>
+<span class="nc" id="L166">				} else {</span>
+<span class="nc" id="L167">					setUnselected(category8);</span>
+				}
+<span class="nc bnc" id="L169" title="All 2 branches missed.">			} else if (v.equals(category9)</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">				if (!category9.isSelected()) {</span>
+<span class="nc" id="L172">					setSelected(category9);</span>
+<span class="nc" id="L173">				} else {</span>
+<span class="nc" id="L174">					setUnselected(category9);</span>
+				}
+<span class="nc bnc" id="L176" title="All 2 branches missed.">			} else if (v.equals(category10)</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">				if (!category10.isSelected()) {</span>
+<span class="nc" id="L179">					setSelected(category10);</span>
+<span class="nc" id="L180">				} else {</span>
+<span class="nc" id="L181">					setUnselected(category10);</span>
+				}
+<span class="nc bnc" id="L183" title="All 2 branches missed.">			} else if (v.equals(category11)</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">				if (!category11.isSelected()) {</span>
+<span class="nc" id="L186">					setSelected(category11);</span>
+<span class="nc" id="L187">				} else {</span>
+<span class="nc" id="L188">					setUnselected(category11);</span>
+				}
+<span class="nc bnc" id="L190" title="All 2 branches missed.">			} else if (v.equals(category12)</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">				if (!category12.isSelected()) {</span>
+<span class="nc" id="L193">					setSelected(category12);</span>
+<span class="nc" id="L194">				} else {</span>
+<span class="nc" id="L195">					setUnselected(category12);</span>
+				}
+<span class="nc bnc" id="L197" title="All 2 branches missed.">			} else if (v.equals(category13)</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">				if (!category13.isSelected()) {</span>
+<span class="nc" id="L200">					setSelected(category13);</span>
+<span class="nc" id="L201">				} else {</span>
+<span class="nc" id="L202">					setUnselected(category13);</span>
+				}
+			}
+<span class="nc" id="L205">			return false;</span>
+		}
+
+		private void setUnselected(TextView v) {
+<span class="nc" id="L209">			v.setSelected(false);</span>
+<span class="nc" id="L210">			v.setTextColor(Color.WHITE);</span>
+<span class="nc" id="L211">			poiController.removeActiveCategory(Integer.parseInt(v.getTag()</span>
+<span class="nc" id="L212">					.toString()));</span>
+<span class="nc" id="L213">		}</span>
+
+		private void setSelected(TextView v) {
+<span class="nc" id="L216">			v.setSelected(true);</span>
+<span class="nc" id="L217">			v.setTextColor(Color.YELLOW);</span>
+<span class="nc" id="L218">			poiController.addActiveCategory(Integer.parseInt(v.getTag()</span>
+<span class="nc" id="L219">					.toString()));</span>
+<span class="nc" id="L220">		}</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BootActivity.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client</a> &gt; <span class="el_source">BootActivity.java</span></div><h1>BootActivity.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client;</span>
+
+import java.util.Locale;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.location.Location;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.os.Looper;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Display;
+import android.widget.ProgressBar;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+<span class="fc" id="L39">public class BootActivity extends Activity {</span>
+	protected static final int TOTALSTEPS = 1000;
+<span class="fc" id="L41">	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419);</span>
+<span class="fc" id="L42">	public static String TAG = BootActivity.class.getSimpleName();</span>
+
+	protected boolean mbActive;
+	protected ProgressBar mProgressBar;
+
+	@Override
+	public void onCreate(final Bundle savedInstanceState) {
+<span class="nc" id="L49">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L50">		System.gc();</span>
+<span class="nc" id="L51">		setContentView(R.layout.progress_bar);</span>
+<span class="nc" id="L52">		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);</span>
+
+<span class="nc" id="L54">		PreferenceManager.setDefaultValues(getApplicationContext(),</span>
+<span class="nc" id="L55">				R.xml.options, true);</span>
+<span class="nc" id="L56">		PreferenceUtility.initialize(getApplicationContext());</span>
+<span class="nc" id="L57">		final Thread timerThread = new BootHelper();</span>
+<span class="nc" id="L58">		timerThread.start();</span>
+<span class="nc" id="L59">	}</span>
+
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L63">		super.onDestroy();</span>
+<span class="nc" id="L64">	}</span>
+
+	public void updateProgress(final int timePassed) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (null != mProgressBar) {</span>
+			// Ignore rounding error here
+<span class="nc" id="L69">			final int progress = mProgressBar.getMax() * timePassed</span>
+<span class="nc" id="L70">					/ TOTALSTEPS;</span>
+<span class="nc" id="L71">			mProgressBar.setProgress(progress);</span>
+		}
+<span class="nc" id="L73">	}</span>
+
+	public void onContinue() {
+<span class="nc" id="L76">		Intent intent = new Intent(this, MapView.class);</span>
+<span class="nc" id="L77">		this.startActivity(intent);</span>
+<span class="nc" id="L78">	}</span>
+
+	public void alert() {
+
+<span class="nc" id="L82">		AlertDialog alertDialog = new AlertDialog.Builder(this).create();</span>
+<span class="nc" id="L83">		alertDialog.setTitle(&quot;Unknown Error&quot;);</span>
+<span class="nc" id="L84">		alertDialog.setMessage(&quot;Close?&quot;);</span>
+<span class="nc" id="L85">		alertDialog.setButton(1, &quot;OK&quot;, new DialogInterface.OnClickListener() {</span>
+			public void onClick(DialogInterface dialog, int which) {
+<span class="nc" id="L87">				finish();</span>
+<span class="nc" id="L88">			}</span>
+		});
+<span class="nc" id="L90">		alertDialog.setIcon(R.drawable.large_logo);</span>
+<span class="nc" id="L91">		alertDialog.show();</span>
+<span class="nc" id="L92">	}</span>
+
+<span class="nc" id="L94">	private class BootHelper extends Thread implements TileListener {</span>
+
+<span class="nc" id="L96">		private int tiles = 0;</span>
+<span class="nc" id="L97">		private int progress = 0;</span>
+		private int stepSize;
+
+		@Override
+		public void run() {
+<span class="nc" id="L102">			mbActive = true;</span>
+			try {
+
+				// Controller initialisierung
+
+<span class="nc" id="L107">				FavoriteMenuController.getInstance();</span>
+<span class="nc" id="L108">				POIMenuController.getInstance();</span>
+<span class="nc" id="L109">				RouteController.getInstance();</span>
+<span class="nc" id="L110">				SearchMenuController.getInstance();</span>
+<span class="nc" id="L111">				CurrentMapStyleModel.getInstance();</span>
+<span class="nc" id="L112">				String mapStyle = PreferenceUtility.getInstance().getMapStyle();</span>
+<span class="nc" id="L113">				CurrentMapStyleModel.getInstance().setCurrentMapStyle(mapStyle);</span>
+				// 10 %
+<span class="nc" id="L115">				progress = 100;</span>
+<span class="nc" id="L116">				updateProgress(progress);</span>
+
+				// Model initialisierung
+
+<span class="nc" id="L120">				FavoriteManager.initialize(getApplicationContext());</span>
+<span class="nc" id="L121">				POIManager.initialize(getApplicationContext());</span>
+<span class="nc" id="L122">				RouteProcessing.getInstance();</span>
+<span class="nc" id="L123">				Looper.prepare();</span>
+<span class="nc" id="L124">				PositionManager.initialize(getApplicationContext());</span>
+
+<span class="nc" id="L126">				Log.d(&quot;debugFu&quot;, &quot; &quot;</span>
+<span class="nc" id="L127">						+ (PreferenceUtility.getInstance().isSoundOn() == true));</span>
+<span class="nc" id="L128">				TextToSpeechUtility.initialize(getApplicationContext(),</span>
+<span class="nc" id="L129">						PreferenceUtility.getInstance().isSoundOn());</span>
+<span class="nc" id="L130">				PreferenceUtility.getInstance()</span>
+<span class="nc" id="L131">						.registerOnSharedPreferenceChangeListener(</span>
+<span class="nc" id="L132">								TextToSpeechUtility.getInstance());</span>
+
+<span class="nc bnc" id="L134" title="All 2 branches missed.">				while (!TextToSpeechUtility.getInstance().isReady()) {</span>
+<span class="nc" id="L135">					Log.d(TAG, &quot;TextToSpeech ist noch nicht ready&quot;);</span>
+<span class="nc" id="L136">					sleep(50);</span>
+				}
+
+				// 20%
+<span class="nc" id="L140">				progress = 200;</span>
+<span class="nc" id="L141">				updateProgress(progress);</span>
+
+<span class="nc" id="L143">				System.gc();</span>
+
+<span class="nc" id="L145">				updateProgress(progress);</span>
+
+				/*
+				String fileString = File.separatorChar + &quot;walkaround&quot;
+						+ File.separatorChar + &quot;geometryData.pbf&quot;;
+				GeometryDataIO geometryDataIO;
+				try {
+					geometryDataIO = GeometryDataIO.load(new File(Environment
+							.getExternalStorageDirectory().getAbsolutePath()
+							+ fileString));
+					GeometryProcessor.init(geometryDataIO);
+				} catch (IOException e) {
+					Log.e(TAG, &quot;geometry konnte nicht initialisiert werden.&quot;);
+				}*/
+
+				// 35%
+<span class="nc" id="L161">				progress = 350;</span>
+<span class="nc" id="L162">				updateProgress(progress);</span>
+
+				// TileFetcher
+<span class="nc" id="L165">				float lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail();</span>
+<span class="nc" id="L166">				Display display = getWindowManager().getDefaultDisplay();</span>
+<span class="nc" id="L167">				Point size = new Point();</span>
+<span class="nc" id="L168">				display.getSize(size);</span>
+
+<span class="nc" id="L170">				Location l = PositionManager.getInstance().getLastKnownPosition();</span>
+				BoundingBox coorBox;
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">				if (l != null) {</span>
+<span class="nc" id="L174">					coorBox = new BoundingBox(new Coordinate(l.getLatitude(), l.getLongitude()), size, lod);</span>
+<span class="nc" id="L175">				} else {</span>
+<span class="nc" id="L176">					coorBox = new BoundingBox(defaultCoordinate, size, lod);</span>
+				}
+
+<span class="nc" id="L179">				TileFetcher tileFetcher = new TileFetcher();</span>
+
+				// 50 %
+<span class="nc" id="L182">				progress = 500;</span>
+<span class="nc" id="L183">				updateProgress(progress);</span>
+
+				// TODO Offset löschen
+<span class="nc" id="L186">				int[] amountTop = TileUtility.getXYTileIndex(</span>
+<span class="nc" id="L187">						coorBox.getTopLeft(), (int) lod);</span>
+<span class="nc" id="L188">				amountTop[0]--;</span>
+<span class="nc" id="L189">				amountTop[1]--;</span>
+
+<span class="nc" id="L191">				int[] amountBottom = TileUtility.getXYTileIndex(</span>
+<span class="nc" id="L192">						coorBox.getBottomRight(), (int) lod);</span>
+
+<span class="nc" id="L194">				amountBottom[0]++;</span>
+<span class="nc" id="L195">				amountBottom[1]++;</span>
+
+<span class="nc" id="L197">				int amount = (amountBottom[0] - amountTop[0])</span>
+<span class="nc" id="L198">						* (amountBottom[1] - amountTop[1]);</span>
+
+<span class="nc" id="L200">				stepSize = (int) (400 / amount);</span>
+
+<span class="nc" id="L202">				tileFetcher.requestTiles((int) lod, amountTop[0], amountTop[1],</span>
+<span class="nc" id="L203">						amountBottom[0], amountBottom[1], this);</span>
+
+<span class="nc" id="L205">				updateProgress(progress);</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">				while ((amount - 4) &gt; tiles) {</span>
+<span class="nc" id="L207">					Log.d(TAG, &quot;Tile Fetcher Schleife: &quot; + amount + &quot; &gt; &quot;</span>
+<span class="nc" id="L208">							+ tiles);</span>
+<span class="nc" id="L209">					updateProgress(progress);</span>
+<span class="nc" id="L210">					sleep(50);</span>
+				}
+
+<span class="nc" id="L213">				MapController.initialize(tileFetcher, coorBox, coorBox.getCenter());</span>
+<span class="nc" id="L214">				progress += 50;</span>
+<span class="nc" id="L215">				updateProgress(progress);</span>
+<span class="nc" id="L216">				HeadUpController.initializes();</span>
+
+<span class="nc" id="L218">				progress = 1000;</span>
+<span class="nc" id="L219">				updateProgress(progress);</span>
+<span class="nc" id="L220">				Log.d(TAG, &quot;alles geladen!!&quot;);</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">				if (TextToSpeechUtility.getInstance().speak(&quot;Willkommen bei !&quot;)) {</span>
+<span class="nc" id="L222">					TextToSpeechUtility.getInstance().speak(&quot;WalkaRound!&quot;,</span>
+<span class="nc" id="L223">							Locale.ENGLISH);</span>
+<span class="nc" id="L224">				} else {</span>
+<span class="nc" id="L225">					MediaPlayer mp = MediaPlayer.create(getBaseContext(),</span>
+<span class="nc" id="L226">							R.raw.hangout_dingtone);</span>
+<span class="nc" id="L227">					mp.setVolume(100, 100);</span>
+<span class="nc" id="L228">					mp.start();</span>
+					// mp.pause();
+				}
+
+<span class="nc" id="L232">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L233">			} finally {</span>
+<span class="nc" id="L234">				onContinue();</span>
+<span class="nc" id="L235">			}</span>
+<span class="nc" id="L236">		}</span>
+
+		public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
+<span class="nc" id="L239">			progress += stepSize;</span>
+<span class="nc" id="L240">			tiles++;</span>
+<span class="nc" id="L241">		}</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

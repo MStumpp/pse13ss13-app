@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GraphDataIO.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">GraphDataIO.java</span></div><h1>GraphDataIO.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import com.google.protobuf.CodedInputStream;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
+
+public class GraphDataIO {
+
+	/**
+	 * Stores a set of Edge objects.
+	 */
+	private Set&lt;Edge&gt; edges;
+
+
+	/**
+	 * Initializes a GraphDataIO object.
+	 */
+<span class="nc" id="L30">	public GraphDataIO() {</span>
+<span class="nc" id="L31">		edges = new TreeSet&lt;Edge&gt;();</span>
+<span class="nc" id="L32">	}</span>
+
+
+	/**
+	 * Adds an Edge to the list of all Edges.
+	 *
+	 * @param edge Edge to be added.
+	 */
+	public void addEdge(Edge edge) {
+<span class="nc" id="L41">		edges.add(edge);</span>
+<span class="nc" id="L42">	}</span>
+
+
+	/**
+	 * Adds a list of Edges to the list of all Edges.
+	 *
+	 * @param edges List of Edges to be added.
+	 */
+	public void addEdges(List&lt;Edge&gt; edges) {
+<span class="nc" id="L51">		this.edges.addAll(edges);</span>
+<span class="nc" id="L52">	}</span>
+
+
+	/**
+	 * Returns the set of all Edges.
+	 *
+	 * @return Set&lt;Edge&gt;.
+	 */
+	public Set&lt;Edge&gt; getEdges() {
+<span class="nc" id="L61">		return edges;</span>
+	}
+
+
+	/**
+	 * Returns a set of all Vertex objects contained in all edges.
+	 *
+	 * @return Set&lt;Vertex&gt; List of all egdes.
+	 */
+	public Set&lt;Vertex&gt; getVertices() {
+<span class="nc" id="L71">		Set&lt;Vertex&gt; vertices = new TreeSet&lt;Vertex&gt;();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		for (Edge edge : edges)</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">			for (Vertex vertex : edge.getVertices())</span>
+<span class="nc" id="L74">				vertices.add(vertex);</span>
+<span class="nc" id="L75">		return vertices;</span>
+	}
+
+
+	/**
+	 * Saves the GraphDataIO  object to an external file.
+	 *
+	 * @param objectToSave GeometryDataIO object to save.
+	 * @param destination Location of output file on file system.
+	 * @throws java.io.IOException
+	 */
+	public static void save(GraphDataIO objectToSave, File destination) throws IOException {
+<span class="nc" id="L87">		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));</span>
+<span class="nc" id="L88">		ProtobufConverter.getGraphDataBuilder(objectToSave).build().writeTo(out);</span>
+<span class="nc" id="L89">		out.flush();</span>
+<span class="nc" id="L90">		out.close();</span>
+<span class="nc" id="L91">	}</span>
+
+
+	/**
+	 * Loads and returns a GraphDataIO  object from a given file.
+	 *
+	 * @param source Location of source file in file system.
+	 * @throws java.io.IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static GraphDataIO load(File source) throws IOException {
+<span class="nc" id="L102">		CodedInputStream in = CodedInputStream.newInstance(new BufferedInputStream(new FileInputStream(source)));</span>
+<span class="nc" id="L103">		in.setSizeLimit(150000000); // Enables reading of files up to 150 MB</span>
+<span class="nc" id="L104">		GraphDataIO geom = ProtobufConverter.getGraphData(Protos.SaveGraphData.parseFrom(in));</span>
+<span class="nc" id="L105">		return geom;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

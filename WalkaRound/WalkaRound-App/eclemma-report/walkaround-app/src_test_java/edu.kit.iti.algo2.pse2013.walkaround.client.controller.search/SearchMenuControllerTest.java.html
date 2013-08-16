@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SearchMenuControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.search</a> &gt; <span class="el_source">SearchMenuControllerTest.java</span></div><h1>SearchMenuControllerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.search;
+
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+
+@RunWith(RobolectricTestRunner.class)
+<span class="nc" id="L14">public class SearchMenuControllerTest {</span>
+	@Ignore
+	@Test
+	public void testRequestByAddress() {
+<span class="nc" id="L18">		Address address = new Address(&quot;Kaiserstraße&quot;, &quot;12&quot;, &quot;Karlsruhe&quot;, 76133);</span>
+<span class="nc" id="L19">		Assert.assertEquals(</span>
+<span class="nc" id="L20">			POIManager.getInstance().searchPOIsByAddress(address),</span>
+<span class="nc" id="L21">			SearchMenuController.getInstance().requestSuggestionsByAddress(76133, &quot;Karlsruhe&quot;, &quot;Kaiserstraße&quot;, &quot;12&quot;));</span>
+<span class="nc" id="L22">	}</span>
+
+	@Test
+	public void testRequestByQuery() {
+<span class="nc" id="L26">		Assert.assertEquals(</span>
+<span class="nc" id="L27">				POIManager.getInstance().searchPOIsByQuery(&quot;Schloss Karlsruhe&quot;),</span>
+<span class="nc" id="L28">				SearchMenuController.getInstance().requestSuggestionsByText(&quot;Schloss Karlsruhe&quot;));</span>
+<span class="nc" id="L29">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

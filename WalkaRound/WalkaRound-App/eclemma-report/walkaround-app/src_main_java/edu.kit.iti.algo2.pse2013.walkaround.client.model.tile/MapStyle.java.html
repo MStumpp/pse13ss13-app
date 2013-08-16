@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapStyle.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.tile</a> &gt; <span class="el_source">MapStyle.java</span></div><h1>MapStyle.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
+
+/**
+ * Diese Klasse repräsentiert einen Kartenstil von Open Street Map.
+ *
+ * @author Ludwig Biermann
+ *
+ */
+public class MapStyle {
+
+	/**
+	 *  Mapnik Kartenstil.
+	 */
+<span class="nc" id="L14">	public static MapStyle MAPSTYLE_MAPNIK = new MapStyle(0,18,&quot;Mapnik&quot;, &quot;http://tile.openstreetmap.org/%3$s/%1$s/%2$s.png&quot;, 16);</span>
+
+	/**
+	 *  Wanderkarten Kartenstil
+	 */
+<span class="nc" id="L19">	public static MapStyle MAPSTYLE_WANDERKARTE = new MapStyle(0, 18, &quot;Hike &amp; Bike&quot;, &quot;http://toolserver.org/tiles/hikebike/%3$s/%1$s/%2$s.png&quot;, 16);</span>
+
+<span class="nc" id="L21">	public static MapStyle MAPSTYLE_WANDERREIT = new MapStyle(0,18,&quot;Wanderkarte&quot;, &quot;http://www.wanderreitkarte.de/topo/%3$s/%1$s/%2$s.png&quot;, 16);</span>
+
+	/**
+	 *  Mapquest KArtenstil.
+	 */
+<span class="nc" id="L26">	public static MapStyle MAPSTYLE_MAPQUEST = new MapStyle(0,19,&quot;MapQuest&quot;, &quot;http://otile1.mqcdn.com/tiles/1.0.0/map/%3$s/%1$s/%2$s.jpg&quot;, 17);</span>
+
+
+	private int minLevelOfDetail;
+	private int maxLevelOfDetail;
+	private String name;
+	private String tileURL;
+	private int defaultLevelOfDetail;
+
+	/**
+	 * Konstruiert einen neuen KartenStil.
+	 *
+	 * @param minLevelOfDetail  Minimales Level of Detail
+	 * @param maxLevelOfDetail  Maximales Level of Detail
+	 * @param name Name des Kartenstils
+	 * @param tileURL Url der Tiles
+	 */
+<span class="nc" id="L43">	private MapStyle(int minLevelOfDetail, int maxLevelOfDetail, String name, String tileURL, int defaultLevelOfDetail){</span>
+<span class="nc" id="L44">		this.minLevelOfDetail = minLevelOfDetail;</span>
+<span class="nc" id="L45">		this.maxLevelOfDetail = maxLevelOfDetail;</span>
+<span class="nc" id="L46">		this.defaultLevelOfDetail = defaultLevelOfDetail;</span>
+<span class="nc" id="L47">		this.name = name;</span>
+<span class="nc" id="L48">		this.tileURL = tileURL;</span>
+<span class="nc" id="L49">	}</span>
+
+	/**
+	 * Gibt den minimal Level of Detail zurück.
+	 *
+	 * @return Minimales Level of Detail
+	 */
+	public int getMinLevelOfDetail() {
+<span class="nc" id="L57">		return minLevelOfDetail;</span>
+	}
+
+	/**
+	 *  Gibt den maximalen Level of Detail zurück.
+	 *
+	 * @return  Maximales Level of Detail
+	 */
+	public int getMaxLevelOfDetail() {
+<span class="nc" id="L66">		return maxLevelOfDetail;</span>
+	}
+
+	/**
+	 * Gibt den Namen des Kartenstils zurück.
+	 *
+	 * @return Name des Kartenstils
+	 */
+	public String getName() {
+<span class="nc" id="L75">		return name;</span>
+	}
+
+	/**
+	 * Gibt die Url der Tiles zurück.
+	 *
+	 * @return Url der Tiles
+	 */
+	public String getTileURL() {
+<span class="nc" id="L84">		return tileURL;</span>
+	}
+
+	/**
+	 * Gibt den Standart Level of Detail zur�ck
+	 *
+	 * @return Standart Level of Detail
+	 */
+	public int getDefaultLevelOfDetail(){
+<span class="nc" id="L93">		return this.defaultLevelOfDetail;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

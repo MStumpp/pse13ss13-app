@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RoundTripView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">RoundTripView.java</span></div><h1>RoundTripView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
+
+import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+
+<span class="nc" id="L19">public class RoundTripView extends Fragment {</span>
+
+<span class="nc" id="L21">	private final String TAG_PULLUP_CONTENT = &quot;PULLUP_CONTENT&quot;;</span>
+
+<span class="nc" id="L23">	private final int MAXIMUM_LENGTH_ROUNDTRIP = 5000;</span>
+
+<span class="nc" id="L25">	private final int MINIMUN_LENGTH_ROUNDTRIP = 100;</span>
+
+<span class="nc" id="L27">	private final int NUMBER_OF_STEPS = MAXIMUM_LENGTH_ROUNDTRIP / 100;</span>
+
+<span class="nc" id="L29">	private final int ON_LONG_CLICK_UPDATE_INTERVALL_MS = 100;</span>
+
+<span class="nc" id="L31">	private int switcher = R.id.pullupRoundtripSwitcher;</span>
+
+	private RouteController routeController;
+
+	private NumberPicker np;
+
+	private TextView meter;
+	private TextView length;
+	private TextView profiles;
+	private TextView jogging;
+	private TextView sightseeing;
+	private TextView shopping;
+	private TextView clubbing;
+	private Button computeRoundtrip;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L48">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L49">		Log.d(TAG_PULLUP_CONTENT, &quot;Create RoundtripView&quot;);</span>
+
+<span class="nc" id="L51">		routeController = RouteController.getInstance();</span>
+
+<span class="nc" id="L53">		Log.d(TAG_PULLUP_CONTENT, &quot;Create NumberPicker&quot;);</span>
+<span class="nc" id="L54">		np = (NumberPicker) this.getActivity().findViewById(R.id.length_picker);</span>
+<span class="nc" id="L55">		String[] nums = new String[NUMBER_OF_STEPS];</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		for (int i = 0; i &lt; nums.length; i++)</span>
+<span class="nc" id="L57">			nums[i] = Integer.toString(100 + i * 100);</span>
+<span class="nc" id="L58">		np.setMinValue(MINIMUN_LENGTH_ROUNDTRIP / 100);</span>
+<span class="nc" id="L59">		np.setMaxValue(MAXIMUM_LENGTH_ROUNDTRIP / 100);</span>
+<span class="nc" id="L60">		np.setWrapSelectorWheel(false);</span>
+<span class="nc" id="L61">		np.setDisplayedValues(nums);</span>
+<span class="nc" id="L62">		np.setOnLongPressUpdateInterval(ON_LONG_CLICK_UPDATE_INTERVALL_MS);</span>
+
+<span class="nc" id="L64">		meter = (TextView) this.getActivity().findViewById(R.id.meter);</span>
+<span class="nc" id="L65">		length = (TextView) this.getActivity().findViewById(R.id.length_text);</span>
+<span class="nc" id="L66">		profiles = (TextView) this.getActivity().findViewById(R.id.profiles);</span>
+<span class="nc" id="L67">		jogging = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L68">				R.id.profile_jogging);</span>
+<span class="nc" id="L69">		sightseeing = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L70">				R.id.profile_sightseeing);</span>
+<span class="nc" id="L71">		shopping = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L72">				R.id.profile_shopping);</span>
+<span class="nc" id="L73">		clubbing = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L74">				R.id.profile_clubbing);</span>
+<span class="nc" id="L75">		computeRoundtrip = (Button) this.getActivity().findViewById(</span>
+<span class="nc" id="L76">				R.id.roundtrip_compute);</span>
+
+<span class="nc" id="L78">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L79">		Display display = this.getActivity().getWindowManager()</span>
+<span class="nc" id="L80">				.getDefaultDisplay();</span>
+<span class="nc" id="L81">		Point size = new Point();</span>
+<span class="nc" id="L82">		display.getSize(size);</span>
+
+<span class="nc" id="L84">		Log.d(TAG_PULLUP_CONTENT, &quot;Einstellen der Größenverhältnisse&quot;);</span>
+		// meter.setX(size.x / 3 * 2);
+		// meter.getLayoutParams().width = size.x;
+		// np.setX(size.x / 3);
+		// np.getLayoutParams().width = size.x / 3;
+		// length.setX(size.x / 10);
+		// length.getLayoutParams().width = size.x / 5;
+		// profiles.setX((size.x / 2.6f));
+		// profiles.getLayoutParams().width = size.x / 2;
+		// jogging.setX(size.x / 6);
+		// jogging.getLayoutParams().width = size.x / 2;
+		// sightseeing.setX((size.x / 6));
+		// sightseeing.getLayoutParams().width = size.x / 2;
+		// shopping.setX(size.x / 6);
+		// shopping.getLayoutParams().width = size.x / 2;
+		// clubbing.setX(size.x / 6);
+		// clubbing.getLayoutParams().width = size.x / 2;
+		// computeRoundtrip.setX(size.x / 4);
+		// computeRoundtrip.getLayoutParams().width = size.x / 2;
+
+<span class="nc" id="L104">		Log.d(TAG_PULLUP_CONTENT, &quot;Listener werden hinzugef�gt&quot;);</span>
+<span class="nc" id="L105">		computeRoundtrip.setOnTouchListener(new RoundtripComputeListener());</span>
+<span class="nc" id="L106">		jogging.setOnTouchListener(new OnProfileTouch());</span>
+<span class="nc" id="L107">		sightseeing.setOnTouchListener(new OnProfileTouch());</span>
+<span class="nc" id="L108">		shopping.setOnTouchListener(new OnProfileTouch());</span>
+<span class="nc" id="L109">		clubbing.setOnTouchListener(new OnProfileTouch());</span>
+
+<span class="nc" id="L111">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L112">	}</span>
+
+	@Override
+	public void onDestroy() {
+<span class="nc" id="L116">		super.onDestroy();</span>
+<span class="nc" id="L117">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy RoundtripView&quot;);</span>
+<span class="nc" id="L118">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+<span class="nc" id="L119">	}</span>
+
+	public boolean equals(Fragment f) {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_ROUNDTRIP)) {</span>
+<span class="nc" id="L123">			return true;</span>
+		}
+<span class="nc" id="L125">		return false;</span>
+	}
+
+<span class="nc" id="L128">	private class RoundtripComputeListener implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">			if (v.equals(computeRoundtrip)</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">				if (jogging.isSelected()) {</span>
+<span class="nc" id="L134">					routeController.addRoundtrip(</span>
+<span class="nc" id="L135">							Integer.parseInt(jogging.getTag().toString()),</span>
+<span class="nc" id="L136">							np.getValue() * 100);</span>
+<span class="nc" id="L137">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L138">							.setNullSizeHeight();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">				} else if (shopping.isSelected()) {</span>
+<span class="nc" id="L140">					routeController.addRoundtrip(</span>
+<span class="nc" id="L141">							Integer.parseInt(shopping.getTag().toString()),</span>
+<span class="nc" id="L142">							np.getValue() * 100);</span>
+<span class="nc" id="L143">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L144">							.setNullSizeHeight();</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">				} else if (sightseeing.isSelected()) {</span>
+<span class="nc" id="L146">					routeController.addRoundtrip(</span>
+<span class="nc" id="L147">							Integer.parseInt(sightseeing.getTag().toString()),</span>
+<span class="nc" id="L148">							np.getValue() * 100);</span>
+<span class="nc" id="L149">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L150">							.setNullSizeHeight();</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">				} else if (clubbing.isSelected()) {</span>
+<span class="nc" id="L152">					routeController.addRoundtrip(</span>
+<span class="nc" id="L153">							Integer.parseInt(clubbing.getTag().toString()),</span>
+<span class="nc" id="L154">							np.getValue() * 100);</span>
+<span class="nc" id="L155">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L156">							.setNullSizeHeight();</span>
+<span class="nc" id="L157">				} else {</span>
+<span class="nc" id="L158">					routeController.addRoundtrip(0, np.getValue() * 100);</span>
+<span class="nc" id="L159">					MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L160">							.setNullSizeHeight();</span>
+				}
+			}
+<span class="nc" id="L163">			return false;</span>
+		}
+
+	}
+
+<span class="nc" id="L168">	private class OnProfileTouch implements OnTouchListener {</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L171" title="All 2 branches missed.">			if (v.equals(jogging)</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">				if (!jogging.isSelected()) {</span>
+<span class="nc" id="L174">					setSelected(jogging);</span>
+<span class="nc" id="L175">					setUnselected(sightseeing);</span>
+<span class="nc" id="L176">					setUnselected(shopping);</span>
+<span class="nc" id="L177">					setUnselected(clubbing);</span>
+
+<span class="nc" id="L179">				} else {</span>
+<span class="nc" id="L180">					setUnselected(jogging);</span>
+				}
+<span class="nc bnc" id="L182" title="All 2 branches missed.">			} else if (v.equals(shopping)</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">				if (!shopping.isSelected()) {</span>
+<span class="nc" id="L185">					setSelected(shopping);</span>
+<span class="nc" id="L186">					setUnselected(sightseeing);</span>
+<span class="nc" id="L187">					setUnselected(jogging);</span>
+<span class="nc" id="L188">					setUnselected(clubbing);</span>
+<span class="nc" id="L189">				} else {</span>
+<span class="nc" id="L190">					setUnselected(shopping);</span>
+				}
+<span class="nc bnc" id="L192" title="All 2 branches missed.">			} else if (v.equals(sightseeing)</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">				if (!sightseeing.isSelected()) {</span>
+<span class="nc" id="L195">					setSelected(sightseeing);</span>
+<span class="nc" id="L196">					setUnselected(jogging);</span>
+<span class="nc" id="L197">					setUnselected(shopping);</span>
+<span class="nc" id="L198">					setUnselected(clubbing);</span>
+<span class="nc" id="L199">				} else {</span>
+<span class="nc" id="L200">					setUnselected(sightseeing);</span>
+				}
+<span class="nc bnc" id="L202" title="All 2 branches missed.">			} else if (v.equals(clubbing)</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">				if (!clubbing.isSelected()) {</span>
+<span class="nc" id="L205">					setSelected(clubbing);</span>
+<span class="nc" id="L206">					setUnselected(sightseeing);</span>
+<span class="nc" id="L207">					setUnselected(shopping);</span>
+<span class="nc" id="L208">					setUnselected(jogging);</span>
+<span class="nc" id="L209">				} else {</span>
+<span class="nc" id="L210">					setUnselected(clubbing);</span>
+				}
+			}
+<span class="nc" id="L213">			return false;</span>
+		}
+
+		private void setUnselected(TextView v) {
+<span class="nc" id="L217">			v.setSelected(false);</span>
+<span class="nc" id="L218">			v.setTextColor(Color.WHITE);</span>
+<span class="nc" id="L219">		}</span>
+
+		private void setSelected(TextView v) {
+<span class="nc" id="L222">			v.setSelected(true);</span>
+<span class="nc" id="L223">			v.setTextColor(Color.YELLOW);</span>
+<span class="nc" id="L224">		}</span>
+
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

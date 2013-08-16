@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>POIMenuControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi</a> &gt; <span class="el_source">POIMenuControllerTest.java</span></div><h1>POIMenuControllerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import android.content.Intent;
+import android.graphics.Point;
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+@RunWith(RobolectricTestRunner.class)
+<span class="fc" id="L25">public class POIMenuControllerTest {</span>
+<span class="fc" id="L26">	private static boolean alreadyBooted = false;</span>
+
+	@Before
+	public void setUp() {
+<span class="nc" id="L30">		BootActivity activity = Robolectric.buildActivity(BootActivity.class).get();</span>
+<span class="nc" id="L31">		MapController.initialize(new TileFetcher(), new BoundingBox(new Coordinate(0, 0), new Point(1920, 1080), 16), new Coordinate(0, 0));</span>
+<span class="nc" id="L32">		Intent in = new Intent(activity, MapView.class);</span>
+<span class="nc" id="L33">		activity.startActivity(in);</span>
+<span class="nc" id="L34">		MapController.getInstance().startController(Robolectric.buildActivity(MapView.class).create().get());</span>
+<span class="nc" id="L35">		PositionManager.initialize(activity.getApplicationContext());</span>
+<span class="nc" id="L36">		boot();</span>
+<span class="nc" id="L37">	}</span>
+
+	@Test
+	public void testAddRemoveCategory() {
+<span class="nc" id="L41">		POIMenuController.getInstance().addActiveCategory(1);</span>
+<span class="nc" id="L42">		assertFalse(POIManager.getInstance().isEmpty());</span>
+<span class="nc" id="L43">		POIMenuController.getInstance().removeActiveCategory(1);</span>
+<span class="nc" id="L44">		assertTrue(POIManager.getInstance().isEmpty());</span>
+<span class="nc" id="L45">	}</span>
+
+	public static void boot() {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">		if (!alreadyBooted) {</span>
+<span class="fc" id="L49">			alreadyBooted = true;</span>
+<span class="fc" id="L50">			Coordinate center = new Coordinate(48, 8);</span>
+<span class="fc" id="L51">			TileFetcher tf = new TileFetcher();</span>
+<span class="fc" id="L52">			Point size = new Point(1920, 1080);</span>
+<span class="fc" id="L53">			BoundingBox bb = new BoundingBox(center, size, 18);</span>
+<span class="fc" id="L54">			MapController.initialize(tf, bb, center);</span>
+<span class="fc" id="L55">			PositionManager.initialize(Robolectric.buildActivity(BootActivity.class).get().getApplicationContext());</span>
+		}
+<span class="fc" id="L57">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Test.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround</a> &gt; <span class="el_source">Test.java</span></div><h1>Test.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround;</span>
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import android.graphics.Bitmap;
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageListener;
+
+@RunWith(RobolectricTestRunner.class)
+<span class="fc" id="L21">public class Test {</span>
+	private Bitmap bitmap;
+
+    @org.junit.Test
+    public void shouldHaveHappySmiles() throws Exception {
+<span class="fc" id="L26">        String hello = Robolectric.buildActivity(BootActivity.class).get().getResources().getString(R.string.address);</span>
+<span class="fc" id="L27">        assertThat(hello, equalTo(&quot;Address&quot;));</span>
+<span class="fc" id="L28">    }</span>
+
+    @org.junit.Test
+    public void test2() throws MalformedURLException, InterruptedException {
+<span class="fc" id="L32">    	POIImageListener list = new POIImageListener() {</span>
+
+			@Override
+			public void setImage(Bitmap b) {
+<span class="fc" id="L36">				bitmap = b;</span>
+
+<span class="fc" id="L38">			}</span>
+		};
+<span class="fc" id="L40">    	POIImageFetcher fetch = new POIImageFetcher(new URL(&quot;http://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Karlsruher_Schloss_Front_Panorama.jpg/220px-Karlsruher_Schloss_Front_Panorama.jpg&quot;), list);</span>
+<span class="fc" id="L41">    	Thread t = new Thread(fetch);</span>
+<span class="fc" id="L42">    	t.start();</span>
+<span class="fc" id="L43">    	t.join();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">    	Assert.assertTrue(bitmap != null);</span>
+<span class="fc" id="L45">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>

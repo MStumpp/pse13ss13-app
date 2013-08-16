@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CoordinateUtility.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-app</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.util</a> &gt; <span class="el_source">CoordinateUtility.java</span></div><h1>CoordinateUtility.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
+
+import java.util.LinkedList;
+import java.util.List;
+
+
+import android.app.Activity;
+import android.graphics.Point;
+import android.util.Log;
+import android.view.Display;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+
+public final class CoordinateUtility {
+
+<span class="nc" id="L19">	public static final String TAG = CoordinateUtility.class.getSimpleName();</span>
+	/**
+	 * Used when pixels are converted to degrees horizontally or vice versa
+	 */
+<span class="nc" id="L23">	public static boolean DIRECTION_HORIZONTAL = true;</span>
+	/**
+	 * Used when pixels are converted to degrees vertically or vice versa
+	 */
+<span class="nc" id="L27">	public static boolean DIRECTION_VERTICAL = false;</span>
+	/**
+	 * Alias for {@link this#DIRECTION_VERTICAL}.
+	 */
+<span class="nc" id="L31">	public static boolean DIRECTION_LATITUDE = DIRECTION_VERTICAL;</span>
+	/**
+	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
+	 */
+<span class="nc" id="L35">	public static boolean DIRECTION_LONGITUDE = DIRECTION_HORIZONTAL;</span>
+	/**
+	 * Alias for {@link this#DIRECTION_VERTICAL}.
+	 */
+<span class="nc" id="L39">	public static boolean DIRECTION_Y = DIRECTION_VERTICAL;</span>
+	/**
+	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
+	 */
+<span class="nc" id="L43">	public static boolean DIRECTION_X = DIRECTION_HORIZONTAL;</span>
+
+	/**
+	 * The average earth radius according to WGS84
+	 */
+<span class="nc" id="L48">	private static double EARTH_RADIUS = 6371.000785;</span>
+
+<span class="nc" id="L50">	private CoordinateUtility() {</span>
+
+<span class="nc" id="L52">	}</span>
+
+	// parameter war im entwurf noch nicht drin!
+	public static Point getDisplay(Activity activity) {
+<span class="nc" id="L56">		Log.d(&quot;COORDINATE_UTILITY&quot;, &quot;Rufe Display ab.&quot;);</span>
+<span class="nc" id="L57">		Display display = activity.getWindowManager().getDefaultDisplay();</span>
+<span class="nc" id="L58">		Point size = new Point();</span>
+<span class="nc" id="L59">		display.getSize(size);</span>
+<span class="nc" id="L60">		return size;</span>
+
+	}
+
+	/**
+	 * Calculates the distance between two coordinates
+	 *
+	 * @param c1
+	 *            the first coordinate
+	 * @param c2
+	 *            the the second coordinate
+	 * @return the distance between the two coordinates in kilometers
+	 * @see {@link https://de.wikipedia.org/wiki/Orthodrome#Strecke}
+	 */
+	public static double calculateDifferenceInMeters(Coordinate c1,
+			Coordinate c2) {
+<span class="nc" id="L76">		double lon1 = Math.toRadians(c1.getLongitude());</span>
+<span class="nc" id="L77">		double lon2 = Math.toRadians(c2.getLongitude());</span>
+<span class="nc" id="L78">		double lat1 = Math.toRadians(c1.getLatitude());</span>
+<span class="nc" id="L79">		double lat2 = Math.toRadians(c2.getLatitude());</span>
+<span class="nc" id="L80">		double zeta = Math.acos(Math.sin(lat1) * Math.sin(lat2)</span>
+<span class="nc" id="L81">				+ Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));</span>
+<span class="nc" id="L82">		return zeta * EARTH_RADIUS;</span>
+	}
+
+	/**
+	 * Converts a given length in display-pixels into the corresponding
+	 * geographical degrees.
+	 *
+	 * @param pixels
+	 *            the given length in pixels
+	 * @param levelOfDetail
+	 *            the current level of detail
+	 * @param one
+	 *            of the constants {@link CoordinateUtility#HORIZONTAL} or {@link CoordinateUtility#VERTICAL}
+	 * @return the given length in degrees
+	 */
+	public static double convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		return (45 * pixels / Math.pow(2, levelOfDetail + 6)) * (isHorizontal ? 2 : 1);</span>
+	}
+
+	/**
+	 * Converts given geographical degrees into the corresponding length in
+	 * display-pixel
+	 *
+	 * @param degree
+	 *            the given geographical degrees
+	 * @param levelOfDetail
+	 *            the current level of detail
+	 * @return the given length in degrees
+	 */
+	public static float convertDegreesToPixels(double degree, float levelOfDetail, boolean isHorizontal) {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		return (float) ((degree * Math.pow(2, levelOfDetail + 6)) / 45) / (isHorizontal ? 2 : 1);</span>
+	}
+
+	/**
+	 * Converts a given Display Coordinate to a geographical Coordinate
+	 *
+	 * @param dc
+	 *            the given DisplayCoordinate
+	 * @param upperLeft
+	 *            the upper left Edge of the display
+	 * @param levelOfDetail
+	 *            the current Level of Detail
+	 * @return a new Coordinate
+	 */
+	public static Coordinate convertDisplayCoordinateToCoordinate(
+			DisplayCoordinate dc, Coordinate upperLeft, float levelOfDetail) {
+<span class="nc" id="L128">		double deltaX = convertPixelsToDegrees(dc.getX(), levelOfDetail,</span>
+<span class="nc" id="L129">				CoordinateUtility.DIRECTION_X);</span>
+<span class="nc" id="L130">		double deltaY = convertPixelsToDegrees(dc.getY(), levelOfDetail,</span>
+<span class="nc" id="L131">				CoordinateUtility.DIRECTION_Y);</span>
+
+<span class="nc" id="L133">		Log.d(TAG, &quot;DisplayCoordinate: &quot; + dc);</span>
+<span class="nc" id="L134">		Log.d(TAG, &quot;Delta upperLeft to DisplayCoordinate: x:&quot; + deltaX + &quot; y:&quot;</span>
+<span class="nc" id="L135">				+ deltaY);</span>
+<span class="nc" id="L136">		Coordinate center = new Coordinate(upperLeft, -deltaY, deltaX);</span>
+<span class="nc" id="L137">		Log.d(TAG, &quot;UpperLeft: &quot; + upperLeft + &quot; Center: &quot; + center);</span>
+
+<span class="nc" id="L139">		return center;</span>
+	}
+
+	/**
+	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer
+	 * Koordinate
+	 *
+	 * @param dc
+	 *            die zu konvertierende DisplayCoordinate
+	 * @return
+	 */
+	public static DisplayCoordinate convertCoordinateToDisplayCoordinate(
+			Coordinate c, Coordinate upperLeft, float levelOfDetail) {
+<span class="nc" id="L152">		double deltaX = CoordinateUtility.convertDegreesToPixels(</span>
+<span class="nc" id="L153">				c.getLongitude() - upperLeft.getLongitude(), levelOfDetail,</span>
+<span class="nc" id="L154">				CoordinateUtility.DIRECTION_LONGITUDE);</span>
+<span class="nc" id="L155">		double deltaY = CoordinateUtility.convertDegreesToPixels(</span>
+<span class="nc" id="L156">				c.getLatitude() - upperLeft.getLatitude(), levelOfDetail,</span>
+<span class="nc" id="L157">				CoordinateUtility.DIRECTION_LATITUDE);</span>
+<span class="nc" id="L158">		return new DisplayCoordinate((float) deltaX, (float) deltaY);</span>
+	}
+
+	/**
+	 * Extract Display Waypoints out of the given Route Info
+	 *
+	 * @param currentRoute
+	 *            the required RouteInfo
+	 * @return DisplayWaypoints
+	 */
+	public static List&lt;DisplayWaypoint&gt; extractDisplayWaypointsOutOfRouteInfo(
+			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail) {
+
+<span class="nc" id="L171">		LinkedList&lt;DisplayWaypoint&gt; dw = new LinkedList&lt;DisplayWaypoint&gt;();</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">		for (Waypoint value : currentRoute.getWaypoints()) {</span>
+
+<span class="nc" id="L174">			float x = (float) (value.getLongitude() - center.getLongitude());</span>
+<span class="nc" id="L175">			Log.d(&quot;wtf&quot;, &quot;&quot; + x);</span>
+<span class="nc" id="L176">			float y = (float) (center.getLatitude() - value.getLatitude());</span>
+<span class="nc" id="L177">			Log.d(&quot;wtf&quot;, &quot;&quot; + y);</span>
+
+<span class="nc" id="L179">			dw.add(new DisplayWaypoint(</span>
+<span class="nc" id="L180">					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.02f,</span>
+<span class="nc" id="L181">					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.78f,</span>
+<span class="nc" id="L182">					value.getId()</span>
+			));
+<span class="nc" id="L184">			Log.d(&quot;d x&quot;, &quot;&quot; + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,</span>
+<span class="nc" id="L185">					CoordinateUtility.DIRECTION_LONGITUDE));</span>
+<span class="nc" id="L186">			Log.d(&quot;d y&quot;, &quot;&quot; + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail,</span>
+<span class="nc" id="L187">					CoordinateUtility.DIRECTION_LATITUDE));</span>
+		}
+
+<span class="nc" id="L190">		return dw;</span>
+	}
+
+	/**
+	 * Extract Display Coordinates out of the given Route Info
+	 *
+	 * @param currentRoute
+	 *            the required RouteInfo
+	 * @return DisplayWaypoints
+	 */
+	public static List&lt;DisplayCoordinate&gt; extractDisplayCoordinatesOutOfRouteInfo(
+			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail) {
+
+<span class="nc" id="L203">		LinkedList&lt;DisplayCoordinate&gt; dw = new LinkedList&lt;DisplayCoordinate&gt;();</span>
+
+<span class="nc bnc" id="L205" title="All 2 branches missed.">		for (Coordinate coordinate : currentRoute.getCoordinates()) {</span>
+
+<span class="nc" id="L207">			float x = (float) (coordinate.getLongitude() - center.getLongitude());</span>
+<span class="nc" id="L208">			float y = (float) (center.getLatitude() - coordinate.getLatitude()) ;</span>
+
+<span class="nc" id="L210">			dw.add(new DisplayCoordinate(</span>
+<span class="nc" id="L211">					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.04f,</span>
+<span class="nc" id="L212">					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.8f</span>
+			));
+		}
+
+<span class="nc" id="L216">		return dw;</span>
+	}
+
+	/**
+	 * compute and returns the current Tile size
+	 *
+	 * @return the current tile size in pixel
+	 */
+	public static float computeCurrentTileWidthInPixels(float levelOfDetail) {
+<span class="nc" id="L225">		return (float) ((256 * Math.pow(2, levelOfDetail)) / Math</span>
+<span class="nc" id="L226">				.pow(2, Math.round(levelOfDetail)));</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
