@@ -29,6 +29,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -286,6 +287,7 @@ public class PullUpView extends Fragment implements RouteListener {
 		Log.d(TAG_PULLUP, "Content Change");
 		routingViewRun = false;
 		this.poiViewRun = false;
+		TextToSpeechUtility.getInstance().stopSpeaking();
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
 

@@ -189,11 +189,13 @@ public class InfoView extends Fragment implements POIImageListener {
 	private void toogleSpeaking(){
 		if(this.speak){
 			this.speak = false;
-			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.pause));
-		} else {
-			this.speak = true;
 			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.play));	
-		}
+			
+			} else {
+			this.speak = true;
+			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.pause));
+			
+			}
 	}
 
 	private class playListener implements OnTouchListener {

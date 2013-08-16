@@ -234,9 +234,13 @@ public class MapView extends Activity {
 		// this.setUserPositionOverlayImage(new DisplayCoordinate(
 		// (float) size.x / 2, (float) size.y / 2), 180);
 
+		try{
 		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,
 				Bitmap.Config.ARGB_8888);
 		routeOverlayBitmap.prepareToDraw();
+		} catch (OutOfMemoryError e) {
+			System.gc();
+		}
 
 		gestureDetector = new GestureDetector(this, new MapGestureDetector());
 		waypointGestureDetector = new GestureDetector(this,
