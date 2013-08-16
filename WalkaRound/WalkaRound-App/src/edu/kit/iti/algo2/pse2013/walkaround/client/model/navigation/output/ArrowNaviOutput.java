@@ -4,7 +4,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpCont
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 
-public class ArrowNaviOutput implements NaviOutput {
+/*public class ArrowNaviOutput implements NaviOutput {
 
 	private static ArrowNaviOutput arrowNaviOutput;
 	private HeadUpController headUpControllerInstance;
@@ -24,4 +24,4 @@ public class ArrowNaviOutput implements NaviOutput {
 	}
 
 
-}
+}*/

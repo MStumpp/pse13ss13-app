@@ -3,7 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 
-public class StereoNaviOutput implements NaviOutput {
+/*public class StereoNaviOutput implements NaviOutput {
 
 	private static StereoNaviOutput stereoNaviOutput;
 	private HeadUpController headUpControllerInstance;
@@ -25,4 +25,4 @@ public class StereoNaviOutput implements NaviOutput {
 
 	}
 
-}
+}*/
