@@ -7,7 +7,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public interface RouteInfo {
 
-	public String getName();
+	//public String getName();
 
 	public Waypoint getStart();
 

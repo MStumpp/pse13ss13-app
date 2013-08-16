@@ -60,10 +60,10 @@ public class Route implements RouteInfo {
 	/**
 	 *
 	 */
-	/*public void resetActiveWaypoint() {
+	public void resetActiveWaypoint() {
 		Log.d(TAG_ROUTE, "resetActiveWaypoint()");
 		this.activeWaypoint = null;
-	}*/
+	}
 
 	/**
 	 * Moves the coordinate represented by the active waypoint to the given
@@ -570,5 +570,4 @@ public class Route implements RouteInfo {
 		}
 		return output;
 	}
-
 }
