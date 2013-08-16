@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestProtobufConverter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.pbf</a> &gt; <span class="el_source">TestProtobufConverter.java</span></div><h1>TestProtobufConverter.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
+
+import static org.junit.Assert.*;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.LinkedList;
+
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
+<span class="nc" id="L23">public class TestProtobufConverter {</span>
+
+	@Test
+	public void testConvertAddress() {
+<span class="nc" id="L27">		assertEquals(null, ProtobufConverter.getAddressBuilder(null));</span>
+<span class="nc" id="L28">		assertEquals(null, ProtobufConverter.getAddress(null));</span>
+<span class="nc" id="L29">		Address a = new Address(null, null, null, Address.NO_POSTAL_CODE);</span>
+<span class="nc" id="L30">		Address a2 = new Address(&quot;Am Fasanengarten&quot;, &quot;5&quot;, &quot;Karlsruhe&quot;, 76131);</span>
+<span class="nc" id="L31">		assertEquals(a, ProtobufConverter.getAddress(ProtobufConverter.getAddressBuilder(a).build()));</span>
+<span class="nc" id="L32">		assertEquals(a2, ProtobufConverter.getAddress(ProtobufConverter.getAddressBuilder(a2).build()));</span>
+<span class="nc" id="L33">	}</span>
+
+	@Test
+	public void testConvertArea() {
+<span class="nc" id="L37">		assertEquals(null, ProtobufConverter.getAreaBuilder(null));</span>
+<span class="nc" id="L38">		assertEquals(null, ProtobufConverter.getArea(null));</span>
+<span class="nc" id="L39">		LinkedList&lt;Coordinate&gt; coords = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L40">		coords.add(new Coordinate(48, 8));</span>
+<span class="nc" id="L41">		coords.add(new Coordinate(49, 8));</span>
+<span class="nc" id="L42">		coords.add(new Coordinate(49, 9));</span>
+<span class="nc" id="L43">		Area a = new Area(Category.getAllAreaCategories(), coords);</span>
+<span class="nc" id="L44">		assertEquals(a, ProtobufConverter.getArea(ProtobufConverter.getAreaBuilder(a).build()));</span>
+<span class="nc" id="L45">	}</span>
+
+	@Test
+	public void testConvertCoordinate() {
+<span class="nc" id="L49">		assertEquals(null, ProtobufConverter.getCoordinate(null));</span>
+<span class="nc" id="L50">		assertEquals(null, ProtobufConverter.getCoordinateBuilder(null));</span>
+<span class="nc" id="L51">		Coordinate c = new Coordinate(48, 8, new CrossingInformation(new float[]{1.0f, 2.0f, 42.0f}));</span>
+<span class="nc" id="L52">		System.out.println(c.getCrossingInformation().getCrossingAngles());</span>
+<span class="nc" id="L53">		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));</span>
+<span class="nc" id="L54">	}</span>
+	@Test
+	public void testLocation() {
+<span class="nc" id="L57">		Location loc = new Location(0, 0, &quot;LocName&quot;, new Address(null, null, null, null));</span>
+<span class="nc" id="L58">		Location loc2 = new Location(0, 0, null, null);</span>
+<span class="nc" id="L59">		assertEquals(loc, ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc).build()));</span>
+<span class="nc" id="L60">		Location reload = ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc2).build());</span>
+<span class="nc" id="L61">		System.out.println(loc2.getId() + &quot; &quot; + reload.getId());</span>
+<span class="nc" id="L62">		System.out.println(loc2.getLatitude() + &quot; &quot; + reload.getLatitude());</span>
+<span class="nc" id="L63">		System.out.println(loc2.getLongitude() + &quot; &quot; + reload.getLongitude());</span>
+<span class="nc" id="L64">		System.out.println(loc2.getName() + &quot; &quot; + reload.getName());</span>
+<span class="nc" id="L65">		System.out.println(loc2.getAddress() + &quot;#&quot; + reload.getAddress());</span>
+<span class="nc" id="L66">		assertEquals(loc2, reload);</span>
+<span class="nc" id="L67">	}</span>
+	@Test
+	public void testPOI() throws MalformedURLException {
+<span class="nc" id="L70">		POI p = new POI(0, 0, null, null, null, null);</span>
+<span class="nc" id="L71">		POI reload = ProtobufConverter.getPOI(ProtobufConverter.getPOIBuilder(p).build());</span>
+<span class="nc" id="L72">		assertEquals(reload.getAddress(), reload.getAddress());</span>
+<span class="nc" id="L73">		assertTrue(((Location) p).equals(reload));</span>
+<span class="nc" id="L74">		assertEquals(p, reload);</span>
+<span class="nc" id="L75">		p = new POI(0, 0, &quot;Name&quot;, &quot;TextInfo&quot;, new URL(&quot;http://www.wikipedia.org&quot;), new int[]{1, 2, 3});</span>
+<span class="nc" id="L76">		assertEquals(p, ProtobufConverter.getPOI(ProtobufConverter.getPOIBuilder(p).build()));</span>
+<span class="nc" id="L77">	}</span>
+
+	@Test
+	public void testConvertGeometryData() throws MalformedURLException {
+<span class="nc" id="L81">		assertEquals(null, ProtobufConverter.getGeometryData(null));</span>
+<span class="nc" id="L82">		assertEquals(null, ProtobufConverter.getGeometryDataBuilder(null));</span>
+<span class="nc" id="L83">		GeometryNode root = new GeometryNode(5);</span>
+<span class="nc" id="L84">		GeometryNode left = new GeometryNode(4);</span>
+<span class="nc" id="L85">		left.addGeometrizable(new Edge(new Vertex(4, 5), new Vertex(6, 7)));</span>
+<span class="nc" id="L86">		left.addGeometrizable(new POI(1, 2, &quot;Name&quot;, &quot;TextInfo&quot;, new URL(&quot;http://www.wikipedia.org&quot;), new int[]{1, 2}));</span>
+<span class="nc" id="L87">		GeometryNode right = new GeometryNode(6);</span>
+<span class="nc" id="L88">		GeometryNode rightLeft = new GeometryNode(5.5);</span>
+<span class="nc" id="L89">		right.setLeftNode(rightLeft);</span>
+<span class="nc" id="L90">		root.setLeftNode(left);</span>
+<span class="nc" id="L91">		root.setRightNode(right);</span>
+
+<span class="nc" id="L93">		GeometryDataIO g = new GeometryDataIO(new GeometryNode(5), 2);</span>
+<span class="nc" id="L94">		assertEquals(g, ProtobufConverter.getGeometryData(ProtobufConverter.getGeometryDataBuilder(g).build()));</span>
+<span class="nc" id="L95">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

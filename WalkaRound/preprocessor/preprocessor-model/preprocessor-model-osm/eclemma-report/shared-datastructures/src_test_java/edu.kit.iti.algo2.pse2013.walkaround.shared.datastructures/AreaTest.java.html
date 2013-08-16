@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>AreaTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">AreaTest.java</span></div><h1>AreaTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * This class test the class Area.
+ * 
+ * @author Thomas Kadow
+ * @version 1.0
+ */
+<span class="nc" id="L20">public class AreaTest {</span>
+
+	private Area testArea;
+
+	private int[] testCats;
+
+	private ArrayList&lt;Coordinate&gt; testCoordinateListA;
+
+	private ArrayList&lt;Coordinate&gt; testCoordinateListB;
+
+	private ArrayList&lt;Coordinate&gt; testCoordinateListC;
+
+	private ArrayList&lt;Coordinate&gt; testCoordinateListTooShort;
+
+	@Before
+	public void setUp() {
+<span class="nc" id="L36">		testCoordinateListA = new ArrayList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L37">		testCoordinateListA.add(new Coordinate(1, 2));</span>
+<span class="nc" id="L38">		testCoordinateListA.add(new Coordinate(3, 4));</span>
+<span class="nc" id="L39">		testCoordinateListA.add(new Coordinate(5, 6));</span>
+
+<span class="nc" id="L41">		testCoordinateListB = new ArrayList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L42">		testCoordinateListB.add(new Coordinate(13, 12));</span>
+<span class="nc" id="L43">		testCoordinateListB.add(new Coordinate(11, 10));</span>
+<span class="nc" id="L44">		testCoordinateListB.add(new Coordinate(9, 8));</span>
+<span class="nc" id="L45">		testCoordinateListB.add(new Coordinate(56, 56));</span>
+<span class="nc" id="L46">		testCoordinateListB.add(new Coordinate(72, 23));</span>
+<span class="nc" id="L47">		testCoordinateListB.add(new Coordinate(65, 41));</span>
+
+<span class="nc" id="L49">		testCoordinateListC = new ArrayList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L50">		testCoordinateListC.add(new Coordinate(-15, 15));</span>
+<span class="nc" id="L51">		testCoordinateListC.add(new Coordinate(-20, 20));</span>
+<span class="nc" id="L52">		testCoordinateListC.add(new Coordinate(-37, 37));</span>
+<span class="nc" id="L53">		testCoordinateListC.add(new Coordinate(-42, 65));</span>
+
+<span class="nc" id="L55">		testCoordinateListTooShort = new ArrayList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L56">		testCoordinateListTooShort.add(new Coordinate(1, 1));</span>
+<span class="nc" id="L57">		testCoordinateListTooShort.add(new Coordinate(20, 40));</span>
+
+<span class="nc" id="L59">		testCats = new int[] { 1, 2, 3 };</span>
+<span class="nc" id="L60">		testArea = new Area(testCats, testCoordinateListA);</span>
+<span class="nc" id="L61">	}</span>
+
+	@Test
+	public void testValidConstructionsOfAreas() {
+<span class="nc" id="L65">		new Area(null, new ArrayList&lt;Coordinate&gt;(testCoordinateListA));</span>
+<span class="nc" id="L66">		new Area(new int[] { 1, 2, 3, 10 }, new ArrayList&lt;Coordinate&gt;(</span>
+<span class="nc" id="L67">				testCoordinateListB));</span>
+<span class="nc" id="L68">		new Area(new int[] { 1, 2, 3, 12, 4 }, new ArrayList&lt;Coordinate&gt;(</span>
+<span class="nc" id="L69">				testCoordinateListC));</span>
+<span class="nc" id="L70">	}</span>
+
+	@Test
+	public void testPersistence() throws MalformedURLException {
+		// Assert
+<span class="nc" id="L75">		assertEquals(testCats, testArea.getAreaCategories());</span>
+<span class="nc" id="L76">		assertEquals(testCoordinateListA, testArea.getAreaCoordinates());</span>
+
+<span class="nc" id="L78">		Area a = new Area(testCats, testCoordinateListB);</span>
+<span class="nc" id="L79">		int[] testCatsOther = new int[] { 123, 321, 432 };</span>
+<span class="nc" id="L80">		a.setAreaCategories(testCatsOther);</span>
+
+<span class="nc" id="L82">		assertEquals(testCatsOther, a.getAreaCategories());</span>
+<span class="nc" id="L83">	}</span>
+
+	@Test
+	public void testHash() {
+<span class="nc" id="L87">		int hashA = testArea.hashCode();</span>
+<span class="nc" id="L88">		int hashC = new Area(new int[] { 42 }, testCoordinateListC).hashCode();</span>
+
+<span class="nc" id="L90">		assertNotEquals(hashA, hashC);</span>
+<span class="nc" id="L91">	}</span>
+
+	@Test
+	public void testEquals() throws IllegalArgumentException,
+			IllegalAccessException, NoSuchFieldException, SecurityException {
+<span class="nc" id="L96">		assertFalse(testArea.equals(null));</span>
+<span class="nc" id="L97">		assertFalse(testArea.equals(&quot;Hello world&quot;));</span>
+
+<span class="nc" id="L99">		assertTrue(testArea.equals(testArea));</span>
+<span class="nc" id="L100">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

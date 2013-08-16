@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>OSMNode.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">preprocessor-model-osm</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata</a> &gt; <span class="el_source">OSMNode.java</span></div><h1>OSMNode.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
+
+public class OSMNode extends OSMElement {
+
+	private double latitude;
+	private double longitude;
+	private Vertex vertex;
+	private Coordinate coord;
+
+	public OSMNode(long id) {
+<span class="fc" id="L15">		this(id, Double.NaN, Double.NaN);</span>
+<span class="fc" id="L16">	}</span>
+
+	public OSMNode(final long id, final double lat, final double lon) {
+<span class="fc" id="L19">		super(id);</span>
+<span class="fc" id="L20">		latitude = lat;</span>
+<span class="fc" id="L21">		longitude = lon;</span>
+<span class="fc" id="L22">	}</span>
+	public double getLatitude() {
+<span class="fc" id="L24">		return latitude;</span>
+	}
+	public double getLongitude() {
+<span class="fc" id="L27">		return longitude;</span>
+	}
+	public Vertex getVertex() {
+<span class="fc bfc" id="L30" title="All 2 branches covered.">		if (vertex == null) {</span>
+<span class="fc" id="L31">			return (vertex = new Vertex(latitude, longitude));</span>
+		}
+<span class="fc" id="L33">		return vertex;</span>
+	}
+
+	public void setLatitude(double lat) {
+<span class="fc" id="L37">		latitude = lat;</span>
+<span class="fc" id="L38">	}</span>
+
+	public void setLongitude(double lon) {
+<span class="fc" id="L41">		longitude = lon;</span>
+<span class="fc" id="L42">	}</span>
+
+	@Override
+	public Coordinate getCenterCoordinate() {
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">		if (coord == null) {</span>
+<span class="fc" id="L47">			return (coord = new Coordinate(latitude, longitude));</span>
+		}
+<span class="nc" id="L49">		return coord;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

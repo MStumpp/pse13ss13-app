@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>OSMDataPreprocessor.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">preprocessor-model-osm</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm</a> &gt; <span class="el_source">OSMDataPreprocessor.java</span></div><h1>OSMDataPreprocessor.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import crosby.binary.file.BlockInputStream;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.pbf.PBF_FileBlockParser;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+
+/**
+ * @author Florian Sch&amp;auml;fer
+ */
+public class OSMDataPreprocessor {
+
+<span class="fc" id="L19">	private static final Logger logger = Logger.getLogger(OSMDataPreprocessor.class.getSimpleName());</span>
+
+	private File graphDestination;
+	private File locationDestination;
+	private File osmSource;
+
+	/**
+	 *
+	 * @param osmSource
+	 * @param locationDestination
+	 * @param graphDestination
+	 * @throws IOException
+	 */
+<span class="fc" id="L32">	public OSMDataPreprocessor(File osmSource, File locationDestination, File graphDestination) throws IOException {</span>
+<span class="fc" id="L33">		this.graphDestination = graphDestination;</span>
+<span class="fc" id="L34">		this.locationDestination = locationDestination;</span>
+<span class="fc" id="L35">		this.osmSource = osmSource;</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">		if (!this.osmSource.exists()) {</span>
+<span class="fc" id="L37">			throw new FileNotFoundException(String.format(&quot;The OSM-Data-File was not found at '%s'!&quot;, osmSource.getAbsolutePath()));</span>
+		}
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">		if (!this.locationDestination.exists()) {</span>
+<span class="nc" id="L40">			this.locationDestination.getParentFile().mkdirs();</span>
+<span class="nc" id="L41">			this.locationDestination.createNewFile();</span>
+		}
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">		if (!this.graphDestination.exists()) {</span>
+<span class="nc" id="L44">			this.graphDestination.getParentFile().mkdirs();</span>
+<span class="nc" id="L45">			this.graphDestination.createNewFile();</span>
+		}
+<span class="fc" id="L47">	}</span>
+	/**
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void parse() throws FileNotFoundException, IOException {
+<span class="fc" id="L53">		GraphDataIO graphData = new GraphDataIO();</span>
+<span class="fc" id="L54">		LocationDataIO locationData = new LocationDataIO();</span>
+		/* NOTE: Den FileInputStream &lt;b&gt;nicht&lt;/b&gt; mit dem Dekorierer {@link java.io.BufferedInputStream} versehen!
+		 * Das Programm crasht sonst unter Umständen (siehe {@link crosby.binary.file.BlockinputStream}, Zeile 25).
+		 * Der InputStream muss &quot;seekable&quot; sein.
+		 */
+<span class="fc" id="L59">		PBF_FileBlockParser parser = new PBF_FileBlockParser(graphData, locationData);</span>
+		do {
+<span class="fc" id="L61">			BlockInputStream blockStream = new BlockInputStream(new FileInputStream(osmSource), parser);</span>
+<span class="fc" id="L62">			blockStream.process();</span>
+<span class="fc" id="L63">			blockStream.close();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		} while (parser.needsFurtherRun());</span>
+
+<span class="fc" id="L66">		logger.info(String.format(&quot;Try writing %d edges (%d vertices) to GraphDataIO-file...&quot;, graphData.getEdges().size(), graphData.getVertices().size()));</span>
+
+<span class="fc" id="L68">		GraphDataIO.save(graphData, graphDestination);</span>
+
+<span class="fc" id="L70">		logger.info(&quot;Writing GraphDataIO finished (written data not yet validated).&quot;);</span>
+
+<span class="fc" id="L72">		logger.info(String.format(&quot;Try writing %d POIs and %d Areas to LocationDataIO-file...&quot;, locationData.getPOIs().size(), locationData.getAreas().size()));</span>
+
+<span class="fc" id="L74">		LocationDataIO.save(locationData, locationDestination);</span>
+
+<span class="fc" id="L76">		logger.info(&quot;Writing LocationDataIO finished (written data not yet validated).&quot;);</span>
+
+<span class="fc" id="L78">		logger.info(&quot;Start reading GraphDataIO...&quot;);</span>
+
+<span class="fc" id="L80">		GraphDataIO graph = GraphDataIO.load(graphDestination);</span>
+
+<span class="fc" id="L82">		logger.info(String.format(&quot;Read %d edges with %d vertices from file.&quot;, graph.getEdges().size(), graph.getVertices().size()));</span>
+
+<span class="fc" id="L84">		logger.info(&quot;Start reading LocationDataIO...&quot;);</span>
+
+<span class="fc" id="L86">		LocationDataIO location = LocationDataIO.load(locationDestination);</span>
+
+<span class="fc" id="L88">		logger.info(String.format(&quot;Read %d POI and %d areas from file.&quot;, location.getPOIs().size(), location.getAreas().size()));</span>
+<span class="fc" id="L89">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

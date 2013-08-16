@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LocationDataIO.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">LocationDataIO.java</span></div><h1>LocationDataIO.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
+
+
+/**
+ * This class contains some preprocessed data by OSMDataPreprocessor and
+ * WikipediaPreprocessor.
+ *
+ * @author Matthias Stumpp
+ * @author Thomas Kadow
+ * @author Florian Sch&amp;auml;fer
+ *
+ * @version 1.0
+ */
+public class LocationDataIO {
+
+	/**
+	 * Stores POIs.
+	 */
+	private List&lt;POI&gt; poiList;
+
+
+	/**
+	 * Stores Areas.
+	 */
+	private List&lt;Area&gt; areaList;
+
+
+	/**
+	 * Initializes LocationDataIO object.
+	 */
+<span class="fc" id="L45">	public LocationDataIO() {</span>
+<span class="fc" id="L46">		poiList = new ArrayList&lt;POI&gt;();</span>
+<span class="fc" id="L47">		areaList = new ArrayList&lt;Area&gt;();</span>
+<span class="fc" id="L48">	}</span>
+
+
+	/**
+	 * Returns a list of all POIs.
+	 *
+	 * @return List&lt;Area&gt; List of all POIs.
+	 */
+	public List&lt;POI&gt; getPOIs() {
+<span class="fc" id="L57">		return poiList;</span>
+	}
+
+
+	/**
+	 * Returns a list of all areas.
+	 *
+	 * @return List&lt;Area&gt; List of all areas.
+	 */
+	public List&lt;Area&gt; getAreas() {
+<span class="fc" id="L67">		return areaList;</span>
+	}
+
+
+	/**
+	 * Adds a POI to the list of all POIs.
+	 *
+	 * @param poi
+	 *            POI to be added.
+	 */
+	public void addPOI(POI poi) {
+<span class="fc" id="L78">		poiList.add(poi);</span>
+<span class="fc" id="L79">	}</span>
+
+
+	/**
+	 * Adds an area to the list of Areas.
+	 *
+	 * @param area
+	 *            Area to be added.
+	 */
+	public void addArea(Area area) {
+<span class="fc" id="L89">		areaList.add(area);</span>
+<span class="fc" id="L90">	}</span>
+
+
+    /**
+     * Saves the LocationDataIO object to an external file.
+     *
+     * @param objectToSave LocationDataIO object to save.
+     * @param destination Location of output file on file system.
+     * @throws java.io.IOException
+     */
+	public static void save(LocationDataIO objectToSave, File destination) throws IOException {
+<span class="fc" id="L101">		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));</span>
+<span class="fc" id="L102">		ProtobufConverter.getLocationDataBuilder(objectToSave).build().writeTo(out);</span>
+<span class="fc" id="L103">		out.flush();</span>
+<span class="fc" id="L104">		out.close();</span>
+<span class="fc" id="L105">	}</span>
+
+
+    /**
+     * Loads and returns a LocationDataIO object from a given file.
+     *
+     * @param source Location of source file in file system.
+     * @throws java.io.IOException
+     */
+	public static LocationDataIO load(File source) throws IOException {
+<span class="fc" id="L115">		InputStream in = new BufferedInputStream(new FileInputStream(source));</span>
+<span class="fc" id="L116">		LocationDataIO geom = ProtobufConverter.getLocationData(Protos.SaveLocationData.parseFrom(in));</span>
+<span class="fc" id="L117">		in.close();</span>
+<span class="fc" id="L118">		return geom;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

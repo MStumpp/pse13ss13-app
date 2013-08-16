@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Vertex.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">Vertex.java</span></div><h1>Vertex.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * This class represents an vertex contained in a graph.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class Vertex extends Coordinate implements Geometrizable {
+
+    /**
+     * Internally used ID of that Vertex.
+     */
+    private int id;
+
+
+    /**
+     * ID counter for internal id.
+     */
+<span class="fc" id="L27">    private static int idCounter = 0;</span>
+
+
+    /**
+     * List of outgoing Edges.
+     */
+    private List&lt;Edge&gt; outgoingEdges;
+
+
+    /**
+     * Parent Vertex.
+     */
+    private Vertex parent;
+
+
+    /**
+     * Current distance to source.
+     */
+    private double currentLength;
+
+
+    /**
+     * Current weighted distance to source.
+     */
+    private double currentWeightedLength;
+
+
+    /**
+     * Stores the current run.
+     */
+    private int run;
+
+
+    /**
+     * Creates an instance of Vertex.
+     *
+     * @param lat Latitude of Vertex
+     * @param lon Longitude of Vertex.
+     */
+    public Vertex(double lat, double lon) {
+<span class="fc" id="L67">        super(lat, lon);</span>
+<span class="fc" id="L68">        id = idCounter;</span>
+<span class="fc" id="L69">        idCounter += 1;</span>
+<span class="fc" id="L70">        outgoingEdges = new ArrayList&lt;Edge&gt;();</span>
+<span class="fc" id="L71">        parent = null;</span>
+<span class="fc" id="L72">        currentLength = Double.POSITIVE_INFINITY;</span>
+<span class="fc" id="L73">        run = 0;</span>
+<span class="fc" id="L74">    }</span>
+
+
+    public Vertex(double latitude, double longitude, int id) {
+<span class="fc" id="L78">		this(latitude, longitude);</span>
+<span class="fc" id="L79">		this.id = id;</span>
+<span class="fc" id="L80">	}</span>
+
+
+    /**
+     * Duplicate a Vertex.
+     *
+     * @param vertex The Vertex to be duplicated.
+     */
+    public Vertex(Vertex vertex) {
+<span class="nc" id="L89">        this(vertex.getLatitude(), vertex.getLongitude(), vertex.getID());</span>
+<span class="nc" id="L90">    }</span>
+
+
+	/**
+     * Returns id of this Vertex.
+     *
+     * @return int.
+     */
+    public int getID() {
+<span class="fc" id="L99">        return id;</span>
+    }
+
+
+    /**
+     * Returns the list of outgoing Edges.
+     *
+     * @return List&lt;Edge&gt;.
+     */
+    public List&lt;Edge&gt; getOutgoingEdges() {
+<span class="nc" id="L109">        return outgoingEdges;</span>
+    }
+
+
+    /**
+     * Returns the Edge having the given
+     * Vertex and this as endpoints.
+     *
+     * @return Edge.
+     */
+    public Edge getOutgoingEdge(Vertex vertex) {
+<span class="nc bnc" id="L120" title="All 4 branches missed.">        if (vertex == null || this.equals(vertex))</span>
+<span class="nc" id="L121">            return null;</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (Edge edge : outgoingEdges) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (edge.getHead().equals(vertex) ||</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                edge.getTail().equals(vertex))</span>
+<span class="nc" id="L126">                return edge;</span>
+        }
+<span class="nc" id="L128">        return null;</span>
+    }
+
+
+    /**
+     * Adds an outgoing Edge to the list of outgoing Edges.
+     */
+    public void addOutgoingEdge(Edge edge) {
+<span class="nc" id="L136">        outgoingEdges.add(edge);</span>
+<span class="nc" id="L137">    }</span>
+
+
+    /**
+     * Returns the parent Vertex.
+     *
+     * @return Vertex.
+     */
+    public Vertex getParent() {
+<span class="nc" id="L146">        return parent;</span>
+    }
+
+
+    /**
+     * Sets the parent Vertex.
+     */
+    public void setParent(Vertex parent) {
+<span class="nc" id="L154">        this.parent = parent;</span>
+<span class="nc" id="L155">    }</span>
+
+
+    /**
+     * Returns the current length.
+     *
+     * @return double.
+     */
+    public double getCurrentLength() {
+<span class="nc" id="L164">        return currentLength;</span>
+    }
+
+
+    /**
+     * Sets the current length.
+     *
+     * @param currentLength The current length from source.
+     */
+    public void setCurrentLength(double currentLength) {
+<span class="nc" id="L174">        this.currentLength = currentLength;</span>
+<span class="nc" id="L175">    }</span>
+
+
+    /**
+     * Returns the current weighted length.
+     *
+     * @return currentWeightedLength.
+     */
+    public double getCurrentWeightedLength() {
+<span class="nc" id="L184">        return currentWeightedLength;</span>
+    }
+
+
+    /**
+     * Sets the current weigthed length.
+     *
+     * @param currentWeightedLength The current length from source.
+     */
+    public void setCurrentWeightedLength(double currentWeightedLength) {
+<span class="nc" id="L194">        this.currentWeightedLength = currentWeightedLength;</span>
+<span class="nc" id="L195">    }</span>
+
+
+    /**
+     * Returns the current run.
+     *
+     * @return int.
+     */
+    public int getRun() {
+<span class="nc" id="L204">        return run;</span>
+    }
+
+
+    /**
+     * Sets the current run.
+     *
+     * @param run Set the current run.
+     */
+    public void setRun(int run) {
+<span class="nc" id="L214">        this.run = run;</span>
+<span class="nc" id="L215">    }</span>
+
+
+    @Override
+    public String toString() {
+<span class="nc" id="L220">        return &quot;Vertex - id: &quot; + id + &quot; - lat: &quot; + getLatitude() + &quot; - lon: &quot; + getLongitude() + &quot; - current length: &quot; + getCurrentLength();</span>
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L227" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        if (!super.equals(o)) return false;</span>
+
+<span class="nc" id="L230">        Vertex vertex = (Vertex) o;</span>
+
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        if (id != vertex.id) return false;</span>
+
+<span class="nc" id="L234">        return true;</span>
+    }
+
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L240">        int result = super.hashCode();</span>
+<span class="nc" id="L241">        result = 31 * result + id;</span>
+<span class="nc" id="L242">        return result;</span>
+    }
+
+
+    // Geometrizable Interface
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
+     */
+    public int numberDimensions() {
+<span class="nc" id="L252">        return 2;</span>
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
+     */
+    public double valueForDimension(int dim) {
+
+<span class="nc bnc" id="L261" title="All 4 branches missed.">        if (dim &lt; 0 || dim &gt; numberDimensions()-1)</span>
+<span class="nc" id="L262">            throw new IllegalArgumentException(&quot;dim out of range&quot;);</span>
+
+<span class="nc bnc" id="L264" title="All 2 branches missed.">        if (dim == 0)</span>
+<span class="nc" id="L265">            return getLatitude();</span>
+        else
+<span class="nc" id="L267">            return getLongitude();</span>
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
+     */
+    public int numberNodes() {
+<span class="nc" id="L275">        return 1;</span>
+    }
+
+
+    /* (non-Javadoc)
+     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
+     */
+    public Geometrizable getNode(int nodeNumber) {
+
+<span class="nc bnc" id="L284" title="All 4 branches missed.">        if (nodeNumber &lt; 0 || (nodeNumber &gt; numberNodes()-1))</span>
+<span class="nc" id="L285">            throw new IllegalArgumentException(&quot;node number out of range&quot;);</span>
+
+<span class="nc" id="L287">        return this;</span>
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+<span class="fc bfc" id="L293" title="All 2 branches covered.">        if (this.getID() &gt; ((Vertex)o).getID()) {</span>
+<span class="fc" id="L294">            return 1;</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        } else if (this.getID() &lt; ((Vertex)o).getID()) {</span>
+<span class="fc" id="L296">            return -1;</span>
+        }
+<span class="fc" id="L298">        return 0;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

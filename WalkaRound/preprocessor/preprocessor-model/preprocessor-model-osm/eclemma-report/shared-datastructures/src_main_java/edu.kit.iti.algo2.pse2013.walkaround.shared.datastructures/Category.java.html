@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Category.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Category.java</span></div><h1>Category.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+/**
+ * This class represents a category.
+ *
+ * @author Thomas Kadow
+ * @version 1.0
+ */
+public class Category {
+
+	public static final int POI_BARS_AND_PUBS = 1;
+
+	public static final int POI_CINEMA = 2;
+
+	public static final int POI_CLUBS_AND_NIGHTCLUBS = 3;
+
+	public static final int POI_FAST_FOOD = 4;
+
+	public static final int POI_FOOD = 5;
+
+	public static final int POI_MUSEUM = 6;
+
+	public static final int POI_PUBLIC_TRANSPORTATION = 7;
+
+	public static final int POI_SHOP = 8;
+
+	public static final int POI_SLEEPING_ACCOMODATIONS = 9;
+
+	public static final int POI_SUPERMARKET = 10;
+
+	public static final int POI_THEATRE = 11;
+
+	public static final int POI_CHURCHES_AND_MONUMENTS = 12;
+
+	public static final int POI_CASTLES = 13;
+
+	public static final int AREA_FOREST = 100;
+
+	public static final int AREA_GARDEN = 101;
+
+	/**
+	 * IDs of all existing categories for areas.
+	 */
+<span class="fc" id="L44">	private static int[] allAreaCategories = {AREA_FOREST, AREA_GARDEN};</span>
+
+	/**
+	 * IDs of all existing categories for POIs.
+	 */
+<span class="fc" id="L49">	private static int[] allPOICategories = { POI_FOOD, POI_FAST_FOOD,POI_BARS_AND_PUBS, POI_CLUBS_AND_NIGHTCLUBS,</span>
+<span class="fc" id="L50">			POI_SUPERMARKET, POI_SHOP, POI_PUBLIC_TRANSPORTATION, POI_MUSEUM, POI_THEATRE, POI_CINEMA,</span>
+<span class="fc" id="L51">			POI_SLEEPING_ACCOMODATIONS, POI_CHURCHES_AND_MONUMENTS, POI_CASTLES };</span>
+
+	/**
+	 * Returns all existing categories of areas.
+	 *
+	 * @return all existing categories of areas.
+	 */
+	public static final int[] getAllAreaCategories() {
+<span class="fc" id="L59">		return allAreaCategories;</span>
+	}
+
+	/**
+	 * Returns all existing categories of POIs.
+	 *
+	 * @return all existing categories of POIs
+	 */
+	public static final int[] getAllPOICategories() {
+<span class="fc" id="L68">		return allPOICategories;</span>
+	}
+
+	/**
+	 * ID of the category.
+	 */
+	private int id;
+
+	/**
+	 * Constructs a new category.
+	 *
+	 * @param id
+	 *            id of the category
+	 */
+<span class="nc" id="L82">	public Category(int id) {</span>
+<span class="nc" id="L83">		this.id = id;</span>
+<span class="nc" id="L84">	}</span>
+
+	/**
+	 * Returns the ID of the category.
+	 *
+	 * @return ID of the category
+	 */
+	public final int getID() {
+<span class="nc" id="L92">		return id;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>

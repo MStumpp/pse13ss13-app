@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>OSMRelation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">preprocessor-model-osm (16.08.2013 10:01:17)</a> &gt; <a href="../../index.html" class="el_group">preprocessor-model-osm</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata</a> &gt; <span class="el_source">OSMRelation.java</span></div><h1>OSMRelation.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata;
+
+import java.util.HashMap;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+public class OSMRelation extends OSMElement {
+<span class="nc" id="L8">	private HashMap&lt;OSMElement, String&gt; members = new HashMap&lt;OSMElement, String&gt;();</span>
+	public OSMRelation(long id) {
+<span class="nc" id="L10">		super(id);</span>
+<span class="nc" id="L11">	}</span>
+	public void addMember(OSMElement ele, String role) {
+<span class="nc" id="L13">		members.put(ele, role);</span>
+<span class="nc" id="L14">	}</span>
+	@Override
+	public Coordinate getCenterCoordinate() {
+<span class="nc" id="L17">		return null;// TODO Auto-generated method stub</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>preprocessor-model-osm (16.08.2013 10:01:17)</div></body></html>
