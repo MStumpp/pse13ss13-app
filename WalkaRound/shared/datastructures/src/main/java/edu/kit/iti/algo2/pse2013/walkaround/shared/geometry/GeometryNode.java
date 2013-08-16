@@ -206,7 +206,7 @@ public class GeometryNode {
                     "be null and/or dim greater or equal to 0");
         }
 
-        if (geometrizables == null) {
+        if (geometrizables.size() == 0) {
             return null;
         }
 

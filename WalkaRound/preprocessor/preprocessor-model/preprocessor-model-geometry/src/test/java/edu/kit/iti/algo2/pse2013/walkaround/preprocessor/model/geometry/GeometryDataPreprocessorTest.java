@@ -203,7 +203,7 @@ public class GeometryDataPreprocessorTest {
         Assert.assertEquals(geometryDataIO.getNumDimensions(), 2);
 
         GeometryNode root_1 = geometryDataIO.getRoot();
-        Assert.assertEquals(3, root_1.getGeometrizables().size());
+        Assert.assertEquals(6, root_1.getGeometrizables().size());
         Assert.assertNull(root_1.getParent());
         Assert.assertNull(root_1.getLeftNode());
         Assert.assertNull(root_1.getRightNode());
