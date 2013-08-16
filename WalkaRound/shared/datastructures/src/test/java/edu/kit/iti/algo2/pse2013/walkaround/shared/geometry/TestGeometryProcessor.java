@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
@@ -18,6 +19,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 public class TestGeometryProcessor {
 
 	@Test(expected=IllegalArgumentException.class)
+    @Ignore
 	public void test() throws IOException, IllegalArgumentException, GeometryProcessorException, GeometryComputationNoSlotsException {
 		GeometryProcessor gp = new GeometryProcessor(GeometryDataIO.load(FileUtil.getFile("geometryData.pbf")), 1);
 		gp.getNearestGeometrizable(new GeometrySearch(new double[]{49.2, 8.5}));
