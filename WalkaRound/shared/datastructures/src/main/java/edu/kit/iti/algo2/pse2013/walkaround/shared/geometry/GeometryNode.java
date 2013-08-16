@@ -206,18 +206,21 @@ public class GeometryNode {
                     "be null and/or dim greater or equal to 0");
         }
 
-        if (geometrizables == null)
+        if (geometrizables == null) {
             return null;
+        }
 
-        if (geometrizables.size() == 1)
+        if (geometrizables.size() == 1) {
             return geometrizables.get(0);
+        }
 
         Geometrizable currentBest = null;
         double minDistance = Double.POSITIVE_INFINITY;
 
         for (Geometrizable geom : geometrizables) {
-            if (constraint != null && !constraint.isValid(geom))
+            if (constraint != null && !constraint.isValid(geom)) {
                 continue;
+            }
 
             double currentDistance = Math.abs(geom.valueForDimension(dim) - value);
 

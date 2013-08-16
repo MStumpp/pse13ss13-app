@@ -75,35 +75,35 @@ public class GeometryDataPreprocessorTest {
 
         GeometryNode root_1 = geometryDataIO.getRoot();
         Assert.assertEquals(5.d, root_1.getSplitValue(), 0.d);
-        Assert.assertNull(root_1.getGeometrizables().get(0));
+        Assert.assertEquals(0, root_1.getGeometrizables().size());
         Assert.assertNull(root_1.getParent());
         Assert.assertNotNull(root_1.getLeftNode());
         Assert.assertNotNull(root_1.getRightNode());
 
         GeometryNode depth_1_root_left_2 = root_1.getLeftNode();
         Assert.assertEquals(4.d, depth_1_root_left_2.getSplitValue(), 0.d);
-        Assert.assertNull(depth_1_root_left_2.getGeometrizables().get(0));
+        Assert.assertEquals(0, depth_1_root_left_2.getGeometrizables().size());
         Assert.assertEquals(depth_1_root_left_2.getParent(), root_1);
         Assert.assertNotNull(depth_1_root_left_2.getLeftNode());
         Assert.assertNotNull(depth_1_root_left_2.getRightNode());
 
         GeometryNode depth_1_root_right_3 = root_1.getRightNode();
         Assert.assertEquals(2.d, depth_1_root_right_3.getSplitValue(), 0.d);
-        Assert.assertNull(depth_1_root_right_3.getGeometrizables().get(0));
+        Assert.assertEquals(0, depth_1_root_right_3.getGeometrizables().size());
         Assert.assertEquals(depth_1_root_right_3.getParent(), root_1);
         Assert.assertNotNull(depth_1_root_right_3.getLeftNode());
         Assert.assertNotNull(depth_1_root_right_3.getRightNode());
 
         GeometryNode depth_2_2_left_4 = depth_1_root_left_2.getLeftNode();
         Assert.assertEquals(2.d, depth_2_2_left_4.getSplitValue(), 0.d);
-        Assert.assertNull(depth_2_2_left_4.getGeometrizables().get(0));
+        Assert.assertEquals(0, depth_2_2_left_4.getGeometrizables().size());
         Assert.assertEquals(depth_2_2_left_4.getParent(), depth_1_root_left_2);
         Assert.assertNotNull(depth_2_2_left_4.getLeftNode());
         Assert.assertNotNull(depth_2_2_left_4.getRightNode());
 
         GeometryNode depth_2_2_right_5 = depth_1_root_left_2.getRightNode();
         Assert.assertEquals(Double.NaN, depth_2_2_right_5.getSplitValue(), 0.d);
-        Assert.assertNotNull(depth_2_2_right_5.getGeometrizables().get(0));
+        Assert.assertNotEquals(0, depth_2_2_right_5.getGeometrizables().size());
         Assert.assertEquals(depth_2_2_right_5.getParent(), depth_1_root_left_2);
         Assert.assertNull(depth_2_2_right_5.getLeftNode());
         Assert.assertNull(depth_2_2_right_5.getRightNode());
@@ -113,7 +113,7 @@ public class GeometryDataPreprocessorTest {
 
         GeometryNode depth_3_4_right_6 = depth_2_2_left_4.getLeftNode();
         Assert.assertEquals(Double.NaN, depth_3_4_right_6.getSplitValue(), 0.d);
-        Assert.assertNotNull(depth_3_4_right_6.getGeometrizables().get(0));
+        Assert.assertNotEquals(0, depth_3_4_right_6.getGeometrizables().size());
         Assert.assertEquals(2.d, depth_3_4_right_6.getGeometrizables().get(0).valueForDimension(0), 0.d);
         Assert.assertEquals(3.d, depth_3_4_right_6.getGeometrizables().get(0).valueForDimension(1), 0.d);
         Assert.assertEquals(depth_3_4_right_6.getParent(), depth_2_2_left_4);
@@ -122,7 +122,7 @@ public class GeometryDataPreprocessorTest {
 
         GeometryNode depth_3_4_right_7 = depth_2_2_left_4.getRightNode();
         Assert.assertEquals(Double.NaN, depth_3_4_right_7.getSplitValue(), 0.d);
-        Assert.assertNotNull(depth_3_4_right_7.getGeometrizables().get(0));
+        Assert.assertNotEquals(0, depth_3_4_right_7.getGeometrizables().size());
         Assert.assertEquals(5.d, depth_3_4_right_7.getGeometrizables().get(0).valueForDimension(0), 0.d);
         Assert.assertEquals(4.d, depth_3_4_right_7.getGeometrizables().get(0).valueForDimension(1), 0.d);
         Assert.assertEquals(depth_3_4_right_7.getParent(), depth_2_2_left_4);
@@ -131,14 +131,14 @@ public class GeometryDataPreprocessorTest {
 
         GeometryNode depth_2_3_left_8 = depth_1_root_right_3.getLeftNode();
         Assert.assertEquals(7.d, depth_2_3_left_8.getSplitValue(), 0.d);
-        Assert.assertNull(depth_2_3_left_8.getGeometrizables().get(0));
+        Assert.assertEquals(0, depth_2_3_left_8.getGeometrizables().size());
         Assert.assertEquals(depth_2_3_left_8.getParent(), depth_1_root_right_3);
         Assert.assertNotNull(depth_2_3_left_8.getLeftNode());
         Assert.assertNotNull(depth_2_3_left_8.getRightNode());
 
         GeometryNode depth_2_3_right_9 = depth_1_root_right_3.getRightNode();
         Assert.assertEquals(Double.NaN, depth_2_3_right_9.getSplitValue(), 0.d);
-        Assert.assertNotNull(depth_2_3_right_9.getGeometrizables().get(0));
+        Assert.assertNotEquals(0, depth_2_3_right_9.getGeometrizables().size());
         Assert.assertEquals(depth_2_3_right_9.getParent(), depth_1_root_right_3);
         Assert.assertNull(depth_2_3_right_9.getLeftNode());
         Assert.assertNull(depth_2_3_right_9.getRightNode());
@@ -148,7 +148,7 @@ public class GeometryDataPreprocessorTest {
 
         GeometryNode depth_3_8_right_10 = depth_2_3_left_8.getLeftNode();
         Assert.assertEquals(Double.NaN, depth_3_8_right_10.getSplitValue(), 0.d);
-        Assert.assertNotNull(depth_3_8_right_10.getGeometrizables().get(0));
+        Assert.assertNotEquals(0, depth_3_8_right_10.getGeometrizables().size());
         Assert.assertEquals(7.d, depth_3_8_right_10.getGeometrizables().get(0).valueForDimension(0), 0.d);
         Assert.assertEquals(2.d, depth_3_8_right_10.getGeometrizables().get(0).valueForDimension(1), 0.d);
         Assert.assertEquals(depth_3_8_right_10.getParent(), depth_2_3_left_8);
@@ -157,7 +157,7 @@ public class GeometryDataPreprocessorTest {
 
         GeometryNode depth_3_8_right_11 = depth_2_3_left_8.getRightNode();
         Assert.assertEquals(Double.NaN, depth_3_8_right_11.getSplitValue(), 0.d);
-        Assert.assertNotNull(depth_3_8_right_11.getGeometrizables().get(0));
+        Assert.assertNotEquals(0, depth_3_8_right_11.getGeometrizables().size());
         Assert.assertEquals(8.d, depth_3_8_right_11.getGeometrizables().get(0).valueForDimension(0), 0.d);
         Assert.assertEquals(1.d, depth_3_8_right_11.getGeometrizables().get(0).valueForDimension(1), 0.d);
         Assert.assertEquals(depth_3_8_right_11.getParent(), depth_2_3_left_8);
@@ -203,7 +203,7 @@ public class GeometryDataPreprocessorTest {
         Assert.assertEquals(geometryDataIO.getNumDimensions(), 2);
 
         GeometryNode root_1 = geometryDataIO.getRoot();
-        Assert.assertNull(root_1.getGeometrizables().get(0));
+        Assert.assertEquals(3, root_1.getGeometrizables().size());
         Assert.assertNull(root_1.getParent());
         Assert.assertNull(root_1.getLeftNode());
         Assert.assertNull(root_1.getRightNode());
