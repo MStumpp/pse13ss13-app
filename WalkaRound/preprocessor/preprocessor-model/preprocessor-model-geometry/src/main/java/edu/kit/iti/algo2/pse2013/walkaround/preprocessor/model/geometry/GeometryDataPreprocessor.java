@@ -58,7 +58,7 @@ public class GeometryDataPreprocessor {
     /**
      * Preprocesses some data structure to be used by GeometryProcessor.
      *
-     * @param geoms GraphDataIO object.
+     * @param geoms list of geometrizables
      * @param numberGeomPerNode Number of the Geometrizables to be stored in a GeometryNode.
      * @return GeometryDataIO.
      * @throw IllegalArgumentException If graphDataIO or locationDataIO args invalid.
@@ -66,10 +66,8 @@ public class GeometryDataPreprocessor {
     public static GeometryDataIO preprocessGeometryDataIO(List<Geometrizable> geoms,
         int numberGeomPerNode) throws IllegalArgumentException {
 
-        List<Geometrizable> geometrizables = geoms;
-
         // throw exception if number of geometrizables is not greater than 0
-        if (geometrizables == null || geometrizables.size() == 0)
+        if (geoms == null || geoms.size() == 0)
             throw new IllegalArgumentException("geometrizables must not be null and/or " +
                     "number of Geometrizables must be at least of size 1");
 
@@ -79,19 +77,19 @@ public class GeometryDataPreprocessor {
                     "GeometryNode must be at least of size 1");
 
         // number of dimensions, use first element of geometrizables
-        int numDimensions = geometrizables.get(0).numberDimensions();
+        int numDimensions = geoms.get(0).numberDimensions();
 
         // if number of nodes in given geometrizables greater than 1,
         // wrap each geometrizable
-        int numberNodes = geometrizables.get(0).numberNodes();
+        int numberNodes = geoms.get(0).numberNodes();
         if (numberNodes > 1) {
             List<Geometrizable> geometrizablesWrapped = new ArrayList<>();
-            for (Geometrizable geometrizable : geometrizables) {
+            for (Geometrizable geometrizable : geoms) {
                 for (int n = 0; n < numberNodes; n++) {
                     geometrizablesWrapped.add(new GeometrizableWrapper(geometrizable, n));
                 }
             }
-            geometrizables = geometrizablesWrapped;
+            geoms = geometrizablesWrapped;
         }
 
         // set up data
@@ -100,7 +98,7 @@ public class GeometryDataPreprocessor {
         // sort data
         for (int i = 0; i<numDimensions; i++) {
             final int dim = i;
-            Collections.sort(geometrizables, new Comparator<Geometrizable>() {
+            Collections.sort(geoms, new Comparator<Geometrizable>() {
                 @Override
                 public int compare(Geometrizable v1, Geometrizable v2) {
                     if (v1.valueForDimension(dim) > v2.valueForDimension(dim)) {
@@ -111,7 +109,7 @@ public class GeometryDataPreprocessor {
                         return 0;
                 }
             });
-            data[i] = geometrizables.toArray(new Geometrizable[0]);
+            data[i] = geoms.toArray(new Geometrizable[0]);
         }
 
         if (data[0].length != data[1].length)

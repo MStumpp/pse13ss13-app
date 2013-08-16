@@ -143,7 +143,7 @@ public class GeometryNode {
 		return depth;
 	}
 
-	public void setDepth(int depth) {
+	private void setDepth(int depth) {
 		this.depth = depth;
 		if (leftNode != null) {
 			leftNode.setDepth(depth + 1);
@@ -285,8 +285,8 @@ public class GeometryNode {
 		sb.append("\n\n -> depth: " + depth + "\n");
 		sb.append("-> split: " + splitValue + "\n");
 
-		if (geometrizables != null)
-			sb.append("\n geometrizable: " + geometrizables.toString() + "\n");
+		if (geometrizables.size() > 0)
+			sb.append("\n geometrizable: " + getGeometrizables().toString() + "\n");
 		else
 			sb.append("\n no vertex \n");
 
@@ -296,9 +296,9 @@ public class GeometryNode {
 			sb.append("-> no parent \n");
 
 		if (leftNode != null)
-			sb.append("-> leftNode: " + leftNode.toString() + "\n");
+			sb.append("-> leftNode: " + getLeftNode().toString() + "\n");
 		if (rightNode != null)
-			sb.append("-> rightNode: " + rightNode.toString() + "\n");
+			sb.append("-> rightNode: " + getRightNode().toString() + "\n");
 		return sb.toString();
 	}
 
@@ -314,7 +314,6 @@ public class GeometryNode {
 				+ ((geometrizables == null) ? 0 : geometrizables.hashCode());
 		result = prime * result
 				+ ((leftNode == null) ? 0 : leftNode.hashCode());
-		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
 		result = prime * result
 				+ ((rightNode == null) ? 0 : rightNode.hashCode());
 		long temp;
@@ -353,13 +352,6 @@ public class GeometryNode {
 				return false;
 			}
 		} else if (!leftNode.equals(other.leftNode)) {
-			return false;
-		}
-		if (parent == null) {
-			if (other.parent != null) {
-				return false;
-			}
-		} else if (!parent.equals(other.parent)) {
 			return false;
 		}
 		if (rightNode == null) {
