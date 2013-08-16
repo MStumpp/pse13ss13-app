@@ -167,7 +167,8 @@ public class GeometryProcessorTest {
     @Test
     public void testGetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesDefaultPerNode();
+
         Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO));
         GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Geometrizable geometrizable = null;
@@ -188,7 +189,7 @@ public class GeometryProcessorTest {
     @Ignore
     public void testGetNearestVertexDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
-        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesDefaultPerNode();
         Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO, 5));
         GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
         Geometrizable geometrizable = null;
