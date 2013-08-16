@@ -21,6 +21,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * GeometryProcessorTest.
  *
@@ -118,6 +120,17 @@ public class GeometryProcessorTest {
         GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
         Assert.assertNotNull(GeometryProcessorPOI.init(geometryDataIO));
         Assert.assertNotNull(GeometryProcessorPOI.getInstance());
+    }
+
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testNearestGeometrizableIsNull() throws IOException, IllegalArgumentException,
+            GeometryProcessorException, GeometryComputationNoSlotsException {
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesDefaultPerNode();
+        GeometryProcessor gp = new GeometryProcessor(geometryDataIO, 1);
+        gp.getNearestGeometrizable(new GeometrySearch(new double[]{49.2, 8.5}));
+        assertTrue(true);
+        gp.getNearestGeometrizable(null);
     }
 
 
