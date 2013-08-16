@@ -18,6 +18,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
+@Ignore
 public class RoundtripProcessorTest {
 
     private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
