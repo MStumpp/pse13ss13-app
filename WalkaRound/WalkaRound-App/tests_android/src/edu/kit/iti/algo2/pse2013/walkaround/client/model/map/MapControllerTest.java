@@ -30,7 +30,7 @@ public class MapControllerTest {
 
 
 	@Before
-	protected void setUp() {
+	public void setUp() {
 		center = new Coordinate(49.0145, 8.419);
 		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();
 		display =  new Point(1025, 600);
