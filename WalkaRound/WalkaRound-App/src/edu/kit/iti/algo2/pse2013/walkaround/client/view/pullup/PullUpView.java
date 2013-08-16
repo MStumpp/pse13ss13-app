@@ -190,8 +190,8 @@ public class PullUpView extends Fragment implements RouteListener {
 		finalHeight  = menu.getLayoutParams().height;
 		DisplayMetrics metrics = new DisplayMetrics();
 		this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		Log.d("omtag", " x " + metrics.density);
-		maxHeight = maxHeight - finalHeight * metrics.density;
+		Log.d("omtag", " x " + metrics.densityDpi);
+		maxHeight = maxHeight - finalHeight * (metrics.densityDpi / 160f);
 		main.setY(maxHeight);
 
 		Log.d(TAG_PULLUP, "allocate fragments");
