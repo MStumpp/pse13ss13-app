@@ -116,14 +116,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4jVersion}</version>
         </dependency>
-        <!-- CHOOSE BETWEEN ONE OF THESE DIFFERENT BINDINGS -->
-        <!-- Binding for NOP, silently discarding all logging. -->
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-nop</artifactId>-->
-            <!--<version>${slf4jVersion}</version>-->
-        <!--</dependency>-->
-        <!-- Binding for System.out -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -138,11 +130,5 @@
             <scope>runtime</scope>
         </dependency>
         <!--Binding for commons logging over slf4j -->
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>jcl-over-slf4j</artifactId>-->
-            <!--<version>${slf4jVersion}</version>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
 	</dependencies>
 </project>

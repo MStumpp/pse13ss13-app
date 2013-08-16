@@ -48,6 +48,7 @@ public class GeometryDataPreprocessorTest {
         }
     }
 
+
     @Before
     public void resetSingleton() throws SecurityException, NoSuchFieldException,
             IllegalArgumentException, IllegalAccessException {
@@ -58,6 +59,25 @@ public class GeometryDataPreprocessorTest {
         idCounter = Edge.class.getDeclaredField("idCounter");
         idCounter.setAccessible(true);
         idCounter.setInt(null, 0);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+         public void testGeometrizableIsNull() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(null);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGeometrizableIsEmpty() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>());
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNumberGeomPerNodeLessThanOne() throws MalformedURLException {
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 0);
     }
 
 
