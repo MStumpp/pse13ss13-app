@@ -197,13 +197,6 @@ public class Coordinate {
 			return false;
 		}
 		Coordinate other = (Coordinate) obj;
-		if (crossInfo == null) {
-			if (other.crossInfo != null) {
-				return false;
-			}
-		} else if (!crossInfo.equals(other.crossInfo)) {
-			return false;
-		}
 		double epsilon = 1e-323;
 		if (Math.abs(Math.abs(latitude) - Math.abs(other.latitude)) > epsilon) {
 			return false;
