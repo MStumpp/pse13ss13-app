@@ -58,7 +58,7 @@ public class InfoView extends Fragment implements POIImageListener {
 
 		final POI poi = MapController.getInstance().getPOI();
 		save.setOnTouchListener(new saveListener(poi, save));
-		play.setOnTouchListener(new playListener());
+		play.setOnTouchListener(new playListener(poi));
 
 		if (poi != null) {
 			Log.d("wtf", "" + (poi.getName() == null) + (title == null));
@@ -197,12 +197,21 @@ public class InfoView extends Fragment implements POIImageListener {
 
 	private class playListener implements OnTouchListener {
 
+		POI poi;
+		
+		public playListener(POI poi){
+			this.poi = poi;
+		}
 
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(play) && event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_CONTENT, "play wurde gedrückt");
-				toogleSpeaking();
-				TextToSpeechUtility.getInstance().stopSpeaking();
+				if(speak){
+					Log.d(TAG_PULLUP_CONTENT, "play wurde gedrückt");
+					toogleSpeaking();
+					TextToSpeechUtility.getInstance().stopSpeaking();
+				} else {
+					TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());
+				}
 			}
 			return false;
 		}
