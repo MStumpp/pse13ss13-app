@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 public class TestPOIImageFetcher {
 	public static Bitmap bitmap;
 	private POIImageListener listener = new POIImageListener() {
-		@Override
 		public void setImage(Bitmap b) {
 			bitmap = b;
 		}
