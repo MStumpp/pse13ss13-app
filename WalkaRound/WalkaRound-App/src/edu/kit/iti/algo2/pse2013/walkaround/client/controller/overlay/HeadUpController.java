@@ -165,8 +165,8 @@ public class HeadUpController {
 	/**
 	 * stoogle Navigation
 	 */
-	public void toggleNavigation() {
-		/*
+	/*public void toggleNavigation() {
+		
 		if(!this.navi){
 			this.headUpView.showNavigationElements();
 			this.navi = true;
@@ -175,8 +175,8 @@ public class HeadUpController {
 			this.navi = false;
 		}
 		Log.d(TAG_HEADUP_CONTROLLER ,"Navigation " + this.navi);
-		*/
-	}
+		
+	}*/
 
 	/**
 	 * Updates pictogram by unique id
