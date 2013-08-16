@@ -13,7 +13,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -370,7 +369,7 @@ public class MapView extends Activity {
 
 						ImageView iv = new ImageView(context);
 						iv.setY(dw.getY() - 145);
-						iv.setX(dw.getX() - 75);
+						iv.setX(dw.getX() - 60);
 
 						iv.setVisibility(View.VISIBLE);
 						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints, (int) sizeOfPoints));
