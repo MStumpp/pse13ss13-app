@@ -264,9 +264,30 @@ public class FavoriteView extends Fragment {
 
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG, String.format("delete fav location"));
-				FavoriteMenuController.getInstance().deleteRoute(name);
-				updateFavorties();
+				
+				// dialog erstellen
+				AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+						getActivity());
+				alertDialog.setTitle(R.string.delete_dialog_header);
+				alertDialog
+						.setMessage(R.string.delete_dialog);
+				alertDialog.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Log.d(TAG, String.format("delete fav route"));
+								FavoriteMenuController.getInstance().deleteRoute(name);
+								updateFavorties();
+							}
+						});
+				alertDialog.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+							}
+						});
+				alertDialog.show();
 			}
 			return false;
 		}

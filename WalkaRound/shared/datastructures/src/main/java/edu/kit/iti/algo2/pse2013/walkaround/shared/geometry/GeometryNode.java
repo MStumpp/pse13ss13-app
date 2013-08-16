@@ -201,21 +201,16 @@ public class GeometryNode {
     public Geometrizable getNearestGeometrizable(double value,
         GeometrizableConstraint constraint, int dim) {
 
-        logger.info("!!!!!!!!! value: " + value + " constraint: " + constraint + " dim: " + dim);
-        logger.info("!!!!!!!!! value: " + value + " constraint: " + constraint + " dim: " + dim);
-
         if (dim < 0) {
             throw new IllegalArgumentException("geometrizable must not " +
                     "be null and/or dim greater or equal to 0");
         }
 
         if (geometrizables.size() == 0) {
-            logger.info("geometrizables.size() == 0 " + geometrizables);
             return null;
         }
 
         if (geometrizables.size() == 1) {
-            logger.info("geometrizables.size() == 1 " + geometrizables.get(0));
             return geometrizables.get(0);
         }
 
@@ -230,7 +225,7 @@ public class GeometryNode {
             double currentDistance = Math.abs(geom.valueForDimension(dim) - value);
 
             if (currentDistance < minDistance) {
-                logger.info("currentDistance < minDistance ");
+                //logger.info("currentDistance < minDistance ");
                 currentBest = geom;
                 minDistance = currentDistance;
             }
@@ -276,7 +271,10 @@ public class GeometryNode {
 	 * @return true if leaf node, false otherwise.
 	 */
 	public boolean isLeaf() {
-		return splitValue == Double.NaN;
+        if (this.leftNode == null && this.rightNode == null) {
+		    return true;
+        }
+        return false;
 	}
 
 	@Override

@@ -159,7 +159,7 @@ public class RouteController {
 
 	}
 
-	public boolean moveActiveWaypointInOrder(final int i) {
+	/*public boolean moveActiveWaypointInOrder(final int i) {
 		Log.d(TAG,
 				"RouteController.moveActiveWaypointInOrder(int)");
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
@@ -176,7 +176,7 @@ public class RouteController {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	public boolean addWaypoint(final Waypoint w) {
 		Log.d(TAG, String.format("RouteController.addWaypoint(%s)", w.toString()));
@@ -305,7 +305,7 @@ public class RouteController {
 		return false;
 	}
 
-	public boolean optimizeRoute() {
+	/*public boolean optimizeRoute() {
 		Log.d(TAG, "RouteController.optimizeRoute()");
 
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
@@ -322,7 +322,7 @@ public class RouteController {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	public void replaceFullRoute(RouteInfo r) {
 		Log.d(TAG, "RouteController.replaceFullRoute(Route)");

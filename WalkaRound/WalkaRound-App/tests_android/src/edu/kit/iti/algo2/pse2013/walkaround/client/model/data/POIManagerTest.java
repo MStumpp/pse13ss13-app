@@ -54,12 +54,12 @@ public class POIManagerTest  {
 
 	@Test
 	public void testSearchByAddress() {
-		Address testAddress = new Address("Kaiserstraße", "12", "Karlsruhe",
+		Address testAddress = new Address("Kaiserstraße", "50", "Karlsruhe",
 				76133);
 		List<Location> suggestions = poiManag.searchPOIsByAddress(testAddress);
 		assertTrue(suggestions.get(0).getAddress().toString()
 				.contains("Kaiserstraße")
-				&& suggestions.get(0).getAddress().toString().contains("12")
+				&& suggestions.get(0).getAddress().toString().contains("50")
 				&& suggestions.get(0).getAddress().toString()
 						.contains("Karlsruhe")
 				&& suggestions.get(0).getAddress().toString()

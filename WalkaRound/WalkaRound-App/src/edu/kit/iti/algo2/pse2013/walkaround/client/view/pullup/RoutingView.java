@@ -56,6 +56,8 @@ public class RoutingView extends Fragment {
 	private LinearLayout layout;
 	private EditText favoriteName;
 
+	private Point size;
+
 	private static boolean isListener = false;
 
 	@Override
@@ -83,7 +85,7 @@ public class RoutingView extends Fragment {
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
-		Point size = new Point();
+		size = new Point();
 		display.getSize(size);
 
 		Log.d(TAG_PULLUP_CONTENT, "Einstellen der sizes");
@@ -173,25 +175,25 @@ public class RoutingView extends Fragment {
 
 	/*
 	 * private class tspListener implements OnTouchListener {
-	 *
+	 * 
 	 * @Override public boolean onTouch(View v, MotionEvent event) { if
 	 * (v.equals(tsp) && event.getAction() == MotionEvent.ACTION_DOWN) {
 	 * Log.d(TAG_PULLUP_CONTENT, "tsp button wurde gedr�ckt");
 	 * RouteController.getInstance().optimizeRoute(); } return false; }
-	 *
+	 * 
 	 * }
 	 */
 
 	/*
 	 * private class loadListener implements OnTouchListener {
-	 *
+	 * 
 	 * @Override public boolean onTouch(View v, MotionEvent event) { if
 	 * (v.equals(load) && event.getAction() == MotionEvent.ACTION_DOWN) {
 	 * Log.d(TAG_PULLUP_CONTENT, "load wurde gedr�ckt"); // TODO: ansicht
 	 * wechselt in die liste der !!!!favorisierten // routen!!!!
 	 * MapController.getInstance().getPullUpView()
 	 * .changeView(PullUpView.CONTENT_FAVORITE); } return false; }
-	 *
+	 * 
 	 * }
 	 */
 
@@ -240,17 +242,14 @@ public class RoutingView extends Fragment {
 	}
 
 	public void onRouteChange(final RouteInfo currentRoute, Context context) {
+		
+		Log.d(TAG_PULLUP_CONTENT, "onRouteChange() METHOD START");
 
 		if (currentRoute != null) {
+			Log.d(TAG_PULLUP_CONTENT, "onRouteChange() übergebene Route Anzahl Wegpunkte: " + currentRoute.getWaypoints().size());
 			if (layout != null) {
 				// lastKnownRoute = currentRoute;
 				layout.removeAllViews();
-
-				Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
-				Display display = this.getActivity().getWindowManager()
-						.getDefaultDisplay();
-				Point size = new Point();
-				display.getSize(size);
 
 				// set layout margins for Text
 				LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
@@ -399,10 +398,12 @@ public class RoutingView extends Fragment {
 				alertDialog.setMessage(R.string.delete_dialog);
 				alertDialog.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO: metho zum löschen eines bestimmten
-								// wegpunktes
-								// RouteController.getInstance().
+							public void onClick(DialogInterface dialog,
+									int which) {
+								RouteController.getInstance()
+										.setActiveWaypoint(value.getId());
+								RouteController.getInstance()
+										.deleteActiveWaypoint();
 							}
 						});
 				alertDialog.setNegativeButton("No",

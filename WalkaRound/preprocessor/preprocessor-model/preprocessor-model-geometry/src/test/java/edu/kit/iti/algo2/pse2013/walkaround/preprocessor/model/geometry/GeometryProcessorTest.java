@@ -21,6 +21,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * GeometryProcessorTest.
  *
@@ -121,8 +123,18 @@ public class GeometryProcessorTest {
     }
 
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testNearestGeometrizableIsNull() throws IOException, IllegalArgumentException,
+            GeometryProcessorException, GeometryComputationNoSlotsException {
+        GeometryDataIO geometryDataIO = getGeometryDataIOVerticesDefaultPerNode();
+        GeometryProcessor gp = new GeometryProcessor(geometryDataIO, 1);
+        gp.getNearestGeometrizable(new GeometrySearch(new double[]{49.2, 8.5}));
+        assertTrue(true);
+        gp.getNearestGeometrizable(null);
+    }
+
+
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -144,7 +156,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -206,7 +217,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -428,7 +438,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestEdgeOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOEdgesOnePerNode();
@@ -690,7 +699,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestPOIWithCategoryDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
