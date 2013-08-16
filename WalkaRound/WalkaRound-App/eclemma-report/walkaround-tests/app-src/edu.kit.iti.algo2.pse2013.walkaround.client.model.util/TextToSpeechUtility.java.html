@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TextToSpeechUtility.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.util</a> &gt; <span class="el_source">TextToSpeechUtility.java</span></div><h1>TextToSpeechUtility.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TextToSpeechUtility.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.util</a> &gt; <span class="el_source">TextToSpeechUtility.java</span></div><h1>TextToSpeechUtility.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
 import java.util.Locale;
 
@@ -18,26 +18,26 @@ import android.util.Log;
 public final class TextToSpeechUtility implements OnInitListener,
 		OnSharedPreferenceChangeListener {
 
-<span class="fc" id="L21">	private static String TAG_TTSUTIL = TextToSpeechUtility.class</span>
-<span class="fc" id="L22">			.getSimpleName();</span>
+<span class="nc" id="L21">	private static String TAG_TTSUTIL = TextToSpeechUtility.class</span>
+<span class="nc" id="L22">			.getSimpleName();</span>
 
 	private static TextToSpeechUtility ttsUtilInstance;
 
 	boolean sound;
 
 	private static TextToSpeech tts;
-<span class="fc" id="L29">	private static boolean isReady;</span>
+<span class="nc" id="L29">	private static boolean isReady;</span>
 
 	public static void initialize(Context context, boolean sound) {
-<span class="fc" id="L32">		Log.d(TAG_TTSUTIL, &quot;initialize(Context)&quot;);</span>
-<span class="fc" id="L33">		ttsUtilInstance = new TextToSpeechUtility(context, sound);</span>
-<span class="fc" id="L34">	}</span>
+<span class="nc" id="L32">		Log.d(TAG_TTSUTIL, &quot;initialize(Context)&quot;);</span>
+<span class="nc" id="L33">		ttsUtilInstance = new TextToSpeechUtility(context, sound);</span>
+<span class="nc" id="L34">	}</span>
 
-<span class="fc" id="L36">	private TextToSpeechUtility(Context context, boolean sound) {</span>
-<span class="fc" id="L37">		tts = new TextToSpeech(context, this);</span>
-<span class="fc" id="L38">		this.sound = sound;</span>
-<span class="fc" id="L39">		isReady = true;</span>
-<span class="fc" id="L40">	}</span>
+<span class="nc" id="L36">	private TextToSpeechUtility(Context context, boolean sound) {</span>
+<span class="nc" id="L37">		tts = new TextToSpeech(context, this);</span>
+<span class="nc" id="L38">		this.sound = sound;</span>
+<span class="nc" id="L39">		isReady = true;</span>
+<span class="nc" id="L40">	}</span>
 
 	/**
 	 * Speaks a String
@@ -78,22 +78,22 @@ public final class TextToSpeechUtility implements OnInitListener,
 	}
 
 	public static TextToSpeechUtility getInstance() {
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">		if (ttsUtilInstance == null) {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (ttsUtilInstance == null) {</span>
 <span class="nc" id="L82">			return null;</span>
 		}
-<span class="fc" id="L84">		return ttsUtilInstance;</span>
+<span class="nc" id="L84">		return ttsUtilInstance;</span>
 	}
 
 	public void onInit(int status) {
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">		if (status == TextToSpeech.SUCCESS) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		if (status == TextToSpeech.SUCCESS) {</span>
 <span class="nc" id="L89">			isReady = true;</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">		} else if (status == TextToSpeech.ERROR) {</span>
-<span class="fc" id="L91">			isReady = false;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		} else if (status == TextToSpeech.ERROR) {</span>
+<span class="nc" id="L91">			isReady = false;</span>
 		}
-<span class="fc" id="L93">	}</span>
+<span class="nc" id="L93">	}</span>
 
 	public boolean isReady() {
-<span class="fc" id="L96">		return isReady;</span>
+<span class="nc" id="L96">		return isReady;</span>
 	}
 
 	public void shutdown() {
@@ -107,6 +107,16 @@ public final class TextToSpeechUtility implements OnInitListener,
 <span class="nc" id="L107">			sound = pref.getBoolean(key, true);</span>
 		}
 <span class="nc" id="L109">	}</span>
+	
+	public boolean stopSpeaking(){
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		if(tts != null){</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">			if(tts.isSpeaking()){</span>
+<span class="nc" id="L114">				tts.stop();</span>
+<span class="nc" id="L115">				return true;</span>
+			}
+		}
+<span class="nc" id="L118">		return false;</span>
+	}
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

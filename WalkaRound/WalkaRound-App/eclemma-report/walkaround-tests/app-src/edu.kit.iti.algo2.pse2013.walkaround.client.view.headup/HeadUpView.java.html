@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>HeadUpView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.headup</a> &gt; <span class="el_source">HeadUpView.java</span></div><h1>HeadUpView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.headup;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>HeadUpView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.headup</a> &gt; <span class="el_source">HeadUpView.java</span></div><h1>HeadUpView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.headup;
 
 import android.app.Fragment;
 import android.graphics.Point;
@@ -151,7 +151,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpCont
 <span class="nc" id="L151">		userLock.setOnTouchListener(new UserLockListener());</span>
 
 		// anfangs pausiert also nach Play listen
-<span class="nc" id="L154">		naviControll.setOnTouchListener(new NavigationControllListener());</span>
+		//naviControll.setOnTouchListener(new NavigationControllListener());
 
 		// -----------------------------------------------
 <span class="nc" id="L157">		Log.d(TAG_HEADUP_VIEW, &quot;initialisiere die Lock Position&quot;);</span>
@@ -356,16 +356,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpCont
 	 * @author Ludwig Biermann
 	 *
 	 */
-<span class="nc" id="L359">	private class NavigationControllListener implements OnTouchListener {</span>
+	/*private class NavigationControllListener implements OnTouchListener {
 		public boolean onTouch(View view, MotionEvent arg1) {
-<span class="nc bnc" id="L361" title="All 2 branches missed.">			if (view.equals(naviControll)) {</span>
-<span class="nc" id="L362">				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;Navigation wird aktiviert/deaktiviert&quot;);</span>
-<span class="nc" id="L363">				headUpController.toggleNavigation();</span>
+			if (view.equals(naviControll)) {
+				Log.d(TAG_HEADUP_VIEW_TOUCH, &quot;Navigation wird aktiviert/deaktiviert&quot;);
+				headUpController.toggleNavigation();
 			}
-<span class="nc" id="L365">			return false;</span>
+			return false;
 		}
 
-	}
+	}*/
 
 
 	/**
@@ -384,4 +384,4 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpCont
 		}
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

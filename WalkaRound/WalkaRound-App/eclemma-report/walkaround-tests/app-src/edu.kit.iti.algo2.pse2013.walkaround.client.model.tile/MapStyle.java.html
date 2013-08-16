@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapStyle.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.tile</a> &gt; <span class="el_source">MapStyle.java</span></div><h1>MapStyle.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapStyle.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.tile</a> &gt; <span class="el_source">MapStyle.java</span></div><h1>MapStyle.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
 
 /**
  * Diese Klasse repräsentiert einen Kartenstil von Open Street Map.
@@ -18,7 +18,7 @@ public class MapStyle {
 	 */
 <span class="fc" id="L19">	public static MapStyle MAPSTYLE_WANDERKARTE = new MapStyle(0, 18, &quot;Hike &amp; Bike&quot;, &quot;http://toolserver.org/tiles/hikebike/%3$s/%1$s/%2$s.png&quot;, 16);</span>
 
-<span class="fc" id="L21">	public static MapStyle MAPSTYLE_WANDERREIT = new MapStyle(0,18,&quot;Wanderkarte&quot;, &quot;http://www.wanderreitkarte.de/topo/%3$s/%1$s/%2$s.png&quot;, 16);</span>
+	//public static MapStyle MAPSTYLE_WANDERREIT = new MapStyle(0,18,&quot;Wanderkarte&quot;, &quot;http://www.wanderreitkarte.de/topo/%3$s/%1$s/%2$s.png&quot;, 16);
 
 	/**
 	 *  Mapquest KArtenstil.
@@ -72,7 +72,7 @@ public class MapStyle {
 	 * @return Name des Kartenstils
 	 */
 	public String getName() {
-<span class="nc" id="L75">		return name;</span>
+<span class="fc" id="L75">		return name;</span>
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class MapStyle {
 	 * @return Standart Level of Detail
 	 */
 	public int getDefaultLevelOfDetail(){
-<span class="nc" id="L93">		return this.defaultLevelOfDetail;</span>
+<span class="fc" id="L93">		return this.defaultLevelOfDetail;</span>
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

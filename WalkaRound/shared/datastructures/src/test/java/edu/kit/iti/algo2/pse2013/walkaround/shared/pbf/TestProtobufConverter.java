@@ -16,11 +16,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInform
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizableWrapper;
 
 public class TestProtobufConverter {
 
@@ -110,6 +113,5 @@ public class TestProtobufConverter {
 		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
 		wp.setPOI(new POI(0, 0, null, null, null, null));
 		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
-
 	}
 }

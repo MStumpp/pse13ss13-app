@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RoundTripView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">RoundTripView.java</span></div><h1>RoundTripView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RoundTripView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">RoundTripView.java</span></div><h1>RoundTripView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 import android.app.Fragment;
 import android.graphics.Color;
@@ -37,7 +37,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 	private TextView meter;
 	private TextView length;
 	private TextView profiles;
-	private TextView jogging;
+	//private TextView jogging;
 	private TextView sightseeing;
 	private TextView shopping;
 	private TextView clubbing;
@@ -64,8 +64,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 <span class="nc" id="L64">		meter = (TextView) this.getActivity().findViewById(R.id.meter);</span>
 <span class="nc" id="L65">		length = (TextView) this.getActivity().findViewById(R.id.length_text);</span>
 <span class="nc" id="L66">		profiles = (TextView) this.getActivity().findViewById(R.id.profiles);</span>
-<span class="nc" id="L67">		jogging = (TextView) this.getActivity().findViewById(</span>
-<span class="nc" id="L68">				R.id.profile_jogging);</span>
+		//jogging = (TextView) this.getActivity().findViewById(
+		//		R.id.profile_jogging);
 <span class="nc" id="L69">		sightseeing = (TextView) this.getActivity().findViewById(</span>
 <span class="nc" id="L70">				R.id.profile_sightseeing);</span>
 <span class="nc" id="L71">		shopping = (TextView) this.getActivity().findViewById(</span>
@@ -103,7 +103,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 
 <span class="nc" id="L104">		Log.d(TAG_PULLUP_CONTENT, &quot;Listener werden hinzugef�gt&quot;);</span>
 <span class="nc" id="L105">		computeRoundtrip.setOnTouchListener(new RoundtripComputeListener());</span>
-<span class="nc" id="L106">		jogging.setOnTouchListener(new OnProfileTouch());</span>
+		//jogging.setOnTouchListener(new OnProfileTouch());
 <span class="nc" id="L107">		sightseeing.setOnTouchListener(new OnProfileTouch());</span>
 <span class="nc" id="L108">		shopping.setOnTouchListener(new OnProfileTouch());</span>
 <span class="nc" id="L109">		clubbing.setOnTouchListener(new OnProfileTouch());</span>
@@ -130,13 +130,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 		public boolean onTouch(View v, MotionEvent event) {
 <span class="nc bnc" id="L131" title="All 2 branches missed.">			if (v.equals(computeRoundtrip)</span>
 <span class="nc bnc" id="L132" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
-<span class="nc bnc" id="L133" title="All 2 branches missed.">				if (jogging.isSelected()) {</span>
-<span class="nc" id="L134">					routeController.addRoundtrip(</span>
-<span class="nc" id="L135">							Integer.parseInt(jogging.getTag().toString()),</span>
-<span class="nc" id="L136">							np.getValue() * 100);</span>
-<span class="nc" id="L137">					MapController.getInstance().getPullUpView()</span>
-<span class="nc" id="L138">							.setNullSizeHeight();</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">				} else if (shopping.isSelected()) {</span>
+				//if (jogging.isSelected()) {
+				//	routeController.addRoundtrip(
+				//			Integer.parseInt(jogging.getTag().toString()),
+				//			np.getValue() * 100);
+				//	MapController.getInstance().getPullUpView()
+				//			.setNullSizeHeight();
+<span class="nc bnc" id="L139" title="All 2 branches missed.">				if (shopping.isSelected()) {</span>
 <span class="nc" id="L140">					routeController.addRoundtrip(</span>
 <span class="nc" id="L141">							Integer.parseInt(shopping.getTag().toString()),</span>
 <span class="nc" id="L142">							np.getValue() * 100);</span>
@@ -168,23 +168,23 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 <span class="nc" id="L168">	private class OnProfileTouch implements OnTouchListener {</span>
 
 		public boolean onTouch(View v, MotionEvent event) {
-<span class="nc bnc" id="L171" title="All 2 branches missed.">			if (v.equals(jogging)</span>
-<span class="nc bnc" id="L172" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
-<span class="nc bnc" id="L173" title="All 2 branches missed.">				if (!jogging.isSelected()) {</span>
-<span class="nc" id="L174">					setSelected(jogging);</span>
-<span class="nc" id="L175">					setUnselected(sightseeing);</span>
-<span class="nc" id="L176">					setUnselected(shopping);</span>
-<span class="nc" id="L177">					setUnselected(clubbing);</span>
+			//if (v.equals(jogging)
+			//		&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {
+			//	if (!jogging.isSelected()) {
+			//		setSelected(jogging);
+			//		setUnselected(sightseeing);
+			//		setUnselected(shopping);
+			//		setUnselected(clubbing);
 
-<span class="nc" id="L179">				} else {</span>
-<span class="nc" id="L180">					setUnselected(jogging);</span>
-				}
-<span class="nc bnc" id="L182" title="All 2 branches missed.">			} else if (v.equals(shopping)</span>
+			//	} else {
+			//		setUnselected(jogging);
+			//	}
+<span class="nc bnc" id="L182" title="All 2 branches missed.">			if (v.equals(shopping)</span>
 <span class="nc bnc" id="L183" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
 <span class="nc bnc" id="L184" title="All 2 branches missed.">				if (!shopping.isSelected()) {</span>
 <span class="nc" id="L185">					setSelected(shopping);</span>
 <span class="nc" id="L186">					setUnselected(sightseeing);</span>
-<span class="nc" id="L187">					setUnselected(jogging);</span>
+					//setUnselected(jogging);
 <span class="nc" id="L188">					setUnselected(clubbing);</span>
 <span class="nc" id="L189">				} else {</span>
 <span class="nc" id="L190">					setUnselected(shopping);</span>
@@ -193,7 +193,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 <span class="nc bnc" id="L193" title="All 2 branches missed.">					&amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
 <span class="nc bnc" id="L194" title="All 2 branches missed.">				if (!sightseeing.isSelected()) {</span>
 <span class="nc" id="L195">					setSelected(sightseeing);</span>
-<span class="nc" id="L196">					setUnselected(jogging);</span>
+					//setUnselected(jogging);
 <span class="nc" id="L197">					setUnselected(shopping);</span>
 <span class="nc" id="L198">					setUnselected(clubbing);</span>
 <span class="nc" id="L199">				} else {</span>
@@ -205,7 +205,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 <span class="nc" id="L205">					setSelected(clubbing);</span>
 <span class="nc" id="L206">					setUnselected(sightseeing);</span>
 <span class="nc" id="L207">					setUnselected(shopping);</span>
-<span class="nc" id="L208">					setUnselected(jogging);</span>
+					//setUnselected(jogging);
 <span class="nc" id="L209">				} else {</span>
 <span class="nc" id="L210">					setUnselected(clubbing);</span>
 				}
@@ -225,4 +225,4 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

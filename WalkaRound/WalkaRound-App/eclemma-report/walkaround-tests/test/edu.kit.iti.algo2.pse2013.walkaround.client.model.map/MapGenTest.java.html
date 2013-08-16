@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapGenTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.map</a> &gt; <span class="el_source">MapGenTest.java</span></div><h1>MapGenTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import android.graphics.Point;
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuControllerTest;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+
+@RunWith(RobolectricTestRunner.class)
+<span class="fc" id="L21">public class MapGenTest {</span>
+
+<span class="fc" id="L23">	protected Coordinate fixture1 = new Coordinate(48, 8);</span>
+	private MapGen model;
+
+	@Before
+	public void setUp() {
+<span class="nc" id="L28">		POIMenuControllerTest.boot();</span>
+<span class="nc" id="L29">		model = new MapGen(new Point(1920, 1080), new BoundingBox(new Coordinate(0, 0), new Point(1920, 1080), 16));</span>
+<span class="nc" id="L30">	}</span>
+
+	@Test
+	public void testZoom() {
+<span class="nc" id="L34">		fixture1 = MapController.getInstance().getCenter();</span>
+<span class="nc" id="L35">		MapController.getInstance().onZoom(2.5f);</span>
+<span class="nc" id="L36">		Assert.assertTrue(MapController.getInstance().getCenter().equals(fixture1));</span>
+//TODO: Einmal zoomen klappt, beim mehrfachen zoomen kommt eine NullPointerException
+		//MapController.getInstance().onZoom(-1f);
+		//assertTrue(MapController.getInstance().getCenter().equals(fixture1));
+//		model.zoom(-3f);
+//		assertTrue(model.getCenter().equals(fixture1));
+//		model.zoom(1f);
+//		assertTrue(model.getCenter().equals(fixture1));
+<span class="nc" id="L44">	}</span>
+	@Test
+	public void testShift() {
+<span class="nc" id="L47">		MapController.getInstance().onShift(10, 10);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">		Assert.assertTrue(!MapController.getInstance().getCenter().equals(fixture1));</span>
+
+<span class="nc" id="L50">	}</span>
+
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L55">		Robolectric.buildActivity(BootActivity.class).get().finish();</span>
+<span class="fc" id="L56">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

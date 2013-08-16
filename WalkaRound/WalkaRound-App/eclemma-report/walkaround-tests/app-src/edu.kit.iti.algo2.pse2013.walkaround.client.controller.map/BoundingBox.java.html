@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BoundingBox.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">BoundingBox.java</span></div><h1>BoundingBox.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BoundingBox.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">BoundingBox.java</span></div><h1>BoundingBox.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
 import android.graphics.Point;
 import android.util.Log;
@@ -161,8 +161,8 @@ public class BoundingBox {
 	 *            the delta to the new Level Of Detail
 	 */
 	public void setLevelOfDetailByADelta(float delta) {
-<span class="fc" id="L164">		this.setLevelOfDetail(levelOfDetail + delta);</span>
-<span class="fc" id="L165">	}</span>
+<span class="nc" id="L164">		this.setLevelOfDetail(levelOfDetail + delta);</span>
+<span class="nc" id="L165">	}</span>
 
 	/**
 	 * Sets a new Level of Detail
@@ -171,11 +171,11 @@ public class BoundingBox {
 	 *            the new Level of Detail
 	 */
 	public void setLevelOfDetail(float levelOfDetail) {
-<span class="fc" id="L174">		this.levelOfDetail = levelOfDetail;</span>
-<span class="fc" id="L175">		this.computeSize();</span>
-<span class="fc" id="L176">		this.topLeft = this.computeTopLeft();</span>
-<span class="fc" id="L177">		this.bottomRight = this.computeBottomRight();</span>
-<span class="fc" id="L178">	}</span>
+<span class="nc" id="L174">		this.levelOfDetail = levelOfDetail;</span>
+<span class="nc" id="L175">		this.computeSize();</span>
+<span class="nc" id="L176">		this.topLeft = this.computeTopLeft();</span>
+<span class="nc" id="L177">		this.bottomRight = this.computeBottomRight();</span>
+<span class="nc" id="L178">	}</span>
 
 	// --------------------------Getter-------------------------- //
 
@@ -349,4 +349,4 @@ public class BoundingBox {
 	}
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">MapControllerTest.java</span></div><h1>MapControllerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import android.graphics.Point;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+
+@RunWith(RobolectricTestRunner.class)
+<span class="fc" id="L21">public class MapControllerTest {</span>
+	private Coordinate center;
+	private float lod;
+	private Point display;
+	private TileFetcher tl;
+	private BoundingBox box;
+	private MapController mc ;
+	private Route r;
+	private MapView mv;
+
+
+	@Before
+	public void setUp() {
+<span class="nc" id="L34">		center = new Coordinate(49.0145, 8.419);</span>
+<span class="nc" id="L35">		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();</span>
+<span class="nc" id="L36">		display =  new Point(1025, 600);</span>
+<span class="nc" id="L37">		TileFetcher tl = new TileFetcher();</span>
+<span class="nc" id="L38">		box = new BoundingBox(center, display, lod);</span>
+<span class="nc" id="L39">		mv = new MapView();</span>
+<span class="nc" id="L40">		mc =  MapController.initialize(tl, box, center);</span>
+<span class="nc" id="L41">		mc.startController(mv);</span>
+<span class="nc" id="L42">		mc.onRouteChange(r);</span>
+<span class="nc" id="L43">	}</span>
+	/**
+	 *
+	 */
+	@Test
+	public void testGeneral() {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">		assertTrue(mc.getCenter() == center);</span>
+		//assertTrue(mc.getActiveWaypointId() == 0);
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		assertTrue(mc.getCurrentLevelOfDetail() == lod);</span>
+<span class="nc" id="L52">		assertTrue(mc.getCurrentRouteLines().isEmpty());</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		assertTrue(mc.getPOIById(0) == null);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		assertTrue(mc.getInstance() != null);</span>
+<span class="nc" id="L55">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

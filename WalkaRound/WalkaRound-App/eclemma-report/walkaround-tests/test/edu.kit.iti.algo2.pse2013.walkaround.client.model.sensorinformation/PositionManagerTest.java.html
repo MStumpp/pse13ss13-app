@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PositionManagerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation</a> &gt; <span class="el_source">PositionManagerTest.java</span></div><h1>PositionManagerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
+
+import static org.junit.Assert.*;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import android.location.Location;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
+
+@RunWith(RobolectricTestRunner.class)
+<span class="nc" id="L15">public class PositionManagerTest implements PositionListener, CompassListener, SpeedListener {</span>
+	
+	PositionManager pm;
+	
+	@BeforeClass
+	public void setUp(){
+<span class="nc" id="L21">		PositionManager.initialize(new BootActivity().getApplicationContext());</span>
+<span class="nc" id="L22">		pm = PositionManager.getInstance();</span>
+<span class="nc" id="L23">	}</span>
+	
+	@Test
+	public void testInit() {
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		assertTrue(pm.getCompassManager() != null);</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">		assertTrue(pm.getSpeedManager() != null);</span>
+<span class="nc" id="L29">	}</span>
+
+	@Test
+	public void testLastKnownPosition() {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		assertTrue(pm.getLastKnownPosition() != null);</span>
+<span class="nc" id="L34">	}</span>
+
+	@Test
+	public void testRegister() {
+<span class="nc" id="L38">		pm.registerPositionListener(this);</span>
+<span class="nc" id="L39">		assertTrue(true);</span>
+<span class="nc" id="L40">	}</span>
+
+	@Test
+	public void testCompassManager() {
+<span class="nc" id="L44">		pm.getCompassManager().registerCompassListener(this);</span>
+<span class="nc" id="L45">		pm.getCompassManager().onAccuracyChanged(null, 0);</span>
+<span class="nc" id="L46">		pm.getCompassManager().onSensorChanged(null);</span>
+<span class="nc" id="L47">		assertTrue(true);</span>
+<span class="nc" id="L48">	}</span>
+
+	@Test
+	public void testSpeedManager() {
+<span class="nc" id="L52">		pm.getSpeedManager().registerSpeedListener(this);</span>
+<span class="nc" id="L53">		pm.getSpeedManager().onPositionChange(null);</span>
+<span class="nc" id="L54">		assertTrue(true);</span>
+<span class="nc" id="L55">	}</span>
+
+	@Override
+	public void onSpeedChange(double speed) {
+<span class="nc" id="L59">		assertTrue(true);</span>
+<span class="nc" id="L60">	}</span>
+
+	@Override
+	public void onCompassChange(float direction) {
+<span class="nc" id="L64">		assertTrue(true);</span>
+<span class="nc" id="L65">	}</span>
+
+	@Override
+	public void onPositionChange(Location androidLocation) {
+<span class="nc" id="L69">		assertTrue(true);</span>
+<span class="nc" id="L70">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.map</a> &gt; <span class="el_source">MapView.java</span></div><h1>MapView.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.map</a> &gt; <span class="el_source">MapView.java</span></div><h1>MapView.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;</span>
 
 // Java Library
 import java.util.List;
@@ -13,7 +13,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,16 +45,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  * @author Ludwig Biermann
  *
  */
-<span class="fc" id="L49">public class MapView extends Activity {</span>
+<span class="fc" id="L48">public class MapView extends Activity {</span>
 
 	/**
 	 * Debug Information
 	 */
-<span class="fc" id="L54">	private static final String TAG_MAPVIEW = MapView.class.getSimpleName();</span>
-<span class="fc" id="L55">	private static final String TAG_MAPVIEW_ANIMATION = TAG_MAPVIEW</span>
-<span class="fc" id="L56">			+ &quot;_animation&quot;;</span>
-<span class="fc" id="L57">	private static final String TAG_MAPVIEW_GESTURE = TAG_MAPVIEW + &quot;_gestures&quot;;</span>
-<span class="fc" id="L58">	private static final String TAG_MAPVIEW_TOUCH = TAG_MAPVIEW + &quot;_touch&quot;;</span>
+<span class="fc" id="L53">	private static final String TAG_MAPVIEW = MapView.class.getSimpleName();</span>
+<span class="fc" id="L54">	private static final String TAG_MAPVIEW_ANIMATION = TAG_MAPVIEW</span>
+<span class="fc" id="L55">			+ &quot;_animation&quot;;</span>
+<span class="fc" id="L56">	private static final String TAG_MAPVIEW_GESTURE = TAG_MAPVIEW + &quot;_gestures&quot;;</span>
+<span class="fc" id="L57">	private static final String TAG_MAPVIEW_TOUCH = TAG_MAPVIEW + &quot;_touch&quot;;</span>
 
 	/**
 	 * Fling defaults
@@ -77,7 +76,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	public static final int DEFAULT_WAYPOINT = R.drawable.waypoint;
 	public static final int DEFAULT_WAYPOINT_ACTIVE = R.drawable.waypoint_activ;
 
-<span class="fc" id="L80">	public static final int DEFAULT_POI = R.drawable.poi;</span>
+<span class="fc" id="L79">	public static final int DEFAULT_POI = R.drawable.poi;</span>
 
 	/**
 	 * Default Drawables
@@ -107,7 +106,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	/**
 	 * Animation
 	 */
-<span class="fc" id="L110">	private long startDelay = 0;</span>
+<span class="fc" id="L109">	private long startDelay = 0;</span>
 
 	/**
 	 * Gestik
@@ -152,105 +151,109 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	private GestureDetector waypointGestureDetector;
 
 	public Point getDisplaySize() {
-<span class="nc" id="L155">		return size;</span>
+<span class="nc" id="L154">		return size;</span>
 	}
 
 
 	public void onCreate(Bundle savedInstanceState) {
-<span class="nc" id="L160">		super.onCreate(savedInstanceState);</span>
-<span class="nc" id="L161">		System.gc();</span>
+<span class="nc" id="L159">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L160">		System.gc();</span>
 
-<span class="nc" id="L163">		Log.d(TAG_MAPVIEW, &quot;Get Display size.&quot;);</span>
+<span class="nc" id="L162">		Log.d(TAG_MAPVIEW, &quot;Get Display size.&quot;);</span>
 
-<span class="nc" id="L165">		Display display = this.getWindowManager().getDefaultDisplay();</span>
-<span class="nc" id="L166">		size = new Point();</span>
-<span class="nc" id="L167">		display.getSize(size);</span>
+<span class="nc" id="L164">		Display display = this.getWindowManager().getDefaultDisplay();</span>
+<span class="nc" id="L165">		size = new Point();</span>
+<span class="nc" id="L166">		display.getSize(size);</span>
 
-<span class="nc" id="L169">		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,</span>
-<span class="nc" id="L170">				Bitmap.Config.ARGB_8888);</span>
-<span class="nc" id="L171">		routeOverlayBitmap.prepareToDraw();</span>
-
-		// ---------------------------------------------
-<span class="nc" id="L174">		Log.d(TAG_MAPVIEW, &quot;Initialisiere Layout.&quot;);</span>
-<span class="nc" id="L175">		this.setContentView(R.layout.map);</span>
+<span class="nc" id="L168">		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,</span>
+<span class="nc" id="L169">				Bitmap.Config.ARGB_8888);</span>
+<span class="nc" id="L170">		routeOverlayBitmap.prepareToDraw();</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L178">		Log.d(TAG_MAPVIEW, &quot;Initialisiere Drawables.&quot;);</span>
-<span class="nc" id="L179">		flag = this.getResources().getDrawable(DEFAULT_FLAG);</span>
-<span class="nc" id="L180">		flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);</span>
-<span class="nc" id="L181">		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);</span>
-<span class="nc" id="L182">		flagTargetActive = this.getResources().getDrawable(DEFAULT_FLAG_TARGET_ACTIVE);</span>
-<span class="nc" id="L183">		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);</span>
-<span class="nc" id="L184">		waypointActive = this.getResources().getDrawable(</span>
-<span class="nc" id="L185">				DEFAULT_WAYPOINT_ACTIVE);</span>
-<span class="nc" id="L186">		poi = this.getResources().getDrawable(DEFAULT_POI);</span>
+<span class="nc" id="L173">		Log.d(TAG_MAPVIEW, &quot;Initialisiere Layout.&quot;);</span>
+<span class="nc" id="L174">		this.setContentView(R.layout.map);</span>
+
+		// ---------------------------------------------
+<span class="nc" id="L177">		Log.d(TAG_MAPVIEW, &quot;Initialisiere Drawables.&quot;);</span>
+<span class="nc" id="L178">		flag = this.getResources().getDrawable(DEFAULT_FLAG);</span>
+<span class="nc" id="L179">		flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);</span>
+<span class="nc" id="L180">		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);</span>
+<span class="nc" id="L181">		flagTargetActive = this.getResources().getDrawable(DEFAULT_FLAG_TARGET_ACTIVE);</span>
+<span class="nc" id="L182">		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);</span>
+<span class="nc" id="L183">		waypointActive = this.getResources().getDrawable(</span>
+<span class="nc" id="L184">				DEFAULT_WAYPOINT_ACTIVE);</span>
+<span class="nc" id="L185">		poi = this.getResources().getDrawable(DEFAULT_POI);</span>
 
 		// ---------------------------------------------
 
-<span class="nc" id="L190">		Log.d(TAG_MAPVIEW, &quot;DisplayMaße: &quot; + size.x + &quot; * &quot; + size.y);</span>
+<span class="nc" id="L189">		Log.d(TAG_MAPVIEW, &quot;DisplayMaße: &quot; + size.x + &quot; * &quot; + size.y);</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L193">		Log.d(TAG_MAPVIEW, &quot;Initialisere Route und POI Ovetrlay.&quot;);</span>
-<span class="nc" id="L194">		routeList = (RelativeLayout) this.findViewById(R.id.routeList);</span>
-<span class="nc" id="L195">		poiList = (RelativeLayout) this.findViewById(R.id.poiList);</span>
-<span class="nc" id="L196">		sizeOfPoints = (size.y / 10);</span>
+<span class="nc" id="L192">		Log.d(TAG_MAPVIEW, &quot;Initialisere Route und POI Ovetrlay.&quot;);</span>
+<span class="nc" id="L193">		routeList = (RelativeLayout) this.findViewById(R.id.routeList);</span>
+<span class="nc" id="L194">		poiList = (RelativeLayout) this.findViewById(R.id.poiList);</span>
+<span class="nc" id="L195">		sizeOfPoints = (size.y / 10);</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L199">		Log.d(TAG_MAPVIEW, &quot;Karte wird erstellt.&quot;);</span>
-<span class="nc" id="L200">		map = (ImageView) this.findViewById(R.id.mapview_map);</span>
-<span class="nc" id="L201">		map.setMinimumWidth(size.x);</span>
-<span class="nc" id="L202">		map.setMinimumHeight(size.y);</span>
-<span class="nc" id="L203">		map.setOnTouchListener(new MapTouchEventListener());</span>
+<span class="nc" id="L198">		Log.d(TAG_MAPVIEW, &quot;Karte wird erstellt.&quot;);</span>
+<span class="nc" id="L199">		map = (ImageView) this.findViewById(R.id.mapview_map);</span>
+<span class="nc" id="L200">		map.setMinimumWidth(size.x);</span>
+<span class="nc" id="L201">		map.setMinimumHeight(size.y);</span>
+<span class="nc" id="L202">		map.setOnTouchListener(new MapTouchEventListener());</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L206">		Log.d(TAG_MAPVIEW, &quot;User wird erstellt.&quot;);</span>
-<span class="nc" id="L207">		user = (ImageView) this.findViewById(R.id.mapview_user);</span>
-<span class="nc" id="L208">		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));</span>
-<span class="nc" id="L209">		user.getLayoutParams().width = USER_X_DELTA * 4;</span>
-<span class="nc" id="L210">		user.getLayoutParams().height = USER_Y_DELTA * 4;</span>
-<span class="nc" id="L211">		user.setScaleType(ImageView.ScaleType.FIT_XY);</span>
-<span class="nc" id="L212">		user.setOnTouchListener(new UserTouchEventListener());</span>
+<span class="nc" id="L205">		Log.d(TAG_MAPVIEW, &quot;User wird erstellt.&quot;);</span>
+<span class="nc" id="L206">		user = (ImageView) this.findViewById(R.id.mapview_user);</span>
+<span class="nc" id="L207">		user.setImageDrawable(this.getResources().getDrawable(USER_ARROW_IMAGE));</span>
+<span class="nc" id="L208">		user.getLayoutParams().width = USER_X_DELTA * 4;</span>
+<span class="nc" id="L209">		user.getLayoutParams().height = USER_Y_DELTA * 4;</span>
+<span class="nc" id="L210">		user.setScaleType(ImageView.ScaleType.FIT_XY);</span>
+<span class="nc" id="L211">		user.setOnTouchListener(new UserTouchEventListener());</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L215">		Log.d(TAG_MAPVIEW, &quot;Initialisiere MapController.&quot;);</span>
-<span class="nc" id="L216">		MapController.getInstance().startController(this);</span>
-<span class="nc" id="L217">		mc = MapController.getInstance();</span>
+<span class="nc" id="L214">		Log.d(TAG_MAPVIEW, &quot;Initialisiere MapController.&quot;);</span>
+<span class="nc" id="L215">		MapController.getInstance().startController(this);</span>
+<span class="nc" id="L216">		mc = MapController.getInstance();</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L220">		Log.d(TAG_MAPVIEW, &quot;Fragmente werden eingebaut&quot;);</span>
-<span class="nc" id="L221">		FragmentTransaction ft = this.getFragmentManager().beginTransaction();</span>
+<span class="nc" id="L219">		Log.d(TAG_MAPVIEW, &quot;Fragmente werden eingebaut&quot;);</span>
+<span class="nc" id="L220">		FragmentTransaction ft = this.getFragmentManager().beginTransaction();</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L224">		Log.d(TAG_MAPVIEW, &quot;Fragment PullUpMenue wird eingebaut&quot;);</span>
-<span class="nc" id="L225">		this.pullUp = new PullUpView();</span>
-<span class="nc" id="L226">		ft.add(R.id.pullUpMain, pullUp).commit();</span>
+<span class="nc" id="L223">		Log.d(TAG_MAPVIEW, &quot;Fragment PullUpMenue wird eingebaut&quot;);</span>
+<span class="nc" id="L224">		this.pullUp = new PullUpView();</span>
+<span class="nc" id="L225">		ft.add(R.id.pullUpMain, pullUp).commit();</span>
 
 		// ---------------------------------------------
-<span class="nc" id="L229">		Log.d(TAG_MAPVIEW, &quot;Fragment headUp wird eingebaut&quot;);</span>
-<span class="nc" id="L230">		Fragment headUp = new HeadUpView();</span>
-<span class="nc" id="L231">		ft.add(R.id.headupmain, headUp);</span>
+<span class="nc" id="L228">		Log.d(TAG_MAPVIEW, &quot;Fragment headUp wird eingebaut&quot;);</span>
+<span class="nc" id="L229">		Fragment headUp = new HeadUpView();</span>
+<span class="nc" id="L230">		ft.add(R.id.headupmain, headUp);</span>
 
 		// -----------------------TEST---------------------
-<span class="nc" id="L234">		Log.d(TAG_MAPVIEW, &quot;User wird in die Mitte gestellt.&quot;);</span>
+<span class="nc" id="L233">		Log.d(TAG_MAPVIEW, &quot;User wird in die Mitte gestellt.&quot;);</span>
 		// this.setUserPositionOverlayImage(new DisplayCoordinate(
 		// (float) size.x / 2, (float) size.y / 2), 180);
 
+		try{
 <span class="nc" id="L238">		routeOverlayBitmap = Bitmap.createBitmap(size.x, size.y,</span>
 <span class="nc" id="L239">				Bitmap.Config.ARGB_8888);</span>
 <span class="nc" id="L240">		routeOverlayBitmap.prepareToDraw();</span>
+<span class="nc" id="L241">		} catch (OutOfMemoryError e) {</span>
+<span class="nc" id="L242">			System.gc();</span>
+		}
 
-<span class="nc" id="L242">		gestureDetector = new GestureDetector(this, new MapGestureDetector());</span>
-<span class="nc" id="L243">		waypointGestureDetector = new GestureDetector(this,</span>
-<span class="nc" id="L244">				new WaypointGestureDetector());</span>
+<span class="nc" id="L245">		gestureDetector = new GestureDetector(this, new MapGestureDetector());</span>
+<span class="nc" id="L246">		waypointGestureDetector = new GestureDetector(this,</span>
+<span class="nc" id="L247">				new WaypointGestureDetector());</span>
 
 		// this.setUserPositionOverlayImage(size.x / 2, size.y / 2);
-<span class="nc" id="L247">	}</span>
+<span class="nc" id="L250">	}</span>
 
 	/**
 	 * gives the pullupview back
 	 */
 	public PullUpView getPullUpView() {
-<span class="nc" id="L253">		return pullUp;</span>
+<span class="nc" id="L256">		return pullUp;</span>
 	}
 
 	/**
@@ -261,19 +264,19 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 */
 	public void updateMapImage(final Bitmap b) {
 
-<span class="fc" id="L264">		runOnUiThread(new Runnable() {</span>
+<span class="fc" id="L267">		runOnUiThread(new Runnable() {</span>
 			public void run() {
-<span class="pc bpc" id="L266" title="1 of 2 branches missed.">				if (!b.isRecycled()) {</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">				if (!b.isRecycled()) {</span>
 					try {
-<span class="fc" id="L268">						map.setImageBitmap(b);</span>
-<span class="fc" id="L269">						map.setVisibility(View.VISIBLE);</span>
-<span class="pc" id="L270">					} catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L271">						Log.e(TAG_MAPVIEW, &quot;&quot; + e.toString());</span>
+<span class="fc" id="L271">						map.setImageBitmap(b);</span>
+<span class="fc" id="L272">						map.setVisibility(View.VISIBLE);</span>
+<span class="pc" id="L273">					} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L274">						Log.e(TAG_MAPVIEW, &quot;&quot; + e.toString());</span>
 					}
 				}
-<span class="fc" id="L274">			}</span>
+<span class="fc" id="L277">			}</span>
 		});
-<span class="fc" id="L276">	}</span>
+<span class="fc" id="L279">	}</span>
 
 	/**
 	 * updates the route
@@ -283,23 +286,23 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 */
 	public void updateRouteOverlayImage(final Bitmap b) {
 
-<span class="nc bnc" id="L286" title="All 2 branches missed.">		if (routeOverlay == null) {</span>
-<span class="nc" id="L287">			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">		if (routeOverlay == null) {</span>
+<span class="nc" id="L290">			routeOverlay = (ImageView) findViewById(R.id.mapview_overlay);</span>
 		}
-<span class="nc" id="L289">		runOnUiThread(new Runnable() {</span>
+<span class="nc" id="L292">		runOnUiThread(new Runnable() {</span>
 			public void run() {
-<span class="nc bnc" id="L291" title="All 2 branches missed.">				if (!b.isRecycled()) {</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">				if (!b.isRecycled()) {</span>
 					try {
-<span class="nc" id="L293">						routeOverlay.setImageBitmap(b);</span>
-<span class="nc" id="L294">						routeOverlay.setVisibility(View.VISIBLE);</span>
-<span class="nc" id="L295">					} catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L296">						Log.e(TAG_MAPVIEW, &quot;&quot; + e.toString());</span>
+<span class="nc" id="L296">						routeOverlay.setImageBitmap(b);</span>
+<span class="nc" id="L297">						routeOverlay.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L298">					} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L299">						Log.e(TAG_MAPVIEW, &quot;&quot; + e.toString());</span>
 					}
 				}
 
-<span class="nc" id="L300">			}</span>
+<span class="nc" id="L303">			}</span>
 		});
-<span class="nc" id="L302">	}</span>
+<span class="nc" id="L305">	}</span>
 
 	/*
 	 *
@@ -323,16 +326,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 */
 	public void onPositionChange(final float x, final float y,
 			final float deltaDegree) {
-<span class="nc" id="L326">		runOnUiThread(new Runnable() {</span>
+<span class="nc" id="L329">		runOnUiThread(new Runnable() {</span>
 			public void run() {
-<span class="nc" id="L328">				delta = deltaDegree;</span>
-<span class="nc" id="L329">				userX = x;</span>
-<span class="nc" id="L330">				userY = y;</span>
-<span class="nc" id="L331">			}</span>
+<span class="nc" id="L331">				delta = deltaDegree;</span>
+<span class="nc" id="L332">				userX = x;</span>
+<span class="nc" id="L333">				userY = y;</span>
+<span class="nc" id="L334">			}</span>
 		});
 		// this.setUserPositionOverlayImage(new DisplayCoordinate(userX, userY),
 		// this.delta);
-<span class="nc" id="L335">	}</span>
+<span class="nc" id="L338">	}</span>
 
 	/**
 	 * updates the DisplayWaypoints
@@ -342,63 +345,63 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 */
 	public void updateDisplayWaypoints(final List&lt;DisplayWaypoint&gt; displayPoints) {
 
-<span class="fc" id="L345">		final Context context = this;</span>
+<span class="fc" id="L348">		final Context context = this;</span>
 
-<span class="pc bpc" id="L347" title="1 of 2 branches missed.">		if (displayPoints.size() == 0) {</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">		if (displayPoints.size() == 0) {</span>
 
-<span class="fc" id="L349">			runOnUiThread(new Runnable() {</span>
+<span class="fc" id="L352">			runOnUiThread(new Runnable() {</span>
 				public void run() {
-<span class="fc" id="L351">					currentActive = null;</span>
-<span class="fc" id="L352">					routeList.removeAllViews();</span>
-<span class="fc" id="L353">				}</span>
+<span class="fc" id="L354">					currentActive = null;</span>
+<span class="fc" id="L355">					routeList.removeAllViews();</span>
+<span class="fc" id="L356">				}</span>
 			});
 
-<span class="fc" id="L356">		} else {</span>
+<span class="fc" id="L359">		} else {</span>
 
-<span class="nc" id="L358">			runOnUiThread(new Runnable() {</span>
+<span class="nc" id="L361">			runOnUiThread(new Runnable() {</span>
 				public void run() {
 
-<span class="nc" id="L361">					Log.d(&quot;red&quot;, &quot;&quot;+displayPoints.size());</span>
+<span class="nc" id="L364">					Log.d(&quot;red&quot;, &quot;&quot;+displayPoints.size());</span>
 
-<span class="nc" id="L363">					currentActive = null;</span>
-<span class="nc" id="L364">					routeList.removeAllViews();</span>
+<span class="nc" id="L366">					currentActive = null;</span>
+<span class="nc" id="L367">					routeList.removeAllViews();</span>
 
-<span class="nc" id="L366">					fromX = displayPoints.get(0).getX();</span>
-<span class="nc" id="L367">					fromY = displayPoints.get(0).getY();</span>
+<span class="nc" id="L369">					fromX = displayPoints.get(0).getX();</span>
+<span class="nc" id="L370">					fromY = displayPoints.get(0).getY();</span>
 
-<span class="nc bnc" id="L369" title="All 2 branches missed.">					for (DisplayWaypoint dw : displayPoints) {</span>
+<span class="nc bnc" id="L372" title="All 2 branches missed.">					for (DisplayWaypoint dw : displayPoints) {</span>
 
-<span class="nc" id="L371">						ImageView iv = new ImageView(context);</span>
-<span class="nc" id="L372">						iv.setY(dw.getY() - 145);</span>
-<span class="nc" id="L373">						iv.setX(dw.getX() - 75);</span>
+<span class="nc" id="L374">						ImageView iv = new ImageView(context);</span>
+<span class="nc" id="L375">						iv.setY(dw.getY() - 145);</span>
+<span class="nc" id="L376">						iv.setX(dw.getX() - 60);</span>
 
-<span class="nc" id="L375">						iv.setVisibility(View.VISIBLE);</span>
-<span class="nc" id="L376">						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints, (int) sizeOfPoints));</span>
-<span class="nc" id="L377">						iv.setScaleType(ImageView.ScaleType.FIT_XY);</span>
-<span class="nc" id="L378">						iv.setTag(dw.getId());</span>
-<span class="nc" id="L379">						iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));</span>
-<span class="nc" id="L380">						iv.setImageDrawable(waypoint);</span>
-<span class="nc" id="L381">						routeList.addView(iv);</span>
+<span class="nc" id="L378">						iv.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L379">						iv.setLayoutParams(new LayoutParams((int) sizeOfPoints, (int) sizeOfPoints));</span>
+<span class="nc" id="L380">						iv.setScaleType(ImageView.ScaleType.FIT_XY);</span>
+<span class="nc" id="L381">						iv.setTag(dw.getId());</span>
+<span class="nc" id="L382">						iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));</span>
+<span class="nc" id="L383">						iv.setImageDrawable(waypoint);</span>
+<span class="nc" id="L384">						routeList.addView(iv);</span>
 					}
 
-<span class="nc bnc" id="L384" title="All 2 branches missed.">					if (routeList.getChildCount() &gt; 0) {</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">					if (routeList.getChildCount() &gt; 0) {</span>
 
-<span class="nc" id="L386">						ImageView iv = (ImageView) routeList</span>
-<span class="nc" id="L387">								.getChildAt((routeList.getChildCount() - 1));</span>
-<span class="nc" id="L388">						iv.setImageDrawable(flagTarget);</span>
+<span class="nc" id="L389">						ImageView iv = (ImageView) routeList</span>
+<span class="nc" id="L390">								.getChildAt((routeList.getChildCount() - 1));</span>
+<span class="nc" id="L391">						iv.setImageDrawable(flagTarget);</span>
 						// iv.setX(iv.getX() - (sizeOfPoints / 2));
 
-<span class="nc" id="L391">						iv = (ImageView) routeList.getChildAt(0);</span>
-<span class="nc" id="L392">						iv.setImageDrawable(flag);</span>
+<span class="nc" id="L394">						iv = (ImageView) routeList.getChildAt(0);</span>
+<span class="nc" id="L395">						iv.setImageDrawable(flag);</span>
 
 						// if ((routeList.getChildCount() != 1)) {
 						// iv.setX(iv.getX() - (sizeOfPoints / 2));
 						// }
 					}
-<span class="nc" id="L398">				}</span>
+<span class="nc" id="L401">				}</span>
 			});
 		}
-<span class="fc" id="L401">	}</span>
+<span class="fc" id="L404">	}</span>
 
 	/**
 	 * updates the POI´s on the Display
@@ -407,27 +410,27 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 *            List of pois
 	 */
 	public void updateDisplayCoordinate(final List&lt;DisplayPOI&gt; dp) {
-<span class="fc" id="L410">		poiList.removeAllViews();</span>
-<span class="fc" id="L411">		final Context context = this;</span>
+<span class="fc" id="L413">		poiList.removeAllViews();</span>
+<span class="fc" id="L414">		final Context context = this;</span>
 
-<span class="fc" id="L413">		runOnUiThread(new Runnable() {</span>
+<span class="fc" id="L416">		runOnUiThread(new Runnable() {</span>
 			public void run() {
-<span class="pc bpc" id="L415" title="1 of 2 branches missed.">				for (DisplayPOI value : dp) {</span>
-<span class="nc" id="L416">					ImageView iv = new ImageView(context);</span>
-<span class="nc" id="L417">					iv.setImageDrawable(poi);</span>
-<span class="nc" id="L418">					iv.setY(value.getY());</span>
-<span class="nc" id="L419">					iv.setX(value.getX());</span>
-<span class="nc" id="L420">					iv.setTag(value.getId());</span>
-<span class="nc" id="L421">					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,</span>
-<span class="nc" id="L422">							(int) sizeOfPoints));</span>
-<span class="nc" id="L423">					iv.setScaleType(ImageView.ScaleType.FIT_XY);</span>
-<span class="nc" id="L424">					iv.setOnTouchListener(new POITouchListener(iv, value</span>
-<span class="nc" id="L425">							.getId()));</span>
-<span class="nc" id="L426">					poiList.addView(iv);</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">				for (DisplayPOI value : dp) {</span>
+<span class="nc" id="L419">					ImageView iv = new ImageView(context);</span>
+<span class="nc" id="L420">					iv.setImageDrawable(poi);</span>
+<span class="nc" id="L421">					iv.setY(value.getY() - 145);</span>
+<span class="nc" id="L422">					iv.setX(value.getX() - 60);</span>
+<span class="nc" id="L423">					iv.setTag(value.getId());</span>
+<span class="nc" id="L424">					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,</span>
+<span class="nc" id="L425">							(int) sizeOfPoints));</span>
+<span class="nc" id="L426">					iv.setScaleType(ImageView.ScaleType.FIT_XY);</span>
+<span class="nc" id="L427">					iv.setOnTouchListener(new POITouchListener(iv, value</span>
+<span class="nc" id="L428">							.getId()));</span>
+<span class="nc" id="L429">					poiList.addView(iv);</span>
 				}
-<span class="fc" id="L428">			}</span>
+<span class="fc" id="L431">			}</span>
 		});
-<span class="fc" id="L430">	}</span>
+<span class="fc" id="L433">	}</span>
 
 	/**
 	 * Set an new Waypoint as active
@@ -436,66 +439,66 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 *            the id of the waypoint
 	 */
 	public void setActiveWaypoint(final int id) {
-<span class="nc" id="L439">		runOnUiThread(new Runnable() {</span>
+<span class="nc" id="L442">		runOnUiThread(new Runnable() {</span>
 			public void run() {
 
-<span class="nc bnc" id="L442" title="All 2 branches missed.">				if (currentActive != null) {</span>
-<span class="nc bnc" id="L443" title="All 2 branches missed.">					if (currentActive.getDrawable().equals(flagActive)) {</span>
-<span class="nc" id="L444">						currentActive.setImageDrawable(flag);</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">				if (currentActive != null) {</span>
+<span class="nc bnc" id="L446" title="All 2 branches missed.">					if (currentActive.getDrawable().equals(flagActive)) {</span>
+<span class="nc" id="L447">						currentActive.setImageDrawable(flag);</span>
 
 					}
 
-<span class="nc bnc" id="L448" title="All 2 branches missed.">					if (currentActive.getDrawable().equals(flagTargetActive)) {</span>
-<span class="nc" id="L449">						currentActive.setImageDrawable(flagTarget);</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">					if (currentActive.getDrawable().equals(flagTargetActive)) {</span>
+<span class="nc" id="L452">						currentActive.setImageDrawable(flagTarget);</span>
 
 					}
 
-<span class="nc bnc" id="L453" title="All 2 branches missed.">					if (currentActive.getDrawable().equals(waypointActive)) {</span>
-<span class="nc" id="L454">						currentActive.setImageDrawable(waypoint);</span>
+<span class="nc bnc" id="L456" title="All 2 branches missed.">					if (currentActive.getDrawable().equals(waypointActive)) {</span>
+<span class="nc" id="L457">						currentActive.setImageDrawable(waypoint);</span>
 
-					}
-				}
-
-<span class="nc" id="L459">				boolean found = false;</span>
-
-<span class="nc bnc" id="L461" title="All 4 branches missed.">				for (int a = 0; a &lt; routeList.getChildCount() &amp;&amp; !found; a++) {</span>
-<span class="nc" id="L462">					int valueId = Integer.parseInt(routeList.getChildAt(a).getTag()</span>
-<span class="nc" id="L463">							.toString());</span>
-<span class="nc bnc" id="L464" title="All 2 branches missed.">					if (valueId == id) {</span>
-<span class="nc" id="L465">						currentActive = (ImageView) routeList.getChildAt(a);</span>
-
-<span class="nc bnc" id="L467" title="All 2 branches missed.">						if (currentActive.getDrawable().equals(flag)) {</span>
-<span class="nc" id="L468">							currentActive.setImageDrawable(flagActive);</span>
-						}
-
-<span class="nc bnc" id="L471" title="All 2 branches missed.">						if (currentActive.getDrawable().equals(flagTarget)) {</span>
-<span class="nc" id="L472">							currentActive.setImageDrawable(flagTargetActive);</span>
-						}
-
-<span class="nc bnc" id="L475" title="All 2 branches missed.">						if (currentActive.getDrawable().equals(waypoint)) {</span>
-<span class="nc" id="L476">							currentActive.setImageDrawable(waypointActive);</span>
-						}
-<span class="nc" id="L478">						found = true;</span>
 					}
 				}
-<span class="nc" id="L481">			}</span>
+
+<span class="nc" id="L462">				boolean found = false;</span>
+
+<span class="nc bnc" id="L464" title="All 4 branches missed.">				for (int a = 0; a &lt; routeList.getChildCount() &amp;&amp; !found; a++) {</span>
+<span class="nc" id="L465">					int valueId = Integer.parseInt(routeList.getChildAt(a).getTag()</span>
+<span class="nc" id="L466">							.toString());</span>
+<span class="nc bnc" id="L467" title="All 2 branches missed.">					if (valueId == id) {</span>
+<span class="nc" id="L468">						currentActive = (ImageView) routeList.getChildAt(a);</span>
+
+<span class="nc bnc" id="L470" title="All 2 branches missed.">						if (currentActive.getDrawable().equals(flag)) {</span>
+<span class="nc" id="L471">							currentActive.setImageDrawable(flagActive);</span>
+						}
+
+<span class="nc bnc" id="L474" title="All 2 branches missed.">						if (currentActive.getDrawable().equals(flagTarget)) {</span>
+<span class="nc" id="L475">							currentActive.setImageDrawable(flagTargetActive);</span>
+						}
+
+<span class="nc bnc" id="L478" title="All 2 branches missed.">						if (currentActive.getDrawable().equals(waypoint)) {</span>
+<span class="nc" id="L479">							currentActive.setImageDrawable(waypointActive);</span>
+						}
+<span class="nc" id="L481">						found = true;</span>
+					}
+				}
+<span class="nc" id="L484">			}</span>
 		});
 
-<span class="nc" id="L484">	}</span>
+<span class="nc" id="L487">	}</span>
 
 	/**
 	 * shift the User Position arrow to an new position
 	 *
 	 */
 	public void setUserPositionOverlayImage(final float x, final float y) {
-<span class="fc" id="L491">		runOnUiThread(new Runnable() {</span>
+<span class="fc" id="L494">		runOnUiThread(new Runnable() {</span>
 			public void run() {
 				//TODO User Pos mitten
-<span class="nc" id="L494">				user.setX(x);</span>
-<span class="nc" id="L495">				user.setY(y);</span>
-<span class="nc" id="L496">			}</span>
+<span class="nc" id="L497">				user.setX(x);</span>
+<span class="nc" id="L498">				user.setY(y);</span>
+<span class="nc" id="L499">			}</span>
 		});
-<span class="fc" id="L498">	}</span>
+<span class="fc" id="L501">	}</span>
 
 	/**
 	 * shift the User Position arrow to an new position
@@ -506,12 +509,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 *            rotation
 	 */
 	public void setUserPositionOverlayImage(final float degree) {
-<span class="nc" id="L509">		runOnUiThread(new Runnable() {</span>
+<span class="pc" id="L512">		runOnUiThread(new Runnable() {</span>
 			public void run() {
-<span class="nc" id="L511">				user.setRotation(degree);</span>
-<span class="nc" id="L512">			}</span>
+<span class="nc" id="L514">				user.setRotation(degree);</span>
+<span class="nc" id="L515">			}</span>
 		});
-<span class="nc" id="L514">	}</span>
+<span class="nc" id="L517">	}</span>
 
 	/**
 	 * shift the User Position arrow to an new position
@@ -525,34 +528,34 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	private void setUserPositionOverlayImage(DisplayCoordinate coor,
 			float degree) {
 		// TODO duration überdenken
-<span class="nc" id="L528">		AnimatorSet set = new AnimatorSet();</span>
-<span class="nc" id="L529">		this.userX = coor.getX();</span>
-<span class="nc" id="L530">		this.userY = coor.getY();</span>
+<span class="nc" id="L531">		AnimatorSet set = new AnimatorSet();</span>
+<span class="nc" id="L532">		this.userX = coor.getX();</span>
+<span class="nc" id="L533">		this.userY = coor.getY();</span>
 
-<span class="nc" id="L532">		Log.d(TAG_MAPVIEW, &quot;Thread Animator Set UP&quot;);</span>
+<span class="nc" id="L535">		Log.d(TAG_MAPVIEW, &quot;Thread Animator Set UP&quot;);</span>
 
-<span class="nc" id="L534">		ObjectAnimator transX = ObjectAnimator.ofFloat(user, &quot;x&quot;, coor.getX()</span>
-<span class="nc" id="L535">				- USER_X_DELTA);</span>
-<span class="nc" id="L536">		ObjectAnimator transY = ObjectAnimator.ofFloat(user, &quot;y&quot;, coor.getY()</span>
-<span class="nc" id="L537">				- USER_Y_DELTA);</span>
-<span class="nc" id="L538">		ObjectAnimator rotate = ObjectAnimator</span>
-<span class="nc" id="L539">				.ofFloat(user, &quot;rotation&quot;, degree);</span>
+<span class="nc" id="L537">		ObjectAnimator transX = ObjectAnimator.ofFloat(user, &quot;x&quot;, coor.getX()</span>
+<span class="nc" id="L538">				- USER_X_DELTA);</span>
+<span class="nc" id="L539">		ObjectAnimator transY = ObjectAnimator.ofFloat(user, &quot;y&quot;, coor.getY()</span>
+<span class="nc" id="L540">				- USER_Y_DELTA);</span>
+<span class="nc" id="L541">		ObjectAnimator rotate = ObjectAnimator</span>
+<span class="nc" id="L542">				.ofFloat(user, &quot;rotation&quot;, degree);</span>
 
-<span class="nc" id="L541">		transX.setDuration(1000);</span>
-<span class="nc" id="L542">		transY.setDuration(1000);</span>
-<span class="nc" id="L543">		rotate.setDuration(1000);</span>
+<span class="nc" id="L544">		transX.setDuration(1000);</span>
+<span class="nc" id="L545">		transY.setDuration(1000);</span>
+<span class="nc" id="L546">		rotate.setDuration(1000);</span>
 
-<span class="nc" id="L545">		set.play(transX).with(transY);</span>
-<span class="nc" id="L546">		set.play(transY).with(rotate);</span>
-<span class="nc" id="L547">		set.play(transX).with(rotate);</span>
+<span class="nc" id="L548">		set.play(transX).with(transY);</span>
+<span class="nc" id="L549">		set.play(transY).with(rotate);</span>
+<span class="nc" id="L550">		set.play(transX).with(rotate);</span>
 
-<span class="nc" id="L549">		set.addListener(new UserAnimationListener(coor, degree));</span>
+<span class="nc" id="L552">		set.addListener(new UserAnimationListener(coor, degree));</span>
 
-<span class="nc" id="L551">		set.setStartDelay(startDelay);</span>
-<span class="nc" id="L552">		startDelay += 1000;</span>
-<span class="nc" id="L553">		set.start();</span>
+<span class="nc" id="L554">		set.setStartDelay(startDelay);</span>
+<span class="nc" id="L555">		startDelay += 1000;</span>
+<span class="nc" id="L556">		set.start();</span>
 
-<span class="nc" id="L555">	}</span>
+<span class="nc" id="L558">	}</span>
 
 	// ----------------Animation Listener ---------------------
 
@@ -567,39 +570,39 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 		private float degree;
 		private DisplayCoordinate coor;
 
-<span class="nc" id="L570">		public UserAnimationListener(DisplayCoordinate coor, float degree) {</span>
-<span class="nc" id="L571">			this.degree = degree;</span>
-<span class="nc" id="L572">			this.coor = coor;</span>
-<span class="nc" id="L573">		}</span>
+<span class="nc" id="L573">		public UserAnimationListener(DisplayCoordinate coor, float degree) {</span>
+<span class="nc" id="L574">			this.degree = degree;</span>
+<span class="nc" id="L575">			this.coor = coor;</span>
+<span class="nc" id="L576">		}</span>
 
 
 		public void onAnimationCancel(Animator animation) {
-<span class="nc" id="L577">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Animation Cancel&quot;);</span>
-<span class="nc" id="L578">		}</span>
+<span class="nc" id="L580">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Animation Cancel&quot;);</span>
+<span class="nc" id="L581">		}</span>
 
 
 		public void onAnimationEnd(Animator animation) {
-<span class="nc" id="L582">			user.clearAnimation();</span>
-<span class="nc" id="L583">			startDelay -= 1000;</span>
+<span class="nc" id="L585">			user.clearAnimation();</span>
+<span class="nc" id="L586">			startDelay -= 1000;</span>
 
-<span class="nc" id="L585">			user.setX(coor.getX() - USER_X_DELTA);</span>
-<span class="nc" id="L586">			user.setY(coor.getY() - USER_Y_DELTA);</span>
+<span class="nc" id="L588">			user.setX(coor.getX() - USER_X_DELTA);</span>
+<span class="nc" id="L589">			user.setY(coor.getY() - USER_Y_DELTA);</span>
 
-<span class="nc" id="L588">			user.setRotation(degree);</span>
-<span class="nc" id="L589">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Drehe den User um &quot; + degree</span>
-<span class="nc" id="L590">					+ &quot; Grad&quot;);</span>
-<span class="nc" id="L591">		}</span>
+<span class="nc" id="L591">			user.setRotation(degree);</span>
+<span class="nc" id="L592">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Drehe den User um &quot; + degree</span>
+<span class="nc" id="L593">					+ &quot; Grad&quot;);</span>
+<span class="nc" id="L594">		}</span>
 
 
 		public void onAnimationRepeat(Animator animation) {
-<span class="nc" id="L595">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Animation Repeat&quot;);</span>
+<span class="nc" id="L598">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Animation Repeat&quot;);</span>
 
-<span class="nc" id="L597">		}</span>
+<span class="nc" id="L600">		}</span>
 
 
 		public void onAnimationStart(Animator animation) {
-<span class="nc" id="L601">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Animation Start&quot;);</span>
-<span class="nc" id="L602">		}</span>
+<span class="nc" id="L604">			Log.d(TAG_MAPVIEW_ANIMATION, &quot;Animation Start&quot;);</span>
+<span class="nc" id="L605">		}</span>
 
 	}
 
@@ -619,90 +622,90 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 		float oldY;
 		float gesamt;
 
-<span class="nc" id="L622">		public MapGestureDetector() {</span>
-<span class="nc" id="L623">			oldX = 0.0F;</span>
-<span class="nc" id="L624">			oldY = 0.0F;</span>
-<span class="nc" id="L625">		}</span>
+<span class="nc" id="L625">		public MapGestureDetector() {</span>
+<span class="nc" id="L626">			oldX = 0.0F;</span>
+<span class="nc" id="L627">			oldY = 0.0F;</span>
+<span class="nc" id="L628">		}</span>
 
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-<span class="nc" id="L629">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Fling&quot;);</span>
-<span class="nc" id="L630">			return false;</span>
+<span class="nc" id="L632">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Fling&quot;);</span>
+<span class="nc" id="L633">			return false;</span>
 		}
 
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
-<span class="nc" id="L635">			Log.d(TAG_MAPVIEW_GESTURE, &quot;SCROLL EVENT&quot;);</span>
+<span class="nc" id="L638">			Log.d(TAG_MAPVIEW_GESTURE, &quot;SCROLL EVENT&quot;);</span>
 
-<span class="nc bnc" id="L637" title="All 2 branches missed.">			if (e2.getPointerCount() &gt;= 2) {</span>
+<span class="nc bnc" id="L640" title="All 2 branches missed.">			if (e2.getPointerCount() &gt;= 2) {</span>
 
-<span class="nc" id="L639">				float x = Math.abs(e2.getX(0) - e2.getX(1));</span>
-<span class="nc" id="L640">				float y = Math.abs(e2.getY(0) - e2.getY(1));</span>
+<span class="nc" id="L642">				float x = Math.abs(e2.getX(0) - e2.getX(1));</span>
+<span class="nc" id="L643">				float y = Math.abs(e2.getY(0) - e2.getY(1));</span>
 
-<span class="nc bnc" id="L642" title="All 2 branches missed.">				if (e2.getX(0) &lt; e2.getX(1)) {</span>
-<span class="nc" id="L643">					x += e2.getX(0);</span>
-<span class="nc" id="L644">				} else {</span>
-<span class="nc" id="L645">					x += e2.getX(1);</span>
+<span class="nc bnc" id="L645" title="All 2 branches missed.">				if (e2.getX(0) &lt; e2.getX(1)) {</span>
+<span class="nc" id="L646">					x += e2.getX(0);</span>
+<span class="nc" id="L647">				} else {</span>
+<span class="nc" id="L648">					x += e2.getX(1);</span>
 				}
 
-<span class="nc bnc" id="L648" title="All 2 branches missed.">				if (e2.getY(0) &lt; e2.getY(1)) {</span>
-<span class="nc" id="L649">					x += e2.getY(0);</span>
-<span class="nc" id="L650">				} else {</span>
-<span class="nc" id="L651">					x += e2.getY(1);</span>
+<span class="nc bnc" id="L651" title="All 2 branches missed.">				if (e2.getY(0) &lt; e2.getY(1)) {</span>
+<span class="nc" id="L652">					x += e2.getY(0);</span>
+<span class="nc" id="L653">				} else {</span>
+<span class="nc" id="L654">					x += e2.getY(1);</span>
 				}
-<span class="nc" id="L653">				int twoFingerZoomOffset = 1000;</span>
+<span class="nc" id="L656">				int twoFingerZoomOffset = 1000;</span>
 
-<span class="nc" id="L655">				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / twoFingerZoomOffset);</span>
+<span class="nc" id="L658">				float z = ((Math.abs(distanceY) + Math.abs(distanceX)) / twoFingerZoomOffset);</span>
 
-<span class="nc" id="L657">				float diff = (float) Math.sqrt(Math.pow(</span>
-<span class="nc" id="L658">						(double) Math.abs(e2.getX(0) - e2.getX(1)), 2)</span>
-<span class="nc" id="L659">						* Math.pow((double) Math.abs(e2.getY(1) - e2.getY(1)),</span>
-<span class="nc" id="L660">								2));</span>
-<span class="nc bnc" id="L661" title="All 2 branches missed.">				if (diff &lt; gesamt) {</span>
-<span class="nc" id="L662">					mc.onZoom(z, new DisplayCoordinate(x, y));</span>
-<span class="nc" id="L663">				} else {</span>
-<span class="nc" id="L664">					mc.onZoom(-z, new DisplayCoordinate(x, y));</span>
+<span class="nc" id="L660">				float diff = (float) Math.sqrt(Math.pow(</span>
+<span class="nc" id="L661">						(double) Math.abs(e2.getX(0) - e2.getX(1)), 2)</span>
+<span class="nc" id="L662">						* Math.pow((double) Math.abs(e2.getY(1) - e2.getY(1)),</span>
+<span class="nc" id="L663">								2));</span>
+<span class="nc bnc" id="L664" title="All 2 branches missed.">				if (diff &lt; gesamt) {</span>
+<span class="nc" id="L665">					mc.onZoom(z, new DisplayCoordinate(x, y));</span>
+<span class="nc" id="L666">				} else {</span>
+<span class="nc" id="L667">					mc.onZoom(-z, new DisplayCoordinate(x, y));</span>
 				}
-<span class="nc" id="L666">			} else {</span>
+<span class="nc" id="L669">			} else {</span>
 
-<span class="nc" id="L668">				Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Scroll&quot;);</span>
+<span class="nc" id="L671">				Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Scroll&quot;);</span>
 				// distanceY *= -1;
-<span class="nc bnc" id="L670" title="All 2 branches missed.">				if (e1.getY() &gt; e2.getY()) {</span>
-<span class="nc" id="L671">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Up &quot; + distanceY);</span>
-<span class="nc" id="L672">				} else {</span>
-<span class="nc" id="L673">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Down &quot; + -distanceY);</span>
+<span class="nc bnc" id="L673" title="All 2 branches missed.">				if (e1.getY() &gt; e2.getY()) {</span>
+<span class="nc" id="L674">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Up &quot; + distanceY);</span>
+<span class="nc" id="L675">				} else {</span>
+<span class="nc" id="L676">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Down &quot; + -distanceY);</span>
 				}
 
-<span class="nc bnc" id="L676" title="All 2 branches missed.">				if (e1.getX() &gt; e2.getX()) {</span>
-<span class="nc" id="L677">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Left &quot; + distanceX);</span>
-<span class="nc" id="L678">				} else {</span>
-<span class="nc" id="L679">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Right &quot; + -distanceX);</span>
+<span class="nc bnc" id="L679" title="All 2 branches missed.">				if (e1.getX() &gt; e2.getX()) {</span>
+<span class="nc" id="L680">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Left &quot; + distanceX);</span>
+<span class="nc" id="L681">				} else {</span>
+<span class="nc" id="L682">					Log.d(TAG_MAPVIEW_GESTURE, &quot;Right &quot; + -distanceX);</span>
 				}
 
-<span class="nc" id="L682">				mc.onShift(distanceX, distanceY);</span>
+<span class="nc" id="L685">				mc.onShift(distanceX, distanceY);</span>
 			}
-<span class="nc" id="L684">			return true;</span>
+<span class="nc" id="L687">			return true;</span>
 		}
 
 		public void onLongPress(MotionEvent event) {
-<span class="nc" id="L688">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Long Touch&quot;);</span>
-<span class="nc" id="L689">			mc.onCreatePoint(new DisplayCoordinate(event.getX(), event.getY()));</span>
-<span class="nc" id="L690">		}</span>
+<span class="nc" id="L691">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Long Touch&quot;);</span>
+<span class="nc" id="L692">			mc.onCreatePoint(new DisplayCoordinate(event.getX(), event.getY()));</span>
+<span class="nc" id="L693">		}</span>
 
 		public boolean onDown(MotionEvent e) {
-<span class="nc" id="L693">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Down&quot;);</span>
-<span class="nc" id="L694">			this.oldX = e.getX();</span>
-<span class="nc" id="L695">			this.oldY = e.getY();</span>
-<span class="nc" id="L696">			return false;</span>
+<span class="nc" id="L696">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Down&quot;);</span>
+<span class="nc" id="L697">			this.oldX = e.getX();</span>
+<span class="nc" id="L698">			this.oldY = e.getY();</span>
+<span class="nc" id="L699">			return false;</span>
 		}
 
 		public void onShowPress(MotionEvent e) {
-<span class="nc" id="L700">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Show Press&quot;);</span>
-<span class="nc" id="L701">		}</span>
+<span class="nc" id="L703">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch Show Press&quot;);</span>
+<span class="nc" id="L704">		}</span>
 
 		public boolean onSingleTapUp(MotionEvent e) {
-<span class="nc" id="L704">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch TapUp&quot;);</span>
-<span class="nc" id="L705">			return false;</span>
+<span class="nc" id="L707">			Log.d(TAG_MAPVIEW_GESTURE, &quot;MapTouch TapUp&quot;);</span>
+<span class="nc" id="L708">			return false;</span>
 		}
 
 	}
@@ -713,16 +716,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 * @author Ludwig Biermann
 	 *
 	 */
-<span class="fc" id="L716">	private class MapTouchEventListener implements OnTouchListener {</span>
+<span class="fc" id="L719">	private class MapTouchEventListener implements OnTouchListener {</span>
 
 		public boolean onTouch(View view, MotionEvent event) {
-<span class="nc bnc" id="L719" title="All 2 branches missed.">			if (map.equals(view)) {</span>
-<span class="nc" id="L720">				Log.d(TAG_MAPVIEW_TOUCH, &quot;TOUCH!&quot; + view.toString());</span>
-<span class="nc" id="L721">				gestureDetector.onTouchEvent(event);</span>
-<span class="nc" id="L722">				return true;</span>
+<span class="nc bnc" id="L722" title="All 2 branches missed.">			if (map.equals(view)) {</span>
+<span class="nc" id="L723">				Log.d(TAG_MAPVIEW_TOUCH, &quot;TOUCH!&quot; + view.toString());</span>
+<span class="nc" id="L724">				gestureDetector.onTouchEvent(event);</span>
+<span class="nc" id="L725">				return true;</span>
 			}
 
-<span class="nc" id="L725">			return false;</span>
+<span class="nc" id="L728">			return false;</span>
 		}
 
 	}
@@ -733,13 +736,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 * @author Ludwig Biermann
 	 *
 	 */
-<span class="fc" id="L736">	private class UserTouchEventListener implements OnTouchListener {</span>
+<span class="fc" id="L739">	private class UserTouchEventListener implements OnTouchListener {</span>
 		public boolean onTouch(View arg0, MotionEvent arg1) {
-<span class="nc bnc" id="L738" title="All 2 branches missed.">			if (arg0.equals(user)) {</span>
-<span class="nc" id="L739">				Log.d(TAG_MAPVIEW_TOUCH, &quot;UserTouch on User Arrow&quot;);</span>
-<span class="nc" id="L740">				return true;</span>
+<span class="nc bnc" id="L741" title="All 2 branches missed.">			if (arg0.equals(user)) {</span>
+<span class="nc" id="L742">				Log.d(TAG_MAPVIEW_TOUCH, &quot;UserTouch on User Arrow&quot;);</span>
+<span class="nc" id="L743">				return true;</span>
 			}
-<span class="nc" id="L742">			return false;</span>
+<span class="nc" id="L745">			return false;</span>
 		}
 	}
 
@@ -760,31 +763,31 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 		 * @param iv
 		 *            the new Imageview
 		 */
-<span class="nc" id="L763">		WaypointTouchListener(ImageView iv, int id) {</span>
-<span class="nc" id="L764">			this.iv = iv;</span>
-<span class="nc" id="L765">			this.id = id;</span>
-<span class="nc" id="L766">		}</span>
+<span class="nc" id="L766">		WaypointTouchListener(ImageView iv, int id) {</span>
+<span class="nc" id="L767">			this.iv = iv;</span>
+<span class="nc" id="L768">			this.id = id;</span>
+<span class="nc" id="L769">		}</span>
 
 		public boolean onTouch(View view, MotionEvent event) {
-<span class="nc bnc" id="L769" title="All 2 branches missed.">			if (view.equals(iv)) {</span>
-<span class="nc" id="L770">				Log.d(TAG_MAPVIEW_TOUCH, &quot;UserTouch auf View ID:&quot; + id);</span>
-<span class="nc" id="L771">				currentId = id;</span>
-<span class="nc" id="L772">				currentView = iv;</span>
-<span class="nc bnc" id="L773" title="All 2 branches missed.">				if (waypointGestureDetector.onTouchEvent(event)) {</span>
-<span class="nc" id="L774">	                return true;</span>
+<span class="nc bnc" id="L772" title="All 2 branches missed.">			if (view.equals(iv)) {</span>
+<span class="nc" id="L773">				Log.d(TAG_MAPVIEW_TOUCH, &quot;UserTouch auf View ID:&quot; + id);</span>
+<span class="nc" id="L774">				currentId = id;</span>
+<span class="nc" id="L775">				currentView = iv;</span>
+<span class="nc bnc" id="L776" title="All 2 branches missed.">				if (waypointGestureDetector.onTouchEvent(event)) {</span>
+<span class="nc" id="L777">	                return true;</span>
 	            }
 
-<span class="nc bnc" id="L777" title="All 2 branches missed.">				if(event.getAction() == MotionEvent.ACTION_UP){</span>
-<span class="nc bnc" id="L778" title="All 2 branches missed.">					if(mIsScrolling){</span>
-<span class="nc" id="L779">					Log.d(&quot;fuck&quot;, &quot;Action Up&quot;);</span>
-<span class="nc" id="L780">                    mIsScrolling  = false;</span>
-<span class="nc" id="L781">                    mIsScrolling = false;</span>
-<span class="nc" id="L782">					mc.pushMovedWaypoint();</span>
+<span class="nc bnc" id="L780" title="All 2 branches missed.">				if(event.getAction() == MotionEvent.ACTION_UP){</span>
+<span class="nc bnc" id="L781" title="All 2 branches missed.">					if(mIsScrolling){</span>
+<span class="nc" id="L782">					Log.d(&quot;fuck&quot;, &quot;Action Up&quot;);</span>
+<span class="nc" id="L783">                    mIsScrolling  = false;</span>
+<span class="nc" id="L784">                    mIsScrolling = false;</span>
+<span class="nc" id="L785">					mc.pushMovedWaypoint();</span>
 					}
 				}
 
 			}
-<span class="nc" id="L787">			return false;</span>
+<span class="nc" id="L790">			return false;</span>
 		}
 	}
 
@@ -799,56 +802,56 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	 * @author Ludwig Biermann
 	 *
 	 */
-<span class="nc" id="L802">	private class WaypointGestureDetector implements OnGestureListener {</span>
+<span class="nc" id="L805">	private class WaypointGestureDetector implements OnGestureListener {</span>
 		public boolean onDown(MotionEvent event) {
-<span class="nc" id="L804">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onDown &quot; + currentId);</span>
-<span class="nc" id="L805">			mc.setActive(currentId);</span>
+<span class="nc" id="L807">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onDown &quot; + currentId);</span>
+<span class="nc" id="L808">			mc.setActive(currentId);</span>
 			// mc.getActiveWaypointId();
-<span class="nc" id="L807">			return true;</span>
+<span class="nc" id="L810">			return true;</span>
 		}
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-<span class="nc" id="L811">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Fling! &quot; + velocityY + &quot; &quot; + e2.getY()</span>
-<span class="nc" id="L812">					+ &quot; &quot; + currentId);</span>
+<span class="nc" id="L814">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Fling! &quot; + velocityY + &quot; &quot; + e2.getY()</span>
+<span class="nc" id="L815">					+ &quot; &quot; + currentId);</span>
 
-<span class="nc" id="L814">			float velocity = (float) Math.sqrt((double) Math.pow(</span>
-<span class="nc" id="L815">					Math.abs(velocityX), 2)</span>
-<span class="nc" id="L816">					+ (double) Math.pow(Math.abs(velocityY), 2));</span>
+<span class="nc" id="L817">			float velocity = (float) Math.sqrt((double) Math.pow(</span>
+<span class="nc" id="L818">					Math.abs(velocityX), 2)</span>
+<span class="nc" id="L819">					+ (double) Math.pow(Math.abs(velocityY), 2));</span>
 
-<span class="nc bnc" id="L818" title="All 2 branches missed.">			if (velocity &gt; 400) {</span>
-<span class="nc" id="L819">				Log.d(TAG_MAPVIEW_GESTURE, &quot;Delete Point &quot; + currentId);</span>
-<span class="nc" id="L820">				mc.onDeletePoint(currentId);</span>
+<span class="nc bnc" id="L821" title="All 2 branches missed.">			if (velocity &gt; 400) {</span>
+<span class="nc" id="L822">				Log.d(TAG_MAPVIEW_GESTURE, &quot;Delete Point &quot; + currentId);</span>
+<span class="nc" id="L823">				mc.onDeletePoint(currentId);</span>
 			}
 
-<span class="nc" id="L823">			return false;</span>
+<span class="nc" id="L826">			return false;</span>
 		}
 
 		public void onLongPress(MotionEvent event) {
-<span class="nc" id="L827">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onLongPress &quot; + currentId);</span>
-<span class="nc" id="L828">		}</span>
+<span class="nc" id="L830">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onLongPress &quot; + currentId);</span>
+<span class="nc" id="L831">		}</span>
 
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
-<span class="nc" id="L832">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onScroll &quot; + currentId);</span>
+<span class="nc" id="L835">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onScroll &quot; + currentId);</span>
 
 			//routeList.removeView(currentView);
-<span class="nc" id="L835">			currentView.setX(currentView.getX() - deltaX);</span>
-<span class="nc" id="L836">			currentView.setY(currentView.getY() - deltaY);</span>
-<span class="nc" id="L837">			mc.onMovePoint(-deltaX, -deltaY, currentId);</span>
+<span class="nc" id="L838">			currentView.setX(currentView.getX() - deltaX);</span>
+<span class="nc" id="L839">			currentView.setY(currentView.getY() - deltaY);</span>
+<span class="nc" id="L840">			mc.onMovePoint(-deltaX, -deltaY, currentId);</span>
 			//routeList.addView(currentView);
-<span class="nc" id="L839">			mIsScrolling = true;</span>
+<span class="nc" id="L842">			mIsScrolling = true;</span>
 
-<span class="nc" id="L841">			return true;</span>
+<span class="nc" id="L844">			return true;</span>
 		}
 
 		public void onShowPress(MotionEvent arg0) {
-<span class="nc" id="L845">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onShowPress &quot; + currentId);</span>
+<span class="nc" id="L848">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onShowPress &quot; + currentId);</span>
 
-<span class="nc" id="L847">		}</span>
+<span class="nc" id="L850">		}</span>
 
 		public boolean onSingleTapUp(MotionEvent arg0) {
-<span class="nc" id="L850">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onSingleTapUp &quot; + currentId);</span>
-<span class="nc" id="L851">			return false;</span>
+<span class="nc" id="L853">			Log.d(TAG_MAPVIEW_GESTURE, &quot;Waypoint onSingleTapUp &quot; + currentId);</span>
+<span class="nc" id="L854">			return false;</span>
 		}
 
 	}
@@ -870,52 +873,52 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 		 * @param iv
 		 *            the new Imageview
 		 */
-<span class="nc" id="L873">		POITouchListener(ImageView iv, int id) {</span>
-<span class="nc" id="L874">			this.iv = iv;</span>
-<span class="nc" id="L875">			this.id = id;</span>
-<span class="nc" id="L876">		}</span>
+<span class="nc" id="L876">		POITouchListener(ImageView iv, int id) {</span>
+<span class="nc" id="L877">			this.iv = iv;</span>
+<span class="nc" id="L878">			this.id = id;</span>
+<span class="nc" id="L879">		}</span>
 
 		public boolean onTouch(View view, MotionEvent event) {
-<span class="nc bnc" id="L879" title="All 2 branches missed.">			if (view.equals(iv)) {</span>
-<span class="nc" id="L880">				Log.d(TAG_MAPVIEW_TOUCH, &quot;UserTouch auf POI ID:&quot; + id);</span>
-<span class="nc" id="L881">				currentPOI = mc.getPOIById(id);</span>
-<span class="nc" id="L882">				pullUp.changeView(PullUpView.CONTENT_INFO);</span>
-<span class="nc" id="L883">				pullUp.setFullSizeHeight();</span>
+<span class="nc bnc" id="L882" title="All 2 branches missed.">			if (view.equals(iv)) {</span>
+<span class="nc" id="L883">				Log.d(TAG_MAPVIEW_TOUCH, &quot;UserTouch auf POI ID:&quot; + id);</span>
+<span class="nc" id="L884">				currentPOI = mc.getPOIById(id);</span>
+<span class="nc" id="L885">				pullUp.changeView(PullUpView.CONTENT_INFO);</span>
+<span class="nc" id="L886">				pullUp.setFullSizeHeight();</span>
 			}
-<span class="nc" id="L885">			return false;</span>
+<span class="nc" id="L888">			return false;</span>
 		}
 	}
 
 
 	public void onLowMemory() {
-<span class="nc" id="L891">		super.onLowMemory();</span>
-<span class="nc" id="L892">		System.gc();</span>
-<span class="nc" id="L893">	}</span>
+<span class="nc" id="L894">		super.onLowMemory();</span>
+<span class="nc" id="L895">		System.gc();</span>
+<span class="nc" id="L896">	}</span>
 
 	public POI getCurrentPOI() {
-<span class="nc" id="L896">		return currentPOI;</span>
+<span class="nc" id="L899">		return currentPOI;</span>
 	}
 
 	public void onCreateView() {
-<span class="nc" id="L900">		super.onDestroy();</span>
-<span class="nc" id="L901">		Log.d(TAG_MAPVIEW, &quot;Create View MapView&quot;);</span>
-<span class="nc" id="L902">	}</span>
+<span class="nc" id="L903">		super.onDestroy();</span>
+<span class="nc" id="L904">		Log.d(TAG_MAPVIEW, &quot;Create View MapView&quot;);</span>
+<span class="nc" id="L905">	}</span>
 
 	public void onDestroyView() {
-<span class="nc" id="L905">		super.onDestroy();</span>
-<span class="nc" id="L906">		Log.d(TAG_MAPVIEW, &quot;Destroy View MapView&quot;);</span>
-<span class="nc" id="L907">	}</span>
+<span class="nc" id="L908">		super.onDestroy();</span>
+<span class="nc" id="L909">		Log.d(TAG_MAPVIEW, &quot;Destroy View MapView&quot;);</span>
+<span class="nc" id="L910">	}</span>
 
 
 	public void onDestroy() {
-<span class="nc" id="L911">		super.onDestroy();</span>
-<span class="nc" id="L912">		TextToSpeechUtility.getInstance().shutdown();</span>
-<span class="nc" id="L913">		Log.d(TAG_MAPVIEW, &quot;Destroy MapView&quot;);</span>
-<span class="nc" id="L914">	}</span>
+<span class="nc" id="L914">		super.onDestroy();</span>
+<span class="nc" id="L915">		TextToSpeechUtility.getInstance().shutdown();</span>
+<span class="nc" id="L916">		Log.d(TAG_MAPVIEW, &quot;Destroy MapView&quot;);</span>
+<span class="nc" id="L917">	}</span>
 
 
 	public void onBackPressed() {
-<span class="nc" id="L918">		MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
-<span class="nc" id="L919">	}</span>
+<span class="nc" id="L921">		MapController.getInstance().getPullUpView().setNullSizeHeight();</span>
+<span class="nc" id="L922">	}</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
