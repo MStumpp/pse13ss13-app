@@ -5,7 +5,7 @@ import org.junit.Test;
 public class TestNoVertexForIDExistsException {
 
 	@Test
-	public void test() {
+	public void testException() {
 		NoVertexForIDExistsException nvfidee = new NoVertexForIDExistsException("Test");
 		nvfidee = new NoVertexForIDExistsException(null);
 	}

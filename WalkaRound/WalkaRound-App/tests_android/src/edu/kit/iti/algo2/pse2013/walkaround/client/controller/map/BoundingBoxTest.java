@@ -13,6 +13,7 @@ import android.graphics.Point;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 @RunWith(RobolectricTestRunner.class)
 public class BoundingBoxTest  {
@@ -82,6 +83,21 @@ public class BoundingBoxTest  {
 		assertTrue(box.getTopRight() != topRight);
 		assertTrue(box.getBottomLeft() != bottomLeft);
 		assertTrue(box.getBottomRight() != botoomRight);
+		box.setCenter(center,4);
+		assertTrue(box.getCenter() == center);
+		box.setCenter(new DisplayCoordinate(0,0));
+		box.getBottomLeft();
+		box.getBottomRight();
+		box.toString();
 
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testShift(){
+		BoundingBox box = new BoundingBox(center, display, lod);
+		box.shiftCenter(0, 0);
 	}
 }
