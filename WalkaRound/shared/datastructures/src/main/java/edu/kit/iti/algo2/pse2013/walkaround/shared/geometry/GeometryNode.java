@@ -276,7 +276,10 @@ public class GeometryNode {
 	 * @return true if leaf node, false otherwise.
 	 */
 	public boolean isLeaf() {
-		return splitValue == Double.NaN;
+        if (this.leftNode == null && this.rightNode == null) {
+		    return true;
+        }
+        return false;
 	}
 
 	@Override
