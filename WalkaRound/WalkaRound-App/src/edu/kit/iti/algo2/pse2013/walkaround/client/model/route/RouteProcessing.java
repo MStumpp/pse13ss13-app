@@ -96,10 +96,6 @@ public class RouteProcessing {
 				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
 				HttpConnectionParams.setSoTimeout(httpParameters, timeout);
 				
-<<<<<<< HEAD
-
-=======
->>>>>>> worked on le route
 				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 				HttpPost httpPost = url;
 				httpPost.setHeader("Accept", "application/json");
