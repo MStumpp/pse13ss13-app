@@ -165,8 +165,8 @@ public class HeadUpController {
 	/**
 	 * stoogle Navigation
 	 */
-	public void toggleNavigation() {
-		/*
+	/*public void toggleNavigation() {
+		
 		if(!this.navi){
 			this.headUpView.showNavigationElements();
 			this.navi = true;
@@ -175,17 +175,17 @@ public class HeadUpController {
 			this.navi = false;
 		}
 		Log.d(TAG_HEADUP_CONTROLLER ,"Navigation " + this.navi);
-		*/
-	}
+		
+	}*/
 
 	/**
 	 * Updates pictogram by unique id
 	 *
 	 * @param piktogramm id of pictogram
 	 */
-	public void setPiktogram(int id) {
+	/*public void setPiktogram(int id) {
 		this.headUpView.updatePiktogram(id);
-	}
+	}*/
 
 	/**
 	 * Updates the navigation text.
@@ -193,18 +193,18 @@ public class HeadUpController {
 	 * @param text
 	 *            neuer Text
 	 */
-	public void setNavigationsText(String text) {
+	/*public void setNavigationsText(String text) {
 		this.headUpView.updateNavigationsText(text);
-	}
+	}*/
 
 	/**
 	 * Updates the speed. Input must be in m/s
 	 *
 	 * @param speed the new speed
 	 */
-	public void setSpeed(double speed) {
+	/*public void setSpeed(double speed) {
 		this.headUpView.updateSpeed(speed);
-	}
+	}*/
 
 	/**
 	 * Updates the way to go. Input in meters
@@ -212,9 +212,9 @@ public class HeadUpController {
 	 * @param waytogo
 	 *            Way to go.
 	 */
-	public void setWayToGo(int waytogo) {
+	/*public void setWayToGo(int waytogo) {
 		this.headUpView.updateWayToGo(waytogo);
-	}
+	}*/
 
 	/**
 	 * Updates way passed. Input in meters
@@ -222,27 +222,27 @@ public class HeadUpController {
 	 * @param wayPassed
 	 *             way passed
 	 */
-	public void setWayPassed(int wayPassed) {
+	/*public void setWayPassed(int wayPassed) {
 		this.headUpView.updateWayPassed(wayPassed);
 
-	}
+	}*/
 
 	/**
 	 * Updates time to go. Input in seconds
 	 *
 	 * @param timeToGo time to go
 	 */
-	public void setTimeToGo(double timeToGo) {
+	/*public void setTimeToGo(double timeToGo) {
 		this.headUpView.updateTimeToGo(timeToGo);
-	}
+	}*/
 
 	/**
 	 * Updates time passed. Input in seconds
 	 *
 	 * @param timePassed time passed
 	 */
-	public void setTimePassed(int timePassed) {
+	/*public void setTimePassed(int timePassed) {
 		this.headUpView.updateWayPassed(timePassed);
 
-	}
+	}*/
 }

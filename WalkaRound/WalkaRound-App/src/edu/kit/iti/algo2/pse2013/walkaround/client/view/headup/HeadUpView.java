@@ -151,7 +151,7 @@ public class HeadUpView extends Fragment {
 		userLock.setOnTouchListener(new UserLockListener());
 
 		// anfangs pausiert also nach Play listen
-		naviControll.setOnTouchListener(new NavigationControllListener());
+		//naviControll.setOnTouchListener(new NavigationControllListener());
 
 		// -----------------------------------------------
 		Log.d(TAG_HEADUP_VIEW, "initialisiere die Lock Position");
@@ -356,7 +356,7 @@ public class HeadUpView extends Fragment {
 	 * @author Ludwig Biermann
 	 *
 	 */
-	private class NavigationControllListener implements OnTouchListener {
+	/*private class NavigationControllListener implements OnTouchListener {
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(naviControll)) {
 				Log.d(TAG_HEADUP_VIEW_TOUCH, "Navigation wird aktiviert/deaktiviert");
@@ -365,7 +365,7 @@ public class HeadUpView extends Fragment {
 			return false;
 		}
 
-	}
+	}*/
 
 
 	/**

@@ -7,11 +7,11 @@ import android.util.Log;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.AudibleTextNaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.StereoNaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.VisualTextNaviOutput;
+//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
+//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.AudibleTextNaviOutput;
+//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutput;
+//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.StereoNaviOutput;
+//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.VisualTextNaviOutput;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
@@ -24,7 +24,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.Location;
 import android.preference.PreferenceManager;
 
-public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
+/*public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
 
 	private static String TAG_NAVI = NaviModel.class.getSimpleName();
 
@@ -95,11 +95,11 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	private void notifyAllNaviOutputs() {
 		Log.e(TAG_NAVI, "notifyAllNaviOutputs() METHOD START");
 		// Sending information to controller of headUp display:
-		this.headUpControllerInstance.setSpeed(this.speed);
-		this.headUpControllerInstance.setTimePassed(this.timeOnRouteInSec);
-		this.headUpControllerInstance.setTimeToGo(this.timeLeftOnRouteInSec);
-		this.headUpControllerInstance.setWayPassed(this.distOnRouteInMeters);
-		this.headUpControllerInstance.setWayToGo(this.distLeftOnRouteInMeter);
+		//this.headUpControllerInstance.setSpeed(this.speed);
+		//this.headUpControllerInstance.setTimePassed(this.timeOnRouteInSec);
+		//this.headUpControllerInstance.setTimeToGo(this.timeLeftOnRouteInSec);
+		//this.headUpControllerInstance.setWayPassed(this.distOnRouteInMeters);
+		//this.headUpControllerInstance.setWayToGo(this.distLeftOnRouteInMeter);
 		// TODO: this.headUpControllerInstance.setTurnAngle(this.turnAngle);
 		// TODO: this.headUpControllerInstance.setDistToTurn(this.distToTurn);
 		// notifying all Navi Outputs:
@@ -335,4 +335,4 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 
 
 
-}
+}*/

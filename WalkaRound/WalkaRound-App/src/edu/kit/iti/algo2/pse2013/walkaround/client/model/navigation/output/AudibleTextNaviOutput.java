@@ -1,7 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
 
-public class AudibleTextNaviOutput implements NaviOutput {
+/*public class AudibleTextNaviOutput implements NaviOutput {
 
 	private static AudibleTextNaviOutput audibleTextNaviOutput;
 
@@ -18,4 +18,4 @@ public class AudibleTextNaviOutput implements NaviOutput {
 
 	}
 
-}
+}*/

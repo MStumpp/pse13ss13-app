@@ -2,7 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 
-public class VisualTextNaviOutput implements NaviOutput {
+/*public class VisualTextNaviOutput implements NaviOutput {
 
 	private static VisualTextNaviOutput visualTextNaviOutput;
 	private HeadUpController headUpControllerInstance;
@@ -17,9 +17,9 @@ public class VisualTextNaviOutput implements NaviOutput {
 	}
 
 	public void deliverOutput(double turnAngle, double distToTurn) {
-		this.headUpControllerInstance.setNavigationsText("in " + distToTurn + "m ");
+		//this.headUpControllerInstance.setNavigationsText("in " + distToTurn + "m ");
 	}
 
 
 
-}
+}*/
