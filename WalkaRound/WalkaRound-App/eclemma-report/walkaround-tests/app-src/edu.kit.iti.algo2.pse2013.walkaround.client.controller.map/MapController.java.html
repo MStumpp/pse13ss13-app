@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">MapController.java</span></div><h1>MapController.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">MapController.java</span></div><h1>MapController.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;</span>
 
 //Java library
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
@@ -38,7 +41,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This Class controls the data flow between the System and the real View.
- *
+ * 
  * @author Ludwig Biermann
  */
 public class MapController implements RouteListener, PositionListener,
@@ -47,15 +50,15 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * default starting Coordinate if GPS is offline
 	 */
-<span class="fc" id="L50">	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211</span>
-<span class="fc" id="L51">	public static String TAG_MAP_CONTROLLER = MapController.class</span>
-<span class="fc" id="L52">			.getSimpleName();</span>
-<span class="fc" id="L53">	public static boolean defaultUserLock = true;</span>
+<span class="fc" id="L53">	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211</span>
+<span class="fc" id="L54">	public static String TAG_MAP_CONTROLLER = MapController.class</span>
+<span class="fc" id="L55">			.getSimpleName();</span>
+<span class="fc" id="L56">	public static boolean defaultUserLock = true;</span>
 
 	/**
 	 * The Controller
 	 */
-<span class="fc" id="L58">	private static MapController mapController;</span>
+<span class="fc" id="L61">	private static MapController mapController;</span>
 	private RouteController routeController;
 
 	/**
@@ -66,7 +69,7 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * permanent class variables
 	 */
-<span class="fc" id="L69">	private boolean lockUserPosition = defaultUserLock;</span>
+<span class="fc" id="L72">	private boolean lockUserPosition = defaultUserLock;</span>
 
 	/**
 	 * DisplayWaypoints to display the Display Points
@@ -94,34 +97,34 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * gets the center Coordinate
-	 *
+	 * 
 	 * @return the Coordinate of the center
 	 */
 	public Coordinate getCenter() {
-<span class="fc" id="L101">		return coorBox.getCenter();</span>
+<span class="nc" id="L104">		return coorBox.getCenter();</span>
 	}
 
 	/**
 	 * sets the Center Coordinate
-	 *
+	 * 
 	 * @param center
 	 *            Coordinate
 	 */
 	public void setCenter(Coordinate center) {
-<span class="nc" id="L111">		this.coorBox.setCenter(center);</span>
-<span class="nc" id="L112">	}</span>
+<span class="nc" id="L114">		this.coorBox.setCenter(center);</span>
+<span class="nc" id="L115">	}</span>
 
 	/**
 	 * sets the Center Coordinate
-	 *
+	 * 
 	 * @param center
 	 *            Coordinate
 	 * @param lod
 	 *            Level Of Detail
 	 */
 	public void setCenter(Coordinate center, float lod) {
-<span class="nc" id="L123">		this.coorBox.setCenter(center, lod);</span>
-<span class="nc" id="L124">	}</span>
+<span class="nc" id="L126">		this.coorBox.setCenter(center, lod);</span>
+<span class="nc" id="L127">	}</span>
 
 	/*
 	 * -----------------Initialization-----------------
@@ -129,34 +132,35 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Initializes the MapController. Needs the current mapView
-	 *
+	 * 
 	 * @param mapView
 	 *            the mapView
 	 * @return the mapController
 	 */
-	public static MapController initialize(TileFetcher tileFetcher, BoundingBox coorBox, Coordinate user) {
-<span class="fc bfc" id="L138" title="All 2 branches covered.">		if (mapController == null) {</span>
-<span class="fc" id="L139">			mapController = new MapController(tileFetcher, coorBox, user);</span>
+	public static MapController initialize(TileFetcher tileFetcher,
+			BoundingBox coorBox, Coordinate user) {
+<span class="fc bfc" id="L142" title="All 2 branches covered.">		if (mapController == null) {</span>
+<span class="fc" id="L143">			mapController = new MapController(tileFetcher, coorBox, user);</span>
 		}
-<span class="fc" id="L141">		return mapController;</span>
+<span class="fc" id="L145">		return mapController;</span>
 	}
 
 	public static boolean isInitialized() {
-<span class="fc bfc" id="L145" title="All 2 branches covered.">		return mapController != null;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">		return mapController != null;</span>
 	}
 
 	/**
 	 * Gives back the unique Instance of the Map Controller
-	 *
+	 * 
 	 * @return the MapController
 	 */
 	public static MapController getInstance() {
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">		if (mapController == null) {</span>
-<span class="nc" id="L155">			Log.e(TAG_MAP_CONTROLLER,</span>
-<span class="nc" id="L156">					&quot;getInstance(): you need to initialize MapController prior to getting an instance&quot;);</span>
-<span class="nc" id="L157">			return null;</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">		if (mapController == null) {</span>
+<span class="nc" id="L159">			Log.e(TAG_MAP_CONTROLLER,</span>
+<span class="nc" id="L160">					&quot;getInstance(): you need to initialize MapController prior to getting an instance&quot;);</span>
+<span class="nc" id="L161">			return null;</span>
 		}
-<span class="fc" id="L159">		return mapController;</span>
+<span class="fc" id="L163">		return mapController;</span>
 	}
 
 	/*
@@ -164,54 +168,54 @@ public class MapController implements RouteListener, PositionListener,
 	 */
 
 	public void startController(MapView mv) {
-<span class="nc" id="L167">		this.mapView = mv;</span>
+<span class="nc" id="L171">		this.mapView = mv;</span>
 
-<span class="nc" id="L169">		PositionManager.getInstance().registerPositionListener(this);</span>
-<span class="nc" id="L170">		PositionManager.getInstance().getCompassManager()</span>
-<span class="nc" id="L171">				.registerCompassListener(this);</span>
+<span class="nc" id="L173">		PositionManager.getInstance().registerPositionListener(this);</span>
+<span class="nc" id="L174">		PositionManager.getInstance().getCompassManager()</span>
+<span class="nc" id="L175">				.registerCompassListener(this);</span>
 
-<span class="nc" id="L173">		this.routeController.registerRouteListener(this);</span>
+<span class="nc" id="L177">		this.routeController.registerRouteListener(this);</span>
 
-<span class="nc" id="L175">		PreferenceManager.getDefaultSharedPreferences(mv)</span>
-<span class="nc" id="L176">				.registerOnSharedPreferenceChangeListener(map);</span>
+<span class="nc" id="L179">		PreferenceManager.getDefaultSharedPreferences(mv)</span>
+<span class="nc" id="L180">				.registerOnSharedPreferenceChangeListener(map);</span>
 
-<span class="nc" id="L178">		this.map.generateMap(coorBox);</span>
-<span class="nc" id="L179">		this.updateUserPosition();</span>
-<span class="nc" id="L180">	}</span>
+<span class="nc" id="L182">		this.map.generateMap(coorBox);</span>
+<span class="nc" id="L183">		this.updateUserPosition();</span>
+<span class="nc" id="L184">	}</span>
 
-<span class="fc" id="L182">	private MapController(TileFetcher tileFetcher, BoundingBox coorBox,</span>
+<span class="fc" id="L186">	private MapController(TileFetcher tileFetcher, BoundingBox coorBox,</span>
 			Coordinate user) {
-<span class="fc" id="L184">		this.user = user;</span>
+<span class="fc" id="L188">		this.user = user;</span>
 
 		// initialize Vars
-<span class="fc" id="L187">		this.currentRoute = new Route(new LinkedList&lt;Coordinate&gt;());</span>
-<span class="fc" id="L188">		this.displayPoints = new LinkedList&lt;DisplayWaypoint&gt;();</span>
-<span class="fc" id="L189">		this.lines = new LinkedList&lt;DisplayCoordinate&gt;();</span>
+<span class="fc" id="L191">		this.currentRoute = new Route(new LinkedList&lt;Coordinate&gt;());</span>
+<span class="fc" id="L192">		this.displayPoints = new LinkedList&lt;DisplayWaypoint&gt;();</span>
+<span class="fc" id="L193">		this.lines = new LinkedList&lt;DisplayCoordinate&gt;();</span>
 
-<span class="fc" id="L191">		this.routeGen = new Thread();</span>
-<span class="fc" id="L192">		this.userPos = new Thread();</span>
+<span class="fc" id="L195">		this.routeGen = new Thread();</span>
+<span class="fc" id="L196">		this.userPos = new Thread();</span>
 
-<span class="fc" id="L194">		this.size = coorBox.getDisplaySize();</span>
-<span class="fc" id="L195">		this.coorBox = coorBox;</span>
+<span class="fc" id="L198">		this.size = coorBox.getDisplaySize();</span>
+<span class="fc" id="L199">		this.coorBox = coorBox;</span>
 
-<span class="fc" id="L197">		this.route = Bitmap.createBitmap(size.x, size.y,</span>
-<span class="fc" id="L198">				Bitmap.Config.ARGB_8888);</span>
+<span class="fc" id="L201">		this.route = Bitmap.createBitmap(size.x, size.y,</span>
+<span class="fc" id="L202">				Bitmap.Config.ARGB_8888);</span>
 
 		// initialize Threads
 
-<span class="fc" id="L202">		this.map = new MapGen(size, coorBox, tileFetcher);</span>
+<span class="fc" id="L206">		this.map = new MapGen(size, coorBox, tileFetcher);</span>
 
-<span class="fc" id="L204">		this.poiGen = new POIGen();</span>
+<span class="fc" id="L208">		this.poiGen = new POIGen();</span>
 		// TODO poi Gen doesnt run as Thread ... why?
-<span class="fc" id="L206">		Thread t = new Thread(poiGen);</span>
-<span class="fc" id="L207">		t.setName(&quot;POI Generator&quot;);</span>
-<span class="fc" id="L208">		t.setPriority(5);</span>
+<span class="fc" id="L210">		Thread t = new Thread(poiGen);</span>
+<span class="fc" id="L211">		t.setName(&quot;POI Generator&quot;);</span>
+<span class="fc" id="L212">		t.setPriority(5);</span>
 		// t.run();
 
 		// Controller
 
-<span class="fc" id="L213">		this.routeController = RouteController.getInstance();</span>
-<span class="fc" id="L214">	}</span>
+<span class="fc" id="L217">		this.routeController = RouteController.getInstance();</span>
+<span class="fc" id="L218">	}</span>
 
 	/*
 	 * -----------------Getter Methods-----------------
@@ -219,36 +223,36 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Gives the id of the current Active Waypoint back
-	 *
+	 * 
 	 * @return id of active Waypoint
 	 */
 	public int getActiveWaypointId() {
-<span class="nc" id="L226">		return currentActiveWaypoint;</span>
+<span class="nc" id="L230">		return currentActiveWaypoint;</span>
 	}
 
 	/**
 	 * Gives the current Pull Up View back.
 	 */
 	public PullUpView getPullUpView() {
-<span class="nc" id="L233">		return mapView.getPullUpView();</span>
+<span class="nc" id="L237">		return mapView.getPullUpView();</span>
 	}
 
 	/**
 	 * Gives back the current Level of Detail.
-	 *
+	 * 
 	 * @return current Level ofDetail.
 	 */
 	public float getCurrentLevelOfDetail() {
-<span class="nc" id="L242">		return this.coorBox.getLevelOfDetail();</span>
+<span class="nc" id="L246">		return this.coorBox.getLevelOfDetail();</span>
 	}
 
 	/**
 	 * Gives the current Route back.
-	 *
+	 * 
 	 * @return current Route
 	 */
 	public List&lt;DisplayCoordinate&gt; getCurrentRouteLines() {
-<span class="nc" id="L251">		return this.lines;</span>
+<span class="nc" id="L255">		return this.lines;</span>
 	}
 
 	/*
@@ -257,35 +261,35 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Forward the Bitmap of the current Map
-	 *
+	 * 
 	 * @param b
 	 *            the Bitmap of the current Map
 	 */
 	public void onMapOverlayImageChange(Bitmap b) {
-<span class="fc" id="L265">		Log.d(TAG_MAP_CONTROLLER, &quot;Bitmap Map Forwarding.&quot;);</span>
-<span class="fc" id="L266">		this.mapView.updateMapImage(b);</span>
-<span class="fc" id="L267">	}</span>
+<span class="fc" id="L269">		Log.d(TAG_MAP_CONTROLLER, &quot;Bitmap Map Forwarding.&quot;);</span>
+<span class="fc" id="L270">		this.mapView.updateMapImage(b);</span>
+<span class="fc" id="L271">	}</span>
 
 	/**
 	 * Forward the Bitmap of the Route
-	 *
+	 * 
 	 * @param b
 	 *            the Bitmap of the Route
 	 */
 	public void onRouteOverlayImageChange(Bitmap b) {
-<span class="nc" id="L276">		Log.d(TAG_MAP_CONTROLLER, &quot;Bitmap Route Forwarding.&quot;);</span>
-<span class="nc" id="L277">		this.mapView.updateRouteOverlayImage(b);</span>
-<span class="nc" id="L278">	}</span>
+<span class="nc" id="L280">		Log.d(TAG_MAP_CONTROLLER, &quot;Bitmap Route Forwarding.&quot;);</span>
+<span class="nc" id="L281">		this.mapView.updateRouteOverlayImage(b);</span>
+<span class="nc" id="L282">	}</span>
 
 	/**
 	 * Forward poi list to MapView
-	 *
+	 * 
 	 * @param poiList
 	 *            the required list of pois
 	 */
 	public void onPOIChange(List&lt;DisplayPOI&gt; poiList) {
-<span class="fc" id="L287">		mapView.updateDisplayCoordinate(poiList);</span>
-<span class="fc" id="L288">	}</span>
+<span class="fc" id="L291">		mapView.updateDisplayCoordinate(poiList);</span>
+<span class="fc" id="L292">	}</span>
 
 	/*
 	 * -----------------Forwarding To MapModel-----------------
@@ -294,28 +298,28 @@ public class MapController implements RouteListener, PositionListener,
 	/**
 	 * Forward a shift action to the Map Model. This contains: shifting the map
 	 * shifting the Route drawing shifting the Display Waypoints
-	 *
+	 * 
 	 * @param distanceX
 	 *            the x delta distance
 	 * @param distanceY
 	 *            the y delta distance
 	 */
 	public void onShift(float distanceX, float distanceY) {
-<span class="nc" id="L304">		Log.d(TAG_MAP_CONTROLLER, &quot;onShift(x: &quot; + distanceX + &quot;, y: &quot;</span>
-<span class="nc" id="L305">				+ distanceY + &quot;)&quot;);</span>
+<span class="nc" id="L308">		Log.d(TAG_MAP_CONTROLLER, &quot;onShift(x: &quot; + distanceX + &quot;, y: &quot;</span>
+<span class="nc" id="L309">				+ distanceY + &quot;)&quot;);</span>
 
-<span class="nc bnc" id="L307" title="All 2 branches missed.">		if (this.lockUserPosition) {</span>
-<span class="nc" id="L308">			this.toggleLockUserPosition();</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">		if (this.lockUserPosition) {</span>
+<span class="nc" id="L312">			this.toggleLockUserPosition();</span>
 		}
 
-<span class="nc" id="L311">		coorBox.shiftCenter(distanceX, distanceY);</span>
+<span class="nc" id="L315">		coorBox.shiftCenter(distanceX, distanceY);</span>
 
-<span class="nc" id="L313">		this.updateAll();</span>
-<span class="nc" id="L314">	}</span>
+<span class="nc" id="L317">		this.updateAll();</span>
+<span class="nc" id="L318">	}</span>
 
 	/**
 	 * Zoom by a delta to a DisplayCoordinate
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 * @param dc
@@ -331,35 +335,35 @@ public class MapController implements RouteListener, PositionListener,
 		 * this.coorBox.getLevelOfDetail() + delta &gt;=
 		 * CurrentMapStyleModel.getInstance()
 		 * .getCurrentMapStyle().getMinLevelOfDetail()) {
-		 *
+		 * 
 		 * // set center before zooming! this.coorBox.setCenter(dc);
 		 * this.coorBox.setLevelOfDetail(delta);
-		 *
+		 * 
 		 * this.updateAll(); }
 		 */
-<span class="nc" id="L340">	}</span>
+<span class="nc" id="L344">	}</span>
 
 	/**
 	 * Zoom by a delta.
-	 *
+	 * 
 	 * @param delta
 	 *            to the new ZoomLevel
 	 */
 	public void onZoom(final float delta) {
-<span class="fc" id="L349">		Log.d(TAG_MAP_CONTROLLER, &quot;The given Zoom Delta: &quot; + delta</span>
-<span class="fc" id="L350">				+ &quot; will be forwarding to MapModel&quot;);</span>
+<span class="nc" id="L353">		Log.d(TAG_MAP_CONTROLLER, &quot;The given Zoom Delta: &quot; + delta</span>
+<span class="nc" id="L354">				+ &quot; will be forwarding to MapModel&quot;);</span>
 
-<span class="fc" id="L352">		if (coorBox.getLevelOfDetail() + delta &lt;= CurrentMapStyleModel</span>
-<span class="pc bpc" id="L353" title="1 of 2 branches missed.">				.getInstance().getCurrentMapStyle().getMaxLevelOfDetail()</span>
-<span class="fc" id="L354">				&amp;&amp; coorBox.getLevelOfDetail() + delta &gt;= CurrentMapStyleModel</span>
-<span class="fc" id="L355">						.getInstance().getCurrentMapStyle()</span>
-<span class="pc bpc" id="L356" title="1 of 2 branches missed.">						.getMinLevelOfDetail()) {</span>
+<span class="nc" id="L356">		if (coorBox.getLevelOfDetail() + delta &lt;= CurrentMapStyleModel</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">				.getInstance().getCurrentMapStyle().getMaxLevelOfDetail()</span>
+<span class="nc" id="L358">				&amp;&amp; coorBox.getLevelOfDetail() + delta &gt;= CurrentMapStyleModel</span>
+<span class="nc" id="L359">						.getInstance().getCurrentMapStyle()</span>
+<span class="nc bnc" id="L360" title="All 2 branches missed.">						.getMinLevelOfDetail()) {</span>
 
-<span class="fc" id="L358">			coorBox.setLevelOfDetailByADelta(delta);</span>
-<span class="fc" id="L359">			updateAll();</span>
+<span class="nc" id="L362">			coorBox.setLevelOfDetailByADelta(delta);</span>
+<span class="nc" id="L363">			updateAll();</span>
 		}
 
-<span class="fc" id="L362">	}</span>
+<span class="nc" id="L366">	}</span>
 
 	/*
 	 * -----------------Calls to Map Controller-----------------
@@ -369,25 +373,25 @@ public class MapController implements RouteListener, PositionListener,
 	 * Switch UserLock between true and false.
 	 */
 	public void toggleLockUserPosition() {
-<span class="nc bnc" id="L372" title="All 2 branches missed.">		if (this.lockUserPosition) {</span>
-<span class="nc" id="L373">			this.lockUserPosition = false;</span>
-<span class="nc" id="L374">		} else {</span>
-<span class="nc" id="L375">			this.lockUserPosition = true;</span>
-<span class="nc" id="L376">			this.setCenter(user);</span>
-<span class="nc" id="L377">			this.updateAll();</span>
+<span class="nc bnc" id="L376" title="All 2 branches missed.">		if (this.lockUserPosition) {</span>
+<span class="nc" id="L377">			this.lockUserPosition = false;</span>
+<span class="nc" id="L378">		} else {</span>
+<span class="nc" id="L379">			this.lockUserPosition = true;</span>
+<span class="nc" id="L380">			this.setCenter(user);</span>
+<span class="nc" id="L381">			this.updateAll();</span>
 		}
-<span class="nc" id="L379">		HeadUpController.getInstance().setUserPoisitionLock(</span>
-<span class="nc" id="L380">				this.lockUserPosition);</span>
-<span class="nc" id="L381">		Log.d(TAG_MAP_CONTROLLER, &quot;Lock User Position: &quot;</span>
-<span class="nc" id="L382">				+ this.lockUserPosition);</span>
-<span class="nc" id="L383">	}</span>
+<span class="nc" id="L383">		HeadUpController.getInstance().setUserPoisitionLock(</span>
+<span class="nc" id="L384">				this.lockUserPosition);</span>
+<span class="nc" id="L385">		Log.d(TAG_MAP_CONTROLLER, &quot;Lock User Position: &quot;</span>
+<span class="nc" id="L386">				+ this.lockUserPosition);</span>
+<span class="nc" id="L387">	}</span>
 
 	/**
 	 *
 	 */
 	public void addPoiToView() {
-<span class="nc" id="L389">		this.poiGen.generatePOIView(coorBox, size);</span>
-<span class="nc" id="L390">	}</span>
+<span class="fc" id="L393">		this.poiGen.generatePOIView(coorBox, size);</span>
+<span class="fc" id="L394">	}</span>
 
 	/*
 	 * -----------------Forwarding To Route Controller-----------------
@@ -395,91 +399,92 @@ public class MapController implements RouteListener, PositionListener,
 
 	/**
 	 * Delete the Active Waypoint
-	 *
+	 * 
 	 * @param currentId
 	 */
 	public void onDeletePoint(int currentId) {
-<span class="nc" id="L402">		Log.d(TAG_MAP_CONTROLLER, &quot;Delete active Waypoint&quot;);</span>
-<span class="nc bnc" id="L403" title="All 2 branches missed.">		if (this.currentActiveWaypoint == currentId) {</span>
-<span class="nc" id="L404">			this.lines.clear();</span>
-<span class="nc" id="L405">			this.displayPoints.clear();</span>
-<span class="nc" id="L406">			this.routeController.deleteActiveWaypoint();</span>
-<span class="nc" id="L407">			this.updateAll();</span>
+<span class="nc" id="L406">		Log.d(TAG_MAP_CONTROLLER, &quot;Delete active Waypoint&quot;);</span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">		if (this.currentActiveWaypoint == currentId) {</span>
+<span class="nc" id="L408">			this.lines.clear();</span>
+<span class="nc" id="L409">			this.displayPoints.clear();</span>
+			// this.updateRouteOverlay();
+<span class="nc" id="L411">			this.routeController.deleteActiveWaypoint();</span>
+<span class="nc" id="L412">			this.updateAll();</span>
 
 		}
-<span class="nc" id="L410">	}</span>
+<span class="nc" id="L415">	}</span>
 
 	/**
 	 * Creates a new Point.
-	 *
+	 * 
 	 * @param dc
 	 *            the DisplayCoordinats of the new Point
 	 */
 	public void onCreatePoint(DisplayCoordinate dc) {
 
-<span class="nc" id="L420">		Log.d(TAG_MAP_CONTROLLER, &quot;onCreatePoint(&quot; + dc + &quot;)&quot;);</span>
+<span class="nc" id="L425">		Log.d(TAG_MAP_CONTROLLER, &quot;onCreatePoint(&quot; + dc + &quot;)&quot;);</span>
 
-<span class="nc" id="L422">		Coordinate next = CoordinateUtility</span>
-<span class="nc" id="L423">				.convertDisplayCoordinateToCoordinate(dc, coorBox.getTopLeft(),</span>
-<span class="nc" id="L424">						coorBox.getLevelOfDetail());</span>
+<span class="nc" id="L427">		Coordinate next = CoordinateUtility</span>
+<span class="nc" id="L428">				.convertDisplayCoordinateToCoordinate(dc, coorBox.getTopLeft(),</span>
+<span class="nc" id="L429">						coorBox.getLevelOfDetail());</span>
 
 		try {
-<span class="nc" id="L427">			CoordinateNormalizer.normalizeCoordinate(next,</span>
-<span class="nc" id="L428">					(int) this.getCurrentLevelOfDetail());</span>
-<span class="nc" id="L429">		} catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L430">			Log.e(TAG_MAP_CONTROLLER,</span>
-<span class="nc" id="L431">					&quot;Coordinate konnte nicht normalisiert werden!&quot;);</span>
-<span class="nc" id="L432">		} catch (CoordinateNormalizerException e) {</span>
+<span class="nc" id="L432">			CoordinateNormalizer.normalizeCoordinate(next,</span>
+<span class="nc" id="L433">					(int) this.getCurrentLevelOfDetail());</span>
+<span class="nc" id="L434">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L435">			Log.e(TAG_MAP_CONTROLLER,</span>
+<span class="nc" id="L436">					&quot;Coordinate konnte nicht normalisiert werden!&quot;);</span>
+<span class="nc" id="L437">		} catch (CoordinateNormalizerException e) {</span>
 			// TODO Auto-generated catch block
-<span class="nc" id="L434">			e.printStackTrace();</span>
-<span class="nc" id="L435">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L439">			e.printStackTrace();</span>
+<span class="nc" id="L440">		} catch (InterruptedException e) {</span>
 			// TODO Auto-generated catch block
-<span class="nc" id="L437">			e.printStackTrace();</span>
+<span class="nc" id="L442">			e.printStackTrace();</span>
 		}
 
-<span class="nc" id="L440">		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next</span>
-<span class="nc" id="L441">				.getLongitude(), &quot;PLACEHOLDER&quot;));</span>
-<span class="nc" id="L442">	}</span>
+<span class="nc" id="L445">		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next</span>
+<span class="nc" id="L446">				.getLongitude(), &quot;PLACEHOLDER&quot;));</span>
+<span class="nc" id="L447">	}</span>
 
 	/**
-	 *
+	 * 
 	 * @param x
 	 * @param y
 	 */
 	public void onMovePoint(float x, float y, int id) {
 
-<span class="nc" id="L451">		double xDelta = CoordinateUtility.convertPixelsToDegrees(x,</span>
-<span class="nc" id="L452">				getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_X);</span>
-<span class="nc" id="L453">		double yDelta = CoordinateUtility.convertPixelsToDegrees(y,</span>
-<span class="nc" id="L454">				getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_Y);</span>
+<span class="nc" id="L456">		double xDelta = CoordinateUtility.convertPixelsToDegrees(x,</span>
+<span class="nc" id="L457">				getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_X);</span>
+<span class="nc" id="L458">		double yDelta = CoordinateUtility.convertPixelsToDegrees(y,</span>
+<span class="nc" id="L459">				getCurrentLevelOfDetail(), CoordinateUtility.DIRECTION_Y);</span>
 
-<span class="nc" id="L456">		currentWaypoint = this.getWaypointById(id);</span>
-<span class="nc" id="L457">		currentWaypoint.setLatitude(currentWaypoint.getLatitude() - yDelta);</span>
-<span class="nc" id="L458">		currentWaypoint.setLongitude(currentWaypoint.getLongitude() + xDelta);</span>
+<span class="nc" id="L461">		currentWaypoint = this.getWaypointById(id);</span>
+<span class="nc" id="L462">		currentWaypoint.setLatitude(currentWaypoint.getLatitude() - yDelta);</span>
+<span class="nc" id="L463">		currentWaypoint.setLongitude(currentWaypoint.getLongitude() + xDelta);</span>
 
-<span class="nc" id="L460">	}</span>
+<span class="nc" id="L465">	}</span>
 
 	private Coordinate currentWaypoint;
 
 	public void pushMovedWaypoint() {
-<span class="nc" id="L465">		this.routeController.moveActiveWaypoint(currentWaypoint);</span>
-<span class="nc" id="L466">	}</span>
+<span class="nc" id="L470">		this.routeController.moveActiveWaypoint(currentWaypoint);</span>
+<span class="nc" id="L471">	}</span>
 
 	/**
 	 * returns a Waypoint by his id
-	 *
+	 * 
 	 * @param id
 	 *            of the Waypoint
 	 * @return null if no Waypoint is available
 	 */
 	private Coordinate getWaypointById(int id) {
 
-<span class="nc bnc" id="L477" title="All 2 branches missed.">		for (Waypoint value : currentRoute.getWaypoints()) {</span>
-<span class="nc bnc" id="L478" title="All 2 branches missed.">			if (value.getId() == id) {</span>
-<span class="nc" id="L479">				return value;</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">		for (Waypoint value : currentRoute.getWaypoints()) {</span>
+<span class="nc bnc" id="L483" title="All 2 branches missed.">			if (value.getId() == id) {</span>
+<span class="nc" id="L484">				return value;</span>
 			}
 		}
-<span class="nc" id="L482">		return null;</span>
+<span class="nc" id="L487">		return null;</span>
 	}
 
 	/*
@@ -493,75 +498,87 @@ public class MapController implements RouteListener, PositionListener,
 	 */
 	private void updateRouteOverlay() {
 
-<span class="fc" id="L496">		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(</span>
-<span class="fc" id="L497">				currentRoute, coorBox.getCenter(), size,</span>
-<span class="fc" id="L498">				this.coorBox.getLevelOfDetail());</span>
+<span class="fc" id="L501">		this.lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(</span>
+<span class="fc" id="L502">				currentRoute, coorBox.getCenter(), size,</span>
+<span class="fc" id="L503">				this.coorBox.getLevelOfDetail());</span>
 
-<span class="fc" id="L500">		this.displayPoints = CoordinateUtility</span>
-<span class="fc" id="L501">				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,</span>
-<span class="fc" id="L502">						coorBox.getCenter(), size,</span>
-<span class="fc" id="L503">						this.coorBox.getLevelOfDetail());</span>
+<span class="fc" id="L505">		Log.d(TAG_MAP_CONTROLLER, &quot;update Route Wegpunkte Punkte: &quot;</span>
+<span class="fc" id="L506">				+ currentRoute.getWaypoints().size());</span>
+<span class="fc" id="L507">		Log.d(TAG_MAP_CONTROLLER, &quot;update Route Linen Punkte: &quot; + lines.size());</span>
 
-<span class="fc" id="L505">		mapView.updateDisplayWaypoints(displayPoints);</span>
+<span class="fc" id="L509">		this.displayPoints = CoordinateUtility</span>
+<span class="fc" id="L510">				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,</span>
+<span class="fc" id="L511">						coorBox.getCenter(), size,</span>
+<span class="fc" id="L512">						this.coorBox.getLevelOfDetail());</span>
 
-<span class="pc bpc" id="L507" title="1 of 2 branches missed.">		if (this.currentRoute.getActiveWaypoint() == null) {</span>
-<span class="fc" id="L508">			return;</span>
+<span class="fc" id="L514">		Log.d(TAG_MAP_CONTROLLER, &quot;update Route Wegpunkte Punkte: &quot;</span>
+<span class="fc" id="L515">				+ displayPoints.size());</span>
+
+<span class="fc" id="L517">		mapView.updateDisplayWaypoints(displayPoints);</span>
+
+<span class="pc bpc" id="L519" title="1 of 2 branches missed.">		if (this.currentRoute.getActiveWaypoint() != null) {</span>
+<span class="nc" id="L520">			mapView.setActiveWaypoint(currentRoute.getActiveWaypoint().getId());</span>
 		}
 
-<span class="nc" id="L511">		mapView.setActiveWaypoint(currentRoute.getActiveWaypoint().getId());</span>
-
-<span class="nc bnc" id="L513" title="All 2 branches missed.">		if (routeGen.isAlive()) {</span>
-<span class="nc" id="L514">			routeGen.interrupt();</span>
+<span class="pc bpc" id="L523" title="1 of 2 branches missed.">		if (routeGen.isAlive()) {</span>
+<span class="nc" id="L524">			routeGen.interrupt();</span>
 		}
-<span class="nc" id="L516">		Thread routeGen = new Thread(new RouteGen(lines, route));</span>
-<span class="nc" id="L517">		routeGen.start();</span>
+<span class="fc" id="L526">		Thread routeGen = new Thread(new RouteGen(lines, route));</span>
+<span class="fc" id="L527">		routeGen.start();</span>
 
-<span class="nc" id="L519">	}</span>
-
+<span class="fc" id="L529">	}</span>
+	
 	public void onRouteChange(RouteInfo currentRoute) {
-<span class="nc" id="L522">		Log.d(TAG_MAP_CONTROLLER, &quot;Route Change! &quot;</span>
-<span class="nc" id="L523">				+ currentRoute.getWaypoints().size());</span>
-<span class="nc bnc" id="L524" title="All 2 branches missed.">		if (currentRoute != null) {</span>
-<span class="nc" id="L525">			this.currentRoute = currentRoute;</span>
-<span class="nc" id="L526">			this.currentActiveWaypoint = currentRoute.getActiveWaypoint()</span>
-<span class="nc" id="L527">					.getId();</span>
+<span class="fc" id="L532">		Log.d(TAG_MAP_CONTROLLER, &quot;Route Change! &quot;</span>
+<span class="fc" id="L533">				+ currentRoute.getWaypoints().size());</span>
+<span class="pc" id="L534">		synchronized (this.currentRoute) {</span>
+<span class="pc bpc" id="L535" title="1 of 2 branches missed.">			if (currentRoute != null) {</span>
+<span class="fc" id="L536">				this.currentRoute = currentRoute;</span>
+<span class="pc bpc" id="L537" title="1 of 2 branches missed.">				if (this.currentRoute != null</span>
+<span class="pc bpc" id="L538" title="1 of 2 branches missed.">						&amp;&amp; this.currentRoute.getActiveWaypoint() != null) {</span>
+<span class="nc" id="L539">					this.currentActiveWaypoint = currentRoute</span>
+<span class="nc" id="L540">							.getActiveWaypoint().getId();</span>
+<span class="nc" id="L541">				} else {</span>
+<span class="fc" id="L542">					this.currentActiveWaypoint = -1;</span>
+				}
+			}
 		}
-<span class="nc" id="L529">		updateRouteOverlay();</span>
-<span class="nc" id="L530">	}</span>
+<span class="fc" id="L546">		updateRouteOverlay();</span>
+<span class="fc" id="L547">	}</span>
 
 	private Coordinate user;
 
 	public void onPositionChange(Location androidLocation) {
-<span class="nc" id="L535">		Log.d(TAG_MAP_CONTROLLER, &quot;Position Change!&quot;);</span>
+<span class="nc" id="L552">		Log.d(TAG_MAP_CONTROLLER, &quot;Position Change!&quot;);</span>
 
-<span class="nc bnc" id="L537" title="All 2 branches missed.">		if (lockUserPosition) {</span>
-<span class="nc" id="L538">			Coordinate center = new Coordinate(androidLocation.getLatitude(),</span>
-<span class="nc" id="L539">					androidLocation.getLongitude());</span>
-<span class="nc" id="L540">			this.setCenter(center);</span>
+<span class="nc bnc" id="L554" title="All 2 branches missed.">		if (lockUserPosition) {</span>
+<span class="nc" id="L555">			Coordinate center = new Coordinate(androidLocation.getLatitude(),</span>
+<span class="nc" id="L556">					androidLocation.getLongitude());</span>
+<span class="nc" id="L557">			this.setCenter(center);</span>
 		}
 
-<span class="nc" id="L543">		user = new Coordinate(androidLocation.getLatitude(),</span>
-<span class="nc" id="L544">				androidLocation.getLongitude());</span>
+<span class="nc" id="L560">		user = new Coordinate(androidLocation.getLatitude(),</span>
+<span class="nc" id="L561">				androidLocation.getLongitude());</span>
 
-<span class="nc" id="L546">		this.updateAll();</span>
-<span class="nc" id="L547">	}</span>
+<span class="nc" id="L563">		this.updateAll();</span>
+<span class="nc" id="L564">	}</span>
 
 	/**
 	 *
 	 */
 	public void updateAll() {
-<span class="fc" id="L553">		this.updateUserPosition();</span>
-<span class="fc" id="L554">		this.updateRouteOverlay();</span>
-<span class="fc" id="L555">		this.updatePOIView();</span>
-<span class="fc" id="L556">		this.map.generateMap(coorBox);</span>
-<span class="fc" id="L557">	}</span>
+<span class="fc" id="L570">		this.updateUserPosition();</span>
+<span class="fc" id="L571">		this.updateRouteOverlay();</span>
+<span class="fc" id="L572">		this.updatePOIView();</span>
+<span class="fc" id="L573">		this.map.generateMap(coorBox);</span>
+<span class="fc" id="L574">	}</span>
 
 	/**
 	 *
 	 */
 	public void updatePOIView() {
-<span class="fc" id="L563">		this.poiGen.generatePOIView(coorBox, size);</span>
-<span class="fc" id="L564">	}</span>
+<span class="fc" id="L580">		this.poiGen.generatePOIView(coorBox, size);</span>
+<span class="fc" id="L581">	}</span>
 
 	Thread userPos;
 
@@ -569,33 +586,33 @@ public class MapController implements RouteListener, PositionListener,
 	 *
 	 */
 	public void updateUserPosition() {
-<span class="pc bpc" id="L572" title="1 of 2 branches missed.">		if (userPos.isAlive()) {</span>
-<span class="nc" id="L573">			userPos.interrupt();</span>
+<span class="pc bpc" id="L589" title="1 of 2 branches missed.">		if (userPos.isAlive()) {</span>
+<span class="nc" id="L590">			userPos.interrupt();</span>
 		}
-<span class="fc" id="L575">		userPos = new Thread(new UserPos());</span>
-<span class="fc" id="L576">		userPos.start();</span>
-<span class="fc" id="L577">	}</span>
+<span class="fc" id="L592">		userPos = new Thread(new UserPos());</span>
+<span class="fc" id="L593">		userPos.start();</span>
+<span class="fc" id="L594">	}</span>
 
 	/**
 	 * This class sets the USer Arrwow
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class UserPos implements Runnable {
 
 		/**
 		 *
 		 */
-<span class="fc" id="L590">		public UserPos() {</span>
-<span class="fc" id="L591">		}</span>
+<span class="fc" id="L607">		public UserPos() {</span>
+<span class="fc" id="L608">		}</span>
 
 		public void run() {
 			/*
 			 * double lon = -coorBox.getTopLeft().getLongitude() +
 			 * user.getLongitude(); double lat = -user.getLatitude() +
 			 * coorBox.getTopLeft().getLatitude();
-			 *
+			 * 
 			 * DisplayCoordinate pos = new DisplayCoordinate(
 			 * CoordinateUtility.convertDegreesToPixels(lon,
 			 * coorBox.getLevelOfDetail(),
@@ -605,64 +622,79 @@ public class MapController implements RouteListener, PositionListener,
 			 * CoordinateUtility.DIRECTION_LATITUDE));
 			 */
 
-<span class="fc" id="L608">			double lon = -coorBox.getCenter().getLongitude()</span>
-<span class="fc" id="L609">					+ user.getLongitude();</span>
-<span class="fc" id="L610">			double lat = -user.getLatitude()</span>
-<span class="fc" id="L611">					+ coorBox.getCenter().getLatitude();</span>
+<span class="fc" id="L625">			double lon = -coorBox.getCenter().getLongitude()</span>
+<span class="fc" id="L626">					+ user.getLongitude();</span>
+<span class="fc" id="L627">			double lat = -user.getLatitude()</span>
+<span class="fc" id="L628">					+ coorBox.getCenter().getLatitude();</span>
 
-<span class="fc" id="L613">			float x = CoordinateUtility.convertDegreesToPixels(lon,</span>
-<span class="fc" id="L614">					coorBox.getLevelOfDetail(),</span>
-<span class="fc" id="L615">					CoordinateUtility.DIRECTION_LONGITUDE);</span>
+<span class="fc" id="L630">			float x = CoordinateUtility.convertDegreesToPixels(lon,</span>
+<span class="fc" id="L631">					coorBox.getLevelOfDetail(),</span>
+<span class="fc" id="L632">					CoordinateUtility.DIRECTION_LONGITUDE);</span>
 
-<span class="fc" id="L617">			float y = CoordinateUtility.convertDegreesToPixels(lat,</span>
-<span class="fc" id="L618">					coorBox.getLevelOfDetail(),</span>
-<span class="fc" id="L619">					CoordinateUtility.DIRECTION_LATITUDE);</span>
+<span class="fc" id="L634">			float y = CoordinateUtility.convertDegreesToPixels(lat,</span>
+<span class="fc" id="L635">					coorBox.getLevelOfDetail(),</span>
+<span class="fc" id="L636">					CoordinateUtility.DIRECTION_LATITUDE);</span>
 
-<span class="fc" id="L621">			Log.d(&quot;UserPos&quot;, &quot; x: &quot; + x + &quot; y: &quot; + y);</span>
+<span class="fc" id="L638">			Log.d(&quot;UserPos&quot;, &quot; x: &quot; + x + &quot; y: &quot; + y);</span>
 
-<span class="fc" id="L623">			x = coorBox.getDisplaySize().x/2 + x;</span>
-<span class="fc" id="L624">			y = coorBox.getDisplaySize().y/2 + y;</span>
+<span class="fc" id="L640">			x = coorBox.getDisplaySize().x / 2 + x;</span>
+<span class="fc" id="L641">			y = coorBox.getDisplaySize().y / 2 + y;</span>
 
-<span class="fc" id="L626">			Log.d(&quot;UserPos&quot;, &quot; x: &quot; + x + &quot; y: &quot; + y);</span>
+<span class="fc" id="L643">			Log.d(&quot;UserPos&quot;, &quot; x: &quot; + x + &quot; y: &quot; + y);</span>
 
-<span class="fc" id="L628">			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(),</span>
-<span class="fc" id="L629">					&quot;User Posi ist:&quot; + user.toString());</span>
+<span class="fc" id="L645">			Log.d(TAG_MAP_CONTROLLER + UserPos.class.getSimpleName(),</span>
+<span class="fc" id="L646">					&quot;User Posi ist:&quot; + user.toString());</span>
 			try {
-<span class="fc" id="L631">				mapView.setUserPositionOverlayImage(x, y);</span>
-<span class="pc" id="L632">			} catch (NullPointerException e) {</span>
-<span class="nc" id="L633">				Log.d(TAG_MAP_CONTROLLER,</span>
-<span class="nc" id="L634">						&quot;mapView wurde noch nicht initialisiert&quot;);</span>
+<span class="fc" id="L648">				mapView.setUserPositionOverlayImage(x, y);</span>
+<span class="fc" id="L649">			} catch (NullPointerException e) {</span>
+<span class="fc" id="L650">				Log.d(TAG_MAP_CONTROLLER,</span>
+<span class="fc" id="L651">						&quot;mapView wurde noch nicht initialisiert&quot;);</span>
 			}
-<span class="fc" id="L636">		}</span>
+<span class="fc" id="L653">		}</span>
 
 	}
 
 	/**
 	 * forwards a set active action to route controller
-	 *
+	 * 
 	 * @param id
 	 *            of the waypoint
-	 *
+	 * 
 	 */
 	public void setActive(int id) {
-<span class="nc" id="L648">		this.routeController.setActiveWaypoint(id);</span>
-<span class="nc" id="L649">	}</span>
+<span class="nc" id="L665">		this.routeController.setActiveWaypoint(id);</span>
+<span class="nc" id="L666">	}</span>
 
 	public void onCompassChange(float direction) {
-<span class="nc" id="L652">		this.mapView.setUserPositionOverlayImage(direction);</span>
-<span class="nc" id="L653">	}</span>
+<span class="nc" id="L669">		this.mapView.setUserPositionOverlayImage(direction);</span>
+<span class="nc" id="L670">	}</span>
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public POI getPOIById(int id) {
-<span class="nc" id="L660">		return poiGen.getPOIInformationById(id);</span>
+<span class="nc" id="L677">		return poiGen.getPOIInformationById(id);</span>
 	}
 
 	public POI getPOI() {
-<span class="nc" id="L664">		return mapView.getCurrentPOI();</span>
+<span class="nc" id="L681">		return mapView.getCurrentPOI();</span>
 	}
 
+	public void roundtripAlert() {
+<span class="nc" id="L685">		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mapView</span>
+			);
+<span class="nc" id="L687">	alertDialog.setTitle(&quot;Unerwarteter Fehler&quot;);</span>
+<span class="nc" id="L688">	alertDialog.setMessage(&quot;Es wurde leider kein Roundtrip gefunden.&quot;);</span>
+<span class="nc" id="L689">	alertDialog.setPositiveButton(&quot;OK&quot;,</span>
+<span class="nc" id="L690">			new DialogInterface.OnClickListener() {</span>
+				public void onClick(DialogInterface dialog,
+						int which) {
+					
+<span class="nc" id="L694">				}</span>
+			});
+<span class="nc" id="L696">	alertDialog.show();</span>
+<span class="nc" id="L697">	}</span>
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

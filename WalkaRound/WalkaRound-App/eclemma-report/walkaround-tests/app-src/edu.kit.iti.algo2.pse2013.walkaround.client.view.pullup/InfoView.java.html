@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>InfoView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">InfoView.java</span></div><h1>InfoView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>InfoView.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup</a> &gt; <span class="el_source">InfoView.java</span></div><h1>InfoView.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
@@ -28,131 +28,139 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 	private TextView title;
 	private ImageView iv;
 	private TextView category;
-	private TextView text;
+	private TextView textView;
 	private ImageView save;
+	private ImageView play;
+	private boolean speak;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-<span class="nc" id="L36">		super.onCreate(savedInstanceState);</span>
-<span class="nc" id="L37">		Log.d(TAG_PULLUP_CONTENT, &quot;Create InfoView&quot;);</span>
+<span class="nc" id="L38">		super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L39">		Log.d(TAG_PULLUP_CONTENT, &quot;Create InfoView&quot;);</span>
 
-<span class="nc" id="L39">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L41">		speak = false;</span>
 
-<span class="nc" id="L41">		this.title = (TextView) this.getActivity().findViewById(</span>
-<span class="nc" id="L42">				R.id.poiinfoview_title);</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">		Log.d(&quot;wtf&quot;, &quot;title: &quot; + (this.title == null));</span>
-<span class="nc" id="L44">		this.iv = (ImageView) this.getActivity().findViewById(</span>
-<span class="nc" id="L45">				R.id.poiinfoview_image);</span>
-<span class="nc" id="L46">		this.category = (TextView) this.getActivity().findViewById(</span>
-<span class="nc" id="L47">				R.id.poiinfoview_category);</span>
-<span class="nc" id="L48">		this.text = (TextView) this.getActivity().findViewById(</span>
-<span class="nc" id="L49">				R.id.poiinfoview_text);</span>
-<span class="nc" id="L50">		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));</span>
+<span class="nc" id="L43">		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);</span>
 
-<span class="nc" id="L52">		iv.setVisibility(View.GONE);</span>
+<span class="nc" id="L45">		this.title = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L46">				R.id.poiinfoview_title);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		Log.d(&quot;wtf&quot;, &quot;title: &quot; + (this.title == null));</span>
+<span class="nc" id="L48">		this.iv = (ImageView) this.getActivity().findViewById(</span>
+<span class="nc" id="L49">				R.id.poiinfoview_image);</span>
+<span class="nc" id="L50">		this.category = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L51">				R.id.poiinfoview_category);</span>
+<span class="nc" id="L52">		this.textView = (TextView) this.getActivity().findViewById(</span>
+<span class="nc" id="L53">				R.id.poiinfoview_text);</span>
+<span class="nc" id="L54">		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));</span>
+<span class="nc" id="L55">		play = (ImageView) (this.getActivity().findViewById(R.id.play));</span>
 
-<span class="nc" id="L54">		final POI poi = MapController.getInstance().getPOI();</span>
-<span class="nc" id="L55">		save.setOnTouchListener(new saveListener(poi, save));</span>
+<span class="nc" id="L57">		iv.setVisibility(View.GONE);</span>
 
-<span class="nc bnc" id="L57" title="All 2 branches missed.">		if (poi != null) {</span>
-<span class="nc bnc" id="L58" title="All 4 branches missed.">			Log.d(&quot;wtf&quot;, &quot;&quot; + (poi.getName() == null) + (title == null));</span>
+<span class="nc" id="L59">		final POI poi = MapController.getInstance().getPOI();</span>
+<span class="nc" id="L60">		save.setOnTouchListener(new saveListener(poi, save));</span>
 
-<span class="nc bnc" id="L60" title="All 2 branches missed.">			if (poi.getName() != null) {</span>
-<span class="nc" id="L61">				title.setText(poi.getName());</span>
-<span class="nc" id="L62">				title.setVisibility(View.VISIBLE);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (poi != null) {</span>
+<span class="nc bnc" id="L63" title="All 4 branches missed.">			Log.d(&quot;wtf&quot;, &quot;&quot; + (poi.getName() == null) + (title == null));</span>
+
+<span class="nc bnc" id="L65" title="All 2 branches missed.">			if (poi.getName() != null) {</span>
+<span class="nc" id="L66">				title.setText(poi.getName());</span>
+<span class="nc" id="L67">				title.setVisibility(View.VISIBLE);</span>
 			}
 
-<span class="nc bnc" id="L65" title="All 2 branches missed.">			if (poi.getURL() != null) {</span>
-<span class="nc" id="L66">				getActivity().runOnUiThread(new POIImageFetcher(poi.getURL(), this));</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">			if (poi.getURL() != null) {</span>
+<span class="nc" id="L71">				getActivity().runOnUiThread(new POIImageFetcher(poi.getURL(), this));</span>
 			}
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">			if (poi.getPOICategories().length != 0) {</span>
-<span class="nc" id="L70">				category.setText(&quot;Category: &quot;);</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">				for (int i = 0; i &lt; poi.getPOICategories().length; i++) {</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">					if (i == 0) {</span>
-<span class="nc" id="L73">						category.setText(category.getText()</span>
-<span class="nc" id="L74">								+ getCategoryName(poi.getPOICategories()[i]));</span>
-<span class="nc" id="L75">					} else {</span>
-<span class="nc" id="L76">						category.setText(category.getText() + &quot;, &quot;</span>
-<span class="nc" id="L77">								+ getCategoryName(poi.getPOICategories()[i]));</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">			if (poi.getPOICategories().length != 0) {</span>
+<span class="nc" id="L75">				category.setText(&quot;Category: &quot;);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">				for (int i = 0; i &lt; poi.getPOICategories().length; i++) {</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">					if (i == 0) {</span>
+<span class="nc" id="L78">						category.setText(category.getText()</span>
+<span class="nc" id="L79">								+ getCategoryName(poi.getPOICategories()[i]));</span>
+<span class="nc" id="L80">					} else {</span>
+<span class="nc" id="L81">						category.setText(category.getText() + &quot;, &quot;</span>
+<span class="nc" id="L82">								+ getCategoryName(poi.getPOICategories()[i]));</span>
 					}
 				}
-<span class="nc" id="L80">				category.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L85">				category.setVisibility(View.VISIBLE);</span>
 			}
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">			if (poi.getTextInfo() != null) {</span>
-<span class="nc" id="L84">				text.setText(Html.fromHtml(poi.getTextInfo()));</span>
-<span class="nc" id="L85">				text.setMovementMethod(LinkMovementMethod.getInstance());</span>
-<span class="nc" id="L86">				text.setVisibility(View.VISIBLE);</span>
-<span class="nc" id="L87">				TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">			if (poi.getTextInfo() != null) {</span>
+<span class="nc" id="L89">				String text = Html.fromHtml(poi.getTextInfo()).toString();</span>
+<span class="nc" id="L90">				play.setOnTouchListener(new playListener(text));</span>
+<span class="nc" id="L91">				textView.setText(text);</span>
+<span class="nc" id="L92">				textView.setMovementMethod(LinkMovementMethod.getInstance());</span>
+<span class="nc" id="L93">				textView.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L94">				toogleSpeaking();</span>
+<span class="nc" id="L95">				TextToSpeechUtility.getInstance().speak(text);</span>
 			}
 		}
 
-<span class="nc" id="L91">	}</span>
+<span class="nc" id="L99">	}</span>
 	public void setImage(Bitmap b) {
-<span class="nc" id="L93">		iv.setVisibility(View.VISIBLE);</span>
-<span class="nc" id="L94">		iv.setImageBitmap(b);</span>
-<span class="nc" id="L95">	}</span>
+<span class="nc" id="L101">		iv.setVisibility(View.VISIBLE);</span>
+<span class="nc" id="L102">		iv.setImageBitmap(b);</span>
+<span class="nc" id="L103">	}</span>
 
 	private String getCategoryName(int id) {
 		TextView tv;
-<span class="nc bnc" id="L99" title="All 14 branches missed.">		switch (id) {</span>
+<span class="nc bnc" id="L107" title="All 14 branches missed.">		switch (id) {</span>
 		case 1:
-<span class="nc" id="L101">			tv = (TextView) getActivity().findViewById(R.id.category_1);</span>
-<span class="nc" id="L102">			return tv.getText().toString();</span>
+<span class="nc" id="L109">			tv = (TextView) getActivity().findViewById(R.id.category_1);</span>
+<span class="nc" id="L110">			return tv.getText().toString();</span>
 		case 2:
-<span class="nc" id="L104">			tv = (TextView) getActivity().findViewById(R.id.category_2);</span>
-<span class="nc" id="L105">			return tv.getText().toString();</span>
+<span class="nc" id="L112">			tv = (TextView) getActivity().findViewById(R.id.category_2);</span>
+<span class="nc" id="L113">			return tv.getText().toString();</span>
 		case 3:
-<span class="nc" id="L107">			tv = (TextView) getActivity().findViewById(R.id.category_3);</span>
-<span class="nc" id="L108">			return tv.getText().toString();</span>
+<span class="nc" id="L115">			tv = (TextView) getActivity().findViewById(R.id.category_3);</span>
+<span class="nc" id="L116">			return tv.getText().toString();</span>
 		case 4:
-<span class="nc" id="L110">			tv = (TextView) getActivity().findViewById(R.id.category_4);</span>
-<span class="nc" id="L111">			return tv.getText().toString();</span>
+<span class="nc" id="L118">			tv = (TextView) getActivity().findViewById(R.id.category_4);</span>
+<span class="nc" id="L119">			return tv.getText().toString();</span>
 		case 5:
-<span class="nc" id="L113">			tv = (TextView) getActivity().findViewById(R.id.category_5);</span>
-<span class="nc" id="L114">			return tv.getText().toString();</span>
+<span class="nc" id="L121">			tv = (TextView) getActivity().findViewById(R.id.category_5);</span>
+<span class="nc" id="L122">			return tv.getText().toString();</span>
 		case 6:
-<span class="nc" id="L116">			tv = (TextView) getActivity().findViewById(R.id.category_6);</span>
-<span class="nc" id="L117">			return tv.getText().toString();</span>
+<span class="nc" id="L124">			tv = (TextView) getActivity().findViewById(R.id.category_6);</span>
+<span class="nc" id="L125">			return tv.getText().toString();</span>
 		case 7:
-<span class="nc" id="L119">			tv = (TextView) getActivity().findViewById(R.id.category_7);</span>
-<span class="nc" id="L120">			return tv.getText().toString();</span>
+<span class="nc" id="L127">			tv = (TextView) getActivity().findViewById(R.id.category_7);</span>
+<span class="nc" id="L128">			return tv.getText().toString();</span>
 		case 8:
-<span class="nc" id="L122">			tv = (TextView) getActivity().findViewById(R.id.category_8);</span>
-<span class="nc" id="L123">			return tv.getText().toString();</span>
+<span class="nc" id="L130">			tv = (TextView) getActivity().findViewById(R.id.category_8);</span>
+<span class="nc" id="L131">			return tv.getText().toString();</span>
 		case 9:
-<span class="nc" id="L125">			tv = (TextView) getActivity().findViewById(R.id.category_9);</span>
-<span class="nc" id="L126">			return tv.getText().toString();</span>
+<span class="nc" id="L133">			tv = (TextView) getActivity().findViewById(R.id.category_9);</span>
+<span class="nc" id="L134">			return tv.getText().toString();</span>
 		case 10:
-<span class="nc" id="L128">			tv = (TextView) getActivity().findViewById(R.id.category_10);</span>
-<span class="nc" id="L129">			return tv.getText().toString();</span>
+<span class="nc" id="L136">			tv = (TextView) getActivity().findViewById(R.id.category_10);</span>
+<span class="nc" id="L137">			return tv.getText().toString();</span>
 		case 11:
-<span class="nc" id="L131">			tv = (TextView) getActivity().findViewById(R.id.category_11);</span>
-<span class="nc" id="L132">			return tv.getText().toString();</span>
+<span class="nc" id="L139">			tv = (TextView) getActivity().findViewById(R.id.category_11);</span>
+<span class="nc" id="L140">			return tv.getText().toString();</span>
 		case 12:
-<span class="nc" id="L134">			tv = (TextView) getActivity().findViewById(R.id.category_12);</span>
-<span class="nc" id="L135">			return tv.getText().toString();</span>
+<span class="nc" id="L142">			tv = (TextView) getActivity().findViewById(R.id.category_12);</span>
+<span class="nc" id="L143">			return tv.getText().toString();</span>
 		case 13:
-<span class="nc" id="L137">			tv = (TextView) getActivity().findViewById(R.id.category_13);</span>
-<span class="nc" id="L138">			return tv.getText().toString();</span>
+<span class="nc" id="L145">			tv = (TextView) getActivity().findViewById(R.id.category_13);</span>
+<span class="nc" id="L146">			return tv.getText().toString();</span>
 		default:
-<span class="nc" id="L140">			return &quot;&quot;;</span>
+<span class="nc" id="L148">			return &quot;&quot;;</span>
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-<span class="nc" id="L146">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy InfoView&quot;);</span>
-<span class="nc" id="L147">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
-<span class="nc" id="L148">		super.onDestroy();</span>
-<span class="nc" id="L149">	}</span>
+<span class="nc" id="L154">		Log.d(TAG_PULLUP_CONTENT, &quot;Destroy InfoView&quot;);</span>
+<span class="nc" id="L155">		this.getActivity().findViewById(switcher).setVisibility(View.GONE);</span>
+<span class="nc" id="L156">		super.onDestroy();</span>
+<span class="nc" id="L157">	}</span>
 
 	public boolean equals(Fragment f) {
-<span class="nc bnc" id="L152" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_INFO)) {</span>
-<span class="nc" id="L153">			return true;</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">		if (f.toString().equals(PullUpView.CONTENT_INFO)) {</span>
+<span class="nc" id="L161">			return true;</span>
 		}
-<span class="nc" id="L155">		return false;</span>
+<span class="nc" id="L163">		return false;</span>
 	}
 
 	private class saveListener implements OnTouchListener {
@@ -160,22 +168,57 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 		private POI poi;
 		private View view;
 
-<span class="nc" id="L163">		public saveListener(POI poi, View view) {</span>
-<span class="nc" id="L164">			this.poi = poi;</span>
-<span class="nc" id="L165">			this.view = view;</span>
-<span class="nc" id="L166">		}</span>
+<span class="nc" id="L171">		public saveListener(POI poi, View view) {</span>
+<span class="nc" id="L172">			this.poi = poi;</span>
+<span class="nc" id="L173">			this.view = view;</span>
+<span class="nc" id="L174">		}</span>
 
 		public boolean onTouch(View v, MotionEvent event) {
-<span class="nc bnc" id="L169" title="All 4 branches missed.">			if (v.equals(save) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
-<span class="nc" id="L170">				Log.d(TAG_PULLUP_CONTENT, &quot;save wurde gedrückt&quot;);</span>
-<span class="nc" id="L171">				RouteController.getInstance().addLocationToFavorites(</span>
-<span class="nc" id="L172">						new Location(poi.getLatitude(), poi.getLongitude(),</span>
-<span class="nc" id="L173">								poi.getName()), poi.getName());</span>
-<span class="nc" id="L174">				MapController.getInstance().getPullUpView()</span>
-<span class="nc" id="L175">				.changeView(PullUpView.CONTENT_FAVORITE);</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">			if (v.equals(save) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc" id="L178">				Log.d(TAG_PULLUP_CONTENT, &quot;save wurde gedrückt&quot;);</span>
+<span class="nc" id="L179">				RouteController.getInstance().addLocationToFavorites(</span>
+<span class="nc" id="L180">						new Location(poi.getLatitude(), poi.getLongitude(),</span>
+<span class="nc" id="L181">								poi.getName()), poi.getName());</span>
+<span class="nc" id="L182">				MapController.getInstance().getPullUpView()</span>
+<span class="nc" id="L183">				.changeView(PullUpView.CONTENT_FAVORITE);</span>
 			}
-<span class="nc" id="L177">			return false;</span>
+<span class="nc" id="L185">			return false;</span>
+		}
+	}
+
+	private void toogleSpeaking(){
+<span class="nc bnc" id="L190" title="All 2 branches missed.">		if(this.speak){</span>
+<span class="nc" id="L191">			this.speak = false;</span>
+<span class="nc" id="L192">			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.play));	</span>
+			
+<span class="nc" id="L194">			} else {</span>
+<span class="nc" id="L195">			this.speak = true;</span>
+<span class="nc" id="L196">			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.pause));</span>
+			
+			}
+<span class="nc" id="L199">	}</span>
+
+	private class playListener implements OnTouchListener {
+
+		String text;
+
+<span class="nc" id="L205">		public playListener(String text){</span>
+<span class="nc" id="L206">			this.text = text;</span>
+<span class="nc" id="L207">		}</span>
+
+		public boolean onTouch(View v, MotionEvent event) {
+<span class="nc bnc" id="L210" title="All 4 branches missed.">			if (v.equals(play) &amp;&amp; event.getAction() == MotionEvent.ACTION_DOWN) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">				if(speak){</span>
+<span class="nc" id="L212">					Log.d(TAG_PULLUP_CONTENT, &quot;play wurde gedrückt&quot;);</span>
+<span class="nc" id="L213">					toogleSpeaking();</span>
+<span class="nc" id="L214">					TextToSpeechUtility.getInstance().stopSpeaking();</span>
+<span class="nc" id="L215">				} else {</span>
+<span class="nc" id="L216">					toogleSpeaking();</span>
+<span class="nc" id="L217">					TextToSpeechUtility.getInstance().speak(text);</span>
+				}
+			}
+<span class="nc" id="L220">			return false;</span>
 		}
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

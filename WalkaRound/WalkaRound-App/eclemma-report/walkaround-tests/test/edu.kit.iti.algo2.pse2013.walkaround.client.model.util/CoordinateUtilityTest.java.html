@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CoordinateUtilityTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.util</a> &gt; <span class="el_source">CoordinateUtilityTest.java</span></div><h1>CoordinateUtilityTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
+
+import junit.framework.TestCase;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+
+@RunWith(RobolectricTestRunner.class)
+<span class="fc" id="L11">public class CoordinateUtilityTest extends TestCase {</span>
+	private final static double FRACTION_DELTA = 1e-4; // TODO: Can this be lowered any further by improving the conversion-method?
+	private final static double INTEGER_DELTA = 1e-64;
+	/**
+	 * Testet den Umgang der Methode {@link CoordinateUtility#convertPixelsToDegrees(float, float)}
+	 * mit ganzzahligen &quot;level of detail&quot;.
+	 */
+	@Test
+	public void testPixelDegreeConversionIntegerLevelsOfDetail() {
+<span class="fc" id="L20">		assertEquals(360,CoordinateUtility.convertPixelsToDegrees(256,0,CoordinateUtility.DIRECTION_HORIZONTAL),1);</span>
+<span class="fc" id="L21">		assertEquals(180,CoordinateUtility.convertPixelsToDegrees(256,1,CoordinateUtility.DIRECTION_HORIZONTAL),1);</span>
+<span class="fc" id="L22">		assertEquals(90,CoordinateUtility.convertPixelsToDegrees(256,2,CoordinateUtility.DIRECTION_HORIZONTAL),1);</span>
+
+<span class="fc" id="L24">		assertEquals(180,CoordinateUtility.convertPixelsToDegrees(128,0,CoordinateUtility.DIRECTION_HORIZONTAL),1);</span>
+<span class="fc" id="L25">		assertEquals(90,CoordinateUtility.convertPixelsToDegrees(128,1,CoordinateUtility.DIRECTION_HORIZONTAL),1);</span>
+<span class="fc" id="L26">		assertEquals(45,CoordinateUtility.convertPixelsToDegrees(128,2,CoordinateUtility.DIRECTION_HORIZONTAL),1);</span>
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">		for (int i = 0; i &lt;= 18; i++) {</span>
+<span class="fc" id="L29">			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);</span>
+<span class="fc" id="L30">			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);</span>
+		}
+<span class="fc" id="L32">	}</span>
+	/**
+	 * Testet den Umgang der Methode {@link CoordinateUtility#convertDegreesToPixels(float, float)}
+	 * mit ganzzahligen &quot;level of detail&quot;
+	 */
+	@Test
+	public void testDegreePixelConversionIntegerLevelsOfDetail() {
+<span class="fc bfc" id="L39" title="All 2 branches covered.">		for (int i = 0; i &lt;= 18; i++) {</span>
+<span class="fc" id="L40">			assertEquals(256 , CoordinateUtility.convertDegreesToPixels((float) (180 / Math.pow(2, i)), i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);</span>
+<span class="fc" id="L41">			assertEquals(1 , CoordinateUtility.convertDegreesToPixels((float) (180 / (Math.pow(2, i) * 256)), i, CoordinateUtility.DIRECTION_VERTICAL), INTEGER_DELTA);</span>
+		}
+<span class="fc" id="L43">	}</span>
+	/**
+	 * Testet den Umgang der Methode {@link CoordinateUtility#convertPixelsToDegrees(float, float)}
+	 * mit brüchigen &quot;level of detail&quot; (Scherz, natürlich mit Fließkommazahlen als &quot;level of detail&quot;).
+	 */
+	@Test
+	public void testPixelDegreeConversionFractionLevelsOfDetail() {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		for (float i = 0; i &lt;= 18; i+= Math.PI / 3.5) {</span>
+<span class="fc" id="L51">			assertEquals(256 , CoordinateUtility.convertDegreesToPixels((float) (180 / Math.pow(2, i)), i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);</span>
+<span class="fc" id="L52">			assertEquals(1 , CoordinateUtility.convertDegreesToPixels((float) (180 / (Math.pow(2, i) * 256)), i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);</span>
+		}
+<span class="fc" id="L54">	}</span>
+	/**
+	 * Testet den Umgang der Methode {@link CoordinateUtility#convertDegreesToPixels(float, float)}
+	 * mit Fließkommazahlen als &quot;level of detail&quot;.
+	 */
+	@Test
+	public void testDegreePixelConversionFractionLevelsOfDetail() {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		for (float i = 0; i &lt;= 18; i+= Math.PI / 3.5) {</span>
+<span class="fc" id="L62">			assertEquals(180 / Math.pow(2, i) , CoordinateUtility.convertPixelsToDegrees(256, i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);</span>
+<span class="fc" id="L63">			assertEquals(180 / (Math.pow(2, i) * 256) , CoordinateUtility.convertPixelsToDegrees(1, i, CoordinateUtility.DIRECTION_VERTICAL), FRACTION_DELTA);</span>
+		}
+<span class="fc" id="L65">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

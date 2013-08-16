@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TextToSpeechUtilityTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.util</a> &gt; <span class="el_source">TextToSpeechUtilityTest.java</span></div><h1>TextToSpeechUtilityTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
+
+import junit.framework.TestCase;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
+
+
+/**
+ * This class tests the text-to-speech utility.
+ *
+ * @author Thomas Kadow
+ * @version 1.0
+ */
+
+@RunWith(RobolectricTestRunner.class)
+<span class="nc" id="L21">public class TextToSpeechUtilityTest extends TestCase {</span>
+
+	@BeforeClass
+	public void testTextToSpeechInit() {
+<span class="nc" id="L25">		TextToSpeechUtility.initialize(new BootActivity().getApplicationContext(), true);</span>
+<span class="nc" id="L26">	}</span>
+	
+	@Test
+	public void testIsReady(){
+<span class="nc" id="L30">		assertTrue(TextToSpeechUtility.getInstance().isReady());</span>
+<span class="nc" id="L31">	}</span>
+	
+	@Test
+	public void testSpeaking(){
+<span class="nc" id="L35">		assertTrue(TextToSpeechUtility.getInstance().speak(&quot;Test Test Test Test Test Test&quot;));</span>
+<span class="nc" id="L36">	}</span>
+	
+	@Test
+	public void testStopSpeaking(){
+<span class="nc" id="L40">		TextToSpeechUtility.getInstance().speak(&quot;Test Test Test Test Test Test&quot;);</span>
+<span class="nc" id="L41">		assertTrue(TextToSpeechUtility.getInstance().stopSpeaking());</span>
+<span class="nc" id="L42">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>

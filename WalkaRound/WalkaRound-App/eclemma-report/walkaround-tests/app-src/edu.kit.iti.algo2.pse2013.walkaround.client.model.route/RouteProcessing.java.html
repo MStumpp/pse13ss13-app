@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteProcessing.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 02:31:21)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">RouteProcessing.java</span></div><h1>RouteProcessing.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteProcessing.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">RouteProcessing.java</span></div><h1>RouteProcessing.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class RouteProcessing {
 
-<span class="fc" id="L37">	private static int timeout = 2000;</span>
+<span class="fc" id="L37">	private static int timeout = 5000;</span>
 
 	/**
 	 * TAG for android debugging.
@@ -95,51 +95,53 @@ public class RouteProcessing {
 <span class="nc" id="L95">				HttpParams httpParameters = new BasicHttpParams();</span>
 <span class="nc" id="L96">				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);</span>
 <span class="nc" id="L97">				HttpConnectionParams.setSoTimeout(httpParameters, timeout);</span>
-
+				
 <span class="nc" id="L99">				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);</span>
 <span class="nc" id="L100">				HttpPost httpPost = url;</span>
 <span class="nc" id="L101">				httpPost.setHeader(&quot;Accept&quot;, &quot;application/json&quot;);</span>
 <span class="nc" id="L102">				httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+				
 
-<span class="nc" id="L104">				String requestAsJSON = gson.toJson(objectToSend);</span>
+<span class="nc" id="L105">				String requestAsJSON = gson.toJson(objectToSend);</span>
 
-<span class="nc" id="L106">				Log.d(TAG_ROUTE_PROCESSING, &quot;Built JSON: &quot; + requestAsJSON);</span>
+<span class="nc" id="L107">				Log.d(TAG_ROUTE_PROCESSING, &quot;Built JSON: &quot; + requestAsJSON);</span>
 
-<span class="nc" id="L108">				httpPost.setEntity(new StringEntity(requestAsJSON));</span>
+<span class="nc" id="L109">				httpPost.setEntity(new StringEntity(requestAsJSON));</span>
 
-<span class="nc" id="L110">				HttpResponse httpResponse = httpClient.execute(httpPost);</span>
+<span class="nc" id="L111">				HttpResponse httpResponse = httpClient.execute(httpPost);</span>
+				
+				
+<span class="nc" id="L114">				HttpEntity httpEntity = httpResponse.getEntity();</span>
+<span class="nc" id="L115">				is = httpEntity.getContent();</span>
 
-<span class="nc" id="L112">				HttpEntity httpEntity = httpResponse.getEntity();</span>
-<span class="nc" id="L113">				is = httpEntity.getContent();</span>
+<span class="nc" id="L117">				Log.d(TAG_ROUTE_PROCESSING, &quot;Sent JSON: &quot; + requestAsJSON);</span>
 
-<span class="nc" id="L115">				Log.d(TAG_ROUTE_PROCESSING, &quot;Sent JSON: &quot; + requestAsJSON);</span>
-
-<span class="nc" id="L117">				BufferedReader reader = new BufferedReader(</span>
-<span class="nc" id="L118">						new InputStreamReader(is, &quot;iso-8859-1&quot;), 8);</span>
-<span class="nc" id="L119">				StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L119">				BufferedReader reader = new BufferedReader(</span>
+<span class="nc" id="L120">						new InputStreamReader(is, &quot;iso-8859-1&quot;), 8);</span>
+<span class="nc" id="L121">				StringBuilder sb = new StringBuilder();</span>
 				String line;
-<span class="nc bnc" id="L121" title="All 2 branches missed.">				while ((line = reader.readLine()) != null)</span>
-<span class="nc" id="L122">					sb.append(line + &quot;\n&quot;);</span>
-<span class="nc" id="L123">				is.close();</span>
-<span class="nc" id="L124">				json = sb.toString();</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">				while ((line = reader.readLine()) != null)</span>
+<span class="nc" id="L124">					sb.append(line + &quot;\n&quot;);</span>
+<span class="nc" id="L125">				is.close();</span>
+<span class="nc" id="L126">				json = sb.toString();</span>
 
-<span class="nc" id="L126">			} catch (UnsupportedEncodingException e) {</span>
-<span class="nc" id="L127">				exception = new RouteProcessingException(</span>
-<span class="nc" id="L128">						&quot;UnsupportedEncodingException&quot;);</span>
-<span class="nc" id="L129">			} catch (ClientProtocolException e) {</span>
-<span class="nc" id="L130">				exception = new RouteProcessingException(</span>
-<span class="nc" id="L131">						&quot;ClientProtocolException&quot;);</span>
-<span class="nc" id="L132">			} catch (IOException e) {</span>
-<span class="nc" id="L133">				exception = new RouteProcessingException(&quot;IOException&quot;);</span>
+<span class="nc" id="L128">			} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L129">				exception = new RouteProcessingException(</span>
+<span class="nc" id="L130">						&quot;UnsupportedEncodingException&quot;);</span>
+<span class="nc" id="L131">			} catch (ClientProtocolException e) {</span>
+<span class="nc" id="L132">				exception = new RouteProcessingException(</span>
+<span class="nc" id="L133">						&quot;ClientProtocolException&quot;);</span>
+<span class="nc" id="L134">			} catch (IOException e) {</span>
+<span class="nc" id="L135">				exception = new RouteProcessingException(&quot;IOException&quot;);</span>
 			}
-<span class="nc" id="L135">		}</span>
+<span class="nc" id="L137">		}</span>
 
 		public Exception getException() {
-<span class="nc" id="L138">			return exception;</span>
+<span class="nc" id="L140">			return exception;</span>
 		}
 
 		public String getJSONAnswer() {
-<span class="nc" id="L142">			return json;</span>
+<span class="nc" id="L144">			return json;</span>
 		}
 	}
 
@@ -163,54 +165,54 @@ public class RouteProcessing {
 			Coordinate coordinate2) throws RouteProcessingException,
 			InterruptedException {
 
-<span class="nc bnc" id="L166" title="All 4 branches missed.">		if (coordinate1 == null || coordinate2 == null)</span>
-<span class="nc" id="L167">			throw new IllegalArgumentException(</span>
-<span class="nc" id="L168">					&quot;coordinate 1 and coordinate 2 must be provided&quot;);</span>
+<span class="pc bpc" id="L168" title="3 of 4 branches missed.">		if (coordinate1 == null || coordinate2 == null)</span>
+<span class="fc" id="L169">			throw new IllegalArgumentException(</span>
+<span class="fc" id="L170">					&quot;coordinate 1 and coordinate 2 must be provided&quot;);</span>
 
-<span class="nc" id="L170">		Log.d(TAG_ROUTE_PROCESSING, &quot;computeShortestPath(Coordinate &quot;</span>
-<span class="nc" id="L171">				+ coordinate1 + &quot;, Coordinate &quot; + coordinate2 + &quot;)&quot;);</span>
+<span class="nc" id="L172">		Log.d(TAG_ROUTE_PROCESSING, &quot;computeShortestPath(Coordinate &quot;</span>
+<span class="nc" id="L173">				+ coordinate1 + &quot;, Coordinate &quot; + coordinate2 + &quot;)&quot;);</span>
 
-<span class="nc" id="L173">		GsonBuilder gsonb = new GsonBuilder();</span>
-<span class="nc" id="L174">		Gson gson = gsonb.create();</span>
+<span class="nc" id="L175">		GsonBuilder gsonb = new GsonBuilder();</span>
+<span class="nc" id="L176">		Gson gson = gsonb.create();</span>
 
-<span class="nc" id="L176">		RouteInfoTransfer routeInfoTransfer = null;</span>
+<span class="nc" id="L178">		RouteInfoTransfer routeInfoTransfer = null;</span>
 
-<span class="nc" id="L178">		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,</span>
-<span class="nc" id="L179">				new Coordinate[] {</span>
-<span class="nc" id="L180">						new Coordinate(coordinate1.getLatitude(), coordinate1.getLongitude()),</span>
-<span class="nc" id="L181">						new Coordinate(coordinate2.getLatitude(), coordinate2.getLongitude()) }, new HttpPost(</span>
-<span class="nc" id="L182">						URL_COMPUTESHORTESTPATH));</span>
-<span class="nc" id="L183">		Log.d(TAG_ROUTE_PROCESSING, &quot;computeShortestPath() - pre Thread&quot;);</span>
-<span class="nc" id="L184">		Thread thread = new Thread(gsonAnswerer);</span>
-<span class="nc" id="L185">		thread.start();</span>
-<span class="nc" id="L186">		thread.join();</span>
-<span class="nc" id="L187">		Log.d(TAG_ROUTE_PROCESSING, &quot;computeShortestPath() - post Thread&quot;);</span>
+<span class="nc" id="L180">		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,</span>
+<span class="nc" id="L181">				new Coordinate[] {</span>
+<span class="nc" id="L182">						new Coordinate(coordinate1.getLatitude(), coordinate1.getLongitude()),</span>
+<span class="nc" id="L183">						new Coordinate(coordinate2.getLatitude(), coordinate2.getLongitude()) }, new HttpPost(</span>
+<span class="nc" id="L184">						URL_COMPUTESHORTESTPATH));</span>
+<span class="nc" id="L185">		Log.d(TAG_ROUTE_PROCESSING, &quot;computeShortestPath() - pre Thread&quot;);</span>
+<span class="nc" id="L186">		Thread thread = new Thread(gsonAnswerer);</span>
+<span class="nc" id="L187">		thread.start();</span>
+<span class="nc" id="L188">		thread.join();</span>
+<span class="nc" id="L189">		Log.d(TAG_ROUTE_PROCESSING, &quot;computeShortestPath() - post Thread&quot;);</span>
 
-<span class="nc bnc" id="L189" title="All 2 branches missed.">		if (gsonAnswerer.getException() != null) {</span>
-<span class="nc" id="L190">			Log.e(TAG_ROUTE_PROCESSING, &quot;HTTP-Connection caused exception&quot;, gsonAnswerer.getException());</span>
-<span class="nc" id="L191">			throw new RouteProcessingException(gsonAnswerer.getException().toString());</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">		if (gsonAnswerer.getException() != null) {</span>
+<span class="nc" id="L192">			Log.e(TAG_ROUTE_PROCESSING, &quot;HTTP-Connection caused exception&quot;, gsonAnswerer.getException());</span>
+<span class="nc" id="L193">			throw new RouteProcessingException(gsonAnswerer.getException().toString());</span>
 		} else {
-<span class="nc" id="L193">			Log.d(TAG_ROUTE_PROCESSING,</span>
-<span class="nc" id="L194">					&quot;Answered JSON: &quot; + gsonAnswerer.getJSONAnswer());</span>
-<span class="nc" id="L195">			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),</span>
-<span class="nc" id="L196">					RouteInfoTransfer.class);</span>
+<span class="nc" id="L195">			Log.d(TAG_ROUTE_PROCESSING,</span>
+<span class="nc" id="L196">					&quot;Answered JSON: &quot; + gsonAnswerer.getJSONAnswer());</span>
+<span class="nc" id="L197">			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),</span>
+<span class="nc" id="L198">					RouteInfoTransfer.class);</span>
 		}
 
-<span class="nc bnc" id="L199" title="All 2 branches missed.">		if (routeInfoTransfer == null) {</span>
-<span class="nc" id="L200">			throw new RouteProcessingException(&quot;routeInfoTransfer is null&quot;);</span>
-<span class="nc bnc" id="L201" title="All 2 branches missed.">		} else  if (routeInfoTransfer.getError() != null) {</span>
-<span class="nc" id="L202"> 			throw new RouteProcessingException(routeInfoTransfer.getError());</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">		if (routeInfoTransfer == null) {</span>
+<span class="nc" id="L202">			throw new RouteProcessingException(&quot;routeInfoTransfer is null&quot;);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">		} else  if (routeInfoTransfer.getError() != null) {</span>
+<span class="nc" id="L204"> 			throw new RouteProcessingException(routeInfoTransfer.getError());</span>
  		}
 
 		// replace first and last Coordinate with Waypoint
-<span class="nc" id="L206">		routeInfoTransfer.postProcessShortestPath();</span>
+<span class="nc" id="L208">		routeInfoTransfer.postProcessShortestPath();</span>
 
-<span class="nc" id="L208">		RouteInfo route = new Route(new LinkedList&lt;Coordinate&gt;(</span>
-<span class="nc" id="L209">				routeInfoTransfer.getCoordinates()));</span>
-<span class="nc" id="L210">		Log.d(TAG_ROUTE_PROCESSING,</span>
-<span class="nc" id="L211">				&quot;computeShortestPath(Coordinate, Coordinate) returning Route: &quot;</span>
-<span class="nc" id="L212">						+ route);</span>
-<span class="nc" id="L213">		return route;</span>
+<span class="nc" id="L210">		RouteInfo route = new Route(new LinkedList&lt;Coordinate&gt;(</span>
+<span class="nc" id="L211">				routeInfoTransfer.getCoordinates()));</span>
+<span class="nc" id="L212">		Log.d(TAG_ROUTE_PROCESSING,</span>
+<span class="nc" id="L213">				&quot;computeShortestPath(Coordinate, Coordinate) returning Route: &quot;</span>
+<span class="nc" id="L214">						+ route);</span>
+<span class="nc" id="L215">		return route;</span>
 	}
 
 
@@ -234,58 +236,58 @@ public class RouteProcessing {
 	 */
 	public RouteInfo computeRoundtrip(Coordinate coordinate, int profile,
 			int length) throws RouteProcessingException, InterruptedException {
-<span class="nc" id="L237">		Log.d(TAG_ROUTE_PROCESSING,</span>
-<span class="nc" id="L238">				&quot;computeRoundtrip(Coordinate coordinate, int profile, int length)&quot;);</span>
+<span class="fc" id="L239">		Log.d(TAG_ROUTE_PROCESSING,</span>
+<span class="fc" id="L240">				&quot;computeRoundtrip(Coordinate coordinate, int profile, int length)&quot;);</span>
 
-<span class="nc bnc" id="L240" title="All 2 branches missed.">		if (coordinate == null)</span>
-<span class="nc" id="L241">			throw new IllegalArgumentException(</span>
-<span class="nc" id="L242">					&quot;coordinate 1 and coordinate 2 must be provided&quot;);</span>
-<span class="nc bnc" id="L243" title="All 2 branches missed.">		if (profile &lt; 0)</span>
-<span class="nc" id="L244">			throw new IllegalArgumentException(</span>
-<span class="nc" id="L245">					&quot;profile id must be equal to or greater than 1&quot;);</span>
-<span class="nc bnc" id="L246" title="All 2 branches missed.">		if (length &lt; 100)</span>
-<span class="nc" id="L247">			throw new IllegalArgumentException(</span>
-<span class="nc" id="L248">					&quot;length must be at least 100 meter&quot;);</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">		if (coordinate == null)</span>
+<span class="fc" id="L243">			throw new IllegalArgumentException(</span>
+<span class="fc" id="L244">					&quot;coordinate 1 and coordinate 2 must be provided&quot;);</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">		if (profile &lt; 0)</span>
+<span class="fc" id="L246">			throw new IllegalArgumentException(</span>
+<span class="fc" id="L247">					&quot;profile id must be equal to or greater than 1&quot;);</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">		if (length &lt; 100)</span>
+<span class="nc" id="L249">			throw new IllegalArgumentException(</span>
+<span class="nc" id="L250">					&quot;length must be at least 100 meter&quot;);</span>
 
-<span class="nc" id="L250">		GsonBuilder gsonb = new GsonBuilder();</span>
-<span class="nc" id="L251">		Gson gson = gsonb.create();</span>
+<span class="nc" id="L252">		GsonBuilder gsonb = new GsonBuilder();</span>
+<span class="nc" id="L253">		Gson gson = gsonb.create();</span>
 
-<span class="nc" id="L253">		RouteInfoTransfer routeInfoTransfer = null;</span>
+<span class="nc" id="L255">		RouteInfoTransfer routeInfoTransfer = null;</span>
 
-<span class="nc" id="L255">		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,</span>
-<span class="nc" id="L256">				new Coordinate(coordinate.getLatitude(),</span>
-<span class="nc" id="L257">						coordinate.getLongitude()), new HttpPost(URL_ROUNDTRIP</span>
-<span class="nc" id="L258">						+ &quot;/profile/&quot; + profile + &quot;/length/&quot; + length));</span>
-<span class="nc" id="L259">		Thread thread = new Thread(gsonAnswerer);</span>
-<span class="nc" id="L260">		thread.start();</span>
-<span class="nc" id="L261">		thread.join();</span>
+<span class="nc" id="L257">		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,</span>
+<span class="nc" id="L258">				new Coordinate(coordinate.getLatitude(),</span>
+<span class="nc" id="L259">						coordinate.getLongitude()), new HttpPost(URL_ROUNDTRIP</span>
+<span class="nc" id="L260">						+ &quot;/profile/&quot; + profile + &quot;/length/&quot; + length));</span>
+<span class="nc" id="L261">		Thread thread = new Thread(gsonAnswerer);</span>
+<span class="nc" id="L262">		thread.start();</span>
+<span class="nc" id="L263">		thread.join();</span>
 
-<span class="nc bnc" id="L263" title="All 2 branches missed.">		if (gsonAnswerer.getException() != null) {</span>
-<span class="nc" id="L264">			Log.e(TAG_ROUTE_PROCESSING, &quot;HTTP-Connection caused exception&quot;, gsonAnswerer.getException());</span>
-<span class="nc" id="L265">			throw new RouteProcessingException(gsonAnswerer.getException().toString());</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">		if (gsonAnswerer.getException() != null) {</span>
+<span class="nc" id="L266">			Log.e(TAG_ROUTE_PROCESSING, &quot;HTTP-Connection caused exception&quot;, gsonAnswerer.getException());</span>
+<span class="nc" id="L267">			throw new RouteProcessingException(gsonAnswerer.getException().toString());</span>
 		} else {
-<span class="nc" id="L267">			Log.d(TAG_ROUTE_PROCESSING,</span>
-<span class="nc" id="L268">					&quot;Answered JSON: &quot; + gsonAnswerer.getJSONAnswer());</span>
-<span class="nc" id="L269">			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),</span>
-<span class="nc" id="L270">					RouteInfoTransfer.class);</span>
+<span class="nc" id="L269">			Log.d(TAG_ROUTE_PROCESSING,</span>
+<span class="nc" id="L270">					&quot;Answered JSON: &quot; + gsonAnswerer.getJSONAnswer());</span>
+<span class="nc" id="L271">			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),</span>
+<span class="nc" id="L272">					RouteInfoTransfer.class);</span>
 		}
 
-<span class="nc bnc" id="L273" title="All 2 branches missed.">		if (routeInfoTransfer == null) {</span>
-<span class="nc" id="L274">			Log.e(TAG_ROUTE_PROCESSING, &quot;Rundkurs konnte nicht berechnet werden&quot;);</span>
-<span class="nc" id="L275">			throw new RouteProcessingException(&quot;routeInfoTransfer is null&quot;);</span>
-<span class="nc bnc" id="L276" title="All 2 branches missed.">		} else  if (routeInfoTransfer.getError() != null) {</span>
-<span class="nc" id="L277"> 			throw new RouteProcessingException(routeInfoTransfer.getError());</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">		if (routeInfoTransfer == null) {</span>
+<span class="nc" id="L276">			Log.e(TAG_ROUTE_PROCESSING, &quot;Rundkurs konnte nicht berechnet werden&quot;);</span>
+<span class="nc" id="L277">			throw new RouteProcessingException(&quot;routeInfoTransfer is null&quot;);</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">		} else  if (routeInfoTransfer.getError() != null) {</span>
+<span class="nc" id="L279"> 			throw new RouteProcessingException(routeInfoTransfer.getError());</span>
  		}
 
 		// replace first and last Coordinate with Waypoint
-<span class="nc" id="L281">		routeInfoTransfer.postProcessRoundtrip();</span>
+<span class="nc" id="L283">		routeInfoTransfer.postProcessRoundtrip();</span>
 
-<span class="nc" id="L283">		RouteInfo routeInfo = new Route(new LinkedList&lt;Coordinate&gt;(</span>
-<span class="nc" id="L284">				routeInfoTransfer.getCoordinates()));</span>
-<span class="nc" id="L285">		Log.d(TAG_ROUTE_PROCESSING,</span>
-<span class="nc" id="L286">				&quot;computeRoundtrip(Coordinate coordinate, int profile, int length) returning Route: &quot;</span>
-<span class="nc" id="L287">				+ routeInfo);</span>
-<span class="nc" id="L288">		return routeInfo;</span>
+<span class="nc" id="L285">		RouteInfo routeInfo = new Route(new LinkedList&lt;Coordinate&gt;(</span>
+<span class="nc" id="L286">				routeInfoTransfer.getCoordinates()));</span>
+<span class="nc" id="L287">		Log.d(TAG_ROUTE_PROCESSING,</span>
+<span class="nc" id="L288">				&quot;computeRoundtrip(Coordinate coordinate, int profile, int length) returning Route: &quot;</span>
+<span class="nc" id="L289">				+ routeInfo);</span>
+<span class="nc" id="L290">		return routeInfo;</span>
 	}
 
 
@@ -299,10 +301,10 @@ public class RouteProcessing {
 	 * @throws RouteProcessingException
 	 *             If something goes wrong.
 	 */
-	public RouteInfo computeOptimizedRoute(RouteInfo routeInfo)
+	/*public RouteInfo computeOptimizedRoute(RouteInfo routeInfo)
 			throws RouteProcessingException {
-<span class="nc" id="L304">		throw new RouteProcessingException(&quot;not yet implemented&quot;);</span>
-	}
+		throw new RouteProcessingException(&quot;not yet implemented&quot;);
+	}*/
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 02:31:21)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
