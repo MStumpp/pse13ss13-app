@@ -74,7 +74,7 @@ public class RouteTest {
 		assertNotNull(route.getWaypoints());
 
 		route.resetRoute();
-		assertNull(route.getWaypoints());
+		assertTrue(route.getWaypoints().size() == 0);
 	}
 
 	@Test
