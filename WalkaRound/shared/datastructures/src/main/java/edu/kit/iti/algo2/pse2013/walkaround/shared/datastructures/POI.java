@@ -206,13 +206,14 @@ public class POI extends Location implements Geometrizable {
 
 	@Override
 	public POI clone() {
-    	URL newURL;
+    	URL newURL = null;
 		try {
-			newURL = new URL(getURL().toExternalForm());
-		} catch (MalformedURLException e) {
-			newURL = null;
-		}
-		return new POI(super.clone(), new String(getTextInfo()), newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));
+			if (getURL() != null) {
+				newURL = new URL(getURL().toExternalForm());
+			}
+		} catch (MalformedURLException e) { }
+		String textInfo = getTextInfo() == null ? null : new String(getTextInfo());
+		return new POI(super.clone(), textInfo, newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));
 	}
 
 

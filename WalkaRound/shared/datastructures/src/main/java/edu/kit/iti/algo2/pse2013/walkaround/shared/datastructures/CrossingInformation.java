@@ -24,19 +24,24 @@ public final class CrossingInformation {
      * @param angles An array of crossroad angles.
      */
     public CrossingInformation(float[] angles) {
-        if (angles.length == 0)
+        if (angles == null || angles.length <= 0)
             throw new IllegalArgumentException("number of crossing angles must be at least one");
         this.angles = angles;
 	}
 
     public CrossingInformation(List<Float> angles) {
+    	if (angles == null || angles.size() <= 0)
+        	throw new IllegalArgumentException("number of crossing angles must be at least one");
     	this.angles = new float[angles.size()];
+    	int counter = 0;
     	for (int i = 0; i < angles.size(); i++) {
-    		assert angles.get(i) != null;
     		if (angles.get(i) != null) {
-        		this.angles[i] = angles.get(i);
+    			this.angles[counter++] = angles.get(i);
     		}
     	}
+    	this.angles = Arrays.copyOf(this.angles, counter);
+        if (this.angles.length <= 0)
+        	throw new IllegalArgumentException("number of crossing angles must be at least one");
     }
 
 
@@ -77,7 +82,7 @@ public final class CrossingInformation {
     }
 
     public boolean setNextCrossingAngleOnRoute(int index) {
-    	if (index >= this.angles.length) {
+    	if (index >= this.angles.length || index < 0) {
     		return false;
     	}
     	this.nextCrossingAngleOnRoute = index;

@@ -96,28 +96,69 @@ public class Waypoint extends Location {
     public boolean isPOI() {
         return poi != null;
     }
-    
-    
-    public Waypoint clone() {
+
+    /* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((poi == null) ? 0 : poi.hashCode());
+		result = prime * result + profile;
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof Waypoint)) {
+			return false;
+		}
+		Waypoint other = (Waypoint) obj;
+		if (poi == null) {
+			if (other.poi != null) {
+				return false;
+			}
+		} else if (!poi.equals(other.poi)) {
+			return false;
+		}
+		if (profile != other.profile) {
+			return false;
+		}
+		return true;
+	}
+
+
+	public Waypoint clone() {
     	String clonedName = null;
     	if (this.getName() != null) {
-    	clonedName = this.getName().toString();
+    		clonedName = this.getName().toString();
     	}
     	Address clonedAddress = null;
     	if (this.getAddress() != null) {
-    	clonedAddress = this.getAddress().clone();
+    		clonedAddress = this.getAddress().clone();
     	}
     	POI clonedPOI = null;
     	if (this.getPOI() != null) {
-    	clonedPOI = this.getPOI().clone();
+    		clonedPOI = this.getPOI().clone();
     	}
-    	
+
     	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);
-    	
+
     	clonedWaypoint.setPOI(clonedPOI);
     	clonedWaypoint.setProfile(this.getProfile());
     	return clonedWaypoint;
     }
-    
+
 
 }

@@ -96,22 +96,12 @@ public class Address {
 
 
 	public Address clone() {
-    	String clonedStreet = "";
-    	if (this.getStreet() != null) {
-    	clonedStreet = this.getStreet().toString();
-    	}
-
-    	String clonedHouseNumber = "";
-    	if (this.getHouseNumber() != null) {
-    	clonedHouseNumber = this.getHouseNumber().toString();
-    	}
-
-    	String clonedCity = "";
-    	if (this.getCity() != null) {
-    	clonedCity = this.getCity().toString();
-    	}
-
-		return new Address(clonedStreet, clonedHouseNumber, clonedCity, this.postalCode);
+		return new Address(
+			getStreet() == null ? null : new String(getStreet()),
+			getHouseNumber() == null ? null : new String(getHouseNumber()),
+			getCity() == null ? null : new String(getCity()),
+			getPostalCode()
+		);
 	}
 
 	/* (non-Javadoc)
