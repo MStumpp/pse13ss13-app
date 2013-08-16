@@ -49,7 +49,6 @@ public class TestProtobufConverter {
 		assertEquals(null, ProtobufConverter.getCoordinate(null));
 		assertEquals(null, ProtobufConverter.getCoordinateBuilder(null));
 		Coordinate c = new Coordinate(48, 8, new CrossingInformation(new float[]{1.0f, 2.0f, 42.0f}));
-		System.out.println(c.getCrossingInformation().getCrossingAngles());
 		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));
 	}
 	@Test
@@ -58,11 +57,6 @@ public class TestProtobufConverter {
 		Location loc2 = new Location(0, 0, null, null);
 		assertEquals(loc, ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc).build()));
 		Location reload = ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc2).build());
-		System.out.println(loc2.getId() + " " + reload.getId());
-		System.out.println(loc2.getLatitude() + " " + reload.getLatitude());
-		System.out.println(loc2.getLongitude() + " " + reload.getLongitude());
-		System.out.println(loc2.getName() + " " + reload.getName());
-		System.out.println(loc2.getAddress() + "#" + reload.getAddress());
 		assertEquals(loc2, reload);
 	}
 	@Test
