@@ -404,6 +404,7 @@ public class MapController implements RouteListener, PositionListener,
 		if (this.currentActiveWaypoint == currentId) {
 			this.lines.clear();
 			this.displayPoints.clear();
+			//this.updateRouteOverlay();
 			this.routeController.deleteActiveWaypoint();
 			this.updateAll();
 
@@ -498,18 +499,22 @@ public class MapController implements RouteListener, PositionListener,
 				currentRoute, coorBox.getCenter(), size,
 				this.coorBox.getLevelOfDetail());
 
+		Log.d(TAG_MAP_CONTROLLER, "update Route Wegpunkte Punkte: " + currentRoute.getWaypoints().size());
+		Log.d(TAG_MAP_CONTROLLER, "update Route Linen Punkte: " + lines.size());
+		
 		this.displayPoints = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(currentRoute,
 						coorBox.getCenter(), size,
 						this.coorBox.getLevelOfDetail());
 
+		Log.d(TAG_MAP_CONTROLLER, "update Route Wegpunkte Punkte: " + displayPoints.size());
+		
 		mapView.updateDisplayWaypoints(displayPoints);
 
-		if (this.currentRoute.getActiveWaypoint() == null) {
-			return;
+		if (this.currentRoute.getActiveWaypoint() != null) {
+			mapView.setActiveWaypoint(currentRoute.getActiveWaypoint().getId());
 		}
 
-		mapView.setActiveWaypoint(currentRoute.getActiveWaypoint().getId());
 
 		if (routeGen.isAlive()) {
 			routeGen.interrupt();

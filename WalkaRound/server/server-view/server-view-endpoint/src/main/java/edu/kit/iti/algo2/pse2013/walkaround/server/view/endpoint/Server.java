@@ -82,7 +82,7 @@ public class Server {
         double[] sourcePoint = RouteUtil.computePointOnLine(sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude(),
                 sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude(), coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude());
 
-        Vertex source = null;
+        Vertex source;
         // determine which edge endpoint is closer to point
         if (RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude()) <
                 RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude())) {
@@ -95,13 +95,13 @@ public class Server {
         double[] targetPoint = RouteUtil.computePointOnLine(targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude(),
                 targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude(), coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude());
 
-        Vertex target = null;
+        Vertex target;
         // determine which edge endpoint is closer to point
         if (RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude()) <
                 RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude())) {
-            source = targetEdge.getTail();
+            target = targetEdge.getTail();
         }  else {
-            source = targetEdge.getHead();
+            target = targetEdge.getHead();
         }
 
         if (source == null || target == null) {
@@ -219,7 +219,7 @@ public class Server {
         double[] point = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
                 edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
 
-        Vertex source = null;
+        Vertex source;
         // determine which edge endpoint is closer to point
         if (RouteUtil.computeDistance(point[0], point[1], edge.getTail().getLatitude(), edge.getTail().getLongitude()) <
                 RouteUtil.computeDistance(point[0], point[1], edge.getHead().getLatitude(), edge.getHead().getLongitude())) {
@@ -264,11 +264,11 @@ public class Server {
                     computeCrossingInformation(vertex)));
         }
 
-        // eventually add point as first coordinate of the route
+        // eventually add point as first/last coordinate of the route
         Coordinate begin = new Coordinate(point[0], point[1]);
         if (!begin.equals(transfer.getCoordinates().getFirst())) {
             transfer.prependCoordinate(begin);
-            transfer.prependCoordinate(begin);
+            transfer.appendCoordinate(begin);
         }
 
         transfer.setLength(RouteUtil.totalLength(route));

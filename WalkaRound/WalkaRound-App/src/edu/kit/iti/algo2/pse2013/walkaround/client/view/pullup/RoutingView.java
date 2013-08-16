@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -81,7 +82,7 @@ public class RoutingView extends Fragment {
 
 		favoriteName = (EditText) this.getActivity().findViewById(
 				R.id.favorite_name);
-
+		
 		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
 		Display display = this.getActivity().getWindowManager()
 				.getDefaultDisplay();
@@ -125,6 +126,7 @@ public class RoutingView extends Fragment {
 		goToMap.setOnTouchListener(new backToMapListener());
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
+		this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 	}
 
 	public void onDestroyView() {
@@ -400,10 +402,10 @@ public class RoutingView extends Fragment {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-								RouteController.getInstance()
+								/*RouteController.getInstance()
 										.setActiveWaypoint(value.getId());
 								RouteController.getInstance()
-										.deleteActiveWaypoint();
+										.deleteActiveWaypoint();*/
 							}
 						});
 				alertDialog.setNegativeButton("No",
