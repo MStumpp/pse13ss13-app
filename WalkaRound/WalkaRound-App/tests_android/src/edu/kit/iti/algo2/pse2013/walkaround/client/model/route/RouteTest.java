@@ -6,10 +6,13 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+@RunWith(RobolectricTestRunner.class)
 public class RouteTest {
 
 	private Route route;
