@@ -211,6 +211,7 @@ public class InfoView extends Fragment implements POIImageListener {
 					toogleSpeaking();
 					TextToSpeechUtility.getInstance().stopSpeaking();
 				} else {
+					toogleSpeaking();
 					TextToSpeechUtility.getInstance().speak(text);
 				}
 			}

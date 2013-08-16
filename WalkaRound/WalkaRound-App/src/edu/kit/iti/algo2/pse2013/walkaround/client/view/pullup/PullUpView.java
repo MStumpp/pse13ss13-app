@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -15,6 +16,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
@@ -106,6 +108,7 @@ public class PullUpView extends Fragment implements RouteListener {
 	 */
 	private GestureDetector gestureDetector;
 
+	int finalHeight, finalWidth;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -134,6 +137,9 @@ public class PullUpView extends Fragment implements RouteListener {
 		Point size = new Point();
 		display.getSize(size);
 
+		
+		
+		
 		minHeight = 0;
 		maxHeight = size.y;
 		halfHeight = (maxHeight / 2);
@@ -169,8 +175,6 @@ public class PullUpView extends Fragment implements RouteListener {
 
 		regulator.getLayoutParams().height = size.y / 10;
 
-		maxHeight = maxHeight - size.y/5;
-
 		Log.d(TAG_PULLUP, "allocate Listener");
 		routing.setOnTouchListener(new RoutingListener());
 		favorite.setOnTouchListener(new FavoriteListener());
@@ -180,6 +184,13 @@ public class PullUpView extends Fragment implements RouteListener {
 		regulator.setOnTouchListener(new RegulatorListener());
 		gestureDetector = new GestureDetector(getActivity(),
 				new FlingDetector());
+		
+
+		finalHeight  = menu.getLayoutParams().height;
+		DisplayMetrics metrics = new DisplayMetrics();
+		this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		Log.d("omtag", " x " + metrics.density);
+		maxHeight = maxHeight - finalHeight * metrics.density;
 		main.setY(maxHeight);
 
 		Log.d(TAG_PULLUP, "allocate fragments");
