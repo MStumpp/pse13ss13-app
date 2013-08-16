@@ -98,4 +98,13 @@ public class RouteTest {
 		assertEquals("test2", route.getWaypoints().get(1).getName());
 		assertEquals("test", route.getWaypoints().get(2).getName());
 	}
+
+	@Test
+	public void testClone() {
+		route.addWaypoint(new Waypoint(2d, 5d, "test"));
+		route.addWaypoint(new Waypoint(3d, 4d, "test2"));
+		route.addWaypoint(new Waypoint(4d, 6d, "test3"));
+		Route cloned = (Route) route.clone();
+		assertEquals(cloned, route);
+	}
 }
