@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -191,7 +192,8 @@ public class PullUpView extends Fragment implements RouteListener {
 		DisplayMetrics metrics = new DisplayMetrics();
 		this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		Log.d("omtag", " x " + metrics.densityDpi);
-		maxHeight = maxHeight - finalHeight * (metrics.densityDpi / 160f);
+		maxHeight = maxHeight -	TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, finalHeight, metrics);
+
 		main.setY(maxHeight);
 
 		Log.d(TAG_PULLUP, "allocate fragments");
