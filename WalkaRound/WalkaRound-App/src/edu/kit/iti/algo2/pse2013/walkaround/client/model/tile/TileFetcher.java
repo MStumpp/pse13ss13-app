@@ -28,7 +28,7 @@ public class TileFetcher {
 	private static final String TAG = TileFetcher.class.getSimpleName();
 	private static final int MAX_CACHE_SIZE = 500;
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
-	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(10, 16, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(3, 10, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
 	/**
 	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
