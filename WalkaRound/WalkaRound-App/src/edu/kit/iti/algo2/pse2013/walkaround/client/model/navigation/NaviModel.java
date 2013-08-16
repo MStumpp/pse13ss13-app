@@ -95,11 +95,11 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	private void notifyAllNaviOutputs() {
 		Log.e(TAG_NAVI, "notifyAllNaviOutputs() METHOD START");
 		// Sending information to controller of headUp display:
-		this.headUpControllerInstance.setSpeed(this.speed);
-		this.headUpControllerInstance.setTimePassed(this.timeOnRouteInSec);
-		this.headUpControllerInstance.setTimeToGo(this.timeLeftOnRouteInSec);
-		this.headUpControllerInstance.setWayPassed(this.distOnRouteInMeters);
-		this.headUpControllerInstance.setWayToGo(this.distLeftOnRouteInMeter);
+		//this.headUpControllerInstance.setSpeed(this.speed);
+		//this.headUpControllerInstance.setTimePassed(this.timeOnRouteInSec);
+		//this.headUpControllerInstance.setTimeToGo(this.timeLeftOnRouteInSec);
+		//this.headUpControllerInstance.setWayPassed(this.distOnRouteInMeters);
+		//this.headUpControllerInstance.setWayToGo(this.distLeftOnRouteInMeter);
 		// TODO: this.headUpControllerInstance.setTurnAngle(this.turnAngle);
 		// TODO: this.headUpControllerInstance.setDistToTurn(this.distToTurn);
 		// notifying all Navi Outputs:

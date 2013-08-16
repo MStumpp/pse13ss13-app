@@ -17,7 +17,7 @@ public class VisualTextNaviOutput implements NaviOutput {
 	}
 
 	public void deliverOutput(double turnAngle, double distToTurn) {
-		this.headUpControllerInstance.setNavigationsText("in " + distToTurn + "m ");
+		//this.headUpControllerInstance.setNavigationsText("in " + distToTurn + "m ");
 	}
 
 
