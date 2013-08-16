@@ -180,7 +180,7 @@ public class RouteController {
 
 	public boolean addWaypoint(final Waypoint w) {
 		Log.d(TAG, String.format("RouteController.addWaypoint(%s)", w.toString()));
-
+		
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {

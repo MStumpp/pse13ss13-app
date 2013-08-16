@@ -171,15 +171,17 @@ public class Route implements RouteInfo {
 							+ this.getEnd() + ", new Route start"
 							+ newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
+			// TODO: Füge die folgende Zwischenroute ein:
 			this.computeShortestPath(this.getEnd(), newRoute.getStart());
 		}
-
+		
 		newRouteCoordsIter.next();
 		while (newRouteCoordsIter.hasNext()) {
 			this.routeCoordinates.addLast(newRouteCoordsIter.next());
 		}
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
+	
 
 	/**
 	 * Moves the active waypoint to the position of the given coordinate.
@@ -570,4 +572,18 @@ public class Route implements RouteInfo {
 		}
 		return output;
 	}
+	
+	private void addCoordinatesToRoute(LinkedList<Coordinate> coordsList) {
+		Iterator<Coordinate> coordsIter = this.getCoordinates().iterator();
+		Coordinate coordTemp = null;
+		while (coordsIter.hasNext()) {
+			coordTemp = coordsIter.next();
+			this.routeCoordinates.add(coordTemp);
+		}
+	}
+	
+	
 }
+
+
+
