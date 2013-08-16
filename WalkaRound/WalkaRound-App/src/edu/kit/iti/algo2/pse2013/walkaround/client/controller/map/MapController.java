@@ -4,6 +4,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
@@ -524,7 +527,7 @@ public class MapController implements RouteListener, PositionListener,
 		routeGen.start();
 
 	}
-
+	
 	public void onRouteChange(RouteInfo currentRoute) {
 		Log.d(TAG_MAP_CONTROLLER, "Route Change! "
 				+ currentRoute.getWaypoints().size());
@@ -676,6 +679,21 @@ public class MapController implements RouteListener, PositionListener,
 
 	public POI getPOI() {
 		return mapView.getCurrentPOI();
+	}
+
+	public void roundtripAlert() {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mapView
+			);
+	alertDialog.setTitle("Unerwarteter Fehler");
+	alertDialog.setMessage("Es wurde leider kein Roundtrip gefunden.");
+	alertDialog.setPositiveButton("OK",
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,
+						int which) {
+					
+				}
+			});
+	alertDialog.show();
 	}
 
 }

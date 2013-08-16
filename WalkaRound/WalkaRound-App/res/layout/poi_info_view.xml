@@ -25,6 +25,11 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:visibility="gone" />
 "
+            <ImageButton
+                android:id="@+id/play"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/pause" />
 
             <ImageButton
                 android:id="@+id/savepoi"
@@ -33,11 +38,6 @@
                 android:scaleType="center"
                 android:src="@drawable/favorite" />
 
-            <ImageButton
-                android:id="@+id/play"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/pause" />
         </LinearLayout>
 
         <ScrollView

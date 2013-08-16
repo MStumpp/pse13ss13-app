@@ -161,25 +161,34 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE,
 				"addRoute(RouteInfo) adding route with the following coordinates: "
 						+ newRoute);
-
-		Iterator<Coordinate> newRouteCoordsIter = newRoute.getCoordinates()
-				.iterator();
-
+		
+		// Determine if an intermediate route is necessary:
 		if (this.getEnd() != null && !this.getEnd().equals(newRoute.getStart())) {
 			Log.d(TAG_ROUTE,
 					"intermediate path has to be computed. Current Route end: "
 							+ this.getEnd() + ", new Route start"
 							+ newRoute.getStart());
-			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing shortest path");
-			this.computeShortestPath(this.getEnd(), newRoute.getStart());
+			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate route");
+			// Calculate and add the intermediate route:
+			RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());			
+			this.addRoute(intermediateRoute);
 		}
-
-		newRouteCoordsIter.next();
-		while (newRouteCoordsIter.hasNext()) {
-			this.routeCoordinates.addLast(newRouteCoordsIter.next());
+		
+		
+		assert(newRoute.getCoordinates().size() > 0);
+		newRoute.getCoordinates().removeFirst();
+		
+		Iterator<Coordinate> coordsIter = newRoute.getCoordinates().iterator();
+		Coordinate tempCoord = null;
+		
+		while (coordsIter.hasNext()) {
+			tempCoord = coordsIter.next();
+			this.routeCoordinates.addLast(tempCoord);
 		}
+		
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
+	
 
 	/**
 	 * Moves the active waypoint to the position of the given coordinate.
@@ -570,4 +579,9 @@ public class Route implements RouteInfo {
 		}
 		return output;
 	}
+	
+	
 }
+
+
+

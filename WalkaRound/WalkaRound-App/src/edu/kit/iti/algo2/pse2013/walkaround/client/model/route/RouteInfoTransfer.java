@@ -118,8 +118,8 @@ public class RouteInfoTransfer {
 
         Coordinate source = coordinates.remove(0);
         coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), "Source"));
-        Coordinate target = coordinates.remove(coordinates.size()-1);
-        coordinates.add(coordinates.size(), coordinates.get(0));
+       // Coordinate target = coordinates.remove(coordinates.size()-1);
+       // coordinates.add(coordinates.size(), coordinates.get(0));
     }
 
 }

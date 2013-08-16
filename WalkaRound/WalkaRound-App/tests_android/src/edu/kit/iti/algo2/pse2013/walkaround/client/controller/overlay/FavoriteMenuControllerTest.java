@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.favorite;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import static org.junit.Assert.*;
 

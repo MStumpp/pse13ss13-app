@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -29,6 +30,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -189,8 +191,11 @@ public class PullUpView extends Fragment implements RouteListener {
 		finalHeight  = menu.getLayoutParams().height;
 		DisplayMetrics metrics = new DisplayMetrics();
 		this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		Log.d("omtag", " x " + metrics.density);
-		maxHeight = maxHeight - finalHeight * metrics.density;
+		Log.d("omtag", " x " + metrics.densityDpi);
+		//maxHeight = maxHeight -	TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, finalHeight, metrics);
+
+		maxHeight = maxHeight - finalHeight * 1.3F;
+		
 		main.setY(maxHeight);
 
 		Log.d(TAG_PULLUP, "allocate fragments");
@@ -286,6 +291,7 @@ public class PullUpView extends Fragment implements RouteListener {
 		Log.d(TAG_PULLUP, "Content Change");
 		routingViewRun = false;
 		this.poiViewRun = false;
+		TextToSpeechUtility.getInstance().stopSpeaking();
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
 

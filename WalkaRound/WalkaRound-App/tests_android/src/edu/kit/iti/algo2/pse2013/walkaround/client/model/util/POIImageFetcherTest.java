@@ -11,7 +11,7 @@ import org.robolectric.RobolectricTestRunner;
 import android.graphics.Bitmap;
 
 @RunWith(RobolectricTestRunner.class)
-public class TestPOIImageFetcher {
+public class POIImageFetcherTest {
 	public static Bitmap bitmap;
 	private POIImageListener listener = new POIImageListener() {
 		public void setImage(Bitmap b) {

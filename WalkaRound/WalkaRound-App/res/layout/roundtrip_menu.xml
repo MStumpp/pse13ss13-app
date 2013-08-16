@@ -53,16 +53,6 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/profile_jogging"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center_horizontal"
-                android:tag="1"
-                android:text="@string/jogging"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
                 android:id="@+id/profile_sightseeing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
