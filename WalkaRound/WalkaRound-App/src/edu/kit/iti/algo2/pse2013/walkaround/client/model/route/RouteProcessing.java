@@ -34,7 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  */
 public class RouteProcessing {
 
-	private static int timeout = 2000;
+	private static int timeout = 5000;
 
 	/**
 	 * TAG for android debugging.
@@ -95,11 +95,13 @@ public class RouteProcessing {
 				HttpParams httpParameters = new BasicHttpParams();
 				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
 				HttpConnectionParams.setSoTimeout(httpParameters, timeout);
+				
 
 				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 				HttpPost httpPost = url;
 				httpPost.setHeader("Accept", "application/json");
 				httpPost.setHeader("Content-Type", "application/json");
+				
 
 				String requestAsJSON = gson.toJson(objectToSend);
 
@@ -108,7 +110,8 @@ public class RouteProcessing {
 				httpPost.setEntity(new StringEntity(requestAsJSON));
 
 				HttpResponse httpResponse = httpClient.execute(httpPost);
-
+				
+				
 				HttpEntity httpEntity = httpResponse.getEntity();
 				is = httpEntity.getContent();
 
