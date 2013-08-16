@@ -107,5 +107,13 @@ public final class TextToSpeechUtility implements OnInitListener,
 			sound = pref.getBoolean(key, true);
 		}
 	}
+	
+	public void stopSpeaking(){
+		if(tts != null){
+			if(tts.isSpeaking()){
+				tts.stop();
+			}
+		}
+	}
 
 }

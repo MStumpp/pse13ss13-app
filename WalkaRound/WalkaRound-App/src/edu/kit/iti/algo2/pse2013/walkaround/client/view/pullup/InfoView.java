@@ -30,6 +30,7 @@ public class InfoView extends Fragment implements POIImageListener {
 	private TextView category;
 	private TextView text;
 	private ImageView save;
+	private ImageView play;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +49,13 @@ public class InfoView extends Fragment implements POIImageListener {
 		this.text = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
+		play = (ImageView) (this.getActivity().findViewById(R.id.play));
 
 		iv.setVisibility(View.GONE);
 
 		final POI poi = MapController.getInstance().getPOI();
 		save.setOnTouchListener(new saveListener(poi, save));
+		play.setOnTouchListener(new playListener());
 
 		if (poi != null) {
 			Log.d("wtf", "" + (poi.getName() == null) + (title == null));
@@ -173,6 +176,19 @@ public class InfoView extends Fragment implements POIImageListener {
 								poi.getName()), poi.getName());
 				MapController.getInstance().getPullUpView()
 				.changeView(PullUpView.CONTENT_FAVORITE);
+			}
+			return false;
+		}
+	}
+	
+
+	private class playListener implements OnTouchListener {
+
+
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(play) && event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.d(TAG_PULLUP_CONTENT, "play wurde gedrückt");
+				TextToSpeechUtility.getInstance().stopSpeaking();
 			}
 			return false;
 		}
