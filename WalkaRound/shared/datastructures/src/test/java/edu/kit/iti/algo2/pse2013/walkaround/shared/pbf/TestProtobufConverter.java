@@ -15,9 +15,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 public class TestProtobufConverter {
@@ -49,6 +51,9 @@ public class TestProtobufConverter {
 		assertEquals(null, ProtobufConverter.getCoordinate(null));
 		assertEquals(null, ProtobufConverter.getCoordinateBuilder(null));
 		Coordinate c = new Coordinate(48, 8, new CrossingInformation(new float[]{1.0f, 2.0f, 42.0f}));
+		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));
+
+		c = new Coordinate(48, 8);
 		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));
 	}
 	@Test
@@ -86,5 +91,25 @@ public class TestProtobufConverter {
 
 		GeometryDataIO g = new GeometryDataIO(new GeometryNode(5), 2);
 		assertEquals(g, ProtobufConverter.getGeometryData(ProtobufConverter.getGeometryDataBuilder(g).build()));
+	}
+
+	@Test
+	public void testGraphData() {
+		GraphDataIO graph = new GraphDataIO();
+		graph.addEdge(new Edge(new Vertex(48,  8), new Vertex(49, 9)));
+		graph.addEdge(new Edge(new Vertex(49,  8), new Vertex(49, 9)));
+		graph.addEdge(new Edge(new Vertex(49,  9), new Vertex(49, 9)));
+		graph.addEdge(new Edge(new Vertex(49,  9), new Vertex(50, 9)));
+		graph.addEdge(new Edge(new Vertex(49,  9), new Vertex(50, 10)));
+		assertEquals(graph, ProtobufConverter.getGraphData(ProtobufConverter.getGraphDataBuilder(graph).build()));
+	}
+
+	@Test
+	public void testWaypoint() {
+		Waypoint wp = new Waypoint(0, 0, null, null);
+		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
+		wp.setPOI(new POI(0, 0, null, null, null, null));
+		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
+
 	}
 }
