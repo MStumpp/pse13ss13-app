@@ -15,9 +15,9 @@
 
         <TextView
             android:id="@+id/route"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_gravity="center"
             android:text="@string/current_route"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -74,15 +74,13 @@
                     android:id="@+id/waylist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.35"
                     android:orientation="vertical" >
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="0.35" >
+                    android:layout_marginTop="10dp" >
 
                     <Button
                         android:id="@+id/add_favorite"
