@@ -36,6 +36,11 @@ public class RouteInfoTransferTest {
 		assertEquals("test", routeInfoTrans.getError());
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructException() {
+		RouteInfoTransfer rt = new RouteInfoTransfer(null);
+	}
+
 	@Test
 	public void testExecution() {
 		routeInfoTrans.addCoordinates(new Coordinate(42d, 42d));
