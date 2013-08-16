@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +23,7 @@ public class Test {
     @org.junit.Test
     public void shouldHaveHappySmiles() throws Exception {
         String hello = Robolectric.buildActivity(BootActivity.class).get().getResources().getString(R.string.address);
-        assertThat(hello, equalTo("Address"));
+        assertEquals(hello, "Address");
     }
 
     @org.junit.Test
