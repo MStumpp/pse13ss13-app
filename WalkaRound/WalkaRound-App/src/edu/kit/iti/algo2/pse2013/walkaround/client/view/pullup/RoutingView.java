@@ -400,10 +400,10 @@ public class RoutingView extends Fragment {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-								RouteController.getInstance()
+								/*RouteController.getInstance()
 										.setActiveWaypoint(value.getId());
 								RouteController.getInstance()
-										.deleteActiveWaypoint();
+										.deleteActiveWaypoint();*/
 							}
 						});
 				alertDialog.setNegativeButton("No",
