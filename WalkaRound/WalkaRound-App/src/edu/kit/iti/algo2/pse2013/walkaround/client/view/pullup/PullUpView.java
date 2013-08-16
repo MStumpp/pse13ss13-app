@@ -287,9 +287,9 @@ public class PullUpView extends Fragment implements RouteListener {
 				//pullUpContent = new RoutingView();
 				ft.replace(R.id.pullupContent, routingView).commit();
 				//if(routingView != null && route != null){
-					//routingView.onRouteChange(route, this.getActivity());
+				//	routingView.onRouteChange(route, this.getActivity());
 				//}
-				routingViewRun = true;
+				//routingViewRun = true;
 			}
 			break;
 		case PullUpView.CONTENT_FAVORITE:
@@ -629,14 +629,15 @@ public class PullUpView extends Fragment implements RouteListener {
 
 
 	public void onRouteChange(final RouteInfo currentRoute) {
+		
+		Log.d(TAG_PULLUP_TOUCH, "Route Change: " + currentRoute.getWaypoints().size());
 
 		getActivity().runOnUiThread(new Runnable() {
 			public void run() {
 				route = currentRoute;
-				if(routingViewRun){
-					Log.d(TAG_PULLUP_TOUCH, "Route Change: " + currentRoute.getWaypoints().size());
+				//if(routingViewRun){
 					routingView.onRouteChange(route,  getActivity());
-				}
+				//}
 			}
 		});
 	}
