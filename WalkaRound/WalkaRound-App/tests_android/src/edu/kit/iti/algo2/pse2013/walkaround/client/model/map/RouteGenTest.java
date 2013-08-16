@@ -29,6 +29,8 @@ public class RouteGenTest {
 	@Test
 	public void updateRoute() {
 		LinkedList<Coordinate> link = new LinkedList<Coordinate>();
+		link.add(new Coordinate(0,0));
+		link.add(new Coordinate(20,20));
 		MapController.getInstance().onRouteChange((RouteInfo) new Route(link));
 		assertTrue(true);
 	}
