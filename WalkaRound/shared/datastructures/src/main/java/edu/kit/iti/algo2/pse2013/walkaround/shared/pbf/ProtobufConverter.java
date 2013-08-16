@@ -187,12 +187,12 @@ public class ProtobufConverter {
 		} else if (geometrizable instanceof Vertex) {
 			return builder.setVertex(getVertexBuilder((Vertex) geometrizable));
 		} else if (geometrizable instanceof GeometrizableWrapper) {
-			return builder.setWrapper(getWrapperBuilder((GeometrizableWrapper) geometrizable));
+			return builder.setWrapper(getGeometrizableWrapperBuilder((GeometrizableWrapper) geometrizable));
 		}
 		assert false;
 		return null;
 	}
-	private static SaveGeometrizableWrapper.Builder getWrapperBuilder(GeometrizableWrapper wrapper) {
+	private static SaveGeometrizableWrapper.Builder getGeometrizableWrapperBuilder(GeometrizableWrapper wrapper) {
 		if (wrapper == null) {
 			return null;
 		}

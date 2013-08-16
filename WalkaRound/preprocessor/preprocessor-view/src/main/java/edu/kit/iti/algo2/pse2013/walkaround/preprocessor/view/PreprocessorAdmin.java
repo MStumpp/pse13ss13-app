@@ -79,18 +79,21 @@ public class PreprocessorAdmin {
 			logger.info("Start building GeometryData Vertices...");
 			GeometryDataIO geomDataVertices = GeometryDataPreprocessor.preprocessGeometryDataIO(
                     new ArrayList<Geometrizable>(GraphDataIO.load(graphFile).getVertices()));
+            logger.info(geomDataVertices.getRoot().getGeometrizables().size() + " Vertex-Geometrizables in root");
 			GeometryDataIO.save(geomDataVertices, geomVerticesFile);
 			logger.info("Writing GeometryDataIO Vertices finished.");
 
             logger.info("Start building GeometryData Edges...");
             GeometryDataIO geomDataEdges = GeometryDataPreprocessor.preprocessGeometryDataIO(
                     new ArrayList<Geometrizable>(GraphDataIO.load(graphFile).getEdges()));
+            logger.info(geomDataEdges.getRoot().getGeometrizables().size() + " Edge-Geometrizables in root");
             GeometryDataIO.save(geomDataEdges, geomEdgesFile);
             logger.info("Writing GeometryDataIO Edges finished.");
 
             logger.info("Start building GeometryData POIs...");
             GeometryDataIO geomDataPOIs = GeometryDataPreprocessor.preprocessGeometryDataIO(
                     new ArrayList<Geometrizable>(LocationDataIO.load(locFile).getPOIs()));
+            logger.info(geomDataPOIs.getRoot().getGeometrizables().size() + " POI-Geometrizables in root");
             GeometryDataIO.save(geomDataPOIs, geomPOIsFile);
             logger.info("Writing GeometryDataIO POIs finished.");
 			return 0;
