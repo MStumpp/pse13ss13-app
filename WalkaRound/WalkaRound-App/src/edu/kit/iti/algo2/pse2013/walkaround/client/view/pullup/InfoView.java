@@ -31,12 +31,15 @@ public class InfoView extends Fragment implements POIImageListener {
 	private TextView text;
 	private ImageView save;
 	private ImageView play;
+	private boolean speak;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_PULLUP_CONTENT, "Create InfoView");
 
+		speak = false;
+		
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 
 		this.title = (TextView) this.getActivity().findViewById(
@@ -87,6 +90,7 @@ public class InfoView extends Fragment implements POIImageListener {
 				text.setText(Html.fromHtml(poi.getTextInfo()));
 				text.setMovementMethod(LinkMovementMethod.getInstance());
 				text.setVisibility(View.VISIBLE);
+				toogleSpeaking();
 				TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());
 			}
 		}
@@ -181,6 +185,15 @@ public class InfoView extends Fragment implements POIImageListener {
 		}
 	}
 	
+	private void toogleSpeaking(){
+		if(this.speak){
+			this.speak = false;
+			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.pause));
+		} else {
+			this.speak = true;
+			this.play.setImageDrawable(this.getResources().getDrawable(R.drawable.play));	
+		}
+	}
 
 	private class playListener implements OnTouchListener {
 
@@ -188,6 +201,7 @@ public class InfoView extends Fragment implements POIImageListener {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(play) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "play wurde gedrückt");
+				toogleSpeaking();
 				TextToSpeechUtility.getInstance().stopSpeaking();
 			}
 			return false;
