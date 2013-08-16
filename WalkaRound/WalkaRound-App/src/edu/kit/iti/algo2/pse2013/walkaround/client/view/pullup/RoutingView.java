@@ -273,12 +273,12 @@ public class RoutingView extends Fragment {
 				saveFavParams.setMargins(0, 10, 0, 0);
 
 				for (Waypoint value : currentRoute.getWaypoints()) {
-					LinearLayout waypoint = new LinearLayout(getActivity());
+					LinearLayout waypoint = new LinearLayout(context.getApplicationContext());
 					waypoint.setOrientation(LinearLayout.HORIZONTAL);
 					TextView waypointText = new TextView(context);
-					ImageButton delete = new ImageButton(getActivity());
+					ImageButton delete = new ImageButton(context.getApplicationContext());
 					delete.setImageResource(R.drawable.delete);
-					ImageButton saveFav = new ImageButton(getActivity());
+					ImageButton saveFav = new ImageButton(context.getApplicationContext());
 					saveFav.setImageResource(R.drawable.favorite);
 					Log.d("routingView: ",
 							" " + value.getName() + " " + value.getId());
