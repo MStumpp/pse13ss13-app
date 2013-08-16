@@ -385,11 +385,9 @@ public class GeometryProcessor {
             if (node.isLeaf()) {
 
                 if (currentBest.getGeometrizable() == null) {
-                    currentGeometrizable = node.getNearestGeometrizable(
-                            search.valueForDimension(dim), constraint, dim);
+                    currentGeometrizable = node.getNearestGeometrizable(search.valueForDimension(dim), constraint, dim);
                 } else {
-                    currentGeometrizable = node.getNearestGeometrizable(
-                            currentBest.getGeometrizable().valueForDimension(dim), constraint, dim);
+                    currentGeometrizable = node.getNearestGeometrizable(currentBest.getGeometrizable().valueForDimension(dim), constraint, dim);
                 }
 
                 if (currentGeometrizable != null) {

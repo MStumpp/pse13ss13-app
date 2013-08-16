@@ -122,6 +122,7 @@ public class GeometryProcessorTest {
 
 
     @Test
+    @Ignore
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -164,7 +165,6 @@ public class GeometryProcessorTest {
 
 
     @Test
-    @Ignore
     public void testGetNearestVertexDefaultPerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
