@@ -28,7 +28,7 @@ public class InfoView extends Fragment implements POIImageListener {
 	private TextView title;
 	private ImageView iv;
 	private TextView category;
-	private TextView text;
+	private TextView textView;
 	private ImageView save;
 	private ImageView play;
 	private boolean speak;
@@ -49,7 +49,7 @@ public class InfoView extends Fragment implements POIImageListener {
 				R.id.poiinfoview_image);
 		this.category = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_category);
-		this.text = (TextView) this.getActivity().findViewById(
+		this.textView = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
 		play = (ImageView) (this.getActivity().findViewById(R.id.play));
@@ -58,7 +58,6 @@ public class InfoView extends Fragment implements POIImageListener {
 
 		final POI poi = MapController.getInstance().getPOI();
 		save.setOnTouchListener(new saveListener(poi, save));
-		play.setOnTouchListener(new playListener(poi));
 
 		if (poi != null) {
 			Log.d("wtf", "" + (poi.getName() == null) + (title == null));
@@ -87,11 +86,13 @@ public class InfoView extends Fragment implements POIImageListener {
 			}
 
 			if (poi.getTextInfo() != null) {
-				text.setText(Html.fromHtml(poi.getTextInfo()));
-				text.setMovementMethod(LinkMovementMethod.getInstance());
-				text.setVisibility(View.VISIBLE);
+				String text = Html.fromHtml(poi.getTextInfo()).toString();
+				play.setOnTouchListener(new playListener(text));
+				textView.setText(text);
+				textView.setMovementMethod(LinkMovementMethod.getInstance());
+				textView.setVisibility(View.VISIBLE);
 				toogleSpeaking();
-				TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());
+				TextToSpeechUtility.getInstance().speak(text);
 			}
 		}
 
@@ -197,10 +198,10 @@ public class InfoView extends Fragment implements POIImageListener {
 
 	private class playListener implements OnTouchListener {
 
-		POI poi;
+		String text;
 		
-		public playListener(POI poi){
-			this.poi = poi;
+		public playListener(String text){
+			this.text = text;
 		}
 
 		public boolean onTouch(View v, MotionEvent event) {
@@ -210,7 +211,7 @@ public class InfoView extends Fragment implements POIImageListener {
 					toogleSpeaking();
 					TextToSpeechUtility.getInstance().stopSpeaking();
 				} else {
-					TextToSpeechUtility.getInstance().speak(Html.fromHtml(poi.getTextInfo()).toString());
+					TextToSpeechUtility.getInstance().speak(text);
 				}
 			}
 			return false;
