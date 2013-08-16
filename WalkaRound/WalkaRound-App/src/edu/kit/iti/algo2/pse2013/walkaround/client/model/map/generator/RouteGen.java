@@ -102,7 +102,6 @@ public class RouteGen implements Runnable {
 		Log.d(Tag_RouteGen, "create Route Bitmap");
 		this.routeImg.eraseColor(defaultBackgroundEmpty);
 		this.routeImg.prepareToDraw();
-
 		this.drawRouteLines();
 	}
 }

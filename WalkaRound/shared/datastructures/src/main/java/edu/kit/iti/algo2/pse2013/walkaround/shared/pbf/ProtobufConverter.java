@@ -200,13 +200,13 @@ public class ProtobufConverter {
 			Field numberField = wrapper.getClass().getDeclaredField("nodeNumber");
 			numberField.setAccessible(true);
 			return SaveGeometrizableWrapper.newBuilder().setNumber(numberField.getInt(wrapper)).setGeometrizable(getGeometrizableBuilder(wrapper.getGeometrizable()));
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -400,30 +400,36 @@ public class ProtobufConverter {
 	}
 	public static Waypoint getWaypoint(SaveWaypoint saWP) {
 		SaveCoordinate coord = saWP.getParentLocation().getParentCoordinate();
-		SaveAddress addr = saWP.getParentLocation().getAddress();
-		Waypoint wp = new Waypoint(coord.getLatitude(), coord.getLongitude(), saWP.getParentLocation().getName(),
-			new Address(addr.getStreet(), addr.getHouseNumber(), addr.getCity(), addr.getPostalCode()));
-		try {
-			wp.getClass().getField("crossInfo").set(wp, new CrossingInformation(saWP.getParentLocation().getParentCoordinate().getCrossingAngleList()));
-			wp.getClass().getField("id").setInt(wp, saWP.getParentLocation().getID());
-		} catch (NoSuchFieldException e) {
-			logger.log(Level.WARNING, "Reflection failed!", e);
-		} catch (IllegalArgumentException e) {
-			logger.log(Level.WARNING, "Reflection failed!", e);
-		} catch (IllegalAccessException e) {
-			logger.log(Level.WARNING, "Reflection failed!", e);
+		Waypoint wp = new Waypoint(coord.getLatitude(), coord.getLongitude(), saWP.getParentLocation().getName());
+		if (saWP.getParentLocation().hasAddress()) {
+			SaveAddress sAddr = saWP.getParentLocation().getAddress();
+			Address addr = new Address(sAddr.getStreet(), sAddr.getHouseNumber(), sAddr.getCity(), sAddr.getPostalCode());
+			wp.setAddress(addr);
+		}
+		if (saWP.getParentLocation().getParentCoordinate().getCrossingAngleList().size() > 0) {
+			wp.setCrossingInformation(new CrossingInformation(saWP.getParentLocation().getParentCoordinate().getCrossingAngleList()));
+		}
+		if (saWP.getParentLocation().hasName()) {
+			wp.setName(saWP.getParentLocation().getName());
+		} else {
+			wp.setName(null);
 		}
 		wp.setProfile(saWP.getProfile());
-		wp.setIsFavorite(saWP.hasFavorite());
-		wp.setPOI(ProtobufConverter.getPOI(saWP.getPOI()));
+		wp.setIsFavorite(saWP.getFavorite());
+		if (saWP.hasPOI()) {
+			wp.setPOI(ProtobufConverter.getPOI(saWP.getPOI()));
+		}
 		return wp;
 	}
 	public static SaveWaypoint.Builder getWaypointBuilder(Waypoint wp) {
 		SaveLocation.Builder loc = ProtobufConverter.getLocationBuilder(wp);
-		return SaveWaypoint.newBuilder()
-				.setProfile(wp.getProfile())
-				.setFavorite(wp.isFavorite())
-				.setPOI(ProtobufConverter.getPOIBuilder(wp.getPOI()))
-				.setParentLocation(loc);
+		SaveWaypoint.Builder builder = SaveWaypoint.newBuilder()
+			.setProfile(wp.getProfile())
+			.setFavorite(wp.isFavorite())
+			.setParentLocation(loc);
+		if (wp.isPOI()) {
+			builder.setPOI(ProtobufConverter.getPOIBuilder(wp.getPOI()));
+		}
+		return builder;
 	}
 }

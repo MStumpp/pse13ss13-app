@@ -45,7 +45,7 @@ public class RoundtripProcessor {
     /**
      * Maximal Epsilon.
      */
-    private final static double MAXIMAL_EPS = 0.01;
+    private final static double MAXIMAL_EPS = 0.1;
 
 
     /**
@@ -181,6 +181,7 @@ public class RoundtripProcessor {
             List<Vertex> roundtrip = new LinkedList<Vertex>();
 
             double currentEPS = INITIAL_EPS;
+            int run = 1;
 
             while (roundtrip.isEmpty()) {
 
@@ -243,7 +244,8 @@ public class RoundtripProcessor {
                 if (currentBestU == null || currentBestV == null || currentRouteUV == null) {
                     logger.info("no roundtrip found");
 
-                    currentEPS = currentEPS + INITIAL_EPS;
+                    run++;
+                    currentEPS *= run;
                     if (currentEPS > MAXIMAL_EPS) {
                         logger.info("updated eps (" + currentEPS + ") is greater than maximal eps (" + MAXIMAL_EPS + "), no roundtrip found");
                         break;

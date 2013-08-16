@@ -414,8 +414,8 @@ public class MapView extends Activity {
 				for (DisplayPOI value : dp) {
 					ImageView iv = new ImageView(context);
 					iv.setImageDrawable(poi);
-					iv.setY(value.getY());
-					iv.setX(value.getX());
+					iv.setY(value.getY() - 145);
+					iv.setX(value.getX() - 60);
 					iv.setTag(value.getId());
 					iv.setLayoutParams(new LayoutParams((int) sizeOfPoints,
 							(int) sizeOfPoints));

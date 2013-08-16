@@ -79,7 +79,18 @@ public class Location extends Coordinate {
     }
 
 
-    /**
+    /* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Location [name=" + name + ", address=" + address
+				+ ", isMoveable=" + isMoveable + ", isFavorite=" + isFavorite
+				+ ", coordinate=" + super.toString() + "]";
+	}
+
+
+	/**
      * Returns the ID of Location.
      *
      * @return int.
@@ -98,6 +109,9 @@ public class Location extends Coordinate {
         return name;
     }
 
+    public void setName(String name) {
+    	this.name = name;
+    }
 
     /**
      * Returns the Address of Location.
@@ -106,6 +120,10 @@ public class Location extends Coordinate {
      */
     public Address getAddress() {
         return address;
+    }
+
+    public void setAddress(Address address) {
+    	this.address = address;
     }
 
 

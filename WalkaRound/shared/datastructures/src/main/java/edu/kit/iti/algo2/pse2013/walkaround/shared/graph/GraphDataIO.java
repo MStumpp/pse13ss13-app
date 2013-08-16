@@ -105,4 +105,42 @@ public class GraphDataIO {
 		return geom;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((edges == null) ? 0 : edges.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof GraphDataIO)) {
+			return false;
+		}
+		GraphDataIO other = (GraphDataIO) obj;
+		if (edges == null) {
+			if (other.edges != null) {
+				return false;
+			}
+		} else if (!edges.equals(other.edges)) {
+			return false;
+		}
+		return true;
+	}
+
 }
