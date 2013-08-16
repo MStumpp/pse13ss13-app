@@ -98,7 +98,6 @@ public class GeometryProcessorVertex {
     public Geometrizable getNearestGeometrizable(GeometrySearch search)
             throws GeometryProcessorException, GeometryComputationNoSlotsException,
             IllegalArgumentException {
-        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + processor);
         return processor.getNearestGeometrizable(search, null);
     }
 
