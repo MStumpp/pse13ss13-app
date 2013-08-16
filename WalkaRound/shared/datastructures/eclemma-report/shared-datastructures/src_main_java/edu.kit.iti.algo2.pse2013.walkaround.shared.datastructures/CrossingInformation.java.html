@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CrossingInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">CrossingInformation.java</span></div><h1>CrossingInformation.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CrossingInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">CrossingInformation.java</span></div><h1>CrossingInformation.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * @author Matthias Stumpp
  * @version 1.0
  */
-<span class="pc bpc" id="L13" title="1 of 2 branches missed.">public final class CrossingInformation {</span>
+public final class CrossingInformation {
 
     /**
      * list of crossroad angles.
@@ -21,23 +21,28 @@ import java.util.List;
     /**
      * Creates an instance of CrossingInformation.
      *
-     * @param crossroadAngles An array of crossroad angles.
+     * @param angles An array of crossroad angles.
      */
 <span class="fc" id="L26">    public CrossingInformation(float[] angles) {</span>
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (angles.length == 0)</span>
-<span class="nc" id="L28">            throw new IllegalArgumentException(&quot;number of crossing angles must be at least one&quot;);</span>
+<span class="fc bfc" id="L27" title="All 4 branches covered.">        if (angles == null || angles.length &lt;= 0)</span>
+<span class="fc" id="L28">            throw new IllegalArgumentException(&quot;number of crossing angles must be at least one&quot;);</span>
 <span class="fc" id="L29">        this.angles = angles;</span>
 <span class="fc" id="L30">	}</span>
 
 <span class="fc" id="L32">    public CrossingInformation(List&lt;Float&gt; angles) {</span>
-<span class="fc" id="L33">    	this.angles = new float[angles.size()];</span>
-<span class="fc bfc" id="L34" title="All 2 branches covered.">    	for (int i = 0; i &lt; angles.size(); i++) {</span>
-<span class="pc bpc" id="L35" title="3 of 4 branches missed.">    		assert angles.get(i) != null;</span>
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">    		if (angles.get(i) != null) {</span>
-<span class="fc" id="L37">        		this.angles[i] = angles.get(i);</span>
+<span class="fc bfc" id="L33" title="All 4 branches covered.">    	if (angles == null || angles.size() &lt;= 0)</span>
+<span class="fc" id="L34">        	throw new IllegalArgumentException(&quot;number of crossing angles must be at least one&quot;);</span>
+<span class="fc" id="L35">    	this.angles = new float[angles.size()];</span>
+<span class="fc" id="L36">    	int counter = 0;</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">    	for (int i = 0; i &lt; angles.size(); i++) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">    		if (angles.get(i) != null) {</span>
+<span class="fc" id="L39">    			this.angles[counter++] = angles.get(i);</span>
     		}
     	}
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L42">    	this.angles = Arrays.copyOf(this.angles, counter);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (this.angles.length &lt;= 0)</span>
+<span class="fc" id="L44">        	throw new IllegalArgumentException(&quot;number of crossing angles must be at least one&quot;);</span>
+<span class="fc" id="L45">    }</span>
 
 
     /**
@@ -46,7 +51,7 @@ import java.util.List;
      * @return array of float.
      */
     public float[] getCrossingAngles() {
-<span class="fc" id="L49">        return angles;</span>
+<span class="fc" id="L54">        return angles;</span>
     }
 
 
@@ -56,10 +61,10 @@ import java.util.List;
      * @return float.
      */
     public float getCrossingAngle(int index) {
-<span class="nc bnc" id="L59" title="All 4 branches missed.">        if (index &lt; 0 || index &gt; angles.length-1)</span>
-<span class="nc" id="L60">            throw new IllegalArgumentException(&quot;index must be equal or greater &quot; +</span>
-<span class="nc" id="L61">                    &quot;than zero but not greater than &quot; + (angles.length-1));</span>
-<span class="nc" id="L62">        return angles[index];</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">        if (index &lt; 0 || index &gt; angles.length-1)</span>
+<span class="fc" id="L65">            throw new IllegalArgumentException(&quot;index must be equal or greater &quot; +</span>
+<span class="fc" id="L66">                    &quot;than zero but not greater than &quot; + (angles.length-1));</span>
+<span class="fc" id="L67">        return angles[index];</span>
 	}
 
 
@@ -69,19 +74,19 @@ import java.util.List;
      * @return int.
      */
     public int getNumCrossroads() {
-<span class="fc" id="L72">        return angles.length;</span>
+<span class="fc" id="L77">        return angles.length;</span>
     }
 
     public CrossingInformation clone() {
-<span class="fc" id="L76">    	return new CrossingInformation(this.angles);</span>
+<span class="fc" id="L81">    	return new CrossingInformation(this.angles);</span>
     }
 
     public boolean setNextCrossingAngleOnRoute(int index) {
-<span class="nc bnc" id="L80" title="All 2 branches missed.">    	if (index &gt;= this.angles.length) {</span>
-<span class="nc" id="L81">    		return false;</span>
+<span class="fc bfc" id="L85" title="All 4 branches covered.">    	if (index &gt;= this.angles.length || index &lt; 0) {</span>
+<span class="fc" id="L86">    		return false;</span>
     	}
-<span class="nc" id="L83">    	this.nextCrossingAngleOnRoute = index;</span>
-<span class="nc" id="L84">    	return true;</span>
+<span class="fc" id="L88">    	this.nextCrossingAngleOnRoute = index;</span>
+<span class="fc" id="L89">    	return true;</span>
     }
 
 	/* (non-Javadoc)
@@ -89,11 +94,11 @@ import java.util.List;
 	 */
 	@Override
 	public int hashCode() {
-<span class="fc" id="L92">		final int prime = 31;</span>
-<span class="fc" id="L93">		int result = 1;</span>
-<span class="fc" id="L94">		result = prime * result + Arrays.hashCode(angles);</span>
-<span class="fc" id="L95">		result = prime * result + nextCrossingAngleOnRoute;</span>
-<span class="fc" id="L96">		return result;</span>
+<span class="fc" id="L97">		final int prime = 31;</span>
+<span class="fc" id="L98">		int result = 1;</span>
+<span class="fc" id="L99">		result = prime * result + Arrays.hashCode(angles);</span>
+<span class="fc" id="L100">		result = prime * result + nextCrossingAngleOnRoute;</span>
+<span class="fc" id="L101">		return result;</span>
 	}
 
 	/* (non-Javadoc)
@@ -101,24 +106,24 @@ import java.util.List;
 	 */
 	@Override
 	public boolean equals(Object obj) {
-<span class="fc bfc" id="L104" title="All 2 branches covered.">		if (this == obj) {</span>
-<span class="fc" id="L105">			return true;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L110">			return true;</span>
 		}
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">		if (obj == null) {</span>
-<span class="nc" id="L108">			return false;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">		if (obj == null) {</span>
+<span class="fc" id="L113">			return false;</span>
 		}
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">		if (!(obj instanceof CrossingInformation)) {</span>
-<span class="nc" id="L111">			return false;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">		if (!(obj instanceof CrossingInformation)) {</span>
+<span class="fc" id="L116">			return false;</span>
 		}
-<span class="fc" id="L113">		CrossingInformation other = (CrossingInformation) obj;</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">		if (!Arrays.equals(angles, other.angles)) {</span>
-<span class="fc" id="L115">			return false;</span>
+<span class="fc" id="L118">		CrossingInformation other = (CrossingInformation) obj;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">		if (!Arrays.equals(angles, other.angles)) {</span>
+<span class="fc" id="L120">			return false;</span>
 		}
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">		if (nextCrossingAngleOnRoute != other.nextCrossingAngleOnRoute) {</span>
-<span class="nc" id="L118">			return false;</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">		if (nextCrossingAngleOnRoute != other.nextCrossingAngleOnRoute) {</span>
+<span class="fc" id="L123">			return false;</span>
 		}
-<span class="fc" id="L120">		return true;</span>
+<span class="fc" id="L125">		return true;</span>
 	}
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Waypoint.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Waypoint.java</span></div><h1>Waypoint.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Waypoint.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Waypoint.java</span></div><h1>Waypoint.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 /**
  * This class represents a Waypoint.
@@ -28,8 +28,8 @@ public class Waypoint extends Location {
      * @param name Name of Waypoint.
      */
     public Waypoint(double lat, double lon, String name) {
-<span class="nc" id="L31">        this(lat, lon, name, null);</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this(lat, lon, name, null);</span>
+<span class="fc" id="L32">    }</span>
 
 
     /**
@@ -41,11 +41,11 @@ public class Waypoint extends Location {
      * @param address Address of Waypoint.
      */
     public Waypoint(double lat, double lon, String name, Address address) {
-<span class="nc" id="L44">        super(lat, lon, name, address);</span>
-<span class="nc" id="L45">        profile = -1;</span>
-<span class="nc" id="L46">        poi = null;</span>
-<span class="nc" id="L47">        this.setMoveability(true);</span>
-<span class="nc" id="L48">    }</span>
+<span class="fc" id="L44">        super(lat, lon, name, address);</span>
+<span class="fc" id="L45">        profile = -1;</span>
+<span class="fc" id="L46">        poi = null;</span>
+<span class="fc" id="L47">        this.setMoveability(true);</span>
+<span class="fc" id="L48">    }</span>
 
 
     /**
@@ -54,8 +54,8 @@ public class Waypoint extends Location {
      * @param profile Profile of Waypoint.
      */
     public void setProfile(int profile) {
-<span class="nc" id="L57">        this.profile = profile;</span>
-<span class="nc" id="L58">    }</span>
+<span class="fc" id="L57">        this.profile = profile;</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -64,7 +64,7 @@ public class Waypoint extends Location {
      * @return int.
      */
     public int getProfile() {
-<span class="nc" id="L67">        return profile;</span>
+<span class="fc" id="L67">        return profile;</span>
     }
 
 
@@ -74,8 +74,8 @@ public class Waypoint extends Location {
      * @param poi POI of Waypoint.
      */
     public void setPOI(POI poi) {
-<span class="nc" id="L77">        this.poi = poi;</span>
-<span class="nc" id="L78">    }</span>
+<span class="fc" id="L77">        this.poi = poi;</span>
+<span class="fc" id="L78">    }</span>
 
 
     /**
@@ -84,7 +84,7 @@ public class Waypoint extends Location {
      * @return POI.
      */
     public POI getPOI() {
-<span class="nc" id="L87">        return poi;</span>
+<span class="fc" id="L87">        return poi;</span>
     }
 
 
@@ -94,31 +94,72 @@ public class Waypoint extends Location {
      * @return true if this Waypoint is a POI, false otherwise.
      */
     public boolean isPOI() {
-<span class="nc bnc" id="L97" title="All 2 branches missed.">        return poi != null;</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        return poi != null;</span>
     }
-    
-    
-    public Waypoint clone() {
-<span class="nc" id="L102">    	String clonedName = null;</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">    	if (this.getName() != null) {</span>
-<span class="nc" id="L104">    	clonedName = this.getName().toString();</span>
+
+    /* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="fc" id="L105">		final int prime = 31;</span>
+<span class="fc" id="L106">		int result = super.hashCode();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">		result = prime * result + ((poi == null) ? 0 : poi.hashCode());</span>
+<span class="fc" id="L108">		result = prime * result + profile;</span>
+<span class="fc" id="L109">		return result;</span>
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L119">			return true;</span>
+		}
+<span class="fc bfc" id="L121" title="All 2 branches covered.">		if (!super.equals(obj)) {</span>
+<span class="fc" id="L122">			return false;</span>
+		}
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		if (!(obj instanceof Waypoint)) {</span>
+<span class="fc" id="L125">			return false;</span>
+		}
+<span class="fc" id="L127">		Waypoint other = (Waypoint) obj;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">		if (poi == null) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">			if (other.poi != null) {</span>
+<span class="fc" id="L130">				return false;</span>
+			}
+<span class="fc bfc" id="L132" title="All 2 branches covered.">		} else if (!poi.equals(other.poi)) {</span>
+<span class="fc" id="L133">			return false;</span>
+		}
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		if (profile != other.profile) {</span>
+<span class="fc" id="L136">			return false;</span>
+		}
+<span class="fc" id="L138">		return true;</span>
+	}
+
+
+	public Waypoint clone() {
+<span class="fc" id="L143">    	String clonedName = null;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    	if (this.getName() != null) {</span>
+<span class="fc" id="L145">    		clonedName = this.getName().toString();</span>
     	}
-<span class="nc" id="L106">    	Address clonedAddress = null;</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">    	if (this.getAddress() != null) {</span>
-<span class="nc" id="L108">    	clonedAddress = this.getAddress().clone();</span>
+<span class="fc" id="L147">    	Address clonedAddress = null;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">    	if (this.getAddress() != null) {</span>
+<span class="fc" id="L149">    		clonedAddress = this.getAddress().clone();</span>
     	}
-<span class="nc" id="L110">    	POI clonedPOI = null;</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">    	if (this.getPOI() != null) {</span>
-<span class="nc" id="L112">    	clonedPOI = this.getPOI().clone();</span>
+<span class="fc" id="L151">    	POI clonedPOI = null;</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">    	if (this.getPOI() != null) {</span>
+<span class="fc" id="L153">    		clonedPOI = this.getPOI().clone();</span>
     	}
-    	
-<span class="nc" id="L115">    	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);</span>
-    	
-<span class="nc" id="L117">    	clonedWaypoint.setPOI(clonedPOI);</span>
-<span class="nc" id="L118">    	clonedWaypoint.setProfile(this.getProfile());</span>
-<span class="nc" id="L119">    	return clonedWaypoint;</span>
+
+<span class="fc" id="L156">    	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);</span>
+
+<span class="fc" id="L158">    	clonedWaypoint.setPOI(clonedPOI);</span>
+<span class="fc" id="L159">    	clonedWaypoint.setProfile(this.getProfile());</span>
+<span class="fc" id="L160">    	return clonedWaypoint;</span>
     }
-    
+
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

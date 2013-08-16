@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometryDataIO.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometryDataIO.java</span></div><h1>GeometryDataIO.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometryDataIO.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometryDataIO.java</span></div><h1>GeometryDataIO.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -73,13 +73,12 @@ public class GeometryDataIO {
 	 *            Location of output file on file system.
 	 * @throws java.io.IOException
 	 */
-	public static void save(GeometryDataIO objectToSave, File destination)
-			throws IOException {
-<span class="fc" id="L78">		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));</span>
-<span class="fc" id="L79">		ProtobufConverter.getGeometryDataBuilder(objectToSave).build().writeTo(out);</span>
-<span class="fc" id="L80">		out.flush();</span>
-<span class="fc" id="L81">		out.close();</span>
-<span class="fc" id="L82">	}</span>
+	public static void save(GeometryDataIO objectToSave, File destination) throws IOException {
+<span class="fc" id="L77">		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));</span>
+<span class="fc" id="L78">		ProtobufConverter.getGeometryDataBuilder(objectToSave).build().writeTo(out);</span>
+<span class="fc" id="L79">		out.flush();</span>
+<span class="fc" id="L80">		out.close();</span>
+<span class="fc" id="L81">	}</span>
 
 	/**
 	 * Loads and returns a GeometryDataIO object from a given file.
@@ -90,10 +89,50 @@ public class GeometryDataIO {
 	 * @throws ClassNotFoundException
 	 */
 	public static GeometryDataIO load(File source) throws IOException {
-<span class="nc" id="L93">		InputStream in = new BufferedInputStream(new FileInputStream(source));</span>
-<span class="nc" id="L94">		GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));</span>
-<span class="nc" id="L95">		in.close();</span>
-<span class="nc" id="L96">		return geom;</span>
+<span class="fc" id="L92">		InputStream in = new BufferedInputStream(new FileInputStream(source));</span>
+<span class="fc" id="L93">		GeometryDataIO geom = ProtobufConverter.getGeometryData(SaveGeometryData.parseFrom(in));</span>
+<span class="fc" id="L94">		in.close();</span>
+<span class="fc" id="L95">		return geom;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="nc" id="L103">		final int prime = 31;</span>
+<span class="nc" id="L104">		int result = 1;</span>
+<span class="nc" id="L105">		result = prime * result + numDimensions;</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		result = prime * result + ((root == null) ? 0 : root.hashCode());</span>
+<span class="nc" id="L107">		return result;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">		if (this == obj) {</span>
+<span class="nc" id="L116">			return true;</span>
+		}
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">		if (obj == null) {</span>
+<span class="nc" id="L119">			return false;</span>
+		}
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">		if (!(obj instanceof GeometryDataIO)) {</span>
+<span class="nc" id="L122">			return false;</span>
+		}
+<span class="fc" id="L124">		GeometryDataIO other = (GeometryDataIO) obj;</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">		if (numDimensions != other.numDimensions) {</span>
+<span class="nc" id="L126">			return false;</span>
+		}
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">		if (root == null) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (other.root != null) {</span>
+<span class="nc" id="L130">				return false;</span>
+			}
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">		} else if (!root.equals(other.root)) {</span>
+<span class="nc" id="L133">			return false;</span>
+		}
+<span class="fc" id="L135">		return true;</span>
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

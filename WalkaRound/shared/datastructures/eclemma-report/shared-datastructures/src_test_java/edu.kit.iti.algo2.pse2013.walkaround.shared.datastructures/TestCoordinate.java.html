@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestCoordinate.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">TestCoordinate.java</span></div><h1>TestCoordinate.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestCoordinate.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">TestCoordinate.java</span></div><h1>TestCoordinate.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -97,65 +97,50 @@ import org.junit.Test;
 <span class="fc" id="L97">	}</span>
 
 	@Test
-	public void testNumberDimensions() {
+	public void testHashCode() {
 <span class="fc" id="L101">		Coordinate c = new Coordinate(48.1234567, 9.987654321);</span>
 <span class="fc" id="L102">		Coordinate c2 = new Coordinate(48.1234567, 9.987654321, new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f}));</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		assertTrue(c.numberDimensions() == 2);</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">		assertTrue(c2.numberDimensions() == 2);</span>
-<span class="fc" id="L105">	}</span>
-
-	@Test
-	public void testValueForDimension() {
-<span class="fc" id="L109">		Coordinate c = new Coordinate(48.1234567, 9.987654321);</span>
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">		assertTrue(c.valueForDimension(0) == c.getLatitude());</span>
-<span class="pc bpc" id="L111" title="1 of 2 branches missed.">		assertTrue(c.valueForDimension(1) == c.getLongitude());</span>
-<span class="fc" id="L112">	}</span>
-
-	@Test
-	public void testHashCode() {
-<span class="fc" id="L116">		Coordinate c = new Coordinate(48.1234567, 9.987654321);</span>
-<span class="fc" id="L117">		Coordinate c2 = new Coordinate(48.1234567, 9.987654321, new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f}));</span>
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">		assertTrue(c.hashCode() != c2.hashCode());</span>
-<span class="fc" id="L119">	}</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		assertTrue(c.hashCode() != c2.hashCode());</span>
+<span class="fc" id="L104">	}</span>
 
 	@Test
 	public void testToString() {
-<span class="fc" id="L123">		testToString(new Coordinate(48.1234567, 9.987654321));</span>
-<span class="fc" id="L124">		testToString(new Coordinate(-48.1234567, 9.987654321));</span>
-<span class="fc" id="L125">		testToString(new Coordinate(48.1234567, -9.987654321));</span>
-<span class="fc" id="L126">		testToString(new Coordinate(-48.1234567, -9.987654321));</span>
-<span class="fc" id="L127">		testToString(new Coordinate(-48.1234567, -9.987654321, new CrossingInformation(new float[]{-1, 0, 1, 2, 42})));</span>
-<span class="fc" id="L128">	}</span>
+<span class="fc" id="L108">		testToString(new Coordinate(48.1234567, 9.987654321));</span>
+<span class="fc" id="L109">		testToString(new Coordinate(-48.1234567, 9.987654321));</span>
+<span class="fc" id="L110">		testToString(new Coordinate(48.1234567, -9.987654321));</span>
+<span class="fc" id="L111">		testToString(new Coordinate(-48.1234567, -9.987654321));</span>
+<span class="fc" id="L112">		testToString(new Coordinate(-48.1234567, -9.987654321, new CrossingInformation(new float[]{-1, 0, 1, 2, 42})));</span>
+<span class="fc" id="L113">	}</span>
 	private void testToString(Coordinate c) {
-<span class="fc" id="L130">		assertTrue(c.toString().contains(String.format(&quot;%.5f&quot;,c.getLatitude())));</span>
-<span class="fc" id="L131">		assertTrue(c.toString().contains(String.format(&quot;%.5f&quot;,c.getLongitude())));</span>
-<span class="fc" id="L132">		assertTrue(c.toString().contains(&quot;Coord&quot;));</span>
-<span class="fc bfc" id="L133" title="All 2 branches covered.">		if (c.getCrossingInformation() != null) {</span>
-<span class="fc" id="L134">			String angles = &quot;&quot;;</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">			for (float f : c.getCrossingInformation().getCrossingAngles()) {</span>
-<span class="fc" id="L136">				angles += &quot; &quot; + f;</span>
+<span class="fc" id="L115">		assertTrue(c.toString().contains(String.format(&quot;%.5f&quot;,c.getLatitude())));</span>
+<span class="fc" id="L116">		assertTrue(c.toString().contains(String.format(&quot;%.5f&quot;,c.getLongitude())));</span>
+<span class="fc" id="L117">		assertTrue(c.toString().contains(&quot;Coord&quot;));</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		if (c.getCrossingInformation() != null) {</span>
+<span class="fc" id="L119">			String angles = &quot;&quot;;</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">			for (float f : c.getCrossingInformation().getCrossingAngles()) {</span>
+<span class="fc" id="L121">				angles += &quot; &quot; + f;</span>
 			}
-<span class="fc" id="L138">			assertTrue(c.toString().contains(angles.trim()));</span>
+<span class="fc" id="L123">			assertTrue(c.toString().contains(angles.trim()));</span>
 		}
-<span class="fc" id="L140">	}</span>
+<span class="fc" id="L125">	}</span>
 
 	@Test
 	public void testEquals() {
-<span class="fc" id="L144">		Coordinate c = new Coordinate(48.1234567, 9.987654321);</span>
-<span class="fc" id="L145">		CrossingInformation cInfo = new CrossingInformation(new float[]{0f});</span>
-<span class="fc" id="L146">		Coordinate c2 = new Coordinate(48.1234567, 9.987654321, cInfo);</span>
-<span class="fc" id="L147">		Coordinate c3 = new Coordinate(48.7654321, 9.123456789);</span>
-<span class="fc" id="L148">		Coordinate c4 = new Coordinate(48.1234567, 9.987654321, new CrossingInformation(new float[]{1f}));</span>
-<span class="fc" id="L149">		Coordinate c5 = new Coordinate(48.1234567, 9.987654321, cInfo);</span>
-<span class="fc" id="L150">		Coordinate c6 = new Coordinate(48.1234567, 9.123456789);</span>
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">		assertTrue(!c.equals(null));</span>
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">		assertTrue(!c.equals(&quot;42&quot;));</span>
-<span class="fc" id="L153">		assertTrue(c.equals(c));</span>
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">		assertTrue(!c.equals(c2));</span>
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">		assertTrue(!c.equals(c3));</span>
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">		assertTrue(!c2.equals(c4));</span>
-<span class="fc" id="L157">		assertTrue(c2.equals(c5));</span>
-<span class="pc bpc" id="L158" title="1 of 2 branches missed.">		assertTrue(!c.equals(c6));</span>
-<span class="fc" id="L159">	}</span>
+<span class="fc" id="L129">		Coordinate c = new Coordinate(48.1234567, 9.987654321);</span>
+<span class="fc" id="L130">		CrossingInformation cInfo = new CrossingInformation(new float[]{0f});</span>
+<span class="fc" id="L131">		Coordinate c2 = new Coordinate(48.1234567, 9.987654321, cInfo);</span>
+<span class="fc" id="L132">		Coordinate c3 = new Coordinate(48.7654321, 9.123456789);</span>
+<span class="fc" id="L133">		Coordinate c4 = new Coordinate(48.1234567, 9.987654321, new CrossingInformation(new float[]{1f}));</span>
+<span class="fc" id="L134">		Coordinate c5 = new Coordinate(48.1234567, 9.987654321, cInfo);</span>
+<span class="fc" id="L135">		Coordinate c6 = new Coordinate(48.1234567, 9.123456789);</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">		assertTrue(!c.equals(null));</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">		assertTrue(!c.equals(&quot;42&quot;));</span>
+<span class="fc" id="L138">		assertTrue(c.equals(c));</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">		assertTrue(!c.equals(c2));</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">		assertTrue(!c.equals(c3));</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">		assertTrue(!c2.equals(c4));</span>
+<span class="fc" id="L142">		assertTrue(c2.equals(c5));</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">		assertTrue(!c.equals(c6));</span>
+<span class="fc" id="L144">	}</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

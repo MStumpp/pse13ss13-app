@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ProtobufConverter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.pbf</a> &gt; <span class="el_source">ProtobufConverter.java</span></div><h1>ProtobufConverter.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ProtobufConverter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.pbf</a> &gt; <span class="el_source">ProtobufConverter.java</span></div><h1>ProtobufConverter.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,11 +15,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
@@ -28,6 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveArea;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveEdge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizableWrapper;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
@@ -37,348 +41,390 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SavePOI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveVertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 
-<span class="nc" id="L40">public class ProtobufConverter {</span>
-<span class="fc" id="L41">	private static Logger logger = Logger.getLogger(ProtobufConverter.class.getSimpleName());</span>
-<span class="fc" id="L42">	private static Map&lt;Integer, Vertex&gt; tmp_vertices;</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">public class ProtobufConverter {</span>
+<span class="fc" id="L45">	private static Logger logger = Logger.getLogger(ProtobufConverter.class.getSimpleName());</span>
+<span class="fc" id="L46">	private static Map&lt;Integer, Vertex&gt; tmp_vertices;</span>
 	public static Address getAddress(SaveAddress saveAddress) {
-<span class="fc bfc" id="L44" title="All 2 branches covered.">		if (saveAddress == null) {</span>
-<span class="fc" id="L45">			return null;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		if (saveAddress == null) {</span>
+<span class="fc" id="L49">			return null;</span>
 		}
-<span class="fc" id="L47">		int zip = Address.NO_POSTAL_CODE;</span>
-<span class="fc" id="L48">		String street = null;</span>
-<span class="fc" id="L49">		String city = null;</span>
-<span class="fc" id="L50">		String housenumber = null;</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">		if (saveAddress.hasStreet()) {</span>
-<span class="fc" id="L52">			street = saveAddress.getStreet();</span>
+<span class="fc" id="L51">		int zip = Address.NO_POSTAL_CODE;</span>
+<span class="fc" id="L52">		String street = null;</span>
+<span class="fc" id="L53">		String city = null;</span>
+<span class="fc" id="L54">		String housenumber = null;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		if (saveAddress.hasStreet()) {</span>
+<span class="fc" id="L56">			street = saveAddress.getStreet();</span>
 		}
-<span class="fc bfc" id="L54" title="All 2 branches covered.">		if (saveAddress.hasPostalCode()) {</span>
-<span class="fc" id="L55">			zip = saveAddress.getPostalCode();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">		if (saveAddress.hasPostalCode()) {</span>
+<span class="fc" id="L59">			zip = saveAddress.getPostalCode();</span>
 		}
-<span class="fc bfc" id="L57" title="All 2 branches covered.">		if (saveAddress.hasCity()) {</span>
-<span class="fc" id="L58">			city = saveAddress.getCity();</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		if (saveAddress.hasCity()) {</span>
+<span class="fc" id="L62">			city = saveAddress.getCity();</span>
 		}
-<span class="fc bfc" id="L60" title="All 2 branches covered.">		if (saveAddress.hasHouseNumber()) {</span>
-<span class="fc" id="L61">			housenumber = saveAddress.getHouseNumber();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		if (saveAddress.hasHouseNumber()) {</span>
+<span class="fc" id="L65">			housenumber = saveAddress.getHouseNumber();</span>
 		}
-<span class="fc" id="L63">		return new Address(street, housenumber, city, zip);</span>
+<span class="fc" id="L67">		return new Address(street, housenumber, city, zip);</span>
 	}
 	public static SaveAddress.Builder getAddressBuilder(Address addr) {
-<span class="fc bfc" id="L66" title="All 2 branches covered.">		if (addr == null) {</span>
-<span class="fc" id="L67">			return null;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		if (addr == null) {</span>
+<span class="fc" id="L71">			return null;</span>
 		}
-<span class="fc" id="L69">		SaveAddress.Builder builder = SaveAddress.newBuilder();</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">		if (addr.getCity() != null) {</span>
-<span class="fc" id="L71">			builder.setCity(addr.getCity());</span>
+<span class="fc" id="L73">		SaveAddress.Builder builder = SaveAddress.newBuilder();</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">		if (addr.getCity() != null) {</span>
+<span class="fc" id="L75">			builder.setCity(addr.getCity());</span>
 		}
-<span class="fc bfc" id="L73" title="All 2 branches covered.">		if (addr.getHouseNumber() != null) {</span>
-<span class="fc" id="L74">			builder.setHouseNumber(addr.getHouseNumber());</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">		if (addr.getHouseNumber() != null) {</span>
+<span class="fc" id="L78">			builder.setHouseNumber(addr.getHouseNumber());</span>
 		}
-<span class="fc bfc" id="L76" title="All 2 branches covered.">		if (addr.getPostalCode() != Address.NO_POSTAL_CODE) {</span>
-<span class="fc" id="L77">			builder.setPostalCode(addr.getPostalCode());</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		if (addr.getPostalCode() != Address.NO_POSTAL_CODE) {</span>
+<span class="fc" id="L81">			builder.setPostalCode(addr.getPostalCode());</span>
 		}
-<span class="fc bfc" id="L79" title="All 2 branches covered.">		if (addr.getStreet() != null) {</span>
-<span class="fc" id="L80">			builder.setStreet(addr.getStreet());</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		if (addr.getStreet() != null) {</span>
+<span class="fc" id="L84">			builder.setStreet(addr.getStreet());</span>
 		}
-<span class="fc" id="L82">		return builder;</span>
+<span class="fc" id="L86">		return builder;</span>
 	}
 	public static Area getArea(SaveArea saveArea) {
-<span class="fc bfc" id="L85" title="All 2 branches covered.">		if (saveArea == null) {</span>
-<span class="fc" id="L86">			return null;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		if (saveArea == null) {</span>
+<span class="fc" id="L90">			return null;</span>
 		}
-<span class="fc" id="L88">		int[] areaCats = new int[saveArea.getCategoryCount()];</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">		for (int i = 0; i &lt; areaCats.length; i++) {</span>
-<span class="fc" id="L90">			areaCats[i] = saveArea.getCategory(i);</span>
+<span class="fc" id="L92">		int[] areaCats = new int[saveArea.getCategoryCount()];</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">		for (int i = 0; i &lt; areaCats.length; i++) {</span>
+<span class="fc" id="L94">			areaCats[i] = saveArea.getCategory(i);</span>
 		}
-<span class="fc" id="L92">		ArrayList&lt;Coordinate&gt; areaCoords = new ArrayList&lt;Coordinate&gt;();</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">		for (SaveCoordinate c : saveArea.getCoordinateList()) {</span>
-<span class="fc" id="L94">			areaCoords.add(getCoordinate(c));</span>
+<span class="fc" id="L96">		ArrayList&lt;Coordinate&gt; areaCoords = new ArrayList&lt;Coordinate&gt;();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		for (SaveCoordinate c : saveArea.getCoordinateList()) {</span>
+<span class="fc" id="L98">			areaCoords.add(getCoordinate(c));</span>
 		}
-<span class="fc" id="L96">		return new Area(areaCats, areaCoords);</span>
+<span class="fc" id="L100">		return new Area(areaCats, areaCoords);</span>
 	}
 	public static SaveArea.Builder getAreaBuilder(Area area) {
-<span class="fc bfc" id="L99" title="All 2 branches covered.">		if (area == null) {</span>
-<span class="fc" id="L100">			return null;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">		if (area == null) {</span>
+<span class="fc" id="L104">			return null;</span>
 		}
-<span class="fc" id="L102">		SaveArea.Builder builder = SaveArea.newBuilder();</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">		for (int cat : area.getAreaCategories()) {</span>
-<span class="fc" id="L104">			builder.addCategory(cat);</span>
+<span class="fc" id="L106">		SaveArea.Builder builder = SaveArea.newBuilder();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">		for (int cat : area.getAreaCategories()) {</span>
+<span class="fc" id="L108">			builder.addCategory(cat);</span>
 		}
-<span class="fc bfc" id="L106" title="All 2 branches covered.">		for (Coordinate c : area.getAreaCoordinates()) {</span>
-<span class="fc" id="L107">			builder.addCoordinate(getCoordinateBuilder(c));</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">		for (Coordinate c : area.getAreaCoordinates()) {</span>
+<span class="fc" id="L111">			builder.addCoordinate(getCoordinateBuilder(c));</span>
 		}
-<span class="fc" id="L109">		return builder;</span>
+<span class="fc" id="L113">		return builder;</span>
 	}
 	public static Coordinate getCoordinate(SaveCoordinate saveCoord) {
-<span class="fc bfc" id="L112" title="All 2 branches covered.">		if (saveCoord == null) {</span>
-<span class="fc" id="L113">			return null;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">		if (saveCoord == null) {</span>
+<span class="fc" id="L117">			return null;</span>
 		}
-<span class="fc" id="L115">		CrossingInformation crossInfo = null;</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered.">		if (saveCoord.getCrossingAngleCount() &gt; 1) {</span>
-<span class="fc" id="L117">			crossInfo = new CrossingInformation(saveCoord.getCrossingAngleList());</span>
+<span class="fc" id="L119">		CrossingInformation crossInfo = null;</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">		if (saveCoord.getCrossingAngleCount() &gt; 1) {</span>
+<span class="fc" id="L121">			crossInfo = new CrossingInformation(saveCoord.getCrossingAngleList());</span>
 		}
-<span class="fc" id="L119">		return new Coordinate(saveCoord.getLatitude(), saveCoord.getLongitude(), crossInfo);</span>
+<span class="fc" id="L123">		return new Coordinate(saveCoord.getLatitude(), saveCoord.getLongitude(), crossInfo);</span>
 	}
 	public static SaveCoordinate.Builder getCoordinateBuilder(Coordinate c) {
-<span class="fc bfc" id="L122" title="All 2 branches covered.">		if (c == null) {</span>
-<span class="fc" id="L123">			return null;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		if (c == null) {</span>
+<span class="fc" id="L127">			return null;</span>
 		}
-<span class="fc" id="L125">		SaveCoordinate.Builder saveCoord = SaveCoordinate.newBuilder()</span>
-<span class="fc" id="L126">				.setLatitude(c.getLatitude())</span>
-<span class="fc" id="L127">				.setLongitude(c.getLongitude());</span>
-<span class="pc bpc" id="L128" title="2 of 6 branches missed.">		if (c.getCrossingInformation() != null &amp;&amp; c.getCrossingInformation().getCrossingAngles() != null &amp;&amp; c.getCrossingInformation().getNumCrossroads() &gt; 1) {</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">			for (float angle : c.getCrossingInformation().getCrossingAngles()) {</span>
-<span class="fc" id="L130">				saveCoord.addCrossingAngle(angle);</span>
+<span class="fc" id="L129">		SaveCoordinate.Builder saveCoord = SaveCoordinate.newBuilder()</span>
+<span class="fc" id="L130">				.setLatitude(c.getLatitude())</span>
+<span class="fc" id="L131">				.setLongitude(c.getLongitude());</span>
+<span class="pc bpc" id="L132" title="2 of 6 branches missed.">		if (c.getCrossingInformation() != null &amp;&amp; c.getCrossingInformation().getCrossingAngles() != null &amp;&amp; c.getCrossingInformation().getNumCrossroads() &gt; 1) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">			for (float angle : c.getCrossingInformation().getCrossingAngles()) {</span>
+<span class="fc" id="L134">				saveCoord.addCrossingAngle(angle);</span>
 			}
 		}
-<span class="fc" id="L133">		return saveCoord;</span>
+<span class="fc" id="L137">		return saveCoord;</span>
 	}
 
 	private static Edge getEdge(SaveEdge saveEdge) {
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">		if (saveEdge == null) {</span>
-<span class="nc" id="L138">			return null;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">		if (saveEdge == null) {</span>
+<span class="nc" id="L142">			return null;</span>
 		}
-<span class="fc" id="L140">		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()), saveEdge.getID());</span>
-<span class="fc" id="L141">		return e;</span>
+<span class="fc" id="L144">		Edge e = new Edge(getVertex(saveEdge.getTail()), getVertex(saveEdge.getHead()), saveEdge.getID());</span>
+<span class="fc" id="L145">		return e;</span>
 	}
 	private static SaveEdge.Builder getEdgeBuilder(Edge e) {
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">		if (e == null) {</span>
-<span class="nc" id="L145">			return null;</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">		if (e == null) {</span>
+<span class="nc" id="L149">			return null;</span>
 		}
-<span class="fc" id="L147">		return SaveEdge.newBuilder()</span>
-<span class="fc" id="L148">			.setHead(getVertexBuilder(e.getHead()))</span>
-<span class="fc" id="L149">			.setTail(getVertexBuilder(e.getTail()))</span>
-<span class="fc" id="L150">			.setID(e.getID());</span>
+<span class="fc" id="L151">		return SaveEdge.newBuilder()</span>
+<span class="fc" id="L152">			.setHead(getVertexBuilder(e.getHead()))</span>
+<span class="fc" id="L153">			.setTail(getVertexBuilder(e.getTail()))</span>
+<span class="fc" id="L154">			.setID(e.getID());</span>
 	}
 
 	public static List&lt;Geometrizable&gt; getGeometrizables(List&lt;SaveGeometrizable&gt; saveGeoms) {
-<span class="nc" id="L154">		ArrayList&lt;Geometrizable&gt; geoms = new ArrayList&lt;Geometrizable&gt;();</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">		for (SaveGeometrizable saveGeom : saveGeoms) {</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">			if (saveGeom.getCoordinate() != null) {</span>
-<span class="nc" id="L157">				geoms.add(getCoordinate(saveGeom.getCoordinate()));</span>
-<span class="nc bnc" id="L158" title="All 2 branches missed.">			} else if (saveGeom.getEdge() != null) {</span>
-<span class="nc" id="L159">				geoms.add(getEdge(saveGeom.getEdge()));</span>
+<span class="fc" id="L158">		ArrayList&lt;Geometrizable&gt; geoms = new ArrayList&lt;Geometrizable&gt;();</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">		for (SaveGeometrizable saveGeom : saveGeoms) {</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">			if (saveGeom != null) {</span>
+<span class="fc" id="L161">				geoms.add(getGeometrizable(saveGeom));</span>
 			}
 		}
-<span class="nc" id="L162">		return null;</span>
+<span class="fc" id="L164">		return geoms;</span>
+	}
+	private static Geometrizable getGeometrizable(SaveGeometrizable saveGeom) {
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		if (saveGeom.hasPOI()) {</span>
+<span class="fc" id="L168">			return getPOI(saveGeom.getPOI());</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">		} else if (saveGeom.hasEdge()) {</span>
+<span class="fc" id="L170">			return getEdge(saveGeom.getEdge());</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">		} else if (saveGeom.hasVertex()) {</span>
+<span class="fc" id="L172">			return getVertex(saveGeom.getVertex());</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">		} else if (saveGeom.hasWrapper()) {</span>
+<span class="fc" id="L174">			return getGeometrizableWrapper(saveGeom.getWrapper());</span>
+		}
+<span class="nc" id="L176">		return null;</span>
+	}
+	private static Geometrizable getGeometrizableWrapper(SaveGeometrizableWrapper wrapper) {
+<span class="fc" id="L179">		return new GeometrizableWrapper(getGeometrizable(wrapper.getGeometrizable()), wrapper.getNumber());</span>
 	}
 	public static SaveGeometrizable.Builder getGeometrizableBuilder(Geometrizable geometrizable) {
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">		if (geometrizable instanceof Edge) {</span>
-<span class="nc" id="L166">			return SaveGeometrizable.newBuilder().setEdge(getEdgeBuilder((Edge) geometrizable));</span>
-<span class="pc bpc" id="L167" title="1 of 2 branches missed.">		} else if (geometrizable instanceof Coordinate) {</span>
-<span class="fc" id="L168">			return SaveGeometrizable.newBuilder().setCoordinate(getCoordinateBuilder((Coordinate) geometrizable));</span>
+<span class="fc" id="L182">		SaveGeometrizable.Builder builder = SaveGeometrizable.newBuilder();</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">		if (geometrizable instanceof Edge) {</span>
+<span class="fc" id="L184">			return builder.setEdge(getEdgeBuilder((Edge) geometrizable));</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">		} else if (geometrizable instanceof POI) {</span>
+<span class="fc" id="L186">			return builder.setPOI(getPOIBuilder((POI) geometrizable));</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">		} else if (geometrizable instanceof Vertex) {</span>
+<span class="fc" id="L188">			return builder.setVertex(getVertexBuilder((Vertex) geometrizable));</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">		} else if (geometrizable instanceof GeometrizableWrapper) {</span>
+<span class="fc" id="L190">			return builder.setWrapper(getWrapperBuilder((GeometrizableWrapper) geometrizable));</span>
 		}
-<span class="nc" id="L170">		return null;</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">		assert false;</span>
+<span class="nc" id="L193">		return null;</span>
+	}
+	private static SaveGeometrizableWrapper.Builder getWrapperBuilder(GeometrizableWrapper wrapper) {
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">		if (wrapper == null) {</span>
+<span class="nc" id="L197">			return null;</span>
+		}
+		try {
+<span class="fc" id="L200">			Field numberField = wrapper.getClass().getDeclaredField(&quot;nodeNumber&quot;);</span>
+<span class="fc" id="L201">			numberField.setAccessible(true);</span>
+<span class="fc" id="L202">			return SaveGeometrizableWrapper.newBuilder().setNumber(numberField.getInt(wrapper)).setGeometrizable(getGeometrizableBuilder(wrapper.getGeometrizable()));</span>
+<span class="nc" id="L203">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L204">			e.printStackTrace();</span>
+<span class="nc" id="L205">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L206">			e.printStackTrace();</span>
+<span class="nc" id="L207">		} catch (NoSuchFieldException e) {</span>
+<span class="nc" id="L208">			e.printStackTrace();</span>
+<span class="nc" id="L209">		} catch (SecurityException e) {</span>
+<span class="nc" id="L210">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L212">		return null;</span>
 	}
 	public static GeometryDataIO getGeometryData(SaveGeometryData saveGeometryData) {
-<span class="nc bnc" id="L173" title="All 2 branches missed.">		if (saveGeometryData == null) {</span>
-<span class="nc" id="L174">			return null;</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">		if (saveGeometryData == null) {</span>
+<span class="fc" id="L216">			return null;</span>
 		}
-<span class="nc" id="L176">		tmp_vertices = new TreeMap&lt;Integer, Vertex&gt;();</span>
-<span class="nc" id="L177">		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot(), saveGeometryData.getRoot().getDepth()), saveGeometryData.getNumDimensions());</span>
+<span class="fc" id="L218">		tmp_vertices = new TreeMap&lt;Integer, Vertex&gt;();</span>
+<span class="fc" id="L219">		return new GeometryDataIO(getGeometryNode(null, saveGeometryData.getRoot()), saveGeometryData.getNumDimensions());</span>
 	}
 	public static SaveGeometryData.Builder getGeometryDataBuilder(GeometryDataIO geometryData) {
-<span class="pc bpc" id="L180" title="2 of 4 branches missed.">		if (geometryData == null || geometryData.getRoot() == null) {</span>
-<span class="nc" id="L181">			return null;</span>
+<span class="pc bpc" id="L222" title="1 of 4 branches missed.">		if (geometryData == null || geometryData.getRoot() == null) {</span>
+<span class="fc" id="L223">			return null;</span>
 		}
-<span class="fc" id="L183">		return SaveGeometryData.newBuilder()</span>
-<span class="fc" id="L184">			.setRoot(getGeometryNodeBuilder(geometryData.getRoot()))</span>
-<span class="fc" id="L185">			.setNumDimensions(geometryData.getNumDimensions());</span>
+<span class="fc" id="L225">		return SaveGeometryData.newBuilder()</span>
+<span class="fc" id="L226">			.setRoot(getGeometryNodeBuilder(geometryData.getRoot()))</span>
+<span class="fc" id="L227">			.setNumDimensions(geometryData.getNumDimensions());</span>
 	}
-	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode, int depth) {
-		if (saveNode == null) {
-			return null;
-		}
-		GeometryNode node;
-		List&lt;Geometrizable&gt; geoms;
-		if (saveNode.getGeometrizableCount() &gt; 0) {
-			geoms = getGeometrizables(saveNode.getGeometrizableList());
-		}
-		if (parent == null) {
-<span class="fc" id="L197">			node = new GeometryNode(saveNode.getSplitValue(), geoms);</span>
-		} else {
-			node = new GeometryNode(parent, saveNode.getDepth(), saveNode.getSplitValue());
-		}
-		if (saveNode.hasLeft()) {
-			node.setLeftNode(getGeometryNode(node, saveNode.getLeft(), depth + 1));
-		}
-		if (saveNode.hasRight()) {
-			node.setRightNode(getGeometryNode(node, saveNode.getRight(), depth + 1));
-		}
-		return node;
-	}
-	public static SaveGeometryNode.Builder getGeometryNodeBuilder(GeometryNode node) {
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">		if (node == null) {</span>
-<span class="nc" id="L211">			return null;</span>
-		}
-<span class="fc" id="L213">		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder()</span>
-			//.setDepth(node.getDepth())
-<span class="fc" id="L215">			.setSplitValue(node.getSplitValue());</span>
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">		if (node.getLeftNode() != null) {</span>
-<span class="nc" id="L217">			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));</span>
-		}
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">		if (node.getRightNode() != null) {</span>
-<span class="nc" id="L220">			builder.setRight(getGeometryNodeBuilder(node.getLeftNode()));</span>
-		}
-<span class="pc bpc" id="L222" title="2 of 4 branches missed.">		if (node.getGeometrizables() != null &amp;&amp; node.getGeometrizables().length &gt; 0) {</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">			for (Geometrizable g : node.getGeometrizables()) {</span>
-<span class="fc" id="L224">				builder.addGeometrizable(getGeometrizableBuilder(g));</span>
-			}
-		}
-<span class="fc" id="L227">		return builder;</span>
-	}
-	public static GraphDataIO getGraphData(SaveGraphData saveGraphData) {
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">		if (saveGraphData == null) {</span>
+	public static GeometryNode getGeometryNode(GeometryNode parent, SaveGeometryNode saveNode) {
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">		if (saveNode == null) {</span>
 <span class="nc" id="L231">			return null;</span>
 		}
-<span class="fc" id="L233">		GraphDataIO graphData = new GraphDataIO();</span>
-<span class="fc" id="L234">		tmp_vertices = new TreeMap&lt;Integer, Vertex&gt;();</span>
-<span class="fc bfc" id="L235" title="All 2 branches covered.">		for (SaveEdge se : saveGraphData.getEdgeList()) {</span>
-<span class="fc" id="L236">			graphData.addEdge(getEdge(se));</span>
+		GeometryNode node;
+<span class="fc" id="L234">		List&lt;Geometrizable&gt; geoms = new LinkedList&lt;Geometrizable&gt;();</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">		if (saveNode.getGeometrizableCount() &gt; 0) {</span>
+<span class="fc" id="L236">			geoms = getGeometrizables(saveNode.getGeometrizableList());</span>
 		}
-<span class="fc" id="L238">		return graphData;</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">		if (parent == null) {</span>
+<span class="fc" id="L239">			node = new GeometryNode(saveNode.getSplitValue(), geoms);</span>
+<span class="fc" id="L240">		} else {</span>
+<span class="fc" id="L241">			node = new GeometryNode(parent, saveNode.getSplitValue(), geoms);</span>
+		}
+<span class="fc bfc" id="L243" title="All 2 branches covered.">		if (saveNode.hasLeft()) {</span>
+<span class="fc" id="L244">			node.setLeftNode(getGeometryNode(node, saveNode.getLeft()));</span>
+		}
+<span class="fc bfc" id="L246" title="All 2 branches covered.">		if (saveNode.hasRight()) {</span>
+<span class="fc" id="L247">			node.setRightNode(getGeometryNode(node, saveNode.getRight()));</span>
+		}
+<span class="fc" id="L249">		return node;</span>
+	}
+	public static SaveGeometryNode.Builder getGeometryNodeBuilder(GeometryNode node) {
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">		if (node == null) {</span>
+<span class="nc" id="L253">			return null;</span>
+		}
+<span class="fc" id="L255">		SaveGeometryNode.Builder builder =  SaveGeometryNode.newBuilder().setSplitValue(node.getSplitValue());</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">		if (node.getLeftNode() != null) {</span>
+<span class="nc" id="L257">			builder.setLeft(getGeometryNodeBuilder(node.getLeftNode()));</span>
+		}
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">		if (node.getRightNode() != null) {</span>
+<span class="nc" id="L260">			builder.setRight(getGeometryNodeBuilder(node.getRightNode()));</span>
+		}
+<span class="pc bpc" id="L262" title="1 of 4 branches missed.">		if (node.getGeometrizables() != null &amp;&amp; node.getGeometrizables().size() &gt; 0) {</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">			for (Geometrizable g : node.getGeometrizables()) {</span>
+<span class="fc" id="L264">				builder.addGeometrizable(getGeometrizableBuilder(g));</span>
+			}
+		}
+<span class="fc" id="L267">		return builder;</span>
+	}
+	public static GraphDataIO getGraphData(SaveGraphData saveGraphData) {
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">		if (saveGraphData == null) {</span>
+<span class="nc" id="L271">			return null;</span>
+		}
+<span class="fc" id="L273">		GraphDataIO graphData = new GraphDataIO();</span>
+<span class="fc" id="L274">		tmp_vertices = new TreeMap&lt;Integer, Vertex&gt;();</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">		for (SaveEdge se : saveGraphData.getEdgeList()) {</span>
+<span class="fc" id="L276">			graphData.addEdge(getEdge(se));</span>
+		}
+<span class="fc" id="L278">		return graphData;</span>
 	}
 	public static SaveGraphData.Builder getGraphDataBuilder(GraphDataIO graphData) {
-<span class="pc bpc" id="L241" title="1 of 2 branches missed.">		if (graphData == null) {</span>
-<span class="nc" id="L242">			return null;</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">		if (graphData == null) {</span>
+<span class="nc" id="L282">			return null;</span>
 		}
-<span class="fc" id="L244">		SaveGraphData.Builder builder = SaveGraphData.newBuilder();</span>
-<span class="fc bfc" id="L245" title="All 2 branches covered.">		for (Edge e : graphData.getEdges()) {</span>
-<span class="fc" id="L246">			builder.addEdge(getEdgeBuilder(e));</span>
+<span class="fc" id="L284">		SaveGraphData.Builder builder = SaveGraphData.newBuilder();</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">		for (Edge e : graphData.getEdges()) {</span>
+<span class="fc" id="L286">			builder.addEdge(getEdgeBuilder(e));</span>
 		}
-<span class="fc" id="L248">		return builder;</span>
+<span class="fc" id="L288">		return builder;</span>
 	}
 	public static Location getLocation(SaveLocation saveLoc) {
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">		if (saveLoc == null) {</span>
-<span class="nc" id="L252">			return null;</span>
+<span class="pc bpc" id="L291" title="1 of 2 branches missed.">		if (saveLoc == null) {</span>
+<span class="nc" id="L292">			return null;</span>
 		}
-<span class="fc" id="L254">		return new Location(</span>
-<span class="fc" id="L255">			saveLoc.getParentCoordinate().getLatitude(),</span>
-<span class="fc" id="L256">			saveLoc.getParentCoordinate().getLongitude(),</span>
-<span class="fc" id="L257">			saveLoc.getName(),</span>
-<span class="fc" id="L258">			getAddress(saveLoc.getAddress()));</span>
+<span class="fc" id="L294">		return new Location(</span>
+<span class="fc" id="L295">			saveLoc.getParentCoordinate().getLatitude(),</span>
+<span class="fc" id="L296">			saveLoc.getParentCoordinate().getLongitude(),</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">			saveLoc.hasName()? saveLoc.getName(): null,</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">			saveLoc.hasAddress()?getAddress(saveLoc.getAddress()):null);</span>
 	}
 	public static SaveLocation.Builder getLocationBuilder(Location loc) {
-<span class="pc bpc" id="L261" title="1 of 2 branches missed.">		if (loc == null) {</span>
-<span class="nc" id="L262">			return null;</span>
-		}
-<span class="fc" id="L264">		SaveLocation.Builder builder = SaveLocation.newBuilder()</span>
-<span class="fc" id="L265">				.setParentCoordinate(getCoordinateBuilder(loc))</span>
-<span class="fc" id="L266">				.setID(loc.getId())</span>
-<span class="fc" id="L267">				.setName(loc.getName());</span>
-<span class="fc" id="L268">		SaveAddress.Builder addr = getAddressBuilder(loc.getAddress());</span>
-<span class="pc bpc" id="L269" title="1 of 2 branches missed.">		if (addr != null) {</span>
-<span class="nc" id="L270">			builder.setAddress(addr);</span>
-		}
-<span class="fc" id="L272">		return builder;</span>
-	}
-	public static LocationDataIO getLocationData(SaveLocationData saveLocationData) {
-<span class="pc bpc" id="L275" title="1 of 2 branches missed.">		if (saveLocationData == null) {</span>
-<span class="nc" id="L276">			return null;</span>
-		}
-<span class="fc" id="L278">		LocationDataIO locationData = new LocationDataIO();</span>
-<span class="fc bfc" id="L279" title="All 2 branches covered.">		for (SavePOI savePOI : saveLocationData.getPOIList()) {</span>
-<span class="fc" id="L280">			locationData.addPOI(getPOI(savePOI));</span>
-		}
-<span class="fc bfc" id="L282" title="All 2 branches covered.">		for (SaveArea saveArea : saveLocationData.getAreaList()) {</span>
-<span class="fc" id="L283">			locationData.addArea(getArea(saveArea));</span>
-		}
-<span class="fc" id="L285">		return locationData;</span>
-	}
-	public static SaveLocationData.Builder getLocationDataBuilder(LocationDataIO locData) {
-<span class="pc bpc" id="L288" title="1 of 2 branches missed.">		if (locData == null) {</span>
-<span class="nc" id="L289">			return null;</span>
-		}
-<span class="fc" id="L291">		SaveLocationData.Builder builder = SaveLocationData.newBuilder();</span>
-<span class="fc bfc" id="L292" title="All 2 branches covered.">		for (POI p : locData.getPOIs()) {</span>
-<span class="fc" id="L293">			builder.addPOI(getPOIBuilder(p));</span>
-		}
-<span class="fc bfc" id="L295" title="All 2 branches covered.">		for (Area a : locData.getAreas()) {</span>
-<span class="fc" id="L296">			builder.addArea(getAreaBuilder(a));</span>
-		}
-<span class="fc" id="L298">		return builder;</span>
-	}
-	public static POI getPOI(SavePOI savePOI) {
-<span class="pc bpc" id="L301" title="1 of 2 branches missed.">		if (savePOI == null) {</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">		if (loc == null) {</span>
 <span class="nc" id="L302">			return null;</span>
 		}
-<span class="fc" id="L304">		int[] cats = new int[savePOI.getPOICategoryList().size()];</span>
-<span class="fc bfc" id="L305" title="All 2 branches covered.">		for (int i = 0; i &lt; cats.length; i++) {</span>
-<span class="fc" id="L306">			cats[i] = savePOI.getPOICategory(i);</span>
+<span class="fc" id="L304">		SaveLocation.Builder builder = SaveLocation.newBuilder()</span>
+<span class="fc" id="L305">				.setParentCoordinate(getCoordinateBuilder(loc))</span>
+<span class="fc" id="L306">				.setID(loc.getId());</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">		if (loc.getName() != null) {</span>
+<span class="fc" id="L308">			builder.setName(loc.getName());</span>
+		}
+<span class="fc" id="L310">		SaveAddress.Builder addr = getAddressBuilder(loc.getAddress());</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">		if (addr != null) {</span>
+<span class="fc" id="L312">			builder.setAddress(addr);</span>
+		}
+<span class="fc" id="L314">		return builder;</span>
+	}
+	public static LocationDataIO getLocationData(SaveLocationData saveLocationData) {
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">		if (saveLocationData == null) {</span>
+<span class="nc" id="L318">			return null;</span>
+		}
+<span class="fc" id="L320">		LocationDataIO locationData = new LocationDataIO();</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">		for (SavePOI savePOI : saveLocationData.getPOIList()) {</span>
+<span class="fc" id="L322">			locationData.addPOI(getPOI(savePOI));</span>
+		}
+<span class="fc bfc" id="L324" title="All 2 branches covered.">		for (SaveArea saveArea : saveLocationData.getAreaList()) {</span>
+<span class="fc" id="L325">			locationData.addArea(getArea(saveArea));</span>
+		}
+<span class="fc" id="L327">		return locationData;</span>
+	}
+	public static SaveLocationData.Builder getLocationDataBuilder(LocationDataIO locData) {
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">		if (locData == null) {</span>
+<span class="nc" id="L331">			return null;</span>
+		}
+<span class="fc" id="L333">		SaveLocationData.Builder builder = SaveLocationData.newBuilder();</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">		for (POI p : locData.getPOIs()) {</span>
+<span class="fc" id="L335">			builder.addPOI(getPOIBuilder(p));</span>
+		}
+<span class="fc bfc" id="L337" title="All 2 branches covered.">		for (Area a : locData.getAreas()) {</span>
+<span class="fc" id="L338">			builder.addArea(getAreaBuilder(a));</span>
+		}
+<span class="fc" id="L340">		return builder;</span>
+	}
+	public static POI getPOI(SavePOI savePOI) {
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">		if (savePOI == null) {</span>
+<span class="nc" id="L344">			return null;</span>
+		}
+<span class="fc" id="L346">		int[] cats = new int[savePOI.getPOICategoryList().size()];</span>
+<span class="fc bfc" id="L347" title="All 2 branches covered.">		for (int i = 0; i &lt; cats.length; i++) {</span>
+<span class="fc" id="L348">			cats[i] = savePOI.getPOICategory(i);</span>
 		}
 		URL url;
 		try {
-<span class="fc" id="L310">			url = new URL(savePOI.getURL());</span>
-<span class="fc" id="L311">		} catch (MalformedURLException e) {</span>
-<span class="fc" id="L312">			url = null;</span>
+<span class="fc" id="L352">			url = new URL(savePOI.getURL());</span>
+<span class="fc" id="L353">		} catch (MalformedURLException e) {</span>
+<span class="fc" id="L354">			url = null;</span>
 		}
-<span class="fc" id="L314">		return new POI(getLocation(savePOI.getParentLocation()), savePOI.getTextInfo(), url, cats);</span>
+<span class="fc" id="L356">		String textInfo = null;</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">		if (savePOI.hasTextInfo()) {</span>
+<span class="fc" id="L358">			textInfo = savePOI.getTextInfo();</span>
+		}
+<span class="fc" id="L360">		return new POI(getLocation(savePOI.getParentLocation()), textInfo, url, cats);</span>
 	}
 	public static SavePOI.Builder getPOIBuilder(POI p) {
-<span class="pc bpc" id="L317" title="1 of 2 branches missed.">		if (p == null) {</span>
-<span class="nc" id="L318">			return null;</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">		if (p == null) {</span>
+<span class="nc" id="L364">			return null;</span>
 		}
-<span class="fc" id="L320">		int[] cats = p.getPOICategories();</span>
-<span class="fc" id="L321">		ArrayList&lt;Integer&gt; poiList = new ArrayList&lt;Integer&gt;();</span>
-<span class="fc bfc" id="L322" title="All 2 branches covered.">		for (int i = 0; i &lt; cats.length; i++) {</span>
-<span class="fc" id="L323">			poiList.add(cats[i]);</span>
+<span class="fc" id="L366">		int[] cats = p.getPOICategories();</span>
+<span class="fc" id="L367">		ArrayList&lt;Integer&gt; poiList = new ArrayList&lt;Integer&gt;();</span>
+<span class="pc bpc" id="L368" title="1 of 4 branches missed.">		for (int i = 0; cats != null &amp;&amp; i &lt; cats.length; i++) {</span>
+<span class="fc" id="L369">			poiList.add(cats[i]);</span>
 		}
-<span class="fc" id="L325">		SavePOI.Builder builder = SavePOI.newBuilder()</span>
-<span class="fc" id="L326">			.setParentLocation(getLocationBuilder(p))</span>
-<span class="fc" id="L327">			.addAllPOICategory(poiList);</span>
-<span class="pc bpc" id="L328" title="1 of 2 branches missed.">		if (p.getTextInfo() != null) {</span>
-<span class="fc" id="L329">			builder.setTextInfo(p.getTextInfo());</span>
+<span class="fc" id="L371">		SavePOI.Builder builder = SavePOI.newBuilder()</span>
+<span class="fc" id="L372">			.setParentLocation(getLocationBuilder(p))</span>
+<span class="fc" id="L373">			.addAllPOICategory(poiList);</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">		if (p.getTextInfo() != null) {</span>
+<span class="fc" id="L375">			builder.setTextInfo(p.getTextInfo());</span>
 		}
-<span class="fc bfc" id="L331" title="All 2 branches covered.">		if (p.getURL() != null) {</span>
-<span class="fc" id="L332">			builder.setURL(p.getURL().toExternalForm());</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">		if (p.getURL() != null) {</span>
+<span class="fc" id="L378">			builder.setURL(p.getURL().toExternalForm());</span>
 		}
-<span class="fc" id="L334">		return builder;</span>
+<span class="fc" id="L380">		return builder;</span>
 	}
 	private static Vertex getVertex(SaveVertex saveVertex) {
-<span class="pc bpc" id="L337" title="1 of 2 branches missed.">		if (saveVertex == null) {</span>
-<span class="nc" id="L338">			return null;</span>
-<span class="fc bfc" id="L339" title="All 2 branches covered.">		} else if (tmp_vertices.containsKey(saveVertex.getID())) {</span>
-<span class="fc" id="L340">			return tmp_vertices.get(saveVertex.getID());</span>
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">		if (saveVertex == null) {</span>
+<span class="nc" id="L384">			return null;</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">		} else if (tmp_vertices.containsKey(saveVertex.getID())) {</span>
+<span class="fc" id="L386">			return tmp_vertices.get(saveVertex.getID());</span>
 		}
-<span class="fc" id="L342">		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getID());</span>
-<span class="fc" id="L343">		tmp_vertices.put(v.getID(), v);</span>
-<span class="fc" id="L344">		return v;</span>
+<span class="fc" id="L388">		Vertex v = new Vertex(saveVertex.getCoordinate().getLatitude(), saveVertex.getCoordinate().getLongitude(), saveVertex.getID());</span>
+<span class="fc" id="L389">		tmp_vertices.put(v.getID(), v);</span>
+<span class="fc" id="L390">		return v;</span>
 	}
 	public static SaveVertex.Builder getVertexBuilder(Vertex vertex) {
-<span class="pc bpc" id="L347" title="1 of 2 branches missed.">		if (vertex == null) {</span>
-<span class="nc" id="L348">			return null;</span>
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">		if (vertex == null) {</span>
+<span class="nc" id="L394">			return null;</span>
 		}
-<span class="fc" id="L350">		SaveVertex.Builder builder = SaveVertex.newBuilder()</span>
-<span class="fc" id="L351">			.setCoordinate(getCoordinateBuilder(vertex))</span>
-<span class="fc" id="L352">			.setID(vertex.getID());</span>
-<span class="fc" id="L353">		return builder;</span>
+<span class="fc" id="L396">		SaveVertex.Builder builder = SaveVertex.newBuilder()</span>
+<span class="fc" id="L397">			.setCoordinate(getCoordinateBuilder(vertex))</span>
+<span class="fc" id="L398">			.setID(vertex.getID());</span>
+<span class="fc" id="L399">		return builder;</span>
 	}
 	public static Waypoint getWaypoint(SaveWaypoint saWP) {
-<span class="nc" id="L356">		SaveCoordinate coord = saWP.getParentLocation().getParentCoordinate();</span>
-<span class="nc" id="L357">		SaveAddress addr = saWP.getParentLocation().getAddress();</span>
-<span class="nc" id="L358">		Waypoint wp = new Waypoint(coord.getLatitude(), coord.getLongitude(), saWP.getParentLocation().getName(),</span>
-<span class="nc" id="L359">			new Address(addr.getStreet(), addr.getHouseNumber(), addr.getCity(), addr.getPostalCode()));</span>
+<span class="nc" id="L402">		SaveCoordinate coord = saWP.getParentLocation().getParentCoordinate();</span>
+<span class="nc" id="L403">		SaveAddress addr = saWP.getParentLocation().getAddress();</span>
+<span class="nc" id="L404">		Waypoint wp = new Waypoint(coord.getLatitude(), coord.getLongitude(), saWP.getParentLocation().getName(),</span>
+<span class="nc" id="L405">			new Address(addr.getStreet(), addr.getHouseNumber(), addr.getCity(), addr.getPostalCode()));</span>
 		try {
-<span class="nc" id="L361">			wp.getClass().getField(&quot;crossInfo&quot;).set(wp, new CrossingInformation(saWP.getParentLocation().getParentCoordinate().getCrossingAngleList()));</span>
-<span class="nc" id="L362">			wp.getClass().getField(&quot;id&quot;).setInt(wp, saWP.getParentLocation().getID());</span>
-<span class="nc" id="L363">		} catch (NoSuchFieldException e) {</span>
-<span class="nc" id="L364">			logger.log(Level.WARNING, &quot;Reflection failed!&quot;, e);</span>
-<span class="nc" id="L365">		} catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L366">			logger.log(Level.WARNING, &quot;Reflection failed!&quot;, e);</span>
-<span class="nc" id="L367">		} catch (IllegalAccessException e) {</span>
-<span class="nc" id="L368">			logger.log(Level.WARNING, &quot;Reflection failed!&quot;, e);</span>
+<span class="nc" id="L407">			wp.getClass().getField(&quot;crossInfo&quot;).set(wp, new CrossingInformation(saWP.getParentLocation().getParentCoordinate().getCrossingAngleList()));</span>
+<span class="nc" id="L408">			wp.getClass().getField(&quot;id&quot;).setInt(wp, saWP.getParentLocation().getID());</span>
+<span class="nc" id="L409">		} catch (NoSuchFieldException e) {</span>
+<span class="nc" id="L410">			logger.log(Level.WARNING, &quot;Reflection failed!&quot;, e);</span>
+<span class="nc" id="L411">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L412">			logger.log(Level.WARNING, &quot;Reflection failed!&quot;, e);</span>
+<span class="nc" id="L413">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L414">			logger.log(Level.WARNING, &quot;Reflection failed!&quot;, e);</span>
 		}
-<span class="nc" id="L370">		wp.setProfile(saWP.getProfile());</span>
-<span class="nc" id="L371">		wp.setIsFavorite(saWP.hasFavorite());</span>
-<span class="nc" id="L372">		wp.setPOI(ProtobufConverter.getPOI(saWP.getPOI()));</span>
-<span class="nc" id="L373">		return wp;</span>
+<span class="nc" id="L416">		wp.setProfile(saWP.getProfile());</span>
+<span class="nc" id="L417">		wp.setIsFavorite(saWP.hasFavorite());</span>
+<span class="nc" id="L418">		wp.setPOI(ProtobufConverter.getPOI(saWP.getPOI()));</span>
+<span class="nc" id="L419">		return wp;</span>
 	}
 	public static SaveWaypoint.Builder getWaypointBuilder(Waypoint wp) {
-<span class="nc" id="L376">		SaveLocation.Builder loc = ProtobufConverter.getLocationBuilder(wp);</span>
-<span class="nc" id="L377">		return SaveWaypoint.newBuilder()</span>
-<span class="nc" id="L378">				.setProfile(wp.getProfile())</span>
-<span class="nc" id="L379">				.setFavorite(wp.isFavorite())</span>
-<span class="nc" id="L380">				.setPOI(ProtobufConverter.getPOIBuilder(wp.getPOI()))</span>
-<span class="nc" id="L381">				.setParentLocation(loc);</span>
+<span class="nc" id="L422">		SaveLocation.Builder loc = ProtobufConverter.getLocationBuilder(wp);</span>
+<span class="nc" id="L423">		return SaveWaypoint.newBuilder()</span>
+<span class="nc" id="L424">				.setProfile(wp.getProfile())</span>
+<span class="nc" id="L425">				.setFavorite(wp.isFavorite())</span>
+<span class="nc" id="L426">				.setPOI(ProtobufConverter.getPOIBuilder(wp.getPOI()))</span>
+<span class="nc" id="L427">				.setParentLocation(loc);</span>
 	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestCrossingInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">TestCrossingInformation.java</span></div><h1>TestCrossingInformation.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import static org.junit.Assert.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.Test;
+
+<span class="fc" id="L10">public class TestCrossingInformation {</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalConstructor1() {
+<span class="nc" id="L13">		new CrossingInformation((float[])null);</span>
+<span class="nc" id="L14">	}</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalConstructor2() {
+<span class="nc" id="L17">		new CrossingInformation((List&lt;Float&gt;)null);</span>
+<span class="nc" id="L18">	}</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalConstructor3() {
+<span class="nc" id="L21">		new CrossingInformation(new float[0]);</span>
+<span class="nc" id="L22">	}</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalConstructor4() {
+<span class="nc" id="L25">		new CrossingInformation(new LinkedList&lt;Float&gt;());</span>
+<span class="nc" id="L26">	}</span>
+	@Test
+	public void testCrossingAngles() {
+<span class="fc" id="L29">		CrossingInformation ci = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="fc" id="L30">		assertEquals(1f, ci.getCrossingAngle(0), 1e-45f);</span>
+<span class="fc" id="L31">		assertEquals(2f, ci.getCrossingAngle(1), 1e-45f);</span>
+<span class="fc" id="L32">		assertEquals(3f, ci.getCrossingAngle(2), 1e-45f);</span>
+<span class="fc" id="L33">	}</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testAngleOverflow() {
+<span class="nc" id="L36">		CrossingInformation ci = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="nc" id="L37">		ci.getCrossingAngle(-1);</span>
+<span class="nc" id="L38">	}</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testAngleOverflow2() {
+<span class="nc" id="L41">		CrossingInformation ci = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="nc" id="L42">		ci.getCrossingAngle(3);</span>
+<span class="nc" id="L43">	}</span>
+	@Test
+	public void testNextAngleOnRoute() {
+<span class="fc" id="L46">		CrossingInformation ci = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="fc" id="L47">		assertFalse(ci.setNextCrossingAngleOnRoute(-1));</span>
+<span class="fc" id="L48">		assertTrue(ci.setNextCrossingAngleOnRoute(0));</span>
+<span class="fc" id="L49">		assertTrue(ci.setNextCrossingAngleOnRoute(2));</span>
+<span class="fc" id="L50">		assertFalse(ci.setNextCrossingAngleOnRoute(3));</span>
+<span class="fc" id="L51">	}</span>
+	@Test
+	public void testEquals() {
+<span class="fc" id="L54">		CrossingInformation ci = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="fc" id="L55">		CrossingInformation ci2 = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="fc" id="L56">		CrossingInformation ci3 = new CrossingInformation(new float[]{1.0f, 2.0f, 4.0f});</span>
+<span class="fc" id="L57">		CrossingInformation ci4 = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});</span>
+<span class="fc" id="L58">		ci4.setNextCrossingAngleOnRoute(1);</span>
+
+<span class="fc" id="L60">		assertFalse(ci.equals(null));</span>
+<span class="fc" id="L61">		assertFalse(ci.equals(&quot;Test&quot;));</span>
+<span class="fc" id="L62">		assertTrue(ci.equals(ci));</span>
+<span class="fc" id="L63">		assertTrue(ci.equals(ci2));</span>
+<span class="fc" id="L64">		assertFalse(ci.equals(ci3));</span>
+<span class="fc" id="L65">		assertFalse(ci.equals(ci4));</span>
+<span class="fc" id="L66">	}</span>
+	@Test(expected=IllegalArgumentException.class)
+	public void testNullInList() {
+<span class="nc" id="L69">		LinkedList&lt;Float&gt; list = new LinkedList&lt;Float&gt;();</span>
+<span class="nc" id="L70">		list.add(null);</span>
+<span class="nc" id="L71">		list.add(1.0f);</span>
+<span class="nc" id="L72">		CrossingInformation ci = new CrossingInformation(list);</span>
+<span class="nc" id="L73">		assertNotNull(ci);</span>
+
+<span class="nc" id="L75">		list = new LinkedList&lt;Float&gt;();</span>
+<span class="nc" id="L76">		list.add(null);</span>
+<span class="nc" id="L77">		ci = new CrossingInformation(list);</span>
+<span class="nc" id="L78">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

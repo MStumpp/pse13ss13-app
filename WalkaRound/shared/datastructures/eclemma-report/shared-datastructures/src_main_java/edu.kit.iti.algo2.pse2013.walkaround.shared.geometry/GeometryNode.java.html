@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometryNode.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometryNode.java</span></div><h1>GeometryNode.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometryNode.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometryNode.java</span></div><h1>GeometryNode.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains some preprocessed data by GeometryDataPreprocessor.
@@ -10,25 +14,30 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
  */
 public class GeometryNode {
 
+    /**
+     * Logger.
+     */
+<span class="fc" id="L20">	private static final Logger logger = LoggerFactory.getLogger(GeometryNode.class);</span>
+
 	/**
 	 * Geometrizable.
 	 */
-	private Geometrizable[] geometrizables;
+<span class="fc" id="L25">	private List&lt;Geometrizable&gt; geometrizables = new ArrayList&lt;Geometrizable&gt;();</span>
 
 	/**
 	 * Value for split plane.
 	 */
-	private double splitValue;
+<span class="fc" id="L30">	private double splitValue = Double.NaN;</span>
 
 	/**
 	 * Parent GeometryNode.
 	 */
-	private GeometryNode parent;
+<span class="fc" id="L35">	private GeometryNode parent = null;</span>
 
 	/**
 	 * Depth of node.
 	 */
-	private int depth;
+<span class="fc" id="L40">	private int depth = 0;</span>
 
 	/**
 	 * Left GeometryNode.
@@ -45,77 +54,62 @@ public class GeometryNode {
 	 *
 	 * @param parent
 	 *            Parent GeometryNode.
-	 * @param depth
-	 *            Depth of this GeometryNode.
-	 * @param geometrizable
+	 * @param geometrizables
 	 *            Geometrizable.
 	 */
-<span class="fc" id="L53">	public GeometryNode(GeometryNode parent, int depth, Geometrizable geometrizable) {</span>
-<span class="fc" id="L54">		this.geometrizables = new Geometrizable[] { geometrizable };</span>
-<span class="fc" id="L55">		this.splitValue = Double.NaN;</span>
-<span class="fc" id="L56">		this.parent = parent;</span>
-<span class="fc" id="L57">		this.depth = depth;</span>
-<span class="fc" id="L58">	}</span>
-
-    /**
-     * Initializes GeometryNode as leaf node.
-     *
-     * @param parent
-     *            Parent GeometryNode.
-     * @param depth
-     *            Depth of this GeometryNode.
-     * @param geometrizables
-     *            Geometrizable.
-     */
-<span class="nc" id="L70">    public GeometryNode(GeometryNode parent, int depth, Geometrizable[] geometrizables) {</span>
-<span class="nc" id="L71">        this.geometrizables = geometrizables;</span>
-<span class="nc" id="L72">        this.splitValue = Double.NaN;</span>
-<span class="nc" id="L73">        this.parent = parent;</span>
-<span class="nc" id="L74">        this.depth = depth;</span>
-<span class="nc" id="L75">    }</span>
+<span class="fc" id="L60">	public GeometryNode(GeometryNode parent, List&lt;Geometrizable&gt; geometrizables) {</span>
+<span class="fc" id="L61">		this.geometrizables = geometrizables;</span>
+<span class="fc" id="L62">		this.parent = parent;</span>
+<span class="fc" id="L63">	}</span>
 
 	/**
 	 * Initializes GeometryNode as inner node.
 	 *
 	 * @param parent
 	 *            Parent GeometryNode.
-	 * @param depth
-	 *            Depth of this GeometryNode.
 	 * @param splitValue
 	 *            Split value.
 	 */
-<span class="fc" id="L87">	public GeometryNode(GeometryNode parent, int depth, double splitValue) {</span>
-<span class="fc" id="L88">		this.geometrizables = null;</span>
+<span class="fc" id="L73">	public GeometryNode(GeometryNode parent, double splitValue) {</span>
+<span class="fc" id="L74">		this.splitValue = splitValue;</span>
+<span class="fc" id="L75">		this.parent = parent;</span>
+<span class="fc" id="L76">	}</span>
+
+	/**
+	 * Initializes GeometryNode as inner node.
+	 *
+	 * @param parent
+	 *            Parent GeometryNode.
+	 * @param splitValue
+	 *            Split value.
+	 * @param geometrizables
+	 *           the geometrizable-list.
+	 */
+<span class="fc" id="L88">	public GeometryNode(GeometryNode parent, double splitValue, List&lt;Geometrizable&gt; geometrizables) {</span>
 <span class="fc" id="L89">		this.splitValue = splitValue;</span>
 <span class="fc" id="L90">		this.parent = parent;</span>
-<span class="fc" id="L91">		this.depth = depth;</span>
+<span class="fc" id="L91">		this.geometrizables = geometrizables;</span>
 <span class="fc" id="L92">	}</span>
 
 	/**
 	 * Initializes GeometryNode.
 	 *
-	 * @param geometrizable
-	 *            Geometrizable.
+	 * @param splitValue
+	 *            Split value.
 	 */
-<span class="fc" id="L100">	public GeometryNode(Geometrizable geometrizable) {</span>
-<span class="fc" id="L101">		this.geometrizables = new Geometrizable[] { geometrizable };</span>
-<span class="fc" id="L102">		this.splitValue = Double.NaN;</span>
-<span class="fc" id="L103">		this.parent = null;</span>
-<span class="fc" id="L104">		this.depth = -1;</span>
-<span class="fc" id="L105">	}</span>
-
+<span class="fc" id="L100">	public GeometryNode(double splitValue) {</span>
+<span class="fc" id="L101">		this.splitValue = splitValue;</span>
+<span class="fc" id="L102">	}</span>
 	/**
 	 * Initializes GeometryNode.
 	 *
 	 * @param splitValue
 	 *            Split value.
 	 */
-<span class="fc" id="L113">	public GeometryNode(double splitValue) {</span>
-<span class="fc" id="L114">		this.geometrizables = null;</span>
-<span class="fc" id="L115">		this.splitValue = splitValue;</span>
-<span class="fc" id="L116">		this.parent = null;</span>
-<span class="fc" id="L117">		this.depth = -1;</span>
-<span class="fc" id="L118">	}</span>
+<span class="fc" id="L109">	public GeometryNode(double splitValue, List&lt;Geometrizable&gt; geometrizables) {</span>
+<span class="fc" id="L110">		this.splitValue = splitValue;</span>
+<span class="fc" id="L111">		this.geometrizables = geometrizables;</span>
+<span class="fc" id="L112">	}</span>
 
 	/**
 	 * Returns split value.
@@ -123,7 +117,7 @@ public class GeometryNode {
 	 * @return double.
 	 */
 	public double getSplitValue() {
-<span class="fc" id="L126">		return splitValue;</span>
+<span class="fc" id="L120">		return splitValue;</span>
 	}
 
 	/**
@@ -132,8 +126,13 @@ public class GeometryNode {
 	 * @return GeometryNode.
 	 */
 	public GeometryNode getParent() {
-<span class="fc" id="L135">		return parent;</span>
+<span class="fc" id="L129">		return parent;</span>
 	}
+
+	private void setParent(GeometryNode parent) {
+<span class="fc" id="L133">		this.parent = parent;</span>
+<span class="fc" id="L134">		setDepth(parent.getDepth() + 1);</span>
+<span class="fc" id="L135">	}</span>
 
 	/**
 	 * Returns the depth.
@@ -141,8 +140,18 @@ public class GeometryNode {
 	 * @return int depth.
 	 */
 	public int getDepth() {
-<span class="fc" id="L144">		return depth;</span>
+<span class="fc" id="L143">		return depth;</span>
 	}
+
+	private void setDepth(int depth) {
+<span class="fc" id="L147">		this.depth = depth;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">		if (leftNode != null) {</span>
+<span class="fc" id="L149">			leftNode.setDepth(depth + 1);</span>
+		}
+<span class="fc bfc" id="L151" title="All 2 branches covered.">		if (rightNode != null) {</span>
+<span class="fc" id="L152">			rightNode.setDepth(depth + 1);</span>
+		}
+<span class="fc" id="L154">	}</span>
 
 	/**
 	 * Returns the left GeometryNode.
@@ -150,7 +159,7 @@ public class GeometryNode {
 	 * @return GeometryNode.
 	 */
 	public GeometryNode getLeftNode() {
-<span class="fc" id="L153">		return leftNode;</span>
+<span class="fc" id="L162">		return leftNode;</span>
 	}
 
 	/**
@@ -159,7 +168,7 @@ public class GeometryNode {
 	 * @return GeometryNode.
 	 */
 	public GeometryNode getRightNode() {
-<span class="fc" id="L162">		return rightNode;</span>
+<span class="fc" id="L171">		return rightNode;</span>
 	}
 
 	/**
@@ -169,8 +178,9 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public void setLeftNode(GeometryNode leftNode) {
-<span class="nc" id="L172">		this.leftNode = leftNode;</span>
-<span class="nc" id="L173">	}</span>
+<span class="fc" id="L181">		this.leftNode = leftNode;</span>
+<span class="fc" id="L182">		leftNode.setParent(this);</span>
+<span class="fc" id="L183">	}</span>
 
 	/**
 	 * Sets the right Geometrizable.
@@ -179,45 +189,54 @@ public class GeometryNode {
 	 *            Geometrizable.
 	 */
 	public void setRightNode(GeometryNode rightNode) {
-<span class="nc" id="L182">		this.rightNode = rightNode;</span>
-<span class="nc" id="L183">	}</span>
-
-	/**
-	 * Returns the Geometrizable.
-	 *
-	 * @return Geometrizable.
-	 */
-	public Geometrizable getGeometrizable() {
-<span class="pc bpc" id="L191" title="1 of 4 branches missed.">        if (geometrizables != null &amp;&amp; geometrizables.length == 1)</span>
-<span class="fc" id="L192">		    return geometrizables[0];</span>
-<span class="fc" id="L193">        return null;</span>
-	}
+<span class="fc" id="L192">		this.rightNode = rightNode;</span>
+<span class="fc" id="L193">		rightNode.setParent(this);</span>
+<span class="fc" id="L194">	}</span>
 
     /**
      * Returns the nearest Geometrizable.
      *
      * @return Geometrizable.
      */
-    public Geometrizable getNearestGeometrizable(Geometrizable geometrizable, int dim) {
+    public Geometrizable getNearestGeometrizable(double value,
+        GeometrizableConstraint constraint, int dim) {
 
-<span class="nc bnc" id="L203" title="All 4 branches missed.">        if (geometrizable == null || dim &lt; 0)</span>
-<span class="nc" id="L204">            throw new IllegalArgumentException(&quot;geometrizable must not &quot; +</span>
+<span class="fc" id="L204">        logger.info(&quot;!!!!!!!!! value: &quot; + value + &quot; constraint: &quot; + constraint + &quot; dim: &quot; + dim);</span>
+<span class="fc" id="L205">        logger.info(&quot;!!!!!!!!! value: &quot; + value + &quot; constraint: &quot; + constraint + &quot; dim: &quot; + dim);</span>
+
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        if (dim &lt; 0) {</span>
+<span class="nc" id="L208">            throw new IllegalArgumentException(&quot;geometrizable must not &quot; +</span>
                     &quot;be null and/or dim greater or equal to 0&quot;);
-
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        if (geometrizables == null)</span>
-<span class="nc" id="L208">            return null;</span>
-
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (geometrizables.length == 1)</span>
-<span class="nc" id="L211">            return geometrizables[0];</span>
-
-<span class="nc" id="L213">        Geometrizable currentBest = geometrizables[0];</span>
-<span class="nc bnc" id="L214" title="All 2 branches missed.">        for (Geometrizable geom : geometrizables) {</span>
-<span class="nc" id="L215">            if (geom.valueForDimension(dim) &lt;</span>
-<span class="nc bnc" id="L216" title="All 2 branches missed.">                    currentBest.valueForDimension(dim))</span>
-<span class="nc" id="L217">                currentBest = geom;</span>
         }
 
-<span class="nc" id="L220">        return currentBest;</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (geometrizables.size() == 0) {</span>
+<span class="fc" id="L213">            logger.info(&quot;geometrizables.size() == 0 &quot; + geometrizables);</span>
+<span class="fc" id="L214">            return null;</span>
+        }
+
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (geometrizables.size() == 1) {</span>
+<span class="fc" id="L218">            logger.info(&quot;geometrizables.size() == 1 &quot; + geometrizables.get(0));</span>
+<span class="fc" id="L219">            return geometrizables.get(0);</span>
+        }
+
+<span class="nc" id="L222">        Geometrizable currentBest = null;</span>
+<span class="nc" id="L223">        double minDistance = Double.POSITIVE_INFINITY;</span>
+
+<span class="nc bnc" id="L225" title="All 2 branches missed.">        for (Geometrizable geom : geometrizables) {</span>
+<span class="nc bnc" id="L226" title="All 4 branches missed.">            if (constraint != null &amp;&amp; !constraint.isValid(geom)) {</span>
+<span class="nc" id="L227">                continue;</span>
+            }
+
+<span class="nc" id="L230">            double currentDistance = Math.abs(geom.valueForDimension(dim) - value);</span>
+
+<span class="nc bnc" id="L232" title="All 2 branches missed.">            if (currentDistance &lt; minDistance) {</span>
+<span class="nc" id="L233">                logger.info(&quot;currentDistance &lt; minDistance &quot;);</span>
+<span class="nc" id="L234">                currentBest = geom;</span>
+<span class="nc" id="L235">                minDistance = currentDistance;</span>
+            }
+        }
+
+<span class="nc" id="L239">        return currentBest;</span>
     }
 
     /**
@@ -225,10 +244,11 @@ public class GeometryNode {
      *
      * @return Geometrizable.
      */
-    public Geometrizable[] getGeometrizables() {
-<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (geometrizables != null)</span>
-<span class="fc" id="L230">            return geometrizables;</span>
-<span class="nc" id="L231">        return new Geometrizable[] {};</span>
+    public List&lt;Geometrizable&gt; getGeometrizables() {
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">    	if (geometrizables == null) {</span>
+<span class="nc" id="L249">    		geometrizables = new ArrayList&lt;Geometrizable&gt;();</span>
+    	}
+<span class="fc" id="L251">        return geometrizables;</span>
     }
 
 	/**
@@ -237,9 +257,9 @@ public class GeometryNode {
 	 * @param geometrizable
 	 *            Geometrizable.
 	 */
-	public void setGeometrizable(Geometrizable geometrizable) {
-<span class="nc" id="L241">		this.geometrizables = new Geometrizable[] { geometrizable };</span>
-<span class="nc" id="L242">	}</span>
+	public void addGeometrizable(Geometrizable geometrizable) {
+<span class="fc" id="L261">        this.geometrizables.add(geometrizable);</span>
+<span class="fc" id="L262">	}</span>
 
 	/**
 	 * Returns whether this is a root node or not.
@@ -247,7 +267,7 @@ public class GeometryNode {
 	 * @return true if root node, false otherwise.
 	 */
 	public boolean isRoot() {
-<span class="nc bnc" id="L250" title="All 2 branches missed.">		return parent == null;</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">		return parent == null;</span>
 	}
 
 	/**
@@ -256,31 +276,96 @@ public class GeometryNode {
 	 * @return true if leaf node, false otherwise.
 	 */
 	public boolean isLeaf() {
-<span class="nc bnc" id="L259" title="All 2 branches missed.">		return geometrizables != null;</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">		return geometrizables != null;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L264">		StringBuffer sb = new StringBuffer();</span>
-<span class="nc" id="L265">		sb.append(&quot;\n\n -&gt; depth: &quot; + depth + &quot;\n&quot;);</span>
-<span class="nc" id="L266">		sb.append(&quot;-&gt; split: &quot; + splitValue + &quot;\n&quot;);</span>
+<span class="fc" id="L284">		StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L285">		sb.append(&quot;\n\n -&gt; depth: &quot; + depth + &quot;\n&quot;);</span>
+<span class="fc" id="L286">		sb.append(&quot;-&gt; split: &quot; + splitValue + &quot;\n&quot;);</span>
 
-<span class="nc bnc" id="L268" title="All 2 branches missed.">		if (geometrizables != null)</span>
-<span class="nc" id="L269">			sb.append(&quot;\n geometrizable: &quot; + geometrizables.toString() + &quot;\n&quot;);</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">		if (geometrizables.size() &gt; 0)</span>
+<span class="fc" id="L289">			sb.append(&quot;\n geometrizable: &quot; + getGeometrizables().toString() + &quot;\n&quot;);</span>
 		else
-<span class="nc" id="L271">			sb.append(&quot;\n no vertex \n&quot;);</span>
+<span class="fc" id="L291">			sb.append(&quot;\n no vertex \n&quot;);</span>
 
-<span class="nc bnc" id="L273" title="All 2 branches missed.">		if (parent != null)</span>
-<span class="nc" id="L274">			sb.append(&quot;-&gt; parent: id: \n&quot;);</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">		if (parent != null)</span>
+<span class="fc" id="L294">			sb.append(&quot;-&gt; parent: id: \n&quot;);</span>
 		else
-<span class="nc" id="L276">			sb.append(&quot;-&gt; no parent \n&quot;);</span>
+<span class="fc" id="L296">			sb.append(&quot;-&gt; no parent \n&quot;);</span>
 
-<span class="nc bnc" id="L278" title="All 2 branches missed.">		if (leftNode != null)</span>
-<span class="nc" id="L279">			sb.append(&quot;-&gt; leftNode: &quot; + leftNode.toString() + &quot;\n&quot;);</span>
-<span class="nc bnc" id="L280" title="All 2 branches missed.">		if (rightNode != null)</span>
-<span class="nc" id="L281">			sb.append(&quot;-&gt; rightNode: &quot; + rightNode.toString() + &quot;\n&quot;);</span>
-<span class="nc" id="L282">		return sb.toString();</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">		if (leftNode != null)</span>
+<span class="fc" id="L299">			sb.append(&quot;-&gt; leftNode: &quot; + getLeftNode().toString() + &quot;\n&quot;);</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">		if (rightNode != null)</span>
+<span class="fc" id="L301">			sb.append(&quot;-&gt; rightNode: &quot; + getRightNode().toString() + &quot;\n&quot;);</span>
+<span class="fc" id="L302">		return sb.toString();</span>
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="fc" id="L310">		final int prime = 31;</span>
+<span class="fc" id="L311">		int result = 1;</span>
+<span class="fc" id="L312">		result = prime * result + depth;</span>
+<span class="fc" id="L313">		result = prime * result</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">				+ ((geometrizables == null) ? 0 : geometrizables.hashCode());</span>
+<span class="fc" id="L315">		result = prime * result</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">				+ ((leftNode == null) ? 0 : leftNode.hashCode());</span>
+<span class="fc" id="L317">		result = prime * result</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">				+ ((rightNode == null) ? 0 : rightNode.hashCode());</span>
+		long temp;
+<span class="fc" id="L320">		temp = Double.doubleToLongBits(splitValue);</span>
+<span class="fc" id="L321">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="fc" id="L322">		return result;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L330" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L331">			return true;</span>
+		}
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">		if (obj == null) {</span>
+<span class="nc" id="L334">			return false;</span>
+		}
+<span class="pc bpc" id="L336" title="1 of 2 branches missed.">		if (!(obj instanceof GeometryNode)) {</span>
+<span class="nc" id="L337">			return false;</span>
+		}
+<span class="fc" id="L339">		GeometryNode other = (GeometryNode) obj;</span>
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">		if (depth != other.depth) {</span>
+<span class="nc" id="L341">			return false;</span>
+		}
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">		if (geometrizables == null) {</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">			if (other.geometrizables != null) {</span>
+<span class="nc" id="L345">				return false;</span>
+			}
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">		} else if (!geometrizables.equals(other.geometrizables)) {</span>
+<span class="nc" id="L348">			return false;</span>
+		}
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">		if (leftNode == null) {</span>
+<span class="pc bpc" id="L351" title="1 of 2 branches missed.">			if (other.leftNode != null) {</span>
+<span class="nc" id="L352">				return false;</span>
+			}
+<span class="nc bnc" id="L354" title="All 2 branches missed.">		} else if (!leftNode.equals(other.leftNode)) {</span>
+<span class="nc" id="L355">			return false;</span>
+		}
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">		if (rightNode == null) {</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">			if (other.rightNode != null) {</span>
+<span class="nc" id="L359">				return false;</span>
+			}
+<span class="nc bnc" id="L361" title="All 2 branches missed.">		} else if (!rightNode.equals(other.rightNode)) {</span>
+<span class="nc" id="L362">			return false;</span>
+		}
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">		if (Double.doubleToLongBits(splitValue) != Double</span>
+<span class="fc" id="L365">				.doubleToLongBits(other.splitValue)) {</span>
+<span class="nc" id="L366">			return false;</span>
+		}
+<span class="fc" id="L368">		return true;</span>
+	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

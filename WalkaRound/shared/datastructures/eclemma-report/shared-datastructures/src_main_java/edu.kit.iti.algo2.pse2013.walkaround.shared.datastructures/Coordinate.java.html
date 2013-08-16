@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Coordinate.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-datastructures (14.08.2013 16:36:36)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Coordinate.java</span></div><h1>Coordinate.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Coordinate.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Coordinate.java</span></div><h1>Coordinate.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 /**
  * This class represents a Coordinate consisting of longitude and latitude.
@@ -6,7 +6,7 @@
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class Coordinate implements Geometrizable {
+public class Coordinate {
 
 	/**
 	 * latitude of this Coordinate.
@@ -128,38 +128,19 @@ public class Coordinate implements Geometrizable {
 	}
 
 
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
-<span class="fc" id="L135">        return 2;</span>
-    }
-
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (dim == 0)</span>
-<span class="fc" id="L144">            return getLatitude();</span>
-        else
-<span class="fc" id="L146">            return getLongitude();</span>
-    }
-
-
 	@Override
 	public String toString() {
-<span class="fc" id="L152">		String crossroads = &quot;&quot;;</span>
-<span class="fc bfc" id="L153" title="All 2 branches covered.">		if (getCrossingInformation() != null) {</span>
-<span class="fc bfc" id="L154" title="All 2 branches covered.">			for (float cross : getCrossingInformation().getCrossingAngles()) {</span>
-<span class="fc" id="L155">				crossroads += cross + &quot; &quot;;</span>
+<span class="fc" id="L133">		String crossroads = &quot;&quot;;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">		if (getCrossingInformation() != null) {</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">			for (float cross : getCrossingInformation().getCrossingAngles()) {</span>
+<span class="fc" id="L136">				crossroads += cross + &quot; &quot;;</span>
 			}
 		}
-<span class="fc" id="L158">		return String.format(</span>
-<span class="fc" id="L159">			&quot;Coord(%.5f° %s %.5f° %s | Crossings: %s)&quot;,</span>
-<span class="fc bfc" id="L160" title="All 2 branches covered.">			latitude,  latitude &gt; 0 ? &quot;N&quot; : &quot;S&quot;,</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">			longitude, longitude &gt; 0 ? &quot;E&quot; : &quot;W&quot;,</span>
-<span class="fc" id="L162">			crossroads.trim()</span>
+<span class="fc" id="L139">		return String.format(</span>
+<span class="fc" id="L140">			&quot;Coord(%.5f° %s %.5f° %s | Crossings: %s)&quot;,</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">			latitude,  latitude &gt; 0 ? &quot;N&quot; : &quot;S&quot;,</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">			longitude, longitude &gt; 0 ? &quot;E&quot; : &quot;W&quot;,</span>
+<span class="fc" id="L143">			crossroads.trim()</span>
 		);
 	}
 
@@ -167,12 +148,12 @@ public class Coordinate implements Geometrizable {
     @Override
     public Coordinate clone() {
     	Coordinate clonedCoordinate;
-<span class="fc bfc" id="L170" title="All 2 branches covered.">    	if (this.crossInfo == null) {</span>
-<span class="fc" id="L171">    		clonedCoordinate = new Coordinate (this.latitude, this.longitude);</span>
-<span class="fc" id="L172">    	} else {</span>
-<span class="fc" id="L173">    		clonedCoordinate = new Coordinate(this.latitude, this.longitude, this.crossInfo.clone());</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">    	if (this.crossInfo == null) {</span>
+<span class="fc" id="L152">    		clonedCoordinate = new Coordinate (this.latitude, this.longitude);</span>
+<span class="fc" id="L153">    	} else {</span>
+<span class="fc" id="L154">    		clonedCoordinate = new Coordinate(this.latitude, this.longitude, this.crossInfo.clone());</span>
     	}
-<span class="fc" id="L175">    	return clonedCoordinate;</span>
+<span class="fc" id="L156">    	return clonedCoordinate;</span>
     }
 
 
@@ -181,15 +162,15 @@ public class Coordinate implements Geometrizable {
 	 */
 	@Override
 	public int hashCode() {
-<span class="fc" id="L184">		final int prime = 31;</span>
-<span class="fc" id="L185">		int result = 1;</span>
-<span class="fc bfc" id="L186" title="All 2 branches covered.">		result = prime * result + ((crossInfo == null) ? 0 : crossInfo.hashCode());</span>
+<span class="fc" id="L165">		final int prime = 31;</span>
+<span class="fc" id="L166">		int result = 1;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		result = prime * result + ((crossInfo == null) ? 0 : crossInfo.hashCode());</span>
 		long temp;
-<span class="fc" id="L188">		temp = Double.doubleToLongBits(latitude);</span>
-<span class="fc" id="L189">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
-<span class="fc" id="L190">		temp = Double.doubleToLongBits(longitude);</span>
-<span class="fc" id="L191">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
-<span class="fc" id="L192">		return result;</span>
+<span class="fc" id="L169">		temp = Double.doubleToLongBits(latitude);</span>
+<span class="fc" id="L170">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="fc" id="L171">		temp = Double.doubleToLongBits(longitude);</span>
+<span class="fc" id="L172">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="fc" id="L173">		return result;</span>
 	}
 
 
@@ -198,31 +179,32 @@ public class Coordinate implements Geometrizable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-<span class="fc bfc" id="L201" title="All 2 branches covered.">		if (this == obj) {</span>
-<span class="fc" id="L202">			return true;</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L183">			return true;</span>
 		}
-<span class="fc bfc" id="L204" title="All 2 branches covered.">		if (obj == null) {</span>
-<span class="fc" id="L205">			return false;</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">		if (obj == null) {</span>
+<span class="fc" id="L186">			return false;</span>
 		}
-<span class="fc bfc" id="L207" title="All 2 branches covered.">		if (!(obj instanceof Coordinate)) {</span>
-<span class="fc" id="L208">			return false;</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">		if (!(obj instanceof Coordinate)) {</span>
+<span class="fc" id="L189">			return false;</span>
 		}
-<span class="fc" id="L210">		Coordinate other = (Coordinate) obj;</span>
-<span class="fc bfc" id="L211" title="All 2 branches covered.">		if (crossInfo == null) {</span>
-<span class="fc bfc" id="L212" title="All 2 branches covered.">			if (other.crossInfo != null) {</span>
-<span class="fc" id="L213">				return false;</span>
+<span class="fc" id="L191">		Coordinate other = (Coordinate) obj;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">		if (crossInfo == null) {</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">			if (other.crossInfo != null) {</span>
+<span class="fc" id="L194">				return false;</span>
 			}
-<span class="fc bfc" id="L215" title="All 2 branches covered.">		} else if (!crossInfo.equals(other.crossInfo)) {</span>
-<span class="fc" id="L216">			return false;</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">		} else if (!crossInfo.equals(other.crossInfo)) {</span>
+<span class="fc" id="L197">			return false;</span>
 		}
-<span class="fc" id="L218">		double epsilon = 1e-323;</span>
-<span class="fc bfc" id="L219" title="All 2 branches covered.">		if (Math.abs(Math.abs(latitude) - Math.abs(other.latitude)) &gt; epsilon) {</span>
-<span class="fc" id="L220">			return false;</span>
+<span class="fc" id="L199">		double epsilon = 1e-323;</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">		if (Math.abs(Math.abs(latitude) - Math.abs(other.latitude)) &gt; epsilon) {</span>
+<span class="fc" id="L201">			return false;</span>
 		}
-<span class="fc bfc" id="L222" title="All 2 branches covered.">		if (Math.abs(Math.abs(longitude) - Math.abs(other.longitude)) &gt; epsilon) {</span>
-<span class="fc" id="L223">			return false;</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">		if (Math.abs(Math.abs(longitude) - Math.abs(other.longitude)) &gt; epsilon) {</span>
+<span class="fc" id="L204">			return false;</span>
 		}
-<span class="fc" id="L225">		return true;</span>
+<span class="fc" id="L206">		return true;</span>
 	}
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-datastructures (14.08.2013 16:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>

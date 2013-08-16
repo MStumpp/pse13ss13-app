@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometrySearch.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">shared-Test (16.08.2013 05:45:25)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometrySearch.java</span></div><h1>GeometrySearch.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * GeometryProcessorException.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class GeometrySearch {
+
+    private Map&lt;Integer, Double&gt; search;
+
+<span class="fc" id="L16">    public GeometrySearch(double[] values) {</span>
+<span class="fc" id="L17">        search = new HashMap&lt;Integer, Double&gt;();</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (int dim = 0; dim &lt; values.length; dim++) {</span>
+<span class="fc" id="L19">            search.put(dim, values[dim]);</span>
+        }
+<span class="fc" id="L21">    }</span>
+
+    public int getNumberDimensions() {
+<span class="nc" id="L24">        return search.size();</span>
+    }
+
+    public double valueForDimension(int dim) {
+<span class="fc" id="L28">        return search.get(dim);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>shared-Test (16.08.2013 05:45:25)</div></body></html>
