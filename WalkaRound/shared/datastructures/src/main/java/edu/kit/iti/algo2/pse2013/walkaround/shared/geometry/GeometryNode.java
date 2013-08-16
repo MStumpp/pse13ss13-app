@@ -276,7 +276,7 @@ public class GeometryNode {
 	 * @return true if leaf node, false otherwise.
 	 */
 	public boolean isLeaf() {
-		return geometrizables != null;
+		return splitValue == Double.NaN;
 	}
 
 	@Override
