@@ -346,12 +346,15 @@ public class GeometryProcessor {
             GeometrizableHolder holder = new GeometrizableHolder(null);
             searchTreeDown(root, search, constraint, holder);
 
-            if (holder.getGeometrizable() == null) {
+            Geometrizable geometrizable = holder.getGeometrizable();
+            if (geometrizable == null) {
                 return null;
-            } else if (holder.getGeometrizable() instanceof GeometrizableHolder) {
-                return ((GeometrizableWrapper) holder.getGeometrizable()).getGeometrizable();
             } else {
-                return holder.getGeometrizable();
+                if (geometrizable instanceof GeometrizableWrapper) {
+                    return ((GeometrizableWrapper) geometrizable).getGeometrizable();
+                } else {
+                    return geometrizable;
+                }
             }
         }
 

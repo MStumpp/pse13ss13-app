@@ -324,7 +324,7 @@ public class RouteController {
 		return false;
 	}*/
 
-	public void replaceFullRoute(RouteInfo r) {
+	private void replaceFullRoute(RouteInfo r) {
 		Log.d(TAG, "RouteController.replaceFullRoute(Route)");
 		this.currentRoute = (Route) r;
 		this.notifyAllRouteListeners();
