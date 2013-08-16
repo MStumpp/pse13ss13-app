@@ -37,7 +37,7 @@ public class RoundTripView extends Fragment {
 	private TextView meter;
 	private TextView length;
 	private TextView profiles;
-	private TextView jogging;
+	//private TextView jogging;
 	private TextView sightseeing;
 	private TextView shopping;
 	private TextView clubbing;
@@ -64,8 +64,8 @@ public class RoundTripView extends Fragment {
 		meter = (TextView) this.getActivity().findViewById(R.id.meter);
 		length = (TextView) this.getActivity().findViewById(R.id.length_text);
 		profiles = (TextView) this.getActivity().findViewById(R.id.profiles);
-		jogging = (TextView) this.getActivity().findViewById(
-				R.id.profile_jogging);
+		//jogging = (TextView) this.getActivity().findViewById(
+		//		R.id.profile_jogging);
 		sightseeing = (TextView) this.getActivity().findViewById(
 				R.id.profile_sightseeing);
 		shopping = (TextView) this.getActivity().findViewById(
@@ -103,7 +103,7 @@ public class RoundTripView extends Fragment {
 
 		Log.d(TAG_PULLUP_CONTENT, "Listener werden hinzugef�gt");
 		computeRoundtrip.setOnTouchListener(new RoundtripComputeListener());
-		jogging.setOnTouchListener(new OnProfileTouch());
+		//jogging.setOnTouchListener(new OnProfileTouch());
 		sightseeing.setOnTouchListener(new OnProfileTouch());
 		shopping.setOnTouchListener(new OnProfileTouch());
 		clubbing.setOnTouchListener(new OnProfileTouch());
@@ -130,13 +130,13 @@ public class RoundTripView extends Fragment {
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(computeRoundtrip)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				if (jogging.isSelected()) {
-					routeController.addRoundtrip(
-							Integer.parseInt(jogging.getTag().toString()),
-							np.getValue() * 100);
-					MapController.getInstance().getPullUpView()
-							.setNullSizeHeight();
-				} else if (shopping.isSelected()) {
+				//if (jogging.isSelected()) {
+				//	routeController.addRoundtrip(
+				//			Integer.parseInt(jogging.getTag().toString()),
+				//			np.getValue() * 100);
+				//	MapController.getInstance().getPullUpView()
+				//			.setNullSizeHeight();
+				if (shopping.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(shopping.getTag().toString()),
 							np.getValue() * 100);
@@ -168,23 +168,23 @@ public class RoundTripView extends Fragment {
 	private class OnProfileTouch implements OnTouchListener {
 
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(jogging)
-					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				if (!jogging.isSelected()) {
-					setSelected(jogging);
-					setUnselected(sightseeing);
-					setUnselected(shopping);
-					setUnselected(clubbing);
+			//if (v.equals(jogging)
+			//		&& event.getAction() == MotionEvent.ACTION_DOWN) {
+			//	if (!jogging.isSelected()) {
+			//		setSelected(jogging);
+			//		setUnselected(sightseeing);
+			//		setUnselected(shopping);
+			//		setUnselected(clubbing);
 
-				} else {
-					setUnselected(jogging);
-				}
-			} else if (v.equals(shopping)
+			//	} else {
+			//		setUnselected(jogging);
+			//	}
+			if (v.equals(shopping)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!shopping.isSelected()) {
 					setSelected(shopping);
 					setUnselected(sightseeing);
-					setUnselected(jogging);
+					//setUnselected(jogging);
 					setUnselected(clubbing);
 				} else {
 					setUnselected(shopping);
@@ -193,7 +193,7 @@ public class RoundTripView extends Fragment {
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!sightseeing.isSelected()) {
 					setSelected(sightseeing);
-					setUnselected(jogging);
+					//setUnselected(jogging);
 					setUnselected(shopping);
 					setUnselected(clubbing);
 				} else {
@@ -205,7 +205,7 @@ public class RoundTripView extends Fragment {
 					setSelected(clubbing);
 					setUnselected(sightseeing);
 					setUnselected(shopping);
-					setUnselected(jogging);
+					//setUnselected(jogging);
 				} else {
 					setUnselected(clubbing);
 				}
