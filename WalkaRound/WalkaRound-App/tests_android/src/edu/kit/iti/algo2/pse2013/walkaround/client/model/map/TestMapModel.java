@@ -16,6 +16,7 @@ import android.graphics.Point;
 import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi.POIMenuControllerTest;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
@@ -29,13 +30,8 @@ public class TestMapModel {
 
 	@Before
 	public void setUp() {
-		Coordinate center = new Coordinate(48, 8);
-		TileFetcher tf = new TileFetcher();
-		Point size = new Point(1920, 1080);
-		BoundingBox bb = new BoundingBox(center, size, 18);
-		MapController.initialize(tf, bb, center);
-		PositionManager.initialize(Robolectric.buildActivity(BootActivity.class).get().getApplicationContext());
-		model = new MapGen(size, bb);
+		POIMenuControllerTest.boot();
+		model = new MapGen(new Point(1920, 1080), new BoundingBox(new Coordinate(0, 0), new Point(1920, 1080), 16));
 	}
 
 	@Test

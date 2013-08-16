@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import android.content.Intent;
 import android.graphics.Point;
 import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
@@ -22,19 +23,17 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 @RunWith(RobolectricTestRunner.class)
 public class POIMenuControllerTest {
+	private static boolean alreadyBooted = false;
 
 	@Before
 	public void setUp() {
-		System.out.println("setUp started");
 		BootActivity activity = Robolectric.buildActivity(BootActivity.class).get();
-		System.out.println("BootActivity finished!");
 		MapController.initialize(new TileFetcher(), new BoundingBox(new Coordinate(0, 0), new Point(1920, 1080), 16), new Coordinate(0, 0));
-		System.out.println("MapController finished!");
+		Intent in = new Intent(activity, MapView.class);
+		activity.startActivity(in);
+		MapController.getInstance().startController(Robolectric.buildActivity(MapView.class).create().get());
 		PositionManager.initialize(activity.getApplicationContext());
-		System.out.println("PositionManager finished!");
-		MapView mv = Robolectric.buildActivity(MapView.class).create().get();
-		MapController.getInstance().startController(mv);
-		System.out.println("SetUp finished!");
+		boot();
 	}
 
 	@Test
@@ -43,5 +42,17 @@ public class POIMenuControllerTest {
 		assertFalse(POIManager.getInstance().isEmpty());
 		POIMenuController.getInstance().removeActiveCategory(1);
 		assertTrue(POIManager.getInstance().isEmpty());
+	}
+
+	public static void boot() {
+		if (!alreadyBooted) {
+			alreadyBooted = true;
+			Coordinate center = new Coordinate(48, 8);
+			TileFetcher tf = new TileFetcher();
+			Point size = new Point(1920, 1080);
+			BoundingBox bb = new BoundingBox(center, size, 18);
+			MapController.initialize(tf, bb, center);
+			PositionManager.initialize(Robolectric.buildActivity(BootActivity.class).get().getApplicationContext());
+		}
 	}
 }

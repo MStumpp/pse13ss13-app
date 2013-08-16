@@ -1,7 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.favorite;
 
+import static org.junit.Assert.*;
+
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
@@ -31,5 +34,10 @@ public class FavoriteMenuControllerTest {
 				.getNamesOfFavoriteRoutes().get(0));
 		Assert.assertTrue(FavoriteMenuController.getInstance().deleteRoute("testRoute"));
 		Assert.assertTrue(FavoriteMenuController.getInstance().deleteLocation("testLoc"));
+	}
+
+	@Test
+	public void testNothing() {
+		assertTrue(true);
 	}
 }

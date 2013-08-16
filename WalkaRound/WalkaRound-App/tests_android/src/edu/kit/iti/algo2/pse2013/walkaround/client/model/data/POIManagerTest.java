@@ -1,23 +1,41 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
+@RunWith(RobolectricTestRunner.class)
 public class POIManagerTest  {
 
 	private POIManager poiManag = POIManager.getInstance();
+
+	@Before
+	public void reset() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field loc = POIManager.class.getDeclaredField("locationDataIO");
+		loc.setAccessible(true);
+		loc.set(null, null);
+		Field ins = POIManager.class.getDeclaredField("instance");
+		ins.setAccessible(true);
+		ins.set(null, null);
+		POIManager.initialize(new BootActivity().getApplicationContext());
+		poiManag = POIManager.getInstance();
+	}
 
 	@Test
 	public void testPersistence() {
