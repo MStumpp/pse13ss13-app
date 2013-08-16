@@ -21,6 +21,7 @@ import java.util.Random;
  * @author Matthias Stumpp
  * @version 1.0
  */
+@Ignore
 public class ShortestPathProcessorTest {
 
     private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile("graphData.pbf");
