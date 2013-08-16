@@ -23,7 +23,7 @@ public class Coordinate {
 	/**
 	 * CrossingInformation for this Coordinate.
 	 */
-	private final CrossingInformation crossInfo;
+	private CrossingInformation crossInfo;
 
 
 	/**
@@ -125,6 +125,14 @@ public class Coordinate {
 	 */
 	public CrossingInformation getCrossingInformation() {
 		return crossInfo;
+	}
+	/**
+	 * Returns CrossingInformation for this Coordinate.
+	 *
+	 * @return CrossingInformation.
+	 */
+	public void setCrossingInformation(CrossingInformation ci) {
+		this.crossInfo = ci;
 	}
 
 
