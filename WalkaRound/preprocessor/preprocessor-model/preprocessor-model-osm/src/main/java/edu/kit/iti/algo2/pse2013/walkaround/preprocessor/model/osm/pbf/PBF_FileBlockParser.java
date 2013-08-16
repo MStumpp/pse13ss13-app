@@ -78,8 +78,6 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 			logger.info(String.format("Finished third run:\n\t%d interesting nodes for POIs found.\n\t%d POIs found.", interestingNodes.size(), locationData.getPOIs().size()));
 		} else if (state == STATE_PARSE_POIS) {
 			logger.info(String.format("Finished fourth run:\n\tAdded extensive POIs. Now %d POIs in total.", locationData.getPOIs().size()));
-		} else if (state == STATE_FINISH) {
-			logger.info("Finished parsing!");
 		}
 		state++;
 	}

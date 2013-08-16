@@ -17,6 +17,6 @@ public abstract class OSMCategory {
 	}
 	public abstract boolean accepts(OSMElement element);
 	public boolean decoratedAccepts(OSMElement element) {
-		return (decorated == null)?false:decorated.accepts(element);
+		return (decorated == null)?inverted:decorated.accepts(element);
 	}
 }

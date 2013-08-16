@@ -7,6 +7,9 @@ public class OSMAndCategory extends OSMCategory {
 	private OSMCategory decorated2;
 
 	public OSMAndCategory(OSMCategory child1, OSMCategory child2) {
+		if (child1 == null || child2 == null) {
+			throw new IllegalArgumentException("OSMAndCategory doesn't accept null-parameters");
+		}
 		this.decorated = child1;
 		this.decorated2 = child2;
 	}

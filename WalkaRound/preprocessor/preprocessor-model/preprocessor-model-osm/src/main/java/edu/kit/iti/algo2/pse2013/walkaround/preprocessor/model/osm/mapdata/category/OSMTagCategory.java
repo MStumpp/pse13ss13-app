@@ -24,6 +24,6 @@ public class OSMTagCategory extends OSMCategory {
 				return !inverted;
 			}
 		}
-		return (decorated == null)? inverted:decoratedAccepts(element);
+		return decoratedAccepts(element);
 	}
 }
