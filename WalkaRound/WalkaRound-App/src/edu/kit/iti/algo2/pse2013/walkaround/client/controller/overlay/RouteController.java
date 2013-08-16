@@ -68,7 +68,7 @@ public class RouteController {
 		Log.d(TAG, "Coordinates of Route: "
 				+ this.currentRoute);
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
-		if (this.currentRoute != null && activeWaypoint != null) {
+		if (this.currentRoute != null) {
 			for (RouteListener rl : routeListeners) {
 				Log.d(TAG, "Notify " + rl.getClass().getSimpleName());
 				rl.onRouteChange((RouteInfo) currentRoute);
@@ -252,7 +252,7 @@ public class RouteController {
 
 	public boolean deleteActiveWaypoint() {
 		Log.d(TAG, "RouteController.deleteActiveWaypoint()");
-
+		
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread (new Runnable() {
