@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Route.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">Route.java</span></div><h1>Route.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Route.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 22:39:32)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">app-src</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">Route.java</span></div><h1>Route.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;</span>
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,12 +34,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 	 * @return
 	 */
 	public boolean setActiveWaypoint(int id) {
-<span class="nc" id="L37">		Log.d(TAG_ROUTE, &quot;setActiveWaypoint(id)&quot;);</span>
+<span class="fc" id="L37">		Log.d(TAG_ROUTE, &quot;setActiveWaypoint(id)&quot;);</span>
 
-<span class="nc bnc" id="L39" title="All 2 branches missed.">		for (Waypoint wp : this.getWaypoints()) {</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">			if (wp.getId() == id) {</span>
-<span class="nc" id="L41">				this.setActiveWaypoint(wp);</span>
-<span class="nc" id="L42">				return true;</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">		for (Waypoint wp : this.getWaypoints()) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">			if (wp.getId() == id) {</span>
+<span class="fc" id="L41">				this.setActiveWaypoint(wp);</span>
+<span class="fc" id="L42">				return true;</span>
 			}
 		}
 <span class="nc" id="L45">		return false;</span>
@@ -219,55 +219,55 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 <span class="fc" id="L219">			final Route tempCurrentRoute = this;</span>
 
 <span class="pc bpc" id="L221" title="1 of 2 branches missed.">			if (beforeActive != null) {</span>
-<span class="nc" id="L222">				Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L223">						&quot;moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. &quot;</span>
-<span class="nc" id="L224">								+ (waypoints.indexOf(beforeActive) + 1) + &quot; / &quot;</span>
-<span class="nc" id="L225">								+ waypoints.size() + &quot; in route&quot;);</span>
+<span class="fc" id="L222">				Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L223">						&quot;moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. &quot;</span>
+<span class="fc" id="L224">								+ (waypoints.indexOf(beforeActive) + 1) + &quot; / &quot;</span>
+<span class="fc" id="L225">								+ waypoints.size() + &quot; in route&quot;);</span>
 
-<span class="nc" id="L227">				this.deletePathBetweenTwoWaypoints(beforeActive,</span>
-<span class="nc" id="L228">						this.activeWaypoint);</span>
+<span class="fc" id="L227">				this.deletePathBetweenTwoWaypoints(beforeActive,</span>
+<span class="fc" id="L228">						this.activeWaypoint);</span>
 
-<span class="nc" id="L230">				Thread pathCalculator = new Thread(new Runnable() {</span>
+<span class="fc" id="L230">				Thread pathCalculator = new Thread(new Runnable() {</span>
 					public void run() {
-<span class="nc" id="L232">						Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L233">								&quot;Thread.run() in moveActiveWaypoint(Coordinate)&quot;);</span>
+<span class="fc" id="L232">						Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L233">								&quot;Thread.run() in moveActiveWaypoint(Coordinate)&quot;);</span>
 						RouteInfo newRouteBeforeActiveWaypoint;
 
-<span class="nc" id="L236">						newRouteBeforeActiveWaypoint = tempCurrentRoute</span>
-<span class="nc" id="L237">								.computeShortestPath(beforeActive, coord);</span>
-<span class="nc" id="L238">						tempCurrentRoute.addRouteBetweenTwoCoords(</span>
-<span class="nc" id="L239">								newRouteBeforeActiveWaypoint, beforeActive,</span>
-<span class="nc" id="L240">								activeWP);</span>
+<span class="fc" id="L236">						newRouteBeforeActiveWaypoint = tempCurrentRoute</span>
+<span class="fc" id="L237">								.computeShortestPath(beforeActive, coord);</span>
+<span class="fc" id="L238">						tempCurrentRoute.addRouteBetweenTwoCoords(</span>
+<span class="fc" id="L239">								newRouteBeforeActiveWaypoint, beforeActive,</span>
+<span class="fc" id="L240">								activeWP);</span>
 
-<span class="nc" id="L242">					}</span>
+<span class="fc" id="L242">					}</span>
 				});
-<span class="nc" id="L244">				pathCalculator.start();</span>
+<span class="fc" id="L244">				pathCalculator.start();</span>
 			}
 
 <span class="pc bpc" id="L247" title="1 of 2 branches missed.">			if (afterActive != null) {</span>
-<span class="nc" id="L248">				Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L249">						&quot;moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. &quot;</span>
-<span class="nc" id="L250">								+ (waypoints.indexOf(afterActive) + 1) + &quot; / &quot;</span>
-<span class="nc" id="L251">								+ waypoints.size() + &quot; in route&quot;);</span>
+<span class="fc" id="L248">				Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L249">						&quot;moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. &quot;</span>
+<span class="fc" id="L250">								+ (waypoints.indexOf(afterActive) + 1) + &quot; / &quot;</span>
+<span class="fc" id="L251">								+ waypoints.size() + &quot; in route&quot;);</span>
 
-<span class="nc" id="L253">				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,</span>
-<span class="nc" id="L254">						afterActive);</span>
+<span class="fc" id="L253">				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,</span>
+<span class="fc" id="L254">						afterActive);</span>
 
-<span class="nc" id="L256">				Thread pathCalculator = new Thread(new Runnable() {</span>
+<span class="fc" id="L256">				Thread pathCalculator = new Thread(new Runnable() {</span>
 					public void run() {
-<span class="nc" id="L258">						Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L259">								&quot;Thread.run() in moveActiveWaypoint(Coordinate)&quot;);</span>
+<span class="fc" id="L258">						Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L259">								&quot;Thread.run() in moveActiveWaypoint(Coordinate)&quot;);</span>
 						RouteInfo newRoutePastActiveWaypoint;
 
-<span class="nc" id="L262">						newRoutePastActiveWaypoint = tempCurrentRoute</span>
-<span class="nc" id="L263">								.computeShortestPath(coord, afterActive);</span>
-<span class="nc" id="L264">						tempCurrentRoute.addRouteBetweenTwoCoords(</span>
-<span class="nc" id="L265">								newRoutePastActiveWaypoint, activeWP,</span>
-<span class="nc" id="L266">								afterActive);</span>
+<span class="fc" id="L262">						newRoutePastActiveWaypoint = tempCurrentRoute</span>
+<span class="fc" id="L263">								.computeShortestPath(coord, afterActive);</span>
+<span class="fc" id="L264">						tempCurrentRoute.addRouteBetweenTwoCoords(</span>
+<span class="fc" id="L265">								newRoutePastActiveWaypoint, activeWP,</span>
+<span class="fc" id="L266">								afterActive);</span>
 
-<span class="nc" id="L268">					}</span>
+<span class="fc" id="L268">					}</span>
 				});
-<span class="nc" id="L270">				pathCalculator.start();</span>
+<span class="fc" id="L270">				pathCalculator.start();</span>
 			}
 
 <span class="fc" id="L273">			this.activeWaypoint.setLongitude(coord.getLongitude());</span>
@@ -290,33 +290,33 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 <span class="fc" id="L290">		Log.d(TAG_ROUTE, &quot;deleteActiveWaypoint() beforeActive is &quot;</span>
 <span class="fc" id="L291">				+ beforeActive + &quot;, afterActive is &quot; + afterActive);</span>
 
-<span class="pc bpc" id="L293" title="2 of 4 branches missed.">		if (beforeActive == null &amp;&amp; afterActive == null) {</span>
-<span class="fc" id="L294">			Log.d(TAG_ROUTE,</span>
-<span class="fc" id="L295">					&quot;deleteActiveWaypoint() case beforeActive == null &amp;&amp; afterActive == null&quot;);</span>
-<span class="fc" id="L296">			this.resetRoute();</span>
-<span class="pc bnc" id="L297" title="All 4 branches missed.">		} else if (beforeActive == null &amp;&amp; afterActive != null) {</span>
+<span class="pc bpc" id="L293" title="3 of 4 branches missed.">		if (beforeActive == null &amp;&amp; afterActive == null) {</span>
+<span class="nc" id="L294">			Log.d(TAG_ROUTE,</span>
+<span class="nc" id="L295">					&quot;deleteActiveWaypoint() case beforeActive == null &amp;&amp; afterActive == null&quot;);</span>
+<span class="nc" id="L296">			this.resetRoute();</span>
+<span class="pc bpc" id="L297" title="3 of 4 branches missed.">		} else if (beforeActive == null &amp;&amp; afterActive != null) {</span>
 <span class="nc" id="L298">			Log.d(TAG_ROUTE,</span>
 <span class="nc" id="L299">					&quot;deleteActiveWaypoint() case beforeActive == null &amp;&amp; afterActive != null&quot;);</span>
 <span class="nc" id="L300">			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);</span>
 <span class="nc" id="L301">			this.routeCoordinates.remove(this.activeWaypoint);</span>
-<span class="nc bnc" id="L302" title="All 4 branches missed.">		} else if (beforeActive != null &amp;&amp; afterActive == null) {</span>
+<span class="pc bpc" id="L302" title="2 of 4 branches missed.">		} else if (beforeActive != null &amp;&amp; afterActive == null) {</span>
 <span class="nc" id="L303">			Log.d(TAG_ROUTE,</span>
 <span class="nc" id="L304">					&quot;deleteActiveWaypoint() case beforeActive != null &amp;&amp; afterActive == null&quot;);</span>
 <span class="nc" id="L305">			this.deletePathBetweenTwoWaypoints(beforeActive,</span>
 <span class="nc" id="L306">					this.activeWaypoint);</span>
 <span class="nc" id="L307">			this.routeCoordinates.remove(this.activeWaypoint);</span>
-<span class="nc bnc" id="L308" title="All 4 branches missed.">		} else if (beforeActive != null &amp;&amp; afterActive != null) {</span>
-<span class="nc" id="L309">			Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L310">					&quot;deleteActiveWaypoint() case beforeActive != null &amp;&amp; afterActive != null&quot;);</span>
-<span class="nc" id="L311">			this.deletePathBetweenTwoWaypoints(beforeActive,</span>
-<span class="nc" id="L312">					this.activeWaypoint);</span>
-<span class="nc" id="L313">			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);</span>
-<span class="nc" id="L314">			this.routeCoordinates.remove(this.activeWaypoint);</span>
+<span class="pc bpc" id="L308" title="2 of 4 branches missed.">		} else if (beforeActive != null &amp;&amp; afterActive != null) {</span>
+<span class="fc" id="L309">			Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L310">					&quot;deleteActiveWaypoint() case beforeActive != null &amp;&amp; afterActive != null&quot;);</span>
+<span class="fc" id="L311">			this.deletePathBetweenTwoWaypoints(beforeActive,</span>
+<span class="fc" id="L312">					this.activeWaypoint);</span>
+<span class="fc" id="L313">			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);</span>
+<span class="fc" id="L314">			this.routeCoordinates.remove(this.activeWaypoint);</span>
 
 			RouteInfo route;
 
-<span class="nc" id="L318">			route = this.computeShortestPath(beforeActive, afterActive);</span>
-<span class="nc" id="L319">			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);</span>
+<span class="fc" id="L318">			route = this.computeShortestPath(beforeActive, afterActive);</span>
+<span class="fc" id="L319">			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);</span>
 		}
 <span class="fc" id="L321">		this.resetActiveWaypoint();</span>
 <span class="fc" id="L322">		this.cleanRouteOfDuplicateCoordinatePairs();</span>
@@ -419,9 +419,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 <span class="fc" id="L419">		Log.d(TAG_ROUTE, &quot;getPreviousWaypoint(int &quot; + waypointNr + &quot;)&quot;);</span>
 <span class="fc" id="L420">		LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
 <span class="pc bpc" id="L421" title="1 of 2 branches missed.">		if (waypointNr == 0) {</span>
-<span class="fc" id="L422">			return null;</span>
+<span class="nc" id="L422">			return null;</span>
 		} else {
-<span class="nc" id="L424">			return (waypoints.get(waypointNr - 1));</span>
+<span class="fc" id="L424">			return (waypoints.get(waypointNr - 1));</span>
 		}
 	}
 
@@ -434,9 +434,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 <span class="fc" id="L434">		Log.d(TAG_ROUTE, &quot;getNextNextWaypoint(int &quot; + waypointNr + &quot;)&quot;);</span>
 <span class="fc" id="L435">		LinkedList&lt;Waypoint&gt; waypoints = this.getWaypoints();</span>
 <span class="pc bpc" id="L436" title="1 of 2 branches missed.">		if (waypointNr == (waypoints.size() - 1)) {</span>
-<span class="fc" id="L437">			return null;</span>
+<span class="nc" id="L437">			return null;</span>
 		} else {
-<span class="nc" id="L439">			return (waypoints.get(waypointNr + 1));</span>
+<span class="fc" id="L439">			return (waypoints.get(waypointNr + 1));</span>
 		}
 	}
 
@@ -447,27 +447,27 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 	 * @return
 	 */
 	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
-<span class="nc" id="L450">		Log.d(TAG_ROUTE, &quot;deletePathBetweenTwoWaypoints(Waypoint &quot; + one</span>
-<span class="nc" id="L451">				+ &quot;, Waypoint &quot; + two + &quot;) METHOD START&quot;);</span>
-<span class="nc" id="L452">		Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L453">				&quot;deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: &quot;</span>
-<span class="nc" id="L454">						+ this.routeCoordinates.size());</span>
-<span class="nc" id="L455">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
+<span class="fc" id="L450">		Log.d(TAG_ROUTE, &quot;deletePathBetweenTwoWaypoints(Waypoint &quot; + one</span>
+<span class="fc" id="L451">				+ &quot;, Waypoint &quot; + two + &quot;) METHOD START&quot;);</span>
+<span class="fc" id="L452">		Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L453">				&quot;deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: &quot;</span>
+<span class="fc" id="L454">						+ this.routeCoordinates.size());</span>
+<span class="fc" id="L455">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
 
-<span class="nc" id="L457">		Coordinate tempCoord = null;</span>
-<span class="nc bnc" id="L458" title="All 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !one.equals(tempCoord)) {</span>
-<span class="nc" id="L459">			tempCoord = routeCoordsIter.next();</span>
+<span class="fc" id="L457">		Coordinate tempCoord = null;</span>
+<span class="pc bpc" id="L458" title="1 of 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !one.equals(tempCoord)) {</span>
+<span class="fc" id="L459">			tempCoord = routeCoordsIter.next();</span>
 		}
-<span class="nc" id="L461">		tempCoord = routeCoordsIter.next();</span>
+<span class="fc" id="L461">		tempCoord = routeCoordsIter.next();</span>
 
-<span class="nc bnc" id="L463" title="All 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !two.equals(tempCoord)) {</span>
+<span class="pc bpc" id="L463" title="1 of 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !two.equals(tempCoord)) {</span>
 <span class="nc" id="L464">			routeCoordsIter.remove();</span>
 <span class="nc" id="L465">			tempCoord = routeCoordsIter.next();</span>
 		}
-<span class="nc" id="L467">		Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L468">				&quot;deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: &quot;</span>
-<span class="nc" id="L469">						+ this.routeCoordinates.size());</span>
-<span class="nc" id="L470">		return true;</span>
+<span class="fc" id="L467">		Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L468">				&quot;deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: &quot;</span>
+<span class="fc" id="L469">						+ this.routeCoordinates.size());</span>
+<span class="fc" id="L470">		return true;</span>
 	}
 
 	/**
@@ -479,40 +479,40 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 	 */
 	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one,
 			Coordinate two) {
-<span class="nc" id="L482">		Log.d(TAG_ROUTE, &quot;addRouteBetweenTwoCoords(RouteInfo, Coordinate : &quot;</span>
-<span class="nc" id="L483">				+ one + &quot;, Coordinate: &quot; + two + &quot;)&quot;);</span>
-<span class="nc" id="L484">		Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L485">				&quot;addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size &quot;</span>
-<span class="nc" id="L486">						+ this.routeCoordinates.size()</span>
-<span class="nc" id="L487">						+ &quot;, adding route size: &quot;</span>
-<span class="nc" id="L488">						+ route.getCoordinates().size());</span>
-<span class="nc bnc" id="L489" title="All 2 branches missed.">		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates</span>
+<span class="fc" id="L482">		Log.d(TAG_ROUTE, &quot;addRouteBetweenTwoCoords(RouteInfo, Coordinate : &quot;</span>
+<span class="fc" id="L483">				+ one + &quot;, Coordinate: &quot; + two + &quot;)&quot;);</span>
+<span class="fc" id="L484">		Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L485">				&quot;addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size &quot;</span>
+<span class="fc" id="L486">						+ this.routeCoordinates.size()</span>
+<span class="fc" id="L487">						+ &quot;, adding route size: &quot;</span>
+<span class="fc" id="L488">						+ route.getCoordinates().size());</span>
+<span class="pc bpc" id="L489" title="1 of 2 branches missed.">		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates</span>
 <span class="nc bnc" id="L490" title="All 2 branches missed.">				.indexOf(two));</span>
-<span class="nc bnc" id="L491" title="All 6 branches missed.">		assert (route.getStart().equals(one) &amp;&amp; route.getEnd().equals(two));</span>
-<span class="nc" id="L492">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
+<span class="pc bpc" id="L491" title="5 of 6 branches missed.">		assert (route.getStart().equals(one) &amp;&amp; route.getEnd().equals(two));</span>
+<span class="fc" id="L492">		Iterator&lt;Coordinate&gt; routeCoordsIter = this.routeCoordinates.iterator();</span>
 
-<span class="nc" id="L494">		Coordinate tempCoord = null;</span>
-<span class="nc bnc" id="L495" title="All 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !one.equals(tempCoord)) {</span>
-<span class="nc" id="L496">			tempCoord = routeCoordsIter.next();</span>
+<span class="fc" id="L494">		Coordinate tempCoord = null;</span>
+<span class="pc bpc" id="L495" title="1 of 4 branches missed.">		while (routeCoordsIter.hasNext() &amp;&amp; !one.equals(tempCoord)) {</span>
+<span class="fc" id="L496">			tempCoord = routeCoordsIter.next();</span>
 		}
 
-<span class="nc" id="L499">		LinkedList&lt;Coordinate&gt; bridgingCoords = route.getCoordinates();</span>
-<span class="nc" id="L500">		bridgingCoords.removeFirst();</span>
-<span class="nc" id="L501">		bridgingCoords.removeLast();</span>
-<span class="nc" id="L502">		int indexOfInsertion = this.routeCoordinates.indexOf(one);</span>
-<span class="nc" id="L503">		Log.d(TAG_ROUTE, &quot;size of Route: &quot; + this.routeCoordinates.size()</span>
-<span class="nc" id="L504">				+ &quot;, indexOfInsertion: &quot; + indexOfInsertion</span>
-<span class="nc" id="L505">				+ &quot;, route contains one &quot; + this.routeCoordinates.contains(one));</span>
+<span class="fc" id="L499">		LinkedList&lt;Coordinate&gt; bridgingCoords = route.getCoordinates();</span>
+<span class="fc" id="L500">		bridgingCoords.removeFirst();</span>
+<span class="fc" id="L501">		bridgingCoords.removeLast();</span>
+<span class="fc" id="L502">		int indexOfInsertion = this.routeCoordinates.indexOf(one);</span>
+<span class="fc" id="L503">		Log.d(TAG_ROUTE, &quot;size of Route: &quot; + this.routeCoordinates.size()</span>
+<span class="fc" id="L504">				+ &quot;, indexOfInsertion: &quot; + indexOfInsertion</span>
+<span class="fc" id="L505">				+ &quot;, route contains one &quot; + this.routeCoordinates.contains(one));</span>
 
-<span class="nc bnc" id="L507" title="All 2 branches missed.">		for (Coordinate coord : bridgingCoords) {</span>
+<span class="pc bpc" id="L507" title="1 of 2 branches missed.">		for (Coordinate coord : bridgingCoords) {</span>
 <span class="nc" id="L508">			this.routeCoordinates.add(indexOfInsertion, coord);</span>
 <span class="nc" id="L509">			indexOfInsertion++;</span>
 		}
-<span class="nc" id="L511">		Log.d(TAG_ROUTE,</span>
-<span class="nc" id="L512">				&quot;addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: &quot;</span>
-<span class="nc" id="L513">						+ this.routeCoordinates.size());</span>
+<span class="fc" id="L511">		Log.d(TAG_ROUTE,</span>
+<span class="fc" id="L512">				&quot;addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: &quot;</span>
+<span class="fc" id="L513">						+ this.routeCoordinates.size());</span>
 
-<span class="nc" id="L515">		return true;</span>
+<span class="fc" id="L515">		return true;</span>
 	}
 
 	/**
@@ -524,7 +524,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 <span class="fc" id="L524">		Coordinate previousCoord = null;</span>
 		Coordinate tempCoord;
 
-<span class="fc bfc" id="L527" title="All 2 branches covered.">		if (routeCoordsIter.hasNext()) {</span>
+<span class="pc bpc" id="L527" title="1 of 2 branches missed.">		if (routeCoordsIter.hasNext()) {</span>
 <span class="fc" id="L528">			previousCoord = routeCoordsIter.next();</span>
 		}
 
@@ -585,4 +585,4 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 
 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 22:39:32)</div></body></html>

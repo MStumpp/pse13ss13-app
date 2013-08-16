@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BoundingBoxTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">BoundingBoxTest.java</span></div><h1>BoundingBoxTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BoundingBoxTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 22:39:32)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">BoundingBoxTest.java</span></div><h1>BoundingBoxTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
 import static org.junit.Assert.*;
 
@@ -13,19 +13,20 @@ import android.graphics.Point;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 @RunWith(RobolectricTestRunner.class)
-<span class="nc" id="L18">public class BoundingBoxTest  {</span>
+<span class="nc" id="L19">public class BoundingBoxTest  {</span>
 	private Point display;
 	private Coordinate center;
 	private float lod;
 
 	@Before
 	protected void setUp() {
-<span class="nc" id="L25">		display = new Point(1025, 600);</span>
-<span class="nc" id="L26">		center =  new Coordinate(49.0145, 8.419);</span>
-<span class="nc" id="L27">		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();</span>
-<span class="nc" id="L28">	}</span>
+<span class="nc" id="L26">		display = new Point(1025, 600);</span>
+<span class="nc" id="L27">		center =  new Coordinate(49.0145, 8.419);</span>
+<span class="nc" id="L28">		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();</span>
+<span class="nc" id="L29">	}</span>
 
 	/**
 	 * Testet die BoundingBox auf allgemeine Funktionalität
@@ -35,16 +36,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 	@Test
 	public void testGeneral() {
 
-<span class="nc" id="L38">		BoundingBox box = new BoundingBox(center, display, lod);</span>
+<span class="nc" id="L39">		BoundingBox box = new BoundingBox(center, display, lod);</span>
 
-<span class="nc bnc" id="L40" title="All 2 branches missed.">		assertTrue(box.getCenter() == center);</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">		assertTrue(box.getLevelOfDetail() == lod);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">		assertTrue(box.getDisplaySize() == display);</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">		assertTrue(box.getTopLeft() != null);</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">		assertTrue(box.getTopRight() != null);</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">		assertTrue(box.getBottomLeft() != null);</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">		assertTrue(box.getBottomRight() != null);</span>
-<span class="nc" id="L47">	}</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		assertTrue(box.getCenter() == center);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		assertTrue(box.getLevelOfDetail() == lod);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">		assertTrue(box.getDisplaySize() == display);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		assertTrue(box.getTopLeft() != null);</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		assertTrue(box.getTopRight() != null);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		assertTrue(box.getBottomLeft() != null);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		assertTrue(box.getBottomRight() != null);</span>
+<span class="nc" id="L48">	}</span>
 
 	/**
 	 * Testet das verändern des Zoomlevels
@@ -52,15 +53,15 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 	@Test
 	public void testZoom() {
 
-<span class="nc" id="L55">		BoundingBox box = new BoundingBox(center, display, lod);</span>
+<span class="nc" id="L56">		BoundingBox box = new BoundingBox(center, display, lod);</span>
 
-<span class="nc" id="L57">		box.setLevelOfDetail(8);</span>
-<span class="nc bnc" id="L58" title="All 4 branches missed.">		assertTrue(box.getLevelOfDetail() == 8 &amp;&amp; box.getCenter() == center);</span>
+<span class="nc" id="L58">		box.setLevelOfDetail(8);</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">		assertTrue(box.getLevelOfDetail() == 8 &amp;&amp; box.getCenter() == center);</span>
 
-<span class="nc" id="L60">		box.setLevelOfDetailByADelta(1);</span>
-<span class="nc bnc" id="L61" title="All 4 branches missed.">		assertTrue(box.getLevelOfDetail() == 9 &amp;&amp; box.getCenter() == center);</span>
+<span class="nc" id="L61">		box.setLevelOfDetailByADelta(1);</span>
+<span class="nc bnc" id="L62" title="All 4 branches missed.">		assertTrue(box.getLevelOfDetail() == 9 &amp;&amp; box.getCenter() == center);</span>
 
-<span class="nc" id="L63">	}</span>
+<span class="nc" id="L64">	}</span>
 
 	/**
 	 * test das verändern der Center Coordinate
@@ -68,21 +69,36 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 	@Test
 	public void testCenter(){
 
-<span class="nc" id="L71">		BoundingBox box = new BoundingBox(center, display, lod);</span>
-<span class="nc" id="L72">		Coordinate center  = new Coordinate(10,10);</span>
+<span class="nc" id="L72">		BoundingBox box = new BoundingBox(center, display, lod);</span>
+<span class="nc" id="L73">		Coordinate center  = new Coordinate(10,10);</span>
 
-<span class="nc" id="L74">		Coordinate topLeft  = box.getTopLeft();</span>
-<span class="nc" id="L75">		Coordinate topRight  = box.getTopRight();</span>
-<span class="nc" id="L76">		Coordinate bottomLeft  = box.getBottomLeft();</span>
-<span class="nc" id="L77">		Coordinate botoomRight  = box.getBottomRight();</span>
+<span class="nc" id="L75">		Coordinate topLeft  = box.getTopLeft();</span>
+<span class="nc" id="L76">		Coordinate topRight  = box.getTopRight();</span>
+<span class="nc" id="L77">		Coordinate bottomLeft  = box.getBottomLeft();</span>
+<span class="nc" id="L78">		Coordinate botoomRight  = box.getBottomRight();</span>
 
-<span class="nc" id="L79">		box.setCenter(center);</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">		assertTrue(box.getCenter() == center);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">		assertTrue(box.getTopLeft() != topLeft);</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">		assertTrue(box.getTopRight() != topRight);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">		assertTrue(box.getBottomLeft() != bottomLeft);</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">		assertTrue(box.getBottomRight() != botoomRight);</span>
+<span class="nc" id="L80">		box.setCenter(center);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		assertTrue(box.getCenter() == center);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		assertTrue(box.getTopLeft() != topLeft);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		assertTrue(box.getTopRight() != topRight);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		assertTrue(box.getBottomLeft() != bottomLeft);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		assertTrue(box.getBottomRight() != botoomRight);</span>
+<span class="nc" id="L86">		box.setCenter(center,4);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">		assertTrue(box.getCenter() == center);</span>
+<span class="nc" id="L88">		box.setCenter(new DisplayCoordinate(0,0));</span>
+<span class="nc" id="L89">		box.getBottomLeft();</span>
+<span class="nc" id="L90">		box.getBottomRight();</span>
+<span class="nc" id="L91">		box.toString();</span>
 
-<span class="nc" id="L86">	}</span>
+<span class="nc" id="L93">	}</span>
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testShift(){
+<span class="nc" id="L100">		BoundingBox box = new BoundingBox(center, display, lod);</span>
+<span class="nc" id="L101">		box.shiftCenter(0, 0);</span>
+<span class="nc" id="L102">	}</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 22:39:32)</div></body></html>

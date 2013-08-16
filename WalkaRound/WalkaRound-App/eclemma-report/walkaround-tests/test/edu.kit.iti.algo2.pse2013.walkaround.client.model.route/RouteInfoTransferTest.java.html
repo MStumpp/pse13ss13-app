@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteInfoTransferTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">RouteInfoTransferTest.java</span></div><h1>RouteInfoTransferTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteInfoTransferTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 22:39:32)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">RouteInfoTransferTest.java</span></div><h1>RouteInfoTransferTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
 import static org.junit.Assert.*;
 
@@ -36,15 +36,20 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 <span class="fc" id="L36">		assertEquals(&quot;test&quot;, routeInfoTrans.getError());</span>
 <span class="fc" id="L37">	}</span>
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructException() {
+<span class="nc" id="L41">		RouteInfoTransfer rt = new RouteInfoTransfer(null);</span>
+<span class="nc" id="L42">	}</span>
+
 	@Test
 	public void testExecution() {
-<span class="fc" id="L41">		routeInfoTrans.addCoordinates(new Coordinate(42d, 42d));</span>
-<span class="fc" id="L42">		routeInfoTrans.setCoordinates(routeInfoTrans.getCoordinates());</span>
-<span class="fc" id="L43">		routeInfoTrans.postProcessRoundtrip();</span>
-<span class="fc" id="L44">		routeInfoTrans.postProcessShortestPath();</span>
-<span class="fc" id="L45">		routeInfoTransWithCoords.postProcessRoundtrip();</span>
-<span class="fc" id="L46">		routeInfoTransWithCoords.postProcessShortestPath();</span>
-<span class="fc" id="L47">		assertTrue(true);</span>
-<span class="fc" id="L48">	}</span>
+<span class="fc" id="L46">		routeInfoTrans.addCoordinates(new Coordinate(42d, 42d));</span>
+<span class="fc" id="L47">		routeInfoTrans.setCoordinates(routeInfoTrans.getCoordinates());</span>
+<span class="fc" id="L48">		routeInfoTrans.postProcessRoundtrip();</span>
+<span class="fc" id="L49">		routeInfoTrans.postProcessShortestPath();</span>
+<span class="fc" id="L50">		routeInfoTransWithCoords.postProcessRoundtrip();</span>
+<span class="fc" id="L51">		routeInfoTransWithCoords.postProcessShortestPath();</span>
+<span class="fc" id="L52">		assertTrue(true);</span>
+<span class="fc" id="L53">	}</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 22:39:32)</div></body></html>

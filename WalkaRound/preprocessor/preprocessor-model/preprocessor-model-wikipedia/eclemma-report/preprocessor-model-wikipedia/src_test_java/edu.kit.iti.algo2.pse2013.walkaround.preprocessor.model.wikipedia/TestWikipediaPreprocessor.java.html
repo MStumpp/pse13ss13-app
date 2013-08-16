@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestWikipediaPreprocessor.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">preprocessor-model-wikipedia</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia</a> &gt; <span class="el_source">TestWikipediaPreprocessor.java</span></div><h1>TestWikipediaPreprocessor.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.wikipedia;
+
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.net.URL;
+
+import javax.xml.stream.XMLStreamException;
+
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+
+<span class="fc" id="L15">public class TestWikipediaPreprocessor {</span>
+
+	@Test
+	public void testTextFetsching() throws IOException, XMLStreamException {
+<span class="fc" id="L19">		LocationDataIO locData = new LocationDataIO();</span>
+<span class="fc" id="L20">		locData.addPOI(new POI(0, 0, &quot;Test&quot;, null,</span>
+<span class="fc" id="L21">				new URL(&quot;http://en.wikipedia.org/w/index.php?title=Badisches_Staatstheater_Karlsruhe&amp;printable=yes&quot;), null));</span>
+
+<span class="fc" id="L23">		WikipediaPreprocessor.preprocessWikipediaInformation(locData);</span>
+
+<span class="fc" id="L25">		String text = locData.getPOIs().get(0).getTextInfo();</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">		assertTrue(text != null);</span>
+<span class="pc bpc" id="L27" title="2 of 4 branches missed.">		assertTrue(text.startsWith(&quot;&lt;p&gt;&quot;) &amp;&amp; text.endsWith(&quot;&lt;/p&gt;&quot;));</span>
+<span class="fc" id="L28">		assertTrue(text.contains(&quot;Badisches Staatstheater Karlsruhe&quot;));</span>
+<span class="fc" id="L29">		System.out.println(locData.getPOIs().get(0).getURL());</span>
+<span class="fc" id="L30">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

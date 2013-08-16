@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">RouteTest.java</span></div><h1>RouteTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RouteTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 22:39:32)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.model.route</a> &gt; <span class="el_source">RouteTest.java</span></div><h1>RouteTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
 import static org.junit.Assert.*;
 
@@ -53,42 +53,59 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 	@Test
 	public void testdeleteWaypoints() {
 <span class="fc" id="L55">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">		assertTrue(route.getWaypoints().size() == 1);</span>
-<span class="fc" id="L57">		route.deleteActiveWaypoint();</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">		assertTrue(route.getWaypoints().size() == 0);</span>
-<span class="fc" id="L59">	}</span>
+<span class="fc" id="L56">		Waypoint second = new Waypoint(3d, 4d, &quot;test2&quot;);</span>
+<span class="fc" id="L57">		route.addWaypoint(second);</span>
+<span class="fc" id="L58">		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">		assertTrue(route.getWaypoints().size() == 3);</span>
+<span class="fc" id="L60">		route.setActiveWaypoint(second.getId());</span>
+<span class="fc" id="L61">		route.deleteActiveWaypoint();</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">		assertTrue(route.getWaypoints().size() == 2);</span>
+<span class="fc" id="L63">	}</span>
 
 	@Test
 	public void testMoveWaypoint() {
-<span class="fc" id="L63">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
-<span class="fc" id="L64">		route.moveActiveWaypoint(new Coordinate(10d, 20d));</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">		assertTrue(route.getActiveWaypoint().getLatitude() == 10d);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">		assertTrue(route.getActiveWaypoint().getLongitude() == 20d);</span>
-<span class="fc" id="L67">	}</span>
+<span class="fc" id="L67">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
+<span class="fc" id="L68">		Waypoint second = new Waypoint(3d, 4d, &quot;test2&quot;);</span>
+<span class="fc" id="L69">		route.addWaypoint(second);</span>
+<span class="fc" id="L70">		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));</span>
+<span class="fc" id="L71">		route.setActiveWaypoint(second.getId());</span>
+<span class="fc" id="L72">		route.moveActiveWaypoint(new Coordinate(10d, 20d));</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">		assertTrue(route.getActiveWaypoint().getLatitude() == 10d);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">		assertTrue(route.getActiveWaypoint().getLongitude() == 20d);</span>
+<span class="fc" id="L75">	}</span>
 
 	@Test
 	public void testResetRoute() {
-<span class="nc" id="L71">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
-<span class="nc" id="L72">		route.addWaypoint(new Waypoint(3d, 4d, &quot;test2&quot;));</span>
-<span class="nc" id="L73">		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));</span>
-<span class="nc" id="L74">		assertNotNull(route.getWaypoints());</span>
+<span class="fc" id="L79">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
+<span class="fc" id="L80">		route.addWaypoint(new Waypoint(3d, 4d, &quot;test2&quot;));</span>
+<span class="fc" id="L81">		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));</span>
+<span class="fc" id="L82">		assertNotNull(route.getWaypoints());</span>
 
-<span class="nc" id="L76">		route.resetRoute();</span>
-<span class="nc" id="L77">		assertNull(route.getWaypoints());</span>
-<span class="nc" id="L78">	}</span>
+<span class="fc" id="L84">		route.resetRoute();</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">		assertTrue(route.getWaypoints().size() == 0);</span>
+<span class="fc" id="L86">	}</span>
 
 	@Test
 	public void testInvertRoute() {
-<span class="fc" id="L82">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
-<span class="fc" id="L83">		route.addWaypoint(new Waypoint(3d, 4d, &quot;test2&quot;));</span>
-<span class="fc" id="L84">		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));</span>
-<span class="fc" id="L85">		assertEquals(&quot;test&quot;, route.getWaypoints().get(0).getName());</span>
-<span class="fc" id="L86">		assertEquals(&quot;test2&quot;, route.getWaypoints().get(1).getName());</span>
-<span class="fc" id="L87">		assertEquals(&quot;test3&quot;, route.getWaypoints().get(2).getName());</span>
-<span class="fc" id="L88">		route.invertRoute();</span>
-<span class="fc" id="L89">		assertEquals(&quot;test3&quot;, route.getWaypoints().get(0).getName());</span>
-<span class="fc" id="L90">		assertEquals(&quot;test2&quot;, route.getWaypoints().get(1).getName());</span>
-<span class="fc" id="L91">		assertEquals(&quot;test&quot;, route.getWaypoints().get(2).getName());</span>
-<span class="fc" id="L92">	}</span>
+<span class="fc" id="L90">		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));</span>
+<span class="fc" id="L91">		route.addWaypoint(new Waypoint(3d, 4d, &quot;test2&quot;));</span>
+<span class="fc" id="L92">		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));</span>
+<span class="fc" id="L93">		assertEquals(&quot;test&quot;, route.getWaypoints().get(0).getName());</span>
+<span class="fc" id="L94">		assertEquals(&quot;test2&quot;, route.getWaypoints().get(1).getName());</span>
+<span class="fc" id="L95">		assertEquals(&quot;test3&quot;, route.getWaypoints().get(2).getName());</span>
+<span class="fc" id="L96">		route.invertRoute();</span>
+<span class="fc" id="L97">		assertEquals(&quot;test3&quot;, route.getWaypoints().get(0).getName());</span>
+<span class="fc" id="L98">		assertEquals(&quot;test2&quot;, route.getWaypoints().get(1).getName());</span>
+<span class="fc" id="L99">		assertEquals(&quot;test&quot;, route.getWaypoints().get(2).getName());</span>
+<span class="fc" id="L100">	}</span>
+
+	@Test
+	public void testClone() {
+		route.addWaypoint(new Waypoint(2d, 5d, &quot;test&quot;));
+		route.addWaypoint(new Waypoint(3d, 4d, &quot;test2&quot;));
+		route.addWaypoint(new Waypoint(4d, 6d, &quot;test3&quot;));
+		Route cloned = (Route) route.clone();
+		assertEquals(cloned, route);
+	}
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 22:39:32)</div></body></html>

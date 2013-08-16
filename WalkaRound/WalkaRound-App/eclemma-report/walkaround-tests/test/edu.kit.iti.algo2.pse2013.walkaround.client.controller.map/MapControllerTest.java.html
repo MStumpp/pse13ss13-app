@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 21:36:36)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">MapControllerTest.java</span></div><h1>MapControllerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MapControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">walkaround-tests (16.08.2013 22:39:32)</a> &gt; <a href="../../index.html" class="el_group">walkaround-tests</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.client.controller.map</a> &gt; <span class="el_source">MapControllerTest.java</span></div><h1>MapControllerTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,10 +15,11 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.MapStyle;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 
 @RunWith(RobolectricTestRunner.class)
-<span class="fc" id="L21">public class MapControllerTest {</span>
+<span class="fc" id="L22">public class MapControllerTest {</span>
 	private Coordinate center;
 	private float lod;
 	private Point display;
@@ -31,28 +32,51 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 	@Before
 	public void setUp() {
-<span class="nc" id="L34">		center = new Coordinate(49.0145, 8.419);</span>
-<span class="nc" id="L35">		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();</span>
-<span class="nc" id="L36">		display =  new Point(1025, 600);</span>
-<span class="nc" id="L37">		TileFetcher tl = new TileFetcher();</span>
-<span class="nc" id="L38">		box = new BoundingBox(center, display, lod);</span>
-<span class="nc" id="L39">		mv = new MapView();</span>
-<span class="nc" id="L40">		mc =  MapController.initialize(tl, box, center);</span>
-<span class="nc" id="L41">		mc.startController(mv);</span>
-<span class="nc" id="L42">		mc.onRouteChange(r);</span>
-<span class="nc" id="L43">	}</span>
+<span class="nc" id="L35">		center = new Coordinate(49.0145, 8.419);</span>
+<span class="nc" id="L36">		lod = MapStyle.MAPSTYLE_MAPNIK.getDefaultLevelOfDetail();</span>
+<span class="nc" id="L37">		display =  new Point(1025, 600);</span>
+<span class="nc" id="L38">		TileFetcher tl = new TileFetcher();</span>
+<span class="nc" id="L39">		box = new BoundingBox(center, display, lod);</span>
+<span class="nc" id="L40">		mv = new MapView();</span>
+<span class="nc" id="L41">		MapController.getInstance();</span>
+<span class="nc" id="L42">		mc =  MapController.initialize(tl, box, center);</span>
+<span class="nc" id="L43">		mc.startController(mv);</span>
+<span class="nc" id="L44">		mc.onRouteChange(r);</span>
+<span class="nc" id="L45">	}</span>
 	/**
 	 *
 	 */
 	@Test
 	public void testGeneral() {
-<span class="nc bnc" id="L49" title="All 2 branches missed.">		assertTrue(mc.getCenter() == center);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		assertTrue(mc.getCenter() == center);</span>
 		//assertTrue(mc.getActiveWaypointId() == 0);
-<span class="nc bnc" id="L51" title="All 2 branches missed.">		assertTrue(mc.getCurrentLevelOfDetail() == lod);</span>
-<span class="nc" id="L52">		assertTrue(mc.getCurrentRouteLines().isEmpty());</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">		assertTrue(mc.getPOIById(0) == null);</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">		assertTrue(mc.getInstance() != null);</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		assertTrue(mc.getCurrentLevelOfDetail() == lod);</span>
+<span class="nc" id="L54">		assertTrue(mc.getCurrentRouteLines().isEmpty());</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		assertTrue(mc.getPOIById(0) == null);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		assertTrue(mc.getInstance() != null);</span>
+<span class="nc" id="L57">		mc.getCenter();</span>
+<span class="nc" id="L58">		mc.setCenter(center);</span>
+<span class="nc" id="L59">		mc.setCenter(center, lod);</span>
+<span class="nc" id="L60">		mc.getCurrentLevelOfDetail();</span>
+<span class="nc" id="L61">		mc.getActiveWaypointId();</span>
+<span class="nc" id="L62">		mc.getPullUpView();</span>
+<span class="nc" id="L63">		mc.getCurrentRouteLines();</span>
+<span class="nc" id="L64">		mc.onShift(0, 0);</span>
+<span class="nc" id="L65">		mc.onZoom(0);</span>
+<span class="nc" id="L66">		mc.toggleLockUserPosition();</span>
+<span class="nc" id="L67">		mc.onDeletePoint(2);</span>
+<span class="nc" id="L68">		mc.onCreatePoint(new DisplayCoordinate(0,0));</span>
+<span class="nc" id="L69">		mc.onMovePoint(0, 0, 1);</span>
+<span class="nc" id="L70">		mc.pushMovedWaypoint();</span>
+<span class="nc" id="L71">		mc.onPositionChange(null);</span>
+<span class="nc" id="L72">		mc.updateUserPosition();</span>
+<span class="nc" id="L73">		mc.updateUserPosition();</span>
+<span class="nc" id="L74">		mc.getPOI();</span>
+<span class="nc" id="L75">		mc.getPOIById(1);</span>
+<span class="nc" id="L76">		mc.setActive(1);</span>
+<span class="nc" id="L77">		mc.onCompassChange(2);</span>
+<span class="nc" id="L78">		mc.roundtripAlert();</span>
+<span class="nc" id="L79">	}</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 21:36:36)</div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>walkaround-tests (16.08.2013 22:39:32)</div></body></html>

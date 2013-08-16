@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GeometrizableWrapper.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">GeometrizableWrapper.java</span></div><h1>GeometrizableWrapper.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+
+/**
+ * Wrapper for Geometrizable to handle multiple points.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class GeometrizableWrapper implements Geometrizable {
+
+    private Geometrizable geometrizable;
+
+    private int nodeNumber;
+
+<span class="nc" id="L15">    public GeometrizableWrapper(Geometrizable geometrizable, int nodeNumber) {</span>
+<span class="nc" id="L16">        this.geometrizable = geometrizable;</span>
+<span class="nc" id="L17">        this.nodeNumber = nodeNumber;</span>
+<span class="nc" id="L18">    }</span>
+
+    @Override
+    public int numberDimensions() {
+<span class="nc" id="L22">        return geometrizable.numberDimensions();</span>
+    }
+
+    @Override
+    public double valueForDimension(int dim) {
+<span class="nc" id="L27">        return geometrizable.getNode(nodeNumber).valueForDimension(dim);</span>
+    }
+
+    @Override
+    public final int numberNodes() {
+<span class="nc" id="L32">        return 1;</span>
+    }
+
+    @Override
+    public Geometrizable getNode(int nodeNumber) {
+<span class="nc" id="L37">        return geometrizable.getNode(nodeNumber);</span>
+    }
+
+    public Geometrizable getNode() {
+<span class="nc" id="L41">        return geometrizable.getNode(nodeNumber);</span>
+    }
+
+    public Geometrizable getGeometrizable() {
+<span class="nc" id="L45">        return geometrizable;</span>
+    }
+
+    @Override
+    public int compareTo(Object o) {
+<span class="nc" id="L50">        return getNode().compareTo(((GeometrizableWrapper)o).getNode());</span>
+    }
+
+    public String toString() {
+<span class="nc" id="L54">        return geometrizable.toString();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

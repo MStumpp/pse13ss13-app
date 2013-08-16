@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GraphDataIOTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">GraphDataIOTest.java</span></div><h1>GraphDataIOTest.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+
+/**
+ * GraphDataIOTest.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+<span class="nc" id="L24">public class GraphDataIOTest {</span>
+
+
+<span class="nc" id="L27">	private static final File REAL_GRAPH_DATA_FILE = FileUtil.getFile(&quot;graphData.pbf&quot;);</span>
+<span class="nc" id="L28">	private static final File TMP_GRAPH_DATA_FILE = new File(System.getProperty(&quot;java.io.tmpdir&quot;) + File.separatorChar + &quot;graphData.pbf&quot;);</span>
+
+	@Before
+	public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+<span class="nc" id="L32">		Field idCounter = Vertex.class.getDeclaredField(&quot;idCounter&quot;);</span>
+<span class="nc" id="L33">		idCounter.setAccessible(true);</span>
+<span class="nc" id="L34">		idCounter.setInt(null, 0);</span>
+<span class="nc" id="L35">	}</span>
+
+	@Test
+	public void testSaveAndLoad() {
+<span class="nc" id="L39">		GraphDataIO graphDataIO = getGraphDataIO();</span>
+
+		try {
+<span class="nc" id="L42">			GraphDataIO.save(graphDataIO, TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L43">		} catch (IOException e) {</span>
+<span class="nc" id="L44">			e.printStackTrace();</span>
+		}
+
+<span class="nc" id="L47">		assertTrue(TMP_GRAPH_DATA_FILE.exists());</span>
+
+<span class="nc" id="L49">		GraphDataIO reload = null;</span>
+		try {
+<span class="nc" id="L51">			reload = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L52">		} catch (IOException e) {</span>
+<span class="nc" id="L53">			e.printStackTrace();</span>
+		}
+
+<span class="nc" id="L56">		assertNotNull(graphDataIO);</span>
+<span class="nc" id="L57">		assertTrue(graphDataIO.getEdges().containsAll(reload.getEdges()));</span>
+<span class="nc" id="L58">		assertTrue(reload.getEdges().containsAll(graphDataIO.getEdges()));</span>
+<span class="nc" id="L59">	}</span>
+
+    @Test
+    public void testSaveAndLoad2() {
+<span class="nc" id="L63">        GraphDataIO graphDataIO = getGraphDataIO();</span>
+<span class="nc" id="L64">        int size = graphDataIO.getEdges().size();</span>
+
+        try {
+<span class="nc" id="L67">            GraphDataIO.save(graphDataIO, TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L68">        } catch (IOException e) {</span>
+<span class="nc" id="L69">            e.printStackTrace();</span>
+        }
+
+<span class="nc" id="L72">        Assert.assertTrue(TMP_GRAPH_DATA_FILE.exists());</span>
+
+<span class="nc" id="L74">        graphDataIO = null;</span>
+        try {
+<span class="nc" id="L76">            graphDataIO = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L77">        } catch (IOException e) {</span>
+<span class="nc" id="L78">            e.printStackTrace();</span>
+        }
+
+<span class="nc" id="L81">        GraphDataIO graphDataIO2 = null;</span>
+        try {
+<span class="nc" id="L83">            graphDataIO2 = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L84">        } catch (IOException e) {</span>
+<span class="nc" id="L85">            e.printStackTrace();</span>
+        }
+
+<span class="nc" id="L88">        Assert.assertNotNull(graphDataIO);</span>
+<span class="nc" id="L89">        Assert.assertEquals(graphDataIO.getEdges().size(), size);</span>
+<span class="nc" id="L90">        Assert.assertEquals(graphDataIO2.getEdges().size(), size);</span>
+<span class="nc" id="L91">    }</span>
+
+	@Test
+    public void testSaveAndLoadWithRealDataSet() throws IOException {
+<span class="nc" id="L95">		System.out.println(&quot;### TestSaveAndLoadWithRealDataSet() ###&quot;);</span>
+<span class="nc" id="L96">		System.out.println(REAL_GRAPH_DATA_FILE);</span>
+
+<span class="nc" id="L98">		Assert.assertNotNull(REAL_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L99">		Assert.assertTrue(REAL_GRAPH_DATA_FILE.exists());</span>
+<span class="nc" id="L100">		Assert.assertTrue(REAL_GRAPH_DATA_FILE.canWrite());</span>
+<span class="nc" id="L101">		Assert.assertTrue(REAL_GRAPH_DATA_FILE.canRead());</span>
+
+<span class="nc" id="L103">		long stopwatch = System.currentTimeMillis();</span>
+<span class="nc" id="L104">		System.out.print(&quot;Load real graph-dataset... &quot;);</span>
+<span class="nc" id="L105">		GraphDataIO graphData = GraphDataIO.load(REAL_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L106">		System.out.println(System.currentTimeMillis() - stopwatch + &quot; ms&quot;);</span>
+
+<span class="nc" id="L108">		int numEdges = graphData.getEdges().size();</span>
+<span class="nc" id="L109">		int numVertices = graphData.getVertices().size();</span>
+<span class="nc" id="L110">		System.out.println(numEdges + &quot; edges and &quot; + numVertices + &quot; vertices&quot;);</span>
+
+<span class="nc" id="L112">		stopwatch = System.currentTimeMillis();</span>
+<span class="nc" id="L113">		System.out.print(&quot;Save to temporary file... &quot;);</span>
+<span class="nc" id="L114">		GraphDataIO.save(graphData, TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L115">		System.out.println(System.currentTimeMillis() - stopwatch + &quot; ms&quot;);</span>
+
+<span class="nc" id="L117">		stopwatch = System.currentTimeMillis();</span>
+<span class="nc" id="L118">		System.out.print(&quot;Load again... &quot;);</span>
+<span class="nc" id="L119">		graphData = GraphDataIO.load(TMP_GRAPH_DATA_FILE);</span>
+<span class="nc" id="L120">		System.out.println(System.currentTimeMillis() - stopwatch + &quot; ms&quot;);</span>
+
+<span class="nc" id="L122">		System.out.println(numEdges + &quot; edges and &quot; + numVertices + &quot; vertices&quot;);</span>
+<span class="nc" id="L123">		Assert.assertEquals(numEdges, graphData.getEdges().size());</span>
+<span class="nc" id="L124">		Assert.assertEquals(numVertices, graphData.getVertices().size());</span>
+<span class="nc" id="L125">	}</span>
+
+	@Test
+	public void testAddEdges() {
+<span class="nc" id="L129">		GraphDataIO gdio = getGraphDataIO();</span>
+<span class="nc" id="L130">		gdio.addEdges(new LinkedList&lt;Edge&gt;());</span>
+<span class="nc" id="L131">	}</span>
+
+	@Test
+	public void testHashCode() {
+<span class="nc" id="L135">		GraphDataIO gdio = getGraphDataIO();</span>
+<span class="nc" id="L136">		GraphDataIO gdio2 = new GraphDataIO();</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">		assertTrue(gdio.hashCode() != gdio2.hashCode());</span>
+<span class="nc" id="L138">	}</span>
+
+
+	private GraphDataIO getGraphDataIO() {
+<span class="nc" id="L142">		GraphDataIO graphDataIO = new GraphDataIO();</span>
+<span class="nc" id="L143">		Edge edge1 = new Edge(new Vertex(1.d, 2.d), new Vertex(3.d, 4.d));</span>
+<span class="nc" id="L144">		Edge edge2 = new Edge(new Vertex(1.d, 2.d), new Vertex(3.d, 4.d));</span>
+<span class="nc" id="L145">		graphDataIO.addEdge(edge1);</span>
+<span class="nc" id="L146">		graphDataIO.addEdge(edge2);</span>
+<span class="nc" id="L147">		return graphDataIO;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

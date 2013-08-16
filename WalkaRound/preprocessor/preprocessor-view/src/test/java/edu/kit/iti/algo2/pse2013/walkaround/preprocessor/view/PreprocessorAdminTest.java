@@ -39,7 +39,6 @@ public class PreprocessorAdminTest {
 	private static final File LOCATION_DATA_FILE = FileUtil.getFile("locationData.pbf");
 
 	@Test
-	@Ignore
 	public void testPreprocessGraphDataIO() {
 
 		File verticesFile = FileUtil.getFile("_nodes.txt");

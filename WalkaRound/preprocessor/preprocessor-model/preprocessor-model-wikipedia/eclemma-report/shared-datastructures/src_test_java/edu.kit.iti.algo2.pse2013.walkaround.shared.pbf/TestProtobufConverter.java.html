@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestProtobufConverter.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.pbf</a> &gt; <span class="el_source">TestProtobufConverter.java</span></div><h1>TestProtobufConverter.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
+
+import static org.junit.Assert.*;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.LinkedList;
+
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometrizableWrapper;
+
+<span class="nc" id="L28">public class TestProtobufConverter {</span>
+
+	@Test
+	public void testConvertAddress() {
+<span class="nc" id="L32">		assertEquals(null, ProtobufConverter.getAddressBuilder(null));</span>
+<span class="nc" id="L33">		assertEquals(null, ProtobufConverter.getAddress(null));</span>
+<span class="nc" id="L34">		Address a = new Address(null, null, null, Address.NO_POSTAL_CODE);</span>
+<span class="nc" id="L35">		Address a2 = new Address(&quot;Am Fasanengarten&quot;, &quot;5&quot;, &quot;Karlsruhe&quot;, 76131);</span>
+<span class="nc" id="L36">		assertEquals(a, ProtobufConverter.getAddress(ProtobufConverter.getAddressBuilder(a).build()));</span>
+<span class="nc" id="L37">		assertEquals(a2, ProtobufConverter.getAddress(ProtobufConverter.getAddressBuilder(a2).build()));</span>
+<span class="nc" id="L38">	}</span>
+
+	@Test
+	public void testConvertArea() {
+<span class="nc" id="L42">		assertEquals(null, ProtobufConverter.getAreaBuilder(null));</span>
+<span class="nc" id="L43">		assertEquals(null, ProtobufConverter.getArea(null));</span>
+<span class="nc" id="L44">		LinkedList&lt;Coordinate&gt; coords = new LinkedList&lt;Coordinate&gt;();</span>
+<span class="nc" id="L45">		coords.add(new Coordinate(48, 8));</span>
+<span class="nc" id="L46">		coords.add(new Coordinate(49, 8));</span>
+<span class="nc" id="L47">		coords.add(new Coordinate(49, 9));</span>
+<span class="nc" id="L48">		Area a = new Area(Category.getAllAreaCategories(), coords);</span>
+<span class="nc" id="L49">		assertEquals(a, ProtobufConverter.getArea(ProtobufConverter.getAreaBuilder(a).build()));</span>
+<span class="nc" id="L50">	}</span>
+
+	@Test
+	public void testConvertCoordinate() {
+<span class="nc" id="L54">		assertEquals(null, ProtobufConverter.getCoordinate(null));</span>
+<span class="nc" id="L55">		assertEquals(null, ProtobufConverter.getCoordinateBuilder(null));</span>
+<span class="nc" id="L56">		Coordinate c = new Coordinate(48, 8, new CrossingInformation(new float[]{1.0f, 2.0f, 42.0f}));</span>
+<span class="nc" id="L57">		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));</span>
+
+<span class="nc" id="L59">		c = new Coordinate(48, 8);</span>
+<span class="nc" id="L60">		assertEquals(c, ProtobufConverter.getCoordinate(ProtobufConverter.getCoordinateBuilder(c).build()));</span>
+<span class="nc" id="L61">	}</span>
+	@Test
+	public void testLocation() {
+<span class="nc" id="L64">		Location loc = new Location(0, 0, &quot;LocName&quot;, new Address(null, null, null, null));</span>
+<span class="nc" id="L65">		Location loc2 = new Location(0, 0, null, null);</span>
+<span class="nc" id="L66">		assertEquals(loc, ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc).build()));</span>
+<span class="nc" id="L67">		Location reload = ProtobufConverter.getLocation(ProtobufConverter.getLocationBuilder(loc2).build());</span>
+<span class="nc" id="L68">		assertEquals(loc2, reload);</span>
+<span class="nc" id="L69">	}</span>
+	@Test
+	public void testPOI() throws MalformedURLException {
+<span class="nc" id="L72">		POI p = new POI(0, 0, null, null, null, null);</span>
+<span class="nc" id="L73">		POI reload = ProtobufConverter.getPOI(ProtobufConverter.getPOIBuilder(p).build());</span>
+<span class="nc" id="L74">		assertEquals(reload.getAddress(), reload.getAddress());</span>
+<span class="nc" id="L75">		assertTrue(((Location) p).equals(reload));</span>
+<span class="nc" id="L76">		assertEquals(p, reload);</span>
+<span class="nc" id="L77">		p = new POI(0, 0, &quot;Name&quot;, &quot;TextInfo&quot;, new URL(&quot;http://www.wikipedia.org&quot;), new int[]{1, 2, 3});</span>
+<span class="nc" id="L78">		assertEquals(p, ProtobufConverter.getPOI(ProtobufConverter.getPOIBuilder(p).build()));</span>
+<span class="nc" id="L79">	}</span>
+
+	@Test
+	public void testConvertGeometryData() throws MalformedURLException {
+<span class="nc" id="L83">		assertEquals(null, ProtobufConverter.getGeometryData(null));</span>
+<span class="nc" id="L84">		assertEquals(null, ProtobufConverter.getGeometryDataBuilder(null));</span>
+<span class="nc" id="L85">		GeometryNode root = new GeometryNode(5);</span>
+<span class="nc" id="L86">		GeometryNode left = new GeometryNode(4);</span>
+<span class="nc" id="L87">		left.addGeometrizable(new Edge(new Vertex(4, 5), new Vertex(6, 7)));</span>
+<span class="nc" id="L88">		left.addGeometrizable(new POI(1, 2, &quot;Name&quot;, &quot;TextInfo&quot;, new URL(&quot;http://www.wikipedia.org&quot;), new int[]{1, 2}));</span>
+<span class="nc" id="L89">		GeometryNode right = new GeometryNode(6);</span>
+<span class="nc" id="L90">		GeometryNode rightLeft = new GeometryNode(5.5);</span>
+<span class="nc" id="L91">		right.setLeftNode(rightLeft);</span>
+<span class="nc" id="L92">		root.setLeftNode(left);</span>
+<span class="nc" id="L93">		root.setRightNode(right);</span>
+
+<span class="nc" id="L95">		GeometryDataIO g = new GeometryDataIO(new GeometryNode(5), 2);</span>
+<span class="nc" id="L96">		assertEquals(g, ProtobufConverter.getGeometryData(ProtobufConverter.getGeometryDataBuilder(g).build()));</span>
+<span class="nc" id="L97">	}</span>
+
+	@Test
+	public void testGraphData() {
+<span class="nc" id="L101">		GraphDataIO graph = new GraphDataIO();</span>
+<span class="nc" id="L102">		graph.addEdge(new Edge(new Vertex(48,  8), new Vertex(49, 9)));</span>
+<span class="nc" id="L103">		graph.addEdge(new Edge(new Vertex(49,  8), new Vertex(49, 9)));</span>
+<span class="nc" id="L104">		graph.addEdge(new Edge(new Vertex(49,  9), new Vertex(49, 9)));</span>
+<span class="nc" id="L105">		graph.addEdge(new Edge(new Vertex(49,  9), new Vertex(50, 9)));</span>
+<span class="nc" id="L106">		graph.addEdge(new Edge(new Vertex(49,  9), new Vertex(50, 10)));</span>
+<span class="nc" id="L107">		assertEquals(graph, ProtobufConverter.getGraphData(ProtobufConverter.getGraphDataBuilder(graph).build()));</span>
+<span class="nc" id="L108">	}</span>
+
+	@Test
+	public void testWaypoint() {
+<span class="nc" id="L112">		Waypoint wp = new Waypoint(0, 0, null, null);</span>
+<span class="nc" id="L113">		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));</span>
+<span class="nc" id="L114">		wp.setPOI(new POI(0, 0, null, null, null, null));</span>
+<span class="nc" id="L115">		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));</span>
+<span class="nc" id="L116">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

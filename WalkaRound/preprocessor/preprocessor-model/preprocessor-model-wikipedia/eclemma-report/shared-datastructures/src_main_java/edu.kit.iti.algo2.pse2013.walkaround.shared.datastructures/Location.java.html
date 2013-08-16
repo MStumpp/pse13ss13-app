@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Location.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">Location.java</span></div><h1>Location.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+
+/**
+ * This class represents a location.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+public class Location extends Coordinate {
+
+    /**
+     * id of Location.
+     */
+    private int id;
+
+
+    /**
+     * name of Location.
+     */
+    private String name;
+
+
+    /**
+     * address of Location.
+     */
+    private Address address;
+
+
+    /**
+     * flag for setting Location as moveable.
+     */
+    private boolean isMoveable;
+
+
+    /**
+     * flag for setting Location as favorite.
+     */
+    private boolean isFavorite;
+
+
+    /**
+     * id counter
+     */
+<span class="fc" id="L45">    private static int idCounter = 0;</span>
+
+
+    /**
+     * Creates an instance of Location.
+     *
+     * @param lat Latitude of Location.
+     * @param lon Longitude of Location.
+     * @param name Name of Location.
+     */
+    public Location(double lat, double lon, String name) {
+<span class="nc" id="L56">        this(lat, lon, name, null);</span>
+<span class="nc" id="L57">    }</span>
+
+
+    /**
+     * Creates an instance of Location.
+     *
+     * @param lat Latitude of Location.
+     * @param lon Longitude of Location.
+     * @param name Name of Location.
+     * @param address Address of Location.
+     */
+    public Location(double lat, double lon, String name, Address address) {
+<span class="fc" id="L69">    	super(lat, lon);</span>
+		//Log.d(TAG_LOCATION, &quot;Location Constructor: lat: &quot; + lat + &quot;, lon: &quot; + lon + &quot;, name: &quot; + name + &quot;, used id: &quot; + idCounter + &quot;&quot;);
+        /*if (name == null || name.isEmpty())
+            throw new IllegalArgumentException(&quot;name must not be null and not be empty&quot;);*/
+<span class="fc" id="L73">        this.name = name;</span>
+<span class="fc" id="L74">        this.address = address;</span>
+<span class="fc" id="L75">        isMoveable = false;</span>
+<span class="fc" id="L76">        isFavorite = false;</span>
+<span class="fc" id="L77">        id = idCounter;</span>
+<span class="fc" id="L78">        idCounter++;</span>
+<span class="fc" id="L79">    }</span>
+
+
+    /* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+<span class="nc" id="L87">		return &quot;Location [name=&quot; + name + &quot;, address=&quot; + address</span>
+<span class="nc" id="L88">				+ &quot;, isMoveable=&quot; + isMoveable + &quot;, isFavorite=&quot; + isFavorite</span>
+<span class="nc" id="L89">				+ &quot;, coordinate=&quot; + super.toString() + &quot;]&quot;;</span>
+	}
+
+
+	/**
+     * Returns the ID of Location.
+     *
+     * @return int.
+     */
+    public int getId() {
+<span class="nc" id="L99">        return id;</span>
+    }
+
+
+    /**
+     * Returns the name of Location.
+     *
+     * @return String.
+     */
+    public String getName() {
+<span class="nc" id="L109">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L113">    	this.name = name;</span>
+<span class="nc" id="L114">    }</span>
+
+    /**
+     * Returns the Address of Location.
+     *
+     * @return Address.
+     */
+    public Address getAddress() {
+<span class="nc" id="L122">        return address;</span>
+    }
+
+    public void setAddress(Address address) {
+<span class="nc" id="L126">    	this.address = address;</span>
+<span class="nc" id="L127">    }</span>
+
+
+    /**
+     * Returns whether Location is moveable.
+     *
+     * @return true if Location is moveable, false otherwise.
+     */
+    public boolean isMoveable() {
+<span class="nc" id="L136">        return isMoveable;</span>
+    }
+
+
+    /**
+     * Returns whether Location is a favorite.
+     *
+     * @return true if Location is a favorite, false otherwise.
+     */
+    public boolean isFavorite() {
+<span class="nc" id="L146">        return isFavorite;</span>
+    }
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+<span class="nc" id="L155">		final int prime = 31;</span>
+<span class="nc" id="L156">		int result = super.hashCode();</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">		result = prime * result + ((address == null) ? 0 : address.hashCode());</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">		result = prime * result + (isFavorite ? 1231 : 1237);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		result = prime * result + (isMoveable ? 1231 : 1237);</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
+<span class="nc" id="L161">		return result;</span>
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L170" title="All 2 branches missed.">		if (this == obj) {</span>
+<span class="nc" id="L171">			return true;</span>
+		}
+<span class="nc bnc" id="L173" title="All 2 branches missed.">		if (!super.equals(obj)) {</span>
+<span class="nc" id="L174">			return false;</span>
+		}
+<span class="nc bnc" id="L176" title="All 2 branches missed.">		if (!(obj instanceof Location)) {</span>
+<span class="nc" id="L177">			return false;</span>
+		}
+<span class="nc" id="L179">		Location other = (Location) obj;</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (address == null) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			if (other.address != null) {</span>
+<span class="nc" id="L182">				return false;</span>
+			}
+<span class="nc bnc" id="L184" title="All 2 branches missed.">		} else if (!address.equals(other.address)) {</span>
+<span class="nc" id="L185">			return false;</span>
+		}
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		if (isFavorite != other.isFavorite) {</span>
+<span class="nc" id="L188">			return false;</span>
+		}
+<span class="nc bnc" id="L190" title="All 2 branches missed.">		if (isMoveable != other.isMoveable) {</span>
+<span class="nc" id="L191">			return false;</span>
+		}
+<span class="nc bnc" id="L193" title="All 2 branches missed.">		if (name == null) {</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">			if (other.name != null) {</span>
+<span class="nc" id="L195">				return false;</span>
+			}
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		} else if (!name.equals(other.name)) {</span>
+<span class="nc" id="L198">			return false;</span>
+		}
+<span class="nc" id="L200">		return true;</span>
+	}
+
+
+	public Location clone() {
+<span class="nc" id="L205">    	String clonedName = null;</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">    	if (this.getName() != null) {</span>
+<span class="nc" id="L207">    	clonedName = this.getName().toString();</span>
+    	}
+<span class="nc" id="L209">    	Address clonedAddress = null;</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">    	if (this.getAddress() != null) {</span>
+<span class="nc" id="L211">    	clonedAddress = this.getAddress().clone();</span>
+    	}
+
+<span class="nc" id="L214">		Location clonedLocation = new Location(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);</span>
+<span class="nc" id="L215">		clonedLocation.setMoveability(this.isMoveable());</span>
+<span class="nc" id="L216">		clonedLocation.setIsFavorite(this.isFavorite());</span>
+<span class="nc" id="L217">		return clonedLocation;</span>
+	}
+
+	protected void setMoveability(boolean moveable) {
+<span class="nc" id="L221">		this.isMoveable = moveable;</span>
+<span class="nc" id="L222">	}</span>
+
+	public void setIsFavorite(boolean isFavorite) {
+<span class="nc" id="L225">		this.isFavorite = isFavorite;</span>
+<span class="nc" id="L226">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

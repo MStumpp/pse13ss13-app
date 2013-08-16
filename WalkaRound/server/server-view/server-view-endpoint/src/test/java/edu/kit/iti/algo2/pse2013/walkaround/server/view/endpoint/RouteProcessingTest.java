@@ -68,7 +68,6 @@ public class RouteProcessingTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    @Ignore
     public void testComputeRoundtripException() throws IllegalArgumentException, RouteProcessingException {
         RouteProcessing routeProcessing = RouteProcessing.getInstance();
         routeProcessing.computeRoundtrip(null, 1, 100);

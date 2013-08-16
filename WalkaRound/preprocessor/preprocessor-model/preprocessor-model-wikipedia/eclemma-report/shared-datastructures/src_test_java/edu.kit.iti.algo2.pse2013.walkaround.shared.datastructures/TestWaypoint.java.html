@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestWaypoint.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">TestWaypoint.java</span></div><h1>TestWaypoint.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+import static org.junit.Assert.*;
+
+import java.net.MalformedURLException;
+
+import org.junit.Before;
+import org.junit.Test;
+
+<span class="nc" id="L10">public class TestWaypoint {</span>
+
+	private Waypoint testWaypoint;
+	private int testProfil;
+	private POI testPoi;
+	private double testLat;
+	private double testLon;
+	private String testName;
+	private Address testAddress;
+
+	@Before
+	public void setUp() {
+<span class="nc" id="L22">		testLat = 2d;</span>
+<span class="nc" id="L23">		testLon = 5d;</span>
+<span class="nc" id="L24">		testProfil = 42;</span>
+<span class="nc" id="L25">		testName = &quot;test&quot;;</span>
+<span class="nc" id="L26">		testPoi = new POI(3d, 10d, &quot;test&quot;, &quot;test&quot;, null, null);</span>
+<span class="nc" id="L27">		testAddress = new Address(null, null, null, 0);</span>
+<span class="nc" id="L28">		testWaypoint = new Waypoint(testLat, testLon, testName, testAddress);</span>
+<span class="nc" id="L29">	}</span>
+
+	@Test
+	public void testPersistence() throws MalformedURLException {
+		// Assert
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		assertTrue(testLat == testWaypoint.getLatitude());</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		assertTrue(testLon == testWaypoint.getLongitude());</span>
+<span class="nc" id="L36">		assertEquals(testName, testWaypoint.getName());</span>
+
+<span class="nc" id="L38">		Waypoint w = new Waypoint(0, 0, null);</span>
+<span class="nc" id="L39">		assertFalse(w.isPOI());</span>
+<span class="nc" id="L40">		w.setPOI(testPoi);</span>
+<span class="nc" id="L41">		w.setProfile(testProfil);</span>
+<span class="nc" id="L42">		assertEquals(testPoi, w.getPOI());</span>
+<span class="nc" id="L43">		assertTrue(w.isPOI());</span>
+<span class="nc" id="L44">		assertEquals(testProfil, w.getProfile());</span>
+<span class="nc" id="L45">	}</span>
+
+	@Test
+	public void testClone() {
+<span class="nc" id="L49">		Waypoint clone = testWaypoint.clone();</span>
+<span class="nc" id="L50">		assertEquals(testWaypoint, clone);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		assertFalse(testWaypoint == clone);</span>
+<span class="nc" id="L52">		Waypoint nullPoint = new Waypoint(0, 0, null, null);</span>
+<span class="nc" id="L53">		nullPoint.setPOI(new POI(0, 0, null, null, null, null));</span>
+<span class="nc" id="L54">		clone = nullPoint.clone();</span>
+<span class="nc" id="L55">		assertEquals(nullPoint, clone);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		assertFalse(nullPoint == clone);</span>
+<span class="nc" id="L57">	}</span>
+
+	@Test
+	public void testEquals() {
+<span class="nc" id="L61">		assertFalse(testWaypoint.equals(null));</span>
+<span class="nc" id="L62">		assertFalse(testWaypoint.equals(&quot;Test&quot;));</span>
+<span class="nc" id="L63">		Waypoint wp2 = new Waypoint(testLat, testLon, testName, testAddress);</span>
+<span class="nc" id="L64">		wp2.setPOI(new POI(0, 0, &quot;&quot;, &quot;&quot;, null, null));</span>
+<span class="nc" id="L65">		assertFalse(testWaypoint.equals(wp2));</span>
+<span class="nc" id="L66">		Waypoint wp3 = new Waypoint(testLat, testLon, testName, testAddress);</span>
+<span class="nc" id="L67">		wp3.setProfile(0);</span>
+<span class="nc" id="L68">		assertFalse(testWaypoint.equals(wp3));</span>
+<span class="nc" id="L69">		Waypoint wp4 = new Waypoint(testLat, testLon, testName, testAddress);</span>
+<span class="nc" id="L70">		wp4.setPOI(new POI(0, 0, null, null, null, null));</span>
+<span class="nc" id="L71">		assertFalse(wp2.equals(wp4));</span>
+<span class="nc" id="L72">		assertTrue(wp4.equals(wp4));</span>
+<span class="nc" id="L73">		POI p = new POI(testLat, testLon, testName, testName, null, null, testAddress);</span>
+<span class="nc" id="L74">		p.setMoveability(true);</span>
+<span class="nc" id="L75">		assertFalse(testWaypoint.equals(p));</span>
+<span class="nc" id="L76">	}</span>
+	@Test
+	public void testHashCode() {
+<span class="nc" id="L79">		int h1 = testWaypoint.hashCode();</span>
+<span class="nc" id="L80">		Waypoint wp2 = new Waypoint(testLat, testLon, testName, testAddress);</span>
+<span class="nc" id="L81">		wp2.setPOI(new POI(0, 0, null, null, null, null));</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		assertTrue(h1 != wp2.hashCode());</span>
+<span class="nc" id="L83">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>
