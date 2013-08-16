@@ -1,4 +1,15 @@
-package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
+package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,18 +17,6 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
-import org.junit.*;
-
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * GeometryDataPreprocessorTest.
