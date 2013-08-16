@@ -53,14 +53,22 @@ public class RouteTest {
 	@Test
 	public void testdeleteWaypoints() {
 		route.addWaypoint(new Waypoint(2d, 5d, "test"));
-		assertTrue(route.getWaypoints().size() == 1);
+		Waypoint second = new Waypoint(3d, 4d, "test2");
+		route.addWaypoint(second);
+		route.addWaypoint(new Waypoint(4d, 6d, "test3"));
+		assertTrue(route.getWaypoints().size() == 3);
+		route.setActiveWaypoint(second.getId());
 		route.deleteActiveWaypoint();
-		assertTrue(route.getWaypoints().size() == 0);
+		assertTrue(route.getWaypoints().size() == 2);
 	}
 
 	@Test
 	public void testMoveWaypoint() {
 		route.addWaypoint(new Waypoint(2d, 5d, "test"));
+		Waypoint second = new Waypoint(3d, 4d, "test2");
+		route.addWaypoint(second);
+		route.addWaypoint(new Waypoint(4d, 6d, "test3"));
+		route.setActiveWaypoint(second.getId());
 		route.moveActiveWaypoint(new Coordinate(10d, 20d));
 		assertTrue(route.getActiveWaypoint().getLatitude() == 10d);
 		assertTrue(route.getActiveWaypoint().getLongitude() == 20d);
