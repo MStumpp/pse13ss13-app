@@ -17,7 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
  */
 
 @RunWith(RobolectricTestRunner.class)
-public class TestTextToSpeechUtility extends TestCase {
+public class TextToSpeechUtilityTest extends TestCase {
 
 	@Test
 	public void testTextToSpeechInit() {

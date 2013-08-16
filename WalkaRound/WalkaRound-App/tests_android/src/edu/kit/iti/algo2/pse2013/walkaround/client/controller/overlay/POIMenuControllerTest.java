@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

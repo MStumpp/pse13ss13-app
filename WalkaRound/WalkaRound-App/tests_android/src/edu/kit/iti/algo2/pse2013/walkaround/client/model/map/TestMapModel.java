@@ -16,7 +16,7 @@ import android.graphics.Point;
 import edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.poi.POIMenuControllerTest;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuControllerTest;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;

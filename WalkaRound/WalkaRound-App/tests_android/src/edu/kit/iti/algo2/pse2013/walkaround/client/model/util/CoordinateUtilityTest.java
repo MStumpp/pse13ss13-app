@@ -8,7 +8,7 @@ import org.robolectric.RobolectricTestRunner;
 
 
 @RunWith(RobolectricTestRunner.class)
-public class TestCoordinateUtility extends TestCase {
+public class CoordinateUtilityTest extends TestCase {
 	private final static double FRACTION_DELTA = 1e-4; // TODO: Can this be lowered any further by improving the conversion-method?
 	private final static double INTEGER_DELTA = 1e-64;
 	/**

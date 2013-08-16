@@ -17,11 +17,16 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
@@ -190,8 +195,11 @@ public class RouteProcessing {
 		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread");
 
 		if (gsonAnswerer.getException() != null) {
+			// dialog erstellen
+			MapController.getInstance().roundtripAlert();
 			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", gsonAnswerer.getException());
 			throw new RouteProcessingException(gsonAnswerer.getException().toString());
+					
 		} else {
 			Log.d(TAG_ROUTE_PROCESSING,
 					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
