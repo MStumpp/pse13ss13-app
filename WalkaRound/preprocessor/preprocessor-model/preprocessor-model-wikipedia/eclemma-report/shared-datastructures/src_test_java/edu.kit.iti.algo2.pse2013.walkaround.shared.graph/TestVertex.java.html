@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestVertex.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.graph</a> &gt; <span class="el_source">TestVertex.java</span></div><h1>TestVertex.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+<span class="nc" id="L7">public class TestVertex {</span>
+
+	@Test
+	public void testCompare() {
+<span class="nc" id="L11">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L12">		Vertex v2 = new Vertex(1, 1);</span>
+<span class="nc bnc" id="L13" title="All 2 branches missed.">		assertTrue(v.compareTo(v2) &lt; 0);</span>
+<span class="nc bnc" id="L14" title="All 2 branches missed.">		assertTrue(v2.compareTo(v) &gt; 0);</span>
+<span class="nc bnc" id="L15" title="All 2 branches missed.">		assertTrue(v2.compareTo(v2) == 0);</span>
+<span class="nc" id="L16">	}</span>
+
+	@Test
+	public void testCurrentWeightedLength() {
+<span class="nc" id="L20">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L21">		assertEquals(0, v.getCurrentWeightedLength(), 1e-323);</span>
+<span class="nc" id="L22">		v.setCurrentWeightedLength(42);</span>
+<span class="nc" id="L23">		assertEquals(42, v.getCurrentWeightedLength(), 1e-323);</span>
+<span class="nc" id="L24">	}</span>
+
+	@Test
+	public void testValueForDimension() {
+<span class="nc" id="L28">		Vertex v = new Vertex(0, 0);</span>
+		try {
+<span class="nc" id="L30">			v.valueForDimension(-1);</span>
+<span class="nc" id="L31">			assertTrue(false);</span>
+<span class="nc" id="L32">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L33">			assertTrue(true);</span>
+		}
+		try {
+<span class="nc" id="L36">			v.valueForDimension(42);</span>
+<span class="nc" id="L37">			assertTrue(false);</span>
+<span class="nc" id="L38">		} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L39">			assertTrue(true);</span>
+		}
+<span class="nc" id="L41">	}</span>
+
+	@Test
+	public void testOutgoingEdges() {
+<span class="nc" id="L45">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L46">		Vertex v2 = new Vertex(1, 1);</span>
+<span class="nc" id="L47">		Vertex v3 = new Vertex(2, 2);</span>
+<span class="nc" id="L48">		Edge e = new Edge(v, v2);</span>
+<span class="nc" id="L49">		Edge e2 = new Edge(v, v3);</span>
+<span class="nc" id="L50">		Edge e3 = new Edge(v2, v3);</span>
+<span class="nc" id="L51">		v.addOutgoingEdge(e);</span>
+<span class="nc" id="L52">		v2.addOutgoingEdge(e);</span>
+<span class="nc" id="L53">		e.equals(v2.getOutgoingEdge(v));</span>
+<span class="nc" id="L54">		e.equals(v.getOutgoingEdge(v2));</span>
+<span class="nc" id="L55">	}</span>
+
+	@Test
+	public void testParent() {
+<span class="nc" id="L59">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L60">		Vertex v2 = new Vertex(1, 1);</span>
+<span class="nc" id="L61">		assertEquals(null, v.getParent());</span>
+<span class="nc" id="L62">		v.setParent(v2);</span>
+<span class="nc" id="L63">		assertEquals(v2, v.getParent());</span>
+<span class="nc" id="L64">	}</span>
+
+	@Test
+	public void testRun() {
+<span class="nc" id="L68">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L69">		assertEquals(0, v.getRun());</span>
+<span class="nc" id="L70">		v.setRun(42);</span>
+<span class="nc" id="L71">		assertEquals(42, v.getRun());</span>
+<span class="nc" id="L72">	}</span>
+
+	@Test
+	public void testHashCode() {
+<span class="nc" id="L76">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L77">		Vertex v2 = new Vertex(1, 1);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		assertTrue(v.hashCode() != v2.hashCode());</span>
+<span class="nc" id="L79">	}</span>
+
+	@Test
+	public void testNumberNodes() {
+<span class="nc" id="L83">		Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L84">		Vertex v2 = new Vertex(1, 1);</span>
+<span class="nc" id="L85">		assertEquals(1, v.numberNodes());</span>
+<span class="nc" id="L86">		assertEquals(1, v2.numberNodes());</span>
+<span class="nc" id="L87">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

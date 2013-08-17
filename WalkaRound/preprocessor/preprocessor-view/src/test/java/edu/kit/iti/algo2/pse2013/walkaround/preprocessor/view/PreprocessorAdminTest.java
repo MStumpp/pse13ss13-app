@@ -24,6 +24,117 @@ public class PreprocessorAdminTest {
 	private static final File GEOMETRY_DATA_FILE = FileUtil.getFile("geometryData.pbf");
 	private static final File LOCATION_DATA_FILE = FileUtil.getFile("locationData.pbf");
 
+<<<<<<< HEAD
+=======
+	@Test
+	public void testPreprocessGraphDataIO() {
+
+		File verticesFile = FileUtil.getFile("_nodes.txt");
+		FileReader input;
+		try {
+			input = new FileReader(verticesFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		Map<Long, Vertex> vertices = new HashMap<Long, Vertex>();
+
+		BufferedReader bufRead = new BufferedReader(input);
+		String myLine;
+		Vertex current;
+		long osmID;
+		try {
+			while ((myLine = bufRead.readLine()) != null) {
+				String[] array = myLine.split("\\s");
+				osmID = Long.parseLong(array[0]);
+				current = new Vertex(Double.parseDouble(array[1]),
+						Double.parseDouble(array[2]));
+				vertices.put(osmID, current);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
+        /*File geometryFile = new File("/Users/Matthias/Workspace/PSE/data/_geometry.txt");
+        try {
+            input = new FileReader(geometryFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Map<Long, String> geometry = new HashMap<>();*/
+
+		File edgesFile = FileUtil.getFile("_edges.txt");
+		try {
+			input = new FileReader(edgesFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+
+        GraphDataIO graphDataIO = new GraphDataIO();
+
+		bufRead = new BufferedReader(input);
+		try {
+			while ((myLine = bufRead.readLine()) != null) {
+				String[] array = myLine.split("\\s");
+				graphDataIO.addEdge(new Edge(vertices.get(Long
+						.parseLong(array[1])), vertices.get(Long
+						.parseLong(array[2]))));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		try {
+			GraphDataIO.save(graphDataIO, GRAPH_DATA_FILE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testPreprocessLocationDataIO() {
+
+		File verticesFile = FileUtil.getFile("restaurant.csv");
+		FileReader input;
+		try {
+			input = new FileReader(verticesFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+
+        LocationDataIO locationDataIO = new LocationDataIO();
+
+        NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
+        BufferedReader bufRead = new BufferedReader(input);
+        String myLine;
+        try {
+            while ((myLine = bufRead.readLine()) != null)
+            {
+                String[] array = myLine.split(";");
+                locationDataIO.addPOI(new POI(format.parse(array[1]).doubleValue(),
+                        format.parse(array[0]).doubleValue(), array[2].replace("\"", ""), array[2].replace("\"", ""), new URL("http://www.walkaround.com"), new int[]{0, 1}));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            LocationDataIO.save(locationDataIO, LOCATION_DATA_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+>>>>>>> 2aaad7e1f52f41c61656dba8b3d6dd2fddc26678
 
     @Test
     public void testPreprocessGeometryDataIO() {

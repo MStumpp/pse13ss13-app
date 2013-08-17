@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DisplayCoordinate.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures</a> &gt; <span class="el_source">DisplayCoordinate.java</span></div><h1>DisplayCoordinate.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
+
+/**
+ * Diese Klasse repräsentiert ein Punkt auf dem Display des Android-Smartphones.
+ *
+ * @author Ludwig Biermann
+ *
+ */
+public class DisplayCoordinate {
+
+	// X Coordinate
+	private float x;
+
+	// Y Coordinate
+	private float y;
+
+	/**
+	 * Erstellt eine Display Koordinate
+	 *
+	 * @param x x-Koordinate (von links nach rechts, in dip)
+	 * @param y y-Koordinate (von oben nach unten, in dip)
+	 */
+<span class="nc" id="L23">	public DisplayCoordinate(float x, float y) {</span>
+<span class="nc" id="L24">		setX(x);</span>
+<span class="nc" id="L25">		setY(y);</span>
+<span class="nc" id="L26">	}</span>
+
+	/**
+	 * Setzt den x-Teil der Koordinate
+	 *
+	 * @param x x-Anteil der Koordinate
+	 */
+	public void setX(float x){
+<span class="nc" id="L34">		this.x = x;</span>
+<span class="nc" id="L35">	}</span>
+
+	/**
+	 * Setzt den y-Teil der Koordinate
+	 *
+	 * @param y y-Anteil der Koordinate
+	 */
+	public void setY(float y){
+<span class="nc" id="L43">		this.y = y;</span>
+<span class="nc" id="L44">	}</span>
+
+	/**
+	 * Gibt den x-Anteil der Koordinate zurück
+	 *
+	 * @return x x-Anteil der Koordinate
+	 */
+	public float getX(){
+<span class="nc" id="L52">		return this.x;</span>
+	}
+
+	/**
+	 * Gibt den y-Anteil der Koordinate zurück
+	 *
+	 * @return y Achse
+	 */
+	public float getY(){
+<span class="nc" id="L61">		return this.y;</span>
+	}
+	
+	@Override
+	public String toString() {
+<span class="nc" id="L66">		return &quot;DisplayCoordinate X: &quot; + x + &quot; Y: &quot; + y;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>

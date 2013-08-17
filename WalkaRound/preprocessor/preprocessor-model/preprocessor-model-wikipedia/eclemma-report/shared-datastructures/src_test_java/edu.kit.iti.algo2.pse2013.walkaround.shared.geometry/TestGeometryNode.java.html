@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestGeometryNode.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Test anything (16.08.2013 22:38:19)</a> &gt; <a href="../../index.html" class="el_group">shared-datastructures</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.html" class="el_package">edu.kit.iti.algo2.pse2013.walkaround.shared.geometry</a> &gt; <span class="el_source">TestGeometryNode.java</span></div><h1>TestGeometryNode.java</h1><pre class="source lang-java linenums">package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
+
+/**
+ * GeometryNodeTest.
+ *
+ * @author Matthias Stumpp
+ * @version 1.0
+ */
+<span class="nc" id="L21">public class TestGeometryNode {</span>
+
+    @Before
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+<span class="nc" id="L25">        Field idCounter = Vertex.class.getDeclaredField(&quot;idCounter&quot;);</span>
+<span class="nc" id="L26">        idCounter.setAccessible(true);</span>
+<span class="nc" id="L27">        idCounter.setInt(null, 0);</span>
+<span class="nc" id="L28">    }</span>
+
+
+    @Test
+    public void testInitialization1() {
+<span class="nc" id="L33">        GeometryNode parent = new GeometryNode(1.d);</span>
+<span class="nc" id="L34">        Vertex vertex = new Vertex(1.d, 2.d);</span>
+<span class="nc" id="L35">        LinkedList&lt;Geometrizable&gt; list = new LinkedList&lt;Geometrizable&gt;();</span>
+<span class="nc" id="L36">        list.add(vertex);</span>
+<span class="nc" id="L37">        GeometryNode node = new GeometryNode(parent, list);</span>
+
+<span class="nc" id="L39">        Assert.assertEquals(node.getParent(), parent);</span>
+<span class="nc" id="L40">        Assert.assertEquals(node.getDepth(), 0);</span>
+<span class="nc" id="L41">        Assert.assertTrue(node.getGeometrizables().containsAll(list));</span>
+<span class="nc" id="L42">        Assert.assertTrue(list.containsAll(node.getGeometrizables()));</span>
+<span class="nc" id="L43">        Assert.assertEquals(node.getSplitValue(), Double.NaN, 0.d);</span>
+<span class="nc" id="L44">    }</span>
+
+    @Test
+    public void testInitialization2() {
+
+<span class="nc" id="L49">        GeometryNode parent = new GeometryNode(1.d);</span>
+<span class="nc" id="L50">        double splitValue = 3.5;</span>
+<span class="nc" id="L51">        GeometryNode node = new GeometryNode(parent, splitValue);</span>
+
+<span class="nc" id="L53">        Assert.assertEquals(node.getParent(), parent);</span>
+<span class="nc" id="L54">        Assert.assertEquals(node.getDepth(), 0);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        Assert.assertTrue(node.getGeometrizables().size() &lt;= 0);</span>
+<span class="nc" id="L56">        Assert.assertEquals(node.getSplitValue(), splitValue, 0.d);</span>
+<span class="nc" id="L57">    }</span>
+
+    @Test
+    public void testToString() {
+<span class="nc" id="L61">    	GeometryNode gn = new GeometryNode(5, new LinkedList&lt;Geometrizable&gt;());</span>
+<span class="nc" id="L62">    	String str = gn.toString();</span>
+<span class="nc" id="L63">    	assertTrue(str.contains(&quot;&quot; + gn.getDepth()));</span>
+<span class="nc" id="L64">    	assertTrue(str.contains(&quot;&quot; + gn.getSplitValue()));</span>
+<span class="nc" id="L65">    	str.contains(&quot;no vertex&quot;);</span>
+<span class="nc" id="L66">    	gn.addGeometrizable(new Edge(new Vertex(0, 0), new Vertex(0, 0)));</span>
+<span class="nc" id="L67">    	str = gn.toString();</span>
+<span class="nc" id="L68">    	assertTrue(str.contains(&quot;geometrizable&quot;));</span>
+<span class="nc" id="L69">    	assertFalse(str.contains(&quot;leftNode&quot;));</span>
+<span class="nc" id="L70">    	assertFalse(str.contains(&quot;rightNode&quot;));</span>
+<span class="nc" id="L71">    	GeometryNode gn_left = new GeometryNode(4);</span>
+<span class="nc" id="L72">    	GeometryNode gn_right = new GeometryNode(6);</span>
+<span class="nc" id="L73">    	gn.setLeftNode(gn_left);</span>
+<span class="nc" id="L74">    	str = gn.toString();</span>
+<span class="nc" id="L75">    	assertTrue(str.contains(&quot;leftNode&quot;));</span>
+<span class="nc" id="L76">    	gn.setRightNode(gn_right);</span>
+<span class="nc" id="L77">    	str = gn.toString();</span>
+<span class="nc" id="L78">    	assertTrue(str.contains(&quot;rightNode&quot;));</span>
+<span class="nc" id="L79">    	assertTrue(str.contains(&quot;leftNode&quot;));</span>
+<span class="nc" id="L80">    }</span>
+
+    @Test
+    public void testNearestGeom() {
+<span class="nc" id="L84">    	LinkedList&lt;Geometrizable&gt; list = new LinkedList&lt;Geometrizable&gt;();</span>
+<span class="nc" id="L85">    	Vertex v = new Vertex(0, 0);</span>
+<span class="nc" id="L86">    	list.add(v);</span>
+<span class="nc" id="L87">    	GeometryNode gn = new GeometryNode(null, 5, list);</span>
+<span class="nc" id="L88">    	assertEquals(v, gn.getNearestGeometrizable(5, null, 0));</span>
+<span class="nc" id="L89">    }</span>
+
+    @Test
+    public void testHashCode() {
+<span class="nc" id="L93">    	GeometryNode gn = new GeometryNode(5, new LinkedList&lt;Geometrizable&gt;());</span>
+<span class="nc" id="L94">    	GeometryNode gn2 = new GeometryNode(5, new LinkedList&lt;Geometrizable&gt;());</span>
+<span class="nc" id="L95">    	GeometryNode gn3 = new GeometryNode(6, new LinkedList&lt;Geometrizable&gt;());</span>
+<span class="nc" id="L96">    	assertEquals(gn.hashCode(), gn2.hashCode());</span>
+<span class="nc" id="L97">    	assertNotEquals(gn.hashCode(), gn3.hashCode());</span>
+<span class="nc" id="L98">    	assertNotEquals(gn3.hashCode(), gn2.hashCode());</span>
+<span class="nc" id="L99">    	GeometryNode gn4 = new GeometryNode(6, null);</span>
+<span class="nc" id="L100">    	GeometryNode gn5 = new GeometryNode(6, null);</span>
+<span class="nc" id="L101">    	gn4.setLeftNode(new GeometryNode(1));</span>
+<span class="nc" id="L102">    	gn5.setRightNode(new GeometryNode(2));</span>
+<span class="nc" id="L103">    	assertNotEquals(gn4.hashCode(), gn5.hashCode());</span>
+<span class="nc" id="L104">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Test anything (16.08.2013 22:38:19)</div></body></html>
