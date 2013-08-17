@@ -8,7 +8,7 @@ public class TestFileUtil {
 
 	@Test
 	public void testFileUtil() {
-		String s = FileUtil.getFile(null).getAbsolutePath();
+		String s = FileUtil.getFile("graphData.pbf").getAbsolutePath();
 		assertTrue(s.contains(System.getProperty("user.home")));
 		assertTrue(s.contains("Dropbox"));
 		assertTrue(s.contains("null"));
