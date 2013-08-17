@@ -1,10 +1,10 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
-
+package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -121,7 +121,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore//(expected=IllegalArgumentException.class)
+    @Test(expected=IllegalArgumentException.class)
     public void testNearestGeometrizableIsNull() throws IOException, IllegalArgumentException,
             GeometryProcessorException, GeometryComputationNoSlotsException {
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesDefaultPerNode();
@@ -132,7 +132,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -153,7 +153,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -214,7 +214,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -321,10 +321,10 @@ public class GeometryProcessorTest {
         } catch (GeometryComputationNoSlotsException e) {
             e.printStackTrace();
         }
-     }
+    }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -454,7 +454,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestEdgeDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOEdgesDefaultPerNode();
@@ -473,7 +473,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestEdgeDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -584,7 +584,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestPOIDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(locationDataIO);
@@ -696,7 +696,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestPOIWithCategoryDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();

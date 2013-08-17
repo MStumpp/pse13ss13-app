@@ -1,8 +1,11 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -62,7 +65,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-         public void testGeometrizableIsNull() throws MalformedURLException {
+    public void testGeometrizableIsNull() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(null);
     }
 

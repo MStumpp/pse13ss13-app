@@ -10,7 +10,6 @@ import java.util.LinkedList;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;

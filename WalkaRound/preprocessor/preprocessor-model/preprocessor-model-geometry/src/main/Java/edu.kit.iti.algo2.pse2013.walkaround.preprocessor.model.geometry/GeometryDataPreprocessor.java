@@ -1,9 +1,13 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import java.util.*;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.TreeMultiset;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometrizableWrapper;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
