@@ -31,6 +31,19 @@ public class Server {
 
 
     /**
+     * CrossingInformation.
+     */
+    private static final boolean computeCrossingInformation = false;
+
+
+    /**
+     * Wether to use Vertex- or Edge-based Geometry.
+     * Defaults to Vertex-based Geometry.
+     */
+    private static final boolean useEdgeBasedGeometry = false;
+
+
+    /**
      * Endpoint method for computation of a shortest path between any given two Coordinates.
      * The actual computation is done by an instance of ShortestPathProcessor.
      *
@@ -51,57 +64,92 @@ public class Server {
             return transfer;
         }
 
-        // project coordinate
-        Edge sourceEdge;
-        Edge targetEdge;
-        try {
-            sourceEdge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
-                    new GeometrySearch(new double[]{coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude()}));
-            targetEdge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
-                    new GeometrySearch(new double[]{coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude()}));
-        } catch (GeometryProcessorException e) {
-            transfer.setError(e.getMessage());
-            return transfer;
-        } catch (InstantiationException e) {
-            transfer.setError(e.getMessage());
-            return transfer;
-        } catch (GeometryComputationNoSlotsException e) {
-            transfer.setError(e.getMessage());
-            return transfer;
-        }
-
-        logger.info("computeShortestPath: Source: " + sourceEdge.toString() + " Target: " + targetEdge.toString());
-
-        if (sourceEdge == null || targetEdge == null) {
-            String msg = "no projekted source and/or target edge for given coordinates found";
-            logger.info(msg);
-            transfer.setError(msg);
-        }
-
-        // get source point on source edge
-        double[] sourcePoint = RouteUtil.computePointOnLine(sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude(),
-                sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude(), coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude());
+        logger.info("computeShortestPath: Before Geometry - Source: " + coordinates.get(0) + " Target: " + coordinates.get(1));
 
         Vertex source;
-        // determine which edge endpoint is closer to point
-        if (RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude()) <
-                RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude())) {
-            source = sourceEdge.getTail();
-        }  else {
-            source = sourceEdge.getHead();
-        }
-
-        // get target point on target edge
-        double[] targetPoint = RouteUtil.computePointOnLine(targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude(),
-                targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude(), coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude());
-
         Vertex target;
-        // determine which edge endpoint is closer to point
-        if (RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude()) <
-                RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude())) {
-            target = targetEdge.getTail();
-        }  else {
-            target = targetEdge.getHead();
+
+        // only for Edge-based Geometry
+        double[] sourcePoint;
+        double[] targetPoint;
+
+        // project coordinate
+        if (!useEdgeBasedGeometry) {
+
+            logger.info("computeShortestPath: Vertex-based Geometry");
+
+            try {
+                source = (Vertex) GeometryProcessorVertex.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude()}));
+                target = (Vertex) GeometryProcessorVertex.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude()}));
+            } catch (GeometryProcessorException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (InstantiationException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (GeometryComputationNoSlotsException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            }
+
+            logger.info("computeShortestPath: Vertex-based Geometry - After Geometry - ShortestPath-Source: " + source + " ShortestPath-Target: " + target);
+
+        } else {
+
+            logger.info("computeShortestPath: Edge-based Geometry");
+
+            Edge sourceEdge;
+            Edge targetEdge;
+            try {
+                sourceEdge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude()}));
+                targetEdge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude()}));
+            } catch (GeometryProcessorException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (InstantiationException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (GeometryComputationNoSlotsException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            }
+
+            if (sourceEdge == null || targetEdge == null) {
+                String msg = "no projected source and/or target edge for given coordinates found";
+                logger.info(msg);
+                transfer.setError(msg);
+            }
+
+            // get source point on source edge
+            sourcePoint = RouteUtil.computePointOnLine(sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude(),
+                    sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude(), coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude());
+
+            // determine which edge endpoint is closer to point
+            if (RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getTail().getLatitude(), sourceEdge.getTail().getLongitude()) <
+                    RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], sourceEdge.getHead().getLatitude(), sourceEdge.getHead().getLongitude())) {
+                source = sourceEdge.getTail();
+            }  else {
+                source = sourceEdge.getHead();
+            }
+
+            // get target point on target edge
+            targetPoint = RouteUtil.computePointOnLine(targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude(),
+                    targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude(), coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude());
+
+            // determine which edge endpoint is closer to point
+            if (RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getTail().getLatitude(), targetEdge.getTail().getLongitude()) <
+                    RouteUtil.computeDistance(targetPoint[0], targetPoint[1], targetEdge.getHead().getLatitude(), targetEdge.getHead().getLongitude())) {
+                target = targetEdge.getTail();
+            }  else {
+                target = targetEdge.getHead();
+            }
+
+            logger.info("computeShortestPath: Edge-based Geometry - After Geometry - Point-on-Edge-Source: " + source + " Point-on-Edge-Target: " + target);
+            logger.info("computeShortestPath: Edge-based Geometry - After Geometry - ShortestPath-Source: " + source + " ShortestPath-Target: " + target);
         }
 
         if (source == null || target == null) {
@@ -137,18 +185,30 @@ public class Server {
         for (Vertex vertex : route) {
             transfer.appendCoordinate(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
-                    computeCrossingInformation(vertex)));
+                    computeCrossingInformation ? computeCrossingInformation(vertex) : null));
         }
 
-        // eventually add point as first coordinate of the route
-        Coordinate tail = new Coordinate(sourcePoint[0], sourcePoint[1]);
-        if (!tail.equals(transfer.getCoordinates().getFirst()))
-            transfer.prependCoordinate(tail);
+        // if Edge-Based Geometry, eventually add Coordinate at Source and/or Target
+        if (useEdgeBasedGeometry) {
 
-        // eventually add point as last coordinate of the route
-        Coordinate head = new Coordinate(targetPoint[0], targetPoint[1]);
-        if (!head.equals(transfer.getCoordinates().getLast()))
-            transfer.appendCoordinate(head);
+            logger.info("computeShortestPath: Edge-based Geometry - Post process Route - Adding Points on Edge");
+
+            // eventually add point as first coordinate of the route
+            Coordinate tail = new Coordinate(sourcePoint[0], sourcePoint[1]);
+            if (!tail.equals(transfer.getCoordinates().getFirst())) {
+                transfer.prependCoordinate(tail);
+                logger.info("computeShortestPath: Edge-based Geometry - Post process Route - Source - Route: " +
+                        transfer.getCoordinates().getFirst() + " Source - Edge: " + tail);
+            }
+
+            // eventually add point as last coordinate of the route
+            Coordinate head = new Coordinate(targetPoint[0], targetPoint[1]);
+            if (!head.equals(transfer.getCoordinates().getLast())) {
+                transfer.appendCoordinate(head);
+                logger.info("computeShortestPath: Edge-based Geometry - Post process Route - Target - Route: " +
+                        transfer.getCoordinates().getFirst() + " Target - Edge: " + tail);
+            }
+        }
 
         transfer.setLength(RouteUtil.totalLength(route));
 
@@ -191,41 +251,74 @@ public class Server {
             return transfer;
         }
 
-        logger.info("computeRoundtrip: Source: " + coordinate + " Profile: " + profile + " Length: " + length);
+        logger.info("computeRoundtrip: Before Geometry - Source: " + coordinate + " Profile: " + profile + " Length: " + length);
 
-        // project coordinate
-        Edge edge;
-        try {
-            edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
-                    new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
-        } catch (GeometryProcessorException e) {
-            transfer.setError(e.getMessage());
-            return transfer;
-        } catch (InstantiationException e) {
-            transfer.setError(e.getMessage());
-            return transfer;
-        } catch (GeometryComputationNoSlotsException e) {
-            transfer.setError(e.getMessage());
-            return transfer;
-        }
-
-        if (edge == null) {
-            String msg = "no projekted edge for given coordinate found";
-            logger.info(msg);
-            transfer.setError(msg);
-        }
-
-        // get point on edge
-        double[] point = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
-                edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
 
         Vertex source;
-        // determine which edge endpoint is closer to point
-        if (RouteUtil.computeDistance(point[0], point[1], edge.getTail().getLatitude(), edge.getTail().getLongitude()) <
-                RouteUtil.computeDistance(point[0], point[1], edge.getHead().getLatitude(), edge.getHead().getLongitude())) {
-            source = edge.getTail();
-        }  else {
-            source = edge.getHead();
+
+        // only for Edge-based Geometry
+        double[] sourcePoint;
+
+        // project coordinate
+        if (!useEdgeBasedGeometry) {
+
+            logger.info("computeRoundtrip: Vertex-based Geometry");
+
+            try {
+                source = (Vertex) GeometryProcessorVertex.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
+            } catch (GeometryProcessorException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (InstantiationException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (GeometryComputationNoSlotsException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            }
+
+            logger.info("computeRoundtrip: Vertex-based Geometry - After Geometry - Roundtrip-Source: " + source);
+
+        } else {
+
+            logger.info("computeRoundtrip: Edge-based Geometry");
+
+            Edge edge;
+            try {
+                edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
+            } catch (GeometryProcessorException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (InstantiationException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            } catch (GeometryComputationNoSlotsException e) {
+                transfer.setError(e.getMessage());
+                return transfer;
+            }
+
+            if (edge == null) {
+                String msg = "no projekted edge for given coordinate found";
+                logger.info(msg);
+                transfer.setError(msg);
+            }
+
+            // get point on edge
+            sourcePoint = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
+                    edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
+
+            // determine which edge endpoint is closer to point
+            if (RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], edge.getTail().getLatitude(), edge.getTail().getLongitude()) <
+                    RouteUtil.computeDistance(sourcePoint[0], sourcePoint[1], edge.getHead().getLatitude(), edge.getHead().getLongitude())) {
+                source = edge.getTail();
+            }  else {
+                source = edge.getHead();
+            }
+
+            logger.info("computeRoundtrip: Edge-based Geometry - After Geometry - Point-on-Edge-Source: " + source);
+            logger.info("computeRoundtrip: Edge-based Geometry - After Geometry - Roundtrip-Source: " + source);
         }
 
         if (source == null) {
@@ -261,14 +354,22 @@ public class Server {
         for (Vertex vertex : route) {
             transfer.appendCoordinate(new Coordinate(vertex.getLatitude(),
                     vertex.getLongitude(),
-                    computeCrossingInformation(vertex)));
+                    computeCrossingInformation ? computeCrossingInformation(vertex) : null));
         }
 
-        // eventually add point as first/last coordinate of the route
-        Coordinate begin = new Coordinate(point[0], point[1]);
-        if (!begin.equals(transfer.getCoordinates().getFirst())) {
-            transfer.prependCoordinate(begin);
-            transfer.appendCoordinate(begin);
+        // if Edge-Based Geometry, eventually add Coordinate at Source and/or Target
+        if (useEdgeBasedGeometry) {
+
+            logger.info("computeRoundtrip: Edge-based Geometry - Post process Route - Adding Points on Edge");
+
+            // eventually add point as first/last coordinate of the route
+            Coordinate begin = new Coordinate(sourcePoint[0], sourcePoint[1]);
+            if (!begin.equals(transfer.getCoordinates().getFirst())) {
+                transfer.prependCoordinate(begin);
+                transfer.appendCoordinate(begin);
+                logger.info("computeRoundtrip: Edge-based Geometry - Post process Route - Source - Route: " +
+                        transfer.getCoordinates().getFirst() + " Source - Edge: " + begin);
+            }
         }
 
         transfer.setLength(RouteUtil.totalLength(route));
@@ -323,26 +424,52 @@ public class Server {
             return null;
 
         // project coordinate
-        Edge edge;
-        try {
-            edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
-                    new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
-        } catch (InstantiationException e) {
-            return null;
-        } catch (GeometryProcessorException e) {
-            return null;
-        } catch (GeometryComputationNoSlotsException e) {
-            return null;
+        Coordinate nearestCoordinate = coordinate;
+
+        if (!useEdgeBasedGeometry) {
+            Vertex vertex;
+            try {
+                vertex = (Vertex) GeometryProcessorVertex.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
+            } catch (InstantiationException e) {
+                return nearestCoordinate;
+            } catch (GeometryProcessorException e) {
+                return nearestCoordinate;
+            } catch (GeometryComputationNoSlotsException e) {
+                return nearestCoordinate;
+            }
+
+            if (vertex == null) {
+                return nearestCoordinate;
+            }
+
+            nearestCoordinate = new Coordinate(vertex.getLatitude(), vertex.getLongitude(), null);
+
+        } else {
+
+            Edge edge;
+            try {
+                edge = (Edge) GeometryProcessorEdge.getInstance().getNearestGeometrizable(
+                        new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
+            } catch (InstantiationException e) {
+                return nearestCoordinate;
+            } catch (GeometryProcessorException e) {
+                return nearestCoordinate;
+            } catch (GeometryComputationNoSlotsException e) {
+                return nearestCoordinate;
+            }
+
+            if (edge == null) {
+                return nearestCoordinate;
+            }
+
+            double[] point = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
+                    edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
+
+            nearestCoordinate = new Coordinate(point[0], point[1], null);
         }
 
-        if (edge == null) {
-            return null;
-        }
-
-        double[] point = RouteUtil.computePointOnLine(edge.getTail().getLatitude(), edge.getTail().getLongitude(),
-                edge.getHead().getLatitude(), edge.getHead().getLongitude(), coordinate.getLatitude(), coordinate.getLongitude());
-
-        return new Coordinate(point[0], point[1], null);
+        return nearestCoordinate;
     }
 
 
