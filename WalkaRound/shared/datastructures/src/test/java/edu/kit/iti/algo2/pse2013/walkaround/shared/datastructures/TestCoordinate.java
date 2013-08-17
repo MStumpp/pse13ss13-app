@@ -138,7 +138,7 @@ public class TestCoordinate {
 		assertTrue(c.equals(c));
 		assertTrue(c.equals(c2));
 		assertTrue(!c.equals(c3));
-		assertTrue(!c2.equals(c4));
+		assertTrue(c2.equals(c4));
 		assertTrue(c2.equals(c5));
 		assertTrue(!c.equals(c6));
 	}
