@@ -1,10 +1,10 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
-
+package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -121,7 +121,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore//(expected=IllegalArgumentException.class)
+    @Test(expected=IllegalArgumentException.class)
     public void testNearestGeometrizableIsNull() throws IOException, IllegalArgumentException,
             GeometryProcessorException, GeometryComputationNoSlotsException {
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesDefaultPerNode();
@@ -132,7 +132,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexOnePerNodeOneThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -153,7 +153,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexOnePerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOVerticesOnePerNode();
@@ -214,7 +214,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexOnePerNodeWithRealDataSetOneThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -321,16 +321,15 @@ public class GeometryProcessorTest {
         } catch (GeometryComputationNoSlotsException e) {
             e.printStackTrace();
         }
-     }
+    }
 
 
-    @Ignore
+    @Test
     public void testGetNearestVertexDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
 
         Assert.assertNotNull(GeometryProcessorVertex.init(geometryDataIO, 5));
         GeometryProcessorVertex geometryProcessor = GeometryProcessorVertex.getInstance();
@@ -454,7 +453,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestEdgeDefaultPerNodeMultiThreaded() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataIOEdgesDefaultPerNode();
@@ -473,13 +472,12 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestEdgeDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
 
         Assert.assertNotNull(GeometryProcessorEdge.init(geometryDataIO, 5));
         GeometryProcessorEdge geometryProcessor = GeometryProcessorEdge.getInstance();
@@ -584,7 +582,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestPOIDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException {
 
         Assert.assertNotNull(locationDataIO);
@@ -696,7 +694,7 @@ public class GeometryProcessorTest {
     }
 
 
-    @Ignore
+    @Test
     public void testGetNearestPOIWithCategoryDefaultPerNodeWithRealDataSetMultiThread() throws InstantiationException, MalformedURLException {
 
         GeometryDataIO geometryDataIO = getGeometryDataPOIIODefaultPerNode();
@@ -798,8 +796,7 @@ public class GeometryProcessorTest {
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
         return geometryDataIO;
     }
 
@@ -810,8 +807,7 @@ public class GeometryProcessorTest {
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
         return geometryDataIO;
     }
 
@@ -822,8 +818,7 @@ public class GeometryProcessorTest {
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()), 1);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()), 1);
         return geometryDataIO;
     }
 
@@ -834,8 +829,7 @@ public class GeometryProcessorTest {
         graphDataIO.addEdge(new Edge(new Vertex(9.d, 6.d), new Vertex(4.d, 7.d)));
         graphDataIO.addEdge(new Edge(new Vertex(8.d, 1.d), new Vertex(7.d, 2.d)));
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
         return geometryDataIO;
     }
 
@@ -846,8 +840,7 @@ public class GeometryProcessorTest {
         locationDataIO.addPOI(new POI(50.2323, 8.3454, "POI_2", "info 2", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 1, 2, 3 }));
         locationDataIO.addPOI(new POI(48.9792, 8.6863, "POI_3", "info 3", new URL("https://de.wikipedia.org/w/index.php?printable=yes&title=Wikipedia"), new int[] { 4, 5, 6 }));
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
         return geometryDataIO;
     }
 

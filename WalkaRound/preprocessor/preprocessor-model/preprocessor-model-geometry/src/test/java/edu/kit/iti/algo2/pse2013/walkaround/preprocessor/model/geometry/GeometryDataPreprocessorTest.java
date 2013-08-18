@@ -1,8 +1,11 @@
-package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
+package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
@@ -62,7 +65,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-         public void testGeometrizableIsNull() throws MalformedURLException {
+    public void testGeometrizableIsNull() throws MalformedURLException {
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(null);
     }
 
@@ -75,16 +78,14 @@ public class GeometryDataPreprocessorTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNumberGeomPerNodeLessThanOne() throws MalformedURLException {
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 0);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 0);
     }
 
 
     @Test
     public void testPreprocessVertexGraphDataIOOnePerNode() throws MalformedURLException {
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-            preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 1);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()), 1);
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -187,8 +188,7 @@ public class GeometryDataPreprocessorTest {
 
     @Test
     public void testPreprocessVerticesGraphDataOnePerNodeIO2() throws MalformedURLException {
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO2().getVertices()), 1);
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -198,8 +198,7 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testPreprocessVerticesGraphDataIODefaultPerNode() throws MalformedURLException {
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()));
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -212,8 +211,7 @@ public class GeometryDataPreprocessorTest {
     @Test
     public void testPreprocessEdgesGraphDataIODefaultPerNode() throws MalformedURLException {
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getEdges()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getEdges()));
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -234,8 +232,7 @@ public class GeometryDataPreprocessorTest {
 
         Assert.assertNotNull(graphDataIO);
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());
@@ -247,8 +244,7 @@ public class GeometryDataPreprocessorTest {
 
         Assert.assertNotNull(graphDataIO);
 
-        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
+        GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getEdges()));
 
         // check that root is not null
         Assert.assertNotNull(geometryDataIO.getRoot());

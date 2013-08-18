@@ -1,30 +1,17 @@
 package edu.kit.iti.algo2.pse2013.walkaround.preprocessor.view;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Map;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataPreprocessor;
-import org.junit.Ignore;
+import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.geometry.GeometryDataPreprocessor;
 import org.junit.Test;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.FileUtil;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
 
 /**
  * PreprocessorAdminTest.
@@ -37,6 +24,8 @@ public class PreprocessorAdminTest {
 	private static final File GEOMETRY_DATA_FILE = FileUtil.getFile("geometryData.pbf");
 	private static final File LOCATION_DATA_FILE = FileUtil.getFile("locationData.pbf");
 
+<<<<<<< HEAD
+=======
 	@Test
 	public void testPreprocessGraphDataIO() {
 
@@ -145,6 +134,7 @@ public class PreprocessorAdminTest {
         }
     }
 
+>>>>>>> 2aaad7e1f52f41c61656dba8b3d6dd2fddc26678
 
     @Test
     public void testPreprocessGeometryDataIO() {

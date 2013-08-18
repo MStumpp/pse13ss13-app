@@ -124,4 +124,13 @@ public class Coordinate {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Coord(%.5f° %s %.5f° %s)",
+                latitude,  latitude > 0 ? "N" : "S",
+                longitude, longitude > 0 ? "E" : "W");
+    }
+
 }
