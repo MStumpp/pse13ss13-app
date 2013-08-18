@@ -107,18 +107,13 @@ public class Route implements RouteInfo {
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 */
 	public void addWaypoint(Waypoint w) {
-		Log.d(TAG_ROUTE,
-				String.format("addWaypoint(%s) METHOD START", w.toString()));
-		Log.d(TAG_ROUTE, String.format(
-				"addWaypoint(%s) to route with Coordinates", w,
-				this.routeCoordinates.size()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w.toString()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
 		if (w != null) {
 			try {
-				w = (Waypoint) CoordinateNormalizer.normalizeCoordinate(w,
-						(int) MapController.getInstance().getCurrentLevelOfDetail());
+				w = (Waypoint) CoordinateNormalizer.normalizeCoordinate(w, (int) MapController.getInstance().getCurrentLevelOfDetail());
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG_ROUTE,
-						"Coordinate konnte nicht normalisiert werden!");
+				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint not normalized");
 			} catch (CoordinateNormalizerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -128,28 +123,22 @@ public class Route implements RouteInfo {
 			}
 		}
 		
-		
 		if (this.routeCoordinates.size() != 0) {
-			Log.d(TAG_ROUTE, String.format(
-					"addWaypoint(%s) -> computing shortest path", w.toString()));
+			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w.toString()));
 			RouteInfo routeExtension;
 			routeExtension = this.computeShortestPath(this.getEnd(), w);
-
-			Log.d(TAG_ROUTE, String.format(
-					"addWaypoint(%s) -> addingRoute with %d Coordinates",
-					w.toString(), routeExtension.getCoordinates().size()));
+			
+			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> addingRoute with %d Coordinates", w.toString(), routeExtension.getCoordinates().size()));
 			this.addRoute(routeExtension);
 		} else {
+			Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route");
 			this.routeCoordinates.add(w);
 		}
 
 		this.setActiveWaypoint(w);
 		this.cleanRouteOfDuplicateCoordinatePairs();
-		Log.d(TAG_ROUTE,
-				String.format("addWaypoint(%s) - new size of route: %d",
-						w.toString(), this.routeCoordinates.size()));
-		Log.d(TAG_ROUTE,
-				String.format("addWaypoint(%s) METHOD END", w.toString()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) - new size of route: %d", w.toString(), this.routeCoordinates.size()));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD END", w.toString()));
 	}
 
 	/**

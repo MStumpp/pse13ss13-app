@@ -65,12 +65,12 @@ public final class CoordinateNormalizer {
 	public static Coordinate normalizeCoordinate(Coordinate coordinate,
 			float levelOfDetail) throws CoordinateNormalizerException,
 			InterruptedException {
+		Log.d(TAG, "normalizeCoordinate() METHOD START");
 
 		if (coordinate == null)
 			throw new IllegalArgumentException("coordinate must be provided");
 
-		Log.d(TAG, "normalizeCoordinate(Coordinate " + coordinate + ", float "
-				+ levelOfDetail + ")");
+		Log.d(TAG, "normalizeCoordinate(Coordinate " + coordinate + ", levelOfDetail " + levelOfDetail + ")");
 
 		GsonBuilder gsonb = new GsonBuilder();
 		Gson gson = gsonb.create();
@@ -81,11 +81,9 @@ public final class CoordinateNormalizer {
 				new Coordinate(coordinate.getLatitude(),
 						coordinate.getLongitude()), new HttpPost(
 						URL_NEARESTVERTEX));
-		Log.d(TAG, "normalizeCoordinate() - pre Thread");
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
 		thread.join();
-		Log.d(TAG, "normalizeCoordinate() - post Thread");
 
 		if (gsonAnswerer.getException() != null) {
 			Log.e(TAG, "HTTP-Connection caused exception",
@@ -102,10 +100,8 @@ public final class CoordinateNormalizer {
 			throw new CoordinateNormalizerException(
 					"normalizedCoordinate is null");
 
-		Log.d(TAG,
-				"normalizeCoordinate(Coordinate coordinate, float levelOfDetail) returning Coordinate: "
-						+ coordinate);
-
+		Log.d(TAG, "normalizeCoordinate(Coordinate coordinate, float levelOfDetail) returning Coordinate: " + coordinate);
+		Log.d(TAG, "normalizeCoordinate() METHOD END");
 		return coordinate;
 	}
 

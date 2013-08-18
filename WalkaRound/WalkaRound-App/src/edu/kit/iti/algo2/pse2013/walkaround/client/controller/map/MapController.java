@@ -428,20 +428,6 @@ public class MapController implements RouteListener, PositionListener,
 				.convertDisplayCoordinateToCoordinate(dc, coorBox.getTopLeft(),
 						coorBox.getLevelOfDetail());
 
-		try {
-			CoordinateNormalizer.normalizeCoordinate(next,
-					(int) this.getCurrentLevelOfDetail());
-		} catch (IllegalArgumentException e) {
-			Log.e(TAG_MAP_CONTROLLER,
-					"Coordinate konnte nicht normalisiert werden!");
-		} catch (CoordinateNormalizerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next
 				.getLongitude(), "PLACEHOLDER"));
 	}
