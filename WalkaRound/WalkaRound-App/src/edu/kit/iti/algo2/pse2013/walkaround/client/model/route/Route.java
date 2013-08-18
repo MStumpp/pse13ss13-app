@@ -119,10 +119,8 @@ public class Route implements RouteInfo {
 			} catch (IllegalArgumentException e) {
 				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized");
 			} catch (CoordinateNormalizerException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -189,8 +187,9 @@ public class Route implements RouteInfo {
 							+ newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate route");
 			// Calculate and add the intermediate route:
-			RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());			
-			this.addRoute(intermediateRoute);
+			// TODO: REACTIVATE
+			// RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());			
+			// this.addRoute(intermediateRoute);
 		}
 		
 		
