@@ -116,7 +116,19 @@ public class Coordinate {
 			this.longitude = lon;
 		}
 	}
-
+	
+	/**
+	 * Sets latitude and longitude attributes of the Coordinate to those of the given Coordinate.
+	 * @param newPosition
+	 */
+	public void setPosition(Coordinate newPosition) {
+		if (newPosition != null) {
+			this.setLatitude(newPosition.getLatitude());
+			this.setLongitude(newPosition.getLongitude());
+		}
+	}
+	
+	
 
 	/**
 	 * Returns CrossingInformation for this Coordinate.

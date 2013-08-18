@@ -100,9 +100,9 @@ public final class CoordinateNormalizer {
 			throw new CoordinateNormalizerException(
 					"normalizedCoordinate is null");
 
-		Log.d(TAG, "normalizeCoordinate(Coordinate coordinate, float levelOfDetail) returning Coordinate: " + coordinate);
+		Log.d(TAG, "normalizeCoordinate() normalized Coordinate: " + normalizedCoordinate);
 		Log.d(TAG, "normalizeCoordinate() METHOD END");
-		return coordinate;
+		return normalizedCoordinate;
 	}
 
 	private static class JSONAnswerGetter implements Runnable {

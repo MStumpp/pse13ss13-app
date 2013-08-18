@@ -109,11 +109,15 @@ public class Route implements RouteInfo {
 	public void addWaypoint(Waypoint w) {
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w.toString()));
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
+		
+		
+		// TODO:
+		Coordinate normalizedCoordinate = null;
 		if (w != null) {
 			try {
-				w = (Waypoint) CoordinateNormalizer.normalizeCoordinate(w, (int) MapController.getInstance().getCurrentLevelOfDetail());
+				normalizedCoordinate = CoordinateNormalizer.normalizeCoordinate(w, (int) MapController.getInstance().getCurrentLevelOfDetail());
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint not normalized");
+				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized");
 			} catch (CoordinateNormalizerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -123,6 +127,12 @@ public class Route implements RouteInfo {
 			}
 		}
 		
+		if (normalizedCoordinate != null) {
+			Log.e(TAG_ROUTE, "addWaypoint() - Waypoint normalized");
+			w.setPosition(normalizedCoordinate);
+		}
+		
+		
 		if (this.routeCoordinates.size() != 0) {
 			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w.toString()));
 			RouteInfo routeExtension;
@@ -131,7 +141,7 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> addingRoute with %d Coordinates", w.toString(), routeExtension.getCoordinates().size()));
 			this.addRoute(routeExtension);
 		} else {
-			Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route");
+			Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route ");
 			this.routeCoordinates.add(w);
 		}
 
@@ -331,9 +341,8 @@ public class Route implements RouteInfo {
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
 
-	/*
-	 * Inverts all Coordinates in the route.
-	 */
+
+	
 	public void invertRoute() {
 		Log.d(TAG_ROUTE, "invertRoute()");
 		LinkedList<Coordinate> revertedRoute = new LinkedList<Coordinate>();
