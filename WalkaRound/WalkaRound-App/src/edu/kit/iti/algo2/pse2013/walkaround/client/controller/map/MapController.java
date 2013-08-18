@@ -427,7 +427,19 @@ public class MapController implements RouteListener, PositionListener,
 		Coordinate next = CoordinateUtility
 				.convertDisplayCoordinateToCoordinate(dc, coorBox.getTopLeft(),
 						coorBox.getLevelOfDetail());
-
+		
+		try {
+			next = CoordinateNormalizer.normalizeCoordinate(next, this.getCurrentLevelOfDetail());
+		} catch (IllegalArgumentException e) {
+		} catch (CoordinateNormalizerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		this.routeController.addWaypoint(new Waypoint(next.getLatitude(), next
 				.getLongitude(), "PLACEHOLDER"));
 	}

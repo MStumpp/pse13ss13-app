@@ -144,12 +144,19 @@ public class Coordinate {
 				crossroads += cross + " ";
 			}
 		}
+		String output = "Coord(" + this.latitude + " " + (latitude > 0 ? "N" : "S") + ", " 
+				+ this.longitude + " " + (longitude > 0 ? "E" : "W") + " | Crossings: " + crossroads.trim() + ")";
+		
+		// Replaced old version, because %f was not exact enough for testing:
+		/*
 		return String.format(
-			"Coord(%.5f° %s %.5f° %s | Crossings: %s)",
+			"Coord(%f %s %f %s | Crossings: %s)",
 			latitude,  latitude > 0 ? "N" : "S",
 			longitude, longitude > 0 ? "E" : "W",
 			crossroads.trim()
 		);
+		*/
+		return output;
 	}
 
 
