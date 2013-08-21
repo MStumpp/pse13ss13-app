@@ -30,7 +30,7 @@ public class GeometryDataPreprocessor {
     /**
      * TreeSet.
      */
-    private static final int NUMBER_GEOMETRIZABLES_PER_NODE = 1000;
+    private static final int NUMBER_GEOMETRIZABLES_PER_NODE = 100000;
 
 
     /**
