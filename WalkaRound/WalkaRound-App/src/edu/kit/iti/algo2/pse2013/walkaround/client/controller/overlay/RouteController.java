@@ -3,7 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 import java.util.LinkedList;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -349,5 +350,9 @@ public class RouteController {
 		Log.d(TAG,
 				"RouteController.addLocationToFavorites(Location, String)");
 		return FavoriteManager.getInstance().addLocationToFavorites(ri, name);
+	}
+	
+	public RouteInfo getCurrentRoute(){
+		return this.currentRoute;
 	}
 }

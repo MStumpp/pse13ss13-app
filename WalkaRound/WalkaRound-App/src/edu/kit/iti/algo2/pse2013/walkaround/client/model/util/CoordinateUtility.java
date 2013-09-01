@@ -202,6 +202,7 @@ public final class CoordinateUtility {
 
 		LinkedList<DisplayCoordinate> dw = new LinkedList<DisplayCoordinate>();
 
+		synchronized(currentRoute) {
 		for (Coordinate coordinate : currentRoute.getCoordinates()) {
 
 			float x = (float) (coordinate.getLongitude() - center.getLongitude());
@@ -211,6 +212,7 @@ public final class CoordinateUtility {
 					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE)*1.04f,
 					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.8f
 			));
+		}
 		}
 
 		return dw;

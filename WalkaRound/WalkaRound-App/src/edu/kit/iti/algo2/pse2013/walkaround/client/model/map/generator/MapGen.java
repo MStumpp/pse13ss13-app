@@ -8,7 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
@@ -251,7 +251,7 @@ public class MapGen implements TileListener, OnSharedPreferenceChangeListener {
 	 */
 	private void pushMap() {
 		try {
-			MapController.getInstance().onMapOverlayImageChange(map);
+			MapControllerOld.getInstance().onMapOverlayImageChange(map);
 		} catch (NullPointerException e) {
 			Log.e(TAG, "MapController existiert noch nicht");
 		}

@@ -27,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
@@ -222,7 +222,7 @@ public class RoutingView extends Fragment {
 				Log.d(TAG_PULLUP_CONTENT, "add favorite wurde gedr�ckt");
 				// TODO: ansicht wechselt in die liste der !!!favorisierten
 				// orte!!!!
-				MapController.getInstance().getPullUpView()
+				MapControllerOld.getInstance().getPullUpView()
 						.changeView(PullUpView.CONTENT_FAVORITE);
 			}
 			return false;
@@ -236,7 +236,7 @@ public class RoutingView extends Fragment {
 			if (v.equals(goToMap)
 					&& event.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG_PULLUP_CONTENT, "go to map wurde gedr�ckt");
-				MapController.getInstance().getPullUpView().setNullSizeHeight();
+				MapControllerOld.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;
 		}
@@ -316,7 +316,7 @@ public class RoutingView extends Fragment {
 					RouteController.getInstance().addRouteToFavorites(
 							v.getText().toString());
 					favoriteName.setVisibility(View.GONE);
-					MapController.getInstance().getPullUpView()
+					MapControllerOld.getInstance().getPullUpView()
 							.changeView(PullUpView.CONTENT_FAVORITE);
 				}
 			}
@@ -371,7 +371,7 @@ public class RoutingView extends Fragment {
 											.toString()),
 							v.getText().toString());
 					favoriteName.setVisibility(View.GONE);
-					MapController.getInstance().getPullUpView()
+					MapControllerOld.getInstance().getPullUpView()
 							.changeView(PullUpView.CONTENT_FAVORITE);
 				}
 			}

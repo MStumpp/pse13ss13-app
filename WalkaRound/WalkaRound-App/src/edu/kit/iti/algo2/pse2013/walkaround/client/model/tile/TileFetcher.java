@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -30,6 +31,11 @@ public class TileFetcher {
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(3, 10, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
+	public void requestTiles(BoundingBox coorBox, TileListener listener){
+		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getTopLeft(),
+				coorBox.getBottomRight(), listener);
+	}
+	
 	/**
 	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
 	 * <ul>

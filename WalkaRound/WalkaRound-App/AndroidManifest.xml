@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="13"
         android:targetSdkVersion="18" />
+    
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -18,10 +19,8 @@
         android:hardwareAccelerated="true"
         android:theme="@android:style/Theme.NoTitleBar" >
 
-	<uses-library android:name="android.test.runner" />
-	
         <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity"
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
 
@@ -30,36 +29,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity>
-
-        <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-
-            <fragment
-                android:id="@+id/Fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                class="edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.pullUpView" />
-
-        </activity>
-        <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            
         </activity>
     </application>
 
-    <instrumentation
-        android:name="android.test.InstrumentationTestRunner"
-        android:label="Tests for WalkAround"
-        android:targetPackage="edu.kit.iti.algo2.pse2013.walkaround.client" />
 
 </manifest>

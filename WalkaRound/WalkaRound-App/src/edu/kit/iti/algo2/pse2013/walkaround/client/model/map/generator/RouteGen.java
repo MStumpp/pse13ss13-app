@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
@@ -93,7 +93,7 @@ public class RouteGen implements Runnable {
 				canvas.drawLines(displayCoords, pinsel);
 			}
 
-			MapController.getInstance().onRouteOverlayImageChange(routeImg);
+			MapControllerOld.getInstance().onRouteOverlayImageChange(routeImg);
 		}
 
 	}

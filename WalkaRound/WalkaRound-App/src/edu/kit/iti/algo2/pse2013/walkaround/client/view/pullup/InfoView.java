@@ -12,7 +12,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageListener;
@@ -56,7 +56,7 @@ public class InfoView extends Fragment implements POIImageListener {
 
 		iv.setVisibility(View.GONE);
 
-		final POI poi = MapController.getInstance().getPOI();
+		final POI poi = MapControllerOld.getInstance().getPOI();
 		save.setOnTouchListener(new saveListener(poi, save));
 
 		if (poi != null) {
@@ -179,7 +179,7 @@ public class InfoView extends Fragment implements POIImageListener {
 				RouteController.getInstance().addLocationToFavorites(
 						new Location(poi.getLatitude(), poi.getLongitude(),
 								poi.getName()), poi.getName());
-				MapController.getInstance().getPullUpView()
+				MapControllerOld.getInstance().getPullUpView()
 				.changeView(PullUpView.CONTENT_FAVORITE);
 			}
 			return false;

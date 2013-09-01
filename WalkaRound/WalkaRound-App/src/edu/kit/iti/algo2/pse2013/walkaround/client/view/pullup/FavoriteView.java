@@ -18,7 +18,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 
@@ -182,7 +182,7 @@ public class FavoriteView extends Fragment {
 						String.format("Add route '%s' to current route", name));
 				FavoriteMenuController.getInstance()
 						.appendFavoriteRouteToRoute(name);
-				MapController.getInstance().getPullUpView().setNullSizeHeight();
+				MapControllerOld.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;
 		}
@@ -204,7 +204,7 @@ public class FavoriteView extends Fragment {
 						name));
 				FavoriteMenuController.getInstance()
 						.appendFavoriteLocationToRoute(name);
-				MapController.getInstance().getPullUpView().setNullSizeHeight();
+				MapControllerOld.getInstance().getPullUpView().setNullSizeHeight();
 			}
 			return false;
 		}

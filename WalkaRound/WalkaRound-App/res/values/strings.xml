@@ -44,4 +44,6 @@
     <string name="castle">Castles</string>
     <string name="delete_dialog" translatable="true">Do you really want to delete this?</string>
     <string name="delete_dialog_header" translatable="true">Delete</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 </resources>

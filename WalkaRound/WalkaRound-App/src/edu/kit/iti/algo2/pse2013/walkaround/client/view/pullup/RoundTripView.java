@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 
 public class RoundTripView extends Fragment {
@@ -140,23 +140,23 @@ public class RoundTripView extends Fragment {
 					routeController.addRoundtrip(
 							Integer.parseInt(shopping.getTag().toString()),
 							np.getValue() * 100);
-					MapController.getInstance().getPullUpView()
+					MapControllerOld.getInstance().getPullUpView()
 							.setNullSizeHeight();
 				} else if (sightseeing.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(sightseeing.getTag().toString()),
 							np.getValue() * 100);
-					MapController.getInstance().getPullUpView()
+					MapControllerOld.getInstance().getPullUpView()
 							.setNullSizeHeight();
 				} else if (clubbing.isSelected()) {
 					routeController.addRoundtrip(
 							Integer.parseInt(clubbing.getTag().toString()),
 							np.getValue() * 100);
-					MapController.getInstance().getPullUpView()
+					MapControllerOld.getInstance().getPullUpView()
 							.setNullSizeHeight();
 				} else {
 					routeController.addRoundtrip(0, np.getValue() * 100);
-					MapController.getInstance().getPullUpView()
+					MapControllerOld.getInstance().getPullUpView()
 							.setNullSizeHeight();
 				}
 			}

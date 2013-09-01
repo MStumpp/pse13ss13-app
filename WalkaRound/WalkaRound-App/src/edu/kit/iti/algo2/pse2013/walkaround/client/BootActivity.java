@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.Display;
 import android.widget.ProgressBar;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
@@ -33,7 +33,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class BootActivity extends Activity {
@@ -73,7 +73,7 @@ public class BootActivity extends Activity {
 	}
 
 	public void onContinue() {
-		Intent intent = new Intent(this, MapView.class);
+		Intent intent = new Intent(this, MapViewOld.class);
 		this.startActivity(intent);
 	}
 
@@ -170,11 +170,8 @@ public class BootActivity extends Activity {
 				Location l = PositionManager.getInstance().getLastKnownPosition();
 				BoundingBox coorBox;
 
-				if (l != null) {
-					coorBox = new BoundingBox(new Coordinate(l.getLatitude(), l.getLongitude()), size, lod);
-				} else {
-					coorBox = new BoundingBox(defaultCoordinate, size, lod);
-				}
+				BoundingBox.initialize(size);
+				coorBox = BoundingBox.getInstance();
 
 				TileFetcher tileFetcher = new TileFetcher();
 
@@ -210,7 +207,7 @@ public class BootActivity extends Activity {
 					sleep(50);
 				}
 
-				MapController.initialize(tileFetcher, coorBox, coorBox.getCenter());
+				MapControllerOld.initialize(tileFetcher, coorBox, coorBox.getCenter());
 				progress += 50;
 				updateProgress(progress);
 				HeadUpController.initializes();

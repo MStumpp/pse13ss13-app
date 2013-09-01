@@ -1,8 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 
 /**
@@ -22,12 +22,12 @@ public class HeadUpController {
 	 * The Controller
 	 */
 	private static HeadUpController headUpController;
-	private MapController mapController;
+	private MapControllerOld mapController;
 
 	/**
 	 * The Views
 	 */
-	private HeadUpView headUpView;
+	private HeadUpViewOld headUpView;
 	
 	/**
 	 * permanent values
@@ -44,17 +44,17 @@ public class HeadUpController {
 	 *
 	 * @param headUpView the required HeadUpView
 	 */
-	private HeadUpController(HeadUpView headUpView) {
+	private HeadUpController(HeadUpViewOld headUpView) {
 		this();
 		this.headUpView = headUpView;
 	}
 
 	private HeadUpController(){
-		this.mapController = MapController.getInstance();
+		this.mapController = MapControllerOld.getInstance();
 		navi = false;		
 	}
 	
-	public void setHeadUpView(HeadUpView headUpView) {
+	public void setHeadUpView(HeadUpViewOld headUpView) {
 		this.headUpView = headUpView;
 	}
 	
@@ -78,7 +78,7 @@ public class HeadUpController {
 	 * @param headUpView the required HeadUpView
 	 * @return Instance of headUpControllers
 	 */
-	public static HeadUpController initializes(HeadUpView headUpView) {
+	public static HeadUpController initializes(HeadUpViewOld headUpView) {
 		if (headUpController == null) {
 			headUpController = new HeadUpController(headUpView);
 		}

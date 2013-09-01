@@ -6,7 +6,7 @@ import java.util.List;
 import android.graphics.Point;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -97,8 +97,8 @@ public class POIGen implements Runnable {
 
 				poi.add(new DisplayPOI(x, y, value.getId()));
 			}
-			if (MapController.getInstance() != null) {
-				MapController.getInstance().onPOIChange(poi);
+			if (MapControllerOld.getInstance() != null) {
+				MapControllerOld.getInstance().onPOIChange(poi);
 			}
 		}
 	}

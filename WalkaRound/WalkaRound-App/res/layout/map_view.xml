@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapviewmain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView
+            android:id="@+id/mapView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView
+            android:id="@+id/routeView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        
+        <edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView
+            android:id="@+id/headUpView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+</RelativeLayout>

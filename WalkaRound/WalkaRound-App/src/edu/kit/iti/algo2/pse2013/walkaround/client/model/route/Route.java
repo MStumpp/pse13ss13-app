@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
@@ -115,7 +116,7 @@ public class Route implements RouteInfo {
 		Coordinate normalizedCoordinate = null;
 		if (w != null) {
 			try {
-				normalizedCoordinate = CoordinateNormalizer.normalizeCoordinate(w, (int) MapController.getInstance().getCurrentLevelOfDetail());
+				normalizedCoordinate = CoordinateNormalizer.normalizeCoordinate(w, (int) BoundingBox.getInstance().getLevelOfDetail());
 			} catch (IllegalArgumentException e) {
 				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized");
 			} catch (CoordinateNormalizerException e) {

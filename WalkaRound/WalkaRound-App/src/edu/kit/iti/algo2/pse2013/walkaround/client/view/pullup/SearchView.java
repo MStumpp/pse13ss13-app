@@ -19,7 +19,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
@@ -266,10 +266,10 @@ public class SearchView extends Fragment {
 						new Waypoint(poi.getLatitude(), poi.getLongitude(), poi
 								.getName()));
 
-				MapController.getInstance().getPullUpView().setNullSizeHeight();
-				MapController.getInstance().setCenter(
+				MapControllerOld.getInstance().getPullUpView().setNullSizeHeight();
+				MapControllerOld.getInstance().setCenter(
 						new Coordinate(poi.getLatitude(), poi.getLongitude()));
-				MapController.getInstance().updateAll();
+				MapControllerOld.getInstance().updateAll();
 
 			}
 			return false;
@@ -293,11 +293,11 @@ public class SearchView extends Fragment {
 						new Waypoint(location.getLatitude(), location
 								.getLongitude(), location.getName()));
 
-				MapController.getInstance().getPullUpView().setNullSizeHeight();
-				MapController.getInstance().setCenter(
+				MapControllerOld.getInstance().getPullUpView().setNullSizeHeight();
+				MapControllerOld.getInstance().setCenter(
 						new Coordinate(location.getLatitude(), location
 								.getLongitude()));
-				MapController.getInstance().updateAll();
+				MapControllerOld.getInstance().updateAll();
 
 			}
 			return false;

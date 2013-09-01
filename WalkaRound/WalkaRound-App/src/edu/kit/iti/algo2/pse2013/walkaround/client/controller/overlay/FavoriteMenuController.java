@@ -3,7 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 import java.util.List;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -82,7 +82,7 @@ public class FavoriteMenuController {
 			return;
 		}
 		RouteController.getInstance().addRoute(route);
-		MapController.getInstance().setCenter(route.getCoordinates().getLast());
+		MapControllerOld.getInstance().setCenter(route.getCoordinates().getLast());
 	}
 
 	/**
@@ -96,6 +96,6 @@ public class FavoriteMenuController {
 		Log.d(TAG, String.format("Favorisierte Location '%s' wird der Route hinzugefügt.", name));
 		Location loc = FavoriteManager.getInstance().getFavoriteLocation(name);
 		RouteController.getInstance().addWaypoint(new Waypoint(loc.getLatitude(), loc.getLongitude(), loc.getName(), loc.getAddress()));
-		MapController.getInstance().setCenter(loc);
+		MapControllerOld.getInstance().setCenter(loc);
 	}
 }

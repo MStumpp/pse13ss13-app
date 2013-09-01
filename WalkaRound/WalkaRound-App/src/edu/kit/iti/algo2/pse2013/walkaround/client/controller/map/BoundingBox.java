@@ -1,7 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
+import android.content.Context;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -23,7 +26,11 @@ public class BoundingBox {
 	 * The Debug Tag of Bounding Box
 	 */
 	private static String TAG = BoundingBox.class.getSimpleName();
+	
+	private static BoundingBox coorBox;
 
+	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
+	
 	// class --------------------------Variables-------------------------- //
 
 	/**
@@ -58,6 +65,35 @@ public class BoundingBox {
 
 	// --------------------------Constructor-------------------------- //
 
+	public static void initialize(Point size) {	
+		Log.d(TAG, "initialisiere BoundingBox");
+		coorBox = new BoundingBox(defaultCoordinate, size, CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail());
+	}
+
+	public static BoundingBox getInstance(Context context){
+
+		if(coorBox != null){
+			return coorBox;
+		}
+		
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		int width = metrics.widthPixels;
+		int height = metrics.heightPixels;		
+		Point size = new Point(width, height);
+		initialize(size);
+		
+		return coorBox;
+	}
+	
+	/**
+	 * !!!!Only possible if you called initialize or getInstance(Context)
+	 * 
+	 * @return BoundingBox
+	 */
+	public static BoundingBox getInstance(){
+		return coorBox;
+	}
+	
 	/**
 	 * Constructs a new Bounding Box
 	 *
@@ -68,8 +104,8 @@ public class BoundingBox {
 	 * @param levelOfDetail
 	 *            Level of Detail
 	 */
-	public BoundingBox(Coordinate center, Point size, float levelOfDetail) {
-		Log.d(TAG, "initialize BoundingBox");
+	private BoundingBox(Coordinate center, Point size, float levelOfDetail) {
+		Log.d(TAG, "initialize BoundingBox | Display: " + size.toString());
 		this.display = size;
 		this.levelOfDetail = levelOfDetail;
 		this.computeSize();
@@ -107,8 +143,8 @@ public class BoundingBox {
 		this.topLeft = this.computeTopLeft();
 		Log.d(TAG, "Topleft is " + this.topLeft);
 		this.bottomRight = this.computeBottomRight();
-		if (MapController.isInitialized()) {
-			MapController.getInstance().updateAll();
+		if (MapControllerOld.isInitialized()) {
+			MapControllerOld.getInstance().updateAll();
 		}
 	}
 
@@ -252,6 +288,9 @@ public class BoundingBox {
 	private void computeSize() {
 		Log.d(TAG,
 				"compute size of the display depending on the Level of Detail");
+		
+		Log.d("test", "1: " + (display != null) + " 2: " + (levelOfDetail > 0));
+		
 		this.size = new DoublePairing(
 				CoordinateUtility.convertPixelsToDegrees(display.x,
 						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
