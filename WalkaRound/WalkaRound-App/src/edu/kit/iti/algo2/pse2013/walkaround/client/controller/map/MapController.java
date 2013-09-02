@@ -4,6 +4,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpViewListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
@@ -37,7 +39,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class MapController extends Activity implements HeadUpViewListener,
-		PositionListener, CompassListener, RouteListener {
+		PositionListener, CompassListener, RouteListener, UpdateFavorites {
 
 	private MapView mapView;
 
@@ -116,6 +118,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		pullUpview.bringToFront();
 		
 		RouteController.getInstance().registerRouteListener(this);
+		FavoriteManager.getInstance(this).registerListener(this);
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -243,6 +246,15 @@ public class MapController extends Activity implements HeadUpViewListener,
 			public void run() {
 				waypointView.updateWaypoint();
 				pullUpview.updateRoute();
+			}
+		});
+	}
+
+	@Override
+	public void updateFacorites() {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				pullUpview.updateFavorite();
 			}
 		});
 	}

@@ -219,6 +219,7 @@ public class FavoriteManager {
 		if (!savedRoutes.containsKey(name)) {
 			savedRoutes.put(name, routeToSave.clone());
 			this.save();
+			notifyListener();
 			return true;
 		}
 		return false;
@@ -238,6 +239,7 @@ public class FavoriteManager {
 		if (!savedLocations.containsKey(name)) {
 			savedLocations.put(name, locationToSave.clone());
 			this.save();
+			notifyListener();
 			return true;
 		}
 		return false;
@@ -305,4 +307,19 @@ public class FavoriteManager {
 		}
 	}
 
+	LinkedList<UpdateFavorites> listener = new LinkedList<UpdateFavorites>();
+	
+	public void registerListener(UpdateFavorites listener){
+		this.listener.add(listener);
+	}
+	
+	public void notifyListener() {
+		for(UpdateFavorites l:listener){
+			l.updateFacorites();
+		}
+	}
+	
+	public interface UpdateFavorites {
+		public void updateFacorites();
+	}
 }

@@ -59,7 +59,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, Favor
 
 		RelativeLayout.LayoutParams main = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-
+		
 		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
 		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
 
@@ -461,4 +461,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, Favor
 		this.changeView(CONTENT_FAVORITE);
 	}
 
+	public void updateFavorite() {
+		this.favoriteMenu.updateFavorites();
+	}
 }
