@@ -22,7 +22,7 @@ public class RoundTripView extends Fragment {
 
 	private final int MAXIMUM_LENGTH_ROUNDTRIP = 5000;
 
-	private final int MINIMUN_LENGTH_ROUNDTRIP = 100;
+	private final int MINIMUN_LENGTH_ROUNDTRIP = 1000;
 
 	private final int NUMBER_OF_STEPS = MAXIMUM_LENGTH_ROUNDTRIP / 100;
 
@@ -54,7 +54,7 @@ public class RoundTripView extends Fragment {
 		np = (NumberPicker) this.getActivity().findViewById(R.id.length_picker);
 		String[] nums = new String[NUMBER_OF_STEPS];
 		for (int i = 0; i < nums.length; i++)
-			nums[i] = Integer.toString(100 + i * 100);
+			nums[i] = Integer.toString(MINIMUN_LENGTH_ROUNDTRIP + i * 100);
 		np.setMinValue(MINIMUN_LENGTH_ROUNDTRIP / 100);
 		np.setMaxValue(MAXIMUM_LENGTH_ROUNDTRIP / 100);
 		np.setWrapSelectorWheel(false);
