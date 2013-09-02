@@ -34,6 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -54,6 +55,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+=======
+>>>>>>> 8166cf5dd38089e17b8c0e3232b120ced854c432
 =======
 >>>>>>> 8166cf5dd38089e17b8c0e3232b120ced854c432
 
@@ -139,8 +142,12 @@ public class MapController extends Activity implements HeadUpViewListener,
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		pullUpview.registerComputeRoundtripListener(this);
 		
+=======
+
+>>>>>>> 8166cf5dd38089e17b8c0e3232b120ced854c432
 =======
 
 >>>>>>> 8166cf5dd38089e17b8c0e3232b120ced854c432

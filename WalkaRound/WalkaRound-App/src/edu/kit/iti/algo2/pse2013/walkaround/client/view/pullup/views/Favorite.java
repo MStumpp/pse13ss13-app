@@ -37,7 +37,10 @@ public class Favorite extends RelativeLayout {
 	private Button waypointButton;
 	private Button routeButton;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8166cf5dd38089e17b8c0e3232b120ced854c432
 	private static int routeNameId = R.string.route;
 	private static String waypointName = "Wegpunkte";
 >>>>>>> 8166cf5dd38089e17b8c0e3232b120ced854c432
