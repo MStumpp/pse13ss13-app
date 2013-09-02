@@ -23,7 +23,7 @@ public class SearchMenuController {
 	public List<Location> requestSuggestionsByAddress(int postalCode,
 			String city, String street, String number) {
 		Address addr = new Address(street, number, city, postalCode);
-		return POIManager.getInstance().searchPOIsByAddress(addr);
+		return null;
 	}
 
 	public List<POI> requestSuggestionsByText(String text) {

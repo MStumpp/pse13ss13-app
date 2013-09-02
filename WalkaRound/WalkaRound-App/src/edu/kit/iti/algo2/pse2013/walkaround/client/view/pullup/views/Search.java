@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,11 +20,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class Search extends RelativeLayout {
 
@@ -222,6 +229,23 @@ public class Search extends RelativeLayout {
 
 		poiSide.addView(freeText, freeParam);
 
+
+		// Go
+
+		LinearLayout.LayoutParams goFreeParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		goFreeParam.width = size.x;
+		goFreeParam.height = size.y / 15;
+		goFreeParam.topMargin = 10;
+
+		Button goFree = new Button(context, attrs);
+		goFree.setGravity(Gravity.CENTER);
+		goFree.setText("Go");
+
+		goFree.setOnTouchListener(new GoQueryListener());
+
+		poiSide.addView(goFree, goFreeParam);
+		
 		// Result
 		result = new LinearLayout(context, attrs);
 		result.setVisibility(GONE);
@@ -305,12 +329,12 @@ public class Search extends RelativeLayout {
 				if (zip.isEmpty()) {
 					Address addr = new Address(street, number, city, 0);
 					locations = POIManager.getInstance(getContext())
-							.searchPOIsByAddress(addr);
+							.searchPOIsByAddress(getContext(), addr);
 				} else {
 					Address addr = new Address(street, number, city,
 							(Integer.parseInt(zip)));
 					locations = POIManager.getInstance(getContext())
-							.searchPOIsByAddress(addr);
+							.searchPOIsByAddress(getContext(), addr);
 				}
 				// TODO: bei keinem ergebnis meldung anzeigen
 				// TODO: bei ergebnis ort anzeigen
@@ -320,12 +344,12 @@ public class Search extends RelativeLayout {
 				toogleResult();
 
 				for (Location value : locations) {
-					TextView location = new TextView(getContext());
+					Button location = new Button(getContext());
 					Log.d("routingView: ",
 							" " + value.getName() + " " + value.getId());
 					location.setText(value.getAddress().toString());
-					// location.setOnTouchListener(new locationTouch(value,
-					// location));
+					location.setOnTouchListener(new locationTouch(value,
+							location));
 					// TODO TextSize relativieren
 					location.setTextSize(30);
 					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
@@ -333,7 +357,6 @@ public class Search extends RelativeLayout {
 							LinearLayout.LayoutParams.WRAP_CONTENT);
 					myParams.topMargin = 10;
 					myParams.width = width;
-					location.setBackgroundColor(Color.GRAY);
 					result.addView(location, myParams);
 				}
 			}
@@ -341,15 +364,16 @@ public class Search extends RelativeLayout {
 		}
 	}
 
-	private class QueryActionListener implements OnEditorActionListener {
+	private class GoQueryListener implements OnTouchListener {
 
-		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
 			Log.d(TAG, "Eine query wurde eingegeben");
 
 			int action = event.getAction();
 
-			if (action == KeyEvent.KEYCODE_ENTER) {
-				String checkString = v.getText().toString().replaceAll(" ", "");
+			if (action == MotionEvent.ACTION_UP) {
+				String checkString = freeText.getText().toString().replaceAll(" ", "");
 				if (!checkString.isEmpty()) {
 
 					List<POI> poiS = POIManager.getInstance(getContext())
@@ -359,11 +383,11 @@ public class Search extends RelativeLayout {
 					toogleResult();
 
 					for (POI value : poiS) {
-						TextView poi = new TextView(getContext());
+						Button poi = new Button(getContext());
 						Log.d("routingView: ", " " + value.getName() + " "
 								+ value.getId());
 						poi.setText(value.getName());
-						// poi.setOnTouchListener(new poiTouch(value, poi));
+						poi.setOnTouchListener(new poiTouch(value, poi));
 						// TODO TextSize relativieren
 						poi.setTextSize(30);
 						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
@@ -371,7 +395,6 @@ public class Search extends RelativeLayout {
 								LinearLayout.LayoutParams.WRAP_CONTENT);
 						myParams.topMargin = 10;
 						myParams.width = width;
-						poi.setBackgroundColor(Color.GRAY);
 						result.addView(poi, myParams);
 					}
 				}
@@ -379,6 +402,107 @@ public class Search extends RelativeLayout {
 			return false;
 		}
 
+	}
+	
+	private class QueryActionListener implements OnEditorActionListener {
+
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			Log.d(TAG, "Eine query wurde eingegeben");
+
+			int action = event.getAction();
+
+			if (action == KeyEvent.KEYCODE_ENTER) {
+				String checkString = freeText.getText().toString().replaceAll(" ", "");
+				if (!checkString.isEmpty()) {
+
+					List<POI> poiS = POIManager.getInstance(getContext())
+							.searchPOIsByQuery(freeText.getText().toString());
+
+					isResult = true;
+					toogleResult();
+
+					for (POI value : poiS) {
+						Button poi = new Button(getContext());
+						Log.d("routingView: ", " " + value.getName() + " "
+								+ value.getId());
+						poi.setText(value.getName());
+						poi.setOnTouchListener(new poiTouch(value, poi));
+						// TODO TextSize relativieren
+						poi.setTextSize(30);
+						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+						myParams.topMargin = 10;
+						myParams.width = width;
+						result.addView(poi, myParams);
+					}
+				}
+			}
+			return false;
+		}
+
+	}
+
+	private class poiTouch implements OnTouchListener {
+
+		private POI poi;
+		private View view;
+
+		public poiTouch(POI p, View view) {
+			this.poi = p;
+			this.view = view;
+		}
+
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				RouteController.getInstance().addWaypoint(
+						new Waypoint(poi.getLatitude(), poi.getLongitude(), poi
+								.getName()));
+				BoundingBox.getInstance(getContext()).setCenter(
+						new Coordinate(poi.getLatitude(), poi.getLongitude()));
+				notifyGoToMapListener();
+			}
+			return false;
+		}
+
+	}
+
+	private class locationTouch implements OnTouchListener {
+
+		private Location location;
+		private View view;
+
+		public locationTouch(Location p, View view) {
+			this.location = p;
+			this.view = view;
+		}
+
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(view)) {
+				RouteController.getInstance().addWaypoint(
+						new Waypoint(location.getLatitude(), location
+								.getLongitude(), location.getName()));
+
+				BoundingBox.getInstance(getContext()).setCenter(
+						new Coordinate(location.getLatitude(), location
+								.getLongitude()));
+				notifyGoToMapListener();
+
+			}
+			return false;
+		}
+	}
+
+	LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
+
+	private void notifyGoToMapListener() {
+		for (GoToMapListener l : rl) {
+			l.onGoToMap();
+		}
+	}
+
+	public void registerGoToMapListener(GoToMapListener listener) {
+		rl.add(listener);
 	}
 
 }

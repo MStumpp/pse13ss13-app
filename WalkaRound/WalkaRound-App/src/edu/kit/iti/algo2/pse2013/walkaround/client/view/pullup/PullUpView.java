@@ -218,6 +218,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 		routingMenu.registerGoToMapListener(this);
 		routingMenu.registerFavoriteListener(this);
+		searchMenu.registerGoToMapListener(this);
 	}
 
 	int pullUpContent = -1;
