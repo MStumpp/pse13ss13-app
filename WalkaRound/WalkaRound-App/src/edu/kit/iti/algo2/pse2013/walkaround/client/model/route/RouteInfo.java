@@ -23,4 +23,6 @@ public interface RouteInfo {
 	
 	public RouteInfo clone();
 
+	public Waypoint getWaypoint(int id);
+
 }

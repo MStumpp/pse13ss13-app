@@ -3,6 +3,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Favorite;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
@@ -18,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-public class PullUpView extends RelativeLayout {
+public class PullUpView extends RelativeLayout implements GoToMapListener {
 
 	Point size;
 	private ImageView routing;
@@ -40,6 +46,11 @@ public class PullUpView extends RelativeLayout {
 
 	private int nullSize;
 	private ImageView regulator;
+	private Routing routingMenu;
+	private POI poiMenu;
+	private Favorite favoriteMenu;
+	private Roundtrip roundtripMenu;
+	private Search searchMenu;
 
 	public PullUpView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -163,7 +174,7 @@ public class PullUpView extends RelativeLayout {
 
 		this.addView(regulator, paramsRegulator);
 
-		content = new RelativeLayout(context, attrs);
+		//content = new RelativeLayout(context, attrs);
 		RelativeLayout.LayoutParams paramsContent = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		paramsContent.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
@@ -174,16 +185,37 @@ public class PullUpView extends RelativeLayout {
 				RelativeLayout.TRUE);
 		paramsContent.addRule(RelativeLayout.BELOW, 5);
 
-		content.getRootView().setBackgroundColor(Color.BLACK);
-
+		//content.getRootView().setBackgroundColor(Color.BLACK);
+		
+		routingMenu = new Routing(context, attrs);
+		poiMenu = new POI(context, attrs);
+		favoriteMenu = new Favorite(context, attrs);
+		roundtripMenu = new Roundtrip(context, attrs);
+		searchMenu = new Search(context, attrs);
+		
+		routingMenu.getRootView().setBackgroundColor(Color.BLACK);
+		poiMenu.getRootView().setBackgroundColor(Color.BLACK);
+		favoriteMenu.getRootView().setBackgroundColor(Color.BLACK);
+		roundtripMenu.getRootView().setBackgroundColor(Color.BLACK);
+		searchMenu.getRootView().setBackgroundColor(Color.BLACK);
+		
+		
+		this.addView(routingMenu, paramsContent);
+		this.addView(favoriteMenu, paramsContent);
+		this.addView(roundtripMenu, paramsContent);
+		this.addView(searchMenu, paramsContent);
+		this.addView(poiMenu, paramsContent);
+		
+		
 		routing.setOnTouchListener(new StaticTouchListener());
 		star.setOnTouchListener(new StaticTouchListener());
 		roundtrip.setOnTouchListener(new StaticTouchListener());
 		search.setOnTouchListener(new StaticTouchListener());
 		poi.setOnTouchListener(new StaticTouchListener());
+		
 		regulator.setOnTouchListener(new StaticTouchListener());
 
-		this.addView(content, paramsContent);
+		routingMenu.registerGoToMapListener(this);
 	}
 
 	int pullUpContent = -1;
@@ -202,7 +234,15 @@ public class PullUpView extends RelativeLayout {
 		case PullUpViewOld.CONTENT_ROUTING:
 
 			if (!(this.pullUpContent == id)) {
-
+				
+				//-----------------------------------
+				routingMenu.setVisibility(View.VISIBLE);
+				poiMenu.setVisibility(View.GONE);
+				favoriteMenu.setVisibility(View.GONE);
+				roundtripMenu.setVisibility(View.GONE);
+				searchMenu.setVisibility(View.GONE);
+				//-----------------------------------
+				
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -214,6 +254,14 @@ public class PullUpView extends RelativeLayout {
 
 			if (!(this.pullUpContent == id)) {
 
+				//-----------------------------------
+				routingMenu.setVisibility(View.GONE);
+				poiMenu.setVisibility(View.GONE);
+				favoriteMenu.setVisibility(View.VISIBLE);
+				roundtripMenu.setVisibility(View.GONE);
+				searchMenu.setVisibility(View.GONE);
+				//-----------------------------------
+				
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -226,6 +274,14 @@ public class PullUpView extends RelativeLayout {
 
 			if (!(this.pullUpContent == id)) {
 
+				//-----------------------------------
+				routingMenu.setVisibility(View.GONE);
+				poiMenu.setVisibility(View.GONE);
+				favoriteMenu.setVisibility(View.GONE);
+				roundtripMenu.setVisibility(View.VISIBLE);
+				searchMenu.setVisibility(View.GONE);
+				//-----------------------------------
+				
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -237,6 +293,14 @@ public class PullUpView extends RelativeLayout {
 		case PullUpViewOld.CONTENT_POI:
 			if (!(this.pullUpContent == id)) {
 
+				//-----------------------------------
+				routingMenu.setVisibility(View.GONE);
+				poiMenu.setVisibility(View.VISIBLE);
+				favoriteMenu.setVisibility(View.GONE);
+				roundtripMenu.setVisibility(View.GONE);
+				searchMenu.setVisibility(View.GONE);
+				//-----------------------------------
+				
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -249,6 +313,14 @@ public class PullUpView extends RelativeLayout {
 
 			if (!(this.pullUpContent == id)) {
 
+				//-----------------------------------
+				routingMenu.setVisibility(View.GONE);
+				poiMenu.setVisibility(View.GONE);
+				favoriteMenu.setVisibility(View.GONE);
+				roundtripMenu.setVisibility(View.GONE);
+				searchMenu.setVisibility(View.VISIBLE);
+				//-----------------------------------
+				
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -261,6 +333,14 @@ public class PullUpView extends RelativeLayout {
 
 			if (!(this.pullUpContent == id)) {
 
+				//-----------------------------------
+				routingMenu.setVisibility(View.GONE);
+				poiMenu.setVisibility(View.GONE);
+				favoriteMenu.setVisibility(View.GONE);
+				roundtripMenu.setVisibility(View.GONE);
+				searchMenu.setVisibility(View.GONE);
+				//-----------------------------------
+				
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -270,6 +350,14 @@ public class PullUpView extends RelativeLayout {
 
 			break;
 		default:
+			//-----------------------------------
+			routingMenu.setVisibility(View.GONE);
+			poiMenu.setVisibility(View.GONE);
+			favoriteMenu.setVisibility(View.GONE);
+			roundtripMenu.setVisibility(View.GONE);
+			searchMenu.setVisibility(View.GONE);
+			//-----------------------------------
+			
 			pullUpContent = -1;
 			if (this.getY() == 0) {
 				this.pullDown();
@@ -355,6 +443,15 @@ public class PullUpView extends RelativeLayout {
 			Log.d(TAG, "Repeat Animation");
 		}
 
+	}
+
+	public void updateRoute() {
+		routingMenu.updateRoute();
+	}
+
+	@Override
+	public void onGoToMap() {
+		this.changeView(-1);
 	}
 
 }

@@ -16,6 +16,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -57,6 +58,8 @@ public class MapController extends Activity implements HeadUpViewListener,
 	private int userDiff;
 	
 	private WaypointView waypointView;
+
+	private PullUpView pullUpview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,6 @@ public class MapController extends Activity implements HeadUpViewListener,
 				R.drawable.user_arrow));
 		user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
 		user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
-
 		rl.addView(user, paramUser);
 
 		PositionManager.getInstance().registerPositionListener(this);
@@ -110,6 +112,8 @@ public class MapController extends Activity implements HeadUpViewListener,
 		
 		mapView.computeParams();
 		tileFetcher.requestTiles(coorBox, mapView);
+		pullUpview = (PullUpView) this.findViewById(R.id.pullUpView);
+		pullUpview.bringToFront();
 		
 		RouteController.getInstance().registerRouteListener(this);
 	}
@@ -238,6 +242,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		runOnUiThread(new Runnable() {
 			public void run() {
 				waypointView.updateWaypoint();
+				pullUpview.updateRoute();
 			}
 		});
 	}

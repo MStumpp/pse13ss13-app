@@ -597,6 +597,17 @@ public class Route implements RouteInfo {
 		}
 		return output;
 	}
+
+	@Override
+	public Waypoint getWaypoint(int id) {
+		
+		for(Waypoint w:this.getWaypoints()){
+			if(w.getId() == id){
+				return w;
+			}
+		}
+		return null;
+	}
 	
 	
 }
