@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 // Walkaround Library
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpViewOld;
 
 /**
  * Ein Controller, der sich um die Anzeige und Verarbeitung des Optionen Menüs
@@ -75,7 +75,7 @@ public class OptionView extends PreferenceFragment implements OnSharedPreference
 	 * @return
 	 */
 	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_FAVORITE)) {
+		if (f.toString().equals(PullUpViewOld.CONTENT_FAVORITE)) {
 			return true;
 		}
 		return false;

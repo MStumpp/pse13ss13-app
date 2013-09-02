@@ -3,7 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpViewOld;
 
 /**
  * This class controls the data flow between the control Elements on the View and the System
@@ -154,7 +154,7 @@ public class HeadUpController {
 	 */
 	public void startOption() {
 		Log.d(TAG_HEADUP_CONTROLLER ,"Start Option!");
-		this.mapController.getPullUpView().changeView(PullUpView.CONTENT_OPTION);
+		this.mapController.getPullUpView().changeView(PullUpViewOld.CONTENT_OPTION);
 		this.mapController.getPullUpView().setFullSizeHeight();
 	}
 	

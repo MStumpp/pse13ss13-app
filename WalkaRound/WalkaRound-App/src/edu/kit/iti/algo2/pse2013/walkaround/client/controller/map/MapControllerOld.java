@@ -31,7 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormaliz
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapViewOld;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -233,7 +233,7 @@ public class MapControllerOld implements RouteListener, PositionListener,
 	/**
 	 * Gives the current Pull Up View back.
 	 */
-	public PullUpView getPullUpView() {
+	public PullUpViewOld getPullUpView() {
 		return mapView.getPullUpView();
 	}
 

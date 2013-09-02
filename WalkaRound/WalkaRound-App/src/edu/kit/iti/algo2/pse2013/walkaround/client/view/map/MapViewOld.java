@@ -31,7 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 // Android Library
@@ -126,7 +126,7 @@ public class MapViewOld extends Activity {
 	/**
 	 *
 	 */
-	private PullUpView pullUp;
+	private PullUpViewOld pullUp;
 
 	private Point size;
 
@@ -221,7 +221,7 @@ public class MapViewOld extends Activity {
 
 		// ---------------------------------------------
 		Log.d(TAG_MAPVIEW, "Fragment PullUpMenue wird eingebaut");
-		this.pullUp = new PullUpView();
+		this.pullUp = new PullUpViewOld();
 		ft.add(R.id.pullUpMain, pullUp).commit();
 
 		// ---------------------------------------------
@@ -252,7 +252,7 @@ public class MapViewOld extends Activity {
 	/**
 	 * gives the pullupview back
 	 */
-	public PullUpView getPullUpView() {
+	public PullUpViewOld getPullUpView() {
 		return pullUp;
 	}
 
@@ -882,7 +882,7 @@ public class MapViewOld extends Activity {
 			if (view.equals(iv)) {
 				Log.d(TAG_MAPVIEW_TOUCH, "UserTouch auf POI ID:" + id);
 				currentPOI = mc.getPOIById(id);
-				pullUp.changeView(PullUpView.CONTENT_INFO);
+				pullUp.changeView(PullUpViewOld.CONTENT_INFO);
 				pullUp.setFullSizeHeight();
 			}
 			return false;

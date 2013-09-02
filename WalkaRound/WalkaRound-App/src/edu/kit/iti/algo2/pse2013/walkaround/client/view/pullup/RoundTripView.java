@@ -119,7 +119,7 @@ public class RoundTripView extends Fragment {
 	}
 
 	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_ROUNDTRIP)) {
+		if (f.toString().equals(PullUpViewOld.CONTENT_ROUNDTRIP)) {
 			return true;
 		}
 		return false;

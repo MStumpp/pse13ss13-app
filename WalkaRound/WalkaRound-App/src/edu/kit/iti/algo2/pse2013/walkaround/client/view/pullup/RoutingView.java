@@ -142,7 +142,7 @@ public class RoutingView extends Fragment {
 	}
 
 	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_ROUTING)) {
+		if (f.toString().equals(PullUpViewOld.CONTENT_ROUTING)) {
 			return true;
 		}
 		return false;
@@ -223,7 +223,7 @@ public class RoutingView extends Fragment {
 				// TODO: ansicht wechselt in die liste der !!!favorisierten
 				// orte!!!!
 				MapControllerOld.getInstance().getPullUpView()
-						.changeView(PullUpView.CONTENT_FAVORITE);
+						.changeView(PullUpViewOld.CONTENT_FAVORITE);
 			}
 			return false;
 		}
@@ -317,7 +317,7 @@ public class RoutingView extends Fragment {
 							v.getText().toString());
 					favoriteName.setVisibility(View.GONE);
 					MapControllerOld.getInstance().getPullUpView()
-							.changeView(PullUpView.CONTENT_FAVORITE);
+							.changeView(PullUpViewOld.CONTENT_FAVORITE);
 				}
 			}
 			return false;
@@ -372,7 +372,7 @@ public class RoutingView extends Fragment {
 							v.getText().toString());
 					favoriteName.setVisibility(View.GONE);
 					MapControllerOld.getInstance().getPullUpView()
-							.changeView(PullUpView.CONTENT_FAVORITE);
+							.changeView(PullUpViewOld.CONTENT_FAVORITE);
 				}
 			}
 			return false;

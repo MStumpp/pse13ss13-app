@@ -95,7 +95,7 @@ public class POIView extends Fragment {
 	}
 
 	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_POI)) {
+		if (f.toString().equals(PullUpViewOld.CONTENT_POI)) {
 			return true;
 		}
 		return false;

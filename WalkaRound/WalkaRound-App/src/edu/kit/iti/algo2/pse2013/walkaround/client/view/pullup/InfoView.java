@@ -157,7 +157,7 @@ public class InfoView extends Fragment implements POIImageListener {
 	}
 
 	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_INFO)) {
+		if (f.toString().equals(PullUpViewOld.CONTENT_INFO)) {
 			return true;
 		}
 		return false;
@@ -180,7 +180,7 @@ public class InfoView extends Fragment implements POIImageListener {
 						new Location(poi.getLatitude(), poi.getLongitude(),
 								poi.getName()), poi.getName());
 				MapControllerOld.getInstance().getPullUpView()
-				.changeView(PullUpView.CONTENT_FAVORITE);
+				.changeView(PullUpViewOld.CONTENT_FAVORITE);
 			}
 			return false;
 		}

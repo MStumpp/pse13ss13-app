@@ -25,5 +25,11 @@
             android:id="@+id/headUpView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        
+        
+        <edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView
+            android:id="@+id/pullUpView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 </RelativeLayout>

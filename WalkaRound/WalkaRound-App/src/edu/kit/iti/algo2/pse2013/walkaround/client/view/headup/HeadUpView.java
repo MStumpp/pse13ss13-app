@@ -68,6 +68,7 @@ public class HeadUpView extends RelativeLayout {
 
 		option.setScaleType(ImageView.ScaleType.FIT_XY);
 		plus.setScaleType(ImageView.ScaleType.FIT_XY);
+		minus.setScaleType(ImageView.ScaleType.FIT_XY);
 		userLock.setScaleType(ImageView.ScaleType.FIT_XY);
 
 		option.setId(1);

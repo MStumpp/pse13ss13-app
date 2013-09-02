@@ -91,7 +91,7 @@ public class FavoriteView extends Fragment {
 	}
 
 	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_FAVORITE)) {
+		if (f.toString().equals(PullUpViewOld.CONTENT_FAVORITE)) {
 			return true;
 		}
 		return false;

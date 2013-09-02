@@ -1,62 +1,35 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
-// Android Library
-import java.util.LinkedList;
-
-import android.app.Fragment;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
-import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
-import android.util.DisplayMetrics;
+import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
-// Walkaround Library
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+public class PullUpView extends RelativeLayout {
 
-/**
- *
- * This class creates a variant of a pull down menu. Instead of pulling down you
- * can pull this menu up. This Class enables us to integrate a different
- * fragments to display different menus.
- *
- * @author Ludwig Biermann
- *
- */
-public class PullUpView extends Fragment implements RouteListener {
+	Point size;
+	private ImageView routing;
+	private ImageView star;
+	private ImageView roundtrip;
+	private ImageView poi;
+	private ImageView search;
+	private RelativeLayout content;
+	private static String TAG = PullUpView.class.getSimpleName();
+	
 
-	/**
-	 * Debug Information
-	 */
-	private static final String TAG_PULLUP = PullUpView.class.getSimpleName();
-	private static final String TAG_PULLUP_ANIMATIOn = PullUpView.class
-			.getSimpleName() + "_animate";
-	private static final String TAG_PULLUP_TOUCH = PullUpView.class
-			.getSimpleName() + "_touch";
-
-	/**
-	 * Content ID
-	 */
 	public static final int CONTENT_ROUTING = 0;
 	public static final int CONTENT_FAVORITE = 1;
 	public static final int CONTENT_ROUNDTRIP = 2;
@@ -64,223 +37,167 @@ public class PullUpView extends Fragment implements RouteListener {
 	public static final int CONTENT_SEARCH = 4;
 	public static final int CONTENT_INFO = 5;
 	public static final int CONTENT_OPTION = 6;
-
-	private RoutingView routingView;
-	private FavoriteView favoriteView;
-	private RoundTripView roundtripView;
-	private POIView poiView;
-	private SearchView searchView;
-	private InfoView infoView;
-	private OptionView optionView;
-
-	/**
-	 * Views
-	 */
-	private RelativeLayout main;
-
-	private RelativeLayout menu;
-	private ImageView routing;
-	private ImageView favorite;
-	private ImageView roundtrip;
-	private ImageView poi;
-	private ImageView search;
-
+	private static final long ANIMATION_DURATION = 500;
+	
+	private int nullSize;
 	private ImageView regulator;
-
-	/**
-	 * Permanent values
-	 */
-	private float minHeight;
-	private float minBorderHeight;
-	private float halfHeight;
-	private float maxBorderHeight;
-	private float maxHeight;
-	private boolean animationRun = false;
-
-	/**
-	 *
-	 */
-
-	private RouteInfo route;
-	private boolean routingViewRun = false;
-	private boolean poiViewRun = false;
-
-	/**
-	 * Gestik
-	 */
-	private GestureDetector gestureDetector;
-
-	int finalHeight, finalWidth;
-
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		route = new Route(new LinkedList<Coordinate>());
-		Log.d(TAG_PULLUP, "allocate views");
-		main = (RelativeLayout) this.getActivity()
-				.findViewById(R.id.pullUpMain);
-		menu = (RelativeLayout) this.getActivity()
-				.findViewById(R.id.staticMenu);
-		routing = (ImageView) this.getActivity().findViewById(
-				R.id.routingMenuButton);
-		favorite = (ImageView) this.getActivity().findViewById(
-				R.id.favoriteMenuButton);
-		roundtrip = (ImageView) this.getActivity().findViewById(
-				R.id.roundtripMenuButton);
-		poi = (ImageView) this.getActivity().findViewById(R.id.poiMenuButton);
-		search = (ImageView) this.getActivity().findViewById(
-				R.id.searchMenuButton);
-
-		regulator = (ImageView) this.getActivity().findViewById(
-				R.id.pullupOpenClose);
-
-		Log.d("COORDINATE_UTILITY", "get display size");
-		Display display = this.getActivity().getWindowManager()
-				.getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-
+	
+	public PullUpView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		size = BoundingBox.getInstance(context).getDisplaySize();
 		
+		RelativeLayout.LayoutParams main = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
+				RelativeLayout.TRUE);
+		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
+				RelativeLayout.TRUE);
+
+		this.getRootView().setBackgroundColor(Color.GRAY);
 		
+		main.height = size.y;
+		main.width = size.x;
 		
-		minHeight = 0;
-		maxHeight = size.y;
-		halfHeight = (maxHeight / 2);
-		minBorderHeight = halfHeight / 2;
-		maxBorderHeight = halfHeight / 2 + halfHeight;
+		this.setLayoutParams(main);
+		this.nullSize = size.y-size.x/5;
+		this.setY(size.y-size.x/5);
+		
+		// statische Menü
+		
+		routing = new ImageView(context);
+		star = new ImageView(context);
+		roundtrip = new ImageView(context);
+		poi = new ImageView(context);
+		search = new ImageView(context);
 
-		Log.d(TAG_PULLUP, "Max = " + maxHeight);
-		Log.d(TAG_PULLUP, "Min = " + minHeight);
+		routing.setImageDrawable(context.getResources().getDrawable(
+				R.drawable.list));
+		star.setImageDrawable(context.getResources().getDrawable(
+				R.drawable.favorite));
+		roundtrip.setImageDrawable(context.getResources().getDrawable(
+				R.drawable.options));
+		poi.setImageDrawable(context.getResources().getDrawable(R.drawable.flag));
+		search.setImageDrawable(context.getResources().getDrawable(R.drawable.loupe));
 
-		Log.d(TAG_PULLUP, "Resize views");
-		menu.getLayoutParams().width = size.x;
-		menu.getLayoutParams().height = size.y / 10;
+		routing.setTag(CONTENT_ROUTING);
+		star.setTag(CONTENT_FAVORITE);
+		roundtrip.setTag(CONTENT_ROUNDTRIP);
+		poi.setTag(CONTENT_POI);
+		search.setTag(CONTENT_SEARCH);
+		
+		routing.setScaleType(ImageView.ScaleType.FIT_XY);
+		star.setScaleType(ImageView.ScaleType.FIT_XY);
+		roundtrip.setScaleType(ImageView.ScaleType.FIT_XY);
+		poi.setScaleType(ImageView.ScaleType.FIT_XY);
+		search.setScaleType(ImageView.ScaleType.FIT_XY);
+		
+		routing.setId(1);
+		star.setId(2);
+		roundtrip.setId(3);
+		poi.setId(4);
 
-		routing.setX(size.x / 5 * 0);
-		routing.getLayoutParams().width = size.x / 5;
-		routing.getLayoutParams().height = size.y / 10;
-
-		favorite.setX(size.x / 5 * 1);
-		favorite.getLayoutParams().width = size.x / 5;
-		favorite.getLayoutParams().height = size.y / 10;
-
-		roundtrip.setX(size.x / 5 * 2);
-		roundtrip.getLayoutParams().width = size.x / 5;
-		roundtrip.getLayoutParams().height = size.y / 10;
-
-		poi.setX(size.x / 5 * 3);
-		poi.getLayoutParams().width = size.x / 5;
-		poi.getLayoutParams().height = size.y / 10;
-
-		search.setX(size.x / 5 * 4);
-		search.getLayoutParams().width = size.x / 5;
-		search.getLayoutParams().height = size.y / 10;
-
-		regulator.getLayoutParams().height = size.y / 10;
-
-		Log.d(TAG_PULLUP, "allocate Listener");
-		routing.setOnTouchListener(new RoutingListener());
-		favorite.setOnTouchListener(new FavoriteListener());
-		roundtrip.setOnTouchListener(new RoundtripListener());
-		poi.setOnTouchListener(new POIListener());
-		search.setOnTouchListener(new SearchListener());
-		regulator.setOnTouchListener(new RegulatorListener());
-		gestureDetector = new GestureDetector(getActivity(),
-				new FlingDetector());
+		RelativeLayout.LayoutParams paramsRouting = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		paramsRouting.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+				RelativeLayout.TRUE);
+		paramsRouting.width = size.x / 6;
+		paramsRouting.height = size.x / 6;
+		paramsRouting.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
+		
+		this.addView(routing, paramsRouting);
 		
 
-		finalHeight  = menu.getLayoutParams().height;
-		DisplayMetrics metrics = new DisplayMetrics();
-		this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		Log.d("omtag", " x " + metrics.densityDpi);
-		//maxHeight = maxHeight -	TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, finalHeight, metrics);
-
-		maxHeight = maxHeight - finalHeight * 1.3F;
+		RelativeLayout.LayoutParams paramsStar = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		paramsStar.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+				RelativeLayout.TRUE);
+		paramsStar.addRule(RelativeLayout.RIGHT_OF, 1);
+		paramsStar.width = size.x / 6;
+		paramsStar.height = size.x / 6;
+		paramsStar.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 		
-		main.setY(maxHeight);
+		this.addView(star, paramsStar);
+		
 
-		Log.d(TAG_PULLUP, "allocate fragments");
+		RelativeLayout.LayoutParams paramsRoundtrip = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		paramsRoundtrip.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+				RelativeLayout.TRUE);
+		paramsRoundtrip.addRule(RelativeLayout.RIGHT_OF, 2);
+		paramsRoundtrip.width = size.x / 6;
+		paramsRoundtrip.height = size.x / 6;
+		paramsRoundtrip.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
+		
+		this.addView(roundtrip, paramsRoundtrip);
+		
 
-		routingView = new RoutingView();
-		favoriteView = new FavoriteView();
-		roundtripView = new RoundTripView();
-		poiView = new POIView();
-		searchView = new SearchView();
-		infoView = new InfoView();
-		optionView = new OptionView();
+		RelativeLayout.LayoutParams paramsPOI = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+				RelativeLayout.TRUE);
+		paramsPOI.addRule(RelativeLayout.RIGHT_OF, 3);
+		paramsPOI.width = size.x / 6;
+		paramsPOI.height = size.x / 6;
+		paramsPOI.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
+		
+		this.addView(poi, paramsPOI);
 
-		FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-		//ft.add(R.id.pullupContent, pullUpContent).commit();
-		main.setOnTouchListener(new MainListener());
+		RelativeLayout.LayoutParams paramsSearch = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		paramsSearch.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+				RelativeLayout.TRUE);
+		paramsSearch.addRule(RelativeLayout.RIGHT_OF, 4);
+		paramsSearch.width = size.x / 6;
+		paramsSearch.height = size.x / 6;
+		paramsSearch.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
+		
+		this.addView(search, paramsSearch);
+		
+		regulator = new ImageView(context,attrs);
+		regulator.setImageDrawable(context.getResources().getDrawable(R.drawable.pikto_rechts));
+		regulator.setRotation(90);
+		regulator.setTag(-1);
+		regulator.setId(5);
+		regulator.setScaleType(ImageView.ScaleType.FIT_XY);
+		
+		RelativeLayout.LayoutParams paramsRegulator = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		paramsRegulator.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
+				RelativeLayout.TRUE);
+		paramsRegulator.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
+				RelativeLayout.TRUE);
+		paramsRegulator.addRule(RelativeLayout.BELOW, 1);
+		paramsRegulator.height = size.x / 15;
 
-		RouteController.getInstance().registerRouteListener(this);
+		this.addView(regulator, paramsRegulator);
+		
+		content = new RelativeLayout(context, attrs);
+		RelativeLayout.LayoutParams paramsContent = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		paramsContent.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
+				RelativeLayout.TRUE);
+		paramsContent.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
+				RelativeLayout.TRUE);
+		paramsContent.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
+				RelativeLayout.TRUE);
+		paramsContent.addRule(RelativeLayout.BELOW, 5);
 
-		this.changeView(CONTENT_ROUTING);
+		content.getRootView().setBackgroundColor(Color.BLACK);
+		
+		routing.setOnTouchListener(new StaticTouchListener());
+		star.setOnTouchListener(new StaticTouchListener());
+		roundtrip.setOnTouchListener(new StaticTouchListener());
+		search.setOnTouchListener(new StaticTouchListener());
+		poi.setOnTouchListener(new StaticTouchListener());
+		regulator.setOnTouchListener(new StaticTouchListener());
+		
+		
 
+		this.addView(content, paramsContent);
 	}
-
-	/**
-	 * Set the height to FullSize
-	 */
-	public void setFullSizeHeight() {
-		this.setHeight(main.getY() * -1, 1000);
-		// this.duration = 0;
-	}
-
-	/**
-	 * Set the height to HalfSize
-	 */
-	public void setHalfSizeHeight() {
-		this.setHeight(halfHeight - main.getY(), 500);
-		// this.duration = 0;
-	}
-
-	/**
-	 * Set the height to minimum
-	 */
-	public void setNullSizeHeight() {
-		this.setHeight(maxHeight - main.getY(), 800);
-	}
-
-	/**
-	 * change the height
-	 *
-	 * @param delta
-	 *            to the new height
-	 */
-	private void setHeight(float delta) {
-		setHeight(delta, 1);
-	}
-
-	/**
-	 * change the height in a time
-	 *
-	 * @param delta
-	 *            to the new height
-	 * @param duration
-	 *            of the animation
-	 */
-	private void setHeight(float delta, long duration) {
-		if(poiViewRun){
-			poiView.setHeight((int)(maxHeight - main.getY() + delta));
-		}
-		TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delta);
-		anim.setDuration(duration);
-		anim.setAnimationListener(new RegulatorAnimationListener(delta
-				+ main.getY()));
-		main.startAnimation(anim);
-	}
-
-	/**
-	 * Gives the height back
-	 *
-	 * @return height of the PullUpMenüs
-	 */
-	public float getHeight() {
-		return main.getY();
-	}
-
-	Fragment pullUpContent;
-
+	
+	int pullUpContent = -1;
 	/**
 	 * change the content of the pullup
 	 *
@@ -288,279 +205,112 @@ public class PullUpView extends Fragment implements RouteListener {
 	 *            of content
 	 */
 	public void changeView(int id) {
-		Log.d(TAG_PULLUP, "Content Change");
-		routingViewRun = false;
-		this.poiViewRun = false;
-		TextToSpeechUtility.getInstance().stopSpeaking();
+		Log.d(TAG , "Content Change");
+		//TextToSpeechUtility.getInstance().stopSpeaking();
+		
+		
 		switch (id) {
-		case PullUpView.CONTENT_ROUTING:
+		case PullUpViewOld.CONTENT_ROUTING:
 
-			if (!(this.pullUpContent == routingView)) {
-				pullUpContent = routingView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "routing starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new RoutingView();
-				ft.replace(R.id.pullupContent, routingView).commit();
-				//if(routingView != null && route != null){
-				//	routingView.onRouteChange(route, this.getActivity());
-				//}
-				//routingViewRun = true;
+			if (!(this.pullUpContent == id)) {
+				
+				
+				pullUpContent = id;
 			}
 			break;
-		case PullUpView.CONTENT_FAVORITE:
+		case PullUpViewOld.CONTENT_FAVORITE:
 
-			if (!(this.pullUpContent == favoriteView)) {
-				pullUpContent = favoriteView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "favorite starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new FavoriteView();
-				ft.replace(R.id.pullupContent, favoriteView).commit();
+			if (!(this.pullUpContent == id)) {
+
+				pullUpContent = id;
 			}
 
 			break;
-		case PullUpView.CONTENT_ROUNDTRIP:
+		case PullUpViewOld.CONTENT_ROUNDTRIP:
 
-			if (!(this.pullUpContent == roundtripView)) {
-				pullUpContent = roundtripView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "roundtrip starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new RoundTripView();
-				ft.replace(R.id.pullupContent, this.roundtripView).commit();
+			if (!(this.pullUpContent == id)) {
+				
+				pullUpContent = id;
 			}
 
 			break;
-		case PullUpView.CONTENT_POI:
-
-			if (!(this.pullUpContent == poiView)) {
-				pullUpContent = poiView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "poi starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new POIView();
-				ft.replace(R.id.pullupContent, poiView).commit();
-				poiView.setHeight((int)halfHeight);
-				this.poiViewRun = true;
+		case PullUpViewOld.CONTENT_POI:
+			if (!(this.pullUpContent == id)) {
+				
+				pullUpContent = id;
 			}
 
 			break;
-		case PullUpView.CONTENT_SEARCH:
+		case PullUpViewOld.CONTENT_SEARCH:
 
-			if (!(this.pullUpContent == searchView)) {
-				pullUpContent = searchView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "search starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new SearchView();
-				ft.replace(R.id.pullupContent, searchView).commit();
+			if (!(this.pullUpContent == id)) {
+				
+				pullUpContent = id;
 			}
 
 			break;
-		case PullUpView.CONTENT_OPTION:
+		case PullUpViewOld.CONTENT_OPTION:
 
-			if (!(this.pullUpContent == optionView)) {
-				pullUpContent = optionView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "optionen starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new OptionView();
-				ft.replace(R.id.pullupContent, optionView).commit();
+			if (!(this.pullUpContent == id)) {
+				
+				pullUpContent = id;
 			}
 
 			break;
 		default:
-
-			if (!(this.pullUpContent == infoView)) {
-				pullUpContent = infoView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				Log.d(TAG_PULLUP, "InfoView starts");
-				//ft.remove(pullUpContent);
-				//pullUpContent = new InfoView();
-				ft.replace(R.id.pullupContent, infoView).commit();
-			} else {
-				infoView = new InfoView();
-				pullUpContent = infoView;
-				FragmentTransaction ft = this.getFragmentManager()
-						.beginTransaction();
-				ft.replace(R.id.pullupContent, infoView).commit();
-			}
-
+			pullUpContent = -1;
 			break;
 		}
 
 	}
+	
+	private void pullUp(){
+		this.setY(0);
+		  TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+				  nullSize, 0);          //  new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+		    animation.setDuration(ANIMATION_DURATION);  // animation duration 
+		    //animation.setRepeatCount(5);  // animation repeat count
+		   // animation.setRepeatMode(2);   // repeat animation (left to right, right to left )
+		    //animation.setFillAfter(true);      
 
-	/**
-	 * Routing button Listener
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class RoutingListener implements OnTouchListener {
-
-		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(routing)
-					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_TOUCH, "routing starts");
-				changeView(PullUpView.CONTENT_ROUTING);
-				setFullSizeHeight();
-				return false;
-			}
-			return true;
-		}
+		    this.startAnimation(animation);  // start animation
+		    //animation.setAnimationListener(new RegulatorAnimationListener(h));
 	}
 
-	/**
-	 * Favorite button listener.
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class FavoriteListener implements OnTouchListener {
+	private void pullDown(){
+		  TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+				  0, nullSize);          //  new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+		    animation.setDuration(ANIMATION_DURATION);  // animation duration 
+			 // this.setY(nullSize);
+		    //animation.setRepeatCount(5);  // animation repeat count
+		   // animation.setRepeatMode(2);   // repeat animation (left to right, right to left )
+		    //animation.setFillAfter(true);      
 
-		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(favorite)
-					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_TOUCH, "Favorite starts");
-				changeView(PullUpView.CONTENT_FAVORITE);
-				setFullSizeHeight();
-				return false;
-			}
-			return true;
-		}
+		    this.startAnimation(animation);  // start animation
+		    animation.setAnimationListener(new RegulatorAnimationListener(nullSize));
 	}
 
-	/**
-	 * roundtrip button listener
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class RoundtripListener implements OnTouchListener {
+	private class StaticTouchListener implements OnTouchListener{
 
-		public boolean onTouch(View v, MotionEvent event) {
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
 
-			if (v.equals(roundtrip)
-					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_TOUCH, "roundtrip starts");
-				changeView(PullUpView.CONTENT_ROUNDTRIP);
-				setFullSizeHeight();
-				return false;
-			}
-			return true;
-		}
-	}
-
-	/**
-	 * poi button listener
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class POIListener implements OnTouchListener {
-
-		public boolean onTouch(View v, MotionEvent event) {
-
-			if (v.equals(poi) && event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_TOUCH, "poi starts");
-				changeView(PullUpView.CONTENT_POI);
-				setHalfSizeHeight();
-				return false;
-			}
-			return true;
-		}
-	}
-
-	/**
-	 * Listener to get general touch events
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class MainListener implements OnTouchListener {
-
-		public boolean onTouch(View v, MotionEvent event) {
-
-			if (!v.equals(main) && event.getAction() == MotionEvent.ACTION_DOWN) {
-				return false;
-			}
-
-			Log.d(TAG_PULLUP_TOUCH, "main starts");
-			return true;
-		}
-	}
-
-	/**
-	 * Listener zur änderung des Content des Menüs.
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class SearchListener implements OnTouchListener {
-
-		public boolean onTouch(View v, MotionEvent event) {
-
-			if (v.equals(search)
-					&& event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.d(TAG_PULLUP_TOUCH, "search starts");
-				changeView(PullUpView.CONTENT_SEARCH);
-				setFullSizeHeight();
-				return false;
-			}
-			return true;
-		}
-	}
-
-	/**
-	 * Implements the listener of height regulator button
-	 *
-	 * @author ludwig Biermann
-	 *
-	 */
-	private class RegulatorListener implements OnTouchListener {
-
-
-		public boolean onTouch(View v, MotionEvent event) {
-
-			int action = MotionEventCompat.getActionMasked(event);
-			switch (action) {
-			case (MotionEvent.ACTION_DOWN):
-				Log.d(TAG_PULLUP_TOUCH, "Action was DOWN");
-				return true;
-			case (MotionEvent.ACTION_MOVE):
-				Log.d(TAG_PULLUP_TOUCH, "Action was MOVE");
-				if (!animationRun) {
-					animationRun = true;
-					float delta = event.getY() - regulator.getY();
-					setHeight(delta);
+			int action = event.getAction();
+			if (action == MotionEvent.ACTION_DOWN) {
+				int id = Integer.parseInt(view.getTag()
+						.toString());
+				changeView(id);
+				if(getY() == 0){
+					pullDown();
+				} else {
+					pullUp();
 				}
-				return gestureDetector.onTouchEvent(event);
-			case (MotionEvent.ACTION_UP):
-				Log.d(TAG_PULLUP_TOUCH, "Action was UP");
-				return gestureDetector.onTouchEvent(event);
-
-			case (MotionEvent.ACTION_CANCEL):
-				Log.d(TAG_PULLUP_TOUCH, "Action was CANCEL");
-				return gestureDetector.onTouchEvent(event);
-			case (MotionEvent.ACTION_OUTSIDE):
-				Log.d(TAG_PULLUP_TOUCH, "Movement occurred outside bounds "
-						+ "of current screen element");
-				return gestureDetector.onTouchEvent(event);
-			default:
-				return gestureDetector.onTouchEvent(event);
+				return false;
 			}
+			return false;
 		}
+		
 	}
-
 	/**
 	 * Implements the Animation listener of the transaction of the pullupview
 	 *
@@ -577,86 +327,21 @@ public class PullUpView extends Fragment implements RouteListener {
 
 
 		public void onAnimationEnd(Animation anim) {
-
-			main.setY(height);
-			animationRun = false;
-			main.clearAnimation();
-
-			if (main.getY() != halfHeight && main.getY() <= maxBorderHeight
-					&& main.getY() >= minBorderHeight) {
-				float delta = (main.getY() - halfHeight) * -1;
-				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to halfSize");
-				setHeight(delta, 1000);
-			}
-
-			if (main.getY() > maxBorderHeight && main.getY() != maxHeight) {
-
-				float delta = (main.getY() - maxHeight) * -1;
-				Log.d(TAG_PULLUP_ANIMATIOn,
-						"Correct to Out of Bound Max delta: " + delta);
-				setHeight(delta, 1000);
-
-			} else if (main.getY() < minBorderHeight && main.getY() != 0.0F) {
-				float delta = main.getY() * -1;
-				Log.d(TAG_PULLUP_ANIMATIOn, "Correct to Out of Bound Min delta"
-						+ delta);
-				setHeight(delta, 1000);
-			}
-			if(poiViewRun){
-				poiView.setHeight((int)(maxHeight - main.getY()));
-			}
-
+			setY(height);
+			clearAnimation();
 		}
 
 
 		public void onAnimationRepeat(Animation arg0) {
-			Log.d(TAG_PULLUP_ANIMATIOn, "Repeat Animation");
+			Log.d(TAG, "Repeat Animation");
 
 		}
 
 
 		public void onAnimationStart(Animation arg0) {
-			Log.d(TAG_PULLUP_ANIMATIOn, "Repeat Animation");
+			Log.d(TAG, "Repeat Animation");
 		}
 
-	}
-
-	/**
-	 * Detect fling events on the pull up menu
-	 *
-	 * @author Ludwig Biermann
-	 *
-	 */
-	private class FlingDetector extends SimpleOnGestureListener {
-
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-
-			Log.d(TAG_PULLUP_TOUCH, "Fling! " + velocityY + " " + e2.getY());
-			if (Math.abs(velocityY) > 1000) {
-				if (e2.getY() < 0) {
-					setFullSizeHeight();
-				} else {
-					setNullSizeHeight();
-				}
-			}
-			return false;
-		}
-	}
-
-
-	public void onRouteChange(final RouteInfo currentRoute) {
-		
-		Log.d(TAG_PULLUP_TOUCH, "Route Change: " + currentRoute.getWaypoints().size());
-
-		getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				route = currentRoute;
-				//if(routingViewRun){
-					routingView.onRouteChange(route,  getActivity());
-				//}
-			}
-		});
 	}
 
 }
