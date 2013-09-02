@@ -355,4 +355,14 @@ public class RouteController {
 	public RouteInfo getCurrentRoute(){
 		return this.currentRoute;
 	}
+
+	public void deleteActiveWaypoint(int id) {
+		for(Waypoint w:currentRoute.getWaypoints()) {
+			if(w.getId() == id){
+				this.setActiveWaypoint(id);
+				this.deleteActiveWaypoint();
+				break;
+			}
+		}
+	}
 }
