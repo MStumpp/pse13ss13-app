@@ -28,7 +28,6 @@ public class PullUpView extends RelativeLayout {
 	private ImageView search;
 	private RelativeLayout content;
 	private static String TAG = PullUpView.class.getSimpleName();
-	
 
 	public static final int CONTENT_ROUTING = 0;
 	public static final int CONTENT_FAVORITE = 1;
@@ -38,33 +37,31 @@ public class PullUpView extends RelativeLayout {
 	public static final int CONTENT_INFO = 5;
 	public static final int CONTENT_OPTION = 6;
 	private static final long ANIMATION_DURATION = 500;
-	
+
 	private int nullSize;
 	private ImageView regulator;
-	
+
 	public PullUpView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		size = BoundingBox.getInstance(context).getDisplaySize();
-		
+
 		RelativeLayout.LayoutParams main = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
-				RelativeLayout.TRUE);
-		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
-				RelativeLayout.TRUE);
+		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
 
 		this.getRootView().setBackgroundColor(Color.GRAY);
-		
+
 		main.height = size.y;
 		main.width = size.x;
-		
+
 		this.setLayoutParams(main);
-		this.nullSize = size.y-size.x/5;
-		this.setY(size.y-size.x/5);
-		
+		this.nullSize = size.y - size.x / 5;
+		this.setY(size.y - size.x / 5);
+
 		// statische Menü
-		
+
 		routing = new ImageView(context);
 		star = new ImageView(context);
 		roundtrip = new ImageView(context);
@@ -77,21 +74,23 @@ public class PullUpView extends RelativeLayout {
 				R.drawable.favorite));
 		roundtrip.setImageDrawable(context.getResources().getDrawable(
 				R.drawable.rundkurs));
-		poi.setImageDrawable(context.getResources().getDrawable(R.drawable.flag));
-		search.setImageDrawable(context.getResources().getDrawable(R.drawable.loupe));
+		poi.setImageDrawable(context.getResources()
+				.getDrawable(R.drawable.flag));
+		search.setImageDrawable(context.getResources().getDrawable(
+				R.drawable.loupe));
 
 		routing.setTag(CONTENT_ROUTING);
 		star.setTag(CONTENT_FAVORITE);
 		roundtrip.setTag(CONTENT_ROUNDTRIP);
 		poi.setTag(CONTENT_POI);
 		search.setTag(CONTENT_SEARCH);
-		
+
 		routing.setScaleType(ImageView.ScaleType.FIT_XY);
 		star.setScaleType(ImageView.ScaleType.FIT_XY);
 		roundtrip.setScaleType(ImageView.ScaleType.FIT_XY);
 		poi.setScaleType(ImageView.ScaleType.FIT_XY);
 		search.setScaleType(ImageView.ScaleType.FIT_XY);
-		
+
 		routing.setId(1);
 		star.setId(2);
 		roundtrip.setId(3);
@@ -104,21 +103,19 @@ public class PullUpView extends RelativeLayout {
 		paramsRouting.width = size.x / 6;
 		paramsRouting.height = size.x / 6;
 		paramsRouting.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-		
+
 		this.addView(routing, paramsRouting);
-		
 
 		RelativeLayout.LayoutParams paramsStar = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		paramsStar.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-				RelativeLayout.TRUE);
+		paramsStar
+				.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		paramsStar.addRule(RelativeLayout.RIGHT_OF, 1);
 		paramsStar.width = size.x / 6;
 		paramsStar.height = size.x / 6;
 		paramsStar.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-		
+
 		this.addView(star, paramsStar);
-		
 
 		RelativeLayout.LayoutParams paramsRoundtrip = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -128,19 +125,17 @@ public class PullUpView extends RelativeLayout {
 		paramsRoundtrip.width = size.x / 6;
 		paramsRoundtrip.height = size.x / 6;
 		paramsRoundtrip.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-		
+
 		this.addView(roundtrip, paramsRoundtrip);
-		
 
 		RelativeLayout.LayoutParams paramsPOI = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-				RelativeLayout.TRUE);
+		paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		paramsPOI.addRule(RelativeLayout.RIGHT_OF, 3);
 		paramsPOI.width = size.x / 6;
 		paramsPOI.height = size.x / 6;
 		paramsPOI.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-		
+
 		this.addView(poi, paramsPOI);
 
 		RelativeLayout.LayoutParams paramsSearch = new RelativeLayout.LayoutParams(
@@ -151,22 +146,23 @@ public class PullUpView extends RelativeLayout {
 		paramsSearch.width = size.x / 6;
 		paramsSearch.height = size.x / 6;
 		paramsSearch.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-		
+
 		this.addView(search, paramsSearch);
-		
-		regulator = new ImageView(context,attrs);
-		regulator.setImageDrawable(context.getResources().getDrawable(R.drawable.pikto_rechts));
+
+		regulator = new ImageView(context, attrs);
+		regulator.setImageDrawable(context.getResources().getDrawable(
+				R.drawable.pikto_rechts));
 		regulator.setRotation(90);
 		regulator.setTag(-1);
 		regulator.setId(5);
 		search.setScaleType(ImageView.ScaleType.FIT_XY);
-		
+
 		RelativeLayout.LayoutParams paramsRegulator = new RelativeLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		paramsRegulator.addRule(RelativeLayout.BELOW, 1);
 
 		this.addView(regulator, paramsRegulator);
-		
+
 		content = new RelativeLayout(context, attrs);
 		RelativeLayout.LayoutParams paramsContent = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -179,38 +175,39 @@ public class PullUpView extends RelativeLayout {
 		paramsContent.addRule(RelativeLayout.BELOW, 5);
 
 		content.getRootView().setBackgroundColor(Color.BLACK);
-		
+
 		routing.setOnTouchListener(new StaticTouchListener());
 		star.setOnTouchListener(new StaticTouchListener());
 		roundtrip.setOnTouchListener(new StaticTouchListener());
 		search.setOnTouchListener(new StaticTouchListener());
 		poi.setOnTouchListener(new StaticTouchListener());
 		regulator.setOnTouchListener(new StaticTouchListener());
-		
-		
 
 		this.addView(content, paramsContent);
 	}
-	
+
 	int pullUpContent = -1;
+
 	/**
 	 * change the content of the pullup
-	 *
+	 * 
 	 * @param id
 	 *            of content
 	 */
 	public void changeView(int id) {
-		Log.d(TAG , "Content Change");
-		//TextToSpeechUtility.getInstance().stopSpeaking();
-		
-		
+		Log.d(TAG, "Content Change");
+		// TextToSpeechUtility.getInstance().stopSpeaking();
+
 		switch (id) {
 		case PullUpViewOld.CONTENT_ROUTING:
 
 			if (!(this.pullUpContent == id)) {
-				
-				
+
 				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
 			}
 			break;
 		case PullUpViewOld.CONTENT_FAVORITE:
@@ -218,99 +215,123 @@ public class PullUpView extends RelativeLayout {
 			if (!(this.pullUpContent == id)) {
 
 				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
 			}
 
 			break;
 		case PullUpViewOld.CONTENT_ROUNDTRIP:
 
 			if (!(this.pullUpContent == id)) {
-				
+
 				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
 			}
 
 			break;
 		case PullUpViewOld.CONTENT_POI:
 			if (!(this.pullUpContent == id)) {
-				
+
 				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
 			}
 
 			break;
 		case PullUpViewOld.CONTENT_SEARCH:
 
 			if (!(this.pullUpContent == id)) {
-				
+
 				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
 			}
 
 			break;
 		case PullUpViewOld.CONTENT_OPTION:
 
 			if (!(this.pullUpContent == id)) {
-				
+
 				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
 			}
 
 			break;
 		default:
 			pullUpContent = -1;
+			if (this.getY() == 0) {
+				this.pullDown();
+			}
 			break;
 		}
 
 	}
-	
-	private void pullUp(){
+
+	private void pullUp() {
 		this.setY(0);
-		  TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
-				  nullSize, 0);          //  new TranslateAnimation(xFrom,xTo, yFrom,yTo)
-		    animation.setDuration(ANIMATION_DURATION);  // animation duration 
-		    //animation.setRepeatCount(5);  // animation repeat count
-		   // animation.setRepeatMode(2);   // repeat animation (left to right, right to left )
-		    //animation.setFillAfter(true);      
+		TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+				nullSize, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+		animation.setDuration(ANIMATION_DURATION); // animation duration
+		// animation.setRepeatCount(5); // animation repeat count
+		// animation.setRepeatMode(2); // repeat animation (left to right, right
+		// to left )
+		// animation.setFillAfter(true);
 
-		    this.startAnimation(animation);  // start animation
-		    //animation.setAnimationListener(new RegulatorAnimationListener(h));
+		this.startAnimation(animation); // start animation
+		// animation.setAnimationListener(new RegulatorAnimationListener(h));
 	}
 
-	private void pullDown(){
-		  TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
-				  0, nullSize);          //  new TranslateAnimation(xFrom,xTo, yFrom,yTo)
-		    animation.setDuration(ANIMATION_DURATION);  // animation duration 
-			 // this.setY(nullSize);
-		    //animation.setRepeatCount(5);  // animation repeat count
-		   // animation.setRepeatMode(2);   // repeat animation (left to right, right to left )
-		    //animation.setFillAfter(true);      
+	private void pullDown() {
+		TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f, 0,
+				nullSize); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+		animation.setDuration(ANIMATION_DURATION); // animation duration
+		// this.setY(nullSize);
+		// animation.setRepeatCount(5); // animation repeat count
+		// animation.setRepeatMode(2); // repeat animation (left to right, right
+		// to left )
+		// animation.setFillAfter(true);
 
-		    this.startAnimation(animation);  // start animation
-		    animation.setAnimationListener(new RegulatorAnimationListener(nullSize));
+		this.startAnimation(animation); // start animation
+		animation
+				.setAnimationListener(new RegulatorAnimationListener(nullSize));
 	}
 
-	private class StaticTouchListener implements OnTouchListener{
+	private class StaticTouchListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 
 			int action = event.getAction();
 			if (action == MotionEvent.ACTION_DOWN) {
-				int id = Integer.parseInt(view.getTag()
-						.toString());
+				int id = Integer.parseInt(view.getTag().toString());
 				changeView(id);
-				if(getY() == 0){
-					pullDown();
-				} else {
+				if (getY() != 0) {
 					pullUp();
 				}
 				return false;
 			}
 			return false;
 		}
-		
+
 	}
+
 	/**
 	 * Implements the Animation listener of the transaction of the pullupview
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class RegulatorAnimationListener implements AnimationListener {
 
@@ -320,18 +341,15 @@ public class PullUpView extends RelativeLayout {
 			this.height = height;
 		}
 
-
 		public void onAnimationEnd(Animation anim) {
 			setY(height);
 			clearAnimation();
 		}
 
-
 		public void onAnimationRepeat(Animation arg0) {
 			Log.d(TAG, "Repeat Animation");
 
 		}
-
 
 		public void onAnimationStart(Animation arg0) {
 			Log.d(TAG, "Repeat Animation");
