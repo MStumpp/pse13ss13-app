@@ -37,7 +37,7 @@ public class GeometryProcessor {
     /**
      * MAX_NUMBER_CALLS.
      */
-    private final static int MAX_NUMBER_CALLS = 15000;
+    private final static int MAX_NUMBER_CALLS = 25000;
 
 
     /**
@@ -100,21 +100,17 @@ public class GeometryProcessor {
         if (search == null)
             throw new IllegalArgumentException("geometrizable must not be null");
 
-        logger.info("getNearestGeometrizable:");
         Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(search, constraint));
 
         if (future.isCancelled()) {
-            logger.info("future.isCancelled()");
             throw new GeometryComputationNoSlotsException("no slots available");
         }
 
         try {
             return future.get();
         } catch (InterruptedException e) {
-            logger.info("InterruptedException: " + e.toString());
             throw new GeometryProcessorException(e.getMessage());
         } catch (ExecutionException e) {
-            logger.info("ExecutionException: " + e.toString());
             throw new GeometryProcessorException(e.getMessage());
         }
     }
@@ -148,7 +144,6 @@ public class GeometryProcessor {
 
         @Override
         public Thread newThread(Runnable r) {
-            logger.info("newThread:");
             if (geometryComputerQueue.isEmpty())
                 return null;
             Thread t = new ThreadCustom(group, r,
@@ -321,8 +316,6 @@ public class GeometryProcessor {
          */
         public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
                 throws GeometryProcessorException {
-
-            logger.info("getNearestGeometrizable:");
 
             long startTime = System.currentTimeMillis();
 

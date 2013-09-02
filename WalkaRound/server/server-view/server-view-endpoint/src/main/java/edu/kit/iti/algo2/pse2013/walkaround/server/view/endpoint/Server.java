@@ -434,21 +434,15 @@ public class Server {
                 vertex = (Vertex) GeometryProcessorVertex.getInstance().getNearestGeometrizable(
                         new GeometrySearch(new double[]{coordinate.getLatitude(), coordinate.getLongitude()}));
             } catch (InstantiationException e) {
-                logger.info("InstantiationException: " + e.toString());
                 return nearestCoordinate;
             } catch (GeometryProcessorException e) {
-                logger.info("GeometryProcessorException: " + e.toString());
                 return nearestCoordinate;
             } catch (GeometryComputationNoSlotsException e) {
-                logger.info("GeometryComputationNoSlotsException: " + e.toString());
                 return nearestCoordinate;
             }
 
             if (vertex == null) {
-                logger.info("getNearestVertex: vertex == null");
                 return nearestCoordinate;
-            } else {
-                logger.info("getNearestVertex: vertex != null");
             }
 
             nearestCoordinate = new Coordinate(vertex.getLatitude(), vertex.getLongitude(), null);

@@ -53,12 +53,12 @@ public class Initialization implements ServletContextListener {
 
         // set up GeometryProcessorEdge
         GeometryDataIO vertices = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()), 1);
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(graphDataIO.getVertices()));
         GeometryProcessorVertex.init(vertices, 2);
 
         // set up GeometryProcessorPOI
         GeometryDataIO pois = GeometryDataPreprocessor.
-                preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()), 1);
+                preprocessGeometryDataIO(new ArrayList<Geometrizable>(locationDataIO.getPOIs()));
         GeometryProcessorPOI.init(pois, 2);
 
         try {

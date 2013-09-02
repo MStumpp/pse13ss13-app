@@ -175,11 +175,11 @@ public class GeometryDataPreprocessor {
 //            }
         }
 
-        treeSet.clear();
-        treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+        //treeSet.clear();
+        //treeSet.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
-        //treeMultiset.clear();
-        //treeMultiset.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
+        treeMultiset.clear();
+        treeMultiset.addAll(Arrays.asList(Arrays.copyOfRange(data[dim], start, median+1)));
 
         Geometrizable[] currentBackupArray;
         int leftIndex;
@@ -192,10 +192,10 @@ public class GeometryDataPreprocessor {
             leftIndex = start;
             rightIndex = median+1;
             for (Geometrizable geometrizable : currentBackupArray) {
-                if (treeSet.contains(geometrizable)) {
-                    treeSet.remove(geometrizable);
-                //if (treeMultiset.contains(geometrizable)) {
-                //    treeMultiset.remove(geometrizable);
+                //if (treeSet.contains(geometrizable)) {
+                //    treeSet.remove(geometrizable);
+                if (treeMultiset.contains(geometrizable)) {
+                    treeMultiset.remove(geometrizable);
                     data[i][leftIndex] = geometrizable;
                     leftIndex += 1;
                 } else {

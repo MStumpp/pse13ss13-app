@@ -45,7 +45,7 @@ public class RoundtripProcessor {
     /**
      * Maximal Epsilon.
      */
-    private final static double MAXIMAL_EPS = 0.1;
+    private final static double MAXIMAL_EPS = 0.2;
 
 
     /**
