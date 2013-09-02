@@ -37,7 +37,7 @@ public class GeometryProcessor {
     /**
      * MAX_NUMBER_CALLS.
      */
-    private final static int MAX_NUMBER_CALLS = 25000;
+    private final static int MAX_NUMBER_CALLS = 100000;
 
 
     /**
