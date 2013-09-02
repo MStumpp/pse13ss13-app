@@ -1,5 +1,17 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
+import android.app.Activity;
+import android.location.Location;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpViewListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
@@ -10,11 +22,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
@@ -22,24 +32,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.graphics.Point;
-import android.location.Location;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class MapController extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites {
@@ -61,7 +53,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 	private RouteView routeView;
 	private ImageView user;
 	private int userDiff;
-	
+
 	private WaypointView waypointView;
 
 	private PullUpView pullUpview;
@@ -112,17 +104,17 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 		PositionManager.getInstance().registerPositionListener(this);
 		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
-		
+
 		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
-		
+
 		mapView.computeParams();
 		tileFetcher.requestTiles(coorBox, mapView);
 		pullUpview = (PullUpView) this.findViewById(R.id.pullUpView);
 		pullUpview.bringToFront();
-		
+
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
-		
+
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 	}
@@ -200,14 +192,11 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
-
 		userCoordinate = new Coordinate(androidLocation.getLatitude(),
 				androidLocation.getLongitude());
-
 		updateUser();
-
 	}
-	
+
 	private void updateUser() {
 		double lon = -coorBox.getCenter().getLongitude()
 				+ userCoordinate.getLongitude();
@@ -220,12 +209,12 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 		float y = CoordinateUtility.convertDegreesToPixels(lat,
 				coorBox.getLevelOfDetail(),
-				CoordinateUtility.DIRECTION_LATITUDE);
+				CoordinateUtility.DIRECTION_LATITUDE) * 0.75f;
 
 		Log.d("UserPos", " x: " + x + " y: " + y);
 
-		x = coorBox.getDisplaySize().x / 2 + x;
-		y = coorBox.getDisplaySize().y / 2 + y;
+		x += coorBox.getDisplaySize().x / 2;
+		y += coorBox.getDisplaySize().y / 2;
 
 		Log.d("UserPos", " x: " + x + " y: " + y);
 
