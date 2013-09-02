@@ -78,12 +78,12 @@ public class Search extends RelativeLayout {
 		main.addView(tabHost, tabHostParams);
 
 		waypointButton = new Button(context, attrs);
-		waypointButton.setText("Addressen");
-		waypointButton.setOnTouchListener(new ToogleTabListener());
+		waypointButton.setText("Adressen");
+		waypointButton.setOnTouchListener(new AddressSideTabListener());
 
 		routeButton = new Button(context, attrs);
 		routeButton.setText("POI");
-		routeButton.setOnTouchListener(new ToogleTabListener());
+		routeButton.setOnTouchListener(new POISideTabListener());
 
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -260,15 +260,13 @@ public class Search extends RelativeLayout {
 		freeText.setText("FreeText");
 	}
 
-	private class ToogleTabListener implements OnTouchListener {
+	private class POISideTabListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
 			if (action == MotionEvent.ACTION_UP) {
-				if (!view.isSelected()) {
-					toogleTab();
-				}
+				setTab(true);
 				isResult = false;
 				toogleResult();
 			}
@@ -277,7 +275,23 @@ public class Search extends RelativeLayout {
 
 	}
 
-	private void toogleTab() {
+	private class AddressSideTabListener implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+			if (action == MotionEvent.ACTION_UP) {
+				setTab(false);
+				isResult = false;
+				toogleResult();
+			}
+			return false;
+		}
+
+	}
+
+	private void setTab(boolean b) {
+		selected = b;
 		if (selected) {
 			waypointButton.setSelected(false);
 			waypointButton.setTextColor(Color.BLACK);
@@ -285,7 +299,6 @@ public class Search extends RelativeLayout {
 			routeButton.setTextColor(Color.RED);
 			poiSide.setVisibility(VISIBLE);
 			addressSide.setVisibility(GONE);
-			selected = false;
 		} else {
 			waypointButton.setSelected(true);
 			waypointButton.setTextColor(Color.RED);
@@ -293,7 +306,6 @@ public class Search extends RelativeLayout {
 			routeButton.setTextColor(Color.BLACK);
 			poiSide.setVisibility(GONE);
 			addressSide.setVisibility(VISIBLE);
-			selected = true;
 		}
 	}
 
@@ -419,7 +431,7 @@ public class Search extends RelativeLayout {
 				.create();
 		alertDialog.setTitle("Sorry..");
 		alertDialog
-				.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n " + text + "\n übereinstimmenden Orte gefunde!");
+				.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n \n" + text + "\n \n übereinstimmenden Orte gefunde!");
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
