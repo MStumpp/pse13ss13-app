@@ -442,6 +442,7 @@ public class Server {
             }
 
             if (vertex == null) {
+                logger.info("getNearestVertex: vertex == null");
                 return nearestCoordinate;
             }
 
