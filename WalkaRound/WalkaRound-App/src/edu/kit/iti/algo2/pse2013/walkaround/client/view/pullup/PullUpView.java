@@ -7,7 +7,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Favorite;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.FavoriteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search;
 import android.app.FragmentTransaction;
@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-public class PullUpView extends RelativeLayout implements GoToMapListener, FavoriteListener {
+public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
 
 	Point size;
 	private ImageView routing;
@@ -217,6 +217,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, Favor
 		regulator.setOnTouchListener(new StaticTouchListener());
 
 		routingMenu.registerGoToMapListener(this);
+		routingMenu.registerFavoriteListener(this);
 	}
 
 	int pullUpContent = -1;
@@ -456,7 +457,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, Favor
 	}
 
 	@Override
-	public void addFavorite() {
+	public void goToFavorite() {
 		// TODO add Favorite
 		this.changeView(CONTENT_FAVORITE);
 	}

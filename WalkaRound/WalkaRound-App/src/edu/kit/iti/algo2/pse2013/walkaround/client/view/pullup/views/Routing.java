@@ -391,19 +391,19 @@ public class Routing extends RelativeLayout {
 
 	// Favorite
 
-	LinkedList<FavoriteListener> fav = new LinkedList<FavoriteListener>();
+	LinkedList<GoToFavoriteListener> fav = new LinkedList<GoToFavoriteListener>();
 
 	private void notifyFavoriteListener() {
-		for (FavoriteListener l : fav) {
-			l.addFavorite();
+		for (GoToFavoriteListener l : fav) {
+			l.goToFavorite();
 		}
 	}
 
-	public void registerFavoriteListener(FavoriteListener listener) {
+	public void registerFavoriteListener(GoToFavoriteListener listener) {
 		fav.add(listener);
 	}
 
-	public interface FavoriteListener {
-		public void addFavorite();
+	public interface GoToFavoriteListener {
+		public void goToFavorite();
 	}
 }
