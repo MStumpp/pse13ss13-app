@@ -444,6 +444,8 @@ public class Server {
             if (vertex == null) {
                 logger.info("getNearestVertex: vertex == null");
                 return nearestCoordinate;
+            } else {
+                logger.info("getNearestVertex: vertex != null");
             }
 
             nearestCoordinate = new Coordinate(vertex.getLatitude(), vertex.getLongitude(), null);
