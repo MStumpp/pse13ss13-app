@@ -2,7 +2,7 @@
 <resources>
     <string name="address">address</string>
     <string name="current" >aktuell</string>
-    <string name="Route" >Strecke</string>
+    <string name="route" >Strecke</string>
     <string name="current_route" >Aktuelle Route</string>
     <string name="reset" >Reset</string>
     <string name="add_favorite" >Favorite hinzufügen</string>
@@ -11,26 +11,22 @@
     <string name="zip_code" >PLZ</string>
     <string name="city" >Stadt</string>
     <string name="street" >Straße</string>
-    <string name="number" >Nummer</string>
+    <string name="number" >Hausnummer</string>
     <string name="start_search" >Los</string>
     <string name="favorite" >Favoriten</string>
-    <string name="meter" >Meter</string>
     <string name="compute_roundtrip" >Rundkurs berechnen</string>
     <string name="profiles" >Profile</string>
     <string name="clubbing" >Bartour</string>
-    <string name="shopping" >Shopping</string>
-    <string name="sightseeing" >Sightseeing</string>
     <string name="jogging" >Joggen</string>
-    <string name="length" >Länge:</string>
-    <string name="pois" >POIs</string>
+    <string name="length" >Länge</string>
     <string name="favorite_name" >Name des Favoriten</string>
     <string name="search" >Suche</string>
-    <string name="bars_and_pubs" >Bars und Pubs</string>
+    <string name="bars_and_pubs" >Bars &amp; Pubs</string>
     <string name="cinema" >Kinos</string>
-    <string name="clubs_and_nightclubs" >Clubs und Nachtclubs</string>
-    <string name="fast_food" >Fast-Food</string>
+    <string name="clubs_and_nightclubs" >Clubs &amp; Nachtclubs</string>
+    <string name="fast_food" >Fast Food</string>
     <string name="food" >Essen</string>
-    <string name="museum" >Museums</string>
+    <string name="museum" >Museen</string>
     <string name="public_transportation" >Öffentliche Verkehrsmittel</string>
     <string name="shop" >Einkaufsläden</string>
     <string name="sleeping_accomodation" >Übernachtungsmöglichkeiten</string>
@@ -42,4 +38,5 @@
     <string name="suggestions" >Vorschläge</string>
     <string name="delete_dialog" >Willst du das wirklich löschen?</string>
     <string name="delete_dialog_header" >Löschen</string>
+    <string name="action_settings" >Einstellungen</string>
 </resources>
