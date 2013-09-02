@@ -76,7 +76,7 @@ public class PullUpView extends RelativeLayout {
 		star.setImageDrawable(context.getResources().getDrawable(
 				R.drawable.favorite));
 		roundtrip.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.options));
+				R.drawable.rundkurs));
 		poi.setImageDrawable(context.getResources().getDrawable(R.drawable.flag));
 		search.setImageDrawable(context.getResources().getDrawable(R.drawable.loupe));
 
@@ -159,16 +159,11 @@ public class PullUpView extends RelativeLayout {
 		regulator.setRotation(90);
 		regulator.setTag(-1);
 		regulator.setId(5);
-		regulator.setScaleType(ImageView.ScaleType.FIT_XY);
+		search.setScaleType(ImageView.ScaleType.FIT_XY);
 		
 		RelativeLayout.LayoutParams paramsRegulator = new RelativeLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		paramsRegulator.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
-				RelativeLayout.TRUE);
-		paramsRegulator.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
-				RelativeLayout.TRUE);
 		paramsRegulator.addRule(RelativeLayout.BELOW, 1);
-		paramsRegulator.height = size.x / 15;
 
 		this.addView(regulator, paramsRegulator);
 		
