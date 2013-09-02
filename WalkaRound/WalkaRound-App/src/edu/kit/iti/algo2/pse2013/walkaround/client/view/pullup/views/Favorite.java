@@ -45,7 +45,7 @@ public class Favorite extends RelativeLayout {
 	private LinearLayout tabHost;
 	private Button waypointButton;
 	private Button routeButton;
-	private static int routeNameId = R.string.Route;
+	private static int routeNameId = R.string.route;
 	private static String waypointName = "Wegpunkte";
 	private boolean selected = true;
 	private int width;

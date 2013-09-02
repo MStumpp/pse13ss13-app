@@ -1,13 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +10,10 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 public class RouteView extends View {
 
