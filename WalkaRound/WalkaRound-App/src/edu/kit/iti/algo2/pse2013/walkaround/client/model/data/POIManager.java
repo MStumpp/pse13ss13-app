@@ -93,6 +93,20 @@ public class POIManager {
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
 	 */
+	public static POIManager getInstance(Context context) {
+		if (instance == null) {
+			POIManager.initialize(context);
+		}
+		return POIManager.getInstance();
+	}
+	
+	/**
+	 * Singleton getInstance method.
+	 *
+	 * @param locationDataIO
+	 *            LocationDataIO object
+	 * @return an instance of the POIManager
+	 */
 	public static POIManager getInstance() {
 		if (instance == null) {
 			instance = new POIManager();

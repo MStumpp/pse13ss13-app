@@ -92,6 +92,14 @@ public class FavoriteManager {
 		return instance;
 	}
 
+	public static FavoriteManager getInstance(Context context) {
+		if (instance == null) {
+			FavoriteManager.initialize(context);
+		}
+		return FavoriteManager.getInstance();
+		
+	}
+
 	private static void loadInstanceFromFile() throws IOException {
 		BufferedInputStream bis = new BufferedInputStream(applicationContext.openFileInput(FILENAME));
 		SaveFavorite saveFav = Protos.SaveFavorite.parseFrom(bis);
@@ -296,4 +304,5 @@ public class FavoriteManager {
 			Log.e(TAG, "The file " + FILENAME + " could not be read successfully!", e);
 		}
 	}
+
 }
