@@ -103,14 +103,18 @@ public class GeometryProcessor {
         logger.info("getNearestGeometrizable:");
         Future<Geometrizable> future = executor.submit(new GeometryNearestGeometrizableTask(search, constraint));
 
-        if (future.isCancelled())
+        if (future.isCancelled()) {
+            logger.info("future.isCancelled()");
             throw new GeometryComputationNoSlotsException("no slots available");
+        }
 
         try {
             return future.get();
         } catch (InterruptedException e) {
+            logger.info("InterruptedException: " + e.toString());
             throw new GeometryProcessorException(e.getMessage());
         } catch (ExecutionException e) {
+            logger.info("ExecutionException: " + e.toString());
             throw new GeometryProcessorException(e.getMessage());
         }
     }
@@ -144,6 +148,7 @@ public class GeometryProcessor {
 
         @Override
         public Thread newThread(Runnable r) {
+            logger.info("newThread:");
             if (geometryComputerQueue.isEmpty())
                 return null;
             Thread t = new ThreadCustom(group, r,
@@ -317,6 +322,8 @@ public class GeometryProcessor {
         public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
                 throws GeometryProcessorException {
 
+            logger.info("getNearestGeometrizable:");
+
             long startTime = System.currentTimeMillis();
 
             Geometrizable nearestGeometrizable = search(root, search, constraint);
@@ -324,7 +331,7 @@ public class GeometryProcessor {
             long stopTime = System.currentTimeMillis();
             long runTime = stopTime - startTime;
 
-            logger.info("getNearestGeometrizable: Start: Run time: " + runTime);
+            logger.info("getNearestGeometrizable: Run time: " + runTime);
 
             return nearestGeometrizable;
         }
