@@ -238,8 +238,8 @@ public class Routing extends RelativeLayout {
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
 			
-			if(action == MotionEvent.ACTION_DOWN) {
-				int id = Integer.parseInt(view.getTag().toString());
+			if(action == MotionEvent.ACTION_UP) {
+				id = Integer.parseInt(view.getTag().toString());
 				this.alert();
 			}
 			

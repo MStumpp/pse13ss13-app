@@ -6,6 +6,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtilit
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Favorite;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
@@ -219,6 +220,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		routingMenu.registerGoToMapListener(this);
 		routingMenu.registerFavoriteListener(this);
 		searchMenu.registerGoToMapListener(this);
+		roundtripMenu.registerGoToMapListener(this);
 	}
 
 	int pullUpContent = -1;
@@ -465,5 +467,9 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	public void updateFavorite() {
 		this.favoriteMenu.updateFavorites();
+	}
+	
+	public void registerComputeRoundtripListener(ComputeRoundtripListener listener){
+		roundtripMenu.registerComputeRoundtripListener(listener);
 	}
 }
