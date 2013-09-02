@@ -423,6 +423,8 @@ public class Server {
         if (coordinate == null)
             return null;
 
+        logger.info("getNearestVertex: unprojected coordinate: " + coordinate.toString());
+
         // project coordinate
         Coordinate nearestCoordinate = coordinate;
 
@@ -468,6 +470,11 @@ public class Server {
 
             nearestCoordinate = new Coordinate(point[0], point[1], null);
         }
+
+        if (nearestCoordinate != null)
+            logger.info("getNearestVertex: projected coordinate: " + nearestCoordinate.toString());
+        else
+            logger.info("getNearestVertex: projected coordinate: null");
 
         return nearestCoordinate;
     }
