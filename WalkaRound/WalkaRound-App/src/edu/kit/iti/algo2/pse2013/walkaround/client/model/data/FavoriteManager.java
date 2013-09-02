@@ -187,6 +187,7 @@ public class FavoriteManager {
 	public boolean deleteRoute(String name) {
 		RouteInfo result = savedRoutes.remove(name);
 		this.save();
+		this.notifyListener();
 		return result != null;
 	}
 
@@ -202,6 +203,7 @@ public class FavoriteManager {
 	public boolean deleteLocation(String name) {
 		Location result = savedLocations.remove(name);
 		this.save();
+		this.notifyListener();
 		return result != null;
 	}
 

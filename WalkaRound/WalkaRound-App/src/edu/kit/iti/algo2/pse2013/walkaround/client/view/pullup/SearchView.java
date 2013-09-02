@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Fragment;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -131,6 +132,8 @@ public class SearchView extends Fragment {
 
 		goButton.setOnTouchListener(new GoListener());
 		query.setOnEditorActionListener(new QueryActionListener());
+		query.setInputType(InputType.TYPE_CLASS_TEXT);
+		query.setImeActionLabel("Go", KeyEvent.KEYCODE_ENTER);
 
 		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 	}

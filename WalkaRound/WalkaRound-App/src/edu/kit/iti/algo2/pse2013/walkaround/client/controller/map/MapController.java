@@ -25,6 +25,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -119,6 +122,9 @@ public class MapController extends Activity implements HeadUpViewListener,
 		
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
+		
+		getWindow().setSoftInputMode(
+			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {

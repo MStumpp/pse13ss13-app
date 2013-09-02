@@ -1,47 +1,59 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TabHost;
-import android.widget.TabHost.TabContentFactory;
-import android.widget.TabHost.TabSpec;
-import android.widget.TabWidget;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class Search extends RelativeLayout {
 
-	private LinearLayout routeSide;
-	private LinearLayout waypointSide;
+	private static final String TAG = Search.class.getSimpleName();
+
+	private LinearLayout poiSide;
+	private LinearLayout addressSide;
 	private LinearLayout main;
 	private LinearLayout tabHost;
 	private Button waypointButton;
 	private Button routeButton;
-	private static int routeNameId = R.string.Route;
-	private static String waypointName = "Wegpunkte";
 	private boolean selected = true;
+	private EditText zipEdit;
+	private EditText cityEdit;
+	private EditText streetEdit;
+	private EditText numberEdit;
+	private EditText freeText;
+
+	private LinearLayout result;
+	private int width;
 
 	public Search(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
-		Point size = BoundingBox.getInstance(context).getDisplaySize();
-		
 
-		
+		Point size = BoundingBox.getInstance(context).getDisplaySize();
+
+		width = size.x;
+
 		main = new LinearLayout(context, attrs);
 		main.setOrientation(LinearLayout.VERTICAL);
-		
+
 		LinearLayout.LayoutParams mainParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
@@ -52,90 +64,321 @@ public class Search extends RelativeLayout {
 		LinearLayout.LayoutParams tabHostParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		tabHostParams.width = size.x;
-		
+
 		main.addView(tabHost, tabHostParams);
-		
+
 		waypointButton = new Button(context, attrs);
-		waypointButton.setText("Orte");
+		waypointButton.setText("Addressen");
 		waypointButton.setOnTouchListener(new ToogleTabListener());
-		
+
 		routeButton = new Button(context, attrs);
-		routeButton.setText("Routen");
+		routeButton.setText("POI");
 		routeButton.setOnTouchListener(new ToogleTabListener());
-		
+
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		waypointButtontParams.height = size.y/10;
-		waypointButtontParams.width = size.x/2;
+		waypointButtontParams.height = size.y / 10;
+		waypointButtontParams.width = size.x / 2;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
-		
+
 		LinearLayout.LayoutParams routeButtontParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		routeButtontParams.height = size.y/10;
-		routeButtontParams.width = size.x/2;
+		routeButtontParams.height = size.y / 10;
+		routeButtontParams.width = size.x / 2;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
-		
+
 		tabHost.addView(waypointButton, waypointButtontParams);
 		tabHost.addView(routeButton, routeButtontParams);
-		
-		routeSide = new LinearLayout(context,attrs);
-		routeSide.setOrientation(LinearLayout.VERTICAL);
-		routeSide.setVisibility(GONE);
 
-		waypointSide = new LinearLayout(context,attrs);
-		waypointSide.setOrientation(LinearLayout.VERTICAL);
-		waypointSide.setVisibility(VISIBLE);
+		poiSide = new LinearLayout(context, attrs);
+		poiSide.setOrientation(LinearLayout.VERTICAL);
+		poiSide.setVisibility(GONE);
+
+		addressSide = new LinearLayout(context, attrs);
+		addressSide.setOrientation(LinearLayout.VERTICAL);
+		addressSide.setVisibility(VISIBLE);
 		waypointButton.setTextColor(Color.RED);
-		
-		routeSide.setBackgroundColor(Color.RED);
 
 		LinearLayout.LayoutParams routeSiedeParam = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		LinearLayout.LayoutParams waypointSiedeParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		
-		main.addView(routeSide, routeSiedeParam);
-		main.addView(waypointSide, waypointSiedeParam);
-		
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
+		main.addView(poiSide, routeSiedeParam);
+		main.addView(addressSide, waypointSiedeParam);
+
+		LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+		LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		textParam.width = size.x / 2;
+		textParam.height = size.y / 15;
+
+		LinearLayout.LayoutParams editParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		editParam.width = size.x / 2;
+		textParam.height = size.y / 15;
+
+		// Address
+
+		// Zip
+		LinearLayout zipLayout = new LinearLayout(context);
+		zipLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+		TextView zip = new TextView(context);
+		zip.setText("ZIP");
+		zip.setTextSize(size.x / 21);
+		zip.setGravity(Gravity.CENTER);
+
+		zipEdit = new EditText(context);
+		zipEdit.setGravity(Gravity.CENTER);
+
+		zipLayout.addView(zip, textParam);
+		zipLayout.addView(zipEdit, editParam);
+
+		addressSide.addView(zipLayout, layoutParam);
+
+		// City
+		LinearLayout cityLayout = new LinearLayout(context);
+		cityLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+		TextView city = new TextView(context);
+		city.setText("City");
+		city.setTextSize(size.x / 21);
+		city.setGravity(Gravity.CENTER);
+
+		cityEdit = new EditText(context);
+		cityEdit.setGravity(Gravity.CENTER);
+
+		cityLayout.addView(city, textParam);
+		cityLayout.addView(cityEdit, editParam);
+
+		addressSide.addView(cityLayout, layoutParam);
+
+		// Street
+		LinearLayout streetLayout = new LinearLayout(context);
+		streetLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+		TextView street = new TextView(context);
+		street.setText("Street");
+		street.setTextSize(size.x / 21);
+		street.setGravity(Gravity.CENTER);
+
+		streetEdit = new EditText(context);
+		streetEdit.setGravity(Gravity.CENTER);
+
+		streetLayout.addView(street, textParam);
+		streetLayout.addView(streetEdit, editParam);
+
+		addressSide.addView(streetLayout, layoutParam);
+
+		// Street
+		LinearLayout numberLayout = new LinearLayout(context);
+		numberLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+		TextView number = new TextView(context);
+		number.setText("Number");
+		number.setTextSize(size.x / 21);
+		number.setGravity(Gravity.CENTER);
+
+		numberEdit = new EditText(context);
+		numberEdit.setGravity(Gravity.CENTER);
+
+		numberLayout.addView(number, textParam);
+		numberLayout.addView(numberEdit, editParam);
+
+		addressSide.addView(numberLayout, layoutParam);
+
+		// Go
+
+		LinearLayout.LayoutParams goParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		goParam.width = size.x;
+		goParam.height = size.y / 15;
+		goParam.topMargin = 10;
+
+		Button go = new Button(context, attrs);
+		go.setGravity(Gravity.CENTER);
+		go.setText("Go");
+
+		go.setOnTouchListener(new GoAdressListener());
+
+		addressSide.addView(go, goParam);
+
+		// POI
+
+		LinearLayout.LayoutParams freeParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		freeParam.height = size.y / 15;
+		freeParam.width = width;
+
+		freeText = new EditText(context);
+		freeText.setGravity(Gravity.CENTER);
+		freeText.setOnEditorActionListener(new QueryActionListener());
+
+		poiSide.addView(freeText, freeParam);
+
+		// Result
+		result = new LinearLayout(context, attrs);
+		result.setVisibility(GONE);
+
+		main.addView(result);
+
+		zipEdit.setText("76185");
+		cityEdit.setText("Karlsruhe");
+		streetEdit.setText("Yorckstr.");
+		numberEdit.setText("48");
+		freeText.setText("FreeText");
 	}
-	
-	private class ToogleTabListener implements OnTouchListener{
+
+	private class ToogleTabListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_DOWN) {
-				if(!view.isSelected()){
+			if (action == MotionEvent.ACTION_UP) {
+				if (!view.isSelected()) {
 					toogleTab();
 				}
+				isResult = false;
+				toogleResult();
 			}
 			return false;
 		}
-		
+
 	}
-	
-	private void toogleTab(){
-		if(selected){
+
+	private void toogleTab() {
+		if (selected) {
 			waypointButton.setSelected(false);
 			waypointButton.setTextColor(Color.BLACK);
 			routeButton.setSelected(true);
 			routeButton.setTextColor(Color.RED);
-			routeSide.setVisibility(VISIBLE);
-			waypointSide.setVisibility(GONE);
+			poiSide.setVisibility(VISIBLE);
+			addressSide.setVisibility(GONE);
 			selected = false;
 		} else {
 			waypointButton.setSelected(true);
 			waypointButton.setTextColor(Color.RED);
 			routeButton.setSelected(false);
 			routeButton.setTextColor(Color.BLACK);
-			routeSide.setVisibility(GONE);
-			waypointSide.setVisibility(VISIBLE);
+			poiSide.setVisibility(GONE);
+			addressSide.setVisibility(VISIBLE);
 			selected = true;
 		}
+	}
+
+	boolean isResult = false;
+
+	private void toogleResult() {
+		if (isResult) {
+			poiSide.setVisibility(GONE);
+			addressSide.setVisibility(GONE);
+			result.setVisibility(View.VISIBLE);
+		} else {
+			result.setVisibility(View.GONE);
+			result.removeAllViews();
+		}
+	}
+
+	private class GoAdressListener implements OnTouchListener {
+
+		public boolean onTouch(View v, MotionEvent event) {
+
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				List<Location> locations;
+				Log.d(TAG, "Go wurde gedrückt");
+				Log.d(TAG, "" + zipEdit.getText().toString());
+
+				String zip = zipEdit.getText().toString().replaceAll(" ", null);
+				String city = cityEdit.getText().toString()
+						.replaceAll(" ", null);
+				String street = streetEdit.getText().toString()
+						.replaceAll(" ", null);
+				String number = numberEdit.getText().toString()
+						.replaceAll(" ", null);
+
+				if (zip.isEmpty()) {
+					Address addr = new Address(street, number, city, 0);
+					locations = POIManager.getInstance(getContext())
+							.searchPOIsByAddress(addr);
+				} else {
+					Address addr = new Address(street, number, city,
+							(Integer.parseInt(zip)));
+					locations = POIManager.getInstance(getContext())
+							.searchPOIsByAddress(addr);
+				}
+				// TODO: bei keinem ergebnis meldung anzeigen
+				// TODO: bei ergebnis ort anzeigen
+
+				// Resultat anzeigen
+				isResult = true;
+				toogleResult();
+
+				for (Location value : locations) {
+					TextView location = new TextView(getContext());
+					Log.d("routingView: ",
+							" " + value.getName() + " " + value.getId());
+					location.setText(value.getAddress().toString());
+					// location.setOnTouchListener(new locationTouch(value,
+					// location));
+					// TODO TextSize relativieren
+					location.setTextSize(30);
+					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT);
+					myParams.topMargin = 10;
+					myParams.width = width;
+					location.setBackgroundColor(Color.GRAY);
+					result.addView(location, myParams);
+				}
+			}
+			return false;
+		}
+	}
+
+	private class QueryActionListener implements OnEditorActionListener {
+
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			Log.d(TAG, "Eine query wurde eingegeben");
+
+			int action = event.getAction();
+
+			if (action == KeyEvent.KEYCODE_ENTER) {
+				String checkString = v.getText().toString().replaceAll(" ", "");
+				if (!checkString.isEmpty()) {
+
+					List<POI> poiS = POIManager.getInstance(getContext())
+							.searchPOIsByQuery(freeText.getText().toString());
+
+					isResult = true;
+					toogleResult();
+
+					for (POI value : poiS) {
+						TextView poi = new TextView(getContext());
+						Log.d("routingView: ", " " + value.getName() + " "
+								+ value.getId());
+						poi.setText(value.getName());
+						// poi.setOnTouchListener(new poiTouch(value, poi));
+						// TODO TextSize relativieren
+						poi.setTextSize(30);
+						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+						myParams.topMargin = 10;
+						myParams.width = width;
+						poi.setBackgroundColor(Color.GRAY);
+						result.addView(poi, myParams);
+					}
+				}
+			}
+			return false;
+		}
+
 	}
 
 }

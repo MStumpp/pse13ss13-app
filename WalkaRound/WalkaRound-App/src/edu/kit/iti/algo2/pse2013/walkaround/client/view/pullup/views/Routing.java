@@ -232,11 +232,37 @@ public class Routing extends RelativeLayout {
 
 	private class DeleteListener implements OnTouchListener {
 
+		int id;
+		
 		@Override
-		public boolean onTouch(View view, MotionEvent arg1) {
-			int id = Integer.parseInt(view.getTag().toString());
-			RouteController.getInstance().deleteActiveWaypoint(id);
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+			
+			if(action == MotionEvent.ACTION_DOWN) {
+				int id = Integer.parseInt(view.getTag().toString());
+				this.alert();
+			}
+			
 			return false;
+		}
+		
+		public void alert() {
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+					.create();
+			alertDialog.setTitle("Wegpunkt löschen");
+			alertDialog.setMessage("Wirklich löschen?");
+			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							RouteController.getInstance().deleteActiveWaypoint(id);
+						}
+					});
+			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+			alertDialog.show();
 		}
 
 	}

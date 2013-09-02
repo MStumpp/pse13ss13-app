@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -163,14 +164,25 @@ public class Favorite extends RelativeLayout {
 
 	public void updateFavorites() {
 		Log.d(TAG, "updateFavorite");
+		routeSide.removeAllViews();
+		waypointSide.removeAllViews();
+		
 		List<String> location = FavoriteManager.getInstance(getContext())
 				.getNamesOfFavoriteLocations();
 		// Category
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		param.topMargin = 5;
-		param.width = width;
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		param.width = width - height;
 		param.height = height;
+
+		LinearLayout.LayoutParams delParam = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		delParam.height = height;
+		delParam.width = height;
+
+		LinearLayout.LayoutParams lineParam = new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		lineParam.topMargin = 5;
 
 		for (String w : location) {
 			TextView b = new TextView(getContext());
@@ -182,7 +194,18 @@ public class Favorite extends RelativeLayout {
 			b.setSelected(false);
 			b.setGravity(Gravity.CENTER);
 
-			waypointSide.addView(b, param);
+			ImageButton del = new ImageButton(getContext());
+			del.setTag(w);
+			del.setImageResource(R.drawable.delete);
+			del.setScaleType(ImageView.ScaleType.FIT_XY);
+			del.setOnTouchListener(new DeleteWaypointListener());
+			
+			LinearLayout linear = new LinearLayout(getContext());
+			linear.setOrientation(LinearLayout.HORIZONTAL);
+
+			waypointSide.addView(linear, lineParam);
+			linear.addView(b, param);
+			linear.addView(del, delParam);
 		}
 		
 		List<String> routes = FavoriteManager.getInstance(getContext())
@@ -199,7 +222,19 @@ public class Favorite extends RelativeLayout {
 			b.setSelected(false);
 			b.setGravity(Gravity.CENTER);
 
-			routeSide.addView(b, param);
+
+			ImageButton del = new ImageButton(getContext());
+			del.setTag(w);
+			del.setImageResource(R.drawable.delete);
+			del.setScaleType(ImageView.ScaleType.FIT_XY);
+			del.setOnTouchListener(new DeleteRouteListener());
+
+			LinearLayout linear = new LinearLayout(getContext());
+			linear.setOrientation(LinearLayout.HORIZONTAL);
+			
+			routeSide.addView(linear, lineParam);
+			linear.addView(b, param);
+			linear.addView(del, delParam);
 		}
 	}
 	
@@ -210,7 +245,7 @@ public class Favorite extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_DOWN){
+			if(action == MotionEvent.ACTION_UP){
 				this.view = view;
 				this.alert();
 			}
@@ -248,7 +283,7 @@ public class Favorite extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_DOWN){
+			if(action == MotionEvent.ACTION_UP){
 				this.view = view;
 				this.alert();
 			}
@@ -275,5 +310,79 @@ public class Favorite extends RelativeLayout {
 			alertDialog.show();
 		}
 		
+	}
+	
+	private class DeleteRouteListener implements OnTouchListener {
+
+		String id;
+		
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+			
+			if(action == MotionEvent.ACTION_UP) {
+				id = view.getTag().toString();
+				this.alert();
+			}
+			
+			return false;
+		}
+		
+		public void alert() {
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+					.create();
+			alertDialog.setTitle("Route löschen");
+			alertDialog.setMessage(id + " wirklich löschen?");
+			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							FavoriteManager.getInstance(getContext()).deleteRoute(id);
+						}
+					});
+			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+			alertDialog.show();
+		}
+
+	}
+
+	private class DeleteWaypointListener implements OnTouchListener {
+
+		String id;
+		
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+			
+			if(action == MotionEvent.ACTION_UP) {
+				id = view.getTag().toString();
+				this.alert();
+			}
+			
+			return false;
+		}
+		
+		public void alert() {
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+					.create();
+			alertDialog.setTitle("Route löschen");
+			alertDialog.setMessage(id + " wirklich löschen?");
+			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							FavoriteManager.getInstance(getContext()).deleteLocation(id);
+						}
+					});
+			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+			alertDialog.show();
+		}
+
 	}
 }
