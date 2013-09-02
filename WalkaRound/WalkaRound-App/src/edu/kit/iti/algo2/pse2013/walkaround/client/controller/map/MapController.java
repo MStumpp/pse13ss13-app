@@ -5,6 +5,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpView
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
@@ -14,6 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -34,7 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class MapController extends Activity implements HeadUpViewListener,
-		PositionListener {
+		PositionListener, CompassListener, RouteListener {
 
 	private MapView mapView;
 
@@ -53,6 +55,8 @@ public class MapController extends Activity implements HeadUpViewListener,
 	private RouteView routeView;
 	private ImageView user;
 	private int userDiff;
+	
+	private WaypointView waypointView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +104,14 @@ public class MapController extends Activity implements HeadUpViewListener,
 		rl.addView(user, paramUser);
 
 		PositionManager.getInstance().registerPositionListener(this);
+		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
 		
-
+		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
+		
 		mapView.computeParams();
 		tileFetcher.requestTiles(coorBox, mapView);
+		
+		RouteController.getInstance().registerRouteListener(this);
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -120,6 +128,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 			mapView.computeParams();
 			tileFetcher.requestTiles(coorBox, mapView);
 			updateUser();
+			waypointView.updateWaypoint();
 			return true;
 		}
 
@@ -149,6 +158,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		this.coorBox.setLevelOfDetailByADelta(delta);
 		this.mapView.computeParams();
 		this.tileFetcher.requestTiles(coorBox, mapView);
+		waypointView.updateWaypoint();
 	}
 
 	@Override
@@ -166,6 +176,9 @@ public class MapController extends Activity implements HeadUpViewListener,
 			coorBox.setCenter(userCoordinate);
 			mapView.computeParams();
 			tileFetcher.requestTiles(coorBox, mapView);
+			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
+			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
+			waypointView.updateWaypoint();
 		}
 		headUpView.setUserPositionLock(userLock);
 	}
@@ -210,7 +223,23 @@ public class MapController extends Activity implements HeadUpViewListener,
 			coorBox.setCenter(userCoordinate);
 			mapView.computeParams();
 			tileFetcher.requestTiles(coorBox, mapView);
+			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
+			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
 		}
+	}
+
+	@Override
+	public void onCompassChange(float direction) {
+		user.setRotation(direction);
+	}
+
+	@Override
+	public void onRouteChange(RouteInfo currentRoute) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				waypointView.updateWaypoint();
+			}
+		});
 	}
 
 }

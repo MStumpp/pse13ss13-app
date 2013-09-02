@@ -28,6 +28,7 @@ public class RouteView extends View {
 
 	/**
 	 * The stroke of the bitmap
+	 * ungearde Zahl aus genauikeitsgründen
 	 */
 	private int strokeWidth = 8;
 

@@ -16,6 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         
+        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView
+            android:id="@+id/waypointView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        
         <edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView
             android:id="@+id/headUpView"
             android:layout_width="match_parent"
