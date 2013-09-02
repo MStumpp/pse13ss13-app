@@ -3,7 +3,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -22,6 +24,7 @@ import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
@@ -75,12 +78,12 @@ public class Search extends RelativeLayout {
 		main.addView(tabHost, tabHostParams);
 
 		waypointButton = new Button(context, attrs);
-		waypointButton.setText("Addressen");
-		waypointButton.setOnTouchListener(new ToogleTabListener());
+		waypointButton.setText("Adressen");
+		waypointButton.setOnTouchListener(new AddressSideTabListener());
 
 		routeButton = new Button(context, attrs);
 		routeButton.setText("POI");
-		routeButton.setOnTouchListener(new ToogleTabListener());
+		routeButton.setOnTouchListener(new POISideTabListener());
 
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -225,10 +228,8 @@ public class Search extends RelativeLayout {
 
 		freeText = new EditText(context);
 		freeText.setGravity(Gravity.CENTER);
-		freeText.setOnEditorActionListener(new QueryActionListener());
 
 		poiSide.addView(freeText, freeParam);
-
 
 		// Go
 
@@ -245,7 +246,7 @@ public class Search extends RelativeLayout {
 		goFree.setOnTouchListener(new GoQueryListener());
 
 		poiSide.addView(goFree, goFreeParam);
-		
+
 		// Result
 		result = new LinearLayout(context, attrs);
 		result.setVisibility(GONE);
@@ -259,15 +260,13 @@ public class Search extends RelativeLayout {
 		freeText.setText("FreeText");
 	}
 
-	private class ToogleTabListener implements OnTouchListener {
+	private class POISideTabListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
 			if (action == MotionEvent.ACTION_UP) {
-				if (!view.isSelected()) {
-					toogleTab();
-				}
+				setTab(true);
 				isResult = false;
 				toogleResult();
 			}
@@ -276,7 +275,23 @@ public class Search extends RelativeLayout {
 
 	}
 
-	private void toogleTab() {
+	private class AddressSideTabListener implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+			if (action == MotionEvent.ACTION_UP) {
+				setTab(false);
+				isResult = false;
+				toogleResult();
+			}
+			return false;
+		}
+
+	}
+
+	private void setTab(boolean b) {
+		selected = b;
 		if (selected) {
 			waypointButton.setSelected(false);
 			waypointButton.setTextColor(Color.BLACK);
@@ -284,7 +299,6 @@ public class Search extends RelativeLayout {
 			routeButton.setTextColor(Color.RED);
 			poiSide.setVisibility(VISIBLE);
 			addressSide.setVisibility(GONE);
-			selected = false;
 		} else {
 			waypointButton.setSelected(true);
 			waypointButton.setTextColor(Color.RED);
@@ -292,7 +306,6 @@ public class Search extends RelativeLayout {
 			routeButton.setTextColor(Color.BLACK);
 			poiSide.setVisibility(GONE);
 			addressSide.setVisibility(VISIBLE);
-			selected = true;
 		}
 	}
 
@@ -336,28 +349,31 @@ public class Search extends RelativeLayout {
 					locations = POIManager.getInstance(getContext())
 							.searchPOIsByAddress(getContext(), addr);
 				}
-				// TODO: bei keinem ergebnis meldung anzeigen
-				// TODO: bei ergebnis ort anzeigen
 
-				// Resultat anzeigen
-				isResult = true;
-				toogleResult();
+				if (!locations.isEmpty()) {
 
-				for (Location value : locations) {
-					Button location = new Button(getContext());
-					Log.d("routingView: ",
-							" " + value.getName() + " " + value.getId());
-					location.setText(value.getAddress().toString());
-					location.setOnTouchListener(new locationTouch(value,
-							location));
-					// TODO TextSize relativieren
-					location.setTextSize(30);
-					LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-							LinearLayout.LayoutParams.MATCH_PARENT,
-							LinearLayout.LayoutParams.WRAP_CONTENT);
-					myParams.topMargin = 10;
-					myParams.width = width;
-					result.addView(location, myParams);
+					// Resultat anzeigen
+					isResult = true;
+					toogleResult();
+
+					for (Location value : locations) {
+						Button location = new Button(getContext());
+						Log.d("routingView: ", " " + value.getName() + " "
+								+ value.getId());
+						location.setText(value.getAddress().toString());
+						location.setOnTouchListener(new locationTouch(value,
+								location));
+						// TODO TextSize relativieren
+						location.setTextSize(30);
+						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+						myParams.topMargin = 10;
+						myParams.width = width;
+						result.addView(location, myParams);
+					}
+				} else {
+					alertResult(zip + " " + city + " " + street + " " + number);
 				}
 			}
 			return false;
@@ -373,29 +389,35 @@ public class Search extends RelativeLayout {
 			int action = event.getAction();
 
 			if (action == MotionEvent.ACTION_UP) {
-				String checkString = freeText.getText().toString().replaceAll(" ", "");
-				if (!checkString.isEmpty()) {
+				String text = freeText.getText().toString()
+						.replaceAll(" ", "");
+				if (!text.isEmpty()) {
 
 					List<POI> poiS = POIManager.getInstance(getContext())
 							.searchPOIsByQuery(freeText.getText().toString());
 
-					isResult = true;
-					toogleResult();
+					if (!poiS.isEmpty()) {
 
-					for (POI value : poiS) {
-						Button poi = new Button(getContext());
-						Log.d("routingView: ", " " + value.getName() + " "
-								+ value.getId());
-						poi.setText(value.getName());
-						poi.setOnTouchListener(new poiTouch(value, poi));
-						// TODO TextSize relativieren
-						poi.setTextSize(30);
-						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT);
-						myParams.topMargin = 10;
-						myParams.width = width;
-						result.addView(poi, myParams);
+						isResult = true;
+						toogleResult();
+
+						for (POI value : poiS) {
+							Button poi = new Button(getContext());
+							Log.d("routingView: ", " " + value.getName() + " "
+									+ value.getId());
+							poi.setText(value.getName());
+							poi.setOnTouchListener(new poiTouch(value, poi));
+							// TODO TextSize relativieren
+							poi.setTextSize(30);
+							LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.MATCH_PARENT,
+									LinearLayout.LayoutParams.WRAP_CONTENT);
+							myParams.topMargin = 10;
+							myParams.width = width;
+							result.addView(poi, myParams);
+						}
+					} else {
+						alertResult(text);
 					}
 				}
 			}
@@ -403,44 +425,19 @@ public class Search extends RelativeLayout {
 		}
 
 	}
-	
-	private class QueryActionListener implements OnEditorActionListener {
 
-		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			Log.d(TAG, "Eine query wurde eingegeben");
-
-			int action = event.getAction();
-
-			if (action == KeyEvent.KEYCODE_ENTER) {
-				String checkString = freeText.getText().toString().replaceAll(" ", "");
-				if (!checkString.isEmpty()) {
-
-					List<POI> poiS = POIManager.getInstance(getContext())
-							.searchPOIsByQuery(freeText.getText().toString());
-
-					isResult = true;
-					toogleResult();
-
-					for (POI value : poiS) {
-						Button poi = new Button(getContext());
-						Log.d("routingView: ", " " + value.getName() + " "
-								+ value.getId());
-						poi.setText(value.getName());
-						poi.setOnTouchListener(new poiTouch(value, poi));
-						// TODO TextSize relativieren
-						poi.setTextSize(30);
-						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT);
-						myParams.topMargin = 10;
-						myParams.width = width;
-						result.addView(poi, myParams);
+	public void alertResult(String text) {
+		AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+				.create();
+		alertDialog.setTitle("Sorry..");
+		alertDialog
+				.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n \n" + text + "\n \n übereinstimmenden Orte gefunde!");
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
 					}
-				}
-			}
-			return false;
-		}
-
+				});
+		alertDialog.show();
 	}
 
 	private class poiTouch implements OnTouchListener {
