@@ -159,20 +159,20 @@ public class GeometryDataPreprocessor {
 
             // to make sure all less or equal
             // points to median go to left tree
-//            int tmpMedian = median+1;
-//            while (tmpMedian <= end) {
-//                if (data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim)) {
-//                    if (tmpMedian == end) {
-//                        median = tmpMedian;
-//                        break;
-//                    } else {
-//                        tmpMedian += 1;
-//                    }
-//                } else {
-//                    median = tmpMedian-1;
-//                    break;
-//                }
-//            }
+            int tmpMedian = median+1;
+            while (tmpMedian <= end) {
+                if (data[dim][tmpMedian].valueForDimension(dim) == data[dim][median].valueForDimension(dim)) {
+                    if (tmpMedian == end) {
+                        median = tmpMedian;
+                        break;
+                    } else {
+                        tmpMedian += 1;
+                    }
+                } else {
+                    median = tmpMedian-1;
+                    break;
+                }
+            }
         }
 
         treeSet.clear();
