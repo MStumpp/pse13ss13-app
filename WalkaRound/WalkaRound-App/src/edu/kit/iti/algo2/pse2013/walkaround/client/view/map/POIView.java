@@ -92,12 +92,11 @@ public class POIView extends RelativeLayout {
 			
 			int action = event.getAction();
 			
-			if(action == MotionEvent.ACTION_UP){
+			if(action == MotionEvent.ACTION_DOWN){
 				int id = view.getId();
 				for(POI poi:poiList){
 					if(id == poi.getId()){
 						notifyPOIInfoListener(poi);
-						break;
 					}
 				}
 			}
