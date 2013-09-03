@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -134,6 +136,12 @@ public class MapController extends Activity implements HeadUpViewListener,
 		
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
+
+		FragmentManager fragmentManager = getFragmentManager();
+	    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+	    pullUpView.setFragment(fragmentTransaction);
+		
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
