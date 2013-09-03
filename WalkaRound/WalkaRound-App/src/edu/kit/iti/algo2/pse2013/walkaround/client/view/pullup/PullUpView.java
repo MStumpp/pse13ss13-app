@@ -31,6 +31,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search.UpdateMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
@@ -533,6 +534,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	public void registerPOIChangeListener(POIChangeListener listener){
 		poiMenu.registerPOIChangeListener(listener);
+	}
+
+	public void registerUpdateMapListener(UpdateMapListener listener){
+		searchMenu.registerUpdateMapListener(listener);
 	}
 
 	public void setFragment(FragmentTransaction fragmentTransaction) {

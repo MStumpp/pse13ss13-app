@@ -39,6 +39,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout.POIChangeListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search.UpdateMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -65,7 +66,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class MapController extends Activity implements HeadUpViewListener,
-		PositionListener, CompassListener, RouteListener, UpdateFavorites, ComputeRoundtripListener, POIChangeListener, POIInfoListener {
+		PositionListener, CompassListener, RouteListener, UpdateFavorites,UpdateMapListener, ComputeRoundtripListener, POIChangeListener, POIInfoListener {
 
 	private MapView mapView;
 
@@ -153,6 +154,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		pullUpView.registerComputeRoundtripListener(this);
 		pullUpView.registerPOIChangeListener(this);
 		poiView.registerPOIInfoListener(this);
+		pullUpView.registerUpdateMapListener(this);
 
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -356,6 +358,15 @@ public class MapController extends Activity implements HeadUpViewListener,
 	@Override
 	public void callPoiInfo(POI poi) {
 		pullUpView.updateInfoView(poi);
+		
+	}
+
+	@Override
+	public void updateMap() {
+		mapView.computeParams();
+		tileFetcher.requestTiles(coorBox, mapView);
+		this.updateUser();
+		waypointView.updateWaypoint();
 		
 	}
 

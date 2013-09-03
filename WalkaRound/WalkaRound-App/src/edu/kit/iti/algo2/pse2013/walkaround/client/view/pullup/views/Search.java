@@ -487,6 +487,7 @@ public class Search extends RelativeLayout {
 	private void notifyGoToMapListener() {
 		for (GoToMapListener l : rl) {
 			l.onGoToMap();
+			notifyUpdateMapListener();
 		}
 	}
 
@@ -494,4 +495,21 @@ public class Search extends RelativeLayout {
 		rl.add(listener);
 	}
 
+
+	LinkedList<UpdateMapListener> ul = new LinkedList<UpdateMapListener>();
+
+	private void notifyUpdateMapListener() {
+		for (UpdateMapListener l : ul) {
+			l.updateMap();
+		}
+	}
+
+	public void registerUpdateMapListener(UpdateMapListener listener) {
+		ul.add(listener);
+	}
+	
+	public interface UpdateMapListener {
+		public void updateMap();
+	}
+	
 }
