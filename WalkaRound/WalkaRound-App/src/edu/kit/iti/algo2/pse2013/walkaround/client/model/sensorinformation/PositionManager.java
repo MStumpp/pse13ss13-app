@@ -2,7 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import android.content.Context;
 import android.location.GpsStatus.Listener;
 import android.location.Location;

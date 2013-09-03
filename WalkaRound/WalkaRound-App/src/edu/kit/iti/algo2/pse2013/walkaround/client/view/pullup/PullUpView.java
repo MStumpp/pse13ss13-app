@@ -1,18 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Favorite;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POI;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -20,11 +12,26 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView.POIInfoListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Favorite;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Info;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout.POIChangeListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
 
@@ -49,10 +56,12 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	private int nullSize;
 	private ImageView regulator;
 	private Routing routingMenu;
-	private POI poiMenu;
+	private POILayout poiMenu;
 	private Favorite favoriteMenu;
 	private Roundtrip roundtripMenu;
 	private Search searchMenu;
+	private Info infoMenu;
+	private FrameLayout optionMenu;
 
 	public PullUpView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -190,23 +199,28 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		//content.getRootView().setBackgroundColor(Color.BLACK);
 		
 		routingMenu = new Routing(context, attrs);
-		poiMenu = new POI(context, attrs);
+		poiMenu = new POILayout(context, attrs);
 		favoriteMenu = new Favorite(context, attrs);
 		roundtripMenu = new Roundtrip(context, attrs);
 		searchMenu = new Search(context, attrs);
+		infoMenu = new Info(context, attrs);
+		optionMenu = new FrameLayout(context, attrs);
 		
 		routingMenu.getRootView().setBackgroundColor(Color.BLACK);
 		poiMenu.getRootView().setBackgroundColor(Color.BLACK);
 		favoriteMenu.getRootView().setBackgroundColor(Color.BLACK);
 		roundtripMenu.getRootView().setBackgroundColor(Color.BLACK);
 		searchMenu.getRootView().setBackgroundColor(Color.BLACK);
-		
+		infoMenu.getRootView().setBackgroundColor(Color.BLACK);
+		optionMenu.getRootView().setBackgroundColor(Color.BLACK);
 		
 		this.addView(routingMenu, paramsContent);
 		this.addView(favoriteMenu, paramsContent);
 		this.addView(roundtripMenu, paramsContent);
 		this.addView(searchMenu, paramsContent);
 		this.addView(poiMenu, paramsContent);
+		this.addView(infoMenu, paramsContent);
+		this.addView(optionMenu, paramsContent);
 		
 		
 		routing.setOnTouchListener(new StaticTouchListener());
@@ -214,6 +228,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		roundtrip.setOnTouchListener(new StaticTouchListener());
 		search.setOnTouchListener(new StaticTouchListener());
 		poi.setOnTouchListener(new StaticTouchListener());
+		
 		
 		regulator.setOnTouchListener(new StaticTouchListener());
 
@@ -233,10 +248,11 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	 */
 	public void changeView(int id) {
 		Log.d(TAG, "Content Change");
+		infoMenu.stopSpeaking();
 		// TextToSpeechUtility.getInstance().stopSpeaking();
 
 		switch (id) {
-		case PullUpViewOld.CONTENT_ROUTING:
+		case PullUpView.CONTENT_ROUTING:
 
 			if (!(this.pullUpContent == id)) {
 				
@@ -246,6 +262,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				favoriteMenu.setVisibility(View.GONE);
 				roundtripMenu.setVisibility(View.GONE);
 				searchMenu.setVisibility(View.GONE);
+				infoMenu.setVisibility(View.GONE);
+				optionMenu.setVisibility(View.GONE);
 				//-----------------------------------
 				
 				pullUpContent = id;
@@ -255,7 +273,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				}
 			}
 			break;
-		case PullUpViewOld.CONTENT_FAVORITE:
+		case PullUpView.CONTENT_FAVORITE:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -265,6 +283,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				favoriteMenu.setVisibility(View.VISIBLE);
 				roundtripMenu.setVisibility(View.GONE);
 				searchMenu.setVisibility(View.GONE);
+				infoMenu.setVisibility(View.GONE);
+				optionMenu.setVisibility(View.GONE);
 				//-----------------------------------
 				
 				pullUpContent = id;
@@ -275,7 +295,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_ROUNDTRIP:
+		case PullUpView.CONTENT_ROUNDTRIP:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -285,6 +305,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				favoriteMenu.setVisibility(View.GONE);
 				roundtripMenu.setVisibility(View.VISIBLE);
 				searchMenu.setVisibility(View.GONE);
+				infoMenu.setVisibility(View.GONE);
+				optionMenu.setVisibility(View.GONE);
 				//-----------------------------------
 				
 				pullUpContent = id;
@@ -295,7 +317,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_POI:
+		case PullUpView.CONTENT_POI:
 			if (!(this.pullUpContent == id)) {
 
 				//-----------------------------------
@@ -304,6 +326,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				favoriteMenu.setVisibility(View.GONE);
 				roundtripMenu.setVisibility(View.GONE);
 				searchMenu.setVisibility(View.GONE);
+				infoMenu.setVisibility(View.GONE);
+				optionMenu.setVisibility(View.GONE);
 				//-----------------------------------
 				
 				pullUpContent = id;
@@ -314,7 +338,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_SEARCH:
+		case PullUpView.CONTENT_SEARCH:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -324,6 +348,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				favoriteMenu.setVisibility(View.GONE);
 				roundtripMenu.setVisibility(View.GONE);
 				searchMenu.setVisibility(View.VISIBLE);
+				infoMenu.setVisibility(View.GONE);
+				optionMenu.setVisibility(View.GONE);
 				//-----------------------------------
 				
 				pullUpContent = id;
@@ -334,7 +360,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_OPTION:
+		case PullUpView.CONTENT_INFO:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -344,6 +370,31 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				favoriteMenu.setVisibility(View.GONE);
 				roundtripMenu.setVisibility(View.GONE);
 				searchMenu.setVisibility(View.GONE);
+				infoMenu.setVisibility(View.VISIBLE);
+				optionMenu.setVisibility(View.GONE);
+				//-----------------------------------
+				
+				pullUpContent = id;
+			} else {
+				if (this.getY() == 0) {
+					this.pullDown();
+				}
+			}
+
+			break;
+
+		case PullUpView.CONTENT_OPTION:
+
+			if (!(this.pullUpContent == id)) {
+
+				//-----------------------------------
+				routingMenu.setVisibility(View.GONE);
+				poiMenu.setVisibility(View.GONE);
+				favoriteMenu.setVisibility(View.GONE);
+				roundtripMenu.setVisibility(View.GONE);
+				searchMenu.setVisibility(View.GONE);
+				infoMenu.setVisibility(View.GONE);
+				optionMenu.setVisibility(View.VISIBLE);
 				//-----------------------------------
 				
 				pullUpContent = id;
@@ -361,6 +412,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			favoriteMenu.setVisibility(View.GONE);
 			roundtripMenu.setVisibility(View.GONE);
 			searchMenu.setVisibility(View.GONE);
+			infoMenu.setVisibility(View.GONE);
 			//-----------------------------------
 			
 			pullUpContent = -1;
@@ -370,6 +422,12 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			break;
 		}
 
+	}
+	
+	public void updateInfoView(POI poi){
+		this.changeView(CONTENT_INFO);
+		this.pullUp();
+		infoMenu.update(poi);
 	}
 
 	private void pullUp() {
@@ -472,4 +530,12 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	public void registerComputeRoundtripListener(ComputeRoundtripListener listener){
 		roundtripMenu.registerComputeRoundtripListener(listener);
 	}
+
+	public void registerPOIChangeListener(POIChangeListener listener){
+		poiMenu.registerPOIChangeListener(listener);
+	}
+
+	public void setFragment(FragmentTransaction fragmentTransaction) {
+	}
+
 }

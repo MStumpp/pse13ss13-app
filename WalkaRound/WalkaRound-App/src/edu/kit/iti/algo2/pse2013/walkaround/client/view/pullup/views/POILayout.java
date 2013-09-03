@@ -17,7 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 
-public class POI extends RelativeLayout {
+public class POILayout extends RelativeLayout {
 
 	private ScrollView scrollView;
 	private static int category1 = R.string.bars_and_pubs;
@@ -37,11 +37,11 @@ public class POI extends RelativeLayout {
 	private LinkedList<Integer> category = new LinkedList<Integer>();
 	private LinearLayout content;
 
-	public POI(Context context, AttributeSet attrs) {
+	public POILayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
-		
+
 		category.add(category1);
 		category.add(category2);
 		category.add(category3);
@@ -59,20 +59,23 @@ public class POI extends RelativeLayout {
 		scrollView = new ScrollView(context, attrs);
 		content = new LinearLayout(context, attrs);
 		content.setOrientation(LinearLayout.VERTICAL);
-		
-		//Content
-		LayoutParams contentParam = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		
-		//ScrollView
-		RelativeLayout.LayoutParams scrollViewParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-		
-		//Category
+
+		// Content
+		LayoutParams contentParam = new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+
+		// ScrollView
+		RelativeLayout.LayoutParams scrollViewParam = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT,
+				RelativeLayout.LayoutParams.MATCH_PARENT);
+
+		// Category
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		param.topMargin = 5;
 		param.height = size.y / 20;
 		scrollView.addView(content, contentParam);
-		
+
 		for (Integer res : category) {
 			TextView b = new TextView(context, attrs);
 			b.setText(context.getResources().getString(res));
@@ -83,7 +86,6 @@ public class POI extends RelativeLayout {
 			b.setSelected(false);
 			b.setGravity(Gravity.CENTER);
 
-			
 			content.addView(b, param);
 		}
 
@@ -107,19 +109,37 @@ public class POI extends RelativeLayout {
 				b.setTextColor(Color.RED);
 				POIManager.getInstance(getContext()).addActivePOICategory(
 						getCategoryID(id));
+
 			}
+			notifyComputeRoundtripListener();
 			return false;
 		}
 
 		public int getCategoryID(int id) {
-			for(int i = 0; i < category.size();i++){
-				if(category.get(i) == id){
-					return (i+1);
+			for (int i = 0; i < category.size(); i++) {
+				if (category.get(i) == id) {
+					return (i + 1);
 				}
 			}
 			return 0;
-			
+
 		}
 
+	}
+
+	LinkedList<POIChangeListener> poiChangeListener = new LinkedList<POIChangeListener>();
+
+	private void notifyComputeRoundtripListener() {
+		for (POIChangeListener l : poiChangeListener) {
+			l.onPOIChange();
+		}
+	}
+
+	public void registerPOIChangeListener(POIChangeListener listener) {
+		poiChangeListener.add(listener);
+	}
+
+	public interface POIChangeListener {
+		public void onPOIChange();
 	}
 }

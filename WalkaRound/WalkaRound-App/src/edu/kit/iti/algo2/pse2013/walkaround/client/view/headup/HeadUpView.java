@@ -2,25 +2,19 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.headup;
 
 import java.util.LinkedList;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpViewListener;
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpViewListener;
 
 public class HeadUpView extends RelativeLayout {
-	private final static String TAG = HeadUpViewOld.class.getSimpleName();
+	private final static String TAG = HeadUpView.class.getSimpleName();
 
 	private final static int user_lock = R.drawable.user_arrow_lock;
 	private final static int user_unlock = R.drawable.user_arrow_unlock;
@@ -32,7 +26,6 @@ public class HeadUpView extends RelativeLayout {
 	// Mögliche Piktogramme
 	public final static int ARROW_RIGHT = R.drawable.pikto_rechts;
 
-	HeadUpController headUpController;
 
 	// Lock Bilder
 	private boolean lockPosition;

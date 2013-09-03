@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-
         <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView
             android:id="@+id/mapView"
             android:layout_width="fill_parent"
@@ -21,11 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         
+        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView
+            android:id="@+id/poiView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        
         <edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView
             android:id="@+id/headUpView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        
         
         <edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView
             android:id="@+id/pullUpView"

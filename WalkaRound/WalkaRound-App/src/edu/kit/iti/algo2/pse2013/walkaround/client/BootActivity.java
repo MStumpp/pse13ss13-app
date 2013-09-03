@@ -1,7 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client;
 
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -17,10 +14,7 @@ import android.util.Log;
 import android.view.Display;
 import android.widget.ProgressBar;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.FavoriteMenuController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.POIMenuController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
@@ -33,7 +27,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 public class BootActivity extends Activity {
@@ -73,7 +66,7 @@ public class BootActivity extends Activity {
 	}
 
 	public void onContinue() {
-		Intent intent = new Intent(this, MapViewOld.class);
+		Intent intent = new Intent(this, MapController.class);
 		this.startActivity(intent);
 	}
 
@@ -104,8 +97,6 @@ public class BootActivity extends Activity {
 
 				// Controller initialisierung
 
-				FavoriteMenuController.getInstance();
-				POIMenuController.getInstance();
 				RouteController.getInstance();
 				SearchMenuController.getInstance();
 				CurrentMapStyleModel.getInstance();
@@ -144,19 +135,6 @@ public class BootActivity extends Activity {
 
 				updateProgress(progress);
 
-				/*
-				String fileString = File.separatorChar + "walkaround"
-						+ File.separatorChar + "geometryData.pbf";
-				GeometryDataIO geometryDataIO;
-				try {
-					geometryDataIO = GeometryDataIO.load(new File(Environment
-							.getExternalStorageDirectory().getAbsolutePath()
-							+ fileString));
-					GeometryProcessor.init(geometryDataIO);
-				} catch (IOException e) {
-					Log.e(TAG, "geometry konnte nicht initialisiert werden.");
-				}*/
-
 				// 35%
 				progress = 350;
 				updateProgress(progress);
@@ -173,7 +151,7 @@ public class BootActivity extends Activity {
 				BoundingBox.initialize(size);
 				coorBox = BoundingBox.getInstance();
 
-				TileFetcher tileFetcher = new TileFetcher();
+				TileFetcher tileFetcher = TileFetcher.getInstance();
 
 				// 50 %
 				progress = 500;
@@ -207,14 +185,14 @@ public class BootActivity extends Activity {
 					sleep(50);
 				}
 
-				MapControllerOld.initialize(tileFetcher, coorBox, coorBox.getCenter());
 				progress += 50;
 				updateProgress(progress);
-				HeadUpController.initializes();
 
 				progress = 1000;
 				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
+				
+				/*
 				if (TextToSpeechUtility.getInstance().speak("Willkommen bei !")) {
 					TextToSpeechUtility.getInstance().speak("WalkaRound!",
 							Locale.ENGLISH);
@@ -225,6 +203,7 @@ public class BootActivity extends Activity {
 					mp.start();
 					// mp.pause();
 				}
+				*/
 
 			} catch (InterruptedException e) {
 			} finally {

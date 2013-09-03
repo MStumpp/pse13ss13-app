@@ -143,9 +143,6 @@ public class BoundingBox {
 		this.topLeft = this.computeTopLeft();
 		Log.d(TAG, "Topleft is " + this.topLeft);
 		this.bottomRight = this.computeBottomRight();
-		if (MapControllerOld.isInitialized()) {
-			MapControllerOld.getInstance().updateAll();
-		}
 	}
 
 	/**
