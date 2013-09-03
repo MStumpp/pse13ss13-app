@@ -240,7 +240,13 @@ public class RouteController {
 		}
 		return false;
 	}
+	
+	// TODO: DELETE
+	public boolean moveActiveWaypoint(Coordinate c) {
+		return false;
+	}
 
+		
 	public boolean moveActiveWaypointMoveOnly(Coordinate c) {
 		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
 
