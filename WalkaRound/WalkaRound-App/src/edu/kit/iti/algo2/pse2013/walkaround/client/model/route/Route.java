@@ -217,7 +217,7 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "moveActiveWaypointMoveOnly(Coordinate " + coord
 				+ ") METHOD START ");
 
-		if (this.activeWaypoint != null) {
+		if (this.activeWaypoint != null && coord != null) {
 			Log.d(TAG_ROUTE,
 					"moveActiveWaypointMoveOnly(Coordinate) Active Waypoint is "
 							+ this.activeWaypoint.toString());
@@ -261,12 +261,66 @@ public class Route implements RouteInfo {
 	
 	
 	/**
-	 * Moves the active waypoint to the position of the given coordinate.
+	 * Moves the active waypoint to the position of the given coordinate. OLD VERSION!
 	 */
+	public void moveActiveWaypointComputeOnly(final Coordinate coord) {
+		Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate " + coord
+				+ ") METHOD START ");
+		
+		if (this.activeWaypoint != null && coord != null) {
+			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate) Active Waypoint is " + this.activeWaypoint.toString());
+			LinkedList<Waypoint> waypoints = this.getWaypoints();
+			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
+			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) Active Waypoint is Nr. " + (indexOfActiveWaypoint + 1) + " of " + waypoints.size() + " Waypoints in route.");
+			
+			final Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
+			final Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
+			Waypoint activeWP = this.activeWaypoint;
+			RouteInfo newRouteBeforeActiveWaypoint = null;
+			RouteInfo newRoutePastActiveWaypoint = null;
+			
+			if (beforeActive != null) {
+				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) case beforeActive != null, beforeActive is nr. "	+ (waypoints.indexOf(beforeActive) + 1) + " / "	+ waypoints.size() + " in route");
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				
+				newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
+				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, activeWP);
+			}
+
+			if (afterActive != null) {
+				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) case afterActive != null, afterActive is nr. " + (waypoints.indexOf(afterActive) + 1) + " / " + waypoints.size() + " in route");
+				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+				
+				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
+			}
+			
+			if (newRouteBeforeActiveWaypoint != null) {
+				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
+				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
+				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+			} else if (newRoutePastActiveWaypoint != null) {
+				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getLast();
+				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
+				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+			}
+			
+		}
+
+		this.cleanRouteOfDuplicateCoordinatePairs();
+	}
+	
+	
+	
+	
+
+	/* OLD VERSION, YET WITHOUT NORMALIZER:
 	public void moveActiveWaypointMoveAndCompute(final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate " + coord
 				+ ") METHOD START ");
+		
 		if (this.activeWaypoint != null) {
+			
 			Log.d(TAG_ROUTE,
 					"moveActiveWaypointComputeOnly(Coordinate) Active Waypoint is "
 							+ this.activeWaypoint.toString());
@@ -345,8 +399,7 @@ public class Route implements RouteInfo {
 
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
-	
-
+	*/
 	
 	
 	
