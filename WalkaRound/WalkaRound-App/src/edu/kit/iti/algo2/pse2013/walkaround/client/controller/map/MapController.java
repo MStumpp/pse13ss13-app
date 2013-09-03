@@ -66,7 +66,9 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class MapController extends Activity implements HeadUpViewListener,
-		PositionListener, CompassListener, RouteListener, UpdateFavorites,UpdateMapListener, ComputeRoundtripListener, POIChangeListener, POIInfoListener {
+		PositionListener, CompassListener, RouteListener, UpdateFavorites,
+		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
+		POIInfoListener {
 
 	private MapView mapView;
 
@@ -120,9 +122,9 @@ public class MapController extends Activity implements HeadUpViewListener,
 		// RouteView
 		routeView = (RouteView) findViewById(R.id.routeView);
 
-		//poiView
+		// poiView
 		poiView = (POIView) findViewById(R.id.poiView);
-		
+
 		RelativeLayout.LayoutParams paramUser = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		paramUser.width = coorBox.getDisplaySize().x / 10;
@@ -140,7 +142,8 @@ public class MapController extends Activity implements HeadUpViewListener,
 		rl.addView(user, paramUser);
 
 		PositionManager.getInstance().registerPositionListener(this);
-		PositionManager.getInstance().getCompassManager().registerCompassListener(this);
+		PositionManager.getInstance().getCompassManager()
+				.registerCompassListener(this);
 
 		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
 
@@ -157,13 +160,13 @@ public class MapController extends Activity implements HeadUpViewListener,
 		pullUpView.registerUpdateMapListener(this);
 
 		getWindow().setSoftInputMode(
-			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 		FragmentManager fragmentManager = getFragmentManager();
-	    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-	    pullUpView.setFragment(fragmentTransaction);
-		
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		pullUpView.setFragment(fragmentTransaction);
+
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -306,10 +309,11 @@ public class MapController extends Activity implements HeadUpViewListener,
 	}
 
 	private static int ROUNDTRIP_TIME = 3000;
-	
+
 	@Override
 	public void onComputeRoundtrip(int profile, int length) {
-		if(RouteController.getInstance().getCurrentRoute().getWaypoints().isEmpty()){
+		if (RouteController.getInstance().getCurrentRoute().getWaypoints()
+				.isEmpty()) {
 
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
@@ -326,28 +330,32 @@ public class MapController extends Activity implements HeadUpViewListener,
 				e.printStackTrace();
 			}
 		}
-		
-		if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() == null && !RouteController.getInstance().getCurrentRoute().getWaypoints().isEmpty()){
-			RouteController.getInstance().setActiveWaypoint(RouteController.getInstance().getCurrentRoute().getWaypoints().getLast());
+
+		if (RouteController.getInstance().getCurrentRoute().getActiveWaypoint() == null
+				&& !RouteController.getInstance().getCurrentRoute()
+						.getWaypoints().isEmpty()) {
+			RouteController.getInstance().setActiveWaypoint(
+					RouteController.getInstance().getCurrentRoute()
+							.getWaypoints().getLast());
 		}
-		
-		if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() != null){
+
+		if (RouteController.getInstance().getCurrentRoute().getActiveWaypoint() != null) {
 			RouteController.getInstance().addRoundtrip(profile, length);
 		} else {
-				AlertDialog alertDialog = new AlertDialog.Builder(this)
-						.create();
-				alertDialog.setTitle("Fehlender AusgangsPunkt");
-				alertDialog.setMessage("Bitte setzten Sie zuerst einen Ausgangspunkt auf der Karte.");
-				alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-								
-							}
-						});
-				alertDialog.show();
-			
+			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+			alertDialog.setTitle("Fehlender AusgangsPunkt");
+			alertDialog
+					.setMessage("Bitte setzten Sie zuerst einen Ausgangspunkt auf der Karte.");
+			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+			alertDialog.show();
+
 		}
-		
+
 	}
 
 	@Override
@@ -358,7 +366,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 	@Override
 	public void callPoiInfo(POI poi) {
 		pullUpView.updateInfoView(poi);
-		
+
 	}
 
 	@Override
@@ -367,7 +375,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		tileFetcher.requestTiles(coorBox, mapView);
 		this.updateUser();
 		waypointView.updateWaypoint();
-		
+
 	}
 
 }
