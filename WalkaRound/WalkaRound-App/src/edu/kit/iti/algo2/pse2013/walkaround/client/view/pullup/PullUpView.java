@@ -521,7 +521,18 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	@Override
 	public void goToFavorite() {
 		// TODO add Favorite
-		this.changeView(CONTENT_FAVORITE);
+
+		//-----------------------------------
+		routingMenu.setVisibility(View.GONE);
+		poiMenu.setVisibility(View.GONE);
+		favoriteMenu.setVisibility(View.VISIBLE);
+		roundtripMenu.setVisibility(View.GONE);
+		searchMenu.setVisibility(View.GONE);
+		infoMenu.setVisibility(View.GONE);
+		optionMenu.setVisibility(View.GONE);
+		//-----------------------------------
+		
+		pullUpContent = PullUpView.CONTENT_FAVORITE;
 	}
 
 	public void updateFavorite() {
