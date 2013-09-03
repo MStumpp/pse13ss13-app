@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 
 /*public class VisualTextNaviOutput implements NaviOutput {
 

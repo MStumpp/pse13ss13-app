@@ -244,7 +244,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		// TextToSpeechUtility.getInstance().stopSpeaking();
 
 		switch (id) {
-		case PullUpViewOld.CONTENT_ROUTING:
+		case PullUpView.CONTENT_ROUTING:
 
 			if (!(this.pullUpContent == id)) {
 				
@@ -264,7 +264,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 				}
 			}
 			break;
-		case PullUpViewOld.CONTENT_FAVORITE:
+		case PullUpView.CONTENT_FAVORITE:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -285,7 +285,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_ROUNDTRIP:
+		case PullUpView.CONTENT_ROUNDTRIP:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -306,7 +306,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_POI:
+		case PullUpView.CONTENT_POI:
 			if (!(this.pullUpContent == id)) {
 
 				//-----------------------------------
@@ -326,7 +326,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_SEARCH:
+		case PullUpView.CONTENT_SEARCH:
 
 			if (!(this.pullUpContent == id)) {
 
@@ -347,7 +347,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 			}
 
 			break;
-		case PullUpViewOld.CONTENT_INFO:
+		case PullUpView.CONTENT_INFO:
 
 			if (!(this.pullUpContent == id)) {
 

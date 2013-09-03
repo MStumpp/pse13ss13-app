@@ -2,17 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 import java.util.LinkedList;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -21,14 +10,16 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.GestureDetector.SimpleOnGestureListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 public class MapView extends View implements TileListener {
 
@@ -91,7 +82,7 @@ public class MapView extends View implements TileListener {
 	/**
 	 * Debug Tag
 	 */
-	private static String TAG = MapGen.class.getSimpleName();
+	private static String TAG = MapView.class.getSimpleName();
 
 	/**
 	 * 

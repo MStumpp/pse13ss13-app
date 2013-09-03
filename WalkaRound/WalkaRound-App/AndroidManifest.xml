@@ -20,7 +20,7 @@
         android:theme="@android:style/Theme.NoTitleBar" >
 
         <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController"
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
 
@@ -29,6 +29,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
+        </activity>
+        
+        <activity
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             
         </activity>
     </application>

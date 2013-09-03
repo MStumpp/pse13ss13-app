@@ -80,7 +80,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 		// BoundingBox & tiles
 
-		this.tileFetcher = new TileFetcher();
+		this.tileFetcher = TileFetcher.getInstance();
 
 		// MapView
 
