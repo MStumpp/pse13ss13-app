@@ -43,15 +43,12 @@ public class OptionView extends PreferenceFragment implements OnSharedPreference
 	public String TAG_PULLUP_CONTENT = "PULLUP_CONTENT";
 	private static boolean on = false;
 
-	private int switcher = R.id.pullupOptionSwitcher;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(!on){
 		Log.d(TAG_PULLUP_CONTENT, "Create FavoriteView");
 		on = false;
-		this.getActivity().findViewById(switcher).setVisibility(View.VISIBLE);
 		Log.d("Options",
 				"Optionen.xml wird als default Preference Manager ausgef�hrt.");
 
@@ -66,7 +63,6 @@ public class OptionView extends PreferenceFragment implements OnSharedPreference
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG_PULLUP_CONTENT, "Destroy OptionView");
-		this.getActivity().findViewById(switcher).setVisibility(View.GONE);
 	}
 
 	/**
