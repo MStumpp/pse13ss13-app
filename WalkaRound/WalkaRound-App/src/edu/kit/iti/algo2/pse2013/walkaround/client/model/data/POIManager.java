@@ -24,7 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class manages requests about POIs.
- *
+ * 
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -49,12 +49,14 @@ public class POIManager {
 	/**
 	 * LocationDataIO where all POIs are stored.
 	 */
-	// private static LocationDataIO locationDataIO;
+	private static LocationDataIO locationDataIO;
 
 	/**
 	 * IDs of categories that where activated in the POI menu.
 	 */
 	private int[] activeCategories;
+
+	private int activeCategoriesCount;
 
 	public static void initialize(Context context) {
 		/*
@@ -66,14 +68,14 @@ public class POIManager {
 		 * .getExternalStorageDirectory().getAbsolutePath() + fileString));
 		 * Log.d(TAG_POIMANAGER, "location data io!" +
 		 * locationDataIO.getPOIs().size());
-		 *
+		 * 
 		 * } catch (IOException e) { Log.d(TAG_POIMANAGER, e.toString()); }
 		 */
 	}
 
 	/**
 	 * Constructs a new manager for POIs.
-	 *
+	 * 
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 */
@@ -86,7 +88,7 @@ public class POIManager {
 
 	/**
 	 * Singleton getInstance method.
-	 *
+	 * 
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
@@ -100,7 +102,7 @@ public class POIManager {
 
 	/**
 	 * Singleton getInstance method.
-	 *
+	 * 
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 * @return an instance of the POIManager
@@ -115,7 +117,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying within a rectangle.
-	 *
+	 * 
 	 * @param upperLeft
 	 *            upperleft coordinate of the rectangle
 	 * @param bottomRight
@@ -126,23 +128,30 @@ public class POIManager {
 	 */
 	public List<POI> getPOIsWithinRectangle(Coordinate upperLeft,
 			Coordinate bottomRight, float levelOfDetail) {
+
+		ArrayList<POI> poiList = new ArrayList<POI>();
+		if (activeCategoriesCount == 0) {
+			locationDataIO = null;
+			return poiList;
+		}
+
 		double minLat = bottomRight.getLatitude();
 		double maxLat = upperLeft.getLatitude();
 		double minLon = upperLeft.getLongitude();
 		double maxLon = bottomRight.getLongitude();
-		ArrayList<POI> poiList = new ArrayList<POI>();
 
 		String fileString = File.separatorChar + "walkaround"
 				+ File.separatorChar + "locationData.pbf";
 		try {
-			Log.d(TAG_POIMANAGER,
-					"ExtFile: " + Environment.getExternalStorageDirectory());
-			LocationDataIO locationDataIO = LocationDataIO.load(new File(
-					Environment.getExternalStorageDirectory().getAbsolutePath()
-							+ fileString));
-			Log.d(TAG_POIMANAGER, "location data io!"
-					+ locationDataIO.getPOIs().size());
-
+			if (locationDataIO == null) {
+				Log.d(TAG_POIMANAGER,
+						"ExtFile: " + Environment.getExternalStorageDirectory());
+				locationDataIO = LocationDataIO.load(new File(Environment
+						.getExternalStorageDirectory().getAbsolutePath()
+						+ fileString));
+				Log.d(TAG_POIMANAGER, "location data io!"
+						+ locationDataIO.getPOIs().size());
+			}
 			if (locationDataIO != null) {
 				for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 						.hasNext();) {
@@ -159,14 +168,12 @@ public class POIManager {
 						}
 					}
 				}
-				System.gc();
 				return poiList;
 			}
 
 		} catch (IOException e) {
 			Log.d(TAG_POIMANAGER, e.toString());
 		}
-		System.gc();
 		return poiList;
 		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
 		// besseren laufzeit
@@ -176,7 +183,7 @@ public class POIManager {
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying upon a route.
-	 *
+	 * 
 	 * @param routeInfo
 	 *            Route to search POIs in the near
 	 * @param levelOfDetail
@@ -187,17 +194,23 @@ public class POIManager {
 		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
 
+		if (activeCategoriesCount == 0) {
+			locationDataIO = null;
+			return poiList;
+		}
+
 		String fileString = File.separatorChar + "walkaround"
 				+ File.separatorChar + "locationData.pbf";
 		try {
-			Log.d(TAG_POIMANAGER,
-					"ExtFile: " + Environment.getExternalStorageDirectory());
-			LocationDataIO locationDataIO = LocationDataIO.load(new File(
-					Environment.getExternalStorageDirectory().getAbsolutePath()
-							+ fileString));
-			Log.d(TAG_POIMANAGER, "location data io!"
-					+ locationDataIO.getPOIs().size());
-
+			if (locationDataIO == null) {
+				Log.d(TAG_POIMANAGER,
+						"ExtFile: " + Environment.getExternalStorageDirectory());
+				locationDataIO = LocationDataIO.load(new File(Environment
+						.getExternalStorageDirectory().getAbsolutePath()
+						+ fileString));
+				Log.d(TAG_POIMANAGER, "location data io!"
+						+ locationDataIO.getPOIs().size());
+			}
 			if (locationDataIO != null) {
 				for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 						.hasNext();) {
@@ -227,7 +240,7 @@ public class POIManager {
 	// aus location poi gemacht
 	/**
 	 * Returns suggestions of locations searched by query.
-	 *
+	 * 
 	 * @param query
 	 *            query to search with
 	 * @return a list of three suggestions of locations
@@ -241,21 +254,24 @@ public class POIManager {
 		ArrayList<POI> suggestions = new ArrayList<POI>();
 
 		try {
-			Log.d(TAG_POIMANAGER,
-					"ExtFile: " + Environment.getExternalStorageDirectory());
-			LocationDataIO locationDataIO = LocationDataIO.load(new File(
-					Environment.getExternalStorageDirectory().getAbsolutePath()
-							+ fileString));
-			Log.d(TAG_POIMANAGER, "location data io!"
-					+ locationDataIO.getPOIs().size());
+			if (locationDataIO == null) {
+				Log.d(TAG_POIMANAGER,
+						"ExtFile: " + Environment.getExternalStorageDirectory());
+				LocationDataIO locationDataIO = LocationDataIO.load(new File(
+						Environment.getExternalStorageDirectory()
+								.getAbsolutePath() + fileString));
+				Log.d(TAG_POIMANAGER, "location data io!"
+						+ locationDataIO.getPOIs().size());
+			}
 
 			if (locationDataIO != null) {
 				for (Iterator<POI> poiIter = locationDataIO.getPOIs()
 						.iterator(); poiIter.hasNext();) {
 					POI currentPOI = poiIter.next();
-					int difference = computeLevenstheinDistance(query
-							.toLowerCase(Locale.getDefault()).trim(), currentPOI.getName()
-							.toLowerCase(Locale.getDefault()).trim());
+					int difference = computeLevenstheinDistance(
+							query.toLowerCase(Locale.getDefault()).trim(),
+							currentPOI.getName()
+									.toLowerCase(Locale.getDefault()).trim());
 					if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
 						if (suggestionsMap.containsKey(difference)) {
 							suggestionsMap.get(difference).add(currentPOI);
@@ -301,7 +317,7 @@ public class POIManager {
 	// android funktion zugegriffen wird
 	/**
 	 * Returns suggestions of locations searched by an address.
-	 *
+	 * 
 	 * @param address
 	 *            address to search with
 	 * @param context
@@ -334,32 +350,34 @@ public class POIManager {
 	// changed boolean return to void
 	/**
 	 * Adds the ID of an active category.
-	 *
+	 * 
 	 * @param id
 	 *            id of the category to activate
 	 */
 	public void addActivePOICategory(int id) {
 		if (activeCategories[id - 1] == -1) {
 			activeCategories[id - 1] = id;
+			activeCategoriesCount++;
 		}
 	}
 
 	// changed boolean return to void
 	/**
 	 * Removes the ID of an active category.
-	 *
+	 * 
 	 * @param id
 	 *            id of the category to deactivate
 	 */
 	public void removeActivePOICategory(int id) {
 		if (activeCategories[id - 1] == id) {
 			activeCategories[id - 1] = -1;
+			activeCategoriesCount--;
 		}
 	}
 
 	/**
 	 * Computes the difference between two strings.
-	 *
+	 * 
 	 * @param first
 	 *            first string to compare
 	 * @param second
@@ -395,7 +413,7 @@ public class POIManager {
 
 	/**
 	 * Return whether the active poi list is empty
-	 *
+	 * 
 	 * @return true is empty
 	 */
 	public boolean isEmpty() {
