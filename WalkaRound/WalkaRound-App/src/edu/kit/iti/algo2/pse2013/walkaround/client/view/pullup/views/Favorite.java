@@ -248,7 +248,7 @@ public class Favorite extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_UP){
+			if(action == MotionEvent.ACTION_DOWN){
 				this.view = view;
 				this.alert();
 			}
@@ -286,7 +286,7 @@ public class Favorite extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_UP){
+			if(action == MotionEvent.ACTION_DOWN){
 				this.view = view;
 				this.alert();
 			}

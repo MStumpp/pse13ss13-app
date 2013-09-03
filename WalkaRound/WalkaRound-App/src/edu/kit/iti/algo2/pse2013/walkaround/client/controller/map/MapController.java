@@ -31,7 +31,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleMod
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView.POIInfoListener;
