@@ -241,11 +241,24 @@ public class RouteController {
 		return false;
 	}
 
-	public boolean moveActiveWaypoint(Coordinate c) {
+	public boolean moveActiveWaypointMoveOnly(Coordinate c) {
 		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
 
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
-			this.currentRoute.moveActiveWaypoint(c);
+			this.currentRoute.moveActiveWaypointMoveOnly(c);
+			this.notifyAllRouteListeners();
+			return true;
+		}
+
+		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) returning false");
+		return false;
+	}
+	
+	public boolean moveActiveWaypointComputeOnly(Coordinate c) {
+		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
+
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			this.currentRoute.moveActiveWaypointMoveAndCompute(c);
 			this.notifyAllRouteListeners();
 			return true;
 		}
