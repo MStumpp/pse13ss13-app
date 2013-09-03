@@ -210,21 +210,19 @@ public class Route implements RouteInfo {
 
 	/**
 	 * Moves the active waypoint to the position of the given coordinate.
+	 * Does not compute new routes afterwards.
 	 */
-	public void moveActiveWaypoint(final Coordinate coord) {
-		Log.d(TAG_ROUTE, "moveActiveWaypoint(Coordinate " + coord
+	public void moveActiveWaypointMoveOnly(final Coordinate coord) {
+		Log.d(TAG_ROUTE, "moveActiveWaypointMoveOnly(Coordinate " + coord
 				+ ") METHOD START ");
 
-		// TODO:
-		if (this.activeWaypoint != null) {
+		if (this.activeWaypoint != null && coord != null) {
 			Log.d(TAG_ROUTE,
-					"moveActiveWaypoint(Coordinate) Active Waypoint is "
+					"moveActiveWaypointMoveOnly(Coordinate) Active Waypoint is "
 							+ this.activeWaypoint.toString());
 			LinkedList<Waypoint> waypoints = this.getWaypoints();
-			int indexOfActiveWaypoint = waypoints.indexOf(this
-					.getActiveWaypoint());
-			Log.d(TAG_ROUTE,
-					"moveActiveWaypoint(coord) Active Waypoint is Nr. "
+			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
+			Log.d(TAG_ROUTE, "moveActiveWaypointMoveOnly(coord) Active Waypoint is Nr. "
 							+ (indexOfActiveWaypoint + 1) + " of "
 							+ waypoints.size() + " Waypoints in route.");
 
@@ -233,33 +231,14 @@ public class Route implements RouteInfo {
 			final Waypoint afterActive = this
 					.getNextWaypoint(indexOfActiveWaypoint);
 
-			final Waypoint activeWP = this.activeWaypoint;
-			final Route tempCurrentRoute = this;
-
 			if (beforeActive != null) {
 				Log.d(TAG_ROUTE,
-						"moveActiveWaypoint(coord) case beforeActive != null, beforeActive is nr. "
+						"moveActiveWaypointMoveOnly(coord) case beforeActive != null, beforeActive is nr. "
 								+ (waypoints.indexOf(beforeActive) + 1) + " / "
 								+ waypoints.size() + " in route");
 
-				this.deletePathBetweenTwoWaypoints(beforeActive,
-						this.activeWaypoint);
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
 
-				Thread pathCalculator = new Thread(new Runnable() {
-					public void run() {
-						Log.d(TAG_ROUTE,
-								"Thread.run() in moveActiveWaypoint(Coordinate)");
-						RouteInfo newRouteBeforeActiveWaypoint;
-
-						newRouteBeforeActiveWaypoint = tempCurrentRoute
-								.computeShortestPath(beforeActive, coord);
-						tempCurrentRoute.addRouteBetweenTwoCoords(
-								newRouteBeforeActiveWaypoint, beforeActive,
-								activeWP);
-
-					}
-				});
-				pathCalculator.start();
 			}
 
 			if (afterActive != null) {
@@ -268,33 +247,69 @@ public class Route implements RouteInfo {
 								+ (waypoints.indexOf(afterActive) + 1) + " / "
 								+ waypoints.size() + " in route");
 
-				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,
-						afterActive);
-
-				Thread pathCalculator = new Thread(new Runnable() {
-					public void run() {
-						Log.d(TAG_ROUTE,
-								"Thread.run() in moveActiveWaypoint(Coordinate)");
-						RouteInfo newRoutePastActiveWaypoint;
-
-						newRoutePastActiveWaypoint = tempCurrentRoute
-								.computeShortestPath(coord, afterActive);
-						tempCurrentRoute.addRouteBetweenTwoCoords(
-								newRoutePastActiveWaypoint, activeWP,
-								afterActive);
-
-					}
-				});
-				pathCalculator.start();
+				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,	afterActive);
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());
 			this.activeWaypoint.setLatitude(coord.getLatitude());
 
 		}
+		this.cleanRouteOfDuplicateCoordinatePairs();
+		
+	}
+	
+	
+	/**
+	 * Moves the active waypoint to the position of the given coordinate. OLD VERSION!
+	 */
+	public void moveActiveWaypointComputeOnly(final Coordinate coord) {
+		Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate " + coord
+				+ ") METHOD START ");
+		
+		if (this.activeWaypoint != null && coord != null) {
+			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate) Active Waypoint is " + this.activeWaypoint.toString());
+			LinkedList<Waypoint> waypoints = this.getWaypoints();
+			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
+			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) Active Waypoint is Nr. " + (indexOfActiveWaypoint + 1) + " of " + waypoints.size() + " Waypoints in route.");
+			
+			final Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
+			final Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
+			Waypoint activeWP = this.activeWaypoint;
+			RouteInfo newRouteBeforeActiveWaypoint = null;
+			RouteInfo newRoutePastActiveWaypoint = null;
+			
+			if (beforeActive != null) {
+				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) case beforeActive != null, beforeActive is nr. "	+ (waypoints.indexOf(beforeActive) + 1) + " / "	+ waypoints.size() + " in route");
+				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				
+				newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
+				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, activeWP);
+			}
+
+			if (afterActive != null) {
+				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) case afterActive != null, afterActive is nr. " + (waypoints.indexOf(afterActive) + 1) + " / " + waypoints.size() + " in route");
+				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+				
+				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
+				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
+			}
+			
+			if (newRouteBeforeActiveWaypoint != null) {
+				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
+				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
+				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+			} else if (newRoutePastActiveWaypoint != null) {
+				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getLast();
+				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
+				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+			}
+			
+		}
 
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
+	
+	
 
 	public void deleteActiveWaypoint() {
 		Log.d(TAG_ROUTE, "deleteActiveWaypoint() METHOD START");

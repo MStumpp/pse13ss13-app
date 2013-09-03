@@ -241,11 +241,12 @@ public class RouteController {
 		return false;
 	}
 
-	public boolean moveActiveWaypoint(Coordinate c) {
+
+	public boolean moveActiveWaypointMoveOnly(Coordinate c) {
 		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
 
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
-			this.currentRoute.moveActiveWaypoint(c);
+			this.currentRoute.moveActiveWaypointMoveOnly(c);
 			this.notifyAllRouteListeners();
 			return true;
 		}
@@ -253,6 +254,29 @@ public class RouteController {
 		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) returning false");
 		return false;
 	}
+	
+	public boolean moveActiveWaypointComputeOnly(final Coordinate c) {
+		Log.d(TAG,	"RouteController.moveActiveWaypointComputeOnly(Coordinate) METHOD START");
+		
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			
+			RouteController.routeChanger = new Thread (new Runnable() {
+				public void run() {
+					Log.d(TAG, "Thread.run() in moveActiveWaypointComputeOnly()");
+					newCurrentRoute.moveActiveWaypointComputeOnly(c);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
+		}
+
+		Log.d(TAG,	"RouteController.moveActiveWaypointComputeOnly(Coordinate) returning false");
+		return false;
+	}
+	
+	
 
 	public boolean deleteActiveWaypoint() {
 		Log.d(TAG, "RouteController.deleteActiveWaypoint()");
