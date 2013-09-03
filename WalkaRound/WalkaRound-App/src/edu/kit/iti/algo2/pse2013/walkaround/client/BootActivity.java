@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.SearchMenuController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
@@ -98,7 +97,6 @@ public class BootActivity extends Activity {
 				// Controller initialisierung
 
 				RouteController.getInstance();
-				SearchMenuController.getInstance();
 				CurrentMapStyleModel.getInstance();
 				String mapStyle = PreferenceUtility.getInstance().getMapStyle();
 				CurrentMapStyleModel.getInstance().setCurrentMapStyle(mapStyle);
