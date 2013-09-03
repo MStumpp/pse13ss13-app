@@ -46,6 +46,7 @@ public final class TextToSpeechUtility implements OnInitListener,
 	 */
 	public boolean speak(String text) {
 		if (isReady && sound) {
+			Log.d(TAG_TTSUTIL, "TextToSpeech is speaking");
 			tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
 			return true;
 		} else {

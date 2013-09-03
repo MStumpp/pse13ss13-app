@@ -8,10 +8,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
@@ -215,6 +217,8 @@ public class MapControllerOld implements RouteListener, PositionListener,
 		// Controller
 
 		this.routeController = RouteController.getInstance();
+		
+
 	}
 
 	/*

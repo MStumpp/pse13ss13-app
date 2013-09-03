@@ -17,7 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 
-public class POI extends RelativeLayout {
+public class POILayout extends RelativeLayout {
 
 	private ScrollView scrollView;
 	private static int category1 = R.string.bars_and_pubs;
@@ -37,7 +37,7 @@ public class POI extends RelativeLayout {
 	private LinkedList<Integer> category = new LinkedList<Integer>();
 	private LinearLayout content;
 
-	public POI(Context context, AttributeSet attrs) {
+	public POILayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		Point size = BoundingBox.getInstance(context).getDisplaySize();

@@ -69,7 +69,10 @@ public class POIManager {
 		 * Log.d(TAG_POIMANAGER, "location data io!" +
 		 * locationDataIO.getPOIs().size());
 		 * 
-		 * } catch (IOException e) { Log.d(TAG_POIMANAGER, e.toString()); }
+		 * } catch (IOException e) { Log.d(TAG_POIMANAGER, e.toString()); }catch (OutOfMemoryError e) {
+			Log.d(TAG_POIMANAGER, e.toString());
+			System.gc();
+		}
 		 */
 	}
 
@@ -173,6 +176,9 @@ public class POIManager {
 
 		} catch (IOException e) {
 			Log.d(TAG_POIMANAGER, e.toString());
+		} catch (OutOfMemoryError e) {
+			Log.d(TAG_POIMANAGER, e.toString());
+			System.gc();
 		}
 		return poiList;
 		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
@@ -229,6 +235,9 @@ public class POIManager {
 			}
 		} catch (IOException e) {
 			Log.d(TAG_POIMANAGER, e.toString());
+		} catch (OutOfMemoryError e) {
+			Log.d(TAG_POIMANAGER, e.toString());
+			System.gc();
 		}
 		System.gc();
 		return poiList;
@@ -307,6 +316,9 @@ public class POIManager {
 
 		} catch (IOException e) {
 			Log.d(TAG_POIMANAGER, e.toString());
+		} catch (OutOfMemoryError e) {
+			Log.d(TAG_POIMANAGER, e.toString());
+			System.gc();
 		}
 		System.gc();
 		return suggestions;

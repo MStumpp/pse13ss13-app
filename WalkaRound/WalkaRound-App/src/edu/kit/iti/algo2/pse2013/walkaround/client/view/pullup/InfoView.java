@@ -51,6 +51,8 @@ public class InfoView extends Fragment implements POIImageListener {
 				R.id.poiinfoview_category);
 		this.textView = (TextView) this.getActivity().findViewById(
 				R.id.poiinfoview_text);
+		
+		
 		save = (ImageView) (this.getActivity().findViewById(R.id.savepoi));
 		play = (ImageView) (this.getActivity().findViewById(R.id.play));
 

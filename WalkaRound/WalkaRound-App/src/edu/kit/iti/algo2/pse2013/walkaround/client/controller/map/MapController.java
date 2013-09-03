@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,17 +30,19 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView.POIInfoListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POI.POIChangeListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout.POIChangeListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 public class MapController extends Activity implements HeadUpViewListener,
-		PositionListener, CompassListener, RouteListener, UpdateFavorites, ComputeRoundtripListener, POIChangeListener {
+		PositionListener, CompassListener, RouteListener, UpdateFavorites, ComputeRoundtripListener, POIChangeListener, POIInfoListener {
 
 	private MapView mapView;
 
@@ -61,7 +64,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 	private WaypointView waypointView;
 
-	private PullUpView pullUpview;
+	private PullUpView pullUpView;
 
 	private POIView poiView;
 
@@ -119,13 +122,15 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 		mapView.computeParams();
 		tileFetcher.requestTiles(coorBox, mapView);
-		pullUpview = (PullUpView) this.findViewById(R.id.pullUpView);
-		pullUpview.bringToFront();
+		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
+		pullUpView.bringToFront();
 
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
-		pullUpview.registerComputeRoundtripListener(this);
-		pullUpview.registerPOIChangeListener(this);
+		pullUpView.registerComputeRoundtripListener(this);
+		pullUpView.registerPOIChangeListener(this);
+		poiView.registerPOIInfoListener(this);
+		
 		
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -253,7 +258,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		runOnUiThread(new Runnable() {
 			public void run() {
 				waypointView.updateWaypoint();
-				pullUpview.updateRoute();
+				pullUpView.updateRoute();
 			}
 		});
 	}
@@ -262,7 +267,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 	public void updateFacorites() {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				pullUpview.updateFavorite();
+				pullUpView.updateFavorite();
 			}
 		});
 	}
@@ -315,6 +320,12 @@ public class MapController extends Activity implements HeadUpViewListener,
 	@Override
 	public void onPOIChange() {
 		poiView.updatePOIView();
+	}
+
+	@Override
+	public void callPoiInfo(POI poi) {
+		pullUpView.updateInfoView(poi);
+		
 	}
 
 }

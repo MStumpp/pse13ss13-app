@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,6 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class POIView extends RelativeLayout {
@@ -27,9 +29,9 @@ public class POIView extends RelativeLayout {
 
 		coorBox = BoundingBox.getInstance(context);
 	}
-
+	List<POI> poiList;
 	public void updatePOIView() {
-		List<POI> poiList = POIManager.getInstance(getContext())
+		poiList = POIManager.getInstance(getContext())
 				.getPOIsWithinRectangle(coorBox.getTopLeft(),
 						coorBox.getBottomRight(), coorBox.getLevelOfDetail());
 
@@ -74,13 +76,50 @@ public class POIView extends RelativeLayout {
 
 			iv.setY(p.getY() - coorBox.getDisplaySize().x / 10);
 			iv.setX(p.getX() - coorBox.getDisplaySize().x / 10 / 2);
-			iv.setTag(p.getId());
+			iv.setId(p.getId());
 			iv.setVisibility(View.VISIBLE);
 			iv.setScaleType(ImageView.ScaleType.FIT_XY);
 			iv.setImageResource(poiDrawable);
-			//iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));
+			iv.setOnTouchListener(new POICall());
 
 			this.addView(iv, paramsOption);
 		}
+	}
+	
+	public class POICall implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			
+			int action = event.getAction();
+			
+			if(action == MotionEvent.ACTION_UP){
+				int id = view.getId();
+				for(POI poi:poiList){
+					if(id == poi.getId()){
+						notifyPOIInfoListener(poi);
+						break;
+					}
+				}
+			}
+			
+			return false;
+		}
+		
+	}
+	LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
+
+	private void notifyPOIInfoListener(POI poi) {
+		for (POIInfoListener l : info) {
+			l.callPoiInfo(poi);
+		}
+	}
+
+	public void registerPOIInfoListener(POIInfoListener listener) {
+		info.add(listener);
+	}
+
+	public interface POIInfoListener {
+		public void callPoiInfo(POI poi);
 	}
 }
