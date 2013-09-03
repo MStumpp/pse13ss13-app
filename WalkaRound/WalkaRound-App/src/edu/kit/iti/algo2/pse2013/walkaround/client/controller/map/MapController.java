@@ -22,19 +22,42 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpViewOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Point;
+import android.location.Location;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class MapController extends Activity implements HeadUpViewListener,
-		PositionListener, CompassListener, RouteListener, UpdateFavorites {
+		PositionListener, CompassListener, RouteListener, UpdateFavorites, ComputeRoundtripListener {
 
 	private MapView mapView;
 
@@ -114,6 +137,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
+		pullUpview.registerComputeRoundtripListener(this);
 
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -192,11 +216,14 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void onPositionChange(Location androidLocation) {
+
 		userCoordinate = new Coordinate(androidLocation.getLatitude(),
 				androidLocation.getLongitude());
-		updateUser();
-	}
 
+		updateUser();
+
+	}
+	
 	private void updateUser() {
 		double lon = -coorBox.getCenter().getLongitude()
 				+ userCoordinate.getLongitude();
@@ -252,6 +279,51 @@ public class MapController extends Activity implements HeadUpViewListener,
 				pullUpview.updateFavorite();
 			}
 		});
+	}
+
+	private static int ROUNDTRIP_TIME = 3000;
+	
+	@Override
+	public void onComputeRoundtrip(int profile, int length) {
+		if(RouteController.getInstance().getCurrentRoute().getWaypoints().isEmpty()){
+
+			Coordinate next = CoordinateUtility
+					.convertDisplayCoordinateToCoordinate(
+							new DisplayCoordinate(user.getX(), user.getY()),
+							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
+
+			RouteController.getInstance().addWaypoint(
+					new Waypoint(next.getLatitude(), next.getLongitude(),
+							"PLACEHOLDER"));
+			try {
+				Thread.sleep(ROUNDTRIP_TIME);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() == null && !RouteController.getInstance().getCurrentRoute().getWaypoints().isEmpty()){
+			RouteController.getInstance().setActiveWaypoint(RouteController.getInstance().getCurrentRoute().getWaypoints().getLast());
+		}
+		
+		if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() != null){
+			RouteController.getInstance().addRoundtrip(profile, length);
+		} else {
+				AlertDialog alertDialog = new AlertDialog.Builder(this)
+						.create();
+				alertDialog.setTitle("Fehlender AusgangsPunkt");
+				alertDialog.setMessage("Bitte setzten Sie zuerst einen Ausgangspunkt auf der Karte.");
+				alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								
+							}
+						});
+				alertDialog.show();
+			
+		}
+		
 	}
 
 }

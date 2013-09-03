@@ -2,9 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views;
 
 import java.util.LinkedList;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -12,13 +9,13 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.RelativeLayout.LayoutParams;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 
 public class POI extends RelativeLayout {
 

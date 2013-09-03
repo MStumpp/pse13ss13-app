@@ -11,22 +11,16 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapControllerOld;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.generator.MapGen;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -363,7 +357,6 @@ public class Search extends RelativeLayout {
 						location.setText(value.getAddress().toString());
 						location.setOnTouchListener(new locationTouch(value,
 								location));
-						// TODO TextSize relativieren
 						location.setTextSize(30);
 						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
 								LinearLayout.LayoutParams.MATCH_PARENT,
@@ -407,7 +400,6 @@ public class Search extends RelativeLayout {
 									+ value.getId());
 							poi.setText(value.getName());
 							poi.setOnTouchListener(new poiTouch(value, poi));
-							// TODO TextSize relativieren
 							poi.setTextSize(30);
 							LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
 									LinearLayout.LayoutParams.MATCH_PARENT,
