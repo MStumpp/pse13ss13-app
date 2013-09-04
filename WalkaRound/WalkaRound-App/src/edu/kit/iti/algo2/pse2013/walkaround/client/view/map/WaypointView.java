@@ -18,6 +18,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteContr
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 public class WaypointView extends RelativeLayout {
 
@@ -159,6 +161,13 @@ public class WaypointView extends RelativeLayout {
 				Log.d(TAG, "UserTouch auf View ID:" + id);
 				currentId = id;
 				currentView = iv;
+				
+				int action = event.getAction();
+				
+				if(action == MotionEvent.ACTION_UP){
+					RouteController.getInstance().moveActiveWaypointComputeOnly();
+				}
+				
 				//if (waypointGestureDetector.onTouchEvent(event)) {
 	           //     return true;
 	            //}
@@ -216,6 +225,13 @@ public class WaypointView extends RelativeLayout {
 				float deltaX, float deltaY) {
 			Log.d(TAG, "Waypoint onScroll " + currentId);
 
+			Coordinate next = CoordinateUtility
+					.convertDisplayCoordinateToCoordinate(
+							new DisplayCoordinate(event2.getX(), event2.getY()),
+							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
+			
+			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
+			
 			//routeList.removeView(currentView);
 			//currentView.setX(currentView.getX() - deltaX);
 			//currentView.setY(currentView.getY() - deltaY);

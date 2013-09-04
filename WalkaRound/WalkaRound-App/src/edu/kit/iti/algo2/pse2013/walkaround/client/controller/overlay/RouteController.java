@@ -241,11 +241,13 @@ public class RouteController {
 		return false;
 	}
 
+	public Coordinate c;
 
 	public boolean moveActiveWaypointMoveOnly(Coordinate c) {
 		Log.d(TAG,	"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
 
 		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+			this.c = c;
 			this.currentRoute.moveActiveWaypointMoveOnly(c);
 			this.notifyAllRouteListeners();
 			return true;
@@ -255,10 +257,10 @@ public class RouteController {
 		return false;
 	}
 	
-	public boolean moveActiveWaypointComputeOnly(final Coordinate c) {
+	public boolean moveActiveWaypointComputeOnly() {
 		Log.d(TAG,	"RouteController.moveActiveWaypointComputeOnly(Coordinate) METHOD START");
 		
-		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+		if (c != null || RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			
 			RouteController.routeChanger = new Thread (new Runnable() {
