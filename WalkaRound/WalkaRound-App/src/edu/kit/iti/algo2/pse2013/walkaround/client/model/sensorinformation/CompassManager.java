@@ -11,9 +11,9 @@ import android.util.Log;
 
 /**
  * This class hold and compare the last known orientation of the device
- *
+ * 
  * @author Lukas Müller, Ludwig Biermann
- *
+ * 
  */
 public class CompassManager implements SensorEventListener {
 
@@ -28,41 +28,43 @@ public class CompassManager implements SensorEventListener {
 	 */
 	private LinkedList<CompassListener> compassListeners;
 
-	/*
-	 *
-	 */
-	private float lastKnownBearing;
 
 	private SensorManager sensorManager;
 	private Sensor accellerometer;
 	private Sensor magneticFieldSensor;
-	private float[] accellerometerReadout;
-	private float[] magneticFieldSensorReadout;
-	private static int messagesPosted = 0;
-	private static int messagePostingInterval = 1000;
+
+	private float[] valuesAccelerometer = new float[3];;
+	private float[] valuesMagneticField = new float[3];;
+
+	private float[] matrixR = new float[9];;
+	private float[] matrixI = new float[9];;
+	private float[] matrixValues = new float[3];;
 
 	/**
 	 *
 	 */
 	public CompassManager(Context context) {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
-		lastKnownBearing = 0.0f;
 		compassListeners = new LinkedList<CompassListener>();
 
-		this.sensorManager = (SensorManager) context.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+		this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-		Log.d(TAG_COMPASS_MANAGER, "" + sensorManager.getSensorList(Sensor.TYPE_ALL));
+		Log.d(TAG_COMPASS_MANAGER,
+				"" + sensorManager.getSensorList(Sensor.TYPE_ALL));
 
-		this.accellerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		this.magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		this.accellerometer = sensorManager
+				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		this.magneticFieldSensor = sensorManager
+				.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-		this.sensorManager.registerListener(this, this.accellerometer, SensorManager.SENSOR_DELAY_NORMAL);
-		this.sensorManager.registerListener(this, this.magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		this.sensorManager.registerListener(this, this.accellerometer,
+				SensorManager.SENSOR_DELAY_NORMAL);
+		this.sensorManager.registerListener(this, this.magneticFieldSensor,
+				SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
-
 	/**
-	 *
+	 * 
 	 * @param newCL
 	 */
 	public void registerCompassListener(CompassListener newCL) {
@@ -72,20 +74,15 @@ public class CompassManager implements SensorEventListener {
 		if (!this.compassListeners.contains(newCL)) {
 			this.compassListeners.add(newCL);
 		}
-		this.notifyAllCompassListeners();
 	}
 
 	/**
 	 *
 	 */
-	private void notifyAllCompassListeners() {
-		if (this.messagesPosted % this.messagePostingInterval == 0) {
-			Log.d(TAG_COMPASS_MANAGER, "CompassManager.notifyAllCompassListeners() sending onCompassChange(" + this.lastKnownBearing + ") to listeners");
-		}
+	private void notifyAllCompassListeners(float bearing) {
 		for (CompassListener cl : this.compassListeners) {
-			cl.onCompassChange(this.lastKnownBearing);
+			cl.onCompassChange(bearing);
 		}
-		this.messagesPosted++;
 	}
 
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
@@ -93,30 +90,32 @@ public class CompassManager implements SensorEventListener {
 	}
 
 	public void onSensorChanged(SensorEvent event) {
-		if (this.messagesPosted % this.messagePostingInterval == 0) {
-			Log.d(TAG_COMPASS_MANAGER, "Compass Manager onSensorChanged(SensorEvent)");
-		}
-		if (event.sensor.getType() == this.accellerometer.getType()) {
-			this.accellerometerReadout = event.values.clone();
-		}
-		if (event.sensor.getType() == this.magneticFieldSensor.getType()) {
-			this.magneticFieldSensorReadout = event.values;
-		}
 
-		if (this.accellerometerReadout != null && this.magneticFieldSensorReadout != null) {
-			float[] R = new float[9];
-			float[] I = new float[9];
-			boolean processed = SensorManager.getRotationMatrix(R, I, this.accellerometerReadout, this.magneticFieldSensorReadout);
-			if (processed) {
-				float[] orientation = new float[3];
-				SensorManager.getOrientation(R, orientation);
-				this.lastKnownBearing = (float) Math.toDegrees(orientation[0]);
+		switch (event.sensor.getType()) {
+		case Sensor.TYPE_ACCELEROMETER:
+			for (int i = 0; i < 3; i++) {
+				valuesAccelerometer[i] = event.values[i];
 			}
+			break;
+		case Sensor.TYPE_MAGNETIC_FIELD:
+			for (int i = 0; i < 3; i++) {
+				valuesMagneticField[i] = event.values[i];
+			}
+			break;
 		}
-		this.notifyAllCompassListeners();
+
+		boolean success = SensorManager.getRotationMatrix(matrixR, matrixI,
+				valuesAccelerometer, valuesMagneticField);
+
+		if (success) {
+			SensorManager.getOrientation(matrixR, matrixValues);
+
+			double azimuth = Math.toDegrees(matrixValues[0]);
+			double pitch = Math.toDegrees(matrixValues[1]);
+			double roll = Math.toDegrees(matrixValues[2]);
+
+			this.notifyAllCompassListeners((float)azimuth);
+		}
 	}
-
-
-
 
 }
