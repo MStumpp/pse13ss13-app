@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -33,6 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
@@ -53,6 +55,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -107,6 +110,14 @@ public class MapController extends Activity implements HeadUpViewListener,
 				+ coorBox.getDisplaySize().toString());
 		PositionManager.initialize(this);
 
+
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+	    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ) {
+	    	Log.d("unsinn", "wtf");
+			gpsAlert();
+		}
+		
 		// BoundingBox & tiles
 
 		this.tileFetcher = TileFetcher.getInstance();
@@ -485,4 +496,43 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 	}
 
+	public void gpsAlert() {
+		Log.d(TAG, "ALERT");
+		
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle("GPS Signal");
+		alert.setMessage("Ihr GPS ist nicht aktiviert. Soll es aktiviert werden?");
+		alert.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+					}
+				});
+
+		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, final int id) {
+                 dialog.cancel();
+            }
+        });
+		
+		alert.show();
+	}
+
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		System.gc();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		TextToSpeechUtility.getInstance().shutdown();
+		Log.d(TAG, "Destroy WalkAround");
+	}
+
+	@Override
+	public void onBackPressed() {
+        this.moveTaskToBack(true);
+	}
 }

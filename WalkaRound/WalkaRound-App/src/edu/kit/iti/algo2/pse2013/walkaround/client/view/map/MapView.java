@@ -56,7 +56,6 @@ public class MapView extends View implements TileListener {
 		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
 				Bitmap.Config.ARGB_8888);
 		this.computeParams();
-
 	}
 
 	protected void onDraw(Canvas c) {

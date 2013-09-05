@@ -399,5 +399,4 @@ public class BoundingBox {
 			return "Double Paring: width: " + width + ", height: " + height;
 		}
 	}
-
 }

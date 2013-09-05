@@ -2,11 +2,13 @@ package edu.kit.iti.algo2.pse2013.walkaround.client;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -108,8 +110,10 @@ public class BootActivity extends Activity {
 
 				FavoriteManager.initialize(getApplicationContext());
 				POIManager.initialize(getApplicationContext());
+
+		    	Looper.prepare();
+				
 				RouteProcessing.getInstance();
-				Looper.prepare();
 				PositionManager.initialize(getApplicationContext());
 
 				Log.d("debugFu", " "
@@ -214,4 +218,5 @@ public class BootActivity extends Activity {
 			tiles++;
 		}
 	}
+	
 }
