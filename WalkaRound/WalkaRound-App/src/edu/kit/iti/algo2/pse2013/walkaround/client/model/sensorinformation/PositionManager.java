@@ -2,8 +2,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.location.GpsStatus.Listener;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,83 +17,78 @@ import android.util.Log;
 /**
  * This class hold and return the last known detected Position from the android
  * file System
- *
+ * 
  * @author Lukas Müller, Ludwig Biermann
- *
+ * 
  */
-public class PositionManager {
+public class PositionManager implements GpsStatus.Listener {
 
-	private final int minMilliSecondsBetweenUpdates = 5000;
-	private final int minMetersBetweenUpdates = 2;
+	private static final int UPDATE_TIME = 5000;
+	private static final int UPDATE_DISTANCE = 2;
 
+	private static String TAG = PositionManager.class.getSimpleName();
 
-	/*
-	 *
-	 */
-	private static String TAG_POSITION_MANAGER = PositionManager.class
-			.getSimpleName();
-
-	/*
-	 *
-	 */
 	private LinkedList<PositionListener> positionListeners;
 
-	/*
-	 *
-	 */
 	private static PositionManager positionManager;
 
-	/*
-	 *
-	 */
 	private LocationManager locationManager;
-	private int lastGPSEvent;
 	private Location lastKnownLocation;
 
 	private CompassManager compass;
 	private SpeedManager speed;
+	
+	private Criteria c;
+	
+	private LocListener listener;
 
 	/**
-	 *
+	 * 
 	 * @param context
 	 */
-	private PositionManager(Context context) {
-
+	private PositionManager(final Context context) {
+		Log.d(TAG, "Position Manger initialize.");
+		
+		listener = new LocListener();
+		
 		positionListeners = new LinkedList<PositionListener>();
 
-		locationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+		
+		locationManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
 
-		Log.d(TAG_POSITION_MANAGER, "GPS enabled: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+	    locationManager.addGpsStatusListener(this);
 
-		// TODO: Check if Position Manager really sends updates:
-		// Is this necessary?:
-		// locationManager.addGpsStatusListener(positionManager);
+		c = new Criteria();
+		c.setAccuracy(Criteria.ACCURACY_FINE);
+		c.setBearingAccuracy(Criteria.ACCURACY_FINE);
+		c.setSpeedAccuracy(Criteria.ACCURACY_FINE);
+		
+		setBestProvider();
 
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minMilliSecondsBetweenUpdates, minMetersBetweenUpdates, locListener);
-		this.getLastKnownPositionFromAndroid();
-
-		//initialize other Sensors
-		compass = new CompassManager(context.getApplicationContext());
+		// initialize other Sensors
+		compass = new CompassManager(context);
 		speed = new SpeedManager(this);
 	}
 
 	/**
-	 *
+	 * 
 	 * @param context
 	 */
 	public static void initialize(Context context) {
-		Log.d(TAG_POSITION_MANAGER, "Context is " + (context != null));
+		Log.d(TAG, "Context is " + (context != null));
 		positionManager = new PositionManager(context);
 	}
 
+	
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public static PositionManager getInstance() {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.getInstance()");
+		Log.d(TAG, "PositionManager.getInstance()");
 		if (positionManager == null) {
-			Log.e(TAG_POSITION_MANAGER, "PositionManager not initialized");
+			Log.e(TAG, "PositionManager not initialized");
 			return null;
 		}
 		return positionManager;
@@ -97,98 +96,87 @@ public class PositionManager {
 
 	/**
 	 * Return the SpeedManager
-	 *
+	 * 
 	 * @return SpeedManager
 	 */
-	public SpeedManager getSpeedManager(){
+	public SpeedManager getSpeedManager() {
 		return speed;
 	}
 
 	/**
 	 * Returns the CompassManager
-	 *
+	 * 
 	 * @return CompassManager
 	 */
-	public CompassManager getCompassManager(){
+	public CompassManager getCompassManager() {
 		return compass;
 	}
 
 	/**
-	 *
+	 * 
 	 * @param newPL
 	 */
 	public void registerPositionListener(PositionListener newPL) {
-		Log.d(TAG_POSITION_MANAGER,
-				"PositionManager.registerPositionListener(PositionListener "
-						+ newPL.getClass().getSimpleName() + ")");
+		Log.d(TAG, "PositionManager.registerPositionListener(PositionListener "
+				+ newPL.getClass().getSimpleName() + ")");
 		if (!this.positionListeners.contains(newPL)) {
 			this.positionListeners.add(newPL);
 		}
-		this.getLastKnownPositionFromAndroid();
 	}
 
 	/**
 	 *
 	 */
-	private void notifyAllPositionListeners() {
-		Log.d(TAG_POSITION_MANAGER,	"PositionManager.notifyAllPositionListeners() Position is not null: " + (lastKnownLocation != null));
-		if (this.lastKnownLocation != null) {
-			Log.d(TAG_POSITION_MANAGER, "Sending the following Position to listeners: " + lastKnownLocation.toString());
-			for (PositionListener pl : this.positionListeners) {
-				Log.d(TAG_POSITION_MANAGER,	"notify position listener - pl is not null: " + (pl != null));
-				pl.onPositionChange(lastKnownLocation);
-			}
+	private void notifyAllPositionListeners(Location l) {
+		for (PositionListener pl : this.positionListeners) {
+			Log.d(TAG, "Location Provider: " + l.getProvider().toString() + " Position: " + l.getLatitude() + " : " + l.getLongitude());
+			pl.onPositionChange(l);
 		}
+
 	}
 
-	public Location getLastKnownPosition(){
+	public Location getLastKnownPosition() {
 		return this.lastKnownLocation;
 	}
-
-	/**
-	 *
-	 */
-	public void onGpsStatusChanged(int event) {
-		Log.d(TAG_POSITION_MANAGER, "PositionManager.onGpsStatusChanged(int " + event + ")");
-		lastGPSEvent = event;
-		if (lastGPSEvent == 3 || lastGPSEvent == 4) {
-			this.getLastKnownPositionFromAndroid();
+	
+	private void setBestProvider() {
+		String p = locationManager.getBestProvider(c, true);
+		
+		if(p != null && !p.isEmpty()){
+			Log.e(TAG, "Provider found!");
+		locationManager.requestLocationUpdates(p,
+				UPDATE_TIME, UPDATE_DISTANCE, listener);
+		} else {
+			Log.e(TAG, "No Provider found!");
+			p = locationManager.getBestProvider(c, false);
+			locationManager.requestLocationUpdates(p,
+				UPDATE_TIME, UPDATE_DISTANCE, listener);
 		}
 	}
 
-	/**
-	 * the method return the last known position of the user if possible
-	 */
-	private void getLastKnownPositionFromAndroid() {
-		Log.d(TAG_POSITION_MANAGER, "getLastKnownPosition");
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			Log.d(TAG_POSITION_MANAGER, "getLastKnownPositionFromAndroid() - GPS is enabled");
-			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			notifyAllPositionListeners();
-		} else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			Log.d(TAG_POSITION_MANAGER, "getLastKnownPositionFromAndroid() - GPS is enabled");
-			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			Log.d(TAG_POSITION_MANAGER, "GPS");
-			notifyAllPositionListeners();
-		}
-	}
+	private class LocListener implements LocationListener {
 
-	private final LocationListener locListener = new LocationListener() {
-
-		public void onLocationChanged(Location arg0) {
-			lastKnownLocation = arg0;
+		public void onLocationChanged(Location l) {
+			if (l != null) {
+				notifyAllPositionListeners(l);
+			}
 		}
 
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
+			setBestProvider();
 		}
 
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
+			setBestProvider();
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
+			setBestProvider();
 		}
+	}
+
+	@Override
+	public void onGpsStatusChanged(int event) {
+		setBestProvider();
 	};
 }
