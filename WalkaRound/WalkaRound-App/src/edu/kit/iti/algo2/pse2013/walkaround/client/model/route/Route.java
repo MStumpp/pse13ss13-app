@@ -294,6 +294,7 @@ public class Route implements RouteInfo {
 				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
 			}
 			
+			// TODO error by moving
 			if (newRouteBeforeActiveWaypoint != null) {
 				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());

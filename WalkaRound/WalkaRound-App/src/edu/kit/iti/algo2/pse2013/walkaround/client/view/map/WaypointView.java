@@ -193,10 +193,12 @@ public class WaypointView extends RelativeLayout {
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
 		
+		DisplayCoordinate curentWP;
 
 		public boolean onDown(MotionEvent event) {
 			RouteController.getInstance().setActiveWaypoint(currentId);
 			// mc.getActiveWaypointId();
+			curentWP = new DisplayCoordinate(currentView.getX(), currentView.getY());
 			return true;
 		}
 		
@@ -220,14 +222,18 @@ public class WaypointView extends RelativeLayout {
 		public void onLongPress(MotionEvent event) {
 			Log.d(TAG, "Waypoint onLongPress " + currentId);
 		}
+		
 
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
 			Log.d(TAG, "Waypoint onScroll " + currentId);
 
+			curentWP.setX(curentWP.getX() - deltaX);
+			curentWP.setY(curentWP.getY() - deltaY);
+			
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
-							new DisplayCoordinate(event2.getX(), event2.getY()),
+							new DisplayCoordinate(curentWP.getX(), curentWP.getY()),
 							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
 			
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);

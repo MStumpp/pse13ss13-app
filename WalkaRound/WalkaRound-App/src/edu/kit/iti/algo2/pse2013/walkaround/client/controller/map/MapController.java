@@ -10,9 +10,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -111,8 +114,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		// MapView
 
 		mapView = (MapView) findViewById(R.id.mapView);
-		gestureDetector = new GestureDetector(this, gestureListener);
-
+		gestureDetector = new GestureDetector(this.getApplicationContext(), new MapGestureListener());
 		this.tileFetcher.requestTiles(coorBox, mapView);
 
 		// HeadUpView
@@ -166,17 +168,23 @@ public class MapController extends Activity implements HeadUpViewListener,
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 		pullUpView.setFragment(fragmentTransaction);
-
+		mapView.setOnTouchListener(new MapListener());
 	}
 
-	public boolean onTouchEvent(MotionEvent event) {
-		return gestureDetector.onTouchEvent(event);
+	public class MapListener implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			return gestureDetector.onTouchEvent(event);
+		}
+		
 	}
 
-	SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
+	private class MapGestureListener implements OnGestureListener {
 
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
+			Log.d(TAG, "MapTouch SCroll");
 			coorBox.shiftCenter(distanceX, distanceY);
 			userLock = false;
 			headUpView.setUserPositionLock(isRestricted());
@@ -185,12 +193,32 @@ public class MapController extends Activity implements HeadUpViewListener,
 			updateUser();
 			poiView.updatePOIView();
 			waypointView.updateWaypoint();
+			
 			return true;
 		}
 
 		public void onLongPress(MotionEvent event) {
 			Log.d(TAG, "MapTouch Long Touch");
 
+		}
+
+		@Override
+		public boolean onDown(MotionEvent arg0) {
+			Log.d(TAG, "MapTouch Down");
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
+				float arg3) {
+			Log.d(TAG, "MapTouch Fling");
+			return false;
+		}
+
+		@Override
+		public void onShowPress(MotionEvent event) {
+			Log.d(TAG, "MapTouch Press");
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
 							new DisplayCoordinate(event.getX(), event.getY()),
@@ -199,6 +227,14 @@ public class MapController extends Activity implements HeadUpViewListener,
 			RouteController.getInstance().addWaypoint(
 					new Waypoint(next.getLatitude(), next.getLongitude(),
 							"PLACEHOLDER"));
+			
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent arg0) {
+			Log.d(TAG, "MapTouch Single Tap");
+			// TODO Auto-generated method stub
+			return false;
 		}
 
 	};
