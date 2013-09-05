@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -35,30 +35,32 @@ public class WaypointView extends RelativeLayout {
 	private RouteInfo route;
 	private BoundingBox coorBox;
 	private Drawable flag;
-	//private Drawable flagActive;
+	// private Drawable flagActive;
 	private Drawable flagTarget;
-	//private Drawable flagTargetActive;
+	// private Drawable flagTargetActive;
 	private Drawable waypoint;
 	private GestureDetector waypointGestureDetector;
-	//private Drawable waypointActive;
+
+	// private Drawable waypointActive;
 
 	public WaypointView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		coorBox = BoundingBox.getInstance();
 		this.route = RouteController.getInstance().getCurrentRoute();
-		
+
 		// ---------------------------------------------
 		Log.d(TAG, "Initialisiere Drawables.");
 		flag = this.getResources().getDrawable(DEFAULT_FLAG);
-		//flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);
+		// flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);
 		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);
-		//flagTargetActive = this.getResources().getDrawable(
-		//		DEFAULT_FLAG_TARGET_ACTIVE);
+		// flagTargetActive = this.getResources().getDrawable(
+		// DEFAULT_FLAG_TARGET_ACTIVE);
 		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);
-		//waypointActive = this.getResources().getDrawable(
-		//		DEFAULT_WAYPOINT_ACTIVE);
-		
-		waypointGestureDetector =  new GestureDetector(context, new WaypointGestureDetector());
+		// waypointActive = this.getResources().getDrawable(
+		// DEFAULT_WAYPOINT_ACTIVE);
+
+		waypointGestureDetector = new GestureDetector(context,
+				new WaypointGestureDetector());
 	}
 
 	public void updateWaypoint() {
@@ -133,12 +135,12 @@ public class WaypointView extends RelativeLayout {
 
 		}
 	}
-	
+
 	/**
 	 * This Class intercept the touch to waypoints
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class WaypointTouchListener implements OnTouchListener {
 
@@ -147,7 +149,7 @@ public class WaypointView extends RelativeLayout {
 
 		/**
 		 * Create a new Waypoint
-		 *
+		 * 
 		 * @param iv
 		 *            the new Imageview
 		 */
@@ -161,21 +163,22 @@ public class WaypointView extends RelativeLayout {
 				Log.d(TAG, "UserTouch auf View ID:" + id);
 				currentId = id;
 				currentView = iv;
-				
-				int action = event.getAction();
-				
-				if(action == MotionEvent.ACTION_UP){
-					RouteController.getInstance().moveActiveWaypointComputeOnly();
-				}
-				
-				//if (waypointGestureDetector.onTouchEvent(event)) {
-	           //     return true;
-	            //}
 
-				//if(event.getAction() == MotionEvent.ACTION_UP){
-				//	mc.pushMovedWaypoint();
-				//	}
-				//}
+				int action = event.getAction();
+
+				if (action == MotionEvent.ACTION_UP) {
+					RouteController.getInstance()
+							.moveActiveWaypointComputeOnly();
+				}
+
+				// if (waypointGestureDetector.onTouchEvent(event)) {
+				// return true;
+				// }
+
+				// if(event.getAction() == MotionEvent.ACTION_UP){
+				// mc.pushMovedWaypoint();
+				// }
+				// }
 
 			}
 			return waypointGestureDetector.onTouchEvent(event);
@@ -184,28 +187,30 @@ public class WaypointView extends RelativeLayout {
 
 	private ImageView currentView;
 	private int currentId;
-	
+
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
-		
+
 		DisplayCoordinate curentWP;
 
 		public boolean onDown(MotionEvent event) {
 			RouteController.getInstance().setActiveWaypoint(currentId);
 			// mc.getActiveWaypointId();
-			curentWP = new DisplayCoordinate(currentView.getX(), currentView.getY());
+			curentWP = new DisplayCoordinate(currentView.getX(),
+					currentView.getY());
 			return true;
 		}
-		
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-			Log.d(TAG, "Fling! " + velocityY + " " + e2.getY()
-					+ " " + currentId);
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+
+			Log.d(TAG, "Fling! " + velocityY + " " + e2.getY() + " "
+					+ currentId);
 
 			float velocity = (float) Math.sqrt((double) Math.pow(
 					Math.abs(velocityX), 2)
@@ -222,7 +227,6 @@ public class WaypointView extends RelativeLayout {
 		public void onLongPress(MotionEvent event) {
 			Log.d(TAG, "Waypoint onLongPress " + currentId);
 		}
-		
 
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
@@ -230,20 +234,21 @@ public class WaypointView extends RelativeLayout {
 
 			curentWP.setX(curentWP.getX() - deltaX);
 			curentWP.setY(curentWP.getY() - deltaY);
-			
+
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
-							new DisplayCoordinate(curentWP.getX(), curentWP.getY()),
-							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
-			
+							new DisplayCoordinate(curentWP.getX(), curentWP
+									.getY()), coorBox.getTopLeft(), coorBox
+									.getLevelOfDetail());
+
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
-			
-			//routeList.removeView(currentView);
-			//currentView.setX(currentView.getX() - deltaX);
-			//currentView.setY(currentView.getY() - deltaY);
-			//mc.onMovePoint(-deltaX, -deltaY, currentId);
-			//routeList.addView(currentView);
-			//mIsScrolling = true;
+
+			// routeList.removeView(currentView);
+			// currentView.setX(currentView.getX() - deltaX);
+			// currentView.setY(currentView.getY() - deltaY);
+			// mc.onMovePoint(-deltaX, -deltaY, currentId);
+			// routeList.addView(currentView);
+			// mIsScrolling = true;
 
 			return true;
 		}

@@ -20,20 +20,27 @@
         android:theme="@android:style/Theme.NoTitleBar" >
 
         <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.BootActivity"
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             
         </activity>
         
         <activity
-            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController"
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.WalkaRound"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            
+        </activity>
+        
+        
+        <activity
+            android:name="edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.Option"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             

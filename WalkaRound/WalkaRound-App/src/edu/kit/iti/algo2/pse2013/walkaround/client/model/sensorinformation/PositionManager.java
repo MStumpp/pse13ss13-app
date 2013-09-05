@@ -2,10 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Criteria;
 import android.location.GpsStatus;
 import android.location.Location;
@@ -143,7 +140,7 @@ public class PositionManager implements GpsStatus.Listener {
 		String p = locationManager.getBestProvider(c, true);
 		
 		if(p != null && !p.isEmpty()){
-			Log.e(TAG, "Provider found!");
+			Log.d(TAG, "Provider found!");
 		locationManager.requestLocationUpdates(p,
 				UPDATE_TIME, UPDATE_DISTANCE, listener);
 		} else {
@@ -179,4 +176,9 @@ public class PositionManager implements GpsStatus.Listener {
 	public void onGpsStatusChanged(int event) {
 		setBestProvider();
 	};
+	
+	public interface PositionListener {
+		public void onPositionChange(Location androidLocation);
+	}
+
 }

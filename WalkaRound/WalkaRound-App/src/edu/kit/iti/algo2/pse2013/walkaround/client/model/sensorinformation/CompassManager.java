@@ -86,7 +86,7 @@ public class CompassManager implements SensorEventListener {
 	}
 
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
+		// do nothing
 	}
 
 	public void onSensorChanged(SensorEvent event) {
@@ -111,11 +111,17 @@ public class CompassManager implements SensorEventListener {
 			SensorManager.getOrientation(matrixR, matrixValues);
 
 			double azimuth = Math.toDegrees(matrixValues[0]);
+			@SuppressWarnings("unused")
 			double pitch = Math.toDegrees(matrixValues[1]);
+			@SuppressWarnings("unused")
 			double roll = Math.toDegrees(matrixValues[2]);
 
 			this.notifyAllCompassListeners((float)azimuth);
 		}
+	}
+	
+	public interface CompassListener {
+		public void onCompassChange(float direction);	
 	}
 
 }

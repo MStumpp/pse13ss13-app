@@ -1,27 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
-import android.util.Log;
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.AudibleTextNaviOutput;
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutput;
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.StereoNaviOutput;
 //import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.VisualTextNaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.location.Location;
-import android.preference.PreferenceManager;
 
 /*public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
 

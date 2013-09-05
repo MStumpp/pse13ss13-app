@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
 import android.content.Context;
 import android.graphics.Point;

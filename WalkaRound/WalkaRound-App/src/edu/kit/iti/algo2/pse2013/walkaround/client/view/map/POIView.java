@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -28,11 +28,13 @@ public class POIView extends RelativeLayout {
 
 		coorBox = BoundingBox.getInstance(context);
 	}
+
 	List<POI> poiList;
+
 	public void updatePOIView() {
-		poiList = POIManager.getInstance(getContext())
-				.getPOIsWithinRectangle(coorBox.getTopLeft(),
-						coorBox.getBottomRight(), coorBox.getLevelOfDetail());
+		poiList = POIManager.getInstance(getContext()).getPOIsWithinRectangle(
+				coorBox.getTopLeft(), coorBox.getBottomRight(),
+				coorBox.getLevelOfDetail());
 
 		Log.d(TAG, "POI Anzahl" + poiList.size());
 
@@ -84,27 +86,28 @@ public class POIView extends RelativeLayout {
 			this.addView(iv, paramsOption);
 		}
 	}
-	
+
 	public class POICall implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
-			
+
 			int action = event.getAction();
-			
-			if(action == MotionEvent.ACTION_DOWN){
+
+			if (action == MotionEvent.ACTION_DOWN) {
 				int id = view.getId();
-				for(POI poi:poiList){
-					if(id == poi.getId()){
+				for (POI poi : poiList) {
+					if (id == poi.getId()) {
 						notifyPOIInfoListener(poi);
 					}
 				}
 			}
-			
+
 			return false;
 		}
-		
+
 	}
+
 	LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
 
 	private void notifyPOIInfoListener(POI poi) {

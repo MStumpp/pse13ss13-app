@@ -1,4 +1,4 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views;
+package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup;
 
 import java.util.LinkedList;
 
@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 
 public class POILayout extends RelativeLayout {
 

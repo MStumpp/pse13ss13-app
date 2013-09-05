@@ -21,7 +21,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
@@ -173,4 +172,5 @@ public final class CoordinateNormalizer {
 			return json;
 		}
 	}
+	
 }

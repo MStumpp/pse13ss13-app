@@ -2,6 +2,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation;
 
 import java.util.LinkedList;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
+
 import android.location.Location;
 import android.util.Log;
 /**
@@ -85,5 +87,9 @@ public class SpeedManager implements PositionListener {
 	public void onPositionChange(Location androidLocation) {
 		lastKnownSpeed = androidLocation.getSpeed();
 		this.notifyAllSpeedListeners();
+	}
+	
+	public interface SpeedListener {
+		public void onSpeedChange(double speed);
 	}
 }

@@ -1,18 +1,16 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.map;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,56 +20,34 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.HeadUpViewListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.headup.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView.POIInfoListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.PullUpView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout.POIChangeListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search.UpdateMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.HeadUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.HeadUpView.HeadUpViewListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.PullUpView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.POILayout.POIChangeListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip.ComputeRoundtripListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search.UpdateMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Point;
-import android.location.Location;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
-public class MapController extends Activity implements HeadUpViewListener,
+public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
 		POIInfoListener {
@@ -86,11 +62,10 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 	private HeadUpView headUpView;
 
-	private static String TAG = MapController.class.getSimpleName();
+	private static String TAG = WalkaRound.class.getSimpleName();
 
 	private boolean userLock = true;
 
-	private RouteView routeView;
 	private ImageView user;
 	private int userDiff;
 
@@ -133,9 +108,6 @@ public class MapController extends Activity implements HeadUpViewListener,
 		headUpView = (HeadUpView) findViewById(R.id.headUpView);
 		headUpView.registerListener(this);
 
-		// RouteView
-		routeView = (RouteView) findViewById(R.id.routeView);
-
 		// poiView
 		poiView = (POIView) findViewById(R.id.poiView);
 
@@ -176,10 +148,6 @@ public class MapController extends Activity implements HeadUpViewListener,
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager
-				.beginTransaction();
-		pullUpView.setFragment(fragmentTransaction);
 		mapView.setOnTouchListener(new MapListener());
 	}
 
@@ -337,8 +305,8 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void onOptionPressed() {
-		// TODO Auto-generated method stub
-
+		Intent intent = new Intent(this, Option.class);
+		this.startActivity(intent);
 	}
 
 	@Override
@@ -535,4 +503,5 @@ public class MapController extends Activity implements HeadUpViewListener,
 	public void onBackPressed() {
         this.moveTaskToBack(true);
 	}
+	
 }

@@ -8,7 +8,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
  */
 public class CoordinateNormalizerException extends Exception {
 
-    public CoordinateNormalizerException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5186400608400400008L;
+
+	public CoordinateNormalizerException(String message) {
         super(message);
     }
 

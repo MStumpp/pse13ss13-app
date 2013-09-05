@@ -42,4 +42,9 @@ public final class POIImageFetcher implements Runnable {
 			Log.e(TAG_POIIMAGEFETCHER, "Multithreading failed", e);
 		}
 	}
+	
+	public interface POIImageListener {
+		public void setImage(Bitmap b);
+	}
+
 }

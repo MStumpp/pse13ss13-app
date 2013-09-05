@@ -1,14 +1,11 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller;
 
 import java.util.LinkedList;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -389,5 +386,10 @@ public class RouteController {
 				break;
 			}
 		}
+	}
+	public interface RouteListener {
+		
+		public void onRouteChange(RouteInfo currentRoute);
+		
 	}
 }

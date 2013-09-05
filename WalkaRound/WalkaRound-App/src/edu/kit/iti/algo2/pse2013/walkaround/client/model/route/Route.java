@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -15,6 +14,7 @@ public class Route implements RouteInfo {
 
 	private static String TAG_ROUTE = Route.class.getSimpleName();
 
+	@SuppressWarnings("unused")
 	private String name;
 	private Waypoint activeWaypoint;
 	private LinkedList<Coordinate> routeCoordinates;

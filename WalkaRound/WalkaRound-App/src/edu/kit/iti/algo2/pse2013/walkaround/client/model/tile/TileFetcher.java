@@ -14,7 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 import android.util.Log;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -162,5 +162,16 @@ public class TileFetcher {
 				Log.e(TAG, e.toString());
 			}
 		}
+	}
+	
+	public interface TileListener {
+		/**
+		 * ATM the tile comes as BufferedImage. That will be changed in future versions.
+		 * @param tile
+		 * @param x
+		 * @param y
+		 * @param levelOfDetail
+		 */
+		public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail);
 	}
 }

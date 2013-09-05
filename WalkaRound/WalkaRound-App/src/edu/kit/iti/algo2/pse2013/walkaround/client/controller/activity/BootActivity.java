@@ -1,30 +1,27 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client;
+package edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.widget.ProgressBar;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.MapController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.overlay.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
@@ -67,7 +64,7 @@ public class BootActivity extends Activity {
 	}
 
 	public void onContinue() {
-		Intent intent = new Intent(this, MapController.class);
+		Intent intent = new Intent(this, WalkaRound.class);
 		this.startActivity(intent);
 	}
 
@@ -147,11 +144,8 @@ public class BootActivity extends Activity {
 				Point size = new Point();
 				display.getSize(size);
 
-				Location l = PositionManager.getInstance().getLastKnownPosition();
-				BoundingBox coorBox;
-
 				BoundingBox.initialize(size);
-				coorBox = BoundingBox.getInstance();
+				BoundingBox coorBox = BoundingBox.getInstance();
 
 				TileFetcher tileFetcher = TileFetcher.getInstance();
 
@@ -159,7 +153,7 @@ public class BootActivity extends Activity {
 				progress = 500;
 				updateProgress(progress);
 
-				// TODO Offset löschen
+				// TODO Offset löschen und TimeOut einfuegen
 				int[] amountTop = TileUtility.getXYTileIndex(
 						coorBox.getTopLeft(), (int) lod);
 				amountTop[0]--;

@@ -1,10 +1,7 @@
-package edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup;
+package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay;
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -18,20 +15,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView.POIInfoListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.option.OptionView;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Favorite;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Info;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.POILayout.POIChangeListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Roundtrip.ComputeRoundtripListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToFavoriteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Routing.GoToMapListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.pullup.views.Search.UpdateMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Favorite;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Info;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.POILayout;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.POILayout.POIChangeListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip.ComputeRoundtripListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToFavoriteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search.UpdateMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
@@ -42,7 +37,6 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	private ImageView roundtrip;
 	private ImageView poi;
 	private ImageView search;
-	private RelativeLayout content;
 	private static String TAG = PullUpView.class.getSimpleName();
 
 	public static final int CONTENT_ROUTING = 0;

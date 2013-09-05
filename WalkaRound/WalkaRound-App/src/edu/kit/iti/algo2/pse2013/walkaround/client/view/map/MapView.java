@@ -3,7 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 import java.util.LinkedList;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,11 +11,9 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -53,13 +50,10 @@ public class MapView extends View implements TileListener {
 		Log.d("test", " " + (size != null));
 
 		this.amount = new Point();
-		this.map = Bitmap.createBitmap(this.size.x, this.size.y,
-				Bitmap.Config.ARGB_8888);
 		this.computeParams();
 	}
 
 	protected void onDraw(Canvas c) {
-		this.c = c;
 		for (int i = 0; i < tileT.size(); i++) {
 			tileT.get(i).start();
 			// tileT.remove(t);
@@ -68,8 +62,12 @@ public class MapView extends View implements TileListener {
 
 		synchronized (tileHolder) {
 			for (int i = 0; i < tileHolder.size(); i++) {
-				c.drawBitmap(tileHolder.get(i).b, (tileHolder.get(i).x * currentTileWidth) + mapOffset.getX(),
-						(tileHolder.get(i).y * currentTileWidth) + mapOffset.getY(), null);
+				c.drawBitmap(
+						tileHolder.get(i).b,
+						(tileHolder.get(i).x * currentTileWidth)
+								+ mapOffset.getX(),
+						(tileHolder.get(i).y * currentTileWidth)
+								+ mapOffset.getY(), null);
 			}
 		}
 		// tileHolder.clear();
@@ -102,15 +100,6 @@ public class MapView extends View implements TileListener {
 	 * 
 	 */
 	// private TileFetcher tileFetcher;
-
-	/**
-	 * 
-	 * The Bitmap that represent the map on the display. Its essential that the
-	 * Map is created on time.
-	 * 
-	 * 
-	 */
-	private Bitmap map;
 
 	/**
 	 * the size of the Display
@@ -151,10 +140,7 @@ public class MapView extends View implements TileListener {
 	 * the index of the tile on the top Left corner
 	 * 
 	 */
-	// TODO maybe it should be the center tile
 	private int[] indexXY;
-
-	private Canvas c;
 
 	/**
 	 * Compute and gives the Tile Offset back
@@ -292,79 +278,5 @@ public class MapView extends View implements TileListener {
 		// starts a new Thread to draw the map
 		// Thread t = new Thread(new TileDrawer(tile, x, y));
 		// tileT.add(t);
-	}
-
-	/**
-	 * This class draws a part of the map
-	 * 
-	 * @author Ludwig Biermann
-	 * 
-	 */
-	private class TileDrawer implements Runnable {
-
-		/**
-		 * the new Tile to draw
-		 */
-		final Bitmap tile;
-
-		/**
-		 * x position
-		 */
-		int x;
-
-		/**
-		 * Y position
-		 */
-		int y;
-
-		/**
-		 * Constructs a new Tile Drawer
-		 * 
-		 * @param tile
-		 *            the new tile to draw
-		 * @param x
-		 *            x-Position
-		 * @param y
-		 *            y Position
-		 */
-		public TileDrawer(Bitmap tile, int x, int y) {
-			this.tile = tile;
-			this.x = x;
-			this.y = y;
-			// this.tile = Bitmap.createBitmap(t.getWidth(), t.getHeight(),
-			// t.getConfig());
-			// Log.d("tt2", ""+ tile.isMutable());
-		}
-
-		public void run() {
-			Log.d(TAG, "Receive Tile!");
-
-			int tileX = x - indexXY[0];
-			int tileY = (y - indexXY[1]);
-
-			Log.d(TAG, "Normalise Tile:  x " + tileX + " y " + tileY);
-
-			if (!map.isRecycled() && tile != null) {
-				c.drawBitmap(
-						Bitmap.createScaledBitmap(tile,
-								Math.round(currentTileWidth),
-								Math.round(currentTileWidth), false),
-						(tileX * currentTileWidth) + mapOffset.getX(),
-						(tileY * currentTileWidth) + mapOffset.getY(), null);
-			}
-			// pushMap();
-		}
-	}
-
-	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
-		Log.d("debugFu", "pref änderung " + key);
-		if (key.equals(PreferenceUtility.OPTION_MAP_TYP)) {
-			Log.d("debugFu", "pref change " + pref.getString(key, "3"));
-			CurrentMapStyleModel.getInstance().setCurrentMapStyle(
-					pref.getString(key, "3"));
-			// this.tileFetcher.clearCache();
-			this.computeParams();
-
-		}
 	}
 }
