@@ -114,7 +114,8 @@ public class MapController extends Activity implements HeadUpViewListener,
 		// MapView
 
 		mapView = (MapView) findViewById(R.id.mapView);
-		gestureDetector = new GestureDetector(this.getApplicationContext(), new MapGestureListener());
+		gestureDetector = new GestureDetector(this.getApplicationContext(),
+				new MapGestureListener());
 		this.tileFetcher.requestTiles(coorBox, mapView);
 
 		// HeadUpView
@@ -175,17 +176,88 @@ public class MapController extends Activity implements HeadUpViewListener,
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+
+			int action = event.getAction();
+			if (event.getPointerCount() >= 2 && action == MotionEvent.ACTION_DOWN && !isZomm) {
+				float deltaX = Math.abs(event.getX(0) - event.getX(1));
+				float deltaY = Math.abs(event.getY(0) - event.getY(1));
+
+
+				gesamt = (float) Math.sqrt(Math.pow(
+						(double) Math.abs(event.getX(0) - event.getX(1)), 2)
+						* Math.pow((double) Math.abs(event.getY(1) - event.getY(1)),
+								2));
+				
+				if (event.getX(0) < event.getX(1)) {
+					targetX += (event.getX(0));
+				} else {
+					targetX += (event.getX(1));
+				}
+				targetX += deltaX;
+
+				if (event.getY(0) < event.getY(1)) {
+					targetY += (event.getY(0));
+				} else {
+					targetY += (event.getY(1));
+				}
+				targetY += deltaY;
+				isZomm = true;
+			}
+			if (action == MotionEvent.ACTION_UP) {
+				isZomm = false;
+			}
+
 			return gestureDetector.onTouchEvent(event);
 		}
-		
+
 	}
+	float gesamt;
+	boolean isZomm = false;
+	float targetX;
+	float targetY;
 
 	private class MapGestureListener implements OnGestureListener {
 
+		int twoFingerZoomOffset = 1;
+
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
-			Log.d(TAG, "MapTouch SCroll");
-			coorBox.shiftCenter(distanceX, distanceY);
+
+			if (e2.getPointerCount() >= 2) {
+				//Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
+				//Log.d(TAG, "Finger2: " + e2.getX(1)+ ":" + e2.getY(1));
+
+
+				float fingerDiff = (float) Math.sqrt(Math.pow(
+						(double) Math.abs(e2.getX(0) - e2.getX(1)), 2)
+						* Math.pow((double) Math.abs(e2.getY(1) - e2.getY(1)),
+								2));
+				
+				
+				float diff = (float) Math.sqrt(Math.abs(Math.pow(distanceX, 2)
+						* Math.pow(distanceY, 2)));
+				
+				diff /= twoFingerZoomOffset;
+				
+				diff = (int) diff;
+				Log.d(TAG, "new Zooming Offset: " + diff);
+
+				if(fingerDiff < gesamt){
+					coorBox.setLevelOfDetailByADelta(-diff);
+					Log.d(TAG, "new Zooming Offset: -" + diff);
+				} else {
+					coorBox.setLevelOfDetailByADelta(diff);
+					Log.d(TAG, "new Zooming Offset: " + diff);
+				}
+				gesamt = fingerDiff;
+				
+				
+				//TODO new Zooming Point
+				//coorBox.setCenter(new DisplayCoordinate(targetX, targetY));
+			} else {
+				Log.d(TAG, "MapTouch SCroll");
+				coorBox.shiftCenter(distanceX, distanceY);
+			}
 			userLock = false;
 			headUpView.setUserPositionLock(isRestricted());
 			mapView.computeParams();
@@ -193,7 +265,6 @@ public class MapController extends Activity implements HeadUpViewListener,
 			updateUser();
 			poiView.updatePOIView();
 			waypointView.updateWaypoint();
-			
 			return true;
 		}
 
@@ -203,7 +274,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 		}
 
 		@Override
-		public boolean onDown(MotionEvent arg0) {
+		public boolean onDown(MotionEvent event) {
 			Log.d(TAG, "MapTouch Down");
 			// TODO Auto-generated method stub
 			return true;
@@ -227,7 +298,7 @@ public class MapController extends Activity implements HeadUpViewListener,
 			RouteController.getInstance().addWaypoint(
 					new Waypoint(next.getLatitude(), next.getLongitude(),
 							"PLACEHOLDER"));
-			
+
 		}
 
 		@Override

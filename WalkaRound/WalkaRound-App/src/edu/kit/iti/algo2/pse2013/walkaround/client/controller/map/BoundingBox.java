@@ -107,7 +107,7 @@ public class BoundingBox {
 	private BoundingBox(Coordinate center, Point size, float levelOfDetail) {
 		Log.d(TAG, "initialize BoundingBox | Display: " + size.toString());
 		this.display = size;
-		this.levelOfDetail = levelOfDetail;
+		this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
 		this.computeSize();
 		this.setCenter(center, levelOfDetail);
 	}
@@ -125,7 +125,7 @@ public class BoundingBox {
 	public void setCenter(Coordinate center, float levelOfDetail) {
 		if (this.levelOfDetail != levelOfDetail) {
 			Log.d(TAG, "set a new Level of Detail: " + levelOfDetail);
-			this.levelOfDetail = levelOfDetail;
+			this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
 			this.computeSize();
 		}
 		this.setCenter(center);
@@ -186,6 +186,22 @@ public class BoundingBox {
 		this.setCenter(center);
 
 	}
+	
+	/**
+	 * Sets a new Level of detail by checking the Boundings
+	 * @param levelOfDetail the new level of detail;
+	 * @return the correct new LOD
+	 */
+	private float checkLevelOfDetail(float levelOfDetail){
+		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() <= levelOfDetail) {
+			return CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();
+		}
+		
+		if(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() >= levelOfDetail){
+			return CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
+		}
+		return levelOfDetail;
+	}
 
 	/**
 	 * Sets a new Level Of Detail by a delta
@@ -204,7 +220,7 @@ public class BoundingBox {
 	 *            the new Level of Detail
 	 */
 	public void setLevelOfDetail(float levelOfDetail) {
-		this.levelOfDetail = levelOfDetail;
+		this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
 		this.computeSize();
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();

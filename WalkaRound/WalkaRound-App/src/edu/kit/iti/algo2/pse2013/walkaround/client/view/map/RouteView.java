@@ -25,8 +25,7 @@ public class RouteView extends View {
 	Paint pinsel;
 
 	/**
-	 * The stroke of the bitmap
-	 * ungearde Zahl aus genauikeitsgründen
+	 * The stroke of the bitmap ungearde Zahl aus genauikeitsgründen
 	 */
 	private int strokeWidth = 8;
 
@@ -48,12 +47,13 @@ public class RouteView extends View {
 	}
 
 	protected void onDraw(Canvas c) {
-
-		List<DisplayCoordinate> lines = CoordinateUtility
-				.extractDisplayCoordinatesOutOfRouteInfo(RouteController
-						.getInstance().getCurrentRoute(), coorBox.getCenter(),
-						coorBox.getDisplaySize(), this.coorBox
-								.getLevelOfDetail());
+		List<DisplayCoordinate> lines;
+		synchronized (RouteController.getInstance().getCurrentRoute()) {
+			lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
+					RouteController.getInstance().getCurrentRoute(),
+					coorBox.getCenter(), coorBox.getDisplaySize(),
+					this.coorBox.getLevelOfDetail());
+		}
 		if (!lines.isEmpty()) {
 
 			float[] displayCoords = new float[(lines.size() - 1) * 4];
