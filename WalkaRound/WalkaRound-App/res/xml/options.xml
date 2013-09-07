@@ -1,58 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceScreen
-        android:key="@string/options_navigation"
+    <PreferenceCategory
+        android:key="@string/options_general"
         android:persistent="false"
-        android:title="@string/options_navigation" >
-        <PreferenceScreen
-            android:key="@string/options_navigation_audio_output"
-            android:persistent="false"
-            android:title="@string/options_navigation_audio_output" >
-            <SwitchPreference
-                android:key="@string/options_navigation_audio_output_all"
-                android:title="@string/options_navigation_audio_output_all"
-            	android:defaultValue="true" />
-
-            <ListPreference
-                android:defaultValue="1"
-                android:dependency="@string/options_navigation_audio_output_all"
-                android:dialogTitle="@string/options_navigation_audio_output_typ"
-                android:entries="@array/options_navigation_audio_output_typ_entries"
-                android:entryValues="@array/options_navigation_audio_output_typ_values"
-                android:key="@string/options_navigation_audio_output_typ"
-                android:title="@string/options_navigation_audio_output_typ" />
-        </PreferenceScreen>
-        <PreferenceScreen
-            android:key="@string/options_navigation_text_output"
-            android:persistent="false"
-            android:title="@string/options_navigation_text_output" >
-            <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/options_navigation_text_output_time_to_destination"
-                android:title="@string/options_navigation_text_output_time_to_destination" />
-            <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/options_navigation_text_output_time_left"
-                android:title="@string/options_navigation_text_output_time_left" />
-            <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/options_navigation_text_output_remaining_way"
-                android:title="@string/options_navigation_text_output_remaining_way" />
-            <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/options_navigation_text_output_walked_way"
-                android:title="@string/options_navigation_text_output_walked_way" />
-            <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/options_navigation_text_output_speed"
-                android:title="@string/options_navigation_text_output_speed" />
-        </PreferenceScreen>
-    </PreferenceScreen>
-    <PreferenceScreen
-        android:key="string/options_map"
+        android:title="@string/options_general" >
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/options_navigation_audio_output_all"
+            android:title="@string/options_navigation_audio_output_all" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/options_face"
         android:persistent="false"
-        android:title="@string/options_map" >
+        android:title="@string/options_face" >
         <ListPreference
             android:defaultValue="MapQuest"
             android:dialogTitle="@string/options_map_typ"
@@ -60,25 +21,101 @@
             android:entryValues="@array/options_map_typ_values"
             android:key="@string/options_map_typ"
             android:title="@string/options_map_typ" />
-    </PreferenceScreen>
-    <PreferenceScreen
-        android:key="@string/options_poi"
+
+        <PreferenceScreen
+            android:key="@string/options_poi"
+            android:persistent="false"
+            android:title="@string/options_poi" >
+            <PreferenceCategory
+                android:key="@string/options_navigation_audio_output"
+                android:persistent="false"
+                android:title="@string/options_navigation_audio_output" >
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:dependency="@string/options_navigation_audio_output_all"
+                    android:key="@string/options_poi_speech_output"
+                    android:title="@string/options_poi_speech_output" />
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:dependency="@string/options_navigation_audio_output_all"
+                    android:key="@string/options_poi_text_output"
+                    android:title="@string/options_poi_text_output" />
+            </PreferenceCategory>
+            <PreferenceCategory
+                android:key="@string/options_navigation_text_output"
+                android:persistent="false"
+                android:title="@string/options_navigation_text_output" >
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="@string/options_poi_image"
+                    android:title="@string/options_poi_image" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/options_navi"
         android:persistent="false"
-        android:title="@string/options_poi" >
-        <SwitchPreference
-            android:key="@string/options_navigation_audio_output_all"
-            android:title="@string/options_navigation_audio_output_all"
-            android:defaultValue="true" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/options_poi_speech_output"
-            android:title="@string/options_poi_speech_output"
-                android:dependency="@string/options_navigation_audio_output_all" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/options_poi_text_output"
-            android:title="@string/options_poi_text_output"
-                android:dependency="@string/options_navigation_audio_output_all" />
-    </PreferenceScreen>
+        android:title="@string/options_navi" >
+        <PreferenceScreen
+            android:key="@string/options_navigation"
+            android:persistent="false"
+            android:title="@string/options_navigation" >
+            <PreferenceCategory
+                android:key="@string/options_navigation_audio_output"
+                android:persistent="false"
+                android:title="@string/options_navigation_audio_output" >
+                <ListPreference
+                    android:defaultValue="1"
+                    android:dependency="@string/options_navigation_audio_output_all"
+                    android:dialogTitle="@string/options_navigation_audio_output_typ"
+                    android:entries="@array/options_navigation_audio_output_typ_entries"
+                    android:entryValues="@array/options_navigation_audio_output_typ_values"
+                    android:key="@string/options_navigation_audio_output_typ"
+                    android:title="@string/options_navigation_audio_output_typ" />
+            </PreferenceCategory>
+            <PreferenceCategory
+                android:key="@string/options_navigation_text_output"
+                android:persistent="false"
+                android:title="@string/options_navigation_text_output" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/options_navigation_text_output_time_to_destination"
+                    android:title="@string/options_navigation_text_output_time_to_destination" />
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/options_navigation_text_output_time_left"
+                    android:title="@string/options_navigation_text_output_time_left" />
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/options_navigation_text_output_remaining_way"
+                    android:title="@string/options_navigation_text_output_remaining_way" />
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/options_navigation_text_output_walked_way"
+                    android:title="@string/options_navigation_text_output_walked_way" />
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/options_navigation_text_output_speed"
+                    android:title="@string/options_navigation_text_output_speed" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/options_server_cat"
+        android:persistent="false"
+        android:title="@string/options_server_cat" >
+        <EditTextPreference
+            android:defaultValue="@string/options_server_url_short_default"
+            android:dialogMessage="@string/options_server_url_message"
+            android:dialogTitle="@string/options_server_url"
+            android:key="@string/options_server_url"
+            android:title="@string/options_server_url" />
+        <EditTextPreference
+            android:defaultValue="@string/options_server_url_roundrip_default"
+            android:dialogMessage="@string/options_server_url_message"
+            android:dialogTitle="@string/options_server_url_roundrip"
+            android:key="@string/options_server_url_roundrip"
+            android:title="@string/options_server_url_roundrip" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

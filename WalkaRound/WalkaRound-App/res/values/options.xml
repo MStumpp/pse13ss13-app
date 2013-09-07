@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="options_general">gerneral settings</string>
+    <string name="options_face">look and feel</string>
+    <string name="options_navi">navigation</string>
+    <string name="options_server_cat">WalkaRound Server Addresses</string>
     <string name="options_navigation">navigation hint</string>
     <string name="options_navigation_audio_output">audio output</string>
     <string name="options_navigation_audio_output_all">sound</string>
@@ -12,7 +16,14 @@
     <string name="options_navigation_text_output_speed">speed</string>
     <string name="options_map">map</string>
     <string name="options_poi">POI information</string>
+    <string name="options_poi_image">show images of the POIn</string>
     <string name="options_poi_text_output">text output</string>
     <string name="options_poi_speech_output">titel output</string>    
     <string name="options_map_typ">map type</string>
+    <string name="options_server">server address</string>
+    <string name="options_server_url">shortest path computing</string>
+    <string name="options_server_url_message">please edit the address</string>
+    <string name="options_server_url_roundrip">roundtrip computing</string>
+    <string name="options_server_url_roundrip_default">http://54.213.123.61:8080/walkaround/api/processor/computeRoundtrip</string>
+    <string name="options_server_url_short_default">http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath</string>
 </resources>
