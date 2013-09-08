@@ -116,6 +116,12 @@
             android:dialogTitle="@string/options_server_url_roundrip"
             android:key="@string/options_server_url_roundrip"
             android:title="@string/options_server_url_roundrip" />
+        <EditTextPreference
+            android:defaultValue="@string/options_server_url_next_vertex_default"
+            android:dialogMessage="@string/options_server_url_message"
+            android:dialogTitle="@string/options_server_url_next_vertex"
+            android:key="@string/options_server_url_next_vertex"
+            android:title="@string/options_server_url_next_vertex" />
     </PreferenceCategory>
 
 </PreferenceScreen>

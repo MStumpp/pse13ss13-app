@@ -41,7 +41,7 @@ public final class CoordinateNormalizer {
 	/**
 	 * URL for roundtrip computation.
 	 */
-	private static String URL_NEARESTVERTEX = "http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex";
+	//private static String URL_NEARESTVERTEX = "http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex";
 
 	/**
 	 * This class is an utility class which is not instantiated.
@@ -79,7 +79,7 @@ public final class CoordinateNormalizer {
 		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
 				new Coordinate(coordinate.getLatitude(),
 						coordinate.getLongitude()), new HttpPost(
-						URL_NEARESTVERTEX));
+						PreferenceUtility.getInstance().getNextVertexServerUrl()));
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
 		thread.join();

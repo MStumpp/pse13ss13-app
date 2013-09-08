@@ -10,11 +10,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -25,7 +28,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  * verwendet.
  * @author Florian Sch&auml;fer
  */
-public class TileFetcher {
+public class TileFetcher implements OnSharedPreferenceChangeListener{
 	
 	private static TileFetcher instance;
 	private static final String TAG = TileFetcher.class.getSimpleName();
@@ -41,7 +44,7 @@ public class TileFetcher {
 	}
 	
 	private TileFetcher(){
-		
+		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 	}
 	
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
@@ -173,5 +176,14 @@ public class TileFetcher {
 		 * @param levelOfDetail
 		 */
 		public void receiveTile(final Bitmap tile, final int x, final int y, final int levelOfDetail);
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sh, String key) {
+		if(PreferenceUtility.KEY_MAP_TYP.equals(key)){
+			CurrentMapStyleModel.getInstance().setCurrentMapStyle(PreferenceUtility.getInstance().getMapStyle());
+			this.clearCache();
+			BoundingBox.getInstance().setLevelOfDetail(BoundingBox.getInstance().getLevelOfDetail());
+		}
 	}
 }

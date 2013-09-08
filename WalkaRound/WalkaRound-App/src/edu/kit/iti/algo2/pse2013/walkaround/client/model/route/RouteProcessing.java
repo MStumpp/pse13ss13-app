@@ -22,6 +22,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
@@ -41,17 +42,6 @@ public class RouteProcessing {
 	 */
 	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class
 			.getSimpleName();
-
-
-	/**
-	 * URL for shortest path computation.
-	 */
-	private static String URL_COMPUTESHORTESTPATH = "http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath";
-
-	/**
-	 * URL for roundtrip computation.
-	 */
-	private static String URL_ROUNDTRIP = "http://54.213.123.61:8080/walkaround/api/processor/computeRoundtrip";
 
 	/**
 	 * RouteProcessing instance.
@@ -181,7 +171,7 @@ public class RouteProcessing {
 				new Coordinate[] {
 						new Coordinate(coordinate1.getLatitude(), coordinate1.getLongitude()),
 						new Coordinate(coordinate2.getLatitude(), coordinate2.getLongitude()) }, new HttpPost(
-						URL_COMPUTESHORTESTPATH));
+								PreferenceUtility.getInstance().getShortestPathServerUrl()));
 		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - pre Thread");
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
@@ -256,7 +246,7 @@ public class RouteProcessing {
 
 		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
 				new Coordinate(coordinate.getLatitude(),
-						coordinate.getLongitude()), new HttpPost(URL_ROUNDTRIP
+						coordinate.getLongitude()), new HttpPost(PreferenceUtility.getInstance().getRoundtripPathServerUrl()
 						+ "/profile/" + profile + "/length/" + length));
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();

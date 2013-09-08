@@ -3,6 +3,8 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
@@ -121,12 +124,19 @@ public class Info extends LinearLayout {
 		if (poi.getName() != null) {
 			this.title.setText(poi.getName());
 			this.title.setVisibility(VISIBLE);
+
+			if (PreferenceUtility.getInstance().isPOITitleSoundOn()) {
+				TextToSpeechUtility.getInstance().speak(poi.getName());
+				this.speak = true;
+				this.sound.setImageResource(R.drawable.pause);
+			}
 		}
-		if (null != null) {
+		
+		if (null != null && PreferenceUtility.getInstance().isPOIImageOn()) {
 			this.textImage.setImageBitmap(null);
 			this.textImage.setVisibility(VISIBLE);
-
 		}
+		
 		if (poi.getTextInfo() != null) {
 			speak = true;
 			sound.setOnTouchListener(new playListener(poi.getTextInfo()));
@@ -134,9 +144,11 @@ public class Info extends LinearLayout {
 			this.text.setVisibility(VISIBLE);
 			sound.setVisibility(VISIBLE);
 
-			TextToSpeechUtility.getInstance().speak(poi.getTextInfo());
-			this.speak = true;
-			this.sound.setImageResource(R.drawable.pause);
+			if (PreferenceUtility.getInstance().isPOITextSoundOn()) {
+				TextToSpeechUtility.getInstance().speak(poi.getTextInfo());
+				this.speak = true;
+				this.sound.setImageResource(R.drawable.pause);
+			}
 
 		}
 	}
@@ -197,7 +209,7 @@ public class Info extends LinearLayout {
 			}
 			return false;
 		}
-	
+
 		public void alert() {
 			edit = new EditText(getContext());
 			edit.setText(poi.getName());
@@ -208,10 +220,13 @@ public class Info extends LinearLayout {
 			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							FavoriteManager.getInstance(getContext()).addLocationToFavorites(
-									new Location(poi.getLatitude(), poi.getLongitude(),
-											poi.getName()), edit.getText().toString());						
-							
+							FavoriteManager.getInstance(getContext())
+									.addLocationToFavorites(
+											new Location(poi.getLatitude(), poi
+													.getLongitude(), poi
+													.getName()),
+											edit.getText().toString());
+
 						}
 					});
 			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
@@ -223,5 +238,4 @@ public class Info extends LinearLayout {
 			alertDialog.show();
 		}
 	}
-
 }

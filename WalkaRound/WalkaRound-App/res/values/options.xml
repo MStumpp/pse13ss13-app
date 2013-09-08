@@ -28,4 +28,6 @@
     <string name="options_server_url_roundrip">roundtrip computing</string>
     <string name="options_server_url_roundrip_default">http://54.213.123.61:8080/walkaround/api/processor/computeRoundtrip</string>
     <string name="options_server_url_short_default">http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath</string>
+    <string name="options_server_url_next_vertex">next vertex</string>
+    <string name="options_server_url_next_vertex_default">http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex</string>
 </resources>

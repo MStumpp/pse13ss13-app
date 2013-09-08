@@ -34,6 +34,7 @@ public final class TextToSpeechUtility implements OnInitListener,
 	}
 
 	private TextToSpeechUtility(Context context, boolean sound) {
+		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		tts = new TextToSpeech(context, this);
 		this.sound = sound;
 		isReady = true;
@@ -104,10 +105,9 @@ public final class TextToSpeechUtility implements OnInitListener,
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
-		
-		/*if (key.equals(PreferenceUtility.OPTION_SOUND)) {
-			sound = pref.getBoolean(key, true);
-		}*/
+		if (key.equals(PreferenceUtility.KEY_SOUND)) {
+			sound = PreferenceUtility.getInstance().isSoundOn();
+		}
 	}
 	
 	public boolean stopSpeaking(){

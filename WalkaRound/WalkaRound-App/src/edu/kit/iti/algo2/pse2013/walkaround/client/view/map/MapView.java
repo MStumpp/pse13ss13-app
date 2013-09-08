@@ -228,9 +228,9 @@ public class MapView extends View implements TileListener, CenterListener, Level
 		this.mapOffset = this.computeTileOffset();
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
-		this.computeAmountOfTiles();
 		tileT.clear();
 		tileHolder.clear();
+		this.computeAmountOfTiles();
 
 		// erase the map
 

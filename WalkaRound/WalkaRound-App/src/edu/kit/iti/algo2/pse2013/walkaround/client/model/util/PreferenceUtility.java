@@ -47,6 +47,7 @@ public class PreferenceUtility {
 	/* server */
 	public static String DEFAULT_SERVER_SHORT;
 	public static String DEFAULT_SERVER_ROUNDTRIP;
+	public static String DEFAULT_SERVER_NEXT_VERTEX;
 
 	/** Keys **/
 
@@ -70,6 +71,7 @@ public class PreferenceUtility {
 	/* server */
 	public static String KEY_SERVER_SHORT;
 	public static String KEY_SERVER_ROUNDTRIP;
+	public static String KEY_SERVER_NEXT_VERTEX;
 
 	/* static */
 	private static PreferenceUtility manager;
@@ -95,6 +97,8 @@ public class PreferenceUtility {
 				R.string.options_server_url_short_default);
 		DEFAULT_SERVER_ROUNDTRIP = context.getResources().getString(
 				R.string.options_server_url_roundrip_default);
+		DEFAULT_SERVER_NEXT_VERTEX = context.getResources().getString(
+				R.string.options_server_url_next_vertex_default);
 
 		// Keys
 
@@ -130,6 +134,8 @@ public class PreferenceUtility {
 				R.string.options_server_url);
 		KEY_SERVER_ROUNDTRIP = context.getResources().getString(
 				R.string.options_server_url_roundrip);
+		KEY_SERVER_NEXT_VERTEX = context.getResources().getString(
+				R.string.options_server_url_next_vertex);
 	}
 
 	/**
@@ -309,6 +315,15 @@ public class PreferenceUtility {
 	 */
 	public String getRoundtripPathServerUrl() {
 		return sh.getString(KEY_SERVER_ROUNDTRIP, DEFAULT_SERVER_ROUNDTRIP);
+	}
+
+	/**
+	 * Gives the url of the next vertex server back
+	 * 
+	 * @return the url of the next vertex Server
+	 */
+	public String getNextVertexServerUrl() {
+		return sh.getString(KEY_SERVER_NEXT_VERTEX, DEFAULT_SERVER_NEXT_VERTEX);
 	}
 
 }

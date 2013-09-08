@@ -133,6 +133,7 @@ public class BoundingBox {
 		this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
 		this.computeSize();
 		this.setCenter(center, levelOfDetail);
+		this.notifyLODListener(this.levelOfDetail);
 	}
 
 	// --------------------------Setter-------------------------- //
@@ -152,6 +153,7 @@ public class BoundingBox {
 			this.computeSize();
 		}
 		this.setCenter(center);
+		this.notifyLODListener(this.levelOfDetail);
 	}
 
 	/**
@@ -221,18 +223,15 @@ public class BoundingBox {
 	private float checkLevelOfDetail(float levelOfDetail) {
 		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 				.getMaxLevelOfDetail() <= levelOfDetail) {
-			this.notifyLODListener(this.levelOfDetail);
 			return CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 					.getMaxLevelOfDetail();
 		}
 
 		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 				.getMinLevelOfDetail() >= levelOfDetail) {
-			this.notifyLODListener(this.levelOfDetail);
 			return CurrentMapStyleModel.getInstance().getCurrentMapStyle()
 					.getMinLevelOfDetail();
 		}
-		this.notifyLODListener(this.levelOfDetail);
 		return levelOfDetail;
 	}
 
@@ -257,6 +256,7 @@ public class BoundingBox {
 		this.computeSize();
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();
+		this.notifyLODListener(this.levelOfDetail);
 	}
 
 	// --------------------------Getter-------------------------- //

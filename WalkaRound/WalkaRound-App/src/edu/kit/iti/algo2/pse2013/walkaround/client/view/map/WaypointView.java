@@ -24,7 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
-public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener, RouteListener {
+public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener {
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;
 	public static final int DEFAULT_FLAG_ACTIVE = R.drawable.flag_activ;
@@ -65,7 +65,6 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		waypointGestureDetector = new GestureDetector(context,
 				new WaypointGestureDetector());
 		
-		RouteController.getInstance().registerRouteListener(this);
 		coorBox.registerCenterListener(this);
 		coorBox.registerLevelOfDetailListener(this);
 	}
@@ -270,11 +269,6 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 			return false;
 		}
 
-	}
-
-	@Override
-	public void onRouteChange(RouteInfo currentRoute) {
-		this.updateWaypoint();		
 	}
 
 	@Override
