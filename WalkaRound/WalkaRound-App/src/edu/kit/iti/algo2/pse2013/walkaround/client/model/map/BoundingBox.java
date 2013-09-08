@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import java.util.LinkedList;
+
 import android.content.Context;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
@@ -16,6 +18,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * Coordinate.
  *
  * @author Ludwig Biermann
+ * @version 4.0
  *
  */
 public class BoundingBox {
@@ -143,6 +146,7 @@ public class BoundingBox {
 		this.topLeft = this.computeTopLeft();
 		Log.d(TAG, "Topleft is " + this.topLeft);
 		this.bottomRight = this.computeBottomRight();
+		this.notifyCenterListener(center);
 	}
 
 	/**
@@ -194,12 +198,15 @@ public class BoundingBox {
 	 */
 	private float checkLevelOfDetail(float levelOfDetail){
 		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() <= levelOfDetail) {
+			this.notifyLODListener(this.levelOfDetail);
 			return CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();
 		}
 		
 		if(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() >= levelOfDetail){
+			this.notifyLODListener(this.levelOfDetail);
 			return CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
 		}
+		this.notifyLODListener(this.levelOfDetail);
 		return levelOfDetail;
 	}
 
@@ -397,6 +404,84 @@ public class BoundingBox {
 		@Override
 		public String toString() {
 			return "Double Paring: width: " + width + ", height: " + height;
+		}
+	}
+	
+	/**
+	 * A Interface to notify classes if the Level of Detail changes
+	 * 
+	 * @author Ludwig
+	 *
+	 */
+	public interface LevelOfDetailListener {
+		
+		/**
+		 * If the level of Detail changes this class will be called.
+		 * @param levelOfDetail
+		 */
+		public void onLevelOfDetailChange(float levelOfDetail);
+		
+	}
+	
+	LinkedList<LevelOfDetailListener> lodListener = new LinkedList<LevelOfDetailListener>();
+	
+	/**
+	 * This will register a new Level Of Detail Listener
+	 * 
+	 * @param listener the new listener
+	 * @return always true
+	 */
+	public boolean registerLevelOfDetailListener(LevelOfDetailListener listener){
+		return lodListener.add(listener);
+	}
+	
+	/**
+	 * This will notify all Level of Detail Listener
+	 * 
+	 * @param levelOfDetail the new level of Detail
+	 */
+	private void notifyLODListener(float levelOfDetail) {
+		for(LevelOfDetailListener l:lodListener){
+			l.onLevelOfDetailChange(levelOfDetail);
+		}
+	}
+
+	/**
+	 * A Interface to notify classes if the Center Coordinate changes
+	 * 
+	 * @author Ludwig
+	 *
+	 */
+	public interface CenterListener {
+
+		/**
+		 * If the Center Coordinate changes this class will be called.
+		 * @param levelOfDetail
+		 */
+		public void onCenterChange(Coordinate center);
+		
+	}
+	
+	LinkedList<CenterListener> centerListener = new LinkedList<CenterListener>();
+	
+	/**
+	 * This will register a new Center Coordinate Listener
+	 * 
+	 * @param listener the new Listener
+	 * @return always true
+	 */
+	public boolean registerLevelOfDetailListener(CenterListener listener){
+		return centerListener.add(listener);
+	}
+	
+	/**
+	 * this will notify all Listener
+	 * 
+	 * @param center the new Center Coordiante
+	 */
+	private void notifyCenterListener(Coordinate center) {
+		for(CenterListener l:centerListener){
+			l.onCenterChange(center);
 		}
 	}
 }
