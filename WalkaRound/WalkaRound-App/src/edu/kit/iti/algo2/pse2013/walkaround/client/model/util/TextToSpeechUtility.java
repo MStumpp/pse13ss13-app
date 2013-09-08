@@ -104,9 +104,10 @@ public final class TextToSpeechUtility implements OnInitListener,
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
-		if (key.equals(PreferenceUtility.OPTION_SOUND)) {
+		
+		/*if (key.equals(PreferenceUtility.OPTION_SOUND)) {
 			sound = pref.getBoolean(key, true);
-		}
+		}*/
 	}
 	
 	public boolean stopSpeaking(){

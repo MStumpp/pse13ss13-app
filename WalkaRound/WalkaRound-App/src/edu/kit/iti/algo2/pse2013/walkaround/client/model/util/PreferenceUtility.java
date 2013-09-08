@@ -34,46 +34,55 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
  * Roundtrip - url
  * 
  * @author Ludwig Biermann
+ * @version 3.2
  *
  */
 public class PreferenceUtility {
 
+	/* gernal */
 	public static boolean DEFAULT_SOUND = true;
+	
+	/* look and feel */
 	public static boolean DEFAULT_SOUND_TEXT_TO_SPEECH = true;
 	public static boolean DEFAULT_SOUND_POI_OUTPUT = true;
 	public static boolean DEFAULT_SOUND_POI_IMAGE_OUTPUT = true;
-	public static int DEFAULT_MAP_TYP = R.string.options_map_typ_default;
+	public static String DEFAULT_MAP_TYP;
 
-	public static int DEFAULT_NAVI_SOUND_TYP = R.string.options_navigation_audio_output_typ_default;
+	/* navi */
+	public static String DEFAULT_NAVI_SOUND_TYP;
 	public static boolean DEFAULT_NAVI_TIME_TO_DESTINATION = true;
 	public static boolean DEFAULT_NAVI_TIME_LEFT = true;
 	public static boolean DEFAULT_NAVI_REMAINING_WAY = true;
 	public static boolean DEFAULT_NAVI_WALKED_WAY = true;
 	public static boolean DEFAULT_NAVI_SPEED = true;
 	
+	/* server */
 	public static int DEFAULT_SERVER_SHORT = R.string.options_server_url_short_default;
 	public static int DEFAULT_SERVER_ROUNDTRIP = R.string.options_server_url_roundrip_default;
+	
 	
 	private static PreferenceUtility manager;
 	private static String TAG = PreferenceUtility.class.getSimpleName();
 
-	public static String OPTION_SOUND;
-	public static String OPTION_MAP_TYP;
-
 	private SharedPreferences sh;
 	private Context context;
 
+	/**
+	 * construct a new Preference Manager
+	 * @param context
+	 */
 	private PreferenceUtility(Context context) {
 		sh = PreferenceManager.getDefaultSharedPreferences(context);
 		this.context = context;
-
-		OPTION_SOUND = context.getString(R.string.options_navigation_audio_output_all);
-		OPTION_MAP_TYP = context.getString(R.string.options_map_typ);
+		
+		DEFAULT_MAP_TYP = context.getResources().getStringArray(R.array.options_map_entries)[0];
+		DEFAULT_NAVI_SOUND_TYP = context.getResources().getStringArray(R.array.options_navigation_audio_output_typ_entries)[0];
 	}
 
 	/**
+	 * initialize a new PreferenceUtility
 	 *
-	 * @param context
+	 * @param context needed arguments
 	 */
 	public static void initialize(Context context) {
 		Log.d(TAG, "Context is " + (context != null));
@@ -81,8 +90,25 @@ public class PreferenceUtility {
 	}
 
 	/**
+	 * gives the Preference Utility back
 	 *
-	 * @return
+	 * @param context needed arguments
+	 * 
+	 * @return the Preference Utility
+	 */
+	public static PreferenceUtility getInstance(Context context) {
+		Log.d(TAG, "PositionManager.getInstance()");
+		if (manager == null) {
+			PreferenceUtility.initialize(context);
+			return manager;
+		}
+		return manager;
+	}
+	
+	/**
+	 * gives the Preference Utility back
+	 *
+	 * @return the Preference Utility or null
 	 */
 	public static PreferenceUtility getInstance() {
 		Log.d(TAG, "PositionManager.getInstance()");
@@ -94,67 +120,135 @@ public class PreferenceUtility {
 	}
 
 	/**
+	 * Register a new PReferenceChangeListener
 	 * 
-	 * @param listener
+	 * @param listener the new Listener
 	 */
 	public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener){
 		sh.registerOnSharedPreferenceChangeListener(listener);
 	}
 	
 	/* ------------------------------ General ------------------------ */
+	/**
+	 * Gives the State of general sound back
+	 * 
+	 * @return true if sound is enable
+	 */
 	public boolean isSoundOn(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_audio_output_all), DEFAULT_SOUND);
 	}
 	
 	/* ------------------------------ look and feel ------------------------ */
 
+	/**
+	 * Gives the current MapStyle back.
+	 * 
+	 * @return the current MapStyle back.
+	 */
 	public String getMapStyle(){
-		return sh.getString(context.getResources().getString(R.string.options_map_typ), context.getString(DEFAULT_MAP_TYP));
+		return sh.getString(context.getResources().getString(R.string.options_map_typ), DEFAULT_MAP_TYP);
 	}
 
+	/**
+	 * Gives the State of poi title sound back
+	 * 
+	 * @return true if sound is enable
+	 */
 	public boolean isPOITitleSoundOn(){
 		return  sh.getBoolean(context.getString(R.string.options_poi_speech_output), DEFAULT_SOUND_TEXT_TO_SPEECH);
 	}
 
+	/**
+	 * Gives the State of poi text sound back
+	 * 
+	 * @return true if sound is enable
+	 */
 	public boolean isPOITextSoundOn(){
 		return  sh.getBoolean(context.getString(R.string.options_poi_text_output), DEFAULT_SOUND_POI_OUTPUT);
 	}
 
-	public boolean isPOIImageSoundOn(){
+	/**
+	 * Gives back whether the user wants images
+	 * 
+	 * @return true if image is enable
+	 */
+	public boolean isPOIImageOn(){
 		return  sh.getBoolean(context.getString(R.string.options_poi_image), DEFAULT_SOUND_POI_IMAGE_OUTPUT);
 	}
 
 	/* ------------------------------ Navigation ------------------------ */
 
+	/**
+	 * Gives the State of navigation sound back
+	 * 
+	 * @return text to speech or stereo sound
+	 */
 	public String getNaviSoundTyp(){
-		return sh.getString(context.getResources().getString(R.string.options_navigation_audio_output_typ), context.getString(DEFAULT_NAVI_SOUND_TYP));
+		return sh.getString(context.getResources().getString(R.string.options_navigation_audio_output_typ), DEFAULT_NAVI_SOUND_TYP);
 	}
 
+	/**
+	 * Gives the State of Time To Destination text field back
+	 * 
+	 * @return true if Time To Destination text field  is enable
+	 */
 	public boolean isTimeToDestination(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_text_output_time_to_destination), DEFAULT_NAVI_TIME_TO_DESTINATION);
 	}
 
+	/**
+	 * Gives the State of Time Left text field back
+	 * 
+	 * @return true if Time Left text field  is enable
+	 */
 	public boolean isTimeLeft(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_text_output_time_left), DEFAULT_NAVI_TIME_LEFT);
 	}
 
+	/**
+	 * Gives the State of Time Remaining text field back
+	 * 
+	 * @return true if Time Remaining text field  is enable
+	 */
 	public boolean isTimeRemaining(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_text_output_remaining_way), DEFAULT_NAVI_REMAINING_WAY);
 	}
 
+	/**
+	 * Gives the State of Walked Way text field back
+	 * 
+	 * @return true if Walked Way text field  is enable
+	 */
 	public boolean isWalkedWay(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_text_output_walked_way), DEFAULT_NAVI_WALKED_WAY);
 	}
 
+	/**
+	 * Gives the State of Speed text field back
+	 * 
+	 * @return true if Speed text field  is enable
+	 */
 	public boolean isSpeed(){
 		return  sh.getBoolean(context.getString(R.string.options_navigation_text_output_speed), DEFAULT_NAVI_SPEED);
 	}
 	
 	/* ------------------------------ Walkaround Server  ------------------------ */
+
+	/**
+	 * Gives the url of the Shortest Path server back
+	 * 
+	 * @return the url of Shortest Path  the Server
+	 */
 	public String getShortestPathServerUrl(){
 		return  sh.getString(context.getString(R.string.options_server_url), context.getString(DEFAULT_SERVER_SHORT));
 	}
 
+
+	/**
+	 * Gives the url of the Roundtrip Path server back
+	 * 
+	 * @return the url of the Roundtrip Server
+	 */
 	public String getRoundtripPathServerUrl(){
 		return  sh.getString(context.getString(R.string.options_server_url_roundrip), context.getString(DEFAULT_SERVER_ROUNDTRIP));
 	}

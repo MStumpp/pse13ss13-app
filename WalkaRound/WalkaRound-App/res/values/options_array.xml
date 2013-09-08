@@ -2,7 +2,7 @@
 <resources>
     <string-array name="options_navigation_audio_output_typ_entries">
         <item>text to speech</item>
-        <item>surround sound</item>
+        <item>stereo sound</item>
     </string-array>
     <string-array name="options_navigation_audio_output_typ_values">
         <item>1</item>
