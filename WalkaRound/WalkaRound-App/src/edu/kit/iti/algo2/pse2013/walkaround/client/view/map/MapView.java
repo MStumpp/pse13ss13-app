@@ -11,14 +11,18 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.WalkaRound;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
-public class MapView extends View implements TileListener {
+public class MapView extends View implements TileListener, CenterListener, LevelOfDetailListener {
 
 	private Handler h;
 	private final int FRAME_RATE = 25;
@@ -35,6 +39,8 @@ public class MapView extends View implements TileListener {
 	public MapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.coorBox = BoundingBox.getInstance(context);
+		coorBox.registerLevelOfDetailListener(this);
+		coorBox.registerCenterListener(this);
 		h = new Handler();
 
 		// this.tileFetcher = new TileFetcher();
@@ -278,5 +284,22 @@ public class MapView extends View implements TileListener {
 		// starts a new Thread to draw the map
 		// Thread t = new Thread(new TileDrawer(tile, x, y));
 		// tileT.add(t);
+	}
+
+	@Override
+	public void onLevelOfDetailChange(float levelOfDetail) {
+		this.computeParams();
+		TileFetcher.getInstance().requestTiles(coorBox, this);
+	}
+
+	@Override
+	public void onCenterChange(Coordinate center) {
+		this.computeParams();
+		TileFetcher.getInstance().requestTiles(coorBox, this);
+	}
+
+	@Override
+	public String toString(){
+		return MapView.class.getSimpleName();
 	}
 }

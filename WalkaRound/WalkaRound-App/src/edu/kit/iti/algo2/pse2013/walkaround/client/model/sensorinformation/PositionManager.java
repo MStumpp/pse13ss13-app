@@ -38,6 +38,7 @@ public class PositionManager implements GpsStatus.Listener {
 	private Criteria c;
 	
 	private LocListener listener;
+	private String provider;
 
 	/**
 	 * 
@@ -55,7 +56,7 @@ public class PositionManager implements GpsStatus.Listener {
 				.getSystemService(Context.LOCATION_SERVICE);
 
 	    locationManager.addGpsStatusListener(this);
-
+	    
 		c = new Criteria();
 		c.setAccuracy(Criteria.ACCURACY_FINE);
 		c.setBearingAccuracy(Criteria.ACCURACY_FINE);
@@ -66,6 +67,7 @@ public class PositionManager implements GpsStatus.Listener {
 		// initialize other Sensors
 		compass = new CompassManager(context);
 		speed = new SpeedManager(this);
+		
 	}
 
 	/**
@@ -133,20 +135,20 @@ public class PositionManager implements GpsStatus.Listener {
 	}
 
 	public Location getLastKnownPosition() {
-		return this.lastKnownLocation;
+		return locationManager.getLastKnownLocation(provider);
 	}
 	
 	private void setBestProvider() {
-		String p = locationManager.getBestProvider(c, true);
+		provider = locationManager.getBestProvider(c, true);
 		
-		if(p != null && !p.isEmpty()){
+		if(provider != null && !provider.isEmpty()){
 			Log.d(TAG, "Provider found!");
-		locationManager.requestLocationUpdates(p,
+		locationManager.requestLocationUpdates(provider,
 				UPDATE_TIME, UPDATE_DISTANCE, listener);
 		} else {
 			Log.e(TAG, "No Provider found!");
-			p = locationManager.getBestProvider(c, false);
-			locationManager.requestLocationUpdates(p,
+			provider = locationManager.getBestProvider(c, false);
+			locationManager.requestLocationUpdates(provider,
 				UPDATE_TIME, UPDATE_DISTANCE, listener);
 		}
 	}

@@ -25,6 +25,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.Ro
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
@@ -50,7 +52,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
-		POIInfoListener {
+		POIInfoListener, CenterListener, LevelOfDetailListener {
 
 	private MapView mapView;
 
@@ -81,6 +83,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		setContentView(R.layout.map_view);
 
 		coorBox = BoundingBox.getInstance(this);
+		coorBox.registerCenterListener(this);
+		coorBox.registerLevelOfDetailListener(this);
 		Log.d(TAG, "initialisiere BoundingBox "
 				+ coorBox.getDisplaySize().toString());
 		PositionManager.initialize(this);
@@ -149,6 +153,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 		mapView.setOnTouchListener(new MapListener());
+		
 	}
 
 	public class MapListener implements OnTouchListener {
@@ -239,8 +244,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			}
 			userLock = false;
 			headUpView.setUserPositionLock(isRestricted());
-			mapView.computeParams();
-			tileFetcher.requestTiles(coorBox, mapView);
+			//mapView.computeParams();
+			//tileFetcher.requestTiles(coorBox, mapView);
 			updateUser();
 			poiView.updatePOIView();
 			waypointView.updateWaypoint();
@@ -298,8 +303,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void onZoom(float delta) {
 		this.coorBox.setLevelOfDetailByADelta(delta);
-		this.mapView.computeParams();
-		this.tileFetcher.requestTiles(coorBox, mapView);
+		//this.mapView.computeParams();
+		//this.tileFetcher.requestTiles(coorBox, mapView);
 		waypointView.updateWaypoint();
 	}
 
@@ -316,8 +321,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		} else {
 			userLock = true;
 			coorBox.setCenter(userCoordinate);
-			mapView.computeParams();
-			tileFetcher.requestTiles(coorBox, mapView);
+			//mapView.computeParams();
+			//tileFetcher.requestTiles(coorBox, mapView);
 			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
 			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
 			waypointView.updateWaypoint();
@@ -333,8 +338,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		userCoordinate = new Coordinate(androidLocation.getLatitude(),
 				androidLocation.getLongitude());
 
+		
 		updateUser();
 
+		if (userLock) {
+			coorBox.setCenter(userCoordinate);
+			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
+			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
+		}
 	}
 
 	private void updateUser() {
@@ -361,13 +372,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		user.setX(x - userDiff);
 		user.setY(y - userDiff);
 
-		if (userLock) {
-			coorBox.setCenter(userCoordinate);
-			mapView.computeParams();
-			tileFetcher.requestTiles(coorBox, mapView);
-			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
-			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
-		}
 	}
 
 	@Override
@@ -457,9 +461,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void updateMap() {
-		mapView.computeParams();
-		tileFetcher.requestTiles(coorBox, mapView);
-		this.updateUser();
+		//mapView.computeParams();
+		//tileFetcher.requestTiles(coorBox, mapView);
+		//this.updateUser();
 		waypointView.updateWaypoint();
 
 	}
@@ -503,5 +507,19 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	public void onBackPressed() {
         this.moveTaskToBack(true);
 	}
+
+	@Override
+	public void onLevelOfDetailChange(float levelOfDetail) {
+		this.updateUser();
+	}
+
+	@Override
+	public void onCenterChange(Coordinate center) {
+		this.updateUser();		
+	}
 	
+	@Override
+	public String toString(){
+		return WalkaRound.class.getSimpleName();
+	}
 }

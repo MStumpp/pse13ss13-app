@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -27,6 +28,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtilit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
+/**
+ * This class boots the WalkaRound app and shows a "Progress Bar"
+ * 
+ * @author Ludwig Biermann
+ * @version 6.3
+ *
+ */
 public class BootActivity extends Activity {
 	protected static final int TOTALSTEPS = 1000;
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419);
@@ -146,7 +154,12 @@ public class BootActivity extends Activity {
 
 				BoundingBox.initialize(size);
 				BoundingBox coorBox = BoundingBox.getInstance();
-
+				
+				Location l = PositionManager.getInstance().getLastKnownPosition();
+				if(l != null){
+					coorBox.setCenter(new Coordinate(l.getLatitude(), l.getLongitude()));
+				}
+				
 				TileFetcher tileFetcher = TileFetcher.getInstance();
 
 				// 50 %

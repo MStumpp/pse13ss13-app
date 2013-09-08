@@ -505,8 +505,8 @@ public class BoundingBox {
 	 *            the new Listener
 	 * @return the current Center Coordinate
 	 */
-	public Coordinate registerLevelOfDetailListener(CenterListener listener) {
-		Log.d(TAG, "register a new LOD Listener: " + listener.toString());
+	public Coordinate registerCenterListener(CenterListener listener) {
+		//Log.d(TAG, "register a new LOD Listener: " + listener.toString());
 		this.centerListener.add(listener);
 		return this.center; 
 	}
@@ -518,7 +518,7 @@ public class BoundingBox {
 	 *            the new Center Coordiante
 	 */
 	private void notifyCenterListener(Coordinate center) {
-		Log.d(TAG, "notify Center Listener new Center: " + center.toString());
+		//Log.d(TAG, "notify Center Listener new Center: " + center.toString());
 		for (CenterListener l : this.centerListener) {
 			l.onCenterChange(center);
 		}
