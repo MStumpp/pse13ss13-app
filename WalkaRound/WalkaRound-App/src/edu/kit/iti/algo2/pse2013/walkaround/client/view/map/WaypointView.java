@@ -14,14 +14,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
-public class WaypointView extends RelativeLayout {
+public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener, RouteListener {
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;
 	public static final int DEFAULT_FLAG_ACTIVE = R.drawable.flag_activ;
@@ -61,6 +64,10 @@ public class WaypointView extends RelativeLayout {
 
 		waypointGestureDetector = new GestureDetector(context,
 				new WaypointGestureDetector());
+		
+		RouteController.getInstance().registerRouteListener(this);
+		coorBox.registerCenterListener(this);
+		coorBox.registerLevelOfDetailListener(this);
 	}
 
 	public void updateWaypoint() {
@@ -265,4 +272,18 @@ public class WaypointView extends RelativeLayout {
 
 	}
 
+	@Override
+	public void onRouteChange(RouteInfo currentRoute) {
+		this.updateWaypoint();		
+	}
+
+	@Override
+	public void onLevelOfDetailChange(float levelOfDetail) {
+		this.updateWaypoint();
+	}
+
+	@Override
+	public void onCenterChange(Coordinate center) {
+		this.updateWaypoint();
+	}
 }

@@ -248,7 +248,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			//tileFetcher.requestTiles(coorBox, mapView);
 			updateUser();
 			poiView.updatePOIView();
-			waypointView.updateWaypoint();
+			//waypointView.updateWaypoint();
 			return true;
 		}
 
@@ -305,7 +305,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		this.coorBox.setLevelOfDetailByADelta(delta);
 		//this.mapView.computeParams();
 		//this.tileFetcher.requestTiles(coorBox, mapView);
-		waypointView.updateWaypoint();
+		//waypointView.updateWaypoint();
 	}
 
 	@Override
@@ -325,7 +325,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			//tileFetcher.requestTiles(coorBox, mapView);
 			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
 			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
-			waypointView.updateWaypoint();
+			//waypointView.updateWaypoint();
 		}
 		headUpView.setUserPositionLock(userLock);
 	}
@@ -383,7 +383,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	public void onRouteChange(RouteInfo currentRoute) {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				waypointView.updateWaypoint();
+				//waypointView.updateWaypoint();
 				pullUpView.updateRoute();
 			}
 		});
@@ -464,7 +464,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		//mapView.computeParams();
 		//tileFetcher.requestTiles(coorBox, mapView);
 		//this.updateUser();
-		waypointView.updateWaypoint();
+		//waypointView.updateWaypoint();
 
 	}
 

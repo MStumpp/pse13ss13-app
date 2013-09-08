@@ -43,6 +43,9 @@ public class BootActivity extends Activity {
 	protected boolean mbActive;
 	protected ProgressBar mProgressBar;
 
+	private static int MAX_TILE_SLEEP =  50;
+	private static int MAX_TILEFETCHER_TIMEOUT =  10000/MAX_TILE_SLEEP;
+
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -187,11 +190,13 @@ public class BootActivity extends Activity {
 						amountBottom[0], amountBottom[1], this);
 
 				updateProgress(progress);
-				while ((amount - 4) > tiles) {
-					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
-							+ tiles);
+				Log.d(TAG, "Tile Fetcher Zeit: " + MAX_TILEFETCHER_TIMEOUT + " > ");
+				for (int time = 0; (amount - 4) > tiles && MAX_TILEFETCHER_TIMEOUT >= time;time++) {
+				//	Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
+				//			+ tiles);
+					Log.d(TAG, "Tile Fetcher Zeit: " + time + " > ");
 					updateProgress(progress);
-					sleep(50);
+					sleep(MAX_TILE_SLEEP);
 				}
 
 				progress += 50;
