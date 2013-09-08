@@ -20,6 +20,7 @@
     <string name="options_poi_text_output">text output</string>
     <string name="options_poi_speech_output">titel output</string>    
     <string name="options_map_typ">map type</string>
+    <string name="options_map_typ_default">Mapnik</string>
     <string name="options_server">server address</string>
     <string name="options_server_url">shortest path computing</string>
     <string name="options_server_url_message">please edit the address</string>

@@ -54,7 +54,7 @@ public class PreferenceUtility {
 	}
 
 	public String getMapStyle(){
-		return sh.getString(context.getResources().getString(R.string.options_map_typ), "Mapnik");
+		return sh.getString(context.getResources().getString(R.string.options_map_typ), context.getString(R.string.options_map_typ_default));
 	}
 
 	public boolean isPOITitleSoundOn(){
@@ -65,6 +65,14 @@ public class PreferenceUtility {
 		return  sh.getBoolean(context.getString(R.string.options_poi_text_output), true);
 	}
 
+	public String getShortestPathServerUrl(){
+		return  sh.getString(context.getString(R.string.options_server_url), context.getString(R.string.options_server_url_short_default));
+	}
+
+	public String getRoundtripPathServerUrl(){
+		return  sh.getString(context.getString(R.string.options_server_url_roundrip), context.getString(R.string.options_server_url_roundrip_default));
+	}
+	
 	public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener){
 		sh.registerOnSharedPreferenceChangeListener(listener);
 	}
