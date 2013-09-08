@@ -33,8 +33,10 @@ public class Roundtrip extends LinearLayout {
 	private static int PROFILE3 = R.string.clubbing;
 	private final int ON_LONG_CLICK_UPDATE_INTERVALL_MS = 100;
 
-	LinkedList<Integer> profilesStrings = new LinkedList<Integer>();
-	LinkedList<TextView> profiles = new LinkedList<TextView>();
+	private LinkedList<Integer> profilesStrings = new LinkedList<Integer>();
+	private LinkedList<TextView> profiles = new LinkedList<TextView>();
+	private LinkedList<ComputeRoundtripListener> roundtripListener = new LinkedList<ComputeRoundtripListener>();
+	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
 
 	private static int MIN_VALUE = 1000;
 	private static int MAX_VALUE = 50000;
@@ -122,12 +124,17 @@ public class Roundtrip extends LinearLayout {
 
 	}
 
+	/**
+	 * Listen to a Profile touch event
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public class OnProfileTouch implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
-
-			//int action = event.getAction();
 
 			TextView t = (TextView) view;
 			for (TextView v : profiles) {
@@ -150,6 +157,14 @@ public class Roundtrip extends LinearLayout {
 
 	}
 
+	/**
+	 * 
+	 * Listen to a the Compute touch event
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public class OnComputeTouch implements OnTouchListener {
 
 		@Override
@@ -176,6 +191,9 @@ public class Roundtrip extends LinearLayout {
 			return false;
 		}
 
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
@@ -190,31 +208,59 @@ public class Roundtrip extends LinearLayout {
 		}
 	}
 
-	LinkedList<ComputeRoundtripListener> roundtripListener = new LinkedList<ComputeRoundtripListener>();
 
+	/**
+	 * natify all compute Roundtrip Listener
+	 * 
+	 * @param profile new profile
+	 * @param length the length
+	 */
 	private void notifyComputeRoundtripListener(int profile, int length) {
 		for (ComputeRoundtripListener l : roundtripListener) {
 			l.onComputeRoundtrip(profile, length);
 		}
 	}
 
+	/**
+	 * register a new ComputeRoundtrip Listener
+	 * @param listener new listener
+	 */
 	public void registerComputeRoundtripListener(
 			ComputeRoundtripListener listener) {
 		roundtripListener.add(listener);
 	}
 
+	/**
+	 * Interface to make a call by computing Roundtrips
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface ComputeRoundtripListener {
+		
+		/**
+		 * is called if the compute button is pressed
+		 * 
+		 * @param profile the profile
+		 * @param length the length
+		 */
 		public void onComputeRoundtrip(int profile, int length);
 	}
 
-	LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
-
+	/**
+	 * notify all listener
+	 */
 	private void notifyGoToMapListener() {
 		for (GoToMapListener l : rl) {
 			l.onGoToMap();
 		}
 	}
 
+	/**
+	 * register a gotomap listener
+	 * @param listener the new listener
+	 */
 	public void registerGoToMapListener(GoToMapListener listener) {
 		rl.add(listener);
 	}

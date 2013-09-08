@@ -114,8 +114,8 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	/**
 	 * Listener lists
 	 */
-	LinkedList<Thread> tileT = new LinkedList<Thread>();
-	LinkedList<TilePaaring> tileHolder = new LinkedList<TilePaaring>();
+	private LinkedList<Thread> tileT = new LinkedList<Thread>();
+	private LinkedList<TilePaaring> tileHolder = new LinkedList<TilePaaring>();
 	
 	/**
 	 * This create a new MapView.

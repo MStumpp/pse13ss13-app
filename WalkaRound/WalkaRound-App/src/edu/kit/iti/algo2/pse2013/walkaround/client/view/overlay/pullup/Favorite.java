@@ -130,6 +130,13 @@ public class Favorite extends RelativeLayout {
 		this.updateFavorites();
 	}
 
+	/**
+	 * A Listener wich toogles the tabs
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class ToogleTabListener implements OnTouchListener {
 
 		@Override
@@ -145,6 +152,9 @@ public class Favorite extends RelativeLayout {
 
 	}
 
+	/**
+	 * toogles the tabs
+	 */
 	private void toogleTab() {
 		if (selected) {
 			waypointButton.setSelected(false);
@@ -165,6 +175,9 @@ public class Favorite extends RelativeLayout {
 		}
 	}
 
+	/**
+	 * update Favorite
+	 */
 	public void updateFavorites() {
 		Log.d(TAG, "updateFavorite");
 		routeSide.removeAllViews();
@@ -241,9 +254,16 @@ public class Favorite extends RelativeLayout {
 		}
 	}
 	
+	/**
+	 * This class listener for a touch on a location
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class FavoriteLocationListener implements OnTouchListener {
 
-		View view;
+		private View view;
 		
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -256,6 +276,9 @@ public class Favorite extends RelativeLayout {
 			return false;
 		}
 		
+		/**
+		 * makes a waypoint alert
+		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
@@ -279,9 +302,15 @@ public class Favorite extends RelativeLayout {
 		
 	}
 
+	/**
+	 * This class listener for a route touch
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class FavoriteRouteListener implements OnTouchListener {
 
-		View view;
+		private View view;
 		
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -293,6 +322,9 @@ public class Favorite extends RelativeLayout {
 			return false;
 		}
 
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
@@ -315,9 +347,15 @@ public class Favorite extends RelativeLayout {
 		
 	}
 	
+	/**
+	 * This class listen for a delete route event
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class DeleteRouteListener implements OnTouchListener {
 
-		String id;
+		private String id;
 		
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -331,6 +369,9 @@ public class Favorite extends RelativeLayout {
 			return false;
 		}
 		
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
@@ -352,9 +393,15 @@ public class Favorite extends RelativeLayout {
 
 	}
 
+	/**
+	 * This class listen for a delete waypoint event
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class DeleteWaypointListener implements OnTouchListener {
 
-		String id;
+		private String id;
 		
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -368,6 +415,9 @@ public class Favorite extends RelativeLayout {
 			return false;
 		}
 		
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();

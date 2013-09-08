@@ -124,6 +124,10 @@ public class Info extends LinearLayout {
 
 	}
 
+	/**
+	 * update a poi
+	 * @param poi the poi to update
+	 */
 	public void update(POI poi) {
 
 		this.title.setVisibility(GONE);
@@ -164,11 +168,17 @@ public class Info extends LinearLayout {
 		}
 	}
 
+	/**
+	 * stops speaking
+	 */
 	public void stopSpeaking() {
 		TextToSpeechUtility.getInstance().stopSpeaking();
 		toogleSpeaking();
 	}
 
+	/**
+	 * toogle speaking
+	 */
 	private void toogleSpeaking() {
 		if (this.speak) {
 			this.speak = false;
@@ -181,14 +191,27 @@ public class Info extends LinearLayout {
 		}
 	}
 
+	/**
+	 * Listen for a Play event
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class playListener implements OnTouchListener {
 
-		String text;
+		private String text;
 
+		/**
+		 * construct a new play listener
+		 * 
+		 * @param text the text to speak
+		 */
 		public playListener(String text) {
 			this.text = text;
 		}
 
+		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(sound) && event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (speak) {
@@ -204,15 +227,26 @@ public class Info extends LinearLayout {
 		}
 	}
 
+	/**
+	 * Listen for a save event
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 */
 	private class saveListener implements OnTouchListener {
 
 		private POI poi;
 		private EditText edit;
 
+		/**
+		 * construkt a save lsitener
+		 * @param poi the poi to listen
+		 */
 		public saveListener(POI poi) {
 			this.poi = poi;
 		}
 
+		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (event.getAction() == MotionEvent.ACTION_UP) {
 				Log.d(TAG, "save wurde gedrückt");
@@ -221,6 +255,9 @@ public class Info extends LinearLayout {
 			return false;
 		}
 
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			edit = new EditText(getContext());
 			edit.setText(poi.getName());

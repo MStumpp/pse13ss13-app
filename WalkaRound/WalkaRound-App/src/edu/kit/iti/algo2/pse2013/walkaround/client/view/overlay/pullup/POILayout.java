@@ -42,6 +42,7 @@ public class POILayout extends RelativeLayout {
 	private static int category13 = R.string.castle;
 
 	private LinkedList<Integer> category = new LinkedList<Integer>();
+	private LinkedList<POIChangeListener> poiChangeListener = new LinkedList<POIChangeListener>();
 	private LinearLayout content;
 
 	/**
@@ -105,8 +106,16 @@ public class POILayout extends RelativeLayout {
 		this.addView(scrollView, scrollViewParam);
 	}
 
+	/**
+	 * Listen for a Category change
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class onCategoryTouch implements OnTouchListener {
 
+		@Override
 		public boolean onTouch(final View v, MotionEvent event) {
 
 			TextView b = (TextView) v;
@@ -128,6 +137,12 @@ public class POILayout extends RelativeLayout {
 			return false;
 		}
 
+		/**
+		 * gets the Category id back
+		 * 
+		 * @param id the needed id
+		 * @return the category id or 0
+		 */
 		public int getCategoryID(int id) {
 			for (int i = 0; i < category.size(); i++) {
 				if (category.get(i) == id) {
@@ -140,19 +155,35 @@ public class POILayout extends RelativeLayout {
 
 	}
 
-	LinkedList<POIChangeListener> poiChangeListener = new LinkedList<POIChangeListener>();
-
+	/**
+	 * notify all Listener
+	 */
 	private void notifyComputeRoundtripListener() {
 		for (POIChangeListener l : poiChangeListener) {
 			l.onPOIChange();
 		}
 	}
 
+	/**
+	 * register a new POIChangeListener
+	 * @param listener the new Listener
+	 */
 	public void registerPOIChangeListener(POIChangeListener listener) {
 		poiChangeListener.add(listener);
 	}
 
+	/**
+	 * A Interface for the POI´s
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface POIChangeListener {
+		
+		/**
+		 * is called if a POI is changed
+		 */
 		public void onPOIChange();
 	}
 }
