@@ -9,18 +9,17 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 /**
  * 
- * Administrate the preferences. sound on/off map typ - Manik; Wanderkarte,
- * MapQuest
+ * Administered the preferences. Uses the SharedPreferences. For testing please
+ * clear data store of the app in android. (a restart and sometimes a
+ * re-installation doesn't reset the preferences)
  * 
  * 
- * POI - audio Title on/off Text on/off
+ * sound on/off map type - Manik; Wanderkarte, MapQuest POI - audio Title on/off
+ * Text on/off POI - text images - on/off Navigation typ of output Text To
+ * Speech; Stereo Sounds time to target - on/off time gone - on/off way left -
+ * on/off way gone - on/off speed - on/off
  * 
- * POI - text images - on/off
- * 
- * Navigation typ of output Text To Speech; Stero Sounds time to target - on/off
- * time gone - on/off way left - on/off way gone - on/off speed - on/off
- * 
- * WalkaRound Server Shortest-Waay - url Roundtrip - url
+ * WalkaRound Server Shortest-Way - url Roundtrip - url
  * 
  * @author Ludwig Biermann
  * @version 3.5
@@ -28,7 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
  */
 public class PreferenceUtility {
 
-	/* gernal */
+	/* General */
 	public static boolean DEFAULT_SOUND = false;
 
 	/* look and feel */
@@ -72,9 +71,11 @@ public class PreferenceUtility {
 	public static String KEY_SERVER_SHORT;
 	public static String KEY_SERVER_ROUNDTRIP;
 
+	/* static */
 	private static PreferenceUtility manager;
 	private static String TAG = PreferenceUtility.class.getSimpleName();
 
+	/* instance */
 	private SharedPreferences sh;
 
 	/**
