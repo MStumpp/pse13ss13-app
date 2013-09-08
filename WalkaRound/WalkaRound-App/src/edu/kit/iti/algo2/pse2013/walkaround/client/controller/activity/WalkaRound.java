@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -89,13 +91,19 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				+ coorBox.getDisplaySize().toString());
 		PositionManager.initialize(this);
 
-
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
 	    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ) {
-	    	Log.d("unsinn", "wtf");
 			gpsAlert();
 		}
+	    
+	    ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+	    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+	    if (!mWifi.isConnected()) {
+			wifiAlert();
+	    }
+
 		
 		// BoundingBox & tiles
 
@@ -383,7 +391,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	public void onRouteChange(RouteInfo currentRoute) {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				//waypointView.updateWaypoint();
+				waypointView.updateWaypoint();
 				pullUpView.updateRoute();
 			}
 		});
@@ -490,6 +498,29 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		alert.show();
 	}
 
+
+	public void wifiAlert() {
+		Log.d(TAG, "ALERT");
+		
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle("Wifi Signal");
+		alert.setMessage("Es konnte keine Verbindung zum Internet festgestellt werden.");
+		alert.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS));
+					}
+				});
+
+		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, final int id) {
+                 dialog.cancel();
+            }
+        });
+		
+		alert.show();
+	}
+	
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();

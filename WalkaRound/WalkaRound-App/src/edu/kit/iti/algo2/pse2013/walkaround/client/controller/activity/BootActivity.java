@@ -192,8 +192,8 @@ public class BootActivity extends Activity {
 				updateProgress(progress);
 				Log.d(TAG, "Tile Fetcher Zeit: " + MAX_TILEFETCHER_TIMEOUT + " > ");
 				for (int time = 0; (amount - 4) > tiles && MAX_TILEFETCHER_TIMEOUT >= time;time++) {
-				//	Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
-				//			+ tiles);
+					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
+							+ tiles);
 					Log.d(TAG, "Tile Fetcher Zeit: " + time + " > ");
 					updateProgress(progress);
 					sleep(MAX_TILE_SLEEP);
