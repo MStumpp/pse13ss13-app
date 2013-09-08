@@ -46,6 +46,9 @@ public class Routing extends RelativeLayout {
 	private RelativeLayout.LayoutParams lParams;
 	private Context context;
 
+	private LinkedList<GoToFavoriteListener> fav = new LinkedList<GoToFavoriteListener>();
+	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
+	
 	/**
 	 * This create a new POIview.
 	 * 
@@ -198,6 +201,9 @@ public class Routing extends RelativeLayout {
 		this.updateRoute();
 	}
 
+	/**
+	 * update Route
+	 */
 	public void updateRoute() {
 		LinkedList<Waypoint> route = RouteController.getInstance()
 				.getCurrentRoute().getWaypoints();
@@ -229,6 +235,13 @@ public class Routing extends RelativeLayout {
 		}
 	}
 
+	/**
+	 * Listen to Waypoint events
+	 * 
+	 * @author Ludwig Biermann
+	 * @version  1.0
+	 *
+	 */
 	private class WaypointListener implements OnTouchListener {
 
 		@Override
@@ -243,9 +256,16 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to delete event
+	 * 
+	 * @author Ludwig Biermann
+	 * @version  1.0
+	 *
+	 */
 	private class DeleteListener implements OnTouchListener {
 
-		int id;
+		private int id;
 		
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -259,6 +279,9 @@ public class Routing extends RelativeLayout {
 			return false;
 		}
 		
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
@@ -280,10 +303,16 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to a sace event
+	 * 
+	 * @author Ludwig Biermann
+	 *
+	 */
 	private class SaveWaypointListener implements OnTouchListener {
 
-		Waypoint w;
-		EditText edit;
+		private Waypoint w;
+		private EditText edit;
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -299,6 +328,9 @@ public class Routing extends RelativeLayout {
 			return false;
 		}
 
+		/**
+		 * alert
+		 */
 		public void alert() {
 			edit = new EditText(getContext());
 			edit.setText("PLACEHOLDER");
@@ -328,6 +360,11 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to a reset
+	 * @author Ludwig Biermann
+	 *
+	 */
 	private class ResetListener implements OnTouchListener {
 
 		@Override
@@ -338,6 +375,12 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to a invert
+	 * 
+	 * @author Ludwig Biermann
+	 *
+	 */
 	private class InvertListener implements OnTouchListener {
 
 		@Override
@@ -348,9 +391,15 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to a save event
+	 * 
+	 * @author Ludwig Biermann
+	 *
+	 */
 	private class SaveListener implements OnTouchListener {
 
-		EditText edit;
+		private EditText edit;
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -362,6 +411,9 @@ public class Routing extends RelativeLayout {
 			return false;
 		}
 
+		/**
+		 * makes a alert
+		 */
 		public void alert() {
 			edit = new EditText(getContext());
 			edit.setText("PLACEHOLDER");
@@ -390,6 +442,13 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to a add favorite listener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class AddFavoriteListener implements OnTouchListener {
 
 		@Override
@@ -400,6 +459,12 @@ public class Routing extends RelativeLayout {
 
 	}
 
+	/**
+	 * Listen to a go to map
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class GoToMapTouchListener implements OnTouchListener {
 
 		@Override
@@ -412,36 +477,65 @@ public class Routing extends RelativeLayout {
 
 	// GoToMap
 
-	LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
-
+	/**
+	 * notify go to map
+	 */
 	private void notifyGoToMapListener() {
 		for (GoToMapListener l : rl) {
 			l.onGoToMap();
 		}
 	}
 
+	/**
+	 * register go to map listener
+	 * 
+	 * @param listener the new Listener
+	 */
 	public void registerGoToMapListener(GoToMapListener listener) {
 		rl.add(listener);
 	}
 
+	/**
+	 * A Interface for call go to map
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface GoToMapListener {
+		
+		/**
+		 * is called if the view wants to go to map
+		 */
 		public void onGoToMap();
 	}
 
 	// Favorite
 
-	LinkedList<GoToFavoriteListener> fav = new LinkedList<GoToFavoriteListener>();
-
+	/**
+	 * notif all listener
+	 */
 	private void notifyFavoriteListener() {
 		for (GoToFavoriteListener l : fav) {
 			l.goToFavorite();
 		}
 	}
 
+	/**
+	 * register a new listener
+	 * @param listener the new listener
+	 */
 	public void registerFavoriteListener(GoToFavoriteListener listener) {
 		fav.add(listener);
 	}
 
+	/**
+	 * 
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface GoToFavoriteListener {
 		public void goToFavorite();
 	}

@@ -17,7 +17,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
  * 
  * @author Ludwig Biermann
  * @version 1.1
- *
+ * 
  */
 public class HeadUpView extends RelativeLayout {
 	private final static String TAG = HeadUpView.class.getSimpleName();
@@ -42,8 +42,10 @@ public class HeadUpView extends RelativeLayout {
 	/**
 	 * This create a new POIview.
 	 * 
-	 * @param context the context of the app
-	 * @param attrs the needed attributes
+	 * @param context
+	 *            the context of the app
+	 * @param attrs
+	 *            the needed attributes
 	 */
 	public HeadUpView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -141,6 +143,12 @@ public class HeadUpView extends RelativeLayout {
 
 	}
 
+	/**
+	 * sets the position lock
+	 * 
+	 * @param lock
+	 *            true is locked
+	 */
 	public void setUserPositionLock(boolean lock) {
 		if (lock) {
 			userLock.setImageDrawable(this.getResources()
@@ -155,9 +163,11 @@ public class HeadUpView extends RelativeLayout {
 	 * Ein Listener der auf eine Verkleinern Eingabe wartet.
 	 * 
 	 * @author Ludwig Biermann
+	 * @version 1.0
 	 * 
 	 */
 	private class ZoomMinusListener implements OnTouchListener {
+		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(minus)) {
 				Log.d(TAG, "Minus is pressed");
@@ -168,7 +178,15 @@ public class HeadUpView extends RelativeLayout {
 
 	}
 
+	/**
+	 * user Lock Listener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	private class UserLockListener implements OnTouchListener {
+		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(userLock)) {
 				Log.d(TAG, "UserLock is pressed");
@@ -179,7 +197,15 @@ public class HeadUpView extends RelativeLayout {
 
 	}
 
+	/**
+	 * Option Listener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	private class OptionListener implements OnTouchListener {
+		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(option)) {
 				Log.d(TAG, "UserLock is pressed");
@@ -191,6 +217,12 @@ public class HeadUpView extends RelativeLayout {
 
 	}
 
+	/**
+	 * notify all listener
+	 * 
+	 * @param delta
+	 *            the delta
+	 */
 	private void notifyListener(float delta) {
 		for (HeadUpViewListener l : this.listener) {
 			l.onZoom(delta);
@@ -198,6 +230,12 @@ public class HeadUpView extends RelativeLayout {
 
 	}
 
+	/**
+	 * notify Listener
+	 * 
+	 * @param id
+	 *            the od
+	 */
 	private void notifyListener(int id) {
 
 		switch (id) {
@@ -218,20 +256,44 @@ public class HeadUpView extends RelativeLayout {
 
 	}
 
+	/**
+	 * register a new HeadUpView listener
+	 * @param listener the new listener
+	 */
 	public void registerListener(HeadUpViewListener listener) {
 		this.listener.add(listener);
 	}
 
+	/**
+	 * remove a listener
+	 * @param listener to remove
+	 */
 	public void removeListener(HeadUpViewListener listener) {
 		this.listener.remove(listener);
 	}
 
+	/**
+	 * HeadUpViewListener
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface HeadUpViewListener {
 
+		/**
+		 * called on Zoom is pressed
+		 * @param delta the delta of lod
+		 */
 		public void onZoom(float delta);
 
+		/**
+		 * called on Option is pressed
+		 */
 		public void onOptionPressed();
 
+		/**
+		 * called on User Lock is pressed
+		 */
 		public void onUserLock();
 	}
 

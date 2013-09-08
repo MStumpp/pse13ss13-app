@@ -1,6 +1,5 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -19,13 +18,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Favorite;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Info;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.POILayout;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.POILayout.POIChangeListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip.ComputeRoundtripListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToFavoriteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search.UpdateMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
@@ -64,6 +63,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	private Search searchMenu;
 	private Info infoMenu;
 	private FrameLayout optionMenu;
+	private int pullUpContent = -1;
 
 	/**
 	 * This create a new POIview.
@@ -246,7 +246,6 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		roundtripMenu.registerGoToMapListener(this);
 	}
 
-	int pullUpContent = -1;
 
 	/**
 	 * change the content of the pullup
@@ -432,6 +431,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	}
 	
+	/**
+	 * update Info View
+	 * @param poi the new poi
+	 */
 	public void updateInfoView(POI poi){
 
 		//-----------------------------------
@@ -447,35 +450,36 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		infoMenu.update(poi);
 	}
 
+	/**
+	 * animate pullup
+	 */
 	private void pullUp() {
 		this.setY(0);
 		TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
 				nullSize, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
 		animation.setDuration(ANIMATION_DURATION); // animation duration
-		// animation.setRepeatCount(5); // animation repeat count
-		// animation.setRepeatMode(2); // repeat animation (left to right, right
-		// to left )
-		// animation.setFillAfter(true);
-
 		this.startAnimation(animation); // start animation
-		// animation.setAnimationListener(new RegulatorAnimationListener(h));
 	}
 
+	/**
+	 * animate pull down
+	 */
 	private void pullDown() {
 		TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f, 0,
 				nullSize); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
 		animation.setDuration(ANIMATION_DURATION); // animation duration
-		// this.setY(nullSize);
-		// animation.setRepeatCount(5); // animation repeat count
-		// animation.setRepeatMode(2); // repeat animation (left to right, right
-		// to left )
-		// animation.setFillAfter(true);
 
 		this.startAnimation(animation); // start animation
 		animation
 				.setAnimationListener(new RegulatorAnimationListener(nullSize));
 	}
 
+	/**
+	 * Static Touch Listener
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class StaticTouchListener implements OnTouchListener {
 
 		@Override
@@ -499,6 +503,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	 * Implements the Animation listener of the transaction of the pullupview
 	 * 
 	 * @author Ludwig Biermann
+	 * @version 1.0
 	 * 
 	 */
 	private class RegulatorAnimationListener implements AnimationListener {
@@ -525,6 +530,9 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	}
 
+	/**
+	 * update route
+	 */
 	public void updateRoute() {
 		routingMenu.updateRoute();
 	}
@@ -536,8 +544,6 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	@Override
 	public void goToFavorite() {
-		// TODO add Favorite
-
 		//-----------------------------------
 		routingMenu.setVisibility(View.GONE);
 		poiMenu.setVisibility(View.GONE);
@@ -551,23 +557,35 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		pullUpContent = PullUpView.CONTENT_FAVORITE;
 	}
 
+	/**
+	 * update favorite
+	 */
 	public void updateFavorite() {
 		this.favoriteMenu.updateFavorites();
 	}
 	
+	/**
+	 * register roundtrip
+	 * @param listener the new Listener
+	 */
 	public void registerComputeRoundtripListener(ComputeRoundtripListener listener){
 		roundtripMenu.registerComputeRoundtripListener(listener);
 	}
 
+	/**
+	 * register poi change listener
+	 * @param listener the new listener
+	 */
 	public void registerPOIChangeListener(POIChangeListener listener){
 		poiMenu.registerPOIChangeListener(listener);
 	}
 
+	/**
+	 * register update map listener
+	 * @param listener the new listener
+	 */
 	public void registerUpdateMapListener(UpdateMapListener listener){
 		searchMenu.registerUpdateMapListener(listener);
-	}
-
-	public void setFragment(FragmentTransaction fragmentTransaction) {
 	}
 
 }

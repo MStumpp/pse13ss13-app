@@ -33,7 +33,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  * 
  * @author Ludwig Biermann
  * @version 1.1
- *
+ * 
  */
 public class Search extends RelativeLayout {
 
@@ -54,12 +54,18 @@ public class Search extends RelativeLayout {
 
 	private LinearLayout result;
 	private int width;
+	private boolean isResult = false;
+	
+	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
+	private LinkedList<UpdateMapListener> ul = new LinkedList<UpdateMapListener>();
 
 	/**
 	 * This create a new POIview.
 	 * 
-	 * @param context the context of the app
-	 * @param attrs the needed attributes
+	 * @param context
+	 *            the context of the app
+	 * @param attrs
+	 *            the needed attributes
 	 */
 	public Search(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -267,6 +273,13 @@ public class Search extends RelativeLayout {
 		freeText.setText("FreeText");
 	}
 
+	/**
+	 * POI side Tab Listener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	private class POISideTabListener implements OnTouchListener {
 
 		@Override
@@ -282,6 +295,13 @@ public class Search extends RelativeLayout {
 
 	}
 
+	/**
+	 * Address side Tab Listener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	private class AddressSideTabListener implements OnTouchListener {
 
 		@Override
@@ -297,6 +317,12 @@ public class Search extends RelativeLayout {
 
 	}
 
+	/**
+	 * set the tab
+	 * 
+	 * @param b
+	 *            true if address Side
+	 */
 	private void setTab(boolean b) {
 		selected = b;
 		if (selected) {
@@ -316,8 +342,9 @@ public class Search extends RelativeLayout {
 		}
 	}
 
-	boolean isResult = false;
-
+	/**
+	 * toogle tabs
+	 */
 	private void toogleResult() {
 		if (isResult) {
 			poiSide.setVisibility(GONE);
@@ -329,8 +356,16 @@ public class Search extends RelativeLayout {
 		}
 	}
 
+	/**
+	 * Go AddressListener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	private class GoAdressListener implements OnTouchListener {
 
+		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -386,6 +421,13 @@ public class Search extends RelativeLayout {
 		}
 	}
 
+	/**
+	 * Go Query Listener
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	private class GoQueryListener implements OnTouchListener {
 
 		@Override
@@ -395,8 +437,7 @@ public class Search extends RelativeLayout {
 			int action = event.getAction();
 
 			if (action == MotionEvent.ACTION_UP) {
-				String text = freeText.getText().toString()
-						.replaceAll(" ", "");
+				String text = freeText.getText().toString().replaceAll(" ", "");
 				if (!text.isEmpty()) {
 
 					List<POI> poiS = POIManager.getInstance(getContext())
@@ -431,12 +472,17 @@ public class Search extends RelativeLayout {
 
 	}
 
+	/**
+	 * makes result alert
+	 * 
+	 * @param text the showing text
+	 */
 	public void alertResult(String text) {
 		AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 				.create();
 		alertDialog.setTitle("Sorry..");
-		alertDialog
-				.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n \n" + text + "\n \n übereinstimmenden Orte gefunde!");
+		alertDialog.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n \n"
+				+ text + "\n \n übereinstimmenden Orte gefunde!");
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
@@ -445,16 +491,29 @@ public class Search extends RelativeLayout {
 		alertDialog.show();
 	}
 
+	/**
+	 * POI Touch calls
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class poiTouch implements OnTouchListener {
 
 		private POI poi;
 		private View view;
 
+		/**
+		 * construct a new poi Touch
+		 * @param p the poi
+		 * @param view the view
+		 */
 		public poiTouch(POI p, View view) {
 			this.poi = p;
 			this.view = view;
 		}
 
+		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
 				RouteController.getInstance().addWaypoint(
@@ -469,16 +528,29 @@ public class Search extends RelativeLayout {
 
 	}
 
+	/**
+	 * Location Touch
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class locationTouch implements OnTouchListener {
 
 		private Location location;
 		private View view;
 
+		/**
+		 * construct a new location touch
+		 * @param p the location
+		 * @param view the view
+		 */
 		public locationTouch(Location p, View view) {
 			this.location = p;
 			this.view = view;
 		}
 
+		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
 				RouteController.getInstance().addWaypoint(
@@ -495,8 +567,9 @@ public class Search extends RelativeLayout {
 		}
 	}
 
-	LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
-
+	/**
+	 * notifiy go to map listener
+	 */
 	private void notifyGoToMapListener() {
 		for (GoToMapListener l : rl) {
 			l.onGoToMap();
@@ -504,25 +577,43 @@ public class Search extends RelativeLayout {
 		}
 	}
 
+	/**
+	 * register a go to map listener
+	 * @param listener the new listener
+	 */
 	public void registerGoToMapListener(GoToMapListener listener) {
 		rl.add(listener);
 	}
 
 
-	LinkedList<UpdateMapListener> ul = new LinkedList<UpdateMapListener>();
-
+	/**
+	 * natify all listener
+	 */
 	private void notifyUpdateMapListener() {
 		for (UpdateMapListener l : ul) {
 			l.updateMap();
 		}
 	}
 
+	/**
+	 * register a update map listener
+	 * @param listener the new listener
+	 */
 	public void registerUpdateMapListener(UpdateMapListener listener) {
 		ul.add(listener);
 	}
-	
+
+	/**
+	 * update Map Listener
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface UpdateMapListener {
+		/**
+		 * calls if map has to be updatet
+		 */
 		public void updateMap();
 	}
-	
+
 }
