@@ -80,7 +80,6 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		
 		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
 		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
 		this.getRootView().setBackgroundColor(Color.GRAY);
 
 		main.height = size.y;

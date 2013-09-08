@@ -56,7 +56,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  * 
  * @author Ludwig Biermann
  * @version 8.0
- *
+ * 
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
@@ -65,11 +65,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	private MapView mapView;
 
-	GestureDetector gestureDetector;
+	private GestureDetector gestureDetector;
 
-	BoundingBox coorBox;
+	private BoundingBox coorBox;
 
-	TileFetcher tileFetcher;
+	private TileFetcher tileFetcher;
 
 	private HeadUpView headUpView;
 
@@ -86,6 +86,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	private POIView poiView;
 
+	private float gesamt;
+	private boolean isZomm = false;
+	private float targetX;
+	private float targetY;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,19 +104,19 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionManager.initialize(this);
 
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		
-	    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ) {
+
+		if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			gpsAlert();
 		}
-	    
-	    ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-	    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-	    if (!mWifi.isConnected()) {
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (!mWifi.isConnected()) {
 			wifiAlert();
-	    }
+		}
 
-		
 		// BoundingBox & tiles
 
 		this.tileFetcher = TileFetcher.getInstance();
@@ -168,7 +173,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 		mapView.setOnTouchListener(new MapListener());
-		
+
 	}
 
 	public class MapListener implements OnTouchListener {
@@ -177,16 +182,16 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		public boolean onTouch(View v, MotionEvent event) {
 
 			int action = event.getAction();
-			if (event.getPointerCount() >= 2 && action == MotionEvent.ACTION_DOWN && !isZomm) {
+			if (event.getPointerCount() >= 2
+					&& action == MotionEvent.ACTION_DOWN && !isZomm) {
 				float deltaX = Math.abs(event.getX(0) - event.getX(1));
 				float deltaY = Math.abs(event.getY(0) - event.getY(1));
 
-
 				gesamt = (float) Math.sqrt(Math.pow(
 						(double) Math.abs(event.getX(0) - event.getX(1)), 2)
-						* Math.pow((double) Math.abs(event.getY(1) - event.getY(1)),
-								2));
-				
+						* Math.pow((double) Math.abs(event.getY(1)
+								- event.getY(1)), 2));
+
 				if (event.getX(0) < event.getX(1)) {
 					targetX += (event.getX(0));
 				} else {
@@ -210,10 +215,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		}
 
 	}
-	float gesamt;
-	boolean isZomm = false;
-	float targetX;
-	float targetY;
+
 
 	private class MapGestureListener implements OnGestureListener {
 
@@ -223,25 +225,23 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				float distanceX, float distanceY) {
 
 			if (e2.getPointerCount() >= 2) {
-				//Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
-				//Log.d(TAG, "Finger2: " + e2.getX(1)+ ":" + e2.getY(1));
-
+				// Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
+				// Log.d(TAG, "Finger2: " + e2.getX(1)+ ":" + e2.getY(1));
 
 				float fingerDiff = (float) Math.sqrt(Math.pow(
 						(double) Math.abs(e2.getX(0) - e2.getX(1)), 2)
 						* Math.pow((double) Math.abs(e2.getY(1) - e2.getY(1)),
 								2));
-				
-				
+
 				float diff = (float) Math.sqrt(Math.abs(Math.pow(distanceX, 2)
 						* Math.pow(distanceY, 2)));
-				
+
 				diff /= twoFingerZoomOffset;
-				
+
 				diff = (int) diff;
 				Log.d(TAG, "new Zooming Offset: " + diff);
 
-				if(fingerDiff < gesamt){
+				if (fingerDiff < gesamt) {
 					coorBox.setLevelOfDetailByADelta(-diff);
 					Log.d(TAG, "new Zooming Offset: -" + diff);
 				} else {
@@ -249,21 +249,20 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					Log.d(TAG, "new Zooming Offset: " + diff);
 				}
 				gesamt = fingerDiff;
-				
-				
-				//TODO new Zooming Point
-				//coorBox.setCenter(new DisplayCoordinate(targetX, targetY));
+
+				// TODO new Zooming Point
+				// coorBox.setCenter(new DisplayCoordinate(targetX, targetY));
 			} else {
 				Log.d(TAG, "MapTouch SCroll");
 				coorBox.shiftCenter(distanceX, distanceY);
 			}
 			userLock = false;
 			headUpView.setUserPositionLock(isRestricted());
-			//mapView.computeParams();
-			//tileFetcher.requestTiles(coorBox, mapView);
+			// mapView.computeParams();
+			// tileFetcher.requestTiles(coorBox, mapView);
 			updateUser();
 			poiView.updatePOIView();
-			//waypointView.updateWaypoint();
+			// waypointView.updateWaypoint();
 			return true;
 		}
 
@@ -318,9 +317,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void onZoom(float delta) {
 		this.coorBox.setLevelOfDetailByADelta(delta);
-		//this.mapView.computeParams();
-		//this.tileFetcher.requestTiles(coorBox, mapView);
-		//waypointView.updateWaypoint();
+		// this.mapView.computeParams();
+		// this.tileFetcher.requestTiles(coorBox, mapView);
+		// waypointView.updateWaypoint();
 	}
 
 	@Override
@@ -336,11 +335,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		} else {
 			userLock = true;
 			coorBox.setCenter(userCoordinate);
-			//mapView.computeParams();
-			//tileFetcher.requestTiles(coorBox, mapView);
+			// mapView.computeParams();
+			// tileFetcher.requestTiles(coorBox, mapView);
 			user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
 			user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
-			//waypointView.updateWaypoint();
+			// waypointView.updateWaypoint();
 		}
 		headUpView.setUserPositionLock(userLock);
 	}
@@ -353,7 +352,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		userCoordinate = new Coordinate(androidLocation.getLatitude(),
 				androidLocation.getLongitude());
 
-		
 		updateUser();
 
 		if (userLock) {
@@ -476,58 +474,63 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void updateMap() {
-		//mapView.computeParams();
-		//tileFetcher.requestTiles(coorBox, mapView);
-		//this.updateUser();
-		//waypointView.updateWaypoint();
+		// mapView.computeParams();
+		// tileFetcher.requestTiles(coorBox, mapView);
+		// this.updateUser();
+		// waypointView.updateWaypoint();
 
 	}
 
 	public void gpsAlert() {
 		Log.d(TAG, "ALERT");
-		
+
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle("GPS Signal");
 		alert.setMessage("Ihr GPS ist nicht aktiviert. Soll es aktiviert werden?");
 		alert.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+						startActivity(new Intent(
+								android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 					}
 				});
 
-		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, final int id) {
-                 dialog.cancel();
-            }
-        });
-		
+		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(final DialogInterface dialog,
+							final int id) {
+						dialog.cancel();
+					}
+				});
+
 		alert.show();
 	}
 
-
 	public void wifiAlert() {
 		Log.d(TAG, "ALERT");
-		
+
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle("Wifi Signal");
 		alert.setMessage("Es konnte keine Verbindung zum Internet festgestellt werden.");
 		alert.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						startActivity(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS));
+						startActivity(new Intent(
+								android.provider.Settings.ACTION_WIFI_SETTINGS));
 					}
 				});
 
-		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, final int id) {
-                 dialog.cancel();
-            }
-        });
-		
+		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(final DialogInterface dialog,
+							final int id) {
+						dialog.cancel();
+					}
+				});
+
 		alert.show();
 	}
-	
+
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
@@ -543,7 +546,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void onBackPressed() {
-        this.moveTaskToBack(true);
+		this.moveTaskToBack(true);
 	}
 
 	@Override
@@ -553,11 +556,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void onCenterChange(Coordinate center) {
-		this.updateUser();		
+		this.updateUser();
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return WalkaRound.class.getSimpleName();
 	}
 }
