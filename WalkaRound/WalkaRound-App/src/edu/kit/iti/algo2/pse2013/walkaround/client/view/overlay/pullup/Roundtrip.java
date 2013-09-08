@@ -19,6 +19,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToMapListener;
 
+/**
+ * This View shows the Roundtrip menu
+ * 
+ * @author Ludwig Biermann
+ * @version 1.1
+ *
+ */
 public class Roundtrip extends LinearLayout {
 
 	private static int PROFILE1 = R.string.sightseeing;
@@ -35,6 +42,12 @@ public class Roundtrip extends LinearLayout {
 
 	private NumberPicker number;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public Roundtrip(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

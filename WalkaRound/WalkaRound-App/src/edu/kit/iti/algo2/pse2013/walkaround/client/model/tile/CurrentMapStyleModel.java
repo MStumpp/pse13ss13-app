@@ -4,6 +4,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
  * Diese Klasse hält den derzeitigen MapStyle vor
  * 
  * @author Ludwig Biermann
+ * @version 1.5
  * 
  */
 public class CurrentMapStyleModel {
@@ -56,15 +57,19 @@ public class CurrentMapStyleModel {
 	}
 
 	/**
-	 * Setzt einen neuen Kartenstil.
+	 * Sets the current Map Style
 	 * 
-	 * @param mapStyle
-	 *            der neue KArtenstil.
+	 * @param mapStyle the new map style
 	 */
 	public void setCurrentMapStyle(MapStyle mapStyle) {
 		this.style = mapStyle;
 	}
 
+	/**
+	 * Sets the current Map Style by a String
+	 * 
+	 * @param mapStyle the new map style
+	 */
 	public void setCurrentMapStyle(String mapStyle) {
 		if(mapStyle.equals(MAPNIK)) {
 			style = MapStyle.MAPSTYLE_MAPNIK;

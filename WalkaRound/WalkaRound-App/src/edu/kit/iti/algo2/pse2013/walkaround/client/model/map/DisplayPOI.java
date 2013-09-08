@@ -6,6 +6,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * This class connect a DisplayCoordinate with a Point of Interest
  *
  * @author Ludwig Biermann
+ * @version 1.0
  *
  */
 public class DisplayPOI extends DisplayCoordinate {

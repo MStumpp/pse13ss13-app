@@ -17,6 +17,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 
+/**
+ * This View shows the POI Menu.
+ * 
+ * @author Ludwig Biermann
+ * @version 1.1
+ *
+ */
 public class POILayout extends RelativeLayout {
 
 	private ScrollView scrollView;
@@ -37,6 +44,12 @@ public class POILayout extends RelativeLayout {
 	private LinkedList<Integer> category = new LinkedList<Integer>();
 	private LinearLayout content;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public POILayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

@@ -28,6 +28,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+/**
+ * This class shows the Search View
+ * 
+ * @author Ludwig Biermann
+ * @version 1.1
+ *
+ */
 public class Search extends RelativeLayout {
 
 	private static final String TAG = Search.class.getSimpleName();
@@ -48,6 +55,12 @@ public class Search extends RelativeLayout {
 	private LinearLayout result;
 	private int width;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public Search(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

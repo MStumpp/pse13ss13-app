@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.WalkaRound;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
@@ -22,65 +21,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
+/**
+ * The View draw the map.
+ * 
+ * @author Ludwig Biermann
+ * @version 1.8
+ *
+ */
 public class MapView extends View implements TileListener, CenterListener, LevelOfDetailListener {
-
-	private Handler h;
-	private final int FRAME_RATE = 25;
-
-	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
-
-	private Runnable r = new Runnable() {
-		// Override
-		public void run() {
-			invalidate();
-		}
-	};
-
-	public MapView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		this.coorBox = BoundingBox.getInstance(context);
-		coorBox.registerLevelOfDetailListener(this);
-		coorBox.registerCenterListener(this);
-		h = new Handler();
-
-		// this.tileFetcher = new TileFetcher();
-		this.indexXY = new int[2];
-		this.mapOffset = new DisplayCoordinate(0, 0);
-
-		Log.d("test", " " + (coorBox.getDisplaySize() != null));
-		size = coorBox.getDisplaySize();
-
-		// this.coorBox = new BoundingBox(defaultCoordinate, size,
-		// CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail());
-
-		Log.d("test", " " + (size != null));
-
-		this.amount = new Point();
-		this.computeParams();
-	}
-
-	protected void onDraw(Canvas c) {
-		for (int i = 0; i < tileT.size(); i++) {
-			tileT.get(i).start();
-			// tileT.remove(t);
-		}
-		tileT.clear();
-
-		synchronized (tileHolder) {
-			for (int i = 0; i < tileHolder.size(); i++) {
-				c.drawBitmap(
-						tileHolder.get(i).b,
-						(tileHolder.get(i).x * currentTileWidth)
-								+ mapOffset.getX(),
-						(tileHolder.get(i).y * currentTileWidth)
-								+ mapOffset.getY(), null);
-			}
-		}
-		// tileHolder.clear();
-		// c.drawBitmap(map, 0, 0, null);
-
-		h.postDelayed(r, FRAME_RATE);
-	}
 
 	/**
 	 * Debug Tag
@@ -100,12 +48,6 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	 * The default empty Background Color
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
-
-	/**
-	 * The Tile Fetcher. This is the location to get the tile parts of the map
-	 * 
-	 */
-	// private TileFetcher tileFetcher;
 
 	/**
 	 * the size of the Display
@@ -147,6 +89,80 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	 * 
 	 */
 	private int[] indexXY;
+	
+	/**
+	 * Helper Variable to update the map
+	 */
+	private Handler h;
+	private Runnable r = new Runnable() {
+		@Override
+		public void run() {
+			invalidate();
+		}
+	};
+	
+	/**
+	 * The Frame Rate of the map
+	 */
+	private static final int FRAME_RATE = 25;
+
+	/**
+	 * default Coordinate to initialize
+	 */
+	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
+
+	/**
+	 * Listener lists
+	 */
+	LinkedList<Thread> tileT = new LinkedList<Thread>();
+	LinkedList<TilePaaring> tileHolder = new LinkedList<TilePaaring>();
+	
+	/**
+	 * This create a new MapView.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
+	public MapView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		this.coorBox = BoundingBox.getInstance(context);
+		coorBox.registerLevelOfDetailListener(this);
+		coorBox.registerCenterListener(this);
+		h = new Handler();
+
+		this.indexXY = new int[2];
+		this.mapOffset = new DisplayCoordinate(0, 0);
+
+		Log.d("test", " " + (coorBox.getDisplaySize() != null));
+		size = coorBox.getDisplaySize();
+
+
+		Log.d("test", " " + (size != null));
+
+		this.amount = new Point();
+		this.computeParams();
+	}
+
+	@Override
+	protected void onDraw(Canvas c) {
+		for (int i = 0; i < tileT.size(); i++) {
+			tileT.get(i).start();
+		}
+		tileT.clear();
+
+		synchronized (tileHolder) {
+			for (int i = 0; i < tileHolder.size(); i++) {
+				c.drawBitmap(
+						tileHolder.get(i).b,
+						(tileHolder.get(i).x * currentTileWidth)
+								+ mapOffset.getX(),
+						(tileHolder.get(i).y * currentTileWidth)
+								+ mapOffset.getY(), null);
+			}
+		}
+
+		h.postDelayed(r, FRAME_RATE);
+	}
 
 	/**
 	 * Compute and gives the Tile Offset back
@@ -158,18 +174,13 @@ public class MapView extends View implements TileListener, CenterListener, Level
 		double lonDiff = ((coorBox.getCenter().getLongitude() + 180) % (360 / Math
 				.pow(2, this.coorBox.getLevelOfDetail())));
 
-		// double latDiff = ((coorBox.getCenter().getLatitude() + 90) % (180 /
-		// Math
-		// .pow(2, this.coorBox.getLevelOfDetail())));
 		int[] index = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				(int) coorBox.getLevelOfDetail());
 
 		double n = Math.PI - (2.0 * Math.PI * index[1])
 				/ Math.pow(2.0, this.coorBox.getLevelOfDetail());
 		n = Math.toDegrees(Math.atan(Math.sinh(n)));
-
-		Log.d("wrong", "Tile Lat " + n);
-		;
+		
 		double latDiff = Math.abs(coorBox.getCenter().getLatitude() - n);
 
 		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff,
@@ -181,14 +192,10 @@ public class MapView extends View implements TileListener, CenterListener, Level
 				CoordinateUtility.DIRECTION_VERTICAL);
 
 		yDiff = yDiff * pPerDiff;
-		Log.d(TAG, "RealOffset: x " + xDiff + " y: " + yDiff);
-
-		// yDiff = (currentTileWidth - 1) - yDiff;
 
 		xDiff = size.x / 2 - Math.abs(xDiff);
 		yDiff = size.y / 2 - Math.abs(yDiff);
 
-		// yDiff = (yDiff - 25) % this.currentTileWidth;
 
 		Log.d(TAG, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
@@ -214,7 +221,7 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 	/**
 	 * 
-	 * This Method starts the compute of a new Map.
+	 * This Method computes the offset and index and clears the current variable
 	 * 
 	 * @param center
 	 *            the new center Coordinate
@@ -222,49 +229,34 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	 *            the Level of Detail
 	 */
 	public void computeParams() {
-
-		// compute new Parameter
-
 		this.mapOffset = this.computeTileOffset();
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
-		tileT.clear();
-		tileHolder.clear();
+		this.tileT.clear();
+		this.tileHolder.clear();
 		this.computeAmountOfTiles();
-
-		// erase the map
-
-		// if (this.map.isMutable()) {
-		// map.eraseColor(defaultBackground);
-		// }
-
-		// this.map.prepareToDraw();
-
-		// Tiles requesten
-		// tileFetcher.requestTiles((int) this.coorBox.getLevelOfDetail(),
-		// indexXY[0]-1, indexXY[1]-1, indexXY[0]+1, indexXY[1]+1, this);
 	}
 
 	/**
-	 * push the map to the View
+	 * A little Helper Class to associate Bitmaps with a Coordinate 
 	 * 
-	 * 
-	 * private void pushMap() { try {
-	 * MapController.getInstance().onMapOverlayImageChange(map); } catch
-	 * (NullPointerException e) { Log.e(TAG,
-	 * "MapController existiert noch nicht"); } }
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
 	 */
-
-	LinkedList<Thread> tileT = new LinkedList<Thread>();
-
-	LinkedList<TilePaaring> tileHolder = new LinkedList<TilePaaring>();
-
 	private class TilePaaring {
 
 		public Bitmap b;
 		public int y;
 		public int x;
 
+		/**
+		 * Construct a new Tile Paring
+		 * 
+		 * @param b the bitmap
+		 * @param x x-coordinate
+		 * @param y y-coordinate
+		 */
 		public TilePaaring(Bitmap b, int x, int y) {
 			this.b = Bitmap.createScaledBitmap(b, Math.round(currentTileWidth),
 					Math.round(currentTileWidth), false);
@@ -274,16 +266,13 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 	}
 
+	@Override
 	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
 
 		int tileX = x - indexXY[0];
 		int tileY = (y - indexXY[1]);
 
-		tileHolder.add(new TilePaaring(tile, tileX, tileY));
-
-		// starts a new Thread to draw the map
-		// Thread t = new Thread(new TileDrawer(tile, x, y));
-		// tileT.add(t);
+		this.tileHolder.add(new TilePaaring(tile, tileX, tileY));
 	}
 
 	@Override

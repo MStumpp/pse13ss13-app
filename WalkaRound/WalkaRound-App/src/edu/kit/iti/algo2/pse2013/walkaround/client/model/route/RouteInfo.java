@@ -5,6 +5,12 @@ import java.util.LinkedList;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+/**
+ * 
+ * @author Lukas Müller
+ * @version 1.0
+ *
+ */
 public interface RouteInfo {
 
 	//public String getName();

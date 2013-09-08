@@ -10,6 +10,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+/**
+ * This is class holds and manage the current Route
+ * 
+ * @author Lukas Müller
+ * @version 1.0
+ *
+ */
 public class RouteController {
 
 	public class Routelistener {

@@ -1,7 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller;
 
 // Android Library
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.PullUpView;
 
 // Walkaround Library
 
@@ -31,6 +29,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.PullUpView;
  * PreferenceManager.getDefaultSharedPreferences(this);
  * 
  * @author Ludwig Biermann
+ * @version 1.0
  * 
  */
 public class OptionFragment extends PreferenceFragment implements
@@ -63,18 +62,7 @@ public class OptionFragment extends PreferenceFragment implements
 		Log.d(TAG_PULLUP_CONTENT, "Destroy OptionView");
 	}
 
-	/**
-	 * 
-	 * @param f
-	 * @return
-	 */
-	public boolean equals(Fragment f) {
-		if (f.toString().equals(PullUpView.CONTENT_FAVORITE)) {
-			return true;
-		}
-		return false;
-	}
-
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
 
 	}

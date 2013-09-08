@@ -12,7 +12,9 @@ import android.util.Log;
 /**
  * This class hold and compare the last known orientation of the device
  * 
- * @author Lukas Müller, Ludwig Biermann
+ * @author Lukas Müller
+ * @author Ludwig Biermann
+ * @version 2.5 
  * 
  */
 public class CompassManager implements SensorEventListener {

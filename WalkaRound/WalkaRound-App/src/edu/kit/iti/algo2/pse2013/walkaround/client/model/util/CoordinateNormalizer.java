@@ -39,11 +39,6 @@ public final class CoordinateNormalizer {
 			.getSimpleName();
 
 	/**
-	 * URL for roundtrip computation.
-	 */
-	//private static String URL_NEARESTVERTEX = "http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex";
-
-	/**
 	 * This class is an utility class which is not instantiated.
 	 */
 	private CoordinateNormalizer() {

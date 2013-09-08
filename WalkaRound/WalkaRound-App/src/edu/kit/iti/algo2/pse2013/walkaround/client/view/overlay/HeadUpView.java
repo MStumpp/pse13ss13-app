@@ -12,6 +12,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
+/**
+ * This class shows the headUpView
+ * 
+ * @author Ludwig Biermann
+ * @version 1.1
+ *
+ */
 public class HeadUpView extends RelativeLayout {
 	private final static String TAG = HeadUpView.class.getSimpleName();
 
@@ -32,6 +39,12 @@ public class HeadUpView extends RelativeLayout {
 
 	LinkedList<HeadUpViewListener> listener = new LinkedList<HeadUpViewListener>();
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public HeadUpView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

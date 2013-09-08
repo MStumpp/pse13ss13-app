@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
@@ -24,28 +23,37 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
+/**
+ * This view draw and handle the Waypoint Marker
+ * 
+ * @author Ludwig Biermann
+ * @version 1.7
+ *
+ */
 public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener {
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;
 	public static final int DEFAULT_FLAG_ACTIVE = R.drawable.flag_activ;
 	public static final int DEFAULT_FLAG_TARGET = R.drawable.flag_target;
 	public static final int DEFAULT_FLAG_TARGET_ACTIVE = R.drawable.flag_target_activ;
-
 	public static final int DEFAULT_WAYPOINT = R.drawable.waypoint;
 	public static final int DEFAULT_WAYPOINT_ACTIVE = R.drawable.waypoint_activ;
 	private static final String TAG = WaypointView.class.getSimpleName();
-
 	private RouteInfo route;
 	private BoundingBox coorBox;
 	private Drawable flag;
-	// private Drawable flagActive;
 	private Drawable flagTarget;
-	// private Drawable flagTargetActive;
 	private Drawable waypoint;
 	private GestureDetector waypointGestureDetector;
+	private ImageView currentView;
+	private int currentId;
 
-	// private Drawable waypointActive;
-
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public WaypointView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		coorBox = BoundingBox.getInstance();
@@ -54,14 +62,8 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		// ---------------------------------------------
 		Log.d(TAG, "Initialisiere Drawables.");
 		flag = this.getResources().getDrawable(DEFAULT_FLAG);
-		// flagActive = this.getResources().getDrawable(DEFAULT_FLAG_ACTIVE);
 		flagTarget = this.getResources().getDrawable(DEFAULT_FLAG_TARGET);
-		// flagTargetActive = this.getResources().getDrawable(
-		// DEFAULT_FLAG_TARGET_ACTIVE);
 		waypoint = this.getResources().getDrawable(DEFAULT_WAYPOINT);
-		// waypointActive = this.getResources().getDrawable(
-		// DEFAULT_WAYPOINT_ACTIVE);
-
 		waypointGestureDetector = new GestureDetector(context,
 				new WaypointGestureDetector());
 		
@@ -69,6 +71,9 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		coorBox.registerLevelOfDetailListener(this);
 	}
 
+	/**
+	 * update the Waypoint
+	 */
 	public void updateWaypoint() {
 		List<DisplayWaypoint> l = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(route,
@@ -146,6 +151,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 	 * This Class intercept the touch to waypoints
 	 * 
 	 * @author Ludwig Biermann
+	 * @version 1.0
 	 * 
 	 */
 	private class WaypointTouchListener implements OnTouchListener {
@@ -176,28 +182,17 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 					RouteController.getInstance()
 							.moveActiveWaypointComputeOnly();
 				}
-
-				// if (waypointGestureDetector.onTouchEvent(event)) {
-				// return true;
-				// }
-
-				// if(event.getAction() == MotionEvent.ACTION_UP){
-				// mc.pushMovedWaypoint();
-				// }
-				// }
-
 			}
 			return waypointGestureDetector.onTouchEvent(event);
 		}
 	}
 
-	private ImageView currentView;
-	private int currentId;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
 	 * 
 	 * @author Ludwig Biermann
+	 * @version 1.0
 	 * 
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
@@ -206,7 +201,6 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 		public boolean onDown(MotionEvent event) {
 			RouteController.getInstance().setActiveWaypoint(currentId);
-			// mc.getActiveWaypointId();
 			curentWP = new DisplayCoordinate(currentView.getX(),
 					currentView.getY());
 			return true;
@@ -248,13 +242,6 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 									.getLevelOfDetail());
 
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
-
-			// routeList.removeView(currentView);
-			// currentView.setX(currentView.getX() - deltaX);
-			// currentView.setY(currentView.getY() - deltaY);
-			// mc.onMovePoint(-deltaX, -deltaY, currentId);
-			// routeList.addView(currentView);
-			// mIsScrolling = true;
 
 			return true;
 		}

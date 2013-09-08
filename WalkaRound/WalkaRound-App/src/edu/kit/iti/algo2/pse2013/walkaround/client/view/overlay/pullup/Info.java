@@ -3,8 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -25,6 +23,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtilit
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
+/**
+ * This View shows the Information View for POI´s.
+ * 
+ * @author Ludwig Biermann
+ * @version 1.2
+ *
+ */
 public class Info extends LinearLayout {
 
 	private TextView title;
@@ -36,6 +41,12 @@ public class Info extends LinearLayout {
 
 	private boolean speak = false;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public Info(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.setOrientation(LinearLayout.VERTICAL);

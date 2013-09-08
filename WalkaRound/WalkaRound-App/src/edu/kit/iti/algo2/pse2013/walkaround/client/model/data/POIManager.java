@@ -26,7 +26,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  * This class manages requests about POIs.
  * 
  * @author Thomas Kadow
- * @version 1.0
+ * @author ludwig Biermann
+ * @version 2.0
  */
 public class POIManager {
 

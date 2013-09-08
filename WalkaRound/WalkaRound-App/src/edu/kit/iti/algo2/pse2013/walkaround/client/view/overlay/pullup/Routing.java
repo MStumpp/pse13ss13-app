@@ -24,6 +24,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+/**
+ * This class shows the Routing Menu
+ * 
+ * @author Ludwig Biermann
+ * @version 1.1
+ *
+ */
 public class Routing extends RelativeLayout {
 
 	private Button reset;
@@ -39,6 +46,12 @@ public class Routing extends RelativeLayout {
 	private RelativeLayout.LayoutParams lParams;
 	private Context context;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public Routing(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

@@ -17,20 +17,36 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayPOI;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
+/**
+ * The View draw and handle the POI Markers
+ * 
+ * @author Ludwig Biermann
+ * @version 1.2
+ *
+ */
 public class POIView extends RelativeLayout {
 
 	private static final String TAG = POIView.class.getSimpleName();
 	private BoundingBox coorBox;
 	private static int poiDrawable = R.drawable.poi;
 
+	private List<POI> poiList;
+	private LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
+
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public POIView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		coorBox = BoundingBox.getInstance(context);
+		this.coorBox = BoundingBox.getInstance(context);
 	}
 
-	List<POI> poiList;
-
+	/**
+	 * updates the POI View
+	 */
 	public void updatePOIView() {
 		poiList = POIManager.getInstance(getContext()).getPOIsWithinRectangle(
 				coorBox.getTopLeft(), coorBox.getBottomRight(),
@@ -87,6 +103,12 @@ public class POIView extends RelativeLayout {
 		}
 	}
 
+	/**
+	 * A Helper class witch is called on a Touch event
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 */
 	public class POICall implements OnTouchListener {
 
 		@Override
@@ -108,18 +130,33 @@ public class POIView extends RelativeLayout {
 
 	}
 
-	LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
-
+	/**
+	 * Notify all POI Listener
+	 * 
+	 * @param poi the pressed poi
+	 */
 	private void notifyPOIInfoListener(POI poi) {
 		for (POIInfoListener l : info) {
 			l.callPoiInfo(poi);
 		}
 	}
 
+	/**
+	 * Register a POI Info Listener
+	 * 
+	 * @param listener the new listener
+	 */
 	public void registerPOIInfoListener(POIInfoListener listener) {
 		info.add(listener);
 	}
 
+	/**
+	 * A POI Info Listener interface
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	public interface POIInfoListener {
 		public void callPoiInfo(POI poi);
 	}

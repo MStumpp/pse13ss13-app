@@ -31,8 +31,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 /**
  * This class manages all saved locations and routes.
  *
- * @author Thomas Kadow, Florian Sch&auml;fer
- * @version 1.0
+ * @author Thomas Kadow
+ * @author Florian Schäfer
+ * @author Ludwig Biermann
+ * @version 2.0
  */
 public class FavoriteManager {
 

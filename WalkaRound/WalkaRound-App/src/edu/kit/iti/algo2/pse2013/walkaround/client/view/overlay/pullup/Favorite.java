@@ -27,6 +27,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+/**
+ * This class show the Favorite Menu
+ * 
+ * @author Ludwig Biermann
+ * @version 1.1
+ *
+ */
 public class Favorite extends RelativeLayout {
 
 	private static final String TAG = Favorite.class.getSimpleName();
@@ -41,6 +48,12 @@ public class Favorite extends RelativeLayout {
 	private int width;
 	private int height;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public Favorite(Context context, AttributeSet attrs) {
 		super(context, attrs);
 

@@ -9,6 +9,13 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
+/**
+ * This class show the Option Menu.
+ * 
+ * @author Ludwig Biermann
+ * @version 1.0
+ *
+ */
 public class Option extends Activity {
 
 	@Override

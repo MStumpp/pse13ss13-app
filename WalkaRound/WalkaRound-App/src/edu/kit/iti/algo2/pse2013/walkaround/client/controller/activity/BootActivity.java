@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -33,7 +35,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  * 
  * @author Ludwig Biermann
  * @version 6.3
- *
+ * 
  */
 public class BootActivity extends Activity {
 	protected static final int TOTALSTEPS = 1000;
@@ -43,8 +45,8 @@ public class BootActivity extends Activity {
 	protected boolean mbActive;
 	protected ProgressBar mProgressBar;
 
-	private static int MAX_TILE_SLEEP =  50;
-	private static int MAX_TILEFETCHER_TIMEOUT =  10000/MAX_TILE_SLEEP;
+	private static int MAX_TILE_SLEEP = 50;
+	private static int MAX_TILEFETCHER_TIMEOUT = 10000 / MAX_TILE_SLEEP;
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -65,6 +67,11 @@ public class BootActivity extends Activity {
 		super.onDestroy();
 	}
 
+	/**
+	 * update Progress bar
+	 * 
+	 * @param timePassed
+	 */
 	public void updateProgress(final int timePassed) {
 		if (null != mProgressBar) {
 			// Ignore rounding error here
@@ -74,11 +81,17 @@ public class BootActivity extends Activity {
 		}
 	}
 
+	/**
+	 * is called if the progress has finished
+	 */
 	public void onContinue() {
 		Intent intent = new Intent(this, WalkaRound.class);
 		this.startActivity(intent);
 	}
 
+	/**
+	 * shows a "unknown error" error
+	 */
 	public void alert() {
 
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -93,6 +106,13 @@ public class BootActivity extends Activity {
 		alertDialog.show();
 	}
 
+	/**
+	 * A Helper Class which boots Walkaround
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 2.3
+	 * 
+	 */
 	private class BootHelper extends Thread implements TileListener {
 
 		private int tiles = 0;
@@ -119,20 +139,19 @@ public class BootActivity extends Activity {
 				FavoriteManager.initialize(getApplicationContext());
 				POIManager.initialize(getApplicationContext());
 
-		    	Looper.prepare();
-				
+				Looper.prepare();
+
 				RouteProcessing.getInstance();
 				PositionManager.initialize(getApplicationContext());
 
-				Log.d("debugFu", " "
-						+ (PreferenceUtility.getInstance().isSoundOn() == true));
 				TextToSpeechUtility.initialize(getApplicationContext(),
 						PreferenceUtility.getInstance().isSoundOn());
 				PreferenceUtility.getInstance()
 						.registerOnSharedPreferenceChangeListener(
 								TextToSpeechUtility.getInstance());
 
-				while (!TextToSpeechUtility.getInstance().isReady()) {
+				for (int time = 0; !TextToSpeechUtility.getInstance().isReady()
+						&& MAX_TILEFETCHER_TIMEOUT >= time; time++) {
 					Log.d(TAG, "TextToSpeech ist noch nicht ready");
 					sleep(50);
 				}
@@ -150,26 +169,28 @@ public class BootActivity extends Activity {
 				updateProgress(progress);
 
 				// TileFetcher
-				float lod = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail();
+				float lod = CurrentMapStyleModel.getInstance()
+						.getCurrentMapStyle().getDefaultLevelOfDetail();
 				Display display = getWindowManager().getDefaultDisplay();
 				Point size = new Point();
 				display.getSize(size);
 
 				BoundingBox.initialize(size);
 				BoundingBox coorBox = BoundingBox.getInstance();
-				
-				Location l = PositionManager.getInstance().getLastKnownPosition();
-				if(l != null){
-					coorBox.setCenter(new Coordinate(l.getLatitude(), l.getLongitude()));
+
+				Location l = PositionManager.getInstance()
+						.getLastKnownPosition();
+				if (l != null) {
+					coorBox.setCenter(new Coordinate(l.getLatitude(), l
+							.getLongitude()));
 				}
-				
+
 				TileFetcher tileFetcher = TileFetcher.getInstance();
 
 				// 50 %
 				progress = 500;
 				updateProgress(progress);
 
-				// TODO Offset löschen und TimeOut einfuegen
 				int[] amountTop = TileUtility.getXYTileIndex(
 						coorBox.getTopLeft(), (int) lod);
 				amountTop[0]--;
@@ -190,11 +211,8 @@ public class BootActivity extends Activity {
 						amountBottom[0], amountBottom[1], this);
 
 				updateProgress(progress);
-				Log.d(TAG, "Tile Fetcher Zeit: " + MAX_TILEFETCHER_TIMEOUT + " > ");
-				for (int time = 0; (amount - 4) > tiles && MAX_TILEFETCHER_TIMEOUT >= time;time++) {
-					Log.d(TAG, "Tile Fetcher Schleife: " + amount + " > "
-							+ tiles);
-					Log.d(TAG, "Tile Fetcher Zeit: " + time + " > ");
+				for (int time = 0; (amount - 4) > tiles
+						&& MAX_TILEFETCHER_TIMEOUT >= time; time++) {
 					updateProgress(progress);
 					sleep(MAX_TILE_SLEEP);
 				}
@@ -205,19 +223,21 @@ public class BootActivity extends Activity {
 				progress = 1000;
 				updateProgress(progress);
 				Log.d(TAG, "alles geladen!!");
-				
-				/*
-				if (TextToSpeechUtility.getInstance().speak("Willkommen bei !")) {
-					TextToSpeechUtility.getInstance().speak("WalkaRound!",
-							Locale.ENGLISH);
-				} else {
-					MediaPlayer mp = MediaPlayer.create(getBaseContext(),
-							R.raw.hangout_dingtone);
-					mp.setVolume(100, 100);
-					mp.start();
-					// mp.pause();
+
+				if (PreferenceUtility.getInstance().isSoundOn()) {
+					if (TextToSpeechUtility.getInstance().speak(
+							"Willkommen bei !")) {
+						TextToSpeechUtility.getInstance().speak("WalkaRound!",
+								Locale.ENGLISH);
+					} else {
+						// TODO Klingelton einfügen^^ 
+						// MediaPlayer mp = MediaPlayer.create(getBaseContext(),
+						// R.raw.hangout_dingtone);
+						// mp.setVolume(100, 100);
+						// mp.start();
+						// mp.pause();
+					}
 				}
-				*/
 
 			} catch (InterruptedException e) {
 			} finally {
@@ -225,10 +245,11 @@ public class BootActivity extends Activity {
 			}
 		}
 
+		@Override
 		public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
 			progress += stepSize;
 			tiles++;
 		}
 	}
-	
+
 }

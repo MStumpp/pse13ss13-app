@@ -6,6 +6,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * This class connect DisplayCoordinate with a Waypoint
  * 
  * @author Ludwig Biermann
+ * @version 1.0
  *
  */
 public class DisplayWaypoint extends DisplayCoordinate {

@@ -29,6 +29,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.G
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Search.UpdateMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
+/**
+ * This class hold and manage all pullup views
+ * 
+ * @author Ludwig Biermann
+ * @version 10.2
+ *
+ */
 public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
 
 	Point size;
@@ -58,6 +65,12 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 	private Info infoMenu;
 	private FrameLayout optionMenu;
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public PullUpView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		size = BoundingBox.getInstance(context).getDisplaySize();

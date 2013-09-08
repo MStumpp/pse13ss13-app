@@ -9,7 +9,8 @@ import android.util.Log;
 /**
  * This class hold and return the last known Speed.
  *
- * @author Lukas M�ller, Ludwig Biermann
+ * @author Lukas Müller
+ * @version 1.0
  *
  */
 public class SpeedManager implements PositionListener {

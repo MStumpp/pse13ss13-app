@@ -10,6 +10,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormaliz
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
+/**
+ * 
+ * @author Lukas Müller
+ * @version 1.0
+ *
+ */
 public class Route implements RouteInfo {
 
 	private static String TAG_ROUTE = Route.class.getSimpleName();

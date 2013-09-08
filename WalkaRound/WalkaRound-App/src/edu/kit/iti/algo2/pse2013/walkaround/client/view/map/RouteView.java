@@ -15,27 +15,37 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
+/**
+ * This View draw the Route
+ * 
+ * @author Ludwig Biermann
+ * @version 1.6
+ *
+ */
 public class RouteView extends View {
-
-	private static String TAG = RouteView.class.getSimpleName();
-
-	private Handler h;
-	private final int FRAME_RATE = 25;
-	private BoundingBox coorBox;
-	Paint pinsel;
 
 	/**
 	 * The stroke of the bitmap ungearde Zahl aus genauikeitsgründen
 	 */
 	private int strokeWidth = 8;
-
+	private static String TAG = RouteView.class.getSimpleName();
+	private final int FRAME_RATE = 25;
+	private BoundingBox coorBox;
+	Paint pinsel;
+	private Handler h;
 	private Runnable r = new Runnable() {
-		// Override
+		@Override
 		public void run() {
 			invalidate();
 		}
 	};
 
+	/**
+	 * This create a new POIview.
+	 * 
+	 * @param context the context of the app
+	 * @param attrs the needed attributes
+	 */
 	public RouteView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		h = new Handler();
@@ -46,6 +56,7 @@ public class RouteView extends View {
 		this.coorBox = BoundingBox.getInstance(context);
 	}
 
+	@Override
 	protected void onDraw(Canvas c) {
 		List<DisplayCoordinate> lines;
 		synchronized (RouteController.getInstance().getCurrentRoute()) {

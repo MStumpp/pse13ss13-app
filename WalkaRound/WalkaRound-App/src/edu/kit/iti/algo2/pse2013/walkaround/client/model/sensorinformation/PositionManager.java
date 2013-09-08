@@ -15,7 +15,9 @@ import android.util.Log;
  * This class hold and return the last known detected Position from the android
  * file System
  * 
- * @author Lukas Müller, Ludwig Biermann
+ * @author Lukas Müller
+ * @author Ludwig Biermann
+ * @version 2.5 
  * 
  */
 public class PositionManager implements GpsStatus.Listener {
@@ -30,7 +32,6 @@ public class PositionManager implements GpsStatus.Listener {
 	private static PositionManager positionManager;
 
 	private LocationManager locationManager;
-	private Location lastKnownLocation;
 
 	private CompassManager compass;
 	private SpeedManager speed;

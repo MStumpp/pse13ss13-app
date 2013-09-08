@@ -9,6 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+/**
+ * 
+ * @author Thomas Kadow
+ * @version 1.0
+ *
+ */
 public final class POIImageFetcher implements Runnable {
 
 	private static final String TAG_POIIMAGEFETCHER = POIImageFetcher.class.getSimpleName();

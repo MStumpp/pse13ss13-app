@@ -26,7 +26,9 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  *
  * Diese Klasse implementiert einen Downloader für Karten-Kacheln, der eine Tile-Cache mit LRU-Ersetzungsstrategie
  * verwendet.
- * @author Florian Sch&auml;fer
+ * @author Florian Schäfer
+ * @author Ludwig Biermann
+ * @version 3.0
  */
 public class TileFetcher implements OnSharedPreferenceChangeListener{
 	

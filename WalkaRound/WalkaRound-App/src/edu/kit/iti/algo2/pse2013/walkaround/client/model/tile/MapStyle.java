@@ -4,6 +4,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.tile;
  * Diese Klasse repräsentiert einen Kartenstil von Open Street Map.
  *
  * @author Ludwig Biermann
+ * @version 1.0
  *
  */
 public class MapStyle {
