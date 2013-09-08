@@ -12,14 +12,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
- *
+ * 
  * This class represent a rectangle of two Coordinates and his center
  * Coordinate. This class holds the upper Left, bottom Right and center
  * Coordinate.
- *
+ * 
  * @author Ludwig Biermann
- * @version 4.0
- *
+ * @version 4.1
+ * 
  */
 public class BoundingBox {
 
@@ -29,11 +29,17 @@ public class BoundingBox {
 	 * The Debug Tag of Bounding Box
 	 */
 	private static String TAG = BoundingBox.class.getSimpleName();
-	
+
+	/**
+	 * Instance of BoundingBox
+	 */
 	private static BoundingBox coorBox;
 
+	/**
+	 * The default start Coordinate
+	 */
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
-	
+
 	// class --------------------------Variables-------------------------- //
 
 	/**
@@ -66,40 +72,52 @@ public class BoundingBox {
 	 */
 	private float levelOfDetail;
 
+	/**
+	 * The Level of Detail listener
+	 */
+	LinkedList<LevelOfDetailListener> lodListener;
+
+	/**
+	 * the Center Listener.
+	 */
+	LinkedList<CenterListener> centerListener;
+	
+
 	// --------------------------Constructor-------------------------- //
 
-	public static void initialize(Point size) {	
+	public static void initialize(Point size) {
 		Log.d(TAG, "initialisiere BoundingBox");
-		coorBox = new BoundingBox(defaultCoordinate, size, CurrentMapStyleModel.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail());
+		coorBox = new BoundingBox(defaultCoordinate, size, CurrentMapStyleModel
+				.getInstance().getCurrentMapStyle().getDefaultLevelOfDetail());
 	}
 
-	public static BoundingBox getInstance(Context context){
+	public static BoundingBox getInstance(Context context) {
 
-		if(coorBox != null){
+		if (coorBox != null) {
 			return coorBox;
 		}
-		
+
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		int width = metrics.widthPixels;
-		int height = metrics.heightPixels;		
+		int height = metrics.heightPixels;
 		Point size = new Point(width, height);
 		initialize(size);
-		
+
 		return coorBox;
 	}
-	
+
 	/**
 	 * !!!!Only possible if you called initialize or getInstance(Context)
 	 * 
 	 * @return BoundingBox
 	 */
-	public static BoundingBox getInstance(){
+	public static BoundingBox getInstance() {
 		return coorBox;
 	}
-	
+
 	/**
 	 * Constructs a new Bounding Box
-	 *
+	 * 
 	 * @param center
 	 *            center Coordinate
 	 * @param size
@@ -109,6 +127,8 @@ public class BoundingBox {
 	 */
 	private BoundingBox(Coordinate center, Point size, float levelOfDetail) {
 		Log.d(TAG, "initialize BoundingBox | Display: " + size.toString());
+		this.lodListener = new LinkedList<LevelOfDetailListener>();
+		this.centerListener = new LinkedList<CenterListener>();
 		this.display = size;
 		this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
 		this.computeSize();
@@ -119,7 +139,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center by a new center and a new Level of detail
-	 *
+	 * 
 	 * @param center
 	 *            the center Coordinate
 	 * @param levelOfDetail
@@ -136,7 +156,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center by a new center and the current Level of Detail
-	 *
+	 * 
 	 * @param center
 	 *            the center Coordinate
 	 */
@@ -151,7 +171,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center to the given DisplayCoordinate
-	 *
+	 * 
 	 * @param dc
 	 *            the given Display Coordinate
 	 */
@@ -170,7 +190,7 @@ public class BoundingBox {
 
 	/**
 	 * Shifts the Center Coordinate bei a Pixel delta
-	 *
+	 * 
 	 * @param x
 	 *            pixel delta
 	 * @param y
@@ -190,21 +210,27 @@ public class BoundingBox {
 		this.setCenter(center);
 
 	}
-	
+
 	/**
 	 * Sets a new Level of detail by checking the Boundings
-	 * @param levelOfDetail the new level of detail;
+	 * 
+	 * @param levelOfDetail
+	 *            the new level of detail;
 	 * @return the correct new LOD
 	 */
-	private float checkLevelOfDetail(float levelOfDetail){
-		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() <= levelOfDetail) {
+	private float checkLevelOfDetail(float levelOfDetail) {
+		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle()
+				.getMaxLevelOfDetail() <= levelOfDetail) {
 			this.notifyLODListener(this.levelOfDetail);
-			return CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail();
+			return CurrentMapStyleModel.getInstance().getCurrentMapStyle()
+					.getMaxLevelOfDetail();
 		}
-		
-		if(CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() >= levelOfDetail){
+
+		if (CurrentMapStyleModel.getInstance().getCurrentMapStyle()
+				.getMinLevelOfDetail() >= levelOfDetail) {
 			this.notifyLODListener(this.levelOfDetail);
-			return CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
+			return CurrentMapStyleModel.getInstance().getCurrentMapStyle()
+					.getMinLevelOfDetail();
 		}
 		this.notifyLODListener(this.levelOfDetail);
 		return levelOfDetail;
@@ -212,7 +238,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level Of Detail by a delta
-	 *
+	 * 
 	 * @param delta
 	 *            the delta to the new Level Of Detail
 	 */
@@ -222,7 +248,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level of Detail
-	 *
+	 * 
 	 * @param levelOfDetail
 	 *            the new Level of Detail
 	 */
@@ -237,7 +263,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper left corner
-	 *
+	 * 
 	 * @return top left
 	 */
 	public Coordinate getTopLeft() {
@@ -246,7 +272,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 *
+	 * 
 	 * @return top right
 	 */
 	public Coordinate getTopRight() {
@@ -255,7 +281,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 *
+	 * 
 	 * @return bottom left
 	 */
 	public Coordinate getBottomLeft() {
@@ -264,7 +290,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 *
+	 * 
 	 * @return bottom right
 	 */
 	public Coordinate getBottomRight() {
@@ -273,7 +299,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Center Coordinate of the box
-	 *
+	 * 
 	 * @return
 	 */
 	public Coordinate getCenter() {
@@ -282,7 +308,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the width and the height of the current Display back
-	 *
+	 * 
 	 * @return display size as Point
 	 */
 	public Point getDisplaySize() {
@@ -291,7 +317,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the current Level Of Detail back
-	 *
+	 * 
 	 * @return Level of Detail as float
 	 */
 	public float getLevelOfDetail() {
@@ -302,15 +328,15 @@ public class BoundingBox {
 
 	/**
 	 * Compute the Size of the Display
-	 *
+	 * 
 	 * @param levelOfDetail
 	 */
 	private void computeSize() {
 		Log.d(TAG,
 				"compute size of the display depending on the Level of Detail");
-		
+
 		Log.d("test", "1: " + (display != null) + " 2: " + (levelOfDetail > 0));
-		
+
 		this.size = new DoublePairing(
 				CoordinateUtility.convertPixelsToDegrees(display.x,
 						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
@@ -320,7 +346,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the upperLeft Coordinate
-	 *
+	 * 
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate computeTopLeft() {
@@ -330,7 +356,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the upper right Coordinate
-	 *
+	 * 
 	 * @return the top right geo-oordinate
 	 */
 	private Coordinate computeTopRight() {
@@ -340,7 +366,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the bootom left Coordinate
-	 *
+	 * 
 	 * @return the bottom left geo-oordinate
 	 */
 	private Coordinate computeBottomLeft() {
@@ -350,7 +376,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the bottom right Coordinate
-	 *
+	 * 
 	 * @return the bottom right geo-oordinate
 	 */
 	private Coordinate computeBottomRight() {
@@ -372,9 +398,9 @@ public class BoundingBox {
 	/**
 	 * A simple Helper Class to pair two doubles. In this Case the make
 	 * relationship between width and height of the display in Coordinates
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class DoublePairing {
 
@@ -390,7 +416,7 @@ public class BoundingBox {
 
 		/**
 		 * Construct a new Double Paring
-		 *
+		 * 
 		 * @param width
 		 *            of the display
 		 * @param height
@@ -406,42 +432,50 @@ public class BoundingBox {
 			return "Double Paring: width: " + width + ", height: " + height;
 		}
 	}
+
+
+	// --------------------------Listener-------------------------- //
 	
 	/**
 	 * A Interface to notify classes if the Level of Detail changes
 	 * 
-	 * @author Ludwig
-	 *
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
 	 */
 	public interface LevelOfDetailListener {
-		
+
 		/**
-		 * If the level of Detail changes this class will be called.
+		 * If the level of Detail changes, this class will be called.
+		 * 
 		 * @param levelOfDetail
 		 */
 		public void onLevelOfDetailChange(float levelOfDetail);
-		
+
 	}
-	
-	LinkedList<LevelOfDetailListener> lodListener = new LinkedList<LevelOfDetailListener>();
 	
 	/**
 	 * This will register a new Level Of Detail Listener
 	 * 
-	 * @param listener the new listener
+	 * @param listener
+	 *            the new listener
 	 * @return always true
 	 */
-	public boolean registerLevelOfDetailListener(LevelOfDetailListener listener){
-		return lodListener.add(listener);
+	public float registerLevelOfDetailListener(LevelOfDetailListener listener) {
+		Log.d(TAG, "register a new Center Listener: " + listener.toString());
+		this.lodListener.add(listener);
+		return this.levelOfDetail;
 	}
-	
+
 	/**
-	 * This will notify all Level of Detail Listener
+	 * This method will notify all Level of Detail Listener
 	 * 
-	 * @param levelOfDetail the new level of Detail
+	 * @param levelOfDetail
+	 *            the new level of Detail
 	 */
 	private void notifyLODListener(float levelOfDetail) {
-		for(LevelOfDetailListener l:lodListener){
+		Log.d(TAG, "notify LOD Listener new LOD: " + levelOfDetail);
+		for (LevelOfDetailListener l : this.lodListener) {
 			l.onLevelOfDetailChange(levelOfDetail);
 		}
 	}
@@ -449,38 +483,43 @@ public class BoundingBox {
 	/**
 	 * A Interface to notify classes if the Center Coordinate changes
 	 * 
-	 * @author Ludwig
-	 *
+	 * @author Ludwig Biermann
+	 * @version 1.0
 	 */
 	public interface CenterListener {
 
 		/**
-		 * If the Center Coordinate changes this class will be called.
+		 * If the Center Coordinate changes, this class will be called.
+		 * 
 		 * @param levelOfDetail
+		 *            the new level of detail
 		 */
 		public void onCenterChange(Coordinate center);
-		
+
 	}
-	
-	LinkedList<CenterListener> centerListener = new LinkedList<CenterListener>();
-	
+
 	/**
 	 * This will register a new Center Coordinate Listener
 	 * 
-	 * @param listener the new Listener
-	 * @return always true
+	 * @param listener
+	 *            the new Listener
+	 * @return the current Center Coordinate
 	 */
-	public boolean registerLevelOfDetailListener(CenterListener listener){
-		return centerListener.add(listener);
+	public Coordinate registerLevelOfDetailListener(CenterListener listener) {
+		Log.d(TAG, "register a new LOD Listener: " + listener.toString());
+		this.centerListener.add(listener);
+		return this.center; 
 	}
-	
+
 	/**
-	 * this will notify all Listener
+	 * This will notify all Listener
 	 * 
-	 * @param center the new Center Coordiante
+	 * @param center
+	 *            the new Center Coordiante
 	 */
 	private void notifyCenterListener(Coordinate center) {
-		for(CenterListener l:centerListener){
+		Log.d(TAG, "notify Center Listener new Center: " + center.toString());
+		for (CenterListener l : this.centerListener) {
 			l.onCenterChange(center);
 		}
 	}
