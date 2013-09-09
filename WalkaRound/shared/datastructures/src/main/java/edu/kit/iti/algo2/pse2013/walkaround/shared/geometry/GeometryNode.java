@@ -210,9 +210,9 @@ public class GeometryNode {
             return null;
         }
 
-        if (geometrizables.size() == 1) {
-            return geometrizables.get(0);
-        }
+//        if (geometrizables.size() == 1) {
+//            return geometrizables.get(0);
+//        }
 
         Geometrizable currentBest = null;
         double minDistance = Double.POSITIVE_INFINITY;

@@ -9,10 +9,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Edge;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.Vertex;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -196,6 +193,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessVerticesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getVertices()));
@@ -209,6 +207,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessEdgesGraphDataIODefaultPerNode() throws MalformedURLException {
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new ArrayList<Geometrizable>(getGraphDataIO().getEdges()));
@@ -228,6 +227,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessVerticesGraphDataIOVerticesDefaultPerNodeWithRealDataSet() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
@@ -240,6 +240,7 @@ public class GeometryDataPreprocessorTest {
 
 
     @Test
+    @Ignore
     public void testPreprocessEdgesGraphDataIOEdgesDefaultPerNodeWithRealDataSet() throws InstantiationException {
 
         Assert.assertNotNull(graphDataIO);
