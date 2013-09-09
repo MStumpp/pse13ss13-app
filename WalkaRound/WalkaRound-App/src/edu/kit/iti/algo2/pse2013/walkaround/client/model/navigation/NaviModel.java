@@ -145,9 +145,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		*/
 	}
 	
-	public void bla() {
-		String naviSoundType = PreferenceUtility.getInstance().getNaviSoundTyp();
-	}
 
 	public void onSpeedChange(double speed) {
 		Log.d(TAG_NAVI, "onSpeedChange(double)");
