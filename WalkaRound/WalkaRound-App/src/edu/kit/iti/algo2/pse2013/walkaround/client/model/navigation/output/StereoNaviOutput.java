@@ -1,17 +1,17 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
 
-/*public class StereoNaviOutput implements NaviOutput {
+public class StereoNaviOutput implements NaviOutputInterface {
 
 	private static StereoNaviOutput stereoNaviOutput;
-	private HeadUpController headUpControllerInstance;
 
 	private StereoNaviOutput() {
-		this.headUpControllerInstance = HeadUpController.getInstance();
 	}
 
-	public static NaviOutput getInstance() {
-		stereoNaviOutput = new StereoNaviOutput();
+	public static NaviOutputInterface getInstance() {
+		if (stereoNaviOutput == null) {
+			stereoNaviOutput = new StereoNaviOutput();
+		}
 		return stereoNaviOutput;
 	}
 
@@ -23,4 +23,4 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
 	}
 
-}*/
+}

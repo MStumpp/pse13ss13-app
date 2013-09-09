@@ -4,7 +4,7 @@
     <string name="options_face">look and feel</string>
     <string name="options_navi">navigation</string>
     <string name="options_server_cat">WalkaRound Server Addresses</string>
-    <string name="options_navigation">navigation hint</string>
+    <string name="options_navigation">navigation settings</string>
     <string name="options_navigation_audio_output">audio output</string>
     <string name="options_navigation_audio_output_all">sound</string>
     <string name="options_navigation_audio_output_typ">sound typ</string>

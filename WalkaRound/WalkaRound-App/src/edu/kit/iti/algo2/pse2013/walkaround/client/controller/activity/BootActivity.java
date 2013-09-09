@@ -20,6 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.NaviModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
@@ -149,7 +150,7 @@ public class BootActivity extends Activity {
 				PreferenceUtility.getInstance()
 						.registerOnSharedPreferenceChangeListener(
 								TextToSpeechUtility.getInstance());
-
+				
 				for (int time = 0; !TextToSpeechUtility.getInstance().isReady()
 						&& MAX_TILEFETCHER_TIMEOUT >= time; time++) {
 					Log.d(TAG, "TextToSpeech ist noch nicht ready");
@@ -163,11 +164,15 @@ public class BootActivity extends Activity {
 				System.gc();
 
 				updateProgress(progress);
-
+				
 				// 35%
 				progress = 350;
 				updateProgress(progress);
 
+				// Navi
+				NaviModel.initialize(getApplicationContext());
+				PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(NaviModel.getInstance());
+				
 				// TileFetcher
 				float lod = CurrentMapStyleModel.getInstance()
 						.getCurrentMapStyle().getDefaultLevelOfDetail();
@@ -184,7 +189,7 @@ public class BootActivity extends Activity {
 					coorBox.setCenter(new Coordinate(l.getLatitude(), l
 							.getLongitude()));
 				}
-
+				
 				TileFetcher tileFetcher = TileFetcher.getInstance();
 
 				// 50 %

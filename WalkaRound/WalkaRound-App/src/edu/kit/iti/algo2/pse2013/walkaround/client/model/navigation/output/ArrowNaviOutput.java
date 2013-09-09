@@ -1,17 +1,17 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 
 
-/*public class ArrowNaviOutput implements NaviOutput {
+public class ArrowNaviOutput implements NaviOutputInterface {
 
 	private static ArrowNaviOutput arrowNaviOutput;
-	private HeadUpController headUpControllerInstance;
 
 	private ArrowNaviOutput() {
-		this.headUpControllerInstance = HeadUpController.getInstance();
 	}
 
-	public static NaviOutput getInstance() {
-		arrowNaviOutput = new ArrowNaviOutput();
+	public static NaviOutputInterface getInstance() {
+		if (arrowNaviOutput == null) {
+			arrowNaviOutput = new ArrowNaviOutput();
+		}
 		return arrowNaviOutput;
 	}
 
@@ -21,4 +21,4 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output;
 	}
 
 
-}*/
+}

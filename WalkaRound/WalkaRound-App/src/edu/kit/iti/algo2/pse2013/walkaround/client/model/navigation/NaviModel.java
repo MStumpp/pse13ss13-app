@@ -1,23 +1,39 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 
-//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
-//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.AudibleTextNaviOutput;
-//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutput;
-//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.StereoNaviOutput;
-//import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.VisualTextNaviOutput;
+import java.util.Iterator;
+import java.util.LinkedList;
 
-/*public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.location.Location;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.TTSNaviOutput;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutputInterface;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.StereoNaviOutput;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.VisualTextNaviOutput;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.SpeedManager.SpeedListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+
+public class NaviModel implements OnSharedPreferenceChangeListener, RouteListener, PositionListener, CompassListener, SpeedListener {
 
 	private static String TAG_NAVI = NaviModel.class.getSimpleName();
 
 	private SharedPreferences sharedPrefs;
-	private Context applicationContext;
+	private static Context applicationContext;
 
 	private static NaviModel naviModel;
 
 	// References to listeners and HeadUpController:
-	private LinkedList<NaviOutput> naviOutputs;
-	private HeadUpController headUpControllerInstance;
+	private LinkedList<NaviOutputInterface> naviOutputs;
 
 	private boolean naviIsActive;
 
@@ -38,15 +54,15 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 	private int timeLeftOnRouteInSec;
 	private double speed;
 
-	public void initialize(Context context) {
+	public static void initialize(Context context) {
 		Log.d(TAG_NAVI, "NavigationModel initialize(Context)");
-		this.applicationContext = context.getApplicationContext();
+		applicationContext = context.getApplicationContext();
 	}
 
 	private NaviModel() {
 		Log.d(TAG_NAVI, "NavigationModel Contructor");
 		if (this.applicationContext != null) {
-			this.naviOutputs = new LinkedList<NaviOutput>();
+			this.naviOutputs = new LinkedList<NaviOutputInterface>();
 			this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext);
 			this.naviIsActive = false;
 			this.distLeftOnRouteInMeter = 0;
@@ -55,21 +71,18 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 			this.timeLeftOnRouteInSec = 0;
 			this.speed = 0;
 			// TODO: Je nach gesetzten Optionen die Navi Strategien in onSharedPref...() Methode aktivieren/deaktivieren
-			this.addOutputStrategy(ArrowNaviOutput.getInstance());
-			this.addOutputStrategy(AudibleTextNaviOutput.getInstance());
-			this.addOutputStrategy(VisualTextNaviOutput.getInstance());
-			this.addOutputStrategy(StereoNaviOutput.getInstance());
+			
+			PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		} else {
 			Log.e(TAG_NAVI, "Navigtaion Model has to be initialized first.");
 		}
 	}
 
-	public NaviModel getInstance() {
+	public static NaviModel getInstance() {
 		Log.d(TAG_NAVI, "getInstance()");
 		if (naviModel == null) {
 			naviModel = new NaviModel();
 		}
-		naviModel.sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 		return naviModel;
 	}
 
@@ -85,19 +98,19 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 		// TODO: this.headUpControllerInstance.setTurnAngle(this.turnAngle);
 		// TODO: this.headUpControllerInstance.setDistToTurn(this.distToTurn);
 		// notifying all Navi Outputs:
-		for (NaviOutput naviOutput : this.naviOutputs) {
+		for (NaviOutputInterface naviOutput : this.naviOutputs) {
 			naviOutput.deliverOutput(this.turnAngle, this.distToTurn);
 		}
 	}
 
 	// 2 Strategy-Pattern methods:
-	public boolean addOutputStrategy(NaviOutput naviOutput) {
+	public boolean addOutputStrategy(NaviOutputInterface naviOutput) {
 		Log.d(TAG_NAVI, "addOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.add(naviOutput);
 		return true;
 	}
 
-	public boolean removeOutputStrategy(NaviOutput naviOutput) {
+	public boolean removeOutputStrategy(NaviOutputInterface naviOutput) {
 		Log.d(TAG_NAVI, "removeOutputStrategy(NaviOutput naviOutput)");
 		this.naviOutputs.remove(naviOutput);
 		return true;
@@ -120,9 +133,20 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		Log.d(TAG_NAVI, "onSharedPreferenceChanged(SharedPreferences, String)");
+		Log.d(TAG_NAVI, "onSharedPreferenceChanged(" + sharedPreferences + ", " + key + ")");
 		this.sharedPrefs = sharedPreferences;
-		//TODO: Strategien an / abmelden, je nach dem, welche Prefs aktiv sind.
+		// TODO: 
+		
+		/*
+		this.addOutputStrategy(ArrowNaviOutput.getInstance());
+		this.addOutputStrategy(TTSNaviOutput.getInstance());
+		this.addOutputStrategy(VisualTextNaviOutput.getInstance());
+		this.addOutputStrategy(StereoNaviOutput.getInstance());
+		*/
+	}
+	
+	public void bla() {
+		String naviSoundType = PreferenceUtility.getInstance().getNaviSoundTyp();
 	}
 
 	public void onSpeedChange(double speed) {
@@ -317,4 +341,5 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation;
 
 
 
-}*/
+
+}

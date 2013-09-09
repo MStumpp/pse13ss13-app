@@ -497,7 +497,9 @@ public class Route implements RouteInfo {
 		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
 			tempCoord = routeCoordsIter.next();
 		}
-		tempCoord = routeCoordsIter.next();
+		if (routeCoordsIter.hasNext()) {
+			tempCoord = routeCoordsIter.next();
+		}
 
 		while (routeCoordsIter.hasNext() && !two.equals(tempCoord)) {
 			routeCoordsIter.remove();
