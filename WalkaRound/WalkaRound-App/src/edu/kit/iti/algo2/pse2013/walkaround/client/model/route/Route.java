@@ -61,7 +61,6 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "setActiveWaypoint(Waypoint)");
 		if (this.containsWaypoint(newActiveWP)) {
 			this.activeWaypoint = newActiveWP;
-			return true;
 		}
 		return false;
 	}
@@ -300,15 +299,16 @@ public class Route implements RouteInfo {
 				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
 			}
 			
-			// TODO error by moving
-			if (newRouteBeforeActiveWaypoint != null) {
+			if (newRouteBeforeActiveWaypoint != null && newRouteBeforeActiveWaypoint.getCoordinates().size() > 0) {
 				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
-			} else if (newRoutePastActiveWaypoint != null) {
-				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getLast();
+				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
+			} else if (newRoutePastActiveWaypoint != null && newRoutePastActiveWaypoint.getCoordinates().size() > 0) {
+				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getFirst();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			}
 			
 		}
@@ -445,7 +445,7 @@ public class Route implements RouteInfo {
 	}
 
 	public LinkedList<Coordinate> getCoordinates() {
-		Log.d(TAG_ROUTE, "getCoordinates()");
+		// Log.d(TAG_ROUTE, "getCoordinates()");
 		return this.routeCoordinates;
 	}
 
@@ -530,15 +530,18 @@ public class Route implements RouteInfo {
 		assert (route.getStart().equals(one) && route.getEnd().equals(two));
 		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
 
+		// Fast forward iterator to coordinate "one":
 		Coordinate tempCoord = null;
 		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
 			tempCoord = routeCoordsIter.next();
 		}
 
-		LinkedList<Coordinate> bridgingCoords = route.getCoordinates();
+		LinkedList<Coordinate> bridgingCoords = route.clone().getCoordinates();
+		// Remove (waypoint-) coordinates from inserted route:
 		bridgingCoords.removeFirst();
 		bridgingCoords.removeLast();
-		int indexOfInsertion = this.routeCoordinates.indexOf(one);
+		
+		int indexOfInsertion = this.routeCoordinates.indexOf(one) + 1;
 		Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size()
 				+ ", indexOfInsertion: " + indexOfInsertion
 				+ ", route contains one " + this.routeCoordinates.contains(one));

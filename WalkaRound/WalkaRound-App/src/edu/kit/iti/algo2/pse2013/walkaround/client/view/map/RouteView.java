@@ -76,7 +76,7 @@ public class RouteView extends View {
 			}
 
 			if (displayCoords.length >= 4) {
-				Log.d(TAG, "ZEICHNE Route!");
+				// Log.d(TAG, "ZEICHNE Route!");
 				c.drawLines(displayCoords, pinsel);
 			}
 

@@ -27,7 +27,6 @@ public class RouteController {
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
 	private static Thread routeChanger;
-
 	private static RouteController routeMC;
 
 	private RouteController() {
@@ -38,7 +37,7 @@ public class RouteController {
 	}
 
 	public static RouteController getInstance() {
-		Log.d(TAG, "RouteController.getInstance()");
+		// Log.d(TAG, "RouteController.getInstance()");
 		if (routeMC == null) {
 			routeMC = new RouteController();
 		}
