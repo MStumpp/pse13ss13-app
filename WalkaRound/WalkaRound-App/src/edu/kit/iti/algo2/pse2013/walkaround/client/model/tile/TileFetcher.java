@@ -10,12 +10,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.LruCache;
 import android.util.Log;
+import android.util.LruCache;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
@@ -31,24 +33,33 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  * @version 3.0
  */
 public class TileFetcher implements OnSharedPreferenceChangeListener{
-	
+
+	private static Activity activity;
 	private static TileFetcher instance;
+	private static Bitmap defaultTile;
 	private static final String TAG = TileFetcher.class.getSimpleName();
-	private static final int MAX_CACHE_SIZE = 500;
+	private static final int MAX_CACHE_SIZE = 300;
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(3, 10, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+
+	public static void init(Activity act) {
+		activity = act;
+	}
 
 	public static TileFetcher getInstance() {
 		if(instance == null){
 			instance = new TileFetcher();
+			if (activity != null) {
+				defaultTile = BitmapFactory.decodeResource(activity.getResources(), R.drawable.default_tile);
+			}
 		}
 		return instance;
 	}
-	
+
 	private TileFetcher(){
 		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 	}
-	
+
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
 		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getTopLeft(),
 				coorBox.getBottomRight(), listener);
@@ -117,6 +128,9 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 						listener.receiveTile(bmpFromCache, x, y, levelOfDetail);
 					}
 				} else {
+					if (listener != null) {
+						listener.receiveTile(defaultTile, x, y, levelOfDetail);
+					}
 					tpe.execute(new SingleFetcher(urlString, x, y, levelOfDetail, listener));
 				}
 			}
@@ -168,7 +182,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 			}
 		}
 	}
-	
+
 	public interface TileListener {
 		/**
 		 * ATM the tile comes as BufferedImage. That will be changed in future versions.
