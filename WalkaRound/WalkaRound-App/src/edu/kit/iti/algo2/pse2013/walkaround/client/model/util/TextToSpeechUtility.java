@@ -2,11 +2,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
 import java.util.Locale;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 
 /**
@@ -15,109 +13,88 @@ import android.util.Log;
  * @author Thomas Kadow
  * @version 1.0
  */
-public final class TextToSpeechUtility implements OnInitListener,
-		OnSharedPreferenceChangeListener {
+public final class TextToSpeechUtility implements OnSharedPreferenceChangeListener {
 
-	private static String TAG_TTSUTIL = TextToSpeechUtility.class
-			.getSimpleName();
+	private static String TAG_TTSUTIL = TextToSpeechUtility.class.getSimpleName();
 
-	private static TextToSpeechUtility ttsUtilInstance;
-
-	boolean sound;
+	private static boolean sound;
 
 	private static TextToSpeech tts;
-	private static boolean isReady;
 
-	public static void initialize(Context context, boolean sound) {
-		Log.d(TAG_TTSUTIL, "initialize(Context)");
-		ttsUtilInstance = new TextToSpeechUtility(context, sound);
+	private static TextToSpeechUtility preferenceListener = new TextToSpeechUtility();
+
+	public static void init(TextToSpeech tts) {
+		TextToSpeechUtility.tts = tts;
+		TextToSpeechUtility.sound = PreferenceUtility.getInstance().isSoundOn();
 	}
 
-	private TextToSpeechUtility(Context context, boolean sound) {
-		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
-		tts = new TextToSpeech(context, this);
-		this.sound = sound;
-		isReady = true;
+	public static TextToSpeechUtility getPreferenceListener() {
+		return preferenceListener;
 	}
 
-	/**
-	 * Speaks a String
-	 *
-	 * @param text
-	 */
-	public boolean speak(String text) {
-		if (isReady && sound) {
-			Log.d(TAG_TTSUTIL, "TextToSpeech is speaking");
-			tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-			return true;
-		} else {
-			Log.e(TAG_TTSUTIL, "TextToSpeech is not ready");
-			if (!sound) {
-				Log.e(TAG_TTSUTIL, "sound is off");
-			}
-		}
-		return false;
-	}
+	private TextToSpeechUtility() {}
 
-	/**
-	 * Speaks a String
-	 *
-	 * @param text
-	 */
-	public boolean speak(String text, Locale language) {
-		if (isReady && sound) {
-			tts.setLanguage(language);
-			tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-			tts.setLanguage(Locale.getDefault());
-			return true;
-		} else {
-			Log.e(TAG_TTSUTIL, "TextToSpeech is not ready");
-			if (!sound) {
-				Log.e(TAG_TTSUTIL, "sound is off");
-			}
-		}
-		return false;
-	}
-
-	public static TextToSpeechUtility getInstance() {
-		if (ttsUtilInstance == null) {
-			return null;
-		}
-		return ttsUtilInstance;
-	}
-
-	public void onInit(int status) {
-		if (status == TextToSpeech.SUCCESS) {
-			isReady = true;
-		} else if (status == TextToSpeech.ERROR) {
-			isReady = false;
-		}
-	}
-
-	public boolean isReady() {
-		return isReady;
-	}
-
-	public void shutdown() {
-		if (tts != null) {
-			tts.shutdown();
-		}
-	}
-
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
 		if (key.equals(PreferenceUtility.KEY_SOUND)) {
 			sound = PreferenceUtility.getInstance().isSoundOn();
 		}
 	}
-	
-	public boolean stopSpeaking(){
-		if(tts != null){
-			if(tts.isSpeaking()){
-				tts.stop();
-				return true;
-			}
+
+	/**
+	 * Speaks a String
+	 *
+	 * @param text
+	 * @return true, if the device has started speaking
+	 */
+	public static boolean speak(String text) {
+		if (sound) {
+			Log.d(TAG_TTSUTIL, "TextToSpeech is speaking");
+			return tts.speak(text, TextToSpeech.QUEUE_ADD, null) == TextToSpeech.SUCCESS;
 		}
+		Log.e(TAG_TTSUTIL, "sound is off");
 		return false;
 	}
 
+
+	/**
+	 * Speaks a String
+	 *
+	 * @param text
+	 * @param language
+	 * @return
+	 */
+	public static boolean speak(String text, Locale language) {
+		if (sound) {
+			tts.setLanguage(language);
+			tts.speak(text, TextToSpeech.QUEUE_ADD, null);
+			tts.setLanguage(Locale.getDefault());
+			return true;
+		}
+		Log.e(TAG_TTSUTIL, "sound is off");
+		return false;
+	}
+
+	/**
+	 * @return the current TextToSpeech-object used by the instance of TextToSpeechUtility
+	 */
+	public static TextToSpeech getTTS() {
+		return tts;
+	}
+
+	public static void shutdown() {
+		if (tts != null) {
+			tts.shutdown();
+		}
+	}
+
+	/**
+	 * @return if the device has stopped speaking
+	 */
+	public static boolean stopSpeaking() {
+		if(tts != null && tts.isSpeaking()){
+			return tts.stop() == TextToSpeech.SUCCESS;
+		}
+		return false;
+	}
 }

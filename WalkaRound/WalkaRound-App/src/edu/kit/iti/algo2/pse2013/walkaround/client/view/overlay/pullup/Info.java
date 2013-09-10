@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This View shows the Information View for POI´s.
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.2
  *
@@ -43,14 +45,13 @@ public class Info extends LinearLayout {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context the context of the app
 	 * @param attrs the needed attributes
 	 */
 	public Info(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.setOrientation(LinearLayout.VERTICAL);
-		TextToSpeechUtility.initialize(getContext(), true);
 
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 
@@ -141,30 +142,30 @@ public class Info extends LinearLayout {
 			this.title.setVisibility(VISIBLE);
 
 			if (PreferenceUtility.getInstance().isPOITitleSoundOn()) {
-				TextToSpeechUtility.getInstance().speak(poi.getName());
+				TextToSpeechUtility.speak(poi.getName());
 				this.speak = true;
 				this.sound.setImageResource(R.drawable.pause);
 			}
 		}
-		
+
 		if (null != null && PreferenceUtility.getInstance().isPOIImageOn()) {
 			this.textImage.setImageBitmap(null);
 			this.textImage.setVisibility(VISIBLE);
 		}
-		
+
 		if (poi.getTextInfo() != null) {
 			speak = true;
 			sound.setOnTouchListener(new playListener(poi.getTextInfo()));
-			this.text.setText(poi.getTextInfo());
+			Spanned htmlizedText = Html.fromHtml(poi.getTextInfo());
+			this.text.setText(htmlizedText);
 			this.text.setVisibility(VISIBLE);
 			sound.setVisibility(VISIBLE);
 
 			if (PreferenceUtility.getInstance().isPOITextSoundOn()) {
-				TextToSpeechUtility.getInstance().speak(poi.getTextInfo());
+				TextToSpeechUtility.speak(htmlizedText.toString());
 				this.speak = true;
 				this.sound.setImageResource(R.drawable.pause);
 			}
-
 		}
 	}
 
@@ -172,7 +173,7 @@ public class Info extends LinearLayout {
 	 * stops speaking
 	 */
 	public void stopSpeaking() {
-		TextToSpeechUtility.getInstance().stopSpeaking();
+		TextToSpeechUtility.stopSpeaking();
 		toogleSpeaking();
 	}
 
@@ -193,7 +194,7 @@ public class Info extends LinearLayout {
 
 	/**
 	 * Listen for a Play event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -204,7 +205,7 @@ public class Info extends LinearLayout {
 
 		/**
 		 * construct a new play listener
-		 * 
+		 *
 		 * @param text the text to speak
 		 */
 		public playListener(String text) {
@@ -217,10 +218,10 @@ public class Info extends LinearLayout {
 				if (speak) {
 					Log.d(TAG, "play wurde gedrückt");
 					toogleSpeaking();
-					TextToSpeechUtility.getInstance().stopSpeaking();
+					TextToSpeechUtility.stopSpeaking();
 				} else {
 					toogleSpeaking();
-					TextToSpeechUtility.getInstance().speak(text);
+					TextToSpeechUtility.speak(text);
 				}
 			}
 			return false;
@@ -229,7 +230,7 @@ public class Info extends LinearLayout {
 
 	/**
 	 * Listen for a save event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 */
