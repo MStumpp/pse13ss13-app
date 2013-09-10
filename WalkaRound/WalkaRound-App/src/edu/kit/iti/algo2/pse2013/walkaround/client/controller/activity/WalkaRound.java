@@ -53,10 +53,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is the main Activity of WalkaRound. This class works like a controller.
- * 
+ *
  * @author Ludwig Biermann
  * @version 8.0
- * 
+ *
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
@@ -540,7 +540,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		TextToSpeechUtility.getInstance().shutdown();
+		TextToSpeechUtility.shutdown();
 		Log.d(TAG, "Destroy WalkAround");
 	}
 

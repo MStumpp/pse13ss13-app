@@ -16,15 +16,15 @@ import android.util.Log;
 import android.view.Display;
 import android.widget.ProgressBar;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.MapStarter;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.MultiStarter;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.NaviStarter;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.SingleStarter;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.StepCounter;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.TextToSpeechStarter;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.NaviModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteProcessing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
@@ -33,21 +33,17 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
  * This class boots the WalkaRound app and shows a "Progress Bar"
- * 
+ *
  * @author Ludwig Biermann
  * @version 6.3
- * 
+ *
  */
-public class BootActivity extends Activity {
+public class BootActivity extends Activity implements StepCounter {
 	protected static final int TOTALSTEPS = 1000;
 	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419);
 	public static String TAG = BootActivity.class.getSimpleName();
 
-	protected boolean mbActive;
-	protected ProgressBar mProgressBar;
-
-	private static int MAX_TILE_SLEEP = 50;
-	private static int MAX_TILEFETCHER_TIMEOUT = 10000 / MAX_TILE_SLEEP;
+	private ProgressBar mProgressBar;
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -55,12 +51,30 @@ public class BootActivity extends Activity {
 		System.gc();
 		setContentView(R.layout.progress_bar);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
+		mProgressBar.setMax(TOTALSTEPS);
 
-		PreferenceManager.setDefaultValues(getApplicationContext(),
-				R.xml.options, true);
+		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.options, true);
 		PreferenceUtility.initialize(getApplicationContext());
-		final Thread timerThread = new BootHelper();
-		timerThread.start();
+
+		BootStarter booSt = new BootStarter(this);
+		SingleStarter[] starters = {
+			new MapStarter(this),
+			new NaviStarter(getApplicationContext()),
+			new TextToSpeechStarter(getApplicationContext())
+		};
+		int sum = 0;
+		for (SingleStarter siSta : starters) {
+			for (int steps : siSta.getSteps()) {
+				sum += steps;
+			}
+			Log.d(TAG, sum + " steps in total");
+		}
+		mProgressBar.setMax(sum);
+		for (SingleStarter siSta : starters) {
+			booSt.start(siSta);
+		}
+
+		booSt.noMoreStarters();
 	}
 
 	@Override
@@ -68,18 +82,10 @@ public class BootActivity extends Activity {
 		super.onDestroy();
 	}
 
-	/**
-	 * update Progress bar
-	 * 
-	 * @param timePassed
-	 */
-	public void updateProgress(final int timePassed) {
-		if (null != mProgressBar) {
-			// Ignore rounding error here
-			final int progress = mProgressBar.getMax() * timePassed
-					/ TOTALSTEPS;
-			mProgressBar.setProgress(progress);
-		}
+	@Override
+	public void makeStep(int stepSize) {
+		Log.d(TAG, "make a " + stepSize + "-step");
+		mProgressBar.setProgress(mProgressBar.getProgress() + stepSize);
 	}
 
 	/**
@@ -99,6 +105,7 @@ public class BootActivity extends Activity {
 		alertDialog.setTitle("Unknown Error");
 		alertDialog.setMessage("Close?");
 		alertDialog.setButton(1, "OK", new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
 			}
@@ -107,154 +114,26 @@ public class BootActivity extends Activity {
 		alertDialog.show();
 	}
 
-	/**
-	 * A Helper Class which boots Walkaround
-	 * 
-	 * @author Ludwig Biermann
-	 * @version 2.3
-	 * 
-	 */
-	private class BootHelper extends Thread implements TileListener {
-
-		private int tiles = 0;
-		private int progress = 0;
-		private int stepSize;
-
-		@Override
-		public void run() {
-			mbActive = true;
-			try {
-
-				// Controller initialisierung
-
-				RouteController.getInstance();
-				CurrentMapStyleModel.getInstance();
-				String mapStyle = PreferenceUtility.getInstance().getMapStyle();
-				CurrentMapStyleModel.getInstance().setCurrentMapStyle(mapStyle);
-				// 10 %
-				progress = 100;
-				updateProgress(progress);
-
-				// Model initialisierung
-
-				FavoriteManager.initialize(getApplicationContext());
-				POIManager.initialize(getApplicationContext());
-
-				Looper.prepare();
-
-				RouteProcessing.getInstance();
-				PositionManager.initialize(getApplicationContext());
-
-				TextToSpeechUtility.initialize(getApplicationContext(),
-						PreferenceUtility.getInstance().isSoundOn());
-				PreferenceUtility.getInstance()
-						.registerOnSharedPreferenceChangeListener(
-								TextToSpeechUtility.getInstance());
-				
-				for (int time = 0; !TextToSpeechUtility.getInstance().isReady()
-						&& MAX_TILEFETCHER_TIMEOUT >= time; time++) {
-					Log.d(TAG, "TextToSpeech ist noch nicht ready");
-					sleep(50);
-				}
-
-				// 20%
-				progress = 200;
-				updateProgress(progress);
-
-				System.gc();
-
-				updateProgress(progress);
-				
-				// 35%
-				progress = 350;
-				updateProgress(progress);
-
-				// Navi
-				NaviModel.initialize(getApplicationContext());
-				PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(NaviModel.getInstance());
-				
-				// TileFetcher
-				float lod = CurrentMapStyleModel.getInstance()
-						.getCurrentMapStyle().getDefaultLevelOfDetail();
-				Display display = getWindowManager().getDefaultDisplay();
-				Point size = new Point();
-				display.getSize(size);
-
-				BoundingBox.initialize(size);
-				BoundingBox coorBox = BoundingBox.getInstance();
-
-				Location l = PositionManager.getInstance()
-						.getLastKnownPosition();
-				if (l != null) {
-					coorBox.setCenter(new Coordinate(l.getLatitude(), l
-							.getLongitude()));
-				}
-				
-				TileFetcher tileFetcher = TileFetcher.getInstance();
-
-				// 50 %
-				progress = 500;
-				updateProgress(progress);
-
-				int[] amountTop = TileUtility.getXYTileIndex(
-						coorBox.getTopLeft(), (int) lod);
-				amountTop[0]--;
-				amountTop[1]--;
-
-				int[] amountBottom = TileUtility.getXYTileIndex(
-						coorBox.getBottomRight(), (int) lod);
-
-				amountBottom[0]++;
-				amountBottom[1]++;
-
-				int amount = (amountBottom[0] - amountTop[0])
-						* (amountBottom[1] - amountTop[1]);
-
-				stepSize = (int) (400 / amount);
-
-				tileFetcher.requestTiles((int) lod, amountTop[0], amountTop[1],
-						amountBottom[0], amountBottom[1], this);
-
-				updateProgress(progress);
-				for (int time = 0; (amount - 4) > tiles
-						&& MAX_TILEFETCHER_TIMEOUT >= time; time++) {
-					updateProgress(progress);
-					sleep(MAX_TILE_SLEEP);
-				}
-
-				progress += 50;
-				updateProgress(progress);
-
-				progress = 1000;
-				updateProgress(progress);
-				Log.d(TAG, "alles geladen!!");
-
-				if (PreferenceUtility.getInstance().isSoundOn()) {
-					if (TextToSpeechUtility.getInstance().speak(
-							"Willkommen bei !")) {
-						TextToSpeechUtility.getInstance().speak("WalkaRound!",
-								Locale.ENGLISH);
-					} else {
-						// TODO Klingelton einfügen^^ 
-						// MediaPlayer mp = MediaPlayer.create(getBaseContext(),
-						// R.raw.hangout_dingtone);
-						// mp.setVolume(100, 100);
-						// mp.start();
-						// mp.pause();
-					}
-				}
-
-			} catch (InterruptedException e) {
-			} finally {
-				onContinue();
-			}
+	private class BootStarter extends MultiStarter {
+		public BootStarter(StepCounter counter) {
+			super(counter);
 		}
 
 		@Override
-		public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-			progress += stepSize;
-			tiles++;
+		public void actionWhenAllFinished() {
+			if (PreferenceUtility.getInstance().isSoundOn()) {
+				if (TextToSpeechUtility.speak("Willkommen bei")) {
+					TextToSpeechUtility.speak("WalkaRound!", Locale.ENGLISH);
+				} else {
+					// TODO Klingelton einfügen^^
+					// MediaPlayer mp = MediaPlayer.create(getBaseContext(),
+					// R.raw.hangout_dingtone);
+					// mp.setVolume(100, 100);
+					// mp.start();
+					// mp.pause();
+				}
+			}
+			onContinue();
 		}
 	}
-
 }

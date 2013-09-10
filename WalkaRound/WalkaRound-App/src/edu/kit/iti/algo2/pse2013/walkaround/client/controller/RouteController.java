@@ -12,16 +12,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is class holds and manage the current Route
- * 
+ *
  * @author Lukas Müller
  * @version 1.0
  *
  */
 public class RouteController {
-
-	public class Routelistener {
-
-	}
 
 	private static final String TAG = RouteController.class.getSimpleName();
 	private LinkedList<RouteListener> routeListeners;
@@ -85,7 +81,7 @@ public class RouteController {
 
 	/**
 	 * Sets a Waypoint active by his id
-	 * 
+	 *
 	 * @param id
 	 *            ID of the Waypoint
 	 */
@@ -105,7 +101,7 @@ public class RouteController {
 		 * !RouteController.routeChanger.isAlive()) { final Route
 		 * newCurrentRoute = this.currentRoute; RouteController.routeChanger =
 		 * new Thread (new Runnable() {
-		 * 
+		 *
 		 * public void run() { Log.d(TAG_ROUTE_CONTROLLER,
 		 * "Thread.run() in setActiveWaypoint(id)");
 		 * newCurrentRoute.setActiveWaypoint(id);
@@ -167,7 +163,7 @@ public class RouteController {
 	 * !RouteController.routeChanger.isAlive()) { final Route newCurrentRoute =
 	 * this.currentRoute; RouteController.routeChanger = new Thread (new
 	 * Runnable() {
-	 * 
+	 *
 	 * public void run() { Log.d(TAG,
 	 * "Thread.run() in moveActiveWaypointInOrder(int)");
 	 * newCurrentRoute.moveActiveWaypointInOrder(i);
@@ -357,12 +353,12 @@ public class RouteController {
 	/*
 	 * public boolean optimizeRoute() { Log.d(TAG,
 	 * "RouteController.optimizeRoute()");
-	 * 
+	 *
 	 * if (RouteController.routeChanger == null ||
 	 * !RouteController.routeChanger.isAlive()) { final Route newCurrentRoute =
 	 * this.currentRoute; RouteController.routeChanger = new Thread (new
 	 * Runnable() {
-	 * 
+	 *
 	 * public void run() { Log.d(TAG, "Thread.run() in optimizeRoute()");
 	 * newCurrentRoute.optimizeRoute();
 	 * RouteController.getInstance().replaceFullRoute(newCurrentRoute); } });
