@@ -8,3 +8,4 @@ gen
 *.pdf
 walkaround-app-maven
 walkaround-tests-maven
+local.properties
