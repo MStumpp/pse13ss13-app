@@ -5,35 +5,23 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter;
  *
  */
 public abstract class SingleStarter implements Runnable {
-
-	private static final int[] STEPS = {};
-	private int numSteps = 0;
 	private StepCounter stepCounter;
 
 	protected StarterListener listener;
 	/**
 	 * @param multiStarter the listener which will be notified when the starter finished successfully
 	 */
-	public void setInitListener(StarterListener listener) {
+	public void setStarterListener(StarterListener listener) {
 		this.listener = listener;
 	}
-
 	public void setStepCounter(StepCounter stepCounter) {
 		this.stepCounter = stepCounter;
 	}
-	public int getSteps() {
-		int sum = 0;
-		for (int i : STEPS) {
-			sum += i;
-		}
-		return sum;
-	}
-
-	protected void makeStep() {
-		if (numSteps < STEPS.length) {
-			stepCounter.makeStep(STEPS[numSteps++]);
+	protected void makeStep(int index) {
+		if (index < getSteps().length && index >= 0) {
+			stepCounter.makeStep(getSteps()[index]);
 		}
 	}
-
+	public abstract int[] getSteps();
 	public abstract void finish();
 }
