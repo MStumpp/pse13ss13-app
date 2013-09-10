@@ -1,3 +1,0 @@
-# Ignore project.properties in order to support different API-versions on different PCs
-# e.g. currently there are afaik API-level 17 and 18 in use.
-project.properties
