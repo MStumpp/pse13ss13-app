@@ -99,7 +99,7 @@ public class FavoriteManager {
 			FavoriteManager.initialize(context);
 		}
 		return FavoriteManager.getInstance();
-		
+
 	}
 
 	private static void loadInstanceFromFile() throws IOException {
@@ -312,17 +312,17 @@ public class FavoriteManager {
 	}
 
 	LinkedList<UpdateFavorites> listener = new LinkedList<UpdateFavorites>();
-	
+
 	public void registerListener(UpdateFavorites listener){
 		this.listener.add(listener);
 	}
-	
+
 	public void notifyListener() {
 		for(UpdateFavorites l:listener){
 			l.updateFacorites();
 		}
 	}
-	
+
 	public interface UpdateFavorites {
 		public void updateFacorites();
 	}

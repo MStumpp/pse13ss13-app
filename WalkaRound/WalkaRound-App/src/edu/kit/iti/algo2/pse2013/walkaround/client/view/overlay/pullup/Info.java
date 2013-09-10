@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.text.Html;
 import android.text.Spanned;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -148,14 +150,19 @@ public class Info extends LinearLayout {
 			}
 		}
 
-		if (null != null && PreferenceUtility.getInstance().isPOIImageOn()) {
-			this.textImage.setImageBitmap(null);
-			this.textImage.setVisibility(VISIBLE);
+		if (poi.getURL() != null && PreferenceUtility.getInstance().isPOIImageOn()) {
+			try {
+				Bitmap bmp = new POIImageFetcher.Synchronous(poi.getURL()).getBitmap();
+				this.textImage.setImageBitmap(bmp);
+				this.textImage.setVisibility(VISIBLE);
+			} catch (InterruptedException e) {
+				Log.e(TAG, "Could not fetch POI-image", e);
+			}
 		}
 
 		if (poi.getTextInfo() != null) {
 			speak = true;
-			sound.setOnTouchListener(new playListener(poi.getTextInfo()));
+			sound.setOnTouchListener(new PlayListener(poi.getTextInfo()));
 			Spanned htmlizedText = Html.fromHtml(poi.getTextInfo());
 			this.text.setText(htmlizedText);
 			this.text.setVisibility(VISIBLE);
@@ -199,7 +206,7 @@ public class Info extends LinearLayout {
 	 * @version 1.0
 	 *
 	 */
-	private class playListener implements OnTouchListener {
+	private class PlayListener implements OnTouchListener {
 
 		private String text;
 
@@ -208,7 +215,7 @@ public class Info extends LinearLayout {
 		 *
 		 * @param text the text to speak
 		 */
-		public playListener(String text) {
+		public PlayListener(String text) {
 			this.text = text;
 		}
 
