@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
@@ -65,7 +66,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private MapView mapView;
 	private GestureDetector gestureDetector;
 	private BoundingBox coorBox;
-	//private TileFetcher tileFetcher;
+	// private TileFetcher tileFetcher;
 	private HeadUpView headUpView;
 	private static String TAG = WalkaRound.class.getSimpleName();
 	private boolean userLock = true;
@@ -111,14 +112,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		// BoundingBox & tiles
 
-		//this.tileFetcher = TileFetcher.getInstance();
+		// this.tileFetcher = TileFetcher.getInstance();
 
 		// MapView
 
 		mapView = (MapView) findViewById(R.id.mapView);
 		gestureDetector = new GestureDetector(this.getApplicationContext(),
 				new MapGestureListener());
-		//this.tileFetcher.requestTiles(coorBox, mapView);
+		// this.tileFetcher.requestTiles(coorBox, mapView);
 
 		// HeadUpView
 		headUpView = (HeadUpView) findViewById(R.id.headUpView);
@@ -151,7 +152,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
 
 		mapView.computeParams();
-		//tileFetcher.requestTiles(coorBox, mapView);
+		// tileFetcher.requestTiles(coorBox, mapView);
 		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
 		pullUpView.bringToFront();
 
@@ -244,11 +245,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					.convertDisplayCoordinateToCoordinate(
 							new DisplayCoordinate(event.getX(), event.getY()),
 							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
-
-			RouteController.getInstance().addWaypoint(
-					new Waypoint(next.getLatitude(), next.getLongitude(),
-							"PLACEHOLDER"));
-
+			addWaypointAlert(next);
 		}
 
 		@Override
@@ -258,6 +255,50 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			return false;
 		}
 
+	}
+
+	int addWaypointCounter = 0;;
+
+	/**
+	 * Helper Method to create Alert
+	 */
+	public void addWaypointAlert(final Coordinate next) {
+		Log.d(TAG, "ALERT");
+
+		final EditText text = new EditText(this);
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle("Neuer Wegpunkt");
+		alert.setMessage("Wie soll ihr neuer Wegpunkt heißen?");
+		alert.setButton(DialogInterface.BUTTON_POSITIVE, "Hinzufügen",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						if (!text.getText().toString().trim().isEmpty()) {
+							RouteController.getInstance().addWaypoint(
+									new Waypoint(next.getLatitude(), next
+											.getLongitude(), text.getText()
+											.toString()));
+						} else {
+							RouteController.getInstance().addWaypoint(
+									new Waypoint(next.getLatitude(), next
+											.getLongitude(), "Waypoint "
+											+ addWaypointCounter));
+						}
+						addWaypointCounter++;
+					}
+				});
+
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Abbrechen",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog,
+							final int id) {
+						dialog.cancel();
+					}
+				});
+		alert.setView(text);
+		alert.show();
 	}
 
 	public class MapListener implements OnTouchListener {
