@@ -317,6 +317,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void onZoom(float delta) {
 		this.coorBox.setLevelOfDetailByADelta(delta);
+		poiView.updatePOIView();
 		// this.mapView.computeParams();
 		// this.tileFetcher.requestTiles(coorBox, mapView);
 		// waypointView.updateWaypoint();

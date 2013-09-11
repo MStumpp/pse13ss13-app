@@ -19,7 +19,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * The View draw and handle the POI Markers
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.2
  *
@@ -35,7 +35,7 @@ public class POIView extends RelativeLayout {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context the context of the app
 	 * @param attrs the needed attributes
 	 */
@@ -69,7 +69,7 @@ public class POIView extends RelativeLayout {
 
 			float y = CoordinateUtility.convertDegreesToPixels(lat,
 					coorBox.getLevelOfDetail(),
-					CoordinateUtility.DIRECTION_LATITUDE);
+					CoordinateUtility.DIRECTION_LATITUDE) * .755f;
 
 			Log.d("UserPos", " x: " + x + " y: " + y);
 
@@ -105,7 +105,7 @@ public class POIView extends RelativeLayout {
 
 	/**
 	 * A Helper class witch is called on a Touch event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 */
@@ -132,7 +132,7 @@ public class POIView extends RelativeLayout {
 
 	/**
 	 * Notify all POI Listener
-	 * 
+	 *
 	 * @param poi the pressed poi
 	 */
 	private void notifyPOIInfoListener(POI poi) {
@@ -143,7 +143,7 @@ public class POIView extends RelativeLayout {
 
 	/**
 	 * Register a POI Info Listener
-	 * 
+	 *
 	 * @param listener the new listener
 	 */
 	public void registerPOIInfoListener(POIInfoListener listener) {
@@ -152,7 +152,7 @@ public class POIView extends RelativeLayout {
 
 	/**
 	 * A POI Info Listener interface
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
