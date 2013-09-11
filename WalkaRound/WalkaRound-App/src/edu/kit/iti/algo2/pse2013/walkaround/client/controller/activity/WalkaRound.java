@@ -33,7 +33,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
@@ -256,8 +255,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		}
 
 	}
-
-	int addWaypointCounter = 0;;
+	
+	private static String DEFAULT_NAME = "Waypoint";
+	private int waypointCounter = 0;
 
 	/**
 	 * Helper Method to create Alert
@@ -266,6 +266,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		Log.d(TAG, "ALERT");
 
 		final EditText text = new EditText(this);
+		
+		text.setText(DEFAULT_NAME + " " + waypointCounter);
+		text.selectAll();
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle("Neuer Wegpunkt");
 		alert.setMessage("Wie soll ihr neuer Wegpunkt heißen?");
@@ -279,13 +282,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 									new Waypoint(next.getLatitude(), next
 											.getLongitude(), text.getText()
 											.toString()));
+							waypointCounter++;
 						} else {
-							RouteController.getInstance().addWaypoint(
-									new Waypoint(next.getLatitude(), next
-											.getLongitude(), "Waypoint "
-											+ addWaypointCounter));
+							dialog.cancel();
 						}
-						addWaypointCounter++;
 					}
 				});
 
