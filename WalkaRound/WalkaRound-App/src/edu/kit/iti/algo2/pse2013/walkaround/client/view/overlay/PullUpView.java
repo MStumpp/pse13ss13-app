@@ -91,7 +91,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		main.width = size.x;
 
 		this.setLayoutParams(main);
-		this.nullSize = size.y - size.x / 5;
+		this.nullSize = size.y - size.x / 4 + 2;
 		this.setY(size.y - size.x / 4 + 2);
 
 		// statische Menü
@@ -215,13 +215,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		lineOne.addView(search, paramsSearch);
 		
 		staticL.addView(regulator, paramsRegulator);
-		
-		RelativeLayout line3 = new RelativeLayout(context, attrs);
-		RelativeLayout.LayoutParams paramsLine3 = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		
-		//staticL.addView(line3,paramsLine3);
-		
+			
 
 		// content = new RelativeLayout(context, attrs);
 		LayoutParams paramsContent = new LayoutParams(

@@ -65,7 +65,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private MapView mapView;
 	private GestureDetector gestureDetector;
 	private BoundingBox coorBox;
-	private TileFetcher tileFetcher;
+	//private TileFetcher tileFetcher;
 	private HeadUpView headUpView;
 	private static String TAG = WalkaRound.class.getSimpleName();
 	private boolean userLock = true;
@@ -111,14 +111,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		// BoundingBox & tiles
 
-		this.tileFetcher = TileFetcher.getInstance();
+		//this.tileFetcher = TileFetcher.getInstance();
 
 		// MapView
 
 		mapView = (MapView) findViewById(R.id.mapView);
 		gestureDetector = new GestureDetector(this.getApplicationContext(),
 				new MapGestureListener());
-		this.tileFetcher.requestTiles(coorBox, mapView);
+		//this.tileFetcher.requestTiles(coorBox, mapView);
 
 		// HeadUpView
 		headUpView = (HeadUpView) findViewById(R.id.headUpView);
@@ -151,7 +151,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
 
 		mapView.computeParams();
-		tileFetcher.requestTiles(coorBox, mapView);
+		//tileFetcher.requestTiles(coorBox, mapView);
 		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
 		pullUpView.bringToFront();
 

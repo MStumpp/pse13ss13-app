@@ -80,7 +80,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 //
 //				stepSize = 400 / amount;
 
-				TileFetcher.init(mainActivity);
+				TileFetcher.getInstance(mainActivity.getApplicationContext());
 				makeStep(4);
 
 				//TileFetcher.getInstance().requestTiles((int) lod, amountTop[0], amountTop[1], amountBottom[0], amountBottom[1], this);

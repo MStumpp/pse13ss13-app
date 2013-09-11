@@ -10,7 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
@@ -30,34 +30,46 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  * verwendet.
  * @author Florian Schäfer
  * @author Ludwig Biermann
- * @version 3.0
+ * @version 3.2
  */
 public class TileFetcher implements OnSharedPreferenceChangeListener{
 
-	private static Activity activity;
+	//private static Activity activity;
 	private static TileFetcher instance;
-	private static Bitmap defaultTile;
 	private static final String TAG = TileFetcher.class.getSimpleName();
 	private static final int MAX_CACHE_SIZE = 300;
+	private static int DEFAULT_TILE_PATH = R.drawable.default_tile;
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(3, 10, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+	private Bitmap defaultTile;
 
-	public static void init(Activity act) {
-		activity = act;
-	}
-
+	/**
+	 * Returns the current TileFetcher or null;
+	 * 
+	 * @return TileFetcher or null
+	 */
 	public static TileFetcher getInstance() {
 		if(instance == null){
-			instance = new TileFetcher();
-			if (activity != null) {
-				defaultTile = BitmapFactory.decodeResource(activity.getResources(), R.drawable.default_tile);
-			}
+			Log.e(TAG, "please call getInstance(context) first");
 		}
 		return instance;
 	}
 
-	private TileFetcher(){
+	/**
+	 * Returns the current TileFetcher
+	 * 
+	 * @return TileFetcher
+	 */
+	public static TileFetcher getInstance(Context context) {
+		if(instance == null){
+			instance = new TileFetcher(context);
+		}
+		return instance;
+	}
+
+	private TileFetcher(Context context){
 		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
+		defaultTile = BitmapFactory.decodeResource(context.getResources(), DEFAULT_TILE_PATH);
 	}
 
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
