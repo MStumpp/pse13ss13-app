@@ -7,14 +7,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.Location;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.ArrowNaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.TTSNaviOutput;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.NaviOutputInterface;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.StereoNaviOutput;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.navigation.output.VisualTextNaviOutput;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
@@ -27,7 +22,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 
 	private static String TAG_NAVI = NaviModel.class.getSimpleName();
 
-	private SharedPreferences sharedPrefs;
 	private static Context applicationContext;
 
 	private static NaviModel naviModel;
@@ -63,7 +57,10 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		Log.d(TAG_NAVI, "NavigationModel Contructor");
 		if (this.applicationContext != null) {
 			this.naviOutputs = new LinkedList<NaviOutputInterface>();
-			this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext);
+			
+			// bitte nutze Preference Utility
+			//this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext);
+			
 			this.naviIsActive = false;
 			this.distLeftOnRouteInMeter = 0;
 			this.distOnRouteInMeters = 0;
@@ -134,7 +131,6 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		Log.d(TAG_NAVI, "onSharedPreferenceChanged(" + sharedPreferences + ", " + key + ")");
-		this.sharedPrefs = sharedPreferences;
 		// TODO: 
 		
 		/*

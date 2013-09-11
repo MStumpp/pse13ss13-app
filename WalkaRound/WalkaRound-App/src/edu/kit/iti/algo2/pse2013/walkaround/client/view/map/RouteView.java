@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
@@ -28,6 +27,7 @@ public class RouteView extends View {
 	 * The stroke of the bitmap ungearde Zahl aus genauikeitsgründen
 	 */
 	private int strokeWidth = 8;
+	@SuppressWarnings("unused")
 	private static String TAG = RouteView.class.getSimpleName();
 	private final int FRAME_RATE = 25;
 	private BoundingBox coorBox;

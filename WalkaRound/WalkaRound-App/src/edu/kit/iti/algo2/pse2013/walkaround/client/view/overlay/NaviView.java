@@ -1,16 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay;
 
-import java.util.LinkedList;
-
 import android.content.Context;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 /**
  * This class shows the navigation elements such as:
@@ -19,7 +11,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
  * - the Play/Pause Button to activate/deactivate the navi
  * - various information tabs such as speed, time on route, etc.
  * 
- * @author Lukas Müller
+ * @author Lukas Mï¿½ller
  * @version 0.1
  * 
  */
@@ -29,6 +21,7 @@ public class NaviView extends RelativeLayout {
 	
 	public NaviView(Context context) {
 		super(context);
+		Log.d(TAG, "create NaviView");
 		// TODO Auto-generated constructor stub
 	}
 

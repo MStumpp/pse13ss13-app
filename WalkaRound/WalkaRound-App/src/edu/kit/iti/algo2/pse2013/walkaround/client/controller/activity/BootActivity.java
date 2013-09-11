@@ -6,14 +6,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Display;
 import android.widget.ProgressBar;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.MapStarter;
@@ -22,13 +17,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.NaviStarte
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.SingleStarter;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.StepCounter;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.TextToSpeechStarter;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**

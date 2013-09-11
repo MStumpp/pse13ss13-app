@@ -52,15 +52,122 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is the main Activity of WalkaRound. This class works like a controller.
- *
+ * 
  * @author Ludwig Biermann
  * @version 8.0
- *
+ * 
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
 		POIInfoListener, CenterListener, LevelOfDetailListener {
+
+	private MapView mapView;
+	private GestureDetector gestureDetector;
+	private BoundingBox coorBox;
+	private TileFetcher tileFetcher;
+	private HeadUpView headUpView;
+	private static String TAG = WalkaRound.class.getSimpleName();
+	private boolean userLock = true;
+	private ImageView user;
+	private int userDiff;
+	private WaypointView waypointView;
+	private PullUpView pullUpView;
+	private POIView poiView;
+	private float gesamt;
+	private boolean isZomm = false;
+	@SuppressWarnings("unused")
+	private float targetX;
+	@SuppressWarnings("unused")
+	private float targetY;
+	private Coordinate userCoordinate = BoundingBox.defaultCoordinate;;
+	private static int ROUNDTRIP_TIME = 3000;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.map_view);
+
+		coorBox = BoundingBox.getInstance(this);
+		coorBox.registerCenterListener(this);
+		coorBox.registerLevelOfDetailListener(this);
+		Log.d(TAG, "initialisiere BoundingBox "
+				+ coorBox.getDisplaySize().toString());
+		PositionManager.initialize(this);
+
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+		if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			gpsAlert();
+		}
+
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (!mWifi.isConnected()) {
+			wifiAlert();
+		}
+
+		// BoundingBox & tiles
+
+		this.tileFetcher = TileFetcher.getInstance();
+
+		// MapView
+
+		mapView = (MapView) findViewById(R.id.mapView);
+		gestureDetector = new GestureDetector(this.getApplicationContext(),
+				new MapGestureListener());
+		this.tileFetcher.requestTiles(coorBox, mapView);
+
+		// HeadUpView
+		headUpView = (HeadUpView) findViewById(R.id.headUpView);
+		headUpView.registerListener(this);
+
+		// poiView
+		poiView = (POIView) findViewById(R.id.poiView);
+
+		RelativeLayout.LayoutParams paramUser = new RelativeLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		paramUser.width = coorBox.getDisplaySize().x / 10;
+		paramUser.height = coorBox.getDisplaySize().x / 10;
+		userDiff = coorBox.getDisplaySize().x / 10 / 2;
+
+		RelativeLayout rl = (RelativeLayout) this
+				.findViewById(R.id.mapviewmain);
+
+		user = new ImageView(this);
+		user.setImageDrawable(this.getResources().getDrawable(
+				R.drawable.user_arrow));
+		user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
+		user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
+		rl.addView(user, paramUser);
+
+		PositionManager.getInstance().registerPositionListener(this);
+		PositionManager.getInstance().getCompassManager()
+				.registerCompassListener(this);
+
+		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
+
+		mapView.computeParams();
+		tileFetcher.requestTiles(coorBox, mapView);
+		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
+		pullUpView.bringToFront();
+
+		RouteController.getInstance().registerRouteListener(this);
+		FavoriteManager.getInstance(this).registerListener(this);
+		pullUpView.registerComputeRoundtripListener(this);
+		pullUpView.registerPOIChangeListener(this);
+		poiView.registerPOIInfoListener(this);
+		pullUpView.registerUpdateMapListener(this);
+
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+		mapView.setOnTouchListener(new MapListener());
+
+	}
 
 	private class MapGestureListener implements OnGestureListener {
 
@@ -69,12 +176,12 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		@Override
 		public boolean onDown(MotionEvent event) {
 			Log.d(TAG, "MapTouch Down");
-			// TODO Auto-generated method stub
 			return true;
 		}
 
 		@Override
-		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2, float arg3) {
+		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
+				float arg3) {
 			Log.d(TAG, "MapTouch Fling");
 			return false;
 		}
@@ -86,7 +193,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		}
 
 		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
 
 			if (e2.getPointerCount() >= 2) {
 				// Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
@@ -94,8 +202,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 				float fingerDiff = (float) Math.sqrt(Math.pow(
 						Math.abs(e2.getX(0) - e2.getX(1)), 2)
-						* Math.pow(Math.abs(e2.getY(1) - e2.getY(1)),
-								2));
+						* Math.pow(Math.abs(e2.getY(1) - e2.getY(1)), 2));
 
 				float diff = (float) Math.sqrt(Math.abs(Math.pow(distanceX, 2)
 						* Math.pow(distanceY, 2)));
@@ -166,8 +273,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 				gesamt = (float) Math.sqrt(Math.pow(
 						Math.abs(event.getX(0) - event.getX(1)), 2)
-						* Math.pow(Math.abs(event.getY(1)
-								- event.getY(1)), 2));
+						* Math.pow(Math.abs(event.getY(1) - event.getY(1)), 2));
 
 				if (event.getX(0) < event.getX(1)) {
 					targetX += (event.getX(0));
@@ -193,45 +299,15 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	}
 
-	private MapView mapView;
-
-	private GestureDetector gestureDetector;
-
-	private BoundingBox coorBox;
-
-	private TileFetcher tileFetcher;
-
-	private HeadUpView headUpView;
-
-	private static String TAG = WalkaRound.class.getSimpleName();
-	private boolean userLock = true;
-
-	private ImageView user;
-
-	private int userDiff;
-
-	private WaypointView waypointView;
-
-	private PullUpView pullUpView;
-	private POIView poiView;
-	private float gesamt;
-	private boolean isZomm = false;
-
-	private float targetX;
-
-	private float targetY;
-
-
-	Coordinate userCoordinate = BoundingBox.defaultCoordinate;;
-
-	private static int ROUNDTRIP_TIME = 3000;
-
 	@Override
 	public void callPoiInfo(POI poi) {
 		pullUpView.updateInfoView(poi);
 
 	}
 
+	/**
+	 * Helper Method to create Alert
+	 */
 	public void gpsAlert() {
 		Log.d(TAG, "ALERT");
 
@@ -290,7 +366,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			try {
 				Thread.sleep(ROUNDTRIP_TIME);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -320,91 +395,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			alertDialog.show();
 
 		}
-
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.map_view);
-
-		coorBox = BoundingBox.getInstance(this);
-		coorBox.registerCenterListener(this);
-		coorBox.registerLevelOfDetailListener(this);
-		Log.d(TAG, "initialisiere BoundingBox "
-				+ coorBox.getDisplaySize().toString());
-		PositionManager.initialize(this);
-
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-		if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			gpsAlert();
-		}
-
-		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo mWifi = connManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-		if (!mWifi.isConnected()) {
-			wifiAlert();
-		}
-
-		// BoundingBox & tiles
-
-		this.tileFetcher = TileFetcher.getInstance();
-
-		// MapView
-
-		mapView = (MapView) findViewById(R.id.mapView);
-		gestureDetector = new GestureDetector(this.getApplicationContext(),
-				new MapGestureListener());
-		this.tileFetcher.requestTiles(coorBox, mapView);
-
-		// HeadUpView
-		headUpView = (HeadUpView) findViewById(R.id.headUpView);
-		headUpView.registerListener(this);
-
-		// poiView
-		poiView = (POIView) findViewById(R.id.poiView);
-
-		RelativeLayout.LayoutParams paramUser = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		paramUser.width = coorBox.getDisplaySize().x / 10;
-		paramUser.height = coorBox.getDisplaySize().x / 10;
-		userDiff = coorBox.getDisplaySize().x / 10 / 2;
-
-		RelativeLayout rl = (RelativeLayout) this
-				.findViewById(R.id.mapviewmain);
-
-		user = new ImageView(this);
-		user.setImageDrawable(this.getResources().getDrawable(
-				R.drawable.user_arrow));
-		user.setX(coorBox.getDisplaySize().x / 2 - userDiff);
-		user.setY(coorBox.getDisplaySize().y / 2 - userDiff);
-		rl.addView(user, paramUser);
-
-		PositionManager.getInstance().registerPositionListener(this);
-		PositionManager.getInstance().getCompassManager()
-				.registerCompassListener(this);
-
-		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
-
-		mapView.computeParams();
-		tileFetcher.requestTiles(coorBox, mapView);
-		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
-		pullUpView.bringToFront();
-
-		RouteController.getInstance().registerRouteListener(this);
-		FavoriteManager.getInstance(this).registerListener(this);
-		pullUpView.registerComputeRoundtripListener(this);
-		pullUpView.registerPOIChangeListener(this);
-		poiView.registerPOIInfoListener(this);
-		pullUpView.registerUpdateMapListener(this);
-
-		getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-		mapView.setOnTouchListener(new MapListener());
 
 	}
 
@@ -544,6 +534,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	}
 
+	/**
+	 * Helüer Alert to create Wifi Alert
+	 */
 	public void wifiAlert() {
 		Log.d(TAG, "ALERT");
 
