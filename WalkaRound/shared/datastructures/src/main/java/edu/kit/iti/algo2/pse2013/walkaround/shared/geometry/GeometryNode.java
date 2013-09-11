@@ -17,6 +17,7 @@ public class GeometryNode {
     /**
      * Logger.
      */
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(GeometryNode.class);
 
 	/**

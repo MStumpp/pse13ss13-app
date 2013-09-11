@@ -14,7 +14,8 @@ public class GeometryProcessorVertex {
     /**
      * Logger.
      */
-    private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorVertex.class);
+    @SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(GeometryProcessorVertex.class);
 
 
     /**

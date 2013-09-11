@@ -15,7 +15,8 @@ public class GeometrizablePOIConstraint implements GeometrizableConstraint {
     /**
      * Logger.
      */
-    private static final Logger logger = LoggerFactory.getLogger(GeometrizablePOIConstraint.class);
+    @SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(GeometrizablePOIConstraint.class);
 
     private int[] poiCategories;
 

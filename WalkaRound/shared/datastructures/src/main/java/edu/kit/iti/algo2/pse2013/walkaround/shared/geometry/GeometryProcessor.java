@@ -31,7 +31,8 @@ public class GeometryProcessor {
     /**
      * TAG.
      */
-    private static final String TAG = "GeometryProcessor";
+    @SuppressWarnings("unused")
+	private static final String TAG = "GeometryProcessor";
 
 
     /**
@@ -204,7 +205,7 @@ public class GeometryProcessor {
             this.geometryComputerQueue = geometryComputerQueue;
         }
 
-        protected void afterExecute(Runnable r, Throwable t) {
+		protected void afterExecute(Runnable r, Throwable t) {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
             logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +

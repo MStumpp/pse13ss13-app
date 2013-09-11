@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
@@ -41,6 +42,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveVertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 
 public class ProtobufConverter {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(ProtobufConverter.class.getSimpleName());
 	private static Map<Integer, Vertex> tmp_vertices;
 	public static Address getAddress(SaveAddress saveAddress) {
