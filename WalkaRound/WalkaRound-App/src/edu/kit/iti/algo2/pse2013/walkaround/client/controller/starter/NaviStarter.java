@@ -23,7 +23,7 @@ public class NaviStarter extends SingleStarter {
 
 		// Navi
 		NaviModel.initialize(appContext);
-		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(NaviModel.getInstance());
+		PreferenceUtility.getInstance(appContext).registerOnSharedPreferenceChangeListener(NaviModel.getInstance());
 		makeStep(1);
 
 		finish();

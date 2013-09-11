@@ -8,22 +8,22 @@ import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 /**
- * 
+ *
  * Administered the preferences. Uses the SharedPreferences. For testing please
  * clear data store of the app in android. (a restart and sometimes a
  * re-installation doesn't reset the preferences)
- * 
- * 
+ *
+ *
  * sound on/off map type - Manik; Wanderkarte, MapQuest POI - audio Title on/off
  * Text on/off POI - text images - on/off Navigation typ of output Text To
  * Speech; Stereo Sounds time to target - on/off time gone - on/off way left -
  * on/off way gone - on/off speed - on/off
- * 
+ *
  * WalkaRound Server Shortest-Way - url Roundtrip - url
- * 
+ *
  * @author Ludwig Biermann
  * @version 3.5
- * 
+ *
  */
 public class PreferenceUtility {
 
@@ -82,7 +82,7 @@ public class PreferenceUtility {
 
 	/**
 	 * construct a new Preference Manager
-	 * 
+	 *
 	 * @param context
 	 */
 	private PreferenceUtility(Context context) {
@@ -140,7 +140,7 @@ public class PreferenceUtility {
 
 	/**
 	 * initialize a new PreferenceUtility
-	 * 
+	 *
 	 * @param context
 	 *            needed arguments
 	 */
@@ -151,10 +151,10 @@ public class PreferenceUtility {
 
 	/**
 	 * gives the Preference Utility back
-	 * 
+	 *
 	 * @param context
 	 *            needed arguments
-	 * 
+	 *
 	 * @return the Preference Utility
 	 */
 	public static PreferenceUtility getInstance(Context context) {
@@ -168,13 +168,13 @@ public class PreferenceUtility {
 
 	/**
 	 * gives the Preference Utility back
-	 * 
+	 *
 	 * @return the Preference Utility or null
 	 */
 	public static PreferenceUtility getInstance() {
-		Log.d(TAG, "PositionManager.getInstance()");
+		Log.d(TAG, "PreferenceUtility.getInstance()");
 		if (manager == null) {
-			Log.e(TAG, "PositionManager not initialized");
+			Log.e(TAG, "PreferenceManager not initialized");
 			return null;
 		}
 		return manager;
@@ -182,7 +182,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Register a new PReferenceChangeListener
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 */
@@ -194,7 +194,7 @@ public class PreferenceUtility {
 	/* ------------------------------ General ------------------------ */
 	/**
 	 * Gives the State of general sound back
-	 * 
+	 *
 	 * @return true if sound is enable
 	 */
 	public boolean isSoundOn() {
@@ -205,7 +205,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the current MapStyle back.
-	 * 
+	 *
 	 * @return the current MapStyle back.
 	 */
 	public String getMapStyle() {
@@ -214,7 +214,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of poi title sound back
-	 * 
+	 *
 	 * @return true if sound is enable
 	 */
 	public boolean isPOITitleSoundOn() {
@@ -223,7 +223,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of poi text sound back
-	 * 
+	 *
 	 * @return true if sound is enable
 	 */
 	public boolean isPOITextSoundOn() {
@@ -232,7 +232,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives back whether the user wants images
-	 * 
+	 *
 	 * @return true if image is enable
 	 */
 	public boolean isPOIImageOn() {
@@ -243,7 +243,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of navigation sound back
-	 * 
+	 *
 	 * @return text to speech or stereo sound
 	 */
 	public String getNaviSoundTyp() {
@@ -252,7 +252,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of Time To Destination text field back
-	 * 
+	 *
 	 * @return true if Time To Destination text field is enable
 	 */
 	public boolean isTimeToDestination() {
@@ -262,7 +262,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of Time Left text field back
-	 * 
+	 *
 	 * @return true if Time Left text field is enable
 	 */
 	public boolean isTimeLeft() {
@@ -271,7 +271,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of Time Remaining text field back
-	 * 
+	 *
 	 * @return true if Time Remaining text field is enable
 	 */
 	public boolean isTimeRemaining() {
@@ -281,7 +281,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of Walked Way text field back
-	 * 
+	 *
 	 * @return true if Walked Way text field is enable
 	 */
 	public boolean isWalkedWay() {
@@ -290,7 +290,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the State of Speed text field back
-	 * 
+	 *
 	 * @return true if Speed text field is enable
 	 */
 	public boolean isSpeed() {
@@ -301,7 +301,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the url of the Shortest Path server back
-	 * 
+	 *
 	 * @return the url of Shortest Path the Server
 	 */
 	public String getShortestPathServerUrl() {
@@ -310,7 +310,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the url of the Roundtrip Path server back
-	 * 
+	 *
 	 * @return the url of the Roundtrip Server
 	 */
 	public String getRoundtripPathServerUrl() {
@@ -319,7 +319,7 @@ public class PreferenceUtility {
 
 	/**
 	 * Gives the url of the next vertex server back
-	 * 
+	 *
 	 * @return the url of the next vertex Server
 	 */
 	public String getNextVertexServerUrl() {
