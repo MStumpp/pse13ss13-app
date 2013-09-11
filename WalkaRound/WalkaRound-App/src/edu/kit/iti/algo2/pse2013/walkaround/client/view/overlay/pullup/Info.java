@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -58,15 +59,14 @@ public class Info extends LinearLayout {
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 
 		title = new TextView(context, attrs);
-		title.setTextSize(size.y / 35);
+		title.setTextSize(25);
 		title.setGravity(Gravity.CENTER);
 
 		text = new TextView(context, attrs);
-		text.setTextSize(size.y / 50);
+		text.setTextSize(15);
 
 		textImage = new ImageView(context, attrs);
-		textImage.setImageResource(R.drawable.play);
-		textImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+		textImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
 		sound = new ImageButton(context, attrs);
 		sound.setImageResource(R.drawable.play);
@@ -89,10 +89,7 @@ public class Info extends LinearLayout {
 		titleParams.height = size.x / 5;
 		titleParams.width = size.x * 3 / 5;
 
-		LinearLayout.LayoutParams textImageParams = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		textImageParams.height = size.x / 2;
-		textImageParams.width = size.x / 2;
+		LinearLayout.LayoutParams textImageParams = new LinearLayout.LayoutParams(size.x, size.x / 2);
 
 		LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -120,7 +117,7 @@ public class Info extends LinearLayout {
 
 		scroll.addView(line2);
 
-		line2.setGravity(Gravity.CENTER);
+		line2.setOrientation(VERTICAL);
 
 		line2.addView(textImage, textImageParams);
 		line2.addView(text, textParams);
@@ -131,7 +128,7 @@ public class Info extends LinearLayout {
 	 * update a poi
 	 * @param poi the poi to update
 	 */
-	public void update(POI poi) {
+	public void update(final POI poi) {
 
 		this.title.setVisibility(GONE);
 		this.text.setVisibility(GONE);
@@ -150,22 +147,13 @@ public class Info extends LinearLayout {
 			}
 		}
 
-		if (poi.getURL() != null && PreferenceUtility.getInstance().isPOIImageOn()) {
-			try {
-				Bitmap bmp = new POIImageFetcher.Synchronous(poi.getURL()).getBitmap();
-				this.textImage.setImageBitmap(bmp);
-				this.textImage.setVisibility(VISIBLE);
-			} catch (InterruptedException e) {
-				Log.e(TAG, "Could not fetch POI-image", e);
-			}
-		}
-
 		if (poi.getTextInfo() != null) {
 			speak = true;
-			sound.setOnTouchListener(new PlayListener(poi.getTextInfo()));
 			Spanned htmlizedText = Html.fromHtml(poi.getTextInfo());
-			this.text.setText(htmlizedText);
-			this.text.setVisibility(VISIBLE);
+			sound.setOnTouchListener(new PlayListener(htmlizedText.toString()));
+			text.setText(htmlizedText);
+			text.setMovementMethod(LinkMovementMethod.getInstance());
+			text.setVisibility(VISIBLE);
 			sound.setVisibility(VISIBLE);
 
 			if (PreferenceUtility.getInstance().isPOITextSoundOn()) {
@@ -173,6 +161,25 @@ public class Info extends LinearLayout {
 				this.speak = true;
 				this.sound.setImageResource(R.drawable.pause);
 			}
+		}
+
+		if (poi.getURL() != null && PreferenceUtility.getInstance().isPOIImageOn()) {
+			textImage.post(new Runnable() {
+				public void run() {
+					try {
+						POIImageFetcher fetcher = new POIImageFetcher(poi.getURL(), null);
+						Thread t = new Thread(fetcher);
+						t.start();
+						t.join();
+						Bitmap bmp = fetcher.getBitmap();
+						Log.d(TAG, "Fetched POI-Bitmap " + bmp);
+						textImage.setImageBitmap(bmp);
+						textImage.setVisibility(VISIBLE);
+					} catch (InterruptedException e) {
+						Log.e(TAG, "Could not fetch POI-image", e);
+					}
+				}
+			});
 		}
 	}
 
@@ -273,8 +280,9 @@ public class Info extends LinearLayout {
 					.create();
 			alertDialog.setTitle("Favorite hinzufügen");
 			alertDialog.setMessage("Bitte geben Sie einen Namen an.");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							FavoriteManager.getInstance(getContext())
 									.addLocationToFavorites(
@@ -285,9 +293,11 @@ public class Info extends LinearLayout {
 
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.setView(edit);
