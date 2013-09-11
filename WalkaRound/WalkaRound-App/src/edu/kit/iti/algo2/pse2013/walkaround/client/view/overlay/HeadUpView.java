@@ -37,7 +37,7 @@ public class HeadUpView extends RelativeLayout {
 	private ImageView option;
 	private ImageView userLock;
 
-	LinkedList<HeadUpViewListener> listener = new LinkedList<HeadUpViewListener>();
+	private LinkedList<HeadUpViewListener> listener = new LinkedList<HeadUpViewListener>();
 
 	/**
 	 * This create a new POIview.
@@ -137,6 +137,7 @@ public class HeadUpView extends RelativeLayout {
 			if (view.equals(plus)) {
 				Log.d(TAG, "plus i pressed");
 				notifyListener(+1.0F);
+				return true;
 			}
 			return false;
 		}
@@ -172,6 +173,7 @@ public class HeadUpView extends RelativeLayout {
 			if (view.equals(minus)) {
 				Log.d(TAG, "Minus is pressed");
 				notifyListener(-1.0F);
+				return true;
 			}
 			return false;
 		}
@@ -191,6 +193,7 @@ public class HeadUpView extends RelativeLayout {
 			if (view.equals(userLock)) {
 				Log.d(TAG, "UserLock is pressed");
 				notifyListener(USERLOCK);
+				return true;
 			}
 			return false;
 		}
@@ -208,9 +211,10 @@ public class HeadUpView extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(option)) {
-				Log.d(TAG, "UserLock is pressed");
+				Log.d(TAG, "Option is pressed");
 
 				notifyListener(OPTION);
+				return true;
 			}
 			return false;
 		}

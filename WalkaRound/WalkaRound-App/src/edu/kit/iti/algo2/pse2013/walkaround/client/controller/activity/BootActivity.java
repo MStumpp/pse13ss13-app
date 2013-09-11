@@ -112,6 +112,7 @@ public class BootActivity extends Activity implements StepCounter {
 		@Override
 		public void actionWhenAllFinished() {
 			if (PreferenceUtility.getInstance().isSoundOn()) {
+				/*
 				if (TextToSpeechUtility.speak("Willkommen bei")) {
 					TextToSpeechUtility.speak("WalkaRound!", Locale.ENGLISH);
 				} else {
@@ -121,7 +122,7 @@ public class BootActivity extends Activity implements StepCounter {
 					// mp.setVolume(100, 100);
 					// mp.start();
 					// mp.pause();
-				}
+				}*/
 			}
 			onContinue();
 		}

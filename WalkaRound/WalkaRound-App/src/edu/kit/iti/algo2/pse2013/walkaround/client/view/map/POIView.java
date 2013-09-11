@@ -123,6 +123,7 @@ public class POIView extends RelativeLayout {
 						notifyPOIInfoListener(poi);
 					}
 				}
+				return true;
 			}
 
 			return false;
