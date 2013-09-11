@@ -23,12 +23,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 
 /**
  * The View draw the map.
- *
+ * 
  * @author Ludwig Biermann
  * @version 1.8
- *
+ * 
  */
-public class MapView extends View implements TileListener, CenterListener, LevelOfDetailListener {
+public class MapView extends View implements TileListener, CenterListener,
+		LevelOfDetailListener {
 
 	/**
 	 * Debug Tag
@@ -36,46 +37,46 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	private static String TAG = MapView.class.getSimpleName();
 
 	/**
-	 *
+	 * 
 	 * The default Background Color
-	 *
-	 *
+	 * 
+	 * 
 	 */
 	public static int defaultBackground = Color.rgb(227, 227, 227);
 
 	/**
-	 *
+	 * 
 	 * The default empty Background Color
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 
 	/**
 	 * the size of the Display
-	 *
+	 * 
 	 */
 	private Point size;
 
 	/**
 	 * the amount of tile parts which fit in the display
-	 *
+	 * 
 	 */
 	private Point amount;
 
 	/**
 	 * the current Coordinates
-	 *
+	 * 
 	 */
 	private BoundingBox coorBox;
 
 	/**
 	 * the current Tile Width
-	 *
+	 * 
 	 */
 	private float currentTileWidth;
 
 	/**
 	 * the Offset of the tile parts
-	 *
+	 * 
 	 */
 	private DisplayCoordinate mapOffset;
 
@@ -86,7 +87,7 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 	/**
 	 * the index of the tile on the top Left corner
-	 *
+	 * 
 	 */
 	private int[] indexXY;
 
@@ -119,9 +120,11 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 	/**
 	 * This create a new MapView.
-	 *
-	 * @param context the context of the app
-	 * @param attrs the needed attributes
+	 * 
+	 * @param context
+	 *            the context of the app
+	 * @param attrs
+	 *            the needed attributes
 	 */
 	public MapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -136,11 +139,12 @@ public class MapView extends View implements TileListener, CenterListener, Level
 		Log.d("test", " " + (coorBox.getDisplaySize() != null));
 		size = coorBox.getDisplaySize();
 
-
 		Log.d("test", " " + (size != null));
 
 		this.amount = new Point();
 		this.computeParams();
+		this.buildDrawingCache();
+		this.setDrawingCacheEnabled(true);
 	}
 
 	@Override
@@ -166,7 +170,7 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 *
+	 * 
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -196,7 +200,6 @@ public class MapView extends View implements TileListener, CenterListener, Level
 		xDiff = size.x / 2 - Math.abs(xDiff);
 		yDiff = size.y / 2 - Math.abs(yDiff);
 
-
 		Log.d(TAG, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
 				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
 				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
@@ -220,9 +223,9 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	}
 
 	/**
-	 *
+	 * 
 	 * This Method computes the offset and index and clears the current variable
-	 *
+	 * 
 	 * @param center
 	 *            the new center Coordinate
 	 * @param lod
@@ -233,16 +236,18 @@ public class MapView extends View implements TileListener, CenterListener, Level
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
 		this.tileT.clear();
+
 		this.tileHolder.clear();
+
 		this.computeAmountOfTiles();
 	}
 
 	/**
 	 * A little Helper Class to associate Bitmaps with a Coordinate
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class TilePaaring {
 
@@ -252,10 +257,13 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 		/**
 		 * Construct a new Tile Paring
-		 *
-		 * @param b the bitmap
-		 * @param x x-coordinate
-		 * @param y y-coordinate
+		 * 
+		 * @param b
+		 *            the bitmap
+		 * @param x
+		 *            x-coordinate
+		 * @param y
+		 *            y-coordinate
 		 */
 		public TilePaaring(Bitmap b, int x, int y) {
 			this.b = Bitmap.createScaledBitmap(b, Math.round(currentTileWidth),
@@ -271,8 +279,13 @@ public class MapView extends View implements TileListener, CenterListener, Level
 
 		int tileX = x - indexXY[0];
 		int tileY = (y - indexXY[1]);
+		try {
+			this.tileHolder.add(new TilePaaring(tile, tileX, tileY));
+		} catch (OutOfMemoryError e) {
+			Log.e(TAG, e.toString());
+			System.gc();
+		}
 
-		this.tileHolder.add(new TilePaaring(tile, tileX, tileY));
 	}
 
 	@Override
@@ -288,7 +301,7 @@ public class MapView extends View implements TileListener, CenterListener, Level
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return MapView.class.getSimpleName();
 	}
 }

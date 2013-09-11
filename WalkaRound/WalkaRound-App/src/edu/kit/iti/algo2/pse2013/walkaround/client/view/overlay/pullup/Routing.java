@@ -333,7 +333,8 @@ public class Routing extends RelativeLayout {
 		 */
 		public void alert() {
 			edit = new EditText(getContext());
-			edit.setText("PLACEHOLDER");
+			edit.setText("WAYPOINT FAVORITE");
+			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
 			alertDialog.setTitle("Wegpunkt speichern");
@@ -416,7 +417,8 @@ public class Routing extends RelativeLayout {
 		 */
 		public void alert() {
 			edit = new EditText(getContext());
-			edit.setText("PLACEHOLDER");
+			edit.setText("ROUTE FAVORITE");
+			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
 			alertDialog.setTitle("Route speichern");

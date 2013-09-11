@@ -70,6 +70,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	private TileFetcher(Context context){
 		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		defaultTile = BitmapFactory.decodeResource(context.getResources(), DEFAULT_TILE_PATH);
+		
 	}
 
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
