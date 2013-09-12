@@ -23,10 +23,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 
 /**
  * The View draw the map.
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.8
- * 
+ *
  */
 public class MapView extends View implements TileListener, CenterListener,
 		LevelOfDetailListener {
@@ -37,46 +37,46 @@ public class MapView extends View implements TileListener, CenterListener,
 	private static String TAG = MapView.class.getSimpleName();
 
 	/**
-	 * 
+	 *
 	 * The default Background Color
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public static int defaultBackground = Color.rgb(227, 227, 227);
 
 	/**
-	 * 
+	 *
 	 * The default empty Background Color
 	 */
 	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
 
 	/**
 	 * the size of the Display
-	 * 
+	 *
 	 */
 	private Point size;
 
 	/**
 	 * the amount of tile parts which fit in the display
-	 * 
+	 *
 	 */
 	private Point amount;
 
 	/**
 	 * the current Coordinates
-	 * 
+	 *
 	 */
 	private BoundingBox coorBox;
 
 	/**
 	 * the current Tile Width
-	 * 
+	 *
 	 */
 	private float currentTileWidth;
 
 	/**
 	 * the Offset of the tile parts
-	 * 
+	 *
 	 */
 	private DisplayCoordinate mapOffset;
 
@@ -87,7 +87,7 @@ public class MapView extends View implements TileListener, CenterListener,
 
 	/**
 	 * the index of the tile on the top Left corner
-	 * 
+	 *
 	 */
 	private int[] indexXY;
 
@@ -120,7 +120,7 @@ public class MapView extends View implements TileListener, CenterListener,
 
 	/**
 	 * This create a new MapView.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -170,7 +170,7 @@ public class MapView extends View implements TileListener, CenterListener,
 
 	/**
 	 * Compute and gives the Tile Offset back
-	 * 
+	 *
 	 * @return Tile Offset
 	 */
 	private DisplayCoordinate computeTileOffset() {
@@ -223,13 +223,7 @@ public class MapView extends View implements TileListener, CenterListener,
 	}
 
 	/**
-	 * 
 	 * This Method computes the offset and index and clears the current variable
-	 * 
-	 * @param center
-	 *            the new center Coordinate
-	 * @param lod
-	 *            the Level of Detail
 	 */
 	public void computeParams() {
 		this.mapOffset = this.computeTileOffset();
@@ -244,10 +238,10 @@ public class MapView extends View implements TileListener, CenterListener,
 
 	/**
 	 * A little Helper Class to associate Bitmaps with a Coordinate
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class TilePaaring {
 
@@ -257,7 +251,7 @@ public class MapView extends View implements TileListener, CenterListener,
 
 		/**
 		 * Construct a new Tile Paring
-		 * 
+		 *
 		 * @param b
 		 *            the bitmap
 		 * @param x

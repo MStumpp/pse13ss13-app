@@ -30,11 +30,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
  * verwendet.
  * @author Florian Schäfer
  * @author Ludwig Biermann
- * @version 3.2
+ * @version 3.3
  */
 public class TileFetcher implements OnSharedPreferenceChangeListener{
 
-	//private static Activity activity;
 	private static TileFetcher instance;
 	private static final String TAG = TileFetcher.class.getSimpleName();
 	private static final int MAX_CACHE_SIZE = 300;
@@ -45,7 +44,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 
 	/**
 	 * Returns the current TileFetcher or null;
-	 * 
+	 *
 	 * @return TileFetcher or null
 	 */
 	public static TileFetcher getInstance() {
@@ -57,7 +56,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 
 	/**
 	 * Returns the current TileFetcher
-	 * 
+	 * @param context
 	 * @return TileFetcher
 	 */
 	public static TileFetcher getInstance(Context context) {
@@ -70,7 +69,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	private TileFetcher(Context context){
 		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		defaultTile = BitmapFactory.decodeResource(context.getResources(), DEFAULT_TILE_PATH);
-		
+
 	}
 
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
@@ -88,19 +87,19 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	 *
 	 * @param levelOfDetail the level of detail for all the downloaded tiles
 	 * @param topLeft a coordinate, which lies inside the tile which marks the upper left corner of the requested rectangle
-	 * @param numTilesX the number of tile-columns in the requested rectangle
-	 * @param numTilesY the number of tile-rows in the requested rectangle
+	 * @param bottomRight the bottom right coordinate (analog to topLeft)
+	 * @param listener the TileListener listeneing for tiles
 	 */
 	public void requestTiles(final int levelOfDetail, final Coordinate topLeft, final Coordinate bottomRight, TileListener listener) {
 		//Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d, %s)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongitude(), numTilesX, numTilesY, listener));
 
-		//Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
+		Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
 		final int[] startTileIndex = TileUtility.getXYTileIndex(topLeft, levelOfDetail);
 		final int[] endTileIndex = TileUtility.getXYTileIndex(bottomRight, levelOfDetail);
 		//Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
 
 		requestTiles(levelOfDetail, startTileIndex[0], startTileIndex[1] - 1, endTileIndex[0], endTileIndex[1], listener);
-		//requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 1, startTileIndex[0] + numTilesX + 1, startTileIndex[1] + numTilesY + 1, null);
+		requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 2, endTileIndex[0] + 1, endTileIndex[1] + 1, null);
 	}
 	public void clearCache(){
 		Log.d(TAG, "Clearing cache...");
@@ -166,6 +165,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 			this.listener = listener;
 		}
 
+		@Override
 		public void run() {
 			try {
 				URLConnection conn = new URL(url).openConnection();
@@ -179,19 +179,15 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 				listener.receiveTile(result, x, y, levelOfDetail);
 				cache.put(url, result);
 			} catch (MalformedURLException e) {
-				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url));
-				Log.e(TAG, e.getLocalizedMessage());
+				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url), e);
 			} catch (IOException e) {
-				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, url));
-				Log.e(TAG, e.getLocalizedMessage());
+				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. IOException while reading from '%s'!", levelOfDetail, x, y, url), e);
 			} catch (OutOfMemoryError e) {
-				Log.e(TAG, "Out of Memory! Clearing cache...");
-				Log.e(TAG, e.toString());
+				Log.e(TAG, "Out of Memory! Clearing cache...", e);
 				cache.evictAll();
 				System.gc();
 			} catch (NullPointerException e){
-				Log.e(TAG, "Try to cache Null Pointer!");
-				Log.e(TAG, e.toString());
+				Log.e(TAG, "Try to catch Null Pointer!", e);
 			}
 		}
 	}
