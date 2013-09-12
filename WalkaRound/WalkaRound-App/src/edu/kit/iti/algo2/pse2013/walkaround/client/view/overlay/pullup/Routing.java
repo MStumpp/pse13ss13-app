@@ -26,7 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class shows the Routing Menu
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
  *
@@ -48,10 +48,10 @@ public class Routing extends RelativeLayout {
 
 	private LinkedList<GoToFavoriteListener> fav = new LinkedList<GoToFavoriteListener>();
 	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
-	
+
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context the context of the app
 	 * @param attrs the needed attributes
 	 */
@@ -96,7 +96,7 @@ public class Routing extends RelativeLayout {
 		// Params
 		// Reset
 		RelativeLayout.LayoutParams paramsReset = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsReset.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 				RelativeLayout.TRUE);
 		paramsReset.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
@@ -107,7 +107,7 @@ public class Routing extends RelativeLayout {
 
 		// Invert
 		RelativeLayout.LayoutParams paramsInvert = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsInvert.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 				RelativeLayout.TRUE);
 		paramsInvert.addRule(RelativeLayout.RIGHT_OF, 1);
@@ -117,7 +117,7 @@ public class Routing extends RelativeLayout {
 
 		// Save
 		RelativeLayout.LayoutParams paramsSave = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsSave
 				.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		paramsSave.addRule(RelativeLayout.RIGHT_OF, 2);
@@ -127,18 +127,18 @@ public class Routing extends RelativeLayout {
 
 		// ScrollView
 		RelativeLayout.LayoutParams paramsScrollView = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 		paramsScrollView.addRule(RelativeLayout.BELOW, 1);
 		paramsScrollView.addRule(RelativeLayout.ABOVE, 3);
 		paramsScrollView.height = 1000;
 
 		// Content
 		RelativeLayout.LayoutParams paramsContent = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 
 		// addFavorite
 		RelativeLayout.LayoutParams paramsAddFavorite = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsAddFavorite.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 				RelativeLayout.TRUE);
 		paramsAddFavorite.bottomMargin = 10;
@@ -146,7 +146,7 @@ public class Routing extends RelativeLayout {
 
 		// goToMap
 		RelativeLayout.LayoutParams paramsGoToMap = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsGoToMap.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 				RelativeLayout.TRUE);
 		paramsGoToMap.addRule(RelativeLayout.RIGHT_OF, 3);
@@ -169,26 +169,26 @@ public class Routing extends RelativeLayout {
 		// Params for Content
 
 		// Delete
-		deleteParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		deleteParams = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		deleteParams.height = size.x * 1 / 5;
 		deleteParams.width = size.x * 1 / 5;
 
 		// Save
-		saveParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		saveParams = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		saveParams.height = size.x * 1 / 5;
 		saveParams.width = size.x * 1 / 5;
 
 		// Text
-		textParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		textParams = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		textParams.height = size.x * 1 / 5;
 		textParams.width = size.x * 3 / 5;
 
 		// vertical Layout
-		lParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		lParams = new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		// Listener
 
@@ -237,7 +237,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * Listen to Waypoint events
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version  1.0
 	 *
@@ -258,7 +258,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * Listen to delete event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version  1.0
 	 *
@@ -266,36 +266,39 @@ public class Routing extends RelativeLayout {
 	private class DeleteListener implements OnTouchListener {
 
 		private int id;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			
+
 			if(action == MotionEvent.ACTION_UP) {
 				id = Integer.parseInt(view.getTag().toString());
 				this.alert();
 			}
-			
+
 			return false;
 		}
-		
+
 		/**
 		 * makes a alert
 		 */
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle("Wegpunkt löschen");
-			alertDialog.setMessage("Wirklich löschen?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setTitle(context.getString(R.string.dialog_header_delete));
+			alertDialog.setMessage(context.getString(R.string.dialog_text_delete));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							RouteController.getInstance().deleteActiveWaypoint(id);
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.option_no),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							//Do nothing
 						}
 					});
 			alertDialog.show();
@@ -305,7 +308,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * Listen to a sace event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -337,10 +340,11 @@ public class Routing extends RelativeLayout {
 			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle("Wegpunkt speichern");
+			alertDialog.setTitle(context.getString(R.string.dialog_header_save, context.getString(R.string.term_waypoint)));
 			alertDialog.setMessage("Wie heißt der Ort?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Add",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_add),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							Location l = new Location(w.getLatitude(), w
 									.getLongitude(), edit.getText().toString());
@@ -350,9 +354,11 @@ public class Routing extends RelativeLayout {
 											edit.getText().toString());
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.option_cancel),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							//Do nothing
 						}
 					});
 			alertDialog.setView(edit);
@@ -378,7 +384,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * Listen to a invert
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -394,7 +400,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * Listen to a save event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -419,12 +425,12 @@ public class Routing extends RelativeLayout {
 			edit = new EditText(getContext());
 			edit.setText("ROUTE FAVORITE");
 			edit.selectAll();
-			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-					.create();
-			alertDialog.setTitle("Route speichern");
-			alertDialog.setMessage("Wie soll die Route heißen?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Add",
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+			alertDialog.setTitle(context.getString(R.string.dialog_header_save, context.getString(R.string.term_route)));
+			alertDialog.setMessage(context.getString(R.string.dialog_text_add_or_save, context.getString(R.string.term_route)));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_add),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							FavoriteManager.getInstance(getContext())
 									.addRouteToFavorites(
@@ -433,9 +439,11 @@ public class Routing extends RelativeLayout {
 											edit.getText().toString());
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.option_cancel),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							//Do nothing
 						}
 					});
 			alertDialog.setView(edit);
@@ -446,7 +454,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * Listen to a add favorite listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -490,7 +498,7 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * register go to map listener
-	 * 
+	 *
 	 * @param listener the new Listener
 	 */
 	public void registerGoToMapListener(GoToMapListener listener) {
@@ -499,13 +507,13 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 * A Interface for call go to map
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
 	 */
 	public interface GoToMapListener {
-		
+
 		/**
 		 * is called if the view wants to go to map
 		 */
@@ -532,8 +540,8 @@ public class Routing extends RelativeLayout {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *

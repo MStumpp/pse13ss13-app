@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="POICat">
+    <item>Bars &amp; Pubs</item>
+	<item>Kinos</item>
+	<item>Clubs</item>
+	<item>Schnellrestaurants</item>
+	<item>Essen</item>
+	<item>Museen</item>
+	<item>ÖPNV</item>
+	<item>Einkaufsläden</item>
+	<item>Übernachtungsmöglichkeiten</item>
+	<item>Supermärkte</item>
+	<item>Theater</item>
+	<item>Monumente &amp; Kirchen</item>
+	<item>Burgen &amp; Schlösser</item>
+</string-array>
+<string-array name="Profile">
+    <item>Stadtrundgang</item>
+    <item>Einkaufen</item>
+    <item>Bartour</item>
+</string-array>
+</resources>

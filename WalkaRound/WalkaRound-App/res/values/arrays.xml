@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="POICat">
+    <item>Bars and pubs</item>
+	<item>Cinemas</item>
+	<item>Clubs and Nightclubs</item>
+	<item>Fast Food</item>
+	<item>Food</item>
+	<item>Museums</item>
+	<item>Public transportation</item>
+	<item>Shops</item>
+	<item>Sleeping Accomodations</item>
+	<item>Supermarkets</item>
+	<item>Theatres</item>
+	<item>Monuments and Churches</item>
+	<item>Castles</item>
+</string-array>
+<string-array name="Profile">
+    <item>Sightseeing</item>
+    <item>Jogging</item>
+    <item>Bartour</item>
+</string-array>
+</resources>

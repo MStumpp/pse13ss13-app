@@ -19,7 +19,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 
 /**
  * This View shows the POI Menu.
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
  *
@@ -27,48 +27,21 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 public class POILayout extends RelativeLayout {
 
 	private ScrollView scrollView;
-	private static int category1 = R.string.bars_and_pubs;
-	private static int category2 = R.string.cinema;
-	private static int category3 = R.string.clubs_and_nightclubs;
-	private static int category4 = R.string.fast_food;
-	private static int category5 = R.string.food;
-	private static int category6 = R.string.museum;
-	private static int category7 = R.string.public_transportation;
-	private static int category8 = R.string.shop;
-	private static int category9 = R.string.sleeping_accomodation;
-	private static int category10 = R.string.supermarket;
-	private static int category11 = R.string.theatre;
-	private static int category12 = R.string.monument;
-	private static int category13 = R.string.castle;
-
-	private LinkedList<Integer> category = new LinkedList<Integer>();
+	private String[] categories;
 	private LinkedList<POIChangeListener> poiChangeListener = new LinkedList<POIChangeListener>();
 	private LinearLayout content;
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context the context of the app
 	 * @param attrs the needed attributes
 	 */
 	public POILayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		categories = context.getResources().getStringArray(R.array.POICat);
 
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
-
-		category.add(category1);
-		category.add(category2);
-		category.add(category3);
-		category.add(category4);
-		category.add(category5);
-		category.add(category6);
-		category.add(category7);
-		category.add(category8);
-		category.add(category9);
-		category.add(category10);
-		category.add(category11);
-		category.add(category12);
-		category.add(category13);
 
 		scrollView = new ScrollView(context, attrs);
 		content = new LinearLayout(context, attrs);
@@ -90,13 +63,13 @@ public class POILayout extends RelativeLayout {
 		param.height = size.y / 20;
 		scrollView.addView(content, contentParam);
 
-		for (Integer res : category) {
+		for (int i = 0; i < categories.length; i++) {
 			TextView b = new TextView(context, attrs);
-			b.setText(context.getResources().getString(res));
-			b.setTag(res);
-			b.setOnTouchListener(new onCategoryTouch());
-			b.setBackgroundColor(Color.GRAY);
-			b.setTextColor(Color.BLACK);
+			b.setText(categories[i]);
+			b.setTag(i);
+			b.setOnTouchListener(new OnCategoryTouch());
+			b.setBackgroundColor(Color.rgb(50, 50, 50));
+			b.setTextColor(Color.WHITE);
 			b.setSelected(false);
 			b.setGravity(Gravity.CENTER);
 
@@ -108,51 +81,40 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * Listen for a Category change
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
 	 */
-	private class onCategoryTouch implements OnTouchListener {
+	private class OnCategoryTouch implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(final View v, MotionEvent event) {
 
 			TextView b = (TextView) v;
 
-			int id = Integer.parseInt(v.getTag().toString());
+			final int id = Integer.parseInt(v.getTag().toString());
 			if (b.isSelected()) {
 				b.setSelected(false);
-				b.setTextColor(Color.BLACK);
-				POIManager.getInstance(getContext()).removeActivePOICategory(
-						getCategoryID(id));
+				b.setTextColor(Color.WHITE);
+				b.setBackgroundColor(Color.rgb(50, 50, 50));
 			} else {
 				b.setSelected(true);
 				b.setTextColor(Color.RED);
-				POIManager.getInstance(getContext()).addActivePOICategory(
-						getCategoryID(id));
-
+				b.setBackgroundColor(Color.GRAY);
 			}
+			Thread t = new Thread(
+				new Runnable() {
+					@Override
+					public void run() {
+						POIManager.getInstance(getContext()).togglePOICategory(id);
+					}
+				}
+			);
+			t.start();
 			notifyComputeRoundtripListener();
 			return false;
 		}
-
-		/**
-		 * gets the Category id back
-		 * 
-		 * @param id the needed id
-		 * @return the category id or 0
-		 */
-		public int getCategoryID(int id) {
-			for (int i = 0; i < category.size(); i++) {
-				if (category.get(i) == id) {
-					return (i + 1);
-				}
-			}
-			return 0;
-
-		}
-
 	}
 
 	/**
@@ -174,13 +136,13 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * A Interface for the POI´s
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
 	 */
 	public interface POIChangeListener {
-		
+
 		/**
 		 * is called if a POI is changed
 		 */

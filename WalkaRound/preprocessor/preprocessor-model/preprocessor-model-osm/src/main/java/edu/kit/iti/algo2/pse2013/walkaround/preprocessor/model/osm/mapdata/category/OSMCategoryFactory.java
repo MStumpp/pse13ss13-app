@@ -122,6 +122,7 @@ public class OSMCategoryFactory {
 	private static final OSMCategory createSupermarketCategory() {
 		OSMTagCategory supermarket = new OSMTagCategory();
 		supermarket.addTag("amenity", "supermarket");
+		supermarket.addTag("shop", "supermarket");
 		return supermarket;
 	}
 	private static final OSMCategory createTheatreCategory() {

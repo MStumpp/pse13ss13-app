@@ -21,7 +21,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.G
 
 /**
  * This View shows the Roundtrip menu
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
  *
@@ -46,7 +46,7 @@ public class Roundtrip extends LinearLayout {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context the context of the app
 	 * @param attrs the needed attributes
 	 */
@@ -68,7 +68,7 @@ public class Roundtrip extends LinearLayout {
 		title.setTextSize(size.y / 28);
 		title.setGravity(Gravity.CENTER);
 		Button compute = new Button(context, attrs);
-		compute.setText("compute Roundtrip");
+		compute.setText(context.getString(R.string.compute, context.getString(R.string.term_roundtrip)));
 		compute.setGravity(Gravity.CENTER);
 		compute.setOnTouchListener(new OnComputeTouch());
 		number = new NumberPicker(context, attrs);
@@ -126,7 +126,7 @@ public class Roundtrip extends LinearLayout {
 
 	/**
 	 * Listen to a Profile touch event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -158,9 +158,9 @@ public class Roundtrip extends LinearLayout {
 	}
 
 	/**
-	 * 
+	 *
 	 * Listen to a the Compute touch event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -211,7 +211,7 @@ public class Roundtrip extends LinearLayout {
 
 	/**
 	 * natify all compute Roundtrip Listener
-	 * 
+	 *
 	 * @param profile new profile
 	 * @param length the length
 	 */
@@ -232,16 +232,16 @@ public class Roundtrip extends LinearLayout {
 
 	/**
 	 * Interface to make a call by computing Roundtrips
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
 	 */
 	public interface ComputeRoundtripListener {
-		
+
 		/**
 		 * is called if the compute button is pressed
-		 * 
+		 *
 		 * @param profile the profile
 		 * @param length the length
 		 */

@@ -1,48 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">WalkaRound</string>
-    <string name="meter" translatable="false">Meter</string>
-    <string name="poi" translatable="false">POI</string>
-    <string name="pois" translatable="false">POIs</string>
-    <string name="address">Address</string>
-    <string name="current">current</string>
-    <string name="route">route</string>
-    <string name="current_route">Current Route</string>
-    <string name="reset">reset</string>
-    <string name="add_favorite">add Favorite</string>
-    <string name="go_to_map">go to map</string>
-    <string name="query">Query</string>
-    <string name="zip_code">ZIP</string>
-    <string name="city">City</string>
-    <string name="street">Street</string>
-    <string name="number">Housenumber</string>
-    <string name="start_search">Go</string>
-    <string name="favorite">Favorites</string>
-    <string name="compute_roundtrip">Compute roundtrip</string>
-    <string name="profiles">Profiles</string>
-    <string name="clubbing">Clubbing</string>
-    <string name="shopping" translatable="false">Shopping</string>
-    <string name="sightseeing" translatable="false">Sightseeing</string>
-    <string name="jogging">Jogging</string>
-    <string name="length">Length</string>
-    <string name="favorite_name">Name for this favorite</string>
-    <string name="search">Search</string>
-    <string name="bars_and_pubs">Bars and Pubs</string>
-    <string name="cinema">Cinemas</string>
-    <string name="clubs_and_nightclubs">Clubs and Nightclubs</string>
-    <string name="fast_food">Fast Food</string>
-    <string name="food">Food</string>
-    <string name="museum">Museums</string>
-    <string name="public_transportation">Public Transportation</string>
-    <string name="shop">Shops</string>
-    <string name="sleeping_accomodation">Sleepin Accommodations</string>
-    <string name="supermarket">Supermarkets</string>
-    <string name="theatre">Theatres</string>
-    <string name="loading">Loading</string>
-    <string name="suggestions">Suggestions</string>
-    <string name="monument">Monuments and churches</string>
-    <string name="castle">Castles</string>
-    <string name="delete_dialog">Do you really want to delete this?</string>
-    <string name="delete_dialog_header">Delete</string>
-    <string name="action_settings">Settings</string>
+	<string name="action_settings">Settings</string>
+	<string name="addr_address">Address</string>
+	<string name="addr_city">City</string>
+	<string name="addr_housenumber">Houseno.</string>
+	<string name="addr_street">Street</string>
+	<string name="addr_zip_code">ZIP</string>
+	<string name="app_name" translatable="false">WalkaRound</string>
+	<string name="clubbing">Clubbing</string>
+	<string name="compute">Compute %s</string>
+	<string name="current">current</string>
+	<string name="current_route">Current Route</string>
+	<string name="dialog_header_add">Add %s</string>
+	<string name="dialog_header_delete">Delete %s</string>
+	<string name="dialog_header_save">Save %s</string>
+	<string name="dialog_text_add_or_save">Pick a name</string>
+	<string name="dialog_text_delete">Do you really want to delete?</string>
+	<string name="go_to_map">Back to map</string>
+	<string name="length">Length</string>
+	<string name="loading">Loading</string>
+	<string name="meter">meter</string>
+	<string name="option_add">Add</string>
+	<string name="option_cancel">Cancel</string>
+	<string name="option_no">No</string>
+	<string name="option_yes">Yes</string>
+	<string name="query">Query</string>
+	<string name="reset">reset</string>
+	<string name="search">Search</string>
+	<string name="shopping">Shopping</string>
+	<string name="sightseeing">Sightseeing</string>
+	<string name="start_search">Go</string>
+	<string name="suggestions">Suggestions</string>
+	<string name="term_favorite_route">Favorite route</string>
+	<string name="term_poi" translatable="false">POI</string>
+	<string name="term_pois" translatable="false">POIs</string>
+	<string name="term_profiles">Profiles</string>
+	<string name="term_route">route</string>
+	<string name="term_waypoint">Waypoint</string>
+	<string name="term_roundtrip">Roundtrip</string>
 </resources>

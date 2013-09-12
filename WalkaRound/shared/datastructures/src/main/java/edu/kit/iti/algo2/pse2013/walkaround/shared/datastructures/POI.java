@@ -138,6 +138,7 @@ public class POI extends Location implements Geometrizable {
 		return poiCategories;
 	}
 
+	@Override
 	public String toString() {
 		String result = "POI:\n\t"
 				+ "\n\tLocation: " + super.toString()
@@ -216,21 +217,13 @@ public class POI extends Location implements Geometrizable {
 		return new POI(super.clone(), textInfo, newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));
 	}
 
-
-    // Geometrizable Interface
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension()
-     */
-    public int numberDimensions() {
+    @Override
+	public int numberDimensions() {
         return 2;
     }
 
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#valueForDimension(int)
-     */
-    public double valueForDimension(int dim) {
+    @Override
+	public double valueForDimension(int dim) {
 
         if (dim < 0 || dim > numberDimensions()-1)
             throw new IllegalArgumentException("dim out of range");
@@ -241,19 +234,13 @@ public class POI extends Location implements Geometrizable {
             return getLongitude();
     }
 
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#numberNodes()
-     */
-    public int numberNodes() {
+    @Override
+	public int numberNodes() {
         return 1;
     }
 
-
-    /* (non-Javadoc)
-     * @see edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable#getNode(int nodeNumber)
-     */
-    public Geometrizable getNode(int nodeNumber) {
+    @Override
+	public Geometrizable getNode(int nodeNumber) {
 
         if (nodeNumber < 0 || (nodeNumber > numberNodes()-1))
             throw new IllegalArgumentException("node number out of range");

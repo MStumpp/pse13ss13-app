@@ -3,19 +3,21 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TreeMap;
-
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 
 import android.content.Context;
 import android.location.Geocoder;
 import android.os.Environment;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -24,7 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class manages requests about POIs.
- * 
+ *
  * @author Thomas Kadow
  * @author ludwig Biermann
  * @version 2.0
@@ -36,8 +38,6 @@ public class POIManager {
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 10;
-
-	private final int NUMBER_OF_CATEGORIES = 13;
 
 	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 10;
 	/**
@@ -55,73 +55,55 @@ public class POIManager {
 	/**
 	 * IDs of categories that where activated in the POI menu.
 	 */
-	private int[] activeCategories;
+	private boolean[] isCatActive;
 
-	private int activeCategoriesCount;
+	private static Context context;
 
+	/**
+	 * @param context a context to initialize
+	 */
 	public static void initialize(Context context) {
-		/*
-		 * applicationContext = context.getApplicationContext(); String
-		 * fileString = File.separatorChar + "walkaround" + File.separatorChar +
-		 * "locationData.pbf"; try { Log.d(TAG_POIMANAGER, "ExtFile: " +
-		 * Environment.getExternalStorageDirectory()); locationDataIO =
-		 * LocationDataIO.load(new File(Environment
-		 * .getExternalStorageDirectory().getAbsolutePath() + fileString));
-		 * Log.d(TAG_POIMANAGER, "location data io!" +
-		 * locationDataIO.getPOIs().size());
-		 * 
-		 * } catch (IOException e) { Log.d(TAG_POIMANAGER, e.toString()); }catch (OutOfMemoryError e) {
-			Log.d(TAG_POIMANAGER, e.toString());
-			System.gc();
-		}
-		 */
+		POIManager.context = context;
+//		String fileString = File.separatorChar + "walkaround" + File.separatorChar + "locationData.pbf";
+//		try {
+//			Log.d(TAG_POIMANAGER, "ExtFile: " + Environment.getExternalStorageDirectory());
+//			locationDataIO = LocationDataIO.load(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + fileString));
+//			Log.d(TAG_POIMANAGER, "location data io!" +
+//			locationDataIO.getPOIs().size());
+//		} catch (IOException e) {
+//			Log.d(TAG_POIMANAGER, e.toString());
+//		}catch (OutOfMemoryError e) {
+//			Log.d(TAG_POIMANAGER, e.toString());
+//			System.gc();
+//		}
 	}
 
 	/**
 	 * Constructs a new manager for POIs.
-	 * 
+	 *
 	 * @param locationDataIO
 	 *            LocationDataIO object
 	 */
-	private POIManager() {
-		activeCategories = new int[NUMBER_OF_CATEGORIES];
-		for (int i = 0; i < activeCategories.length; i++) {
-			activeCategories[i] = -1;
-		}
+	private POIManager(Context context) {
+		isCatActive = new boolean[context.getResources().getStringArray(R.array.POICat).length];
 	}
 
 	/**
 	 * Singleton getInstance method.
-	 * 
-	 * @param locationDataIO
-	 *            LocationDataIO object
+	 * @param context a context for initialization
 	 * @return an instance of the POIManager
 	 */
 	public static POIManager getInstance(Context context) {
 		if (instance == null) {
 			POIManager.initialize(context);
-		}
-		return POIManager.getInstance();
-	}
-
-	/**
-	 * Singleton getInstance method.
-	 * 
-	 * @param locationDataIO
-	 *            LocationDataIO object
-	 * @return an instance of the POIManager
-	 */
-	public static POIManager getInstance() {
-		if (instance == null) {
-			instance = new POIManager();
+			instance = new POIManager(context);
 		}
 		return instance;
 	}
 
-	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying within a rectangle.
-	 * 
+	 *
 	 * @param upperLeft
 	 *            upperleft coordinate of the rectangle
 	 * @param bottomRight
@@ -130,13 +112,13 @@ public class POIManager {
 	 *            level of detail
 	 * @return a list of all POIs laying within a rectangle
 	 */
-	public List<POI> getPOIsWithinRectangle(Coordinate upperLeft,
+	public Set<POI> getPOIsWithinRectangle(Coordinate upperLeft,
 			Coordinate bottomRight, float levelOfDetail) {
 
-		ArrayList<POI> poiList = new ArrayList<POI>();
-		if (activeCategoriesCount == 0) {
+		Set<POI> poiSet = new HashSet<POI>();
+		if (getNumActiveCategories() <= 0) {
 			locationDataIO = null;
-			return poiList;
+			return poiSet;
 		}
 
 		double minLat = bottomRight.getLatitude();
@@ -148,31 +130,30 @@ public class POIManager {
 				+ File.separatorChar + "locationData.pbf";
 		try {
 			if (locationDataIO == null) {
-				Log.d(TAG_POIMANAGER,
-						"ExtFile: " + Environment.getExternalStorageDirectory());
+				Log.d(TAG_POIMANAGER, "ExtFile: " + Environment.getExternalStorageDirectory());
 				locationDataIO = LocationDataIO.load(new File(Environment
 						.getExternalStorageDirectory().getAbsolutePath()
 						+ fileString));
-				Log.d(TAG_POIMANAGER, "location data io!"
-						+ locationDataIO.getPOIs().size());
+				Log.d(TAG_POIMANAGER, "location data io! " + locationDataIO.getPOIs().size());
 			}
 			if (locationDataIO != null) {
-				for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
-						.hasNext();) {
+				Iterator<POI> iter = locationDataIO.getPOIs().iterator();
+				while (iter.hasNext()) {
 					POI current = iter.next();
-					if ((current.getLatitude() >= minLat && current
-							.getLatitude() <= maxLat)
-							&& (current.getLongitude() >= minLon && current
-									.getLongitude() <= maxLon)) {
+					if (
+						current.getLatitude() >= minLat
+						&& current.getLatitude() <= maxLat
+						&& current.getLongitude() >= minLon
+						&& current.getLongitude() <= maxLon
+					) {
 						for (int i = 0; i < current.getPOICategories().length; i++) {
-							// pois vlt doppelt geaddet!? (performance)
-							if (activeCategories[current.getPOICategories()[i] - 1] != -1) {
-								poiList.add(current);
+							if (isCatActive[current.getPOICategories()[i]]) {
+								poiSet.add(current);
 							}
 						}
 					}
 				}
-				return poiList;
+				return poiSet;
 			}
 
 		} catch (IOException e) {
@@ -181,16 +162,24 @@ public class POIManager {
 			Log.d(TAG_POIMANAGER, e.toString());
 			System.gc();
 		}
-		return poiList;
+		return poiSet;
 		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}
 
+	private int getNumActiveCategories() {
+		int num = 0;
+		for (boolean cat : isCatActive) {
+			num += cat ? 1 : 0;
+		}
+		return num;
+	}
+
 	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying upon a route.
-	 * 
+	 *
 	 * @param routeInfo
 	 *            Route to search POIs in the near
 	 * @param levelOfDetail
@@ -201,7 +190,7 @@ public class POIManager {
 		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
 
-		if (activeCategoriesCount == 0) {
+		if (getNumActiveCategories() <= 0) {
 			locationDataIO = null;
 			return poiList;
 		}
@@ -250,7 +239,7 @@ public class POIManager {
 	// aus location poi gemacht
 	/**
 	 * Returns suggestions of locations searched by query.
-	 * 
+	 *
 	 * @param query
 	 *            query to search with
 	 * @return a list of three suggestions of locations
@@ -270,8 +259,7 @@ public class POIManager {
 				LocationDataIO locationDataIO = LocationDataIO.load(new File(
 						Environment.getExternalStorageDirectory()
 								.getAbsolutePath() + fileString));
-				Log.d(TAG_POIMANAGER, "location data io!"
-						+ locationDataIO.getPOIs().size());
+				Log.d(TAG_POIMANAGER, "location data io!" + locationDataIO.getPOIs().size());
 			}
 
 			if (locationDataIO != null) {
@@ -330,7 +318,7 @@ public class POIManager {
 	// android funktion zugegriffen wird
 	/**
 	 * Returns suggestions of locations searched by an address.
-	 * 
+	 *
 	 * @param address
 	 *            address to search with
 	 * @param context
@@ -360,37 +348,20 @@ public class POIManager {
 		return suggestions;
 	}
 
-	// changed boolean return to void
 	/**
-	 * Adds the ID of an active category.
-	 * 
-	 * @param id
-	 *            id of the category to activate
+	 * Toggle the active-status of the category with the given id
+	 *
+	 * @param id	id of the category to activate
+	 * @return the new status of the toggled category
 	 */
-	public void addActivePOICategory(int id) {
-		if (activeCategories[id - 1] == -1) {
-			activeCategories[id - 1] = id;
-			activeCategoriesCount++;
-		}
-	}
-
-	// changed boolean return to void
-	/**
-	 * Removes the ID of an active category.
-	 * 
-	 * @param id
-	 *            id of the category to deactivate
-	 */
-	public void removeActivePOICategory(int id) {
-		if (activeCategories[id - 1] == id) {
-			activeCategories[id - 1] = -1;
-			activeCategoriesCount--;
-		}
+	public boolean togglePOICategory(int id) {
+		Log.d(TAG_POIMANAGER, "Schalte POI-Category '" + context.getResources().getStringArray(R.array.POICat)[id] + "' auf " + !isCatActive[id]);
+		return isCatActive[id] = !isCatActive[id];
 	}
 
 	/**
 	 * Computes the difference between two strings.
-	 * 
+	 *
 	 * @param first
 	 *            first string to compare
 	 * @param second
@@ -426,15 +397,14 @@ public class POIManager {
 
 	/**
 	 * Return whether the active poi list is empty
-	 * 
+	 *
 	 * @return true is empty
 	 */
 	public boolean isEmpty() {
-		for (int i = 0; i < activeCategories.length; i++) {
-			if (activeCategories[i] == -1) {
-				return false;
-			}
+		boolean isEmpty = true;
+		for (boolean cat : isCatActive) {
+			isEmpty = isEmpty && !cat;
 		}
-		return true;
+		return isEmpty;
 	}
 }

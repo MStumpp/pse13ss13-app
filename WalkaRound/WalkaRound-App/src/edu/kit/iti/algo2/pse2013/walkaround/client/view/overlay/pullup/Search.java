@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
@@ -30,10 +31,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class shows the Search View
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
- * 
+ *
  */
 public class Search extends RelativeLayout {
 
@@ -43,8 +44,8 @@ public class Search extends RelativeLayout {
 	private LinearLayout addressSide;
 	private LinearLayout main;
 	private LinearLayout tabHost;
-	private Button waypointButton;
-	private Button routeButton;
+	private Button addressButton;
+	private Button poiButton;
 	private boolean selected = true;
 	private EditText zipEdit;
 	private EditText cityEdit;
@@ -55,13 +56,13 @@ public class Search extends RelativeLayout {
 	private LinearLayout result;
 	private int width;
 	private boolean isResult = false;
-	
+
 	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
 	private LinkedList<UpdateMapListener> ul = new LinkedList<UpdateMapListener>();
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -90,13 +91,13 @@ public class Search extends RelativeLayout {
 
 		main.addView(tabHost, tabHostParams);
 
-		waypointButton = new Button(context, attrs);
-		waypointButton.setText("Adressen");
-		waypointButton.setOnTouchListener(new AddressSideTabListener());
+		addressButton = new Button(context, attrs);
+		addressButton.setText(context.getString(R.string.addr_address));
+		addressButton.setOnTouchListener(new AddressSideTabListener());
 
-		routeButton = new Button(context, attrs);
-		routeButton.setText("POI");
-		routeButton.setOnTouchListener(new POISideTabListener());
+		poiButton = new Button(context, attrs);
+		poiButton.setText(context.getString(R.string.term_poi));
+		poiButton.setOnTouchListener(new POISideTabListener());
 
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -112,8 +113,8 @@ public class Search extends RelativeLayout {
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
 
-		tabHost.addView(waypointButton, waypointButtontParams);
-		tabHost.addView(routeButton, routeButtontParams);
+		tabHost.addView(addressButton, waypointButtontParams);
+		tabHost.addView(poiButton, routeButtontParams);
 
 		poiSide = new LinearLayout(context, attrs);
 		poiSide.setOrientation(LinearLayout.VERTICAL);
@@ -122,7 +123,7 @@ public class Search extends RelativeLayout {
 		addressSide = new LinearLayout(context, attrs);
 		addressSide.setOrientation(LinearLayout.VERTICAL);
 		addressSide.setVisibility(VISIBLE);
-		waypointButton.setTextColor(Color.RED);
+		addressButton.setTextColor(Color.RED);
 
 		LinearLayout.LayoutParams routeSiedeParam = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -153,7 +154,7 @@ public class Search extends RelativeLayout {
 		zipLayout.setOrientation(LinearLayout.HORIZONTAL);
 
 		TextView zip = new TextView(context);
-		zip.setText("ZIP");
+		zip.setText(context.getString(R.string.addr_zip_code));
 		zip.setTextSize(size.x / 21);
 		zip.setGravity(Gravity.CENTER);
 
@@ -170,7 +171,7 @@ public class Search extends RelativeLayout {
 		cityLayout.setOrientation(LinearLayout.HORIZONTAL);
 
 		TextView city = new TextView(context);
-		city.setText("City");
+		city.setText(context.getString(R.string.addr_city));
 		city.setTextSize(size.x / 21);
 		city.setGravity(Gravity.CENTER);
 
@@ -187,7 +188,7 @@ public class Search extends RelativeLayout {
 		streetLayout.setOrientation(LinearLayout.HORIZONTAL);
 
 		TextView street = new TextView(context);
-		street.setText("Street");
+		street.setText(context.getString(R.string.addr_street));
 		street.setTextSize(size.x / 21);
 		street.setGravity(Gravity.CENTER);
 
@@ -204,7 +205,7 @@ public class Search extends RelativeLayout {
 		numberLayout.setOrientation(LinearLayout.HORIZONTAL);
 
 		TextView number = new TextView(context);
-		number.setText("Number");
+		number.setText(context.getString(R.string.addr_housenumber));
 		number.setTextSize(size.x / 21);
 		number.setGravity(Gravity.CENTER);
 
@@ -226,7 +227,7 @@ public class Search extends RelativeLayout {
 
 		Button go = new Button(context, attrs);
 		go.setGravity(Gravity.CENTER);
-		go.setText("Go");
+		go.setText(context.getString(R.string.search));
 
 		go.setOnTouchListener(new GoAdressListener());
 
@@ -270,15 +271,15 @@ public class Search extends RelativeLayout {
 		cityEdit.setText("Karlsruhe");
 		streetEdit.setText("Yorckstr.");
 		numberEdit.setText("48");
-		freeText.setText("FreeText");
+		freeText.setHint(context.getString(R.string.query));
 	}
 
 	/**
 	 * POI side Tab Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class POISideTabListener implements OnTouchListener {
 
@@ -297,10 +298,10 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * Address side Tab Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class AddressSideTabListener implements OnTouchListener {
 
@@ -319,24 +320,24 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * set the tab
-	 * 
+	 *
 	 * @param b
 	 *            true if address Side
 	 */
 	private void setTab(boolean b) {
 		selected = b;
 		if (selected) {
-			waypointButton.setSelected(false);
-			waypointButton.setTextColor(Color.BLACK);
-			routeButton.setSelected(true);
-			routeButton.setTextColor(Color.RED);
+			addressButton.setSelected(false);
+			addressButton.setTextColor(Color.BLACK);
+			poiButton.setSelected(true);
+			poiButton.setTextColor(Color.RED);
 			poiSide.setVisibility(VISIBLE);
 			addressSide.setVisibility(GONE);
 		} else {
-			waypointButton.setSelected(true);
-			waypointButton.setTextColor(Color.RED);
-			routeButton.setSelected(false);
-			routeButton.setTextColor(Color.BLACK);
+			addressButton.setSelected(true);
+			addressButton.setTextColor(Color.RED);
+			poiButton.setSelected(false);
+			poiButton.setTextColor(Color.BLACK);
 			poiSide.setVisibility(GONE);
 			addressSide.setVisibility(VISIBLE);
 		}
@@ -358,10 +359,10 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * Go AddressListener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class GoAdressListener implements OnTouchListener {
 
@@ -423,10 +424,10 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * Go Query Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class GoQueryListener implements OnTouchListener {
 
@@ -474,7 +475,7 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * makes result alert
-	 * 
+	 *
 	 * @param text the showing text
 	 */
 	public void alertResult(String text) {
@@ -493,7 +494,7 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * POI Touch calls
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -530,7 +531,7 @@ public class Search extends RelativeLayout {
 
 	/**
 	 * Location Touch
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *

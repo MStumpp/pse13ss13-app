@@ -8,31 +8,31 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
  */
 public class Category {
 
-	public static final int POI_BARS_AND_PUBS = 1;
+	public static final int POI_BARS_AND_PUBS = 0;
 
-	public static final int POI_CINEMA = 2;
+	public static final int POI_CINEMA = 1;
 
-	public static final int POI_CLUBS_AND_NIGHTCLUBS = 3;
+	public static final int POI_CLUBS_AND_NIGHTCLUBS = 2;
 
-	public static final int POI_FAST_FOOD = 4;
+	public static final int POI_FAST_FOOD = 3;
 
-	public static final int POI_FOOD = 5;
+	public static final int POI_FOOD = 4;
 
-	public static final int POI_MUSEUM = 6;
+	public static final int POI_MUSEUM = 5;
 
-	public static final int POI_PUBLIC_TRANSPORTATION = 7;
+	public static final int POI_PUBLIC_TRANSPORTATION = 6;
 
-	public static final int POI_SHOP = 8;
+	public static final int POI_SHOP = 7;
 
-	public static final int POI_SLEEPING_ACCOMODATIONS = 9;
+	public static final int POI_SLEEPING_ACCOMODATIONS = 8;
 
-	public static final int POI_SUPERMARKET = 10;
+	public static final int POI_SUPERMARKET = 9;
 
-	public static final int POI_THEATRE = 11;
+	public static final int POI_THEATRE = 10;
 
-	public static final int POI_CHURCHES_AND_MONUMENTS = 12;
+	public static final int POI_CHURCHES_AND_MONUMENTS = 11;
 
-	public static final int POI_CASTLES = 13;
+	public static final int POI_CASTLES = 12;
 
 	public static final int AREA_FOREST = 100;
 

@@ -109,6 +109,7 @@ public class LocationDataIO {
      * Loads and returns a LocationDataIO object from a given file.
      *
      * @param source Location of source file in file system.
+     * @return the read LocationDataIO-object
      * @throws java.io.IOException
      */
 	public static LocationDataIO load(File source) throws IOException {

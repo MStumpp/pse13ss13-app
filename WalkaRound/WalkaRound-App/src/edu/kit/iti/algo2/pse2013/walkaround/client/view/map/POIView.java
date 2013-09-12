@@ -2,6 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -30,7 +31,7 @@ public class POIView extends RelativeLayout {
 	private BoundingBox coorBox;
 	private static int poiDrawable = R.drawable.poi;
 
-	private List<POI> poiList;
+	private Set<POI> poiList;
 	private LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
 
 	/**
