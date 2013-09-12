@@ -184,7 +184,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		this.findViewById(R.id.mapviewmain).invalidate();
 		
 		progress.setVisibility(View.GONE);
-		POIManager.getInstance(this).setOnProgressListener(this);
 		
 	}
 	

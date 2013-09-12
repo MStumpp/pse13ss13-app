@@ -85,14 +85,14 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
 		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-		this.getRootView().setBackgroundColor(Color.GRAY);
+		// this.getRootView().setBackgroundColor(Color.GRAY);
 
 		main.height = size.y;
 		main.width = size.x;
 
 		this.setLayoutParams(main);
-		this.nullSize = size.y - size.x / 4 + 2;
-		this.setY(size.y - size.x / 4 + 2);
+		this.nullSize = size.y - size.x / 4 + 7;
+		this.setY(size.y - size.x / 4 + 7);
 
 		// statische Menü
 
@@ -102,16 +102,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		poi = new ImageView(context);
 		search = new ImageView(context);
 
-		routing.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.list));
-		star.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.favorite));
-		roundtrip.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.rundkurs));
-		poi.setImageDrawable(context.getResources()
-				.getDrawable(R.drawable.flag));
-		search.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.loupe));
+		this.unsetActiveMenu();
 
 		routing.setTag(CONTENT_ROUTING);
 		star.setTag(CONTENT_FAVORITE);
@@ -136,7 +127,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		staticL.setOrientation(LinearLayout.VERTICAL);
 		staticLParams.width = size.x;
 		staticLParams.height = size.y;
-		
+
 		this.addView(staticL, staticLParams);
 
 		LinearLayout lineOne = new LinearLayout(context, attrs);
@@ -144,60 +135,56 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		lineOne.setOrientation(LinearLayout.HORIZONTAL);
 		lineOne.setGravity(Gravity.CENTER);
-		
+
 		staticL.addView(lineOne, lineOneLParams);
-		
+
 		LinearLayout.LayoutParams paramsRouting = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		//paramsRouting.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		//		RelativeLayout.TRUE);
+		// paramsRouting.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+		// RelativeLayout.TRUE);
 		paramsRouting.width = size.x / 5;
 		paramsRouting.height = size.x / 5;
-		//paramsRouting.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-
+		// paramsRouting.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsStar = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		//paramsStar
-		//		.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-		//paramsStar.addRule(RelativeLayout.RIGHT_OF, 1);
+		// paramsStar
+		// .addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+		// paramsStar.addRule(RelativeLayout.RIGHT_OF, 1);
 		paramsStar.width = size.x / 5;
 		paramsStar.height = size.x / 5;
-		//paramsStar.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-
+		// paramsStar.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsRoundtrip = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		//paramsRoundtrip.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		//		RelativeLayout.TRUE);
-		//paramsRoundtrip.addRule(RelativeLayout.RIGHT_OF, 2);
+		// paramsRoundtrip.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+		// RelativeLayout.TRUE);
+		// paramsRoundtrip.addRule(RelativeLayout.RIGHT_OF, 2);
 		paramsRoundtrip.width = size.x / 5;
 		paramsRoundtrip.height = size.x / 5;
-		//paramsRoundtrip.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-
+		// paramsRoundtrip.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsPOI = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		//paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-		//paramsPOI.addRule(RelativeLayout.RIGHT_OF, 3);
+		// paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+		// RelativeLayout.TRUE);
+		// paramsPOI.addRule(RelativeLayout.RIGHT_OF, 3);
 		paramsPOI.width = size.x / 5;
 		paramsPOI.height = size.x / 5;
-		//paramsPOI.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-
+		// paramsPOI.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsSearch = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		//paramsSearch.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		//		RelativeLayout.TRUE);
-		//paramsSearch.addRule(RelativeLayout.RIGHT_OF, 4);
+		// paramsSearch.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+		// RelativeLayout.TRUE);
+		// paramsSearch.addRule(RelativeLayout.RIGHT_OF, 4);
 		paramsSearch.width = size.x / 5;
 		paramsSearch.height = size.x / 5;
-		//paramsSearch.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
-
+		// paramsSearch.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		regulator = new ImageView(context, attrs);
 		regulator.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.pikto_rechts));
+				R.drawable.closearrows));
 		regulator.setRotation(90);
 		regulator.setTag(-1);
 		regulator.setId(5);
@@ -205,7 +192,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 		LinearLayout.LayoutParams paramsRegulator = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		//paramsRegulator.addRule(RelativeLayout.BELOW, 1);
+		// paramsRegulator.addRule(RelativeLayout.BELOW, 1);
 		paramsRegulator.gravity = Gravity.CENTER_HORIZONTAL;
 
 		lineOne.addView(routing, paramsRouting);
@@ -213,9 +200,9 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		lineOne.addView(roundtrip, paramsRoundtrip);
 		lineOne.addView(poi, paramsPOI);
 		lineOne.addView(search, paramsSearch);
-		
+
 		staticL.addView(regulator, paramsRegulator);
-			
+		staticL.getRootView().setBackgroundColor(Color.BLACK);
 
 		// content = new RelativeLayout(context, attrs);
 		LayoutParams paramsContent = new LayoutParams(
@@ -261,6 +248,14 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		roundtripMenu.registerGoToMapListener(this);
 	}
 
+	public void unsetActiveMenu() {
+		routing.setImageResource(R.drawable.list);
+		star.setImageResource(R.drawable.staticstar);
+		roundtrip.setImageResource(R.drawable.rundkurs);
+		poi.setImageResource(R.drawable.staticflag);
+		search.setImageResource(R.drawable.loupe);
+	}
+
 	/**
 	 * change the content of the pullup
 	 * 
@@ -271,6 +266,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		Log.d(TAG, "Content Change");
 		infoMenu.stopSpeaking();
 		// TextToSpeechUtility.getInstance().stopSpeaking();
+		this.unsetActiveMenu();
 
 		switch (id) {
 		case PullUpView.CONTENT_ROUTING:
@@ -286,11 +282,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.GONE);
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
+				this.routing.setImageResource(R.drawable.listactive);
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 			break;
@@ -307,11 +305,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.GONE);
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
+				this.star.setImageResource(R.drawable.staticstaractive);
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 
@@ -329,11 +329,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.GONE);
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
+				this.roundtrip.setImageResource(R.drawable.rundkursactive);
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 
@@ -350,11 +352,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.GONE);
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
+				this.poi.setImageResource(R.drawable.staticflagactive);
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 
@@ -372,11 +376,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.GONE);
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
+				this.search.setImageResource(R.drawable.loupeactive);
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 
@@ -394,11 +400,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.VISIBLE);
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
+				this.unsetActiveMenu();
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 
@@ -417,11 +425,13 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				infoMenu.setVisibility(View.GONE);
 				optionMenu.setVisibility(View.VISIBLE);
 				// -----------------------------------
+				this.unsetActiveMenu();
 
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
 					this.pullDown();
+					pullUpContent = -1;
 				}
 			}
 
@@ -462,6 +472,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		infoMenu.setVisibility(View.VISIBLE);
 		optionMenu.setVisibility(View.GONE);
 		// -----------------------------------
+		this.unsetActiveMenu();
 		this.pullUp();
 		infoMenu.update(poi);
 	}
@@ -504,7 +515,9 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 			int action = event.getAction();
 			if (action == MotionEvent.ACTION_DOWN) {
-				if (view.equals(routing) || view.equals(star) || view.equals(roundtrip) || view.equals(search) || view.equals(poi)) {
+				if (view.equals(routing) || view.equals(star)
+						|| view.equals(roundtrip) || view.equals(search)
+						|| view.equals(poi)) {
 					int id = Integer.parseInt(view.getTag().toString());
 					changeView(id);
 					if (getY() != 0) {
@@ -516,6 +529,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 			return false;
 		}
 	}
+
 	/**
 	 * Static Touch Listener
 	 * 
@@ -538,7 +552,6 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 			return false;
 		}
 	}
-	
 
 	/**
 	 * Implements the Animation listener of the transaction of the pullupview
@@ -558,6 +571,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		public void onAnimationEnd(Animation anim) {
 			setY(height);
 			clearAnimation();
+			unsetActiveMenu();
 		}
 
 		public void onAnimationRepeat(Animation arg0) {
