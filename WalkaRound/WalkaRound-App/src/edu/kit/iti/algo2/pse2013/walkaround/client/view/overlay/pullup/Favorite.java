@@ -29,7 +29,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class show the Favorite Menu
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
  *
@@ -47,15 +47,17 @@ public class Favorite extends RelativeLayout {
 	private boolean selected = true;
 	private int width;
 	private int height;
+	private Context context;
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context the context of the app
 	 * @param attrs the needed attributes
 	 */
 	public Favorite(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.context = context;
 
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 		width = size.x;
@@ -66,13 +68,13 @@ public class Favorite extends RelativeLayout {
 
 		ScrollView scrollWay = new ScrollView(context);
 		ScrollView scrollRoute = new ScrollView(context);
-		
+
 		LinearLayout.LayoutParams mainParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 		this.addView(main, mainParams);
 
-		
+
 		tabHost = new LinearLayout(context, attrs);
 		tabHost.setOrientation(LinearLayout.HORIZONTAL);
 		LinearLayout.LayoutParams tabHostParams = new LinearLayout.LayoutParams(
@@ -82,7 +84,7 @@ public class Favorite extends RelativeLayout {
 		main.addView(tabHost, tabHostParams);
 		main.addView(scrollWay);
 		main.addView(scrollRoute);
-		
+
 		waypointButton = new Button(context, attrs);
 		waypointButton.setText("Orte");
 		waypointButton.setOnTouchListener(new ToogleTabListener());
@@ -132,7 +134,7 @@ public class Favorite extends RelativeLayout {
 
 	/**
 	 * A Listener wich toogles the tabs
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -182,7 +184,7 @@ public class Favorite extends RelativeLayout {
 		Log.d(TAG, "updateFavorite");
 		routeSide.removeAllViews();
 		waypointSide.removeAllViews();
-		
+
 		List<String> location = FavoriteManager.getInstance(getContext())
 				.getNamesOfFavoriteLocations();
 		// Category
@@ -215,7 +217,7 @@ public class Favorite extends RelativeLayout {
 			del.setImageResource(R.drawable.delete);
 			del.setScaleType(ImageView.ScaleType.FIT_XY);
 			del.setOnTouchListener(new DeleteWaypointListener());
-			
+
 			LinearLayout linear = new LinearLayout(getContext());
 			linear.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -223,7 +225,7 @@ public class Favorite extends RelativeLayout {
 			linear.addView(b, param);
 			linear.addView(del, delParam);
 		}
-		
+
 		List<String> routes = FavoriteManager.getInstance(getContext())
 				.getNamesOfFavoriteRoutes();
 		// Category
@@ -247,16 +249,16 @@ public class Favorite extends RelativeLayout {
 
 			LinearLayout linear = new LinearLayout(getContext());
 			linear.setOrientation(LinearLayout.HORIZONTAL);
-			
+
 			routeSide.addView(linear, lineParam);
 			linear.addView(b, param);
 			linear.addView(del, delParam);
 		}
 	}
-	
+
 	/**
 	 * This class listener for a touch on a location
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -264,7 +266,7 @@ public class Favorite extends RelativeLayout {
 	private class FavoriteLocationListener implements OnTouchListener {
 
 		private View view;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
@@ -272,10 +274,10 @@ public class Favorite extends RelativeLayout {
 				this.view = view;
 				this.alert();
 			}
-			
+
 			return false;
 		}
-		
+
 		/**
 		 * makes a waypoint alert
 		 */
@@ -289,7 +291,7 @@ public class Favorite extends RelativeLayout {
 						public void onClick(DialogInterface dialog, int which) {
 							Location l = FavoriteManager.getInstance(getContext()).getFavoriteLocation(view.getTag().toString());
 							Waypoint w = new Waypoint(l.getLatitude(), l.getLongitude(), l.getName(), l.getAddress());
-							RouteController.getInstance().addWaypoint(w);
+							RouteController.getInstance().addWaypoint(context, w);
 						}
 					});
 			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
@@ -299,7 +301,7 @@ public class Favorite extends RelativeLayout {
 					});
 			alertDialog.show();
 		}
-		
+
 	}
 
 	/**
@@ -311,7 +313,7 @@ public class Favorite extends RelativeLayout {
 	private class FavoriteRouteListener implements OnTouchListener {
 
 		private View view;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
@@ -344,9 +346,9 @@ public class Favorite extends RelativeLayout {
 					});
 			alertDialog.show();
 		}
-		
+
 	}
-	
+
 	/**
 	 * This class listen for a delete route event
 	 * @author Ludwig Biermann
@@ -356,19 +358,19 @@ public class Favorite extends RelativeLayout {
 	private class DeleteRouteListener implements OnTouchListener {
 
 		private String id;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			
+
 			if(action == MotionEvent.ACTION_UP) {
 				id = view.getTag().toString();
 				this.alert();
 			}
-			
+
 			return false;
 		}
-		
+
 		/**
 		 * makes a alert
 		 */
@@ -402,19 +404,19 @@ public class Favorite extends RelativeLayout {
 	private class DeleteWaypointListener implements OnTouchListener {
 
 		private String id;
-		
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			
+
 			if(action == MotionEvent.ACTION_UP) {
 				id = view.getTag().toString();
 				this.alert();
 			}
-			
+
 			return false;
 		}
-		
+
 		/**
 		 * makes a alert
 		 */

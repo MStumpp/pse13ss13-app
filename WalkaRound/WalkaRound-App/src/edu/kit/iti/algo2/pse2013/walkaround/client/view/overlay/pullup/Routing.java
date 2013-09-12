@@ -216,7 +216,7 @@ public class Routing extends RelativeLayout {
 
 			delete.setImageResource(R.drawable.delete);
 			save.setImageResource(R.drawable.favorite);
-			text.setText(w.getName() + " " + w.getId());
+			text.setText(w.getName());
 
 			delete.setTag(w.getId());
 			save.setTag(w.getId());
@@ -285,7 +285,7 @@ public class Routing extends RelativeLayout {
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle(context.getString(R.string.dialog_header_delete));
+			alertDialog.setTitle(context.getString(R.string.dialog_header_delete, context.getString(R.string.term_waypoint)));
 			alertDialog.setMessage(context.getString(R.string.dialog_text_delete));
 			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {

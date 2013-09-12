@@ -27,6 +27,7 @@
 	<string name="option_add">Add</string>
 	<string name="option_cancel">Cancel</string>
 	<string name="option_no">No</string>
+	<string name="option_ok" translatable="no">OK</string>
 	<string name="option_yes">Yes</string>
 	<string name="query">Query</string>
 	<string name="reset">reset</string>
@@ -43,4 +44,5 @@
 	<string name="term_boomerang">Boomerangpoint</string>
 	<string name="term_waypoint">Waypoint</string>
 	<string name="term_roundtrip">Roundtrip</string>
+	<string name="unknown_location">Unknown location</string>
 </resources>

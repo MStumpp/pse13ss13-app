@@ -53,6 +53,8 @@ public class Search extends RelativeLayout {
 	private EditText numberEdit;
 	private EditText freeText;
 
+	private Context context;
+
 	private LinearLayout result;
 	private int width;
 	private boolean isResult = false;
@@ -70,6 +72,7 @@ public class Search extends RelativeLayout {
 	 */
 	public Search(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.context = context;
 
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 
@@ -517,7 +520,7 @@ public class Search extends RelativeLayout {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				RouteController.getInstance().addWaypoint(
+				RouteController.getInstance().addWaypoint(context,
 						new Waypoint(poi.getLatitude(), poi.getLongitude(), poi
 								.getName()));
 				BoundingBox.getInstance(getContext()).setCenter(
@@ -554,7 +557,7 @@ public class Search extends RelativeLayout {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				RouteController.getInstance().addWaypoint(
+				RouteController.getInstance().addWaypoint(context,
 						new Waypoint(location.getLatitude(), location
 								.getLongitude(), location.getName()));
 

@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
@@ -35,6 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.Geocoder;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
@@ -276,50 +276,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	}
 
-	private static String DEFAULT_NAME = "Waypoint";
-	private int waypointCounter = 0;
-
 	/**
 	 * Helper Method to create Alert
 	 * @param next
 	 */
 	public void addWaypointAlert(final Coordinate next) {
-		Log.d(TAG, "ALERT");
-
-		final EditText text = new EditText(this);
-
-		text.setText(DEFAULT_NAME + " " + waypointCounter);
-		text.selectAll();
-		AlertDialog alert = new AlertDialog.Builder(this).create();
-		alert.setTitle("Neuer Wegpunkt");
-		alert.setMessage("Wie soll ihr neuer Wegpunkt heißen?");
-		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_add),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-
-						if (!text.getText().toString().trim().isEmpty()) {
-							RouteController.getInstance().addWaypoint(
-									new Waypoint(next.getLatitude(), next
-											.getLongitude(), text.getText()
-											.toString()));
-							waypointCounter++;
-						} else {
-							dialog.cancel();
-						}
-					}
-				});
-
-		alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.option_cancel),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(final DialogInterface dialog,
-							final int id) {
-						dialog.cancel();
-					}
-				});
-		alert.setView(text);
-		alert.show();
+		Log.d(TAG, "Add waypoint!");
+		Waypoint wp = new Waypoint(next.getLatitude(), next.getLongitude(), getString(R.string.unknown_location));
+		RouteController.getInstance().addWaypoint(getApplicationContext(), wp);
 	}
 
 	public class MapListener implements OnTouchListener {
@@ -422,9 +386,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							new DisplayCoordinate(user.getX(), user.getY()),
 							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
 
-			RouteController.getInstance().addWaypoint(
-					new Waypoint(next.getLatitude(), next.getLongitude(),
-							"PLACEHOLDER"));
+			RouteController.getInstance().addWaypoint(getApplicationContext(), new Waypoint(next.getLatitude(), next.getLongitude(),""));
 			try {
 				Thread.sleep(ROUNDTRIP_TIME);
 			} catch (InterruptedException e) {

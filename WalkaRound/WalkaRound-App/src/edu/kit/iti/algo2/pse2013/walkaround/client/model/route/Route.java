@@ -3,10 +3,12 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import android.content.Context;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.Geocoder;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -114,12 +116,12 @@ public class Route implements RouteInfo {
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 * @param w the waypoint which should be added
 	 */
-	public void addWaypoint(Waypoint w) {
-			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w));
-			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
+	public void addWaypoint(Context context, Waypoint w) {
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w));
+		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
 
-			// TODO:
-			Coordinate normalizedCoordinate = null;
+		// TODO:
+		Coordinate normalizedCoordinate = null;
 		if (w != null) {
 			try {
 				normalizedCoordinate = CoordinateNormalizer.normalizeCoordinate(w, (int) BoundingBox.getInstance().getLevelOfDetail());
@@ -130,27 +132,30 @@ public class Route implements RouteInfo {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			Geocoder geo = new Geocoder();
+			geo.reverseGeocode(context, w);
 
 			if (normalizedCoordinate != null) {
 				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint normalized");
 				w.setPosition(normalizedCoordinate);
 			}
+
+			if (this.routeCoordinates.size() != 0) {
+				Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w));
+				RouteInfo routeExtension;
+				routeExtension = this.computeShortestPath(this.getEnd(), w);
+
+				Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> addingRoute with %d Coordinates", w, routeExtension.getCoordinates().size()));
+				this.addRoute(routeExtension);
+			} else {
+				Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route ");
+				this.routeCoordinates.add(w);
+			}
+
+			this.setActiveWaypoint(w);
+			this.cleanRouteOfDuplicateCoordinatePairs();
+
 		}
-
-		if (this.routeCoordinates.size() != 0) {
-			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w));
-			RouteInfo routeExtension;
-			routeExtension = this.computeShortestPath(this.getEnd(), w);
-
-			Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> addingRoute with %d Coordinates", w, routeExtension.getCoordinates().size()));
-			this.addRoute(routeExtension);
-		} else {
-			Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route ");
-			this.routeCoordinates.add(w);
-		}
-
-		this.setActiveWaypoint(w);
-		this.cleanRouteOfDuplicateCoordinatePairs();
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) - new size of route: %d", w, this.routeCoordinates.size()));
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD END", w));
 	}
@@ -271,7 +276,7 @@ public class Route implements RouteInfo {
 	 * Moves the active waypoint to the position of the given coordinate. OLD VERSION!
 	 * @param coord
 	 */
-	public void moveActiveWaypointComputeOnly(final Coordinate coord) {
+	public void moveActiveWaypointComputeOnly(final Context context, final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate " + coord
 				+ ") METHOD START ");
 
@@ -307,11 +312,13 @@ public class Route implements RouteInfo {
 				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+				new Geocoder().reverseGeocode(context, activeWaypoint);
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			} else if (newRoutePastActiveWaypoint != null && newRoutePastActiveWaypoint.getCoordinates().size() > 0) {
 				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getFirst();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
+				new Geocoder().reverseGeocode(context, activeWaypoint);
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			}
 
