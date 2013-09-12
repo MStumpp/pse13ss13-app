@@ -18,7 +18,6 @@ public class ArrowNaviOutput implements NaviOutputInterface {
 	public void deliverOutput(double turnAngle, double distToTurn) {
 		// TODO
 		// HeadUpView.ARROW_RIGHT
+
 	}
-
-
 }

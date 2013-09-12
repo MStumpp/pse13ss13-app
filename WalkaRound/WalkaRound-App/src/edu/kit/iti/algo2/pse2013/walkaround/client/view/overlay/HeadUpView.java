@@ -14,10 +14,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 
 /**
  * This class shows the headUpView
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
- * 
+ *
  */
 public class HeadUpView extends RelativeLayout {
 	private final static String TAG = HeadUpView.class.getSimpleName();
@@ -41,7 +41,7 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -75,7 +75,7 @@ public class HeadUpView extends RelativeLayout {
 		plus.setId(2);
 
 		RelativeLayout.LayoutParams paramsOption = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsOption.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
 				RelativeLayout.TRUE);
 		paramsOption.addRule(RelativeLayout.ALIGN_PARENT_TOP,
@@ -87,7 +87,7 @@ public class HeadUpView extends RelativeLayout {
 		this.addView(option, paramsOption);
 
 		RelativeLayout.LayoutParams paramsPlus = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsOption.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 				RelativeLayout.TRUE);
 		paramsPlus.addRule(RelativeLayout.BELOW, 1);
@@ -98,7 +98,7 @@ public class HeadUpView extends RelativeLayout {
 		this.addView(plus, paramsPlus);
 
 		RelativeLayout.LayoutParams paramsMinus = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsOption.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 				RelativeLayout.TRUE);
 		paramsMinus.addRule(RelativeLayout.BELOW, 2);
@@ -109,7 +109,7 @@ public class HeadUpView extends RelativeLayout {
 		this.addView(minus, paramsMinus);
 
 		RelativeLayout.LayoutParams paramsUserLock = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsUserLock.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
 				RelativeLayout.TRUE);
 		paramsUserLock.addRule(RelativeLayout.ALIGN_PARENT_TOP,
@@ -128,11 +128,12 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * Ein Listener der auf eine Vergrößern Eingabe wartet.
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class ZoomPlusListener implements OnTouchListener {
+		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			if (view.equals(plus)) {
 				Log.d(TAG, "plus i pressed");
@@ -146,7 +147,7 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * sets the position lock
-	 * 
+	 *
 	 * @param lock
 	 *            true is locked
 	 */
@@ -162,10 +163,10 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * Ein Listener der auf eine Verkleinern Eingabe wartet.
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class ZoomMinusListener implements OnTouchListener {
 		@Override
@@ -182,10 +183,10 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * user Lock Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class UserLockListener implements OnTouchListener {
 		@Override
@@ -202,10 +203,10 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * Option Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class OptionListener implements OnTouchListener {
 		@Override
@@ -223,7 +224,7 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * notify all listener
-	 * 
+	 *
 	 * @param delta
 	 *            the delta
 	 */
@@ -236,7 +237,7 @@ public class HeadUpView extends RelativeLayout {
 
 	/**
 	 * notify Listener
-	 * 
+	 *
 	 * @param id
 	 *            the od
 	 */

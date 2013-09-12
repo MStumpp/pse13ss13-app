@@ -20,14 +20,12 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
@@ -155,7 +153,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		this.findViewById(R.id.mapviewmain).requestLayout();
 		this.findViewById(R.id.mapviewmain).invalidate();
-		
+
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
 		pullUpView.registerComputeRoundtripListener(this);
@@ -177,18 +175,18 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		this.findViewById(R.id.mapviewmain).requestLayout();
 		this.findViewById(R.id.mapviewmain).invalidate();
-		
+
 		progress.setVisibility(View.GONE);
-		
+
 	}
-	
+
 	class ProgressTouchListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
 			return true;
 		}
-		
+
 	}
 
 	private class MapGestureListener implements OnGestureListener {
@@ -283,6 +281,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	/**
 	 * Helper Method to create Alert
+	 * @param next
 	 */
 	public void addWaypointAlert(final Coordinate next) {
 		Log.d(TAG, "ALERT");
@@ -294,7 +293,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle("Neuer Wegpunkt");
 		alert.setMessage("Wie soll ihr neuer Wegpunkt heißen?");
-		alert.setButton(DialogInterface.BUTTON_POSITIVE, "Hinzufügen",
+		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_add),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -311,7 +310,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					}
 				});
 
-		alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Abbrechen",
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.option_cancel),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
@@ -376,8 +375,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle("GPS Signal");
-		alert.setMessage("Ihr GPS ist nicht aktiviert. Soll es aktiviert werden?");
-		alert.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+		alert.setMessage(getString(R.string.dialog_text_gps_inactive));
+		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_yes),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -386,7 +385,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					}
 				});
 
-		alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.option_no),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
@@ -445,9 +444,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			RouteController.getInstance().addRoundtrip(profile, length);
 		} else {
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-			alertDialog.setTitle("Fehlender AusgangsPunkt");
-			alertDialog
-					.setMessage("Bitte setzten Sie zuerst einen Ausgangspunkt auf der Karte.");
+			alertDialog.setTitle(getString(R.string.dialog_header_add, getString(R.string.term_boomerang)));
+			alertDialog.setMessage(getString(R.string.dialog_text_boomerang));
 			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
 						@Override
@@ -604,9 +602,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		Log.d(TAG, "ALERT");
 
 		AlertDialog alert = new AlertDialog.Builder(this).create();
-		alert.setTitle("Wifi Signal");
-		alert.setMessage("Es konnte keine Verbindung zum Internet festgestellt werden.");
-		alert.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+		alert.setTitle(getString(R.string.dialog_header_wifi));
+		alert.setMessage(getString(R.string.dialog_text_wifi));
+		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_yes),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -615,7 +613,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					}
 				});
 
-		alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.option_no),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
@@ -626,7 +624,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		alert.show();
 	}
-	
+
 	@Override
 	public void showProgress(){
 		Log.d(TAG, "show progress");
