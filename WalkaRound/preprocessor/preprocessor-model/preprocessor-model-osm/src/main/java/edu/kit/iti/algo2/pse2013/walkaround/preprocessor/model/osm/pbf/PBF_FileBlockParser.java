@@ -14,7 +14,6 @@ import crosby.binary.Osmformat.Node;
 import crosby.binary.Osmformat.PrimitiveGroup;
 import crosby.binary.Osmformat.Relation;
 import crosby.binary.Osmformat.Way;
-import crosby.binary.file.BlockReaderAdapter;
 import crosby.binary.file.FileBlockPosition;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMNode;
 import edu.kit.iti.algo2.pse2013.walkaround.preprocessor.model.osm.mapdata.OSMWay;
@@ -24,7 +23,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.LocationDataIO
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.GraphDataIO;
 
-public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdapter {
+public class PBF_FileBlockParser extends BinaryParser {
 	/**
 	 * In this state all nodes that are part of a way are added to {@link this#interestingNodes}.
 	 */
@@ -60,13 +59,24 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 	private short state = STATE_FIND_NODES_FOR_WAYS;
 	private static int readBlocks = 0;
 
+	private static StringBuffer blockString = new StringBuffer();
+	private static long lastPrintTime = 0;
+	private static final int PRINT_PAUSE_IN_MS = 500;
+
 	public PBF_FileBlockParser(GraphDataIO graphData, LocationDataIO locationData) {
 		this.graphData = graphData;
 		this.locationData = locationData;
 	}
 
+	public void printBlockString() {
+		System.out.print(blockString);
+		blockString.setLength(0);
+		lastPrintTime = System.currentTimeMillis();
+	}
+
 	@Override
 	public void complete() {
+		printBlockString();
 		System.out.println();
 		readBlocks = 0;
 		if (state == STATE_FIND_NODES_FOR_WAYS) {
@@ -81,32 +91,37 @@ public class PBF_FileBlockParser extends BinaryParser implements BlockReaderAdap
 		}
 		state++;
 	}
+	@Override
 	public boolean skipBlock(FileBlockPosition blockPos) {
 		return false;
 	}
 
 	@Override
 	protected void parse(HeaderBlock block) {
-		logger.info("Started parsing of file:\n\tEach character represents roughly 8000 osm-elements.\n\t\t- D for DenseNodes\n\t\t- N for Nodes\n\t\t- W for Ways\n\t\t- R for Relations");
+		logger.info("Started parsing of file:\n\tEach character represents roughly 8000 osm-elements. Each line has 100 characters, except the last one which can consist of less.\n\t\t- D for DenseNodes\n\t\t- N for Nodes\n\t\t- W for Ways\n\t\t- R for Relations");
 	}
 
+	@Override
 	public void parse(Osmformat.PrimitiveBlock block) {
 		super.parse(block);
 		for (PrimitiveGroup group : block.getPrimitivegroupList()) {
 			readBlocks++;
 			if (group.getDense() != null && group.getDense().getIdCount() >= 1) {
-				System.out.print('D');
+				blockString.append('D');
 			} else if (group.getNodesList() != null && group.getNodesList().size() >= 1) {
-				System.out.print('N');
+				blockString.append('N');
 			} else if (group.getWaysList() != null && group.getWaysList().size() >= 1) {
-				System.out.print('W');
+				blockString.append('W');
 			} else if (group.getRelationsList() != null && group.getRelationsList().size() >= 1) {
-				System.out.print('R');
+				blockString.append('R');
 			} else {
 				readBlocks--;
 			}
-			if (readBlocks % 50 == 0) {
-				System.out.println();
+			if (readBlocks % 100 == 0) {
+				blockString.append('\n');
+			}
+			if (System.currentTimeMillis() - lastPrintTime > PRINT_PAUSE_IN_MS) {
+				printBlockString();
 			}
 		}
 	}

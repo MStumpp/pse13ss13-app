@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLStreamException;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -33,13 +32,13 @@ public class WikipediaPreprocessor {
 	 * and a link to an image if available.
 	 *
 	 * @param locationData
-	 * @throws IOException
-	 * @throws XMLStreamException
 	 */
 	public static void preprocessWikipediaInformation(LocationDataIO locationData) {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setFeature("http://xml.org/sax/features/validation", false);
+			factory.setFeature("http://apache.org/xml/features/continue-after-fatal-error", true);
+			factory.setFeature("http://apache.org/xml/features/continue-after-fatal-error", true);
 			SAXParser parser = factory.newSAXParser();
 
 			Iterator<POI> iter = locationData.getPOIs().iterator();
@@ -47,6 +46,7 @@ public class WikipediaPreprocessor {
 				POI current = iter.next();
 				if (current.getURL() != null) {
 					try {
+						System.out.print(current.getName());
 						URL url = current.getURL();
 						URLConnection connection = url.openConnection();
 						connection.connect();
@@ -62,8 +62,9 @@ public class WikipediaPreprocessor {
 						parser.parse(input, handler);
 						current.setTextInfo(handler.getFirstParagraphs());
 						current.setURL(handler.getImageURL());
+						System.out.print(" ✓\n");
 					} catch (SAXException e) {
-						e.printStackTrace();
+						logger.info(String.format("Schwerwiegender Syntaxfehler in %s! Wird ignoriert.", current.getURL().toExternalForm()));
 					} catch (IOException e) {
 						logger.info(current.getURL().toExternalForm() + " konnte nicht gelesen werden! Wird ignoriert.");
 					}
