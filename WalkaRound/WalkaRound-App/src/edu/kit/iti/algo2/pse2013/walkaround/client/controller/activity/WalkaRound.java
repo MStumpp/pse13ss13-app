@@ -35,6 +35,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
@@ -54,10 +55,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is the main Activity of WalkaRound. This class works like a controller.
- * 
+ *
  * @author Ludwig Biermann
  * @version 8.0
- * 
+ *
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
@@ -67,7 +68,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private MapView mapView;
 	private GestureDetector gestureDetector;
 	private BoundingBox coorBox;
-	// private TileFetcher tileFetcher;
 	private HeadUpView headUpView;
 	private static String TAG = WalkaRound.class.getSimpleName();
 	private boolean userLock = true;
@@ -112,16 +112,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			wifiAlert();
 		}
 
-		// BoundingBox & tiles
-
-		// this.tileFetcher = TileFetcher.getInstance();
-
 		// MapView
 
 		mapView = (MapView) findViewById(R.id.mapView);
 		gestureDetector = new GestureDetector(this.getApplicationContext(),
 				new MapGestureListener());
-		// this.tileFetcher.requestTiles(coorBox, mapView);
 
 		// HeadUpView
 		headUpView = (HeadUpView) findViewById(R.id.headUpView);
@@ -154,7 +149,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		waypointView = (WaypointView) this.findViewById(R.id.waypointView);
 
 		mapView.computeParams();
-		// tileFetcher.requestTiles(coorBox, mapView);
+		TileFetcher.getInstance().requestTiles(coorBox, mapView);
 		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
 		pullUpView.bringToFront();
 
@@ -282,7 +277,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		}
 
 	}
-	
+
 	private static String DEFAULT_NAME = "Waypoint";
 	private int waypointCounter = 0;
 
@@ -293,7 +288,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		Log.d(TAG, "ALERT");
 
 		final EditText text = new EditText(this);
-		
+
 		text.setText(DEFAULT_NAME + " " + waypointCounter);
 		text.selectAll();
 		AlertDialog alert = new AlertDialog.Builder(this).create();
