@@ -79,18 +79,19 @@ public class RouteProcessing {
 			this.url = url;
 		}
 
+		@Override
 		public void run() {
 			InputStream is;
 			try {
 				HttpParams httpParameters = new BasicHttpParams();
 				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
 				HttpConnectionParams.setSoTimeout(httpParameters, timeout);
-				
+
 				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 				HttpPost httpPost = url;
 				httpPost.setHeader("Accept", "application/json");
 				httpPost.setHeader("Content-Type", "application/json");
-				
+
 
 				String requestAsJSON = gson.toJson(objectToSend);
 
@@ -99,8 +100,8 @@ public class RouteProcessing {
 				httpPost.setEntity(new StringEntity(requestAsJSON));
 
 				HttpResponse httpResponse = httpClient.execute(httpPost);
-				
-				
+
+
 				HttpEntity httpEntity = httpResponse.getEntity();
 				is = httpEntity.getContent();
 
@@ -181,12 +182,9 @@ public class RouteProcessing {
 		if (gsonAnswerer.getException() != null) {
 			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", gsonAnswerer.getException());
 			throw new RouteProcessingException(gsonAnswerer.getException().toString());
-		} else {
-			Log.d(TAG_ROUTE_PROCESSING,
-					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
-			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),
-					RouteInfoTransfer.class);
 		}
+		Log.d(TAG_ROUTE_PROCESSING, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
+		routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(), RouteInfoTransfer.class);
 
 		if (routeInfoTransfer == null) {
 			throw new RouteProcessingException("routeInfoTransfer is null");
@@ -255,12 +253,9 @@ public class RouteProcessing {
 		if (gsonAnswerer.getException() != null) {
 			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", gsonAnswerer.getException());
 			throw new RouteProcessingException(gsonAnswerer.getException().toString());
-		} else {
-			Log.d(TAG_ROUTE_PROCESSING,
-					"Answered JSON: " + gsonAnswerer.getJSONAnswer());
-			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(),
-					RouteInfoTransfer.class);
 		}
+		Log.d(TAG_ROUTE_PROCESSING, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
+		routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(), RouteInfoTransfer.class);
 
 		if (routeInfoTransfer == null) {
 			Log.e(TAG_ROUTE_PROCESSING, "Rundkurs konnte nicht berechnet werden");

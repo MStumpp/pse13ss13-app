@@ -49,6 +49,7 @@ public class RouteInfoTransfer {
 
     /**
      * Adds a Coordinate to the list of Coordinates.
+     * @param coordinate the coordinate to be added
      */
     public void addCoordinates(Coordinate coordinate) {
         coordinates.add(coordinate);
