@@ -27,6 +27,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
@@ -61,7 +62,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
-		POIInfoListener, CenterListener, LevelOfDetailListener {
+		POIInfoListener, CenterListener, LevelOfDetailListener, ProgressListener {
 
 	private MapView mapView;
 	private GestureDetector gestureDetector;
@@ -183,6 +184,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		this.findViewById(R.id.mapviewmain).invalidate();
 		
 		progress.setVisibility(View.GONE);
+		POIManager.getInstance(this).setOnProgressListener(this);
 		
 	}
 	
@@ -631,12 +633,16 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		alert.show();
 	}
 	
+	@Override
 	public void showProgress(){
+		Log.d(TAG, "show progress");
 		progress.setVisibility(View.VISIBLE);
+		progress.bringToFront();
 	}
 
+	@Override
 	public void hideProgress(){
+		Log.d(TAG, "hide progress");
 		progress.setVisibility(View.GONE);
-		
 	}
 }
