@@ -176,7 +176,9 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 				bis.close();
 				inStream.close();
 				Log.d(TAG, String.format("Send to TileListener: %s (%s/%s/%s.png)", result, levelOfDetail, x, y));
-				listener.receiveTile(result, x, y, levelOfDetail);
+				if (listener != null) {
+					listener.receiveTile(result, x, y, levelOfDetail);
+				}
 				cache.put(url, result);
 			} catch (MalformedURLException e) {
 				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url), e);
