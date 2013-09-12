@@ -5,34 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView
-            android:id="@+id/mapView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+    <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
-        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView
-            android:id="@+id/routeView"
+    <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView
+        android:id="@+id/routeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView
+        android:id="@+id/waypointView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView
+        android:id="@+id/poiView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.HeadUpView
+        android:id="@+id/headUpView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.PullUpView
+        android:id="@+id/pullUpView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.PullUpView>
+
+    <RelativeLayout
+            android:id="@+id/progressBarMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/imageView1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        
-        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView
-            android:id="@+id/waypointView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        
-        <edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView
-            android:id="@+id/poiView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        
-        <edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.HeadUpView
-            android:id="@+id/headUpView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        
-        <edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.PullUpView
-            android:id="@+id/pullUpView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/fiftyperblack" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

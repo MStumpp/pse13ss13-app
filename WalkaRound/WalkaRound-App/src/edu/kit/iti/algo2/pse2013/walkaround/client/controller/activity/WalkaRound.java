@@ -20,6 +20,7 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
@@ -80,7 +81,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private float targetX;
 	@SuppressWarnings("unused")
 	private float targetY;
-	private Coordinate userCoordinate = BoundingBox.defaultCoordinate;;
+	private Coordinate userCoordinate = BoundingBox.defaultCoordinate;
+	private RelativeLayout progress;;
 	private static int ROUNDTRIP_TIME = 3000;
 
 	@Override
@@ -155,6 +157,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		pullUpView = (PullUpView) this.findViewById(R.id.pullUpView);
 		pullUpView.bringToFront();
 
+		this.findViewById(R.id.mapviewmain).requestLayout();
+		this.findViewById(R.id.mapviewmain).invalidate();
+		
 		RouteController.getInstance().registerRouteListener(this);
 		FavoriteManager.getInstance(this).registerListener(this);
 		pullUpView.registerComputeRoundtripListener(this);
@@ -167,6 +172,27 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		mapView.setOnTouchListener(new MapListener());
 
+		this.findViewById(R.id.progressBar1).setOnTouchListener(new ProgressTouchListener());
+		this.findViewById(R.id.progressBar1).bringToFront();
+		progress = (RelativeLayout) this.findViewById(R.id.progressBarMain);
+		progress.bringToFront();
+		progress.setOnTouchListener(new ProgressTouchListener());
+		this.findViewById(R.id.imageView1).setOnTouchListener(new ProgressTouchListener());
+
+		this.findViewById(R.id.mapviewmain).requestLayout();
+		this.findViewById(R.id.mapviewmain).invalidate();
+		
+		progress.setVisibility(View.GONE);
+		
+	}
+	
+	class ProgressTouchListener implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View view, MotionEvent arg1) {
+			return true;
+		}
+		
 	}
 
 	private class MapGestureListener implements OnGestureListener {
@@ -603,5 +629,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				});
 
 		alert.show();
+	}
+	
+	public void showProgress(){
+		progress.setVisibility(View.VISIBLE);
+	}
+
+	public void hideProgress(){
+		progress.setVisibility(View.GONE);
+		
 	}
 }
