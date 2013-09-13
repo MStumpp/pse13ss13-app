@@ -34,7 +34,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.Posit
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.Geocoder;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
@@ -81,7 +80,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@SuppressWarnings("unused")
 	private float targetY;
 	private Coordinate userCoordinate = BoundingBox.defaultCoordinate;
-	private RelativeLayout progress;;
+	private RelativeLayout progress;
 	private static int ROUNDTRIP_TIME = 3000;
 
 	@Override
@@ -283,7 +282,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	public void addWaypointAlert(final Coordinate next) {
 		Log.d(TAG, "Add waypoint!");
 		Waypoint wp = new Waypoint(next.getLatitude(), next.getLongitude(), getString(R.string.unknown_location));
-		RouteController.getInstance().addWaypoint(getApplicationContext(), wp);
+		RouteController.getInstance().addWaypoint(wp);
 	}
 
 	public class MapListener implements OnTouchListener {
@@ -386,7 +385,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							new DisplayCoordinate(user.getX(), user.getY()),
 							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
 
-			RouteController.getInstance().addWaypoint(getApplicationContext(), new Waypoint(next.getLatitude(), next.getLongitude(),""));
+			RouteController.getInstance().addWaypoint(new Waypoint(next.getLatitude(), next.getLongitude(),""));
 			try {
 				Thread.sleep(ROUNDTRIP_TIME);
 			} catch (InterruptedException e) {

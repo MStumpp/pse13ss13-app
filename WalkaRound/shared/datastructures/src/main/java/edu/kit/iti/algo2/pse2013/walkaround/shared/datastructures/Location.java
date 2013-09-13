@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import android.util.Log;
+
 
 /**
  * This class represents a location.
@@ -111,6 +113,7 @@ public class Location extends Coordinate {
 
     public void setName(String name) {
     	this.name = name;
+    	Log.d("Location", "Set name '" + name + "' from " + Thread.currentThread().getStackTrace()[3].getClassName()+ "." + Thread.currentThread().getStackTrace()[3].getMethodName() + "()");
     }
 
     /**
@@ -200,7 +203,7 @@ public class Location extends Coordinate {
 		return true;
 	}
 
-
+	@Override
 	public Location clone() {
     	String clonedName = null;
     	if (this.getName() != null) {

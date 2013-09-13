@@ -1,11 +1,10 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * RouteInfoTransfer for client only.
@@ -99,14 +98,16 @@ public class RouteInfoTransfer {
 
 	/**
 	 * Post processes shortest path.
+	 * @param targetName
+	 * @param sourceName
 	 */
-	public void postProcessShortestPath() {
+	public void postProcessShortestPath(String sourceName, String targetName) {
 		if (coordinates.size() < 2)
 			return;
 		Coordinate source = coordinates.remove(0);
-		coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), name));
+		coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), sourceName));
 		Coordinate target = coordinates.remove(coordinates.size()-1);
-		coordinates.add(coordinates.size(), new Waypoint(target.getLatitude(), target.getLongitude(), name));
+		coordinates.add(coordinates.size(), new Waypoint(target.getLatitude(), target.getLongitude(), targetName));
 	}
 
 

@@ -22,8 +22,11 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
  * This class provides a set of delegation methods for computing a shortest
@@ -141,9 +144,9 @@ public class RouteProcessing {
 	 * Delegation method for computing a shortest path between any two
 	 * Coordinates. The actual computation is done by an endpoint.
 	 *
-	 * @param coordinate1
+	 * @param source
 	 *            One end of the route to be computed.
-	 * @param coordinate2
+	 * @param target
 	 *            One end of the route to be computed.
 	 * @return RouteInfo.
 	 * @throws RouteProcessingException
@@ -152,48 +155,54 @@ public class RouteProcessing {
 	 * @throws IllegalArgumentException
 	 *             if input parameter are null.
 	 */
-	public RouteInfo computeShortestPath(Coordinate coordinate1,
-			Coordinate coordinate2) throws RouteProcessingException,
-			InterruptedException {
+	public RouteInfo computeShortestPath(Coordinate source, Coordinate target) throws RouteProcessingException, InterruptedException {
 
-		if (coordinate1 == null || coordinate2 == null)
-			throw new IllegalArgumentException(
-					"coordinate 1 and coordinate 2 must be provided");
+		if (source == null || target == null)
+			throw new IllegalArgumentException("source and target must be provided for RouteProcessing.computeShortestPath()");
 
-		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Coordinate "
-				+ coordinate1 + ", Coordinate " + coordinate2 + ")");
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath(Source " + source + ", Target " + target + ")");
 
-		GsonBuilder gsonb = new GsonBuilder();
-		Gson gson = gsonb.create();
+		Gson gson = new GsonBuilder().create();
 
 		RouteInfoTransfer routeInfoTransfer = null;
 
-		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
-				new Coordinate[] {
-						new Coordinate(coordinate1.getLatitude(), coordinate1.getLongitude()),
-						new Coordinate(coordinate2.getLatitude(), coordinate2.getLongitude()) }, new HttpPost(
-								PreferenceUtility.getInstance().getShortestPathServerUrl()));
-		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - pre Thread");
-		Thread thread = new Thread(gsonAnswerer);
+		JSONAnswerGetter jsonAnswerGetter = new JSONAnswerGetter(
+			gson,
+			new Coordinate[] {
+					new Coordinate(source.getLatitude(), source.getLongitude()),
+					new Coordinate(target.getLatitude(), target.getLongitude())
+			},
+			new HttpPost(PreferenceUtility.getInstance().getShortestPathServerUrl())
+		);
+		Thread thread = new Thread(jsonAnswerGetter);
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - pre Thread " + thread.getId());
 		thread.start();
 		thread.join();
-		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread");
+		Log.d(TAG_ROUTE_PROCESSING, "computeShortestPath() - post Thread " + thread.getId());
 
-		if (gsonAnswerer.getException() != null) {
-			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", gsonAnswerer.getException());
-			throw new RouteProcessingException(gsonAnswerer.getException().toString());
+		if (jsonAnswerGetter.getException() != null) {
+			Log.e(TAG_ROUTE_PROCESSING, "HTTP-Connection caused exception", jsonAnswerGetter.getException());
+			throw new RouteProcessingException(jsonAnswerGetter.getException().toString());
 		}
-		Log.d(TAG_ROUTE_PROCESSING, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
-		routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(), RouteInfoTransfer.class);
+		Log.d(TAG_ROUTE_PROCESSING, "Answered JSON: " + jsonAnswerGetter.getJSONAnswer());
+		routeInfoTransfer = gson.fromJson(jsonAnswerGetter.getJSONAnswer(), RouteInfoTransfer.class);
 
 		if (routeInfoTransfer == null) {
 			throw new RouteProcessingException("routeInfoTransfer is null");
 		} else  if (routeInfoTransfer.getError() != null) {
  			throw new RouteProcessingException(routeInfoTransfer.getError());
  		}
+		String sourceName = BootActivity.getAppContext().getString(R.string.unknown_location);
+		String targetName = BootActivity.getAppContext().getString(R.string.unknown_location);
+		if (source instanceof Location) {
+			sourceName = ((Location) source).getName();
+		}
+		if (target instanceof Location) {
+			targetName = ((Location) target).getName();
+		}
 
 		// replace first and last Coordinate with Waypoint
-		routeInfoTransfer.postProcessShortestPath();
+		routeInfoTransfer.postProcessShortestPath(sourceName, targetName);
 
 		RouteInfo route = new Route(new LinkedList<Coordinate>(
 				routeInfoTransfer.getCoordinates()));

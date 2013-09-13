@@ -3,7 +3,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import android.content.Context;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
@@ -116,7 +115,7 @@ public class Route implements RouteInfo {
 	 * Adds a new waypoint at the given coordinate to the end of the route.
 	 * @param w the waypoint which should be added
 	 */
-	public void addWaypoint(Context context, Waypoint w) {
+	public void addWaypoint(Waypoint w) {
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w));
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
 
@@ -125,20 +124,17 @@ public class Route implements RouteInfo {
 		if (w != null) {
 			try {
 				normalizedCoordinate = CoordinateNormalizer.normalizeCoordinate(w, (int) BoundingBox.getInstance().getLevelOfDetail());
+				Log.d(TAG_ROUTE, "addWaypoint() - Waypoint normalized");
+				w.setPosition(normalizedCoordinate);
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized");
+				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized", e);
 			} catch (CoordinateNormalizerException e) {
-				e.printStackTrace();
+				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized", e);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized", e);
 			}
 			Geocoder geo = new Geocoder();
-			geo.reverseGeocode(context, w);
-
-			if (normalizedCoordinate != null) {
-				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint normalized");
-				w.setPosition(normalizedCoordinate);
-			}
+			geo.reverseGeocode(w);
 
 			if (this.routeCoordinates.size() != 0) {
 				Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w));
@@ -276,11 +272,11 @@ public class Route implements RouteInfo {
 	 * Moves the active waypoint to the position of the given coordinate. OLD VERSION!
 	 * @param coord
 	 */
-	public void moveActiveWaypointComputeOnly(final Context context, final Coordinate coord) {
+	public void moveActiveWaypointComputeOnly(final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate " + coord
 				+ ") METHOD START ");
 
-		if (this.activeWaypoint != null && coord != null) {
+		if (activeWaypoint != null && coord != null) {
 			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate) Active Waypoint is " + this.activeWaypoint.toString());
 			LinkedList<Waypoint> waypoints = this.getWaypoints();
 			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
@@ -312,13 +308,13 @@ public class Route implements RouteInfo {
 				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
-				new Geocoder().reverseGeocode(context, activeWaypoint);
+				new Geocoder().reverseGeocode(activeWaypoint);
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			} else if (newRoutePastActiveWaypoint != null && newRoutePastActiveWaypoint.getCoordinates().size() > 0) {
 				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getFirst();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
-				new Geocoder().reverseGeocode(context, activeWaypoint);
+				new Geocoder().reverseGeocode(activeWaypoint);
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			}
 

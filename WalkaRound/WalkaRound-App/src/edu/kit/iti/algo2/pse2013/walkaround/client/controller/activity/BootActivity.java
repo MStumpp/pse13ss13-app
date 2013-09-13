@@ -1,9 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity;
 
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.SingleStar
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.StepCounter;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter.TextToSpeechStarter;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
 /**
@@ -34,10 +32,20 @@ public class BootActivity extends Activity implements StepCounter {
 	public static String TAG = BootActivity.class.getSimpleName();
 
 	private ProgressBar mProgressBar;
+	private static Context context;
+	private static Activity lastStartedBootActivity;
+
+	public static Activity getLastStarted() {
+		return lastStartedBootActivity;
+	}
+	public static Context getAppContext() {
+		return context;
+	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		context = getApplicationContext();
 		System.gc();
 		setContentView(R.layout.progress_bar);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
@@ -65,6 +73,7 @@ public class BootActivity extends Activity implements StepCounter {
 		}
 
 		booSt.noMoreStarters();
+		lastStartedBootActivity = this;
 	}
 
 	@Override

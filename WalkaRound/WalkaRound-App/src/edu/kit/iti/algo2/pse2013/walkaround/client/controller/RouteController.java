@@ -2,7 +2,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller;
 
 import java.util.LinkedList;
 
-import android.content.Context;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
@@ -23,7 +22,6 @@ public class RouteController {
 	private static final String TAG = RouteController.class.getSimpleName();
 	private LinkedList<RouteListener> routeListeners;
 	private Route currentRoute;
-	private Context context;
 	private static Thread routeChanger;
 	private static RouteController routeController;
 
@@ -32,10 +30,6 @@ public class RouteController {
 		this.routeListeners = new LinkedList<RouteListener>();
 		LinkedList<Coordinate> coordinateList = new LinkedList<Coordinate>();
 		this.currentRoute = new Route(coordinateList);
-	}
-
-	public void initialize(Context context) {
-		this.context = context;
 	}
 
 	public static RouteController getInstance() {
@@ -62,9 +56,8 @@ public class RouteController {
 		}
 	}
 
-	private void notifyAllRouteListeners() {
-		Log.d(TAG,
-				String.format(
+	public void notifyAllRouteListeners() {
+		Log.d(TAG, String.format(
 						"RouteController.notifyAllRouteListeners() - sending Route with %d Coordinates and %d Waypoints to %d listeners.",
 						currentRoute.getCoordinates().size(), currentRoute
 								.getWaypoints().size(), routeListeners.size()));
@@ -73,7 +66,7 @@ public class RouteController {
 		if (this.currentRoute != null) {
 			for (RouteListener rl : routeListeners) {
 				Log.d(TAG, "Notify " + rl.getClass().getSimpleName());
-				rl.onRouteChange((RouteInfo) currentRoute);
+				rl.onRouteChange(currentRoute);
 			}
 		} else {
 			Log.d(TAG, String.format(
@@ -89,12 +82,12 @@ public class RouteController {
 	 *
 	 * @param id
 	 *            ID of the Waypoint
+	 * @return if the operation was successful
 	 */
 	public boolean setActiveWaypoint(int id) {
 		Log.d(TAG, "Routecontroller.setActiveWaypoint(id)");
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			this.currentRoute.setActiveWaypoint(id);
 			this.notifyAllRouteListeners();
 			return true;
@@ -178,7 +171,7 @@ public class RouteController {
 	 * RouteController.routeChanger.start(); return true; } return false; }
 	 */
 
-	public boolean addWaypoint(final Context context, final Waypoint w) {
+	public boolean addWaypoint(final Waypoint w) {
 		Log.d(TAG,
 				String.format("RouteController.addWaypoint(%s)", w.toString()));
 
@@ -193,11 +186,12 @@ public class RouteController {
 							"Thread.run() in RouteController.addWaypoint(%s)",
 							w.toString()));
 
-					newCurrentRoute.addWaypoint(context, w);
+					newCurrentRoute.addWaypoint(w);
 					replaceFullRoute(newCurrentRoute);
 				}
 			});
 			RouteController.routeChanger.start();
+			notifyAllRouteListeners();
 			return true;
 		}
 		Log.e(TAG,
@@ -285,7 +279,7 @@ public class RouteController {
 				@Override
 				public void run() {
 					Log.d(TAG, "Thread.run() in moveActiveWaypointComputeOnly()");
-					newCurrentRoute.moveActiveWaypointComputeOnly(context, c);
+					newCurrentRoute.moveActiveWaypointComputeOnly(c);
 					RouteController.getInstance().replaceFullRoute(
 							newCurrentRoute);
 				}

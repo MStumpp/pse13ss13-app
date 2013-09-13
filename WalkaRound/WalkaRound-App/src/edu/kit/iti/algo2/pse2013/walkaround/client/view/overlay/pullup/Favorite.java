@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,8 +48,6 @@ public class Favorite extends RelativeLayout {
 	private boolean selected = true;
 	private int width;
 	private int height;
-	private Context context;
-
 	/**
 	 * This create a new POIview.
 	 *
@@ -57,8 +56,6 @@ public class Favorite extends RelativeLayout {
 	 */
 	public Favorite(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
-
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 		width = size.x;
 		height = size.y / 20;
@@ -70,7 +67,7 @@ public class Favorite extends RelativeLayout {
 		ScrollView scrollRoute = new ScrollView(context);
 
 		LinearLayout.LayoutParams mainParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
 		this.addView(main, mainParams);
 
@@ -78,7 +75,7 @@ public class Favorite extends RelativeLayout {
 		tabHost = new LinearLayout(context, attrs);
 		tabHost.setOrientation(LinearLayout.HORIZONTAL);
 		LinearLayout.LayoutParams tabHostParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		tabHostParams.width = size.x;
 
 		main.addView(tabHost, tabHostParams);
@@ -94,14 +91,14 @@ public class Favorite extends RelativeLayout {
 		routeButton.setOnTouchListener(new ToogleTabListener());
 
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		waypointButtontParams.height = size.y / 10;
 		waypointButtontParams.width = size.x / 2;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
 
 		LinearLayout.LayoutParams routeButtontParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		routeButtontParams.height = size.y / 10;
 		routeButtontParams.width = size.x / 2;
 		waypointButtontParams.leftMargin = 0;
@@ -121,10 +118,10 @@ public class Favorite extends RelativeLayout {
 
 
 		LinearLayout.LayoutParams routeSiedeParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		LinearLayout.LayoutParams waypointSiedeParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		scrollRoute.addView(routeSide, routeSiedeParam);
 		scrollWay.addView(waypointSide, waypointSiedeParam);
@@ -189,17 +186,17 @@ public class Favorite extends RelativeLayout {
 				.getNamesOfFavoriteLocations();
 		// Category
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		param.width = width - height;
 		param.height = height;
 
 		LinearLayout.LayoutParams delParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		delParam.height = height;
 		delParam.width = height;
 
 		LinearLayout.LayoutParams lineParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		lineParam.topMargin = 5;
 
 		for (String w : location) {
@@ -286,17 +283,20 @@ public class Favorite extends RelativeLayout {
 					.create();
 			alertDialog.setTitle("Wegpunkt hinzufügen");
 			alertDialog.setMessage("Wirklich hinzufügen?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							Location l = FavoriteManager.getInstance(getContext()).getFavoriteLocation(view.getTag().toString());
 							Waypoint w = new Waypoint(l.getLatitude(), l.getLongitude(), l.getName(), l.getAddress());
-							RouteController.getInstance().addWaypoint(context, w);
+							RouteController.getInstance().addWaypoint(w);
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.show();
@@ -332,16 +332,19 @@ public class Favorite extends RelativeLayout {
 					.create();
 			alertDialog.setTitle("Route hinzufügen");
 			alertDialog.setMessage("Wirklich hinzufügen?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							RouteInfo l = FavoriteManager.getInstance(getContext()).getFavoriteRoute(view.getTag().toString());
 							RouteController.getInstance().addRoute(l);
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.show();
@@ -379,15 +382,18 @@ public class Favorite extends RelativeLayout {
 					.create();
 			alertDialog.setTitle("Route löschen");
 			alertDialog.setMessage(id + " wirklich löschen?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							FavoriteManager.getInstance(getContext()).deleteRoute(id);
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.show();
@@ -425,15 +431,18 @@ public class Favorite extends RelativeLayout {
 					.create();
 			alertDialog.setTitle("Route löschen");
 			alertDialog.setMessage(id + " wirklich löschen?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							FavoriteManager.getInstance(getContext()).deleteLocation(id);
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.show();

@@ -37,8 +37,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  * @version 10.2
  *
  */
-public class PullUpView extends RelativeLayout implements GoToMapListener,
-		GoToFavoriteListener {
+public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
 
 	Point size;
 	private ImageView routing;
@@ -652,5 +651,4 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 	public void registerUpdateMapListener(UpdateMapListener listener) {
 		searchMenu.registerUpdateMapListener(listener);
 	}
-
 }

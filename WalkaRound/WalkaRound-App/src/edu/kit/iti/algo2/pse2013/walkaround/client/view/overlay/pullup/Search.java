@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,7 +25,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToMapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -53,8 +53,6 @@ public class Search extends RelativeLayout {
 	private EditText numberEdit;
 	private EditText freeText;
 
-	private Context context;
-
 	private LinearLayout result;
 	private int width;
 	private boolean isResult = false;
@@ -72,8 +70,6 @@ public class Search extends RelativeLayout {
 	 */
 	public Search(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
-
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 
 		width = size.x;
@@ -82,14 +78,14 @@ public class Search extends RelativeLayout {
 		main.setOrientation(LinearLayout.VERTICAL);
 
 		LinearLayout.LayoutParams mainParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
 		this.addView(main, mainParams);
 
 		tabHost = new LinearLayout(context, attrs);
 		tabHost.setOrientation(LinearLayout.HORIZONTAL);
 		LinearLayout.LayoutParams tabHostParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		tabHostParams.width = size.x;
 
 		main.addView(tabHost, tabHostParams);
@@ -103,14 +99,14 @@ public class Search extends RelativeLayout {
 		poiButton.setOnTouchListener(new POISideTabListener());
 
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		waypointButtontParams.height = size.y / 10;
 		waypointButtontParams.width = size.x / 2;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
 
 		LinearLayout.LayoutParams routeButtontParams = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		routeButtontParams.height = size.y / 10;
 		routeButtontParams.width = size.x / 2;
 		waypointButtontParams.leftMargin = 0;
@@ -129,24 +125,24 @@ public class Search extends RelativeLayout {
 		addressButton.setTextColor(Color.RED);
 
 		LinearLayout.LayoutParams routeSiedeParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		LinearLayout.LayoutParams waypointSiedeParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
 		main.addView(poiSide, routeSiedeParam);
 		main.addView(addressSide, waypointSiedeParam);
 
 		LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		textParam.width = size.x / 2;
 		textParam.height = size.y / 15;
 
 		LinearLayout.LayoutParams editParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		editParam.width = size.x / 2;
 		textParam.height = size.y / 15;
 
@@ -223,7 +219,7 @@ public class Search extends RelativeLayout {
 		// Go
 
 		LinearLayout.LayoutParams goParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		goParam.width = size.x;
 		goParam.height = size.y / 15;
 		goParam.topMargin = 10;
@@ -239,7 +235,7 @@ public class Search extends RelativeLayout {
 		// POI
 
 		LinearLayout.LayoutParams freeParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		freeParam.height = size.y / 15;
 		freeParam.width = width;
 
@@ -251,7 +247,7 @@ public class Search extends RelativeLayout {
 		// Go
 
 		LinearLayout.LayoutParams goFreeParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		goFreeParam.width = size.x;
 		goFreeParam.height = size.y / 15;
 		goFreeParam.topMargin = 10;
@@ -411,8 +407,8 @@ public class Search extends RelativeLayout {
 								location));
 						location.setTextSize(30);
 						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT);
+								ViewGroup.LayoutParams.MATCH_PARENT,
+								ViewGroup.LayoutParams.WRAP_CONTENT);
 						myParams.topMargin = 10;
 						myParams.width = width;
 						result.addView(location, myParams);
@@ -460,8 +456,8 @@ public class Search extends RelativeLayout {
 							poi.setOnTouchListener(new poiTouch(value, poi));
 							poi.setTextSize(30);
 							LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
-									LinearLayout.LayoutParams.MATCH_PARENT,
-									LinearLayout.LayoutParams.WRAP_CONTENT);
+									ViewGroup.LayoutParams.MATCH_PARENT,
+									ViewGroup.LayoutParams.WRAP_CONTENT);
 							myParams.topMargin = 10;
 							myParams.width = width;
 							result.addView(poi, myParams);
@@ -487,9 +483,11 @@ public class Search extends RelativeLayout {
 		alertDialog.setTitle("Sorry..");
 		alertDialog.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n \n"
 				+ text + "\n \n übereinstimmenden Orte gefunde!");
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
 				new DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						// Do nothing
 					}
 				});
 		alertDialog.show();
@@ -520,11 +518,8 @@ public class Search extends RelativeLayout {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				RouteController.getInstance().addWaypoint(context,
-						new Waypoint(poi.getLatitude(), poi.getLongitude(), poi
-								.getName()));
-				BoundingBox.getInstance(getContext()).setCenter(
-						new Coordinate(poi.getLatitude(), poi.getLongitude()));
+				RouteController.getInstance().addWaypoint(new Waypoint(poi.getLatitude(), poi.getLongitude(), poi.getName()));
+				BoundingBox.getInstance(getContext()).setCenter(poi);
 				notifyGoToMapListener();
 			}
 			return false;
@@ -557,15 +552,9 @@ public class Search extends RelativeLayout {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.equals(view)) {
-				RouteController.getInstance().addWaypoint(context,
-						new Waypoint(location.getLatitude(), location
-								.getLongitude(), location.getName()));
-
-				BoundingBox.getInstance(getContext()).setCenter(
-						new Coordinate(location.getLatitude(), location
-								.getLongitude()));
+				RouteController.getInstance().addWaypoint(new Waypoint(location.getLatitude(), location.getLongitude(), location.getName()));
+				BoundingBox.getInstance(getContext()).setCenter(location);
 				notifyGoToMapListener();
-
 			}
 			return false;
 		}

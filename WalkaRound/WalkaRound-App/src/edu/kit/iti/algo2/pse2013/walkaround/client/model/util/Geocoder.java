@@ -16,18 +16,19 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 public class Geocoder {
 	private static final String TAG = Geocoder.class.getSimpleName();
 	private int timeout = 5000;
 
-	public void reverseGeocode(Context context, Location loc) {
+	public void reverseGeocode(Location loc) {
 		new Thread(new RunReverseGeocode(loc)).start();
-		loc.setName(context.getString(R.string.unknown_location));
+		loc.setName(BootActivity.getAppContext().getString(R.string.unknown_location));
 	}
 
 	private class RunReverseGeocode implements Runnable {
@@ -44,15 +45,16 @@ public class Geocoder {
 				HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
 				HttpConnectionParams.setSoTimeout(httpParameters, timeout);
 
-				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-				Log.d(TAG, String.format(Locale.UK, "http://nominatim.openstreetmap.org/reverse?format=json&lat=%f&lon=%f&zoom=18&addressdetails=1",
-						loc.getLatitude(),
-						loc.getLongitude()));
-				HttpGet httpGet = new HttpGet(
-					String.format(Locale.UK, "http://nominatim.openstreetmap.org/reverse?format=json&lat=%f&lon=%f&zoom=18&addressdetails=1",
+				String urlString = String.format(
+					Locale.UK,
+					"http://nominatim.openstreetmap.org/reverse?format=json&lat=%f&lon=%f&zoom=18&addressdetails=1&email=%s",
 					loc.getLatitude(),
-					loc.getLongitude())
+					loc.getLongitude(),
+					BootActivity.getAppContext().getString(R.string.email_address)
 				);
+				DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+				Log.d(TAG, urlString);
+				HttpGet httpGet = new HttpGet(urlString);
 				httpGet.setHeader("Accept", "application/json");
 				httpGet.setHeader("Content-Type", "application/json");
 
@@ -90,6 +92,7 @@ public class Geocoder {
 				}
 				if (name != "") {
 					loc.setName(name);
+					RouteController.getInstance().notifyAllRouteListeners();
 				}
 				Log.d(TAG, "Location is " + name);
 			} catch (IOException e) {

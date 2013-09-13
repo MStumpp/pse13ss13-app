@@ -19,8 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
@@ -31,7 +34,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  * @version 1.1
  *
  */
-public class Routing extends RelativeLayout {
+public class Routing extends RelativeLayout implements RouteListener {
 
 	private Button reset;
 	private ImageButton invert;
@@ -199,39 +202,46 @@ public class Routing extends RelativeLayout {
 		goToMap.setOnTouchListener(new GoToMapTouchListener());
 
 		this.updateRoute();
+		RouteController.getInstance().registerRouteListener(this);
 	}
 
 	/**
 	 * update Route
 	 */
 	public void updateRoute() {
-		LinkedList<Waypoint> route = RouteController.getInstance()
-				.getCurrentRoute().getWaypoints();
-		content.removeAllViews();
-		for (Waypoint w : route) {
-			LinearLayout l = new LinearLayout(context);
-			ImageButton delete = new ImageButton(context);
-			ImageButton save = new ImageButton(context);
-			Button text = new Button(context);
+		BootActivity.getLastStarted().runOnUiThread(new RouteUpdater());
+	}
 
-			delete.setImageResource(R.drawable.delete);
-			save.setImageResource(R.drawable.favorite);
-			text.setText(w.getName());
+	private class RouteUpdater implements Runnable {
+		@Override
+		public void run() {
+			LinkedList<Waypoint> route = RouteController.getInstance().getCurrentRoute().getWaypoints();
+			content.removeAllViews();
+			for (Waypoint w : route) {
+				LinearLayout l = new LinearLayout(context);
+				ImageButton delete = new ImageButton(context);
+				ImageButton save = new ImageButton(context);
+				Button text = new Button(context);
 
-			delete.setTag(w.getId());
-			save.setTag(w.getId());
-			text.setTag(w.getId());
+				delete.setImageResource(R.drawable.delete);
+				save.setImageResource(R.drawable.favorite);
+				text.setText(w.getName());
 
-			l.setOrientation(LinearLayout.HORIZONTAL);
-			l.addView(text, textParams);
-			l.addView(save, saveParams);
-			l.addView(delete, deleteParams);
+				delete.setTag(w.getId());
+				save.setTag(w.getId());
+				text.setTag(w.getId());
 
-			content.addView(l, lParams);
+				l.setOrientation(LinearLayout.HORIZONTAL);
+				l.addView(text, textParams);
+				l.addView(save, saveParams);
+				l.addView(delete, deleteParams);
 
-			text.setOnTouchListener(new WaypointListener());
-			save.setOnTouchListener(new SaveWaypointListener());
-			delete.setOnTouchListener(new DeleteListener());
+				content.addView(l, lParams);
+
+				text.setOnTouchListener(new WaypointListener());
+				save.setOnTouchListener(new SaveWaypointListener());
+				delete.setOnTouchListener(new DeleteListener());
+			}
 		}
 	}
 
@@ -243,9 +253,8 @@ public class Routing extends RelativeLayout {
 	 *
 	 */
 	private class WaypointListener implements OnTouchListener {
-
 		@Override
-		public boolean onTouch(View view, MotionEvent arg1) {
+		public boolean onTouch(View view, MotionEvent me) {
 			int id = Integer.parseInt(view.getTag().toString());
 			BoundingBox.getInstance().setCenter(
 					RouteController.getInstance().getCurrentRoute()
@@ -541,12 +550,16 @@ public class Routing extends RelativeLayout {
 
 	/**
 	 *
-	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
 	 */
 	public interface GoToFavoriteListener {
 		public void goToFavorite();
+	}
+
+	@Override
+	public void onRouteChange(RouteInfo currentRoute) {
+		updateRoute();
 	}
 }
