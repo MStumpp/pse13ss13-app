@@ -88,10 +88,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 		// images and text
 
 		invert.setImageResource(R.drawable.invert);
-		invert.setScaleType(ImageView.ScaleType.FIT_XY);
+		invert.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
 		save.setImageResource(R.drawable.favorite);
-		save.setScaleType(ImageView.ScaleType.FIT_XY);
+		save.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
 		reset.setText(context.getString(R.string.reset));
 		addFavorite.setText(context.getString(R.string.dialog_header_add, context.getString(R.string.term_favorite)));
@@ -114,7 +114,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				RelativeLayout.TRUE);
 		paramsReset.topMargin = 10;
 		paramsReset.height = size.y / 10;
-		paramsReset.width = size.x / 5;
+		paramsReset.width = size.x / 3;
 
 		// Invert
 		RelativeLayout.LayoutParams paramsInvert = new RelativeLayout.LayoutParams(
@@ -125,7 +125,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsInvert.addRule(RelativeLayout.RIGHT_OF, 1);
 		paramsInvert.topMargin = 10;
 		paramsInvert.height = size.y / 10;
-		paramsInvert.width = size.x / 6;
+		paramsInvert.width = size.x / 3;
 
 		// Save
 		RelativeLayout.LayoutParams paramsSave = new RelativeLayout.LayoutParams(
@@ -136,7 +136,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsSave.addRule(RelativeLayout.RIGHT_OF, 2);
 		paramsSave.topMargin = 10;
 		paramsSave.height = size.y / 10;
-		paramsSave.width = size.x / 6;
+		paramsSave.width = size.x / 3;
 
 		// ScrollView
 		RelativeLayout.LayoutParams paramsScrollView = new RelativeLayout.LayoutParams(
@@ -159,6 +159,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				RelativeLayout.TRUE);
 		paramsAddFavorite.bottomMargin = 10;
 		paramsAddFavorite.height = size.y / 10;
+		paramsAddFavorite.width = size.x / 2;
 
 		// goToMap
 		RelativeLayout.LayoutParams paramsGoToMap = new RelativeLayout.LayoutParams(
@@ -169,6 +170,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsGoToMap.addRule(RelativeLayout.RIGHT_OF, 3);
 		paramsGoToMap.bottomMargin = 10;
 		paramsGoToMap.height = size.y / 10;
+		paramsGoToMap.width = size.x / 2;
 
 		// build View
 
@@ -189,7 +191,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		moveParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
-		moveParams.width = size.x * 1 / 6;
+		moveParams.width = size.y / 10;
 		moveParams.height = (size.x * 1 / 6) / 2;
 		moveParams.bottomMargin = 0;
 		moveParams.topMargin = 0;
@@ -205,14 +207,14 @@ public class Routing extends RelativeLayout implements RouteListener {
 		saveParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		saveParams.height = size.x * 1 / 6;
+		saveParams.height = size.y / 10;
 		saveParams.width = size.x * 1 / 6;
 
 		// Text
 		textParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		textParams.height = size.x * 1 / 6;
+		textParams.height = size.y / 10;
 		textParams.width = size.x * 3 / 6;
 
 		// vertical Layout

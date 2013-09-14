@@ -24,7 +24,7 @@
 	<string name="dialog_text_unknown_error">Die App wird jetzt geschlossen.</string>
 	<string name="dialog_text_wifi">Keine WLAN-Verbindung erkannt. Möchten sie sich mit einem WLAN verbinden?</string>
 	<string name="go_to_map">zurück zur Karte</string>
-	<string name="length">Länge</string>
+	<string name="length">Länge :</string>
 	<string name="loading">Lade</string>
 	<string name="logo_description">Das Logo von Walkaround: Ein Wegweiser, auf dem das Wort \"Walk\" steht, darunter steht das Wort\"aRound\" mit einem großen R und das o wurde durch einen roten Pfeil ersetzt, der zu einem Kreis gebogen ist.</string>
 	<string name="meter">Meter</string>

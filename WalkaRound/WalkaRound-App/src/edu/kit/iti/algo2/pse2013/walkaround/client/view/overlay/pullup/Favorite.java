@@ -45,6 +45,7 @@ public class Favorite extends RelativeLayout {
 	private LinearLayout tabHost;
 	private Button waypointButton;
 	private Button routeButton;
+	private Point size;
 
 	private boolean selected = true;
 	private int width;
@@ -57,7 +58,7 @@ public class Favorite extends RelativeLayout {
 	 */
 	public Favorite(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		Point size = BoundingBox.getInstance(context).getDisplaySize();
+		size = BoundingBox.getInstance(context).getDisplaySize();
 		width = size.x;
 		height = size.y / 20;
 
@@ -95,6 +96,7 @@ public class Favorite extends RelativeLayout {
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		waypointButtontParams.height = size.y / 10;
 		waypointButtontParams.width = size.x / 2;
+		waypointButtontParams.topMargin = 10;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
 
@@ -102,6 +104,7 @@ public class Favorite extends RelativeLayout {
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		routeButtontParams.height = size.y / 10;
 		routeButtontParams.width = size.x / 2;
+		routeButtontParams.topMargin = 10;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
 
@@ -188,27 +191,27 @@ public class Favorite extends RelativeLayout {
 		// Category
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		param.width = width - height;
-		param.height = height;
+		param.width = size.x * 5 / 6;
+		param.height = size.y / 10;
 
 		LinearLayout.LayoutParams delParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		delParam.height = height;
-		delParam.width = height;
+		delParam.height = size.y / 10;
+		delParam.width = size.x * 1 / 6;
 
 		LinearLayout.LayoutParams lineParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		lineParam.topMargin = 5;
 
 		for (String w : location) {
-			TextView b = new TextView(getContext());
+			Button b = new Button(getContext());
 			b.setText(w);
 			b.setTag(w);
 			b.setOnTouchListener(new FavoriteLocationListener());
-			b.setBackgroundColor(Color.GRAY);
-			b.setTextColor(Color.BLACK);
-			b.setSelected(false);
-			b.setGravity(Gravity.CENTER);
+			//b.setBackgroundColor(Color.GRAY);
+			//b.setTextColor(Color.BLACK);
+			//b.setSelected(false);
+			//b.setGravity(Gravity.CENTER);
 
 			ImageButton del = new ImageButton(getContext());
 			del.setTag(w);
@@ -229,14 +232,14 @@ public class Favorite extends RelativeLayout {
 		// Category
 
 		for (String w : routes) {
-			TextView b = new TextView(getContext());
+			Button b = new Button(getContext());
 			b.setText(w);
 			b.setTag(w);
 			b.setOnTouchListener(new FavoriteRouteListener());
-			b.setBackgroundColor(Color.GRAY);
-			b.setTextColor(Color.BLACK);
-			b.setSelected(false);
-			b.setGravity(Gravity.CENTER);
+			//b.setBackgroundColor(Color.GRAY);
+			//b.setTextColor(Color.BLACK);
+			//b.setSelected(false);
+			//b.setGravity(Gravity.CENTER);
 
 
 			ImageButton del = new ImageButton(getContext());
@@ -268,7 +271,7 @@ public class Favorite extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_DOWN){
+			if(action == MotionEvent.ACTION_UP){
 				this.view = view;
 				this.alert();
 			}
@@ -314,7 +317,7 @@ public class Favorite extends RelativeLayout {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if(action == MotionEvent.ACTION_DOWN){
+			if(action == MotionEvent.ACTION_UP){
 				this.view = view;
 				this.alert();
 			}

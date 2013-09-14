@@ -26,7 +26,7 @@
 	<string name="dialog_text_wifi">No WiFi-connection was detected. Do you want to establish one?</string>
 	<string name="email_address" translatable="false">pse13ss13@ira.uni-karlsruhe.de</string>
 	<string name="go_to_map">Back to map</string>
-	<string name="length">Length</string>
+	<string name="length">Length :</string>
 	<string name="loading">Loading</string>
 	<string name="meter">meter</string>
 	<string name="option_add">Add</string>

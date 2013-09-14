@@ -66,8 +66,8 @@ public class Roundtrip extends LinearLayout {
 		// Zuweisung
 
 		TextView title = new TextView(context, attrs);
-		title.setText("Profiles");
-		title.setTextSize(size.y / 28);
+		title.setText(R.string.term_profiles);
+		title.setTextSize(30);
 		title.setGravity(Gravity.CENTER);
 		Button compute = new Button(context, attrs);
 		compute.setText(context.getString(R.string.compute, context.getString(R.string.term_roundtrip)));
@@ -86,13 +86,15 @@ public class Roundtrip extends LinearLayout {
 
 		LinearLayout.LayoutParams numberParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		numberParam.height = size.y / 5;
-		numberParam.width = size.x / 2;
+		numberParam.width = size.x / 3;
 		numberParam.topMargin = 10;
+		numberParam.gravity = Gravity.CENTER;
 
 		LinearLayout.LayoutParams computeParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		computeParam.height = size.y / 15;
+		computeParam.height = size.y / 10;
 		computeParam.width = size.x / 2;
-		numberParam.topMargin = 10;
+		computeParam.topMargin = 10;
+		computeParam.gravity = Gravity.CENTER;
 
 		//String[] nums = new String[NUMBER_OF_STEPS];
 		//for (int i = 0; i < nums.length; i++)
@@ -107,7 +109,7 @@ public class Roundtrip extends LinearLayout {
 			text.setText(context.getResources().getString(i));
 			text.setTag(counter);
 			text.setId(counter);
-			text.setTextSize(size.y / 35);
+			text.setTextSize(25);
 			text.setGravity(Gravity.CENTER);
 			text.setTextColor(Color.GRAY);
 			text.setOnTouchListener(new OnProfileTouch());
@@ -117,9 +119,21 @@ public class Roundtrip extends LinearLayout {
 
 		LinearLayout line1 = new LinearLayout(context, attrs);
 		line1.setOrientation(LinearLayout.HORIZONTAL);
-
+		
+		TextView length = new TextView(getContext());
+		length.setText(R.string.length);
+		length.setTextSize(30);
+		length.setGravity(Gravity.CENTER);
+		
+		TextView unit = new TextView(getContext());
+		unit.setText(R.string.meter);
+		unit.setTextSize(30);
+		unit.setGravity(Gravity.CENTER);
+		
+		line1.addView(length);
 		line1.addView(lengthPicker, numberParam);
-		line1.addView(compute, computeParam);
+		line1.addView(unit);
+		//line1.addView(compute, computeParam);
 		line1.setGravity(Gravity.CENTER);
 
 		this.addView(line1);
@@ -127,7 +141,7 @@ public class Roundtrip extends LinearLayout {
 		for (TextView i : profiles) {
 			this.addView(i);
 		}
-
+		this.addView(compute, computeParam);
 	}
 
 	/**

@@ -154,7 +154,7 @@ public class Search extends RelativeLayout {
 
 		TextView zip = new TextView(context);
 		zip.setText(context.getString(R.string.addr_zip_code));
-		zip.setTextSize(size.x / 21);
+		zip.setTextSize(30);
 		zip.setGravity(Gravity.CENTER);
 
 		zipEdit = new EditText(context);
@@ -171,7 +171,7 @@ public class Search extends RelativeLayout {
 
 		TextView city = new TextView(context);
 		city.setText(context.getString(R.string.addr_city));
-		city.setTextSize(size.x / 21);
+		city.setTextSize(30);
 		city.setGravity(Gravity.CENTER);
 
 		cityEdit = new EditText(context);
@@ -188,7 +188,7 @@ public class Search extends RelativeLayout {
 
 		TextView street = new TextView(context);
 		street.setText(context.getString(R.string.addr_street));
-		street.setTextSize(size.x / 21);
+		street.setTextSize(30);
 		street.setGravity(Gravity.CENTER);
 
 		streetEdit = new EditText(context);
@@ -205,7 +205,7 @@ public class Search extends RelativeLayout {
 
 		TextView number = new TextView(context);
 		number.setText(context.getString(R.string.addr_housenumber));
-		number.setTextSize(size.x / 21);
+		number.setTextSize(30);
 		number.setGravity(Gravity.CENTER);
 
 		numberEdit = new EditText(context);
@@ -221,7 +221,7 @@ public class Search extends RelativeLayout {
 		LinearLayout.LayoutParams goParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		goParam.width = size.x;
-		goParam.height = size.y / 15;
+		goParam.height = size.y / 10;
 		goParam.topMargin = 10;
 
 		Button go = new Button(context, attrs);
@@ -249,7 +249,7 @@ public class Search extends RelativeLayout {
 		LinearLayout.LayoutParams goFreeParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		goFreeParam.width = size.x;
-		goFreeParam.height = size.y / 15;
+		goFreeParam.height = size.y / 10;
 		goFreeParam.topMargin = 10;
 
 		Button goFree = new Button(context, attrs);
@@ -266,10 +266,10 @@ public class Search extends RelativeLayout {
 
 		main.addView(result);
 
-		zipEdit.setText("76185");
+		//zipEdit.setText("76185");
 		cityEdit.setText("Karlsruhe");
-		streetEdit.setText("Yorckstr.");
-		numberEdit.setText("48");
+		//streetEdit.setText("Yorckstr.");
+		//numberEdit.setText("48");
 		freeText.setHint(context.getString(R.string.query));
 	}
 
