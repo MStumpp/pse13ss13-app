@@ -34,9 +34,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  */
 public class POIManager {
 
-	private static final String TAG_POIMANAGER = POIManager.class
+	private static final String TAG = POIManager.class
 			.getSimpleName();
-	private static final String TAG = POIManager.class.getSimpleName();
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 10;
@@ -44,7 +43,12 @@ public class POIManager {
 	private final int MAX_DIFFERENCE_OF_COORDINATES_IN_METER = 10;
 
 	private final String fileString = File.separatorChar + "walkaround"
+			
 			+ File.separatorChar + "locationData.pbf";
+	private ProgressListener progress;
+
+	private boolean locationLoaded = false;
+	private boolean locationLoadedStatus = false;
 
 	/**
 	 * Instance of the POIManager.
@@ -71,22 +75,6 @@ public class POIManager {
 	 */
 	public static void initialize(Context context) {
 		POIManager.context = context;
-		// String fileString = File.separatorChar + "walkaround" +
-		// File.separatorChar + "locationData.pbf";
-		// try {
-		// Log.d(TAG_POIMANAGER, "ExtFile: " +
-		// Environment.getExternalStorageDirectory());
-		// locationDataIO = LocationDataIO.load(new
-		// File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-		// fileString));
-		// Log.d(TAG_POIMANAGER, "location data io!" +
-		// locationDataIO.getPOIs().size());
-		// } catch (IOException e) {
-		// Log.d(TAG_POIMANAGER, e.toString());
-		// }catch (OutOfMemoryError e) {
-		// Log.d(TAG_POIMANAGER, e.toString());
-		// System.gc();
-		// }
 	}
 
 	/**
@@ -115,27 +103,32 @@ public class POIManager {
 		return instance;
 	}
 
-	boolean locationLoaded = false;
-	boolean locationLoadedStatus = false;
 
+	/**
+	 * This class loads the Location Data from the Filesystem
+	 * 
+	 * @author ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class LocationLoader implements Runnable {
 		@Override
 		public void run() {
 			locationLoadedStatus = false;
-			Log.d(TAG_POIMANAGER,
+			Log.d(TAG,
 					"ExtFile: " + Environment.getExternalStorageDirectory());
 			try {
 				locationDataIO = LocationDataIO.load(new File(Environment
 						.getExternalStorageDirectory().getAbsolutePath()
 						+ fileString));
-				Log.d(TAG_POIMANAGER, "location data io! "
+				Log.d(TAG, "location data io! "
 						+ locationDataIO.getPOIs().size());
 				locationLoaded = true;
 			} catch (IOException e) {
-				Log.d(TAG_POIMANAGER, e.toString());
+				Log.d(TAG, e.toString());
 				locationLoaded = false;
 			} catch (OutOfMemoryError e) {
-				Log.d(TAG_POIMANAGER, e.toString());
+				Log.d(TAG, e.toString());
 				System.gc();
 				locationLoaded = false;
 			}
@@ -226,11 +219,15 @@ public class POIManager {
 		}
 
 		return poiSet;
+		//TODO
 		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}
 
+	/**
+	 * gives the number of active Categories back
+	 */
 	private int getNumActiveCategories() {
 		int num = 0;
 		for (boolean cat : isCatActive) {
@@ -239,7 +236,7 @@ public class POIManager {
 		return num;
 	}
 
-	// int[] parameter gelöscht da aktive kategorien als attribut vorliegen
+	//TODO int[] parameter gelöscht da aktive kategorien als attribut vorliegen
 	/**
 	 * Returns all POIs laying upon a route.
 	 * 
@@ -271,12 +268,13 @@ public class POIManager {
 			return poiList;
 		}
 		return poiList;
+		//TODO
 		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}
 
-	// aus location poi gemacht
+	//TODO aus location poi gemacht
 	/**
 	 * Returns suggestions of locations searched by query.
 	 * 
@@ -349,6 +347,7 @@ public class POIManager {
 		return suggestions;
 	}
 
+	//TODO
 	// context parameter dazu
 	// gemacht da auf
 	// android funktion zugegriffen wird
@@ -370,7 +369,7 @@ public class POIManager {
 			addresses = geocoder.getFromLocationName(address.toString(),
 					MAX_NUMBER_OF_SUGGESTIONS);
 		} catch (IOException e) {
-			Log.d(TAG_POIMANAGER, e.toString());
+			Log.d(TAG, e.toString());
 		}
 		for (Iterator<android.location.Address> iter = addresses.iterator(); iter
 				.hasNext();) {
@@ -393,7 +392,7 @@ public class POIManager {
 	 * @return the new status of the toggled category
 	 */
 	public boolean togglePOICategory(int id) {
-		Log.d(TAG_POIMANAGER, "Schalte POI-Category '"
+		Log.d(TAG, "Schalte POI-Category '"
 				+ context.getResources().getStringArray(R.array.POICat)[id]
 				+ "' auf " + !isCatActive[id]);
 		boolean zw = !isCatActive[id];
@@ -456,8 +455,11 @@ public class POIManager {
 		return isEmpty;
 	}
 
-	ProgressListener progress;
-
+	/**
+	 * Register a Progress Listener
+	 * 
+	 * @param listener the new Listener
+	 */
 	public void registerProgressListener(ProgressListener listener) {
 		if (listener != null) {
 			progress = listener;
