@@ -192,17 +192,9 @@ public class RouteProcessing {
 		} else  if (routeInfoTransfer.getError() != null) {
  			throw new RouteProcessingException(routeInfoTransfer.getError());
  		}
-		String sourceName = BootActivity.getAppContext().getString(R.string.unknown_location);
-		String targetName = BootActivity.getAppContext().getString(R.string.unknown_location);
-		if (source instanceof Location) {
-			sourceName = ((Location) source).getName();
-		}
-		if (target instanceof Location) {
-			targetName = ((Location) target).getName();
-		}
 
 		// replace first and last Coordinate with Waypoint
-		routeInfoTransfer.postProcessShortestPath(sourceName, targetName);
+		routeInfoTransfer.postProcessShortestPath(source, target);
 
 		RouteInfo route = new Route(new LinkedList<Coordinate>(
 				routeInfoTransfer.getCoordinates()));

@@ -113,7 +113,6 @@ public class Location extends Coordinate {
 
     public void setName(String name) {
     	this.name = name;
-    	Log.d("Location", "Set name '" + name + "' from " + Thread.currentThread().getStackTrace()[3].getClassName()+ "." + Thread.currentThread().getStackTrace()[3].getMethodName() + "()");
     }
 
     /**

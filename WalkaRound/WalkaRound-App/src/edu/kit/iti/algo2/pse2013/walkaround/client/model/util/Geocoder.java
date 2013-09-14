@@ -28,7 +28,7 @@ public class Geocoder {
 
 	public void reverseGeocode(Location loc) {
 		new Thread(new RunReverseGeocode(loc)).start();
-		loc.setName(BootActivity.getAppContext().getString(R.string.unknown_location));
+		loc.setName(BootActivity.getAppContext().getString(R.string.unknown_location, loc.getId()));
 	}
 
 	private class RunReverseGeocode implements Runnable {

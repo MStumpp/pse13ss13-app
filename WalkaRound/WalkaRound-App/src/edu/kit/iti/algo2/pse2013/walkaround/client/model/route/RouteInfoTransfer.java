@@ -98,16 +98,16 @@ public class RouteInfoTransfer {
 
 	/**
 	 * Post processes shortest path.
-	 * @param targetName
-	 * @param sourceName
+	 * @param target
+	 * @param source
 	 */
-	public void postProcessShortestPath(String sourceName, String targetName) {
+	public void postProcessShortestPath(Coordinate source, Coordinate target) {
 		if (coordinates.size() < 2)
 			return;
-		Coordinate source = coordinates.remove(0);
-		coordinates.add(0, new Waypoint(source.getLatitude(), source.getLongitude(), sourceName));
-		Coordinate target = coordinates.remove(coordinates.size()-1);
-		coordinates.add(coordinates.size(), new Waypoint(target.getLatitude(), target.getLongitude(), targetName));
+		coordinates.remove(0);
+		coordinates.remove(coordinates.size()-1);
+		coordinates.add(0, source);
+		coordinates.add(target);
 	}
 
 

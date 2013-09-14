@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  */
 public class Routing extends RelativeLayout implements RouteListener {
 
+	private static final String TAG = Routing.class.getSimpleName();
 	private Button reset;
 	private ImageButton invert;
 	private Button addFavorite;
@@ -210,6 +212,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 	 */
 	public void updateRoute() {
 		BootActivity.getLastStarted().runOnUiThread(new RouteUpdater());
+		Log.d(TAG, "Update Routing-View");
 	}
 
 	private class RouteUpdater implements Runnable {
@@ -226,6 +229,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				delete.setImageResource(R.drawable.delete);
 				save.setImageResource(R.drawable.favorite);
 				text.setText(w.getName());
+				Log.d(TAG, String.format("Setze Name von WP %d auf '%s'", w.getId(), w.getName()));
 
 				delete.setTag(w.getId());
 				save.setTag(w.getId());

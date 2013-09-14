@@ -101,9 +101,9 @@ public class BootActivity extends Activity implements StepCounter {
 	public void alert() {
 
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		alertDialog.setTitle("Unknown Error");
-		alertDialog.setMessage("Close?");
-		alertDialog.setButton(1, "OK", new DialogInterface.OnClickListener() {
+		alertDialog.setTitle(getString(R.string.dialog_header_unknown_error));
+		alertDialog.setMessage(getString(R.string.dialog_text_unknown_error));
+		alertDialog.setButton(1, getString(R.string.option_ok), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
