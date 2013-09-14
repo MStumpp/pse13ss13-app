@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,22 +156,18 @@ public class FavoriteManager {
 	/**
 	 * Returns a favorite route by ID.
 	 *
-	 * @param index
-	 *            index of the favorite route.
+	 * @param name	name of the favorite route.
 	 * @return RouteInfo
 	 */
 	public RouteInfo getFavoriteRoute(String name) {
-		if(savedRoutes.get(name).clone() == null) {
-			Log.d(TAG, "Klon ist null");
-		}
 		return savedRoutes.get(name).clone();
 	}
 
 	/**
 	 * Returns a favorite location by ID.
 	 *
-	 * @param index
-	 *            index of the favorite location.
+	 * @param name
+	 *            name of the favorite location.
 	 * @return Location
 	 */
 	public Location getFavoriteLocation(String name) {
@@ -179,12 +176,8 @@ public class FavoriteManager {
 
 	/**
 	 * Removes a favorite route from the list.
-	 *
-	 * @param index
-	 *            index of the favorite route
-	 * @return
-	 * @throws IOException
-	 * @throws FileNotFoundException
+	 * @param name
+	 * @return see {@link Collection#remove(Object)}
 	 */
 	public boolean deleteRoute(String name) {
 		RouteInfo result = savedRoutes.remove(name);

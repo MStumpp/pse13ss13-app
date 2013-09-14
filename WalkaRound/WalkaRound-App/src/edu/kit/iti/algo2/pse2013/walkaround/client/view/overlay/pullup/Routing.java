@@ -88,9 +88,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 		save.setImageResource(R.drawable.favorite);
 		save.setScaleType(ImageView.ScaleType.FIT_XY);
 
-		reset.setText("Reset");
-		addFavorite.setText("add Favorite");
-		goToMap.setText("go to Map");
+		reset.setText(context.getString(R.string.reset));
+		addFavorite.setText(context.getString(R.string.dialog_header_add, context.getString(R.string.term_favorite)));
+		goToMap.setText(context.getString(R.string.go_to_map));
 
 		// IDs
 
@@ -108,7 +108,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				RelativeLayout.TRUE);
 		paramsReset.topMargin = 10;
 		paramsReset.height = size.y / 10;
-		paramsReset.width = size.y / 10;
+		paramsReset.width = size.x / 5;
 
 		// Invert
 		RelativeLayout.LayoutParams paramsInvert = new RelativeLayout.LayoutParams(
@@ -118,7 +118,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsInvert.addRule(RelativeLayout.RIGHT_OF, 1);
 		paramsInvert.topMargin = 10;
 		paramsInvert.height = size.y / 10;
-		paramsInvert.width = size.y / 10;
+		paramsInvert.width = size.x / 6;
 
 		// Save
 		RelativeLayout.LayoutParams paramsSave = new RelativeLayout.LayoutParams(
@@ -128,7 +128,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsSave.addRule(RelativeLayout.RIGHT_OF, 2);
 		paramsSave.topMargin = 10;
 		paramsSave.height = size.y / 10;
-		paramsSave.width = size.y / 10;
+		paramsSave.width = size.x / 6;
 
 		// ScrollView
 		RelativeLayout.LayoutParams paramsScrollView = new RelativeLayout.LayoutParams(
@@ -296,10 +296,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 		 * makes a alert
 		 */
 		public void alert() {
-			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-					.create();
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
 			alertDialog.setTitle(context.getString(R.string.dialog_header_delete, context.getString(R.string.term_waypoint)));
-			alertDialog.setMessage(context.getString(R.string.dialog_text_delete));
+			alertDialog.setMessage(context.getString(R.string.dialog_text_delete, RouteController.getInstance().getWaypoint(id).getName()));
 			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override

@@ -12,13 +12,15 @@
 	<string name="current">current</string>
 	<string name="current_route">Current Route</string>
 	<string name="dialog_header_add">Add %s</string>
+	<string name="dialog_header_add_fav_to_route">Add favorite to route</string>
 	<string name="dialog_header_delete">Delete %s</string>
 	<string name="dialog_header_save">Save %s</string>
 	<string name="dialog_header_unknown_error">An unknown error occurred</string>
 	<string name="dialog_header_wifi">No WiFi-Connection</string>
+	<string name="dialog_text_add_fav_to_route">Do you really want to add \'%s\' to the end of the current route?</string>
 	<string name="dialog_text_add_or_save">Pick a name</string>
 	<string name="dialog_text_boomerang">You have not picked any waypoint. Please pick one in order to calculate a Roundtrip.</string>
-	<string name="dialog_text_delete">Do you really want to delete?</string>
+	<string name="dialog_text_delete">Do you really want to delete \'%s\'?</string>
 	<string name="dialog_text_gps_inactive">Your GPS is inactive. Should it become activated?</string>
 	<string name="dialog_text_unknown_error">The app will be closing now.</string>
 	<string name="dialog_text_wifi">No WiFi-connection was detected. Do you want to establish one?</string>
@@ -39,7 +41,9 @@
 	<string name="sightseeing">Sightseeing</string>
 	<string name="start_search">Go</string>
 	<string name="suggestions">Suggestions</string>
+	<string name="term_favorite">Favorite</string>
 	<string name="term_favorite_route">Favorite route</string>
+	<string name="term_location">location</string>
 	<string name="term_poi" translatable="false">POI</string>
 	<string name="term_pois" translatable="false">POIs</string>
 	<string name="term_profiles">Profiles</string>

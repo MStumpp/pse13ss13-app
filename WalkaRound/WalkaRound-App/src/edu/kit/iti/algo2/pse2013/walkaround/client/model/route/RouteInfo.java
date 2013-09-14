@@ -6,7 +6,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
- * 
+ *
  * @author Lukas Müller
  * @version 1.0
  *
@@ -26,7 +26,7 @@ public interface RouteInfo {
 	public LinkedList<Coordinate> getCoordinates();
 
 	public boolean containsWaypoint(Waypoint wp);
-	
+
 	public RouteInfo clone();
 
 	public Waypoint getWaypoint(int id);

@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
@@ -83,11 +84,11 @@ public class Favorite extends RelativeLayout {
 		main.addView(scrollRoute);
 
 		waypointButton = new Button(context, attrs);
-		waypointButton.setText("Orte");
+		waypointButton.setText(BootActivity.getAppContext().getString(R.string.term_location));
 		waypointButton.setOnTouchListener(new ToogleTabListener());
 
 		routeButton = new Button(context, attrs);
-		routeButton.setText("Routen");
+		routeButton.setText(BootActivity.getAppContext().getString(R.string.term_route));
 		routeButton.setOnTouchListener(new ToogleTabListener());
 
 		LinearLayout.LayoutParams waypointButtontParams = new LinearLayout.LayoutParams(
@@ -271,7 +272,6 @@ public class Favorite extends RelativeLayout {
 				this.view = view;
 				this.alert();
 			}
-
 			return false;
 		}
 
@@ -281,9 +281,9 @@ public class Favorite extends RelativeLayout {
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle("Wegpunkt hinzufügen");
-			alertDialog.setMessage("Wirklich hinzufügen?");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+			alertDialog.setTitle(BootActivity.getAppContext().getString(R.string.dialog_header_add_fav_to_route));
+			alertDialog.setMessage(BootActivity.getAppContext().getString(R.string.dialog_text_add_fav_to_route, view.getTag().toString()));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, BootActivity.getAppContext().getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -292,7 +292,7 @@ public class Favorite extends RelativeLayout {
 							RouteController.getInstance().addWaypoint(w);
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, BootActivity.getAppContext().getString(R.string.option_no),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -301,7 +301,6 @@ public class Favorite extends RelativeLayout {
 					});
 			alertDialog.show();
 		}
-
 	}
 
 	/**
@@ -311,9 +310,7 @@ public class Favorite extends RelativeLayout {
 	 *
 	 */
 	private class FavoriteRouteListener implements OnTouchListener {
-
 		private View view;
-
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
@@ -328,19 +325,19 @@ public class Favorite extends RelativeLayout {
 		 * makes a alert
 		 */
 		public void alert() {
-			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-					.create();
-			alertDialog.setTitle("Route hinzufügen");
-			alertDialog.setMessage("Wirklich hinzufügen?");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+			final RouteInfo route = FavoriteManager.getInstance(getContext()).getFavoriteRoute(view.getTag().toString());
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+			alertDialog.setTitle(BootActivity.getAppContext().getString(R.string.dialog_header_add_fav_to_route));
+			alertDialog.setMessage(BootActivity.getAppContext().getString(R.string.dialog_text_add_fav_to_route, view.getTag().toString()));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, BootActivity.getAppContext().getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							RouteInfo l = FavoriteManager.getInstance(getContext()).getFavoriteRoute(view.getTag().toString());
-							RouteController.getInstance().addRoute(l);
+							RouteController.getInstance().addRoute(route);
+							Log.d(TAG, String.format("Added favorite route with %d coordinates to current route: %s", route.getCoordinates().size(), route));
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, BootActivity.getAppContext().getString(R.string.option_no),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -349,7 +346,6 @@ public class Favorite extends RelativeLayout {
 					});
 			alertDialog.show();
 		}
-
 	}
 
 	/**
@@ -380,16 +376,16 @@ public class Favorite extends RelativeLayout {
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle("Route löschen");
-			alertDialog.setMessage(id + " wirklich löschen?");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+			alertDialog.setTitle(BootActivity.getAppContext().getString(R.string.dialog_header_delete, BootActivity.getAppContext().getString(R.string.term_route)));
+			alertDialog.setMessage(BootActivity.getAppContext().getString(R.string.dialog_text_delete, id));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, BootActivity.getAppContext().getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							FavoriteManager.getInstance(getContext()).deleteRoute(id);
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, BootActivity.getAppContext().getString(R.string.option_no),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -427,18 +423,17 @@ public class Favorite extends RelativeLayout {
 		 * makes a alert
 		 */
 		public void alert() {
-			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-					.create();
-			alertDialog.setTitle("Route löschen");
-			alertDialog.setMessage(id + " wirklich löschen?");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+			alertDialog.setTitle(BootActivity.getAppContext().getString(R.string.dialog_header_delete, BootActivity.getAppContext().getString(R.string.term_location)));
+			alertDialog.setMessage(BootActivity.getAppContext().getString(R.string.dialog_text_delete, id));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, BootActivity.getAppContext().getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							FavoriteManager.getInstance(getContext()).deleteLocation(id);
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, BootActivity.getAppContext().getString(R.string.option_no),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
