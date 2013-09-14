@@ -420,4 +420,16 @@ public class RouteController {
 		}
 		return null;
 	}
+
+
+	/**
+	 * Shifts the position of the given waypoint
+	 * 
+	 * @param id of the Waypoint
+	 * @param i shift the order of the given Waypoint by this number. Positive numbers to the end of the list. Negative numbers to the begin of the list.
+	 */
+	public void moveWaypoint(int id, int i) {
+		// TODO Auto-generated method stub
+		
+	}
 }

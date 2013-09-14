@@ -270,13 +270,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 	 * Listen to Waypoint events
 	 * 
 	 * @author Ludwig Biermann
-<<<<<<< HEAD
-	 * @version 1.0
-	 * 
-=======
 	 * @version 1.1
 	 *
->>>>>>> e54aa1c1c4168b06e52b0a93d82012b4296e9f89
 	 */
 	private class WaypointListener implements OnTouchListener {
 		@Override
@@ -295,6 +290,54 @@ public class Routing extends RelativeLayout implements RouteListener {
 			return false;
 		}
 
+	}
+	
+	/**
+	 * Shifts the position one step down
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
+	private class MoveDownListener implements OnTouchListener {
+
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+
+			if (action == MotionEvent.ACTION_UP) {
+				int id = Integer.parseInt(view.getTag().toString());
+				
+				RouteController.getInstance().moveWaypoint(id, 1);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Shifts the position one step upd
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
+	private class MoveUpListener implements OnTouchListener {
+
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+
+			if (action == MotionEvent.ACTION_UP) {
+				int id = Integer.parseInt(view.getTag().toString());
+				
+				RouteController.getInstance().moveWaypoint(id, -1);
+			}
+
+			return false;
+		}
 	}
 
 	/**
