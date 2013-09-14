@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Favorite;
@@ -69,6 +70,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 	private Info infoMenu;
 	private FrameLayout optionMenu;
 	private int pullUpContent = -1;
+	private TextView title;
 
 	/**
 	 * This create a new POIview.
@@ -146,74 +148,90 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		LinearLayout.LayoutParams paramsRouting = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		// paramsRouting.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		// RelativeLayout.TRUE);
 		paramsRouting.width = size.x / 5;
 		paramsRouting.height = size.x / 5;
-		// paramsRouting.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsStar = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		// paramsStar
-		// .addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-		// paramsStar.addRule(RelativeLayout.RIGHT_OF, 1);
 		paramsStar.width = size.x / 5;
 		paramsStar.height = size.x / 5;
-		// paramsStar.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsRoundtrip = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		// paramsRoundtrip.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		// RelativeLayout.TRUE);
-		// paramsRoundtrip.addRule(RelativeLayout.RIGHT_OF, 2);
 		paramsRoundtrip.width = size.x / 5;
 		paramsRoundtrip.height = size.x / 5;
-		// paramsRoundtrip.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsPOI = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		// paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		// RelativeLayout.TRUE);
-		// paramsPOI.addRule(RelativeLayout.RIGHT_OF, 3);
 		paramsPOI.width = size.x / 5;
 		paramsPOI.height = size.x / 5;
-		// paramsPOI.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsSearch = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		// paramsSearch.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-		// RelativeLayout.TRUE);
-		// paramsSearch.addRule(RelativeLayout.RIGHT_OF, 4);
 		paramsSearch.width = size.x / 5;
 		paramsSearch.height = size.x / 5;
-		// paramsSearch.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
+		
+		
 		regulator = new ImageView(context, attrs);
+		title = new TextView(context, attrs);
+		title.setText("Test");
+		title.setTextSize(30);
+
+		LinearLayout tileLine = new LinearLayout(context, attrs);
+		LinearLayout.LayoutParams titleLineParams = new LinearLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		tileLine.setOrientation(LinearLayout.HORIZONTAL);
+		titleLineParams.width = size.x;
+		//tileLine.setBackgroundColor(Color.RED);
+		
+		
+		
 		regulator.setImageDrawable(context.getResources().getDrawable(
 				R.drawable.closearrows));
 		regulator.setRotation(90);
 		regulator.setTag(-1);
 		regulator.setId(5);
+		
+		
 		search.setScaleType(ImageView.ScaleType.FIT_XY);
 
 		LinearLayout.LayoutParams paramsRegulator = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		// paramsRegulator.addRule(RelativeLayout.BELOW, 1);
-		paramsRegulator.gravity = Gravity.CENTER_HORIZONTAL;
-
+		paramsRegulator.weight = 0.1F;
+		
+		LinearLayout.LayoutParams tileParams = new LinearLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		tileParams.weight = 0.9F;
+		tileParams.width = size.x;
+		tileParams.topMargin = 8;
+		tileParams.bottomMargin = 8;
+		tileParams.gravity = Gravity.CENTER;
+		tileParams.leftMargin = 20;
+		//title.setBackgroundColor(Color.RED);
+		title.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+		title.setWidth(size.x);
+		
 		lineOne.addView(routing, paramsRouting);
 		lineOne.addView(star, paramsStar);
 		lineOne.addView(roundtrip, paramsRoundtrip);
 		lineOne.addView(poi, paramsPOI);
 		lineOne.addView(search, paramsSearch);
 
-		staticL.addView(regulator, paramsRegulator);
+		tileLine.addView(regulator, paramsRegulator);
+		tileLine.addView(title, tileParams);
+
+		staticL.addView(tileLine, titleLineParams);
 		staticL.getRootView().setBackgroundColor(Color.BLACK);
+		
+		
 
 		// content = new RelativeLayout(context, attrs);
 		LayoutParams paramsContent = new LayoutParams(
@@ -295,7 +313,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
 				this.routing.setImageResource(R.drawable.listactive);
-
+				this.title.setText("Routenverwaltung");
 				pullUpContent = id;
 			} else {
 				if (this.getY() == 0) {
@@ -318,6 +336,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
 				this.star.setImageResource(R.drawable.staticstaractive);
+				this.title.setText("Favoriten");
 
 				pullUpContent = id;
 			} else {
@@ -342,6 +361,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
 				this.roundtrip.setImageResource(R.drawable.rundkursactive);
+				this.title.setText("Rundkurs erstellen");
 
 				pullUpContent = id;
 			} else {
@@ -365,6 +385,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
 				this.poi.setImageResource(R.drawable.staticflagactive);
+				this.title.setText("Points of Interest");
 
 				pullUpContent = id;
 			} else {
@@ -389,6 +410,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
 				this.search.setImageResource(R.drawable.loupeactive);
+				this.title.setText("Suche");
 
 				pullUpContent = id;
 			} else {
@@ -413,6 +435,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.GONE);
 				// -----------------------------------
 				this.unsetActiveMenu();
+				this.title.setText("Infos");
 
 				pullUpContent = id;
 			} else {
@@ -438,6 +461,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 				optionMenu.setVisibility(View.VISIBLE);
 				// -----------------------------------
 				this.unsetActiveMenu();
+				this.title.setText("Options");
 
 				pullUpContent = id;
 			} else {
@@ -457,6 +481,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 			searchMenu.setVisibility(View.GONE);
 			infoMenu.setVisibility(View.GONE);
 			// -----------------------------------
+			this.title.setText("");
 
 			pullUpContent = -1;
 			if (this.getY() == 0) {
@@ -484,6 +509,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		infoMenu.setVisibility(View.VISIBLE);
 		optionMenu.setVisibility(View.GONE);
 		// -----------------------------------
+		this.title.setText("Favoriten hinzufügen");
 		this.unsetActiveMenu();
 		this.pullUp();
 		infoMenu.update(poi);
