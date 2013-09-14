@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="options_general">gerneral settings</string>
-    <string name="options_face">look and feel</string>
-    <string name="options_navi">navigation</string>
-    <string name="options_server_cat">WalkaRound Server Addresses</string>
-    <string name="options_navigation">navigation settings</string>
-    <string name="options_navigation_audio_output">audio output</string>
-    <string name="options_navigation_audio_output_all">sound</string>
-    <string name="options_navigation_audio_output_typ">sound typ</string>
-    <string name="options_navigation_audio_output_typ_default">text to speech</string>
-    <string name="options_navigation_text_output">text output</string>
-    <string name="options_navigation_text_output_time_to_destination">time to destination</string>
-    <string name="options_navigation_text_output_time_left">time left</string>
-    <string name="options_navigation_text_output_remaining_way">remaining way</string>
-    <string name="options_navigation_text_output_walked_way">walked way</string>
-    <string name="options_navigation_text_output_speed">speed</string>
-    <string name="options_map">map</string>
+    <string name="options_face">Look and feel</string>
+    <string name="options_general">General settings</string>
+    <string name="options_map">Map</string>
+    <string name="options_map_typ">Map type</string>
+    <string name="options_map_typ_default">OSM default style</string>
+    <string name="options_navi">Navigation</string>
+    <string name="options_navigation">Navigation settings</string>
+    <string name="options_navigation_audio_output">Audio output</string>
+    <string name="options_navigation_audio_output_all">Sound</string>
+    <string name="options_navigation_audio_output_typ">Sound type</string>
+    <string name="options_navigation_audio_output_typ_default">Text-to-speech</string>
+    <string name="options_navigation_text_output">Text output</string>
+    <string name="options_navigation_text_output_remaining_way">Remaining way</string>
+    <string name="options_navigation_text_output_speed">Speed</string>
+    <string name="options_navigation_text_output_time_left">Time left</string>
+    <string name="options_navigation_text_output_time_to_destination">Time to destination</string>
+    <string name="options_navigation_text_output_walked_way">Walked way</string>
     <string name="options_poi">POI information</string>
     <string name="options_poi_image">show images of the POIn</string>
+    <string name="options_poi_speech_output">titel output</string>
     <string name="options_poi_text_output">text output</string>
-    <string name="options_poi_speech_output">titel output</string>    
-    <string name="options_map_typ">map type</string>
-    <string name="options_map_typ_default">Mapnik</string>
-    <string name="options_server">server address</string>
-    <string name="options_server_url">shortest path computing</string>
-    <string name="options_server_url_message">please edit the address</string>
-    <string name="options_server_url_roundrip">roundtrip computing</string>
-    <string name="options_server_url_roundrip_default">http://54.213.123.61:8080/walkaround/api/processor/computeRoundtrip</string>
-    <string name="options_server_url_short_default">http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath</string>
-    <string name="options_server_url_next_vertex">next vertex</string>
-    <string name="options_server_url_next_vertex_default">http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex</string>
+    <string name="options_server">Server address</string>
+    <string name="options_server_cat">WalkaRound Server Addresses</string>
+    <string name="options_server_url">Shortest path computing</string>
+    <string name="options_server_url_message">Please edit the address</string>
+    <string name="options_server_url_next_vertex">Nearest vertex for position</string>
+    <string name="options_server_url_next_vertex_default" translatable="false">http://54.213.123.61:8080/walkaround/api/processor/getNearestVertex</string>
+    <string name="options_server_url_roundrip">Roundtrip computation</string>
+    <string name="options_server_url_roundrip_default" translatable="false">http://54.213.123.61:8080/walkaround/api/processor/computeRoundtrip</string>
+    <string name="options_server_url_short_default" translatable="false">http://54.213.123.61:8080/walkaround/api/processor/computeShortestPath</string>
 </resources>

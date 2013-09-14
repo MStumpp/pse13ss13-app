@@ -14,11 +14,13 @@
 	<string name="dialog_header_add">Add %s</string>
 	<string name="dialog_header_delete">Delete %s</string>
 	<string name="dialog_header_save">Save %s</string>
+	<string name="dialog_header_unknown_error">An unknown error occurred</string>
 	<string name="dialog_header_wifi">No WiFi-Connection</string>
 	<string name="dialog_text_add_or_save">Pick a name</string>
 	<string name="dialog_text_boomerang">You have not picked any waypoint. Please pick one in order to calculate a Roundtrip.</string>
 	<string name="dialog_text_delete">Do you really want to delete?</string>
 	<string name="dialog_text_gps_inactive">Your GPS is inactive. Should it become activated?</string>
+	<string name="dialog_text_unknown_error">The app will be closing now.</string>
 	<string name="dialog_text_wifi">No WiFi-connection was detected. Do you want to establish one?</string>
 	<string name="email_address" translatable="false">pse13ss13@ira.uni-karlsruhe.de</string>
 	<string name="go_to_map">Back to map</string>
@@ -45,5 +47,5 @@
 	<string name="term_boomerang">Boomerangpoint</string>
 	<string name="term_waypoint">Waypoint</string>
 	<string name="term_roundtrip">Roundtrip</string>
-	<string name="unknown_location">Unknown location</string>
+	<string name="unknown_location">Unknown %d</string>
 </resources>

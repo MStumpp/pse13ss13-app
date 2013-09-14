@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="options_general">Allgemeine Einstellungen</string>
     <string name="options_face">Erscheinungsbild</string>
+    <string name="options_general">Allgemeine Einstellungen</string>
+    <string name="options_map">Karte</string>
+    <string name="options_map_typ">Karten Typ</string>
+    <string name="options_map_typ_default">OSM Standardstil</string>
     <string name="options_navi">Navigation</string>
-    <string name="options_server_cat">WalkaRound Server Adressen</string>
-    <string name="options_navigation">Navigations Hinweise</string>
+    <string name="options_navigation">Navigationshinweise</string>
     <string name="options_navigation_audio_output">Audio Ausgabe</string>
     <string name="options_navigation_audio_output_all">Ton</string>
     <string name="options_navigation_audio_output_typ">Art der Ausgabe</string>
+    <string name="options_navigation_audio_output_typ_default">Text-to-speech</string>
     <string name="options_navigation_text_output">Text Ausgabe</string>
-    <string name="options_navigation_text_output_time_to_destination">Zeit bis zum Ziel</string>
-    <string name="options_navigation_text_output_time_left">Verstrichene Zeit</string>
     <string name="options_navigation_text_output_remaining_way">Verbleibender Weg</string>
-    <string name="options_navigation_text_output_walked_way">Gegangener Weg</string>
     <string name="options_navigation_text_output_speed">Geschwindigkeit</string>
-    <string name="options_map">Karte</string>
-    <string name="options_poi">POI Informationen</string>
-    <string name="options_poi_image">zu POI´s Bilder anzeigen</string>
-    <string name="options_poi_text_output">Text ausgeben</string>
+    <string name="options_navigation_text_output_time_left">Verstrichene Zeit</string>
+    <string name="options_navigation_text_output_time_to_destination">Zeit bis zum Ziel</string>
+    <string name="options_navigation_text_output_walked_way">Gegangener Weg</string>
+    <string name="options_poi">Informationen zu POI</string>
+    <string name="options_poi_image">Bilder zu POIs anzeigen</string>
     <string name="options_poi_speech_output">Titel ausgeben</string>
-    <string name="options_map_typ">Karten Typ</string>
-    <string name="options_server">Server Adressen</string>
-    <string name="options_server_url">Kürtzeste-Wege Berechnung</string>
-    <string name="options_server_url_message">bitte korrigieren sie die Adresse</string>
-    <string name="options_server_url_roundrip">Rundkurs Berechnung</string>
+    <string name="options_poi_text_output">Text ausgeben</string>
+    <string name="options_server">Serveradressen</string>
+    <string name="options_server_cat">Serveradressen</string>
+    <string name="options_server_url">Berechnung der kürzesten Strecke</string>
+    <string name="options_server_url_next_vertex">Nächster Graphknoten zur Position</string>
+    <string name="options_server_url_message">Bitte geben Sie die Serveradresse für die %s ein.</string>
+    <string name="options_server_url_roundrip">Rundkursberechnung</string>
 </resources>

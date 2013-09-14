@@ -28,6 +28,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/large_logo" />
+        android:src="@drawable/large_logo"
+        android:contentDescription="@string/logo_description"/>
 
 </RelativeLayout>

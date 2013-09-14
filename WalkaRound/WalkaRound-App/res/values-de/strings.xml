@@ -13,15 +13,18 @@
 	<string name="dialog_header_add">%s hinzufügen</string>
 	<string name="dialog_header_delete">%s löschen</string>
 	<string name="dialog_header_save">%s speichern</string>
+	<string name="dialog_header_unknown_error">Ein unbekannter Fehler ist aufgetreten</string>
 	<string name="dialog_header_wifi">Keine WLAN-Verbindung</string>
 	<string name="dialog_text_add_or_save">Wählen sie einen Namen aus</string>
 	<string name="dialog_text_boomerang">Sie haben noch keinen Wegpunkt gewählt. Bitte wählen Sie einen, um einen Rundkurs zu berechnen.</string>
 	<string name="dialog_text_delete">Sind Sie sich sicher, dass sie löschen wollen?</string>
 	<string name="dialog_text_gps_inactive">Ihr GPS ist nicht aktiviert. Soll es aktiviert werden?</string>
+	<string name="dialog_text_unknown_error">Die App wird jetzt geschlossen.</string>
 	<string name="dialog_text_wifi">Keine WLAN-Verbindung erkannt. Möchten sie sich mit einem WLAN verbinden?</string>
 	<string name="go_to_map">zurück zur Karte</string>
 	<string name="length">Länge</string>
 	<string name="loading">Lade</string>
+	<string name="logo_description">Das Logo von Walkaround: Ein Wegweiser, auf dem das Wort \"Walk\" steht, darunter steht das Wort\"aRound\" mit einem großen R und das o wurde durch einen roten Pfeil ersetzt, der zu einem Kreis gebogen ist.</string>
 	<string name="meter">Meter</string>
 	<string name="option_add">Hinzufügen</string>
 	<string name="option_cancel">Abbrechen</string>
@@ -40,5 +43,5 @@
 	<string name="term_route">Strecke</string>
 	<string name="term_waypoint">Wegpunkt</string>
 	<string name="term_roundtrip">Rundkurs</string>
-	<string name="unknown_location">Unbekannter Ort</string>
+	<string name="unknown_location">Unbekannt %d</string>
 </resources>
