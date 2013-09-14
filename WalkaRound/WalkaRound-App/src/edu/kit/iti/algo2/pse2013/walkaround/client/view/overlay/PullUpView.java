@@ -500,6 +500,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 	 */
 	public void updateInfoView(POI poi) {
 
+		this.unsetActiveMenu();
 		// -----------------------------------
 		routingMenu.setVisibility(View.GONE);
 		poiMenu.setVisibility(View.GONE);
@@ -510,7 +511,6 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		optionMenu.setVisibility(View.GONE);
 		// -----------------------------------
 		this.title.setText("Infos");
-		this.unsetActiveMenu();
 		this.pullUp();
 		infoMenu.update(poi);
 	}
