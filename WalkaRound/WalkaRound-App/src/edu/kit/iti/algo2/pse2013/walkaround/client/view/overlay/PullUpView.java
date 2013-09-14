@@ -32,12 +32,13 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class hold and manage all pullup views
- *
+ * 
  * @author Ludwig Biermann
  * @version 10.2
- *
+ * 
  */
-public class PullUpView extends RelativeLayout implements GoToMapListener, GoToFavoriteListener {
+public class PullUpView extends RelativeLayout implements GoToMapListener,
+		GoToFavoriteListener {
 
 	Point size;
 	private ImageView routing;
@@ -69,7 +70,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * This create a new POIview.
-	 *
+	 * 
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -80,7 +81,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		size = BoundingBox.getInstance(context).getDisplaySize();
 
 		RelativeLayout.LayoutParams main = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		main.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
 		main.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
@@ -122,7 +124,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 		LinearLayout staticL = new LinearLayout(context, attrs);
 		LinearLayout.LayoutParams staticLParams = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		staticL.setOrientation(LinearLayout.VERTICAL);
 		staticLParams.width = size.x;
 		staticLParams.height = size.y;
@@ -131,14 +134,16 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 		LinearLayout lineOne = new LinearLayout(context, attrs);
 		LinearLayout.LayoutParams lineOneLParams = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		lineOne.setOrientation(LinearLayout.HORIZONTAL);
 		lineOne.setGravity(Gravity.CENTER);
 
 		staticL.addView(lineOne, lineOneLParams);
 
 		LinearLayout.LayoutParams paramsRouting = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		// paramsRouting.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 		// RelativeLayout.TRUE);
 		paramsRouting.width = size.x / 5;
@@ -146,7 +151,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		// paramsRouting.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsStar = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		// paramsStar
 		// .addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		// paramsStar.addRule(RelativeLayout.RIGHT_OF, 1);
@@ -155,7 +161,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		// paramsStar.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsRoundtrip = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		// paramsRoundtrip.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 		// RelativeLayout.TRUE);
 		// paramsRoundtrip.addRule(RelativeLayout.RIGHT_OF, 2);
@@ -164,7 +171,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		// paramsRoundtrip.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsPOI = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		// paramsPOI.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 		// RelativeLayout.TRUE);
 		// paramsPOI.addRule(RelativeLayout.RIGHT_OF, 3);
@@ -173,7 +181,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		// paramsPOI.leftMargin = Math.abs(size.x / 6 - size.x / 5) / 2;
 
 		LinearLayout.LayoutParams paramsSearch = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		// paramsSearch.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 		// RelativeLayout.TRUE);
 		// paramsSearch.addRule(RelativeLayout.RIGHT_OF, 4);
@@ -190,7 +199,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		search.setScaleType(ImageView.ScaleType.FIT_XY);
 
 		LinearLayout.LayoutParams paramsRegulator = new LinearLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		// paramsRegulator.addRule(RelativeLayout.BELOW, 1);
 		paramsRegulator.gravity = Gravity.CENTER_HORIZONTAL;
 
@@ -205,7 +215,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 		// content = new RelativeLayout(context, attrs);
 		LayoutParams paramsContent = new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 
 		// content.getRootView().setBackgroundColor(Color.BLACK);
 
@@ -257,7 +268,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * change the content of the pullup
-	 *
+	 * 
 	 * @param id
 	 *            of content
 	 */
@@ -456,7 +467,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * update Info View
-	 *
+	 * 
 	 * @param poi
 	 *            the new poi
 	 */
@@ -502,10 +513,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * Static Touch Listener
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class StaticTouchListener implements OnTouchListener {
 
@@ -513,7 +524,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 		public boolean onTouch(View view, MotionEvent event) {
 
 			int action = event.getAction();
-			if (action == MotionEvent.ACTION_DOWN) {
+
+			if (action == MotionEvent.ACTION_UP) {
 				if (view.equals(routing) || view.equals(star)
 						|| view.equals(roundtrip) || view.equals(search)
 						|| view.equals(poi)) {
@@ -525,16 +537,25 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 					return true;
 				}
 			}
+
+			if (action == MotionEvent.ACTION_DOWN) {
+				if (view.equals(routing) || view.equals(star)
+						|| view.equals(roundtrip) || view.equals(search)
+						|| view.equals(poi)) {
+					return true;
+				}
+			}
+
 			return false;
 		}
 	}
 
 	/**
 	 * Static Touch Listener
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class RegulatorTouchListener implements OnTouchListener {
 
@@ -554,10 +575,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * Implements the Animation listener of the transaction of the pullupview
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class RegulatorAnimationListener implements AnimationListener {
 
@@ -623,7 +644,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * register roundtrip
-	 *
+	 * 
 	 * @param listener
 	 *            the new Listener
 	 */
@@ -634,7 +655,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * register poi change listener
-	 *
+	 * 
 	 * @param listener
 	 *            the new listener
 	 */
@@ -644,7 +665,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener, GoToF
 
 	/**
 	 * register update map listener
-	 *
+	 * 
 	 * @param listener
 	 *            the new listener
 	 */
