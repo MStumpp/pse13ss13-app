@@ -624,6 +624,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	@Override
 	public void goToFavorite() {
+		unsetActiveMenu();
 		// -----------------------------------
 		routingMenu.setVisibility(View.GONE);
 		poiMenu.setVisibility(View.GONE);
@@ -633,6 +634,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		infoMenu.setVisibility(View.GONE);
 		optionMenu.setVisibility(View.GONE);
 		// -----------------------------------
+		this.star.setImageResource(R.drawable.staticstaractive);
 
 		pullUpContent = PullUpView.CONTENT_FAVORITE;
 	}
