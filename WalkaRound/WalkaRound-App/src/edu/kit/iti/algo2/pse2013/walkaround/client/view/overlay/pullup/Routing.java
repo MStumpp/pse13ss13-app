@@ -502,9 +502,37 @@ public class Routing extends RelativeLayout implements RouteListener {
 	private class ResetListener implements OnTouchListener {
 
 		@Override
-		public boolean onTouch(View view, MotionEvent arg1) {
-			RouteController.getInstance().resetRoute();
+		public boolean onTouch(View view, MotionEvent event) {
+			int action = event.getAction();
+			if (action == MotionEvent.ACTION_UP) {
+				this.alert();
+			}
 			return false;
+		}
+		/**
+		 * makes a alert
+		 */
+		public void alert() {
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+					.create();
+			alertDialog.setTitle("Route löschen");
+			alertDialog.setMessage("Route wirklich löschen");
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+					"Ja",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							RouteController.getInstance().resetRoute();							
+						}
+					});
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+					"Nein!",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+			alertDialog.show();
 		}
 
 	}

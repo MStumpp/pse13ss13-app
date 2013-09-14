@@ -140,6 +140,8 @@ public class Info extends LinearLayout {
 		if (poi.getName() != null) {
 			this.title.setText(poi.getName());
 			this.title.setVisibility(VISIBLE);
+			sound.setVisibility(VISIBLE);
+			sound.setOnTouchListener(new PlayListener(poi.getName()));
 
 			if (PreferenceUtility.getInstance().isPOITitleSoundOn()) {
 				TextToSpeechUtility.speak(poi.getName());
@@ -151,7 +153,11 @@ public class Info extends LinearLayout {
 		if (poi.getTextInfo() != null) {
 			speak = true;
 			Spanned htmlizedText = Html.fromHtml(poi.getTextInfo());
-			sound.setOnTouchListener(new PlayListener(htmlizedText.toString()));
+			if(poi.getName() == null){
+				sound.setOnTouchListener(new PlayListener(htmlizedText.toString()));
+			} else {
+				sound.setOnTouchListener(new PlayListener(poi.getName() + " " + htmlizedText.toString()));
+			}
 			text.setText(htmlizedText);
 			text.setMovementMethod(LinkMovementMethod.getInstance());
 			text.setVisibility(VISIBLE);
