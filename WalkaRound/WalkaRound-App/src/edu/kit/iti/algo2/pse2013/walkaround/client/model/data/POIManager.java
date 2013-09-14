@@ -162,7 +162,7 @@ public class POIManager {
 	 */
 	private boolean loadLocation(boolean force) {
 
-		if (locationDataIO == null && (getNumActiveCategories() > 0 || force)) {
+		if (locationDataIO == null || force) {
 
 			if (progress != null) {
 				Log.d(TAG, "Show Progress");
@@ -181,9 +181,6 @@ public class POIManager {
 				progress.hideProgress();
 			}
 			return locationLoaded;
-		} else {
-			locationDataIO = null;
-			System.gc();
 		}
 		return true;
 	}
@@ -203,16 +200,14 @@ public class POIManager {
 			Coordinate bottomRight, float levelOfDetail) {
 
 		Set<POI> poiSet = new HashSet<POI>();
-		if (getNumActiveCategories() <= 0) {
-			return poiSet;
-		}
-
-		double minLat = bottomRight.getLatitude();
-		double maxLat = upperLeft.getLatitude();
-		double minLon = upperLeft.getLongitude();
-		double maxLon = bottomRight.getLongitude();
 
 		if (locationDataIO != null) {
+			
+			double minLat = bottomRight.getLatitude();
+			double maxLat = upperLeft.getLatitude();
+			double minLon = upperLeft.getLongitude();
+			double maxLon = bottomRight.getLongitude();
+			
 			Iterator<POI> iter = locationDataIO.getPOIs().iterator();
 			while (iter.hasNext()) {
 				POI current = iter.next();
@@ -255,14 +250,11 @@ public class POIManager {
 	 * @return a list of all POIs laying upon a route
 	 */
 	public List<POI> getPOIsAlongRoute(RouteInfo routeInfo, float levelOfDetail) {
-		LinkedList<Coordinate> coords = routeInfo.getCoordinates();
 		ArrayList<POI> poiList = new ArrayList<POI>();
 
-		if (getNumActiveCategories() <= 0) {
-			return poiList;
-		}
-
 		if (locationDataIO != null) {
+			LinkedList<Coordinate> coords = routeInfo.getCoordinates();
+			
 			for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 					.hasNext();) {
 				POI currentPOI = iter.next();
@@ -294,13 +286,14 @@ public class POIManager {
 	 */
 	public List<POI> searchPOIsByQuery(String query) {
 
-		TreeMap<Integer, ArrayList<POI>> suggestionsMap = new TreeMap<Integer, ArrayList<POI>>();
 		ArrayList<POI> suggestions = new ArrayList<POI>();
 
 		// loads Location IO
-		this.loadLocation(true);
+		this.loadLocation();
 
 		if (locationDataIO != null) {
+			TreeMap<Integer, ArrayList<POI>> suggestionsMap = new TreeMap<Integer, ArrayList<POI>>();
+			
 			for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
 					.hasNext();) {
 				POI currentPOI = poiIter.next();
@@ -331,13 +324,25 @@ public class POIManager {
 					suggestionsReduced.add(currentSuggestion);
 					suggestionsCounter--;
 				} else {
+					
+					if(this.getNumActiveCategories() <= 0)	{
+						locationDataIO = null;
+					}
+					
 					System.gc();
 					return suggestionsReduced;
 				}
 			}
 			// Log.d(TAG_POIMANAGER, "suggestions" + suggestions.get(0));
+			if(this.getNumActiveCategories() <= 0)	{
+				locationDataIO = null;
+			}
+			
 			System.gc();
 			return suggestionsReduced;
+		}
+		if(this.getNumActiveCategories() <= 0)	{
+			locationDataIO = null;
 		}
 
 		System.gc();
@@ -394,6 +399,10 @@ public class POIManager {
 		boolean zw = !isCatActive[id];
 		isCatActive[id] = !isCatActive[id];
 		this.loadLocation();
+		
+		if(this.getNumActiveCategories() <= 0)	{
+			locationDataIO = null;
+		}
 
 		return zw;
 	}
