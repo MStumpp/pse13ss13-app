@@ -196,13 +196,15 @@ public class Route implements RouteInfo {
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate route");
 			// Calculate and add the intermediate route:
 			// TODO: REACTIVATE
-			// RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());
-			// this.addRoute(intermediateRoute);
+			RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());
+			this.addRoute(intermediateRoute);
 		}
 
 
 		assert(newRoute.getCoordinates().size() > 0);
-		newRoute.getCoordinates().removeFirst();
+		if (getEnd().equals(newRoute.getStart())) {
+			newRoute.getCoordinates().removeFirst();
+		}
 
 		Iterator<Coordinate> coordsIter = newRoute.getCoordinates().iterator();
 		Coordinate tempCoord = null;
@@ -645,9 +647,4 @@ public class Route implements RouteInfo {
 		}
 		return null;
 	}
-
-
 }
-
-
-

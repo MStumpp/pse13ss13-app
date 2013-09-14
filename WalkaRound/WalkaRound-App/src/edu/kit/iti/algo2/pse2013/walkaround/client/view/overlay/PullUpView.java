@@ -509,7 +509,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		infoMenu.setVisibility(View.VISIBLE);
 		optionMenu.setVisibility(View.GONE);
 		// -----------------------------------
-		this.title.setText("Favoriten hinzufügen");
+		this.title.setText("Infos");
 		this.unsetActiveMenu();
 		this.pullUp();
 		infoMenu.update(poi);
@@ -661,6 +661,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		optionMenu.setVisibility(View.GONE);
 		// -----------------------------------
 		this.star.setImageResource(R.drawable.staticstaractive);
+		this.title.setText("Favoriten hinzufügen");
 
 		pullUpContent = PullUpView.CONTENT_FAVORITE;
 	}

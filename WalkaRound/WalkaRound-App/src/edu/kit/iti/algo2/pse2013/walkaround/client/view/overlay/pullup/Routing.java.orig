@@ -270,13 +270,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 	 * Listen to Waypoint events
 	 * 
 	 * @author Ludwig Biermann
-<<<<<<< HEAD
 	 * @version 1.0
 	 * 
-=======
-	 * @version 1.1
-	 *
->>>>>>> e54aa1c1c4168b06e52b0a93d82012b4296e9f89
 	 */
 	private class WaypointListener implements OnTouchListener {
 		@Override
@@ -324,6 +319,12 @@ public class Routing extends RelativeLayout implements RouteListener {
 		 * makes a alert
 		 */
 		public void alert() {
+<<<<<<< HEAD
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+			alertDialog.setTitle(context.getString(R.string.dialog_header_delete, context.getString(R.string.term_waypoint)));
+			alertDialog.setMessage(context.getString(R.string.dialog_text_delete, RouteController.getInstance().getWaypoint(id).getName()));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_yes),
+=======
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
 			alertDialog.setTitle(context.getString(
@@ -333,6 +334,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					.getString(R.string.dialog_text_delete));
 			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
 					context.getString(R.string.option_yes),
+>>>>>>> fix scrolling in  Routing
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {

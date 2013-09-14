@@ -57,10 +57,15 @@ public class RouteController {
 	}
 
 	public void notifyAllRouteListeners() {
-		Log.d(TAG, String.format(
-						"RouteController.notifyAllRouteListeners() - sending Route with %d Coordinates and %d Waypoints to %d listeners.",
-						currentRoute.getCoordinates().size(), currentRoute
-								.getWaypoints().size(), routeListeners.size()));
+		Log.d(
+			TAG,
+			String.format(
+				"RouteController.notifyAllRouteListeners() - sending Route with %d Coordinates and %d Waypoints to %d listeners.",
+				currentRoute.getCoordinates().size(),
+				currentRoute.getWaypoints().size(),
+				routeListeners.size()
+			)
+		);
 		Log.d(TAG, "Coordinates of Route: " + this.currentRoute);
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if (this.currentRoute != null) {
@@ -227,17 +232,14 @@ public class RouteController {
 	public boolean addRoute(final RouteInfo ri) {
 		Log.d(TAG, "RouteController.addRoute(RouteInfo)");
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
-
 				@Override
 				public void run() {
 					Log.d(TAG, "Thread.run() in addRoute(RouteInfo)");
 					newCurrentRoute.addRoute(ri);
-					RouteController.getInstance().replaceFullRoute(
-							newCurrentRoute);
+					RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 				}
 			});
 			RouteController.routeChanger.start();
@@ -397,12 +399,10 @@ public class RouteController {
 	}
 
 	public void deleteActiveWaypoint(int id) {
-		for (Waypoint w : currentRoute.getWaypoints()) {
-			if (w.getId() == id) {
-				this.setActiveWaypoint(id);
-				this.deleteActiveWaypoint();
-				break;
-			}
+		Waypoint w = getWaypoint(id);
+		if (w != null) {
+			setActiveWaypoint(id);
+			deleteActiveWaypoint();
 		}
 	}
 
@@ -410,5 +410,14 @@ public class RouteController {
 
 		public void onRouteChange(RouteInfo currentRoute);
 
+	}
+
+	public Waypoint getWaypoint(int id) {
+		for (Waypoint w : currentRoute.getWaypoints()) {
+			if (w.getId() == id) {
+				return w;
+			}
+		}
+		return null;
 	}
 }
