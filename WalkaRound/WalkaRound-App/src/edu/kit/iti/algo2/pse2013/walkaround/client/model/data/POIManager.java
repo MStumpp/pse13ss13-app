@@ -16,6 +16,7 @@ import android.location.Geocoder;
 import android.os.Environment;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.ProgressListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
@@ -35,6 +36,7 @@ public class POIManager {
 
 	private static final String TAG_POIMANAGER = POIManager.class
 			.getSimpleName();
+	private static final String TAG = POIManager.class.getSimpleName();
 	private final int MAX_DIFFERENCE_FOR_SEARCH = 3;
 
 	private final int MAX_NUMBER_OF_SUGGESTIONS = 10;
@@ -113,9 +115,13 @@ public class POIManager {
 		return instance;
 	}
 
-	private boolean loadLocation() {
+	boolean locationLoaded = false;
+	boolean locationLoadedStatus = false;
 
-		if (locationDataIO == null) {
+	private class LocationLoader implements Runnable {
+		@Override
+		public void run() {
+			locationLoadedStatus = false;
 			Log.d(TAG_POIMANAGER,
 					"ExtFile: " + Environment.getExternalStorageDirectory());
 			try {
@@ -124,14 +130,60 @@ public class POIManager {
 						+ fileString));
 				Log.d(TAG_POIMANAGER, "location data io! "
 						+ locationDataIO.getPOIs().size());
-				return true;
+				locationLoaded = true;
 			} catch (IOException e) {
 				Log.d(TAG_POIMANAGER, e.toString());
+				locationLoaded = false;
 			} catch (OutOfMemoryError e) {
 				Log.d(TAG_POIMANAGER, e.toString());
 				System.gc();
+				locationLoaded = false;
 			}
-			return false;
+			locationLoadedStatus = true;
+		}
+	}
+
+	/**
+	 * lodas the LocationData IO
+	 * 
+	 * @return true if sucess
+	 */
+	private boolean loadLocation() {
+		return loadLocation(false);
+	}
+
+	/**
+	 * lodas the LocationData IO
+	 * 
+	 * @param force
+	 *            true location will forced to be loaded
+	 * 
+	 * @return true if sucess
+	 */
+	private boolean loadLocation(boolean force) {
+
+		if (locationDataIO == null && (getNumActiveCategories() > 0 || force)) {
+
+			if (progress != null) {
+				Log.d(TAG, "Show Progress");
+				progress.showProgress();
+			}
+			Thread t = new Thread(new LocationLoader());
+			t.start();
+			while (!locationLoadedStatus) {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (progress != null) {
+				progress.hideProgress();
+			}
+			return locationLoaded;
+		} else {
+			locationDataIO = null;
+			System.gc();
 		}
 		return true;
 	}
@@ -152,7 +204,6 @@ public class POIManager {
 
 		Set<POI> poiSet = new HashSet<POI>();
 		if (getNumActiveCategories() <= 0) {
-			locationDataIO = null;
 			return poiSet;
 		}
 
@@ -160,9 +211,6 @@ public class POIManager {
 		double maxLat = upperLeft.getLatitude();
 		double minLon = upperLeft.getLongitude();
 		double maxLon = bottomRight.getLongitude();
-
-		// loads Location IO
-		this.loadLocation();
 
 		if (locationDataIO != null) {
 			Iterator<POI> iter = locationDataIO.getPOIs().iterator();
@@ -211,15 +259,9 @@ public class POIManager {
 		ArrayList<POI> poiList = new ArrayList<POI>();
 
 		if (getNumActiveCategories() <= 0) {
-			locationDataIO = null;
 			return poiList;
 		}
 
-		// loads Location IO
-		this.loadLocation();
-
-		// loads Location IO
-		this.loadLocation();
 		if (locationDataIO != null) {
 			for (Iterator<POI> iter = locationDataIO.getPOIs().iterator(); iter
 					.hasNext();) {
@@ -256,7 +298,7 @@ public class POIManager {
 		ArrayList<POI> suggestions = new ArrayList<POI>();
 
 		// loads Location IO
-		this.loadLocation();
+		this.loadLocation(true);
 
 		if (locationDataIO != null) {
 			for (Iterator<POI> poiIter = locationDataIO.getPOIs().iterator(); poiIter
@@ -334,6 +376,7 @@ public class POIManager {
 					current.getLocality(), address.getPostalCode())));
 		}
 		// Log.d(TAG_POIMANAGER, suggestions.get(0).toString());
+
 		return suggestions;
 	}
 
@@ -348,7 +391,11 @@ public class POIManager {
 		Log.d(TAG_POIMANAGER, "Schalte POI-Category '"
 				+ context.getResources().getStringArray(R.array.POICat)[id]
 				+ "' auf " + !isCatActive[id]);
-		return isCatActive[id] = !isCatActive[id];
+		boolean zw = !isCatActive[id];
+		isCatActive[id] = !isCatActive[id];
+		this.loadLocation();
+
+		return zw;
 	}
 
 	/**
@@ -398,5 +445,13 @@ public class POIManager {
 			isEmpty = isEmpty && !cat;
 		}
 		return isEmpty;
+	}
+
+	ProgressListener progress;
+
+	public void registerProgressListener(ProgressListener listener) {
+		if (listener != null) {
+			progress = listener;
+		}
 	}
 }

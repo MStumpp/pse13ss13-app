@@ -24,6 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
@@ -52,15 +53,16 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is the main Activity of WalkaRound. This class works like a controller.
- *
+ * 
  * @author Ludwig Biermann
  * @version 8.0
- *
+ * 
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
-		POIInfoListener, CenterListener, LevelOfDetailListener, ProgressListener {
+		POIInfoListener, CenterListener, LevelOfDetailListener,
+		ProgressListener {
 
 	private MapView mapView;
 	private GestureDetector gestureDetector;
@@ -165,17 +167,21 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		mapView.setOnTouchListener(new MapListener());
 
-		this.findViewById(R.id.progressBar1).setOnTouchListener(new ProgressTouchListener());
+		this.findViewById(R.id.progressBar1).setOnTouchListener(
+				new ProgressTouchListener());
 		this.findViewById(R.id.progressBar1).bringToFront();
 		progress = (RelativeLayout) this.findViewById(R.id.progressBarMain);
 		progress.bringToFront();
 		progress.setOnTouchListener(new ProgressTouchListener());
-		this.findViewById(R.id.imageView1).setOnTouchListener(new ProgressTouchListener());
+		this.findViewById(R.id.imageView1).setOnTouchListener(
+				new ProgressTouchListener());
 
 		this.findViewById(R.id.mapviewmain).requestLayout();
 		this.findViewById(R.id.mapviewmain).invalidate();
 
 		progress.setVisibility(View.GONE);
+
+		POIManager.getInstance(this).registerProgressListener(this);
 
 	}
 
@@ -277,11 +283,13 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	/**
 	 * Helper Method to create Alert
+	 * 
 	 * @param next
 	 */
 	public void addWaypointAlert(final Coordinate next) {
 		Log.d(TAG, "Add waypoint!");
-		Waypoint wp = new Waypoint(next.getLatitude(), next.getLongitude(), getString(R.string.unknown_location));
+		Waypoint wp = new Waypoint(next.getLatitude(), next.getLongitude(),
+				getString(R.string.unknown_location));
 		RouteController.getInstance().addWaypoint(wp);
 	}
 
@@ -339,7 +347,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle("GPS Signal");
 		alert.setMessage(getString(R.string.dialog_text_gps_inactive));
-		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_yes),
+		alert.setButton(DialogInterface.BUTTON_POSITIVE,
+				getString(R.string.option_yes),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -348,7 +357,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					}
 				});
 
-		alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.option_no),
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE,
+				getString(R.string.option_no),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
@@ -385,7 +395,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							new DisplayCoordinate(user.getX(), user.getY()),
 							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
 
-			RouteController.getInstance().addWaypoint(new Waypoint(next.getLatitude(), next.getLongitude(),""));
+			RouteController.getInstance().addWaypoint(
+					new Waypoint(next.getLatitude(), next.getLongitude(), ""));
 			try {
 				Thread.sleep(ROUNDTRIP_TIME);
 			} catch (InterruptedException e) {
@@ -405,7 +416,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			RouteController.getInstance().addRoundtrip(profile, length);
 		} else {
 			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-			alertDialog.setTitle(getString(R.string.dialog_header_add, getString(R.string.term_boomerang)));
+			alertDialog.setTitle(getString(R.string.dialog_header_add,
+					getString(R.string.term_boomerang)));
 			alertDialog.setMessage(getString(R.string.dialog_text_boomerang));
 			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
@@ -565,7 +577,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle(getString(R.string.dialog_header_wifi));
 		alert.setMessage(getString(R.string.dialog_text_wifi));
-		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_yes),
+		alert.setButton(DialogInterface.BUTTON_POSITIVE,
+				getString(R.string.option_yes),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -574,7 +587,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					}
 				});
 
-		alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.option_no),
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE,
+				getString(R.string.option_no),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
@@ -587,15 +601,25 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	}
 
 	@Override
-	public void showProgress(){
-		Log.d(TAG, "show progress");
-		progress.setVisibility(View.VISIBLE);
-		progress.bringToFront();
+	public void showProgress() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.d(TAG, "show progress");
+				progress.setVisibility(View.VISIBLE);
+				progress.bringToFront();
+			}
+		});
 	}
 
 	@Override
-	public void hideProgress(){
-		Log.d(TAG, "hide progress");
-		progress.setVisibility(View.GONE);
+	public void hideProgress() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.d(TAG, "hide progress");
+				progress.setVisibility(View.GONE);
+			}
+		});
 	}
 }
