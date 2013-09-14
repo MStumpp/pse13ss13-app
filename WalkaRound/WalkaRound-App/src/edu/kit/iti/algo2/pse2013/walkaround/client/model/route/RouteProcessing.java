@@ -22,11 +22,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import edu.kit.iti.algo2.pse2013.walkaround.client.R;
-import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 /**
  * This class provides a set of delegation methods for computing a shortest
@@ -43,8 +40,7 @@ public class RouteProcessing {
 	/**
 	 * TAG for android debugging.
 	 */
-	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class
-			.getSimpleName();
+	private static String TAG_ROUTE_PROCESSING = RouteProcessing.class.getSimpleName();
 
 	/**
 	 * RouteProcessing instance.
@@ -99,6 +95,7 @@ public class RouteProcessing {
 				String requestAsJSON = gson.toJson(objectToSend);
 
 				Log.d(TAG_ROUTE_PROCESSING, "Built JSON: " + requestAsJSON);
+				Log.d(TAG_ROUTE_PROCESSING, String.format("Send to URL %s", url.getURI().toURL().toExternalForm()));
 
 				httpPost.setEntity(new StringEntity(requestAsJSON));
 
@@ -210,7 +207,7 @@ public class RouteProcessing {
 	 * Coordinate, Profile id and a roundtrip length. The actual computation is
 	 * done by an endpoint.
 	 *
-	 * @param coordinate
+	 * @param source
 	 *            The starting Coordinate of the roundtrip to be computed.
 	 * @param profile
 	 *            The id of the Profile of the roundtrip to be computed.
@@ -223,30 +220,33 @@ public class RouteProcessing {
 	 * @throws IllegalArgumentException
 	 *             if input parameter are null.
 	 */
-	public RouteInfo computeRoundtrip(Coordinate coordinate, int profile,
-			int length) throws RouteProcessingException, InterruptedException {
+	public RouteInfo computeRoundtrip(Coordinate source, int profile, int length) throws RouteProcessingException, InterruptedException {
 		Log.d(TAG_ROUTE_PROCESSING,
 				"computeRoundtrip(Coordinate coordinate, int profile, int length)");
 
-		if (coordinate == null)
-			throw new IllegalArgumentException(
-					"coordinate 1 and coordinate 2 must be provided");
+		if (source == null)
+			throw new IllegalArgumentException("a source coordinate must be provided");
 		if (profile < 0)
-			throw new IllegalArgumentException(
-					"profile id must be equal to or greater than 1");
+			throw new IllegalArgumentException("profile id must be at least 0");
 		if (length < 100)
-			throw new IllegalArgumentException(
-					"length must be at least 100 meter");
+			throw new IllegalArgumentException("length must be at least 100 meter");
 
 		GsonBuilder gsonb = new GsonBuilder();
 		Gson gson = gsonb.create();
 
 		RouteInfoTransfer routeInfoTransfer = null;
 
-		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(gson,
-				new Coordinate(coordinate.getLatitude(),
-						coordinate.getLongitude()), new HttpPost(PreferenceUtility.getInstance().getRoundtripPathServerUrl()
-						+ "/profile/" + profile + "/length/" + length));
+		String urlString =
+			PreferenceUtility.getInstance().getRoundtripPathServerUrl()
+			+ "/profile/" + profile + "/length/" + length;
+		JSONAnswerGetter gsonAnswerer = new JSONAnswerGetter(
+			gson,
+			new Coordinate(
+				source.getLatitude(),
+				source.getLongitude()
+			),
+			new HttpPost(urlString)
+		);
 		Thread thread = new Thread(gsonAnswerer);
 		thread.start();
 		thread.join();

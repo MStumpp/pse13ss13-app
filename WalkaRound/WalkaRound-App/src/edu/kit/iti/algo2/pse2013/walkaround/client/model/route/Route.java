@@ -164,8 +164,7 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, String.format("addRoundtripAtActiveWaypoint(profile %d, length %d)", profile, length));
 		RouteInfo newRoundtrip;
 		try {
-			newRoundtrip = this.routeProcessor.computeRoundtrip(
-					this.getActiveWaypoint(), profile, length);
+			newRoundtrip = this.routeProcessor.computeRoundtrip(this.getActiveWaypoint(), profile, length);
 			if (newRoundtrip != null) {
 				this.addRoute(newRoundtrip);
 			}

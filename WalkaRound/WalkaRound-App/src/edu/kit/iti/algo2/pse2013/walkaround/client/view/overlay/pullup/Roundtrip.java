@@ -11,9 +11,11 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
@@ -39,10 +41,10 @@ public class Roundtrip extends LinearLayout {
 	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
 
 	private static int MIN_VALUE = 1000;
-	private static int MAX_VALUE = 50000;
-	private final int NUMBER_OF_STEPS = (MAX_VALUE - MIN_VALUE) / 100;
+	private static int MAX_VALUE = 20000;
+	private final int STEPSIZE = 100;
 
-	private NumberPicker number;
+	private NumberPicker lengthPicker;
 
 	/**
 	 * This create a new POIview.
@@ -71,29 +73,33 @@ public class Roundtrip extends LinearLayout {
 		compute.setText(context.getString(R.string.compute, context.getString(R.string.term_roundtrip)));
 		compute.setGravity(Gravity.CENTER);
 		compute.setOnTouchListener(new OnComputeTouch());
-		number = new NumberPicker(context, attrs);
-		number.setMinValue(MIN_VALUE);
-		number.setMaxValue(MAX_VALUE);
-		number.setWrapSelectorWheel(false);
+		lengthPicker = new NumberPicker(context, attrs);
+		lengthPicker.setMinValue(MIN_VALUE);
+		lengthPicker.setMaxValue(MAX_VALUE);
+		lengthPicker.setWrapSelectorWheel(false);
+		lengthPicker.setOnValueChangedListener(new OnValueChangeListener() {
+			@Override
+			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+				lengthPicker.setValue((int) (Math.signum(newVal - oldVal) * STEPSIZE + oldVal));
+			}
+		});
 
-		LinearLayout.LayoutParams numberParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams numberParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		numberParam.height = size.y / 5;
 		numberParam.width = size.x / 2;
 		numberParam.topMargin = 10;
 
-		LinearLayout.LayoutParams computeParam = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams computeParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		computeParam.height = size.y / 15;
 		computeParam.width = size.x / 2;
 		numberParam.topMargin = 10;
 
-		String[] nums = new String[NUMBER_OF_STEPS];
-		for (int i = 0; i < nums.length; i++)
-			nums[i] = Integer.toString(MIN_VALUE + i * 100);
+		//String[] nums = new String[NUMBER_OF_STEPS];
+		//for (int i = 0; i < nums.length; i++)
+		//	nums[i] = Integer.toString(MIN_VALUE + i * 100);
 
-		number.setDisplayedValues(nums);
-		number.setOnLongPressUpdateInterval(ON_LONG_CLICK_UPDATE_INTERVALL_MS);
+		//number.setDisplayedValues(nums);
+		lengthPicker.setOnLongPressUpdateInterval(ON_LONG_CLICK_UPDATE_INTERVALL_MS);
 
 		int counter = 2;
 		for (Integer i : profilesStrings) {
@@ -112,7 +118,7 @@ public class Roundtrip extends LinearLayout {
 		LinearLayout line1 = new LinearLayout(context, attrs);
 		line1.setOrientation(LinearLayout.HORIZONTAL);
 
-		line1.addView(number, numberParam);
+		line1.addView(lengthPicker, numberParam);
 		line1.addView(compute, computeParam);
 		line1.setGravity(Gravity.CENTER);
 
@@ -184,7 +190,7 @@ public class Roundtrip extends LinearLayout {
 					return false;
 				}
 
-				notifyComputeRoundtripListener(id, number.getValue());
+				notifyComputeRoundtripListener(id, lengthPicker.getValue());
 				notifyGoToMapListener();
 			}
 
@@ -199,9 +205,11 @@ public class Roundtrip extends LinearLayout {
 					.create();
 			alertDialog.setTitle("Fehlendes Profil");
 			alertDialog.setMessage("Bitte wählen Sie ein Profil.");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.show();
