@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -253,17 +254,23 @@ public class Routing extends RelativeLayout implements RouteListener {
 	 * Listen to Waypoint events
 	 *
 	 * @author Ludwig Biermann
-	 * @version  1.0
+	 * @version 1.1
 	 *
 	 */
 	private class WaypointListener implements OnTouchListener {
 		@Override
-		public boolean onTouch(View view, MotionEvent me) {
-			int id = Integer.parseInt(view.getTag().toString());
-			BoundingBox.getInstance().setCenter(
-					RouteController.getInstance().getCurrentRoute()
-							.getWaypoint(id));
-			notifyGoToMapListener();
+		public boolean onTouch(View view, MotionEvent event) {
+
+			int action = event.getAction();
+
+			if (action == MotionEvent.ACTION_UP) {
+				int id = Integer.parseInt(view.getTag().toString());
+				BoundingBox.getInstance().setCenter(
+						RouteController.getInstance().getCurrentRoute()
+								.getWaypoint(id));
+				notifyGoToMapListener();
+			}
+
 			return false;
 		}
 
@@ -284,7 +291,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
 
-			if(action == MotionEvent.ACTION_UP) {
+			if (action == MotionEvent.ACTION_UP) {
 				id = Integer.parseInt(view.getTag().toString());
 				this.alert();
 			}
@@ -310,7 +317,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//Do nothing
+							// Do nothing
 						}
 					});
 			alertDialog.show();
@@ -332,7 +339,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if (action == MotionEvent.ACTION_DOWN) {
+			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
 				w = RouteController.getInstance().getCurrentRoute()
 						.getWaypoint(id);
@@ -370,7 +377,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//Do nothing
+							// Do nothing
 						}
 					});
 			alertDialog.setView(edit);
@@ -381,6 +388,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a reset
+	 * 
 	 * @author Ludwig Biermann
 	 *
 	 */
@@ -455,7 +463,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//Do nothing
+							// Do nothing
 						}
 					});
 			alertDialog.setView(edit);
@@ -483,6 +491,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a go to map
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -565,4 +574,5 @@ public class Routing extends RelativeLayout implements RouteListener {
 	public void onRouteChange(RouteInfo currentRoute) {
 		updateRoute();
 	}
+
 }

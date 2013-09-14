@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
@@ -672,4 +674,5 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 	public void registerUpdateMapListener(UpdateMapListener listener) {
 		searchMenu.registerUpdateMapListener(listener);
 	}
+	
 }
