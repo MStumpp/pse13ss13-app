@@ -195,14 +195,13 @@ public class Route implements RouteInfo {
 							+ newRoute.getStart());
 			Log.d(TAG_ROUTE, "addRoute(RouteInfo) -> computing intermediate route");
 			// Calculate and add the intermediate route:
-			// TODO: REACTIVATE
 			RouteInfo intermediateRoute = this.computeShortestPath(this.getEnd(), newRoute.getStart());
 			this.addRoute(intermediateRoute);
 		}
 
 
 		assert(newRoute.getCoordinates().size() > 0);
-		if (getEnd().equals(newRoute.getStart())) {
+		if (getEnd() != null && getEnd().equals(newRoute.getStart())) {
 			newRoute.getCoordinates().removeFirst();
 		}
 
