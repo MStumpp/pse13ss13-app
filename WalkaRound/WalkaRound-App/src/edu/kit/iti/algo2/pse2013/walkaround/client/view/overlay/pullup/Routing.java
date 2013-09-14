@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,10 +31,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class shows the Routing Menu
- *
+ * 
  * @author Ludwig Biermann
  * @version 1.1
- *
+ * 
  */
 public class Routing extends RelativeLayout implements RouteListener {
 
@@ -56,9 +57,11 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * This create a new POIview.
-	 *
-	 * @param context the context of the app
-	 * @param attrs the needed attributes
+	 * 
+	 * @param context
+	 *            the context of the app
+	 * @param attrs
+	 *            the needed attributes
 	 */
 	public Routing(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -101,7 +104,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 		// Params
 		// Reset
 		RelativeLayout.LayoutParams paramsReset = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsReset.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 				RelativeLayout.TRUE);
 		paramsReset.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
@@ -112,7 +116,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 		// Invert
 		RelativeLayout.LayoutParams paramsInvert = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsInvert.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 				RelativeLayout.TRUE);
 		paramsInvert.addRule(RelativeLayout.RIGHT_OF, 1);
@@ -122,7 +127,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 		// Save
 		RelativeLayout.LayoutParams paramsSave = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsSave
 				.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		paramsSave.addRule(RelativeLayout.RIGHT_OF, 2);
@@ -132,18 +138,21 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 		// ScrollView
 		RelativeLayout.LayoutParams paramsScrollView = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 		paramsScrollView.addRule(RelativeLayout.BELOW, 1);
 		paramsScrollView.addRule(RelativeLayout.ABOVE, 3);
 		paramsScrollView.height = 1000;
 
 		// Content
 		RelativeLayout.LayoutParams paramsContent = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 
 		// addFavorite
 		RelativeLayout.LayoutParams paramsAddFavorite = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsAddFavorite.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 				RelativeLayout.TRUE);
 		paramsAddFavorite.bottomMargin = 10;
@@ -151,7 +160,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 		// goToMap
 		RelativeLayout.LayoutParams paramsGoToMap = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsGoToMap.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 				RelativeLayout.TRUE);
 		paramsGoToMap.addRule(RelativeLayout.RIGHT_OF, 3);
@@ -174,25 +184,29 @@ public class Routing extends RelativeLayout implements RouteListener {
 		// Params for Content
 
 		// Delete
-		deleteParams = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		deleteParams = new LinearLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		deleteParams.height = size.x * 1 / 5;
 		deleteParams.width = size.x * 1 / 5;
 
 		// Save
-		saveParams = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		saveParams = new LinearLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		saveParams.height = size.x * 1 / 5;
 		saveParams.width = size.x * 1 / 5;
 
 		// Text
-		textParams = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		textParams = new LinearLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		textParams.height = size.x * 1 / 5;
 		textParams.width = size.x * 3 / 5;
 
 		// vertical Layout
-		lParams = new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+		lParams = new RelativeLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		// Listener
@@ -218,7 +232,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 	private class RouteUpdater implements Runnable {
 		@Override
 		public void run() {
-			LinkedList<Waypoint> route = RouteController.getInstance().getCurrentRoute().getWaypoints();
+			LinkedList<Waypoint> route = RouteController.getInstance()
+					.getCurrentRoute().getWaypoints();
 			content.removeAllViews();
 			for (Waypoint w : route) {
 				LinearLayout l = new LinearLayout(context);
@@ -229,7 +244,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 				delete.setImageResource(R.drawable.delete);
 				save.setImageResource(R.drawable.favorite);
 				text.setText(w.getName());
-				Log.d(TAG, String.format("Setze Name von WP %d auf '%s'", w.getId(), w.getName()));
+				Log.d(TAG,
+						String.format("Setze Name von WP %d auf '%s'",
+								w.getId(), w.getName()));
 
 				delete.setTag(w.getId());
 				save.setTag(w.getId());
@@ -251,19 +268,25 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to Waypoint events
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 * @version  1.0
-	 *
+	 * @version 1.0
+	 * 
 	 */
 	private class WaypointListener implements OnTouchListener {
 		@Override
-		public boolean onTouch(View view, MotionEvent me) {
-			int id = Integer.parseInt(view.getTag().toString());
-			BoundingBox.getInstance().setCenter(
-					RouteController.getInstance().getCurrentRoute()
-							.getWaypoint(id));
-			notifyGoToMapListener();
+		public boolean onTouch(View view, MotionEvent event) {
+
+			int action = event.getAction();
+
+			if (action == MotionEvent.ACTION_UP) {
+				int id = Integer.parseInt(view.getTag().toString());
+				BoundingBox.getInstance().setCenter(
+						RouteController.getInstance().getCurrentRoute()
+								.getWaypoint(id));
+				notifyGoToMapListener();
+			}
+
 			return false;
 		}
 
@@ -271,10 +294,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to delete event
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 * @version  1.0
-	 *
+	 * @version 1.0
+	 * 
 	 */
 	private class DeleteListener implements OnTouchListener {
 
@@ -284,7 +307,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
 
-			if(action == MotionEvent.ACTION_UP) {
+			if (action == MotionEvent.ACTION_UP) {
 				id = Integer.parseInt(view.getTag().toString());
 				this.alert();
 			}
@@ -298,20 +321,26 @@ public class Routing extends RelativeLayout implements RouteListener {
 		public void alert() {
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle(context.getString(R.string.dialog_header_delete, context.getString(R.string.term_waypoint)));
-			alertDialog.setMessage(context.getString(R.string.dialog_text_delete));
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_yes),
+			alertDialog.setTitle(context.getString(
+					R.string.dialog_header_delete,
+					context.getString(R.string.term_waypoint)));
+			alertDialog.setMessage(context
+					.getString(R.string.dialog_text_delete));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+					context.getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							RouteController.getInstance().deleteActiveWaypoint(id);
+							RouteController.getInstance().deleteActiveWaypoint(
+									id);
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.option_no),
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+					context.getString(R.string.option_no),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//Do nothing
+							// Do nothing
 						}
 					});
 			alertDialog.show();
@@ -321,9 +350,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a sace event
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class SaveWaypointListener implements OnTouchListener {
 
@@ -333,7 +362,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
-			if (action == MotionEvent.ACTION_DOWN) {
+			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
 				w = RouteController.getInstance().getCurrentRoute()
 						.getWaypoint(id);
@@ -353,9 +382,11 @@ public class Routing extends RelativeLayout implements RouteListener {
 			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
-			alertDialog.setTitle(context.getString(R.string.dialog_header_save, context.getString(R.string.term_waypoint)));
+			alertDialog.setTitle(context.getString(R.string.dialog_header_save,
+					context.getString(R.string.term_waypoint)));
 			alertDialog.setMessage("Wie heißt der Ort?");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_add),
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+					context.getString(R.string.option_add),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -367,11 +398,12 @@ public class Routing extends RelativeLayout implements RouteListener {
 											edit.getText().toString());
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.option_cancel),
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+					context.getString(R.string.option_cancel),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//Do nothing
+							// Do nothing
 						}
 					});
 			alertDialog.setView(edit);
@@ -382,8 +414,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a reset
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class ResetListener implements OnTouchListener {
 
@@ -397,9 +430,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a invert
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class InvertListener implements OnTouchListener {
 
@@ -413,9 +446,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a save event
-	 *
+	 * 
 	 * @author Ludwig Biermann
-	 *
+	 * 
 	 */
 	private class SaveListener implements OnTouchListener {
 
@@ -438,10 +471,15 @@ public class Routing extends RelativeLayout implements RouteListener {
 			edit = new EditText(getContext());
 			edit.setText("ROUTE FAVORITE");
 			edit.selectAll();
-			AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-			alertDialog.setTitle(context.getString(R.string.dialog_header_save, context.getString(R.string.term_route)));
-			alertDialog.setMessage(context.getString(R.string.dialog_text_add_or_save, context.getString(R.string.term_route)));
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.option_add),
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+					.create();
+			alertDialog.setTitle(context.getString(R.string.dialog_header_save,
+					context.getString(R.string.term_route)));
+			alertDialog.setMessage(context.getString(
+					R.string.dialog_text_add_or_save,
+					context.getString(R.string.term_route)));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+					context.getString(R.string.option_add),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -452,11 +490,12 @@ public class Routing extends RelativeLayout implements RouteListener {
 											edit.getText().toString());
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.option_cancel),
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+					context.getString(R.string.option_cancel),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//Do nothing
+							// Do nothing
 						}
 					});
 			alertDialog.setView(edit);
@@ -467,10 +506,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a add favorite listener
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class AddFavoriteListener implements OnTouchListener {
 
@@ -484,9 +523,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a go to map
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class GoToMapTouchListener implements OnTouchListener {
 
@@ -511,8 +551,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * register go to map listener
-	 *
-	 * @param listener the new Listener
+	 * 
+	 * @param listener
+	 *            the new Listener
 	 */
 	public void registerGoToMapListener(GoToMapListener listener) {
 		rl.add(listener);
@@ -520,10 +561,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * A Interface for call go to map
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	public interface GoToMapListener {
 
@@ -546,17 +587,19 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * register a new listener
-	 * @param listener the new listener
+	 * 
+	 * @param listener
+	 *            the new listener
 	 */
 	public void registerFavoriteListener(GoToFavoriteListener listener) {
 		fav.add(listener);
 	}
 
 	/**
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	public interface GoToFavoriteListener {
 		public void goToFavorite();
@@ -566,4 +609,5 @@ public class Routing extends RelativeLayout implements RouteListener {
 	public void onRouteChange(RouteInfo currentRoute) {
 		updateRoute();
 	}
+
 }
