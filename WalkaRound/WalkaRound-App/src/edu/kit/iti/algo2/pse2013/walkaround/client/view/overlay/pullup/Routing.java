@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -54,6 +55,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	private LinkedList<GoToFavoriteListener> fav = new LinkedList<GoToFavoriteListener>();
 	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
+	private android.widget.LinearLayout.LayoutParams moveParams;
 
 	/**
 	 * This create a new POIview.
@@ -183,26 +185,35 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 		// Params for Content
 
+		// Move
+		moveParams = new LinearLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+		moveParams.width = size.x * 1 / 6;
+		moveParams.height = (size.x * 1 / 6) / 2;
+		moveParams.bottomMargin = 0;
+		moveParams.topMargin = 0;
+		
 		// Delete
 		deleteParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		deleteParams.height = size.x * 1 / 5;
-		deleteParams.width = size.x * 1 / 5;
+		deleteParams.height = size.x * 1 / 6;
+		deleteParams.width = size.x * 1 / 6;
 
 		// Save
 		saveParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		saveParams.height = size.x * 1 / 5;
-		saveParams.width = size.x * 1 / 5;
+		saveParams.height = size.x * 1 / 6;
+		saveParams.width = size.x * 1 / 6;
 
 		// Text
 		textParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		textParams.height = size.x * 1 / 5;
-		textParams.width = size.x * 3 / 5;
+		textParams.height = size.x * 1 / 6;
+		textParams.width = size.x * 3 / 6;
 
 		// vertical Layout
 		lParams = new RelativeLayout.LayoutParams(
@@ -236,11 +247,22 @@ public class Routing extends RelativeLayout implements RouteListener {
 					.getCurrentRoute().getWaypoints();
 			content.removeAllViews();
 			for (Waypoint w : route) {
+				LinearLayout m = new LinearLayout(context);	
+				ImageButton  moveUp = new ImageButton(context);
+				ImageButton  moveDown = new ImageButton(context);
+				m.setPadding(0, 0, 0, 0);
+				
 				LinearLayout l = new LinearLayout(context);
 				ImageButton delete = new ImageButton(context);
 				ImageButton save = new ImageButton(context);
 				Button text = new Button(context);
 
+				moveUp.setImageResource(R.drawable.move_up);
+				moveUp.setScaleType(ScaleType.FIT_XY);
+				moveDown.setImageResource(R.drawable.move_down);
+				moveDown.setRotation(180);
+				moveDown.setScaleType(ScaleType.FIT_XY);
+				
 				delete.setImageResource(R.drawable.delete);
 				save.setImageResource(R.drawable.favorite);
 				text.setText(w.getName());
@@ -251,8 +273,15 @@ public class Routing extends RelativeLayout implements RouteListener {
 				delete.setTag(w.getId());
 				save.setTag(w.getId());
 				text.setTag(w.getId());
+				moveUp.setTag(w.getId());
+				moveDown.setTag(w.getId());
 
+				m.setOrientation(LinearLayout.VERTICAL);
+				m.addView(moveUp,moveParams);
+				m.addView(moveDown,moveParams);
+				
 				l.setOrientation(LinearLayout.HORIZONTAL);
+				l.addView(m);
 				l.addView(text, textParams);
 				l.addView(save, saveParams);
 				l.addView(delete, deleteParams);
@@ -262,6 +291,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 				text.setOnTouchListener(new WaypointListener());
 				save.setOnTouchListener(new SaveWaypointListener());
 				delete.setOnTouchListener(new DeleteListener());
+				moveUp.setOnTouchListener(new MoveUpListener());
+				moveDown.setOnTouchListener(new MoveDownListener());
 			}
 		}
 	}
