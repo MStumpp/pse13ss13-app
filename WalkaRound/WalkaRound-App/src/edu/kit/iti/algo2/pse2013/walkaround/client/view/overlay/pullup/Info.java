@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -72,7 +73,7 @@ public class Info extends LinearLayout {
 		sound.setImageResource(R.drawable.play);
 
 		LinearLayout.LayoutParams soundParams = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		soundParams.height = size.x / 5;
 		soundParams.width = size.x / 5;
 
@@ -80,19 +81,19 @@ public class Info extends LinearLayout {
 		save.setImageResource(R.drawable.favorite);
 
 		LinearLayout.LayoutParams saveParams = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		saveParams.height = size.x / 5;
 		saveParams.width = size.x / 5;
 
 		LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		titleParams.height = size.x / 5;
 		titleParams.width = size.x * 3 / 5;
 
 		LinearLayout.LayoutParams textImageParams = new LinearLayout.LayoutParams(size.x, size.x / 2);
 
 		LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		textParams.width = size.x;
 
 		LinearLayout line1 = new LinearLayout(context, attrs);
@@ -165,6 +166,7 @@ public class Info extends LinearLayout {
 
 		if (poi.getURL() != null && PreferenceUtility.getInstance().isPOIImageOn()) {
 			textImage.post(new Runnable() {
+				@Override
 				public void run() {
 					try {
 						POIImageFetcher fetcher = new POIImageFetcher(poi.getURL(), null);

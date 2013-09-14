@@ -212,10 +212,8 @@ public class RouteController {
 
 				@Override
 				public void run() {
-					Log.d(TAG,
-							"Thread.run() in addRoundtrip(int profile, int length)");
-					newCurrentRoute.addRoundtripAtActiveWaypoint(profileID,
-							length);
+					Log.d(TAG,String.format("Thread.run() in addRoundtrip(profile %d, length %d)", profileID, length));
+					newCurrentRoute.addRoundtripAtActiveWaypoint(profileID,length);
 					RouteController.getInstance().replaceFullRoute(
 							newCurrentRoute);
 				}
