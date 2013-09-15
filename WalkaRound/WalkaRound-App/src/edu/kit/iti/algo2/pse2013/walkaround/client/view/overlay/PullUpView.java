@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
@@ -35,10 +33,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
 
 /**
  * This class hold and manage all pullup views
- * 
+ *
  * @author Ludwig Biermann
  * @version 10.2
- * 
+ *
  */
 public class PullUpView extends RelativeLayout implements GoToMapListener,
 		GoToFavoriteListener {
@@ -74,7 +72,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -175,8 +173,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		paramsSearch.width = size.x / 5;
 		paramsSearch.height = size.x / 5;
 
-		
-		
+
+
 		regulator = new ImageView(context, attrs);
 		title = new TextView(context, attrs);
 		title.setText("Test");
@@ -189,23 +187,23 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		tileLine.setOrientation(LinearLayout.HORIZONTAL);
 		titleLineParams.width = size.x;
 		//tileLine.setBackgroundColor(Color.RED);
-		
-		
-		
+
+
+
 		regulator.setImageDrawable(context.getResources().getDrawable(
 				R.drawable.closearrows));
 		regulator.setRotation(90);
 		regulator.setTag(-1);
 		regulator.setId(5);
-		
-		
+
+
 		search.setScaleType(ImageView.ScaleType.FIT_XY);
 
 		LinearLayout.LayoutParams paramsRegulator = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		paramsRegulator.weight = 0.1F;
-		
+
 		LinearLayout.LayoutParams tileParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -218,7 +216,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		//title.setBackgroundColor(Color.RED);
 		title.setTextAlignment(TEXT_ALIGNMENT_CENTER);
 		title.setWidth(size.x);
-		
+
 		lineOne.addView(routing, paramsRouting);
 		lineOne.addView(star, paramsStar);
 		lineOne.addView(roundtrip, paramsRoundtrip);
@@ -230,8 +228,8 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 		staticL.addView(tileLine, titleLineParams);
 		staticL.getRootView().setBackgroundColor(Color.BLACK);
-		
-		
+
+
 
 		// content = new RelativeLayout(context, attrs);
 		LayoutParams paramsContent = new LayoutParams(
@@ -288,7 +286,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * change the content of the pullup
-	 * 
+	 *
 	 * @param id
 	 *            of content
 	 */
@@ -494,7 +492,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * update Info View
-	 * 
+	 *
 	 * @param poi
 	 *            the new poi
 	 */
@@ -541,10 +539,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * Static Touch Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class StaticTouchListener implements OnTouchListener {
 
@@ -580,10 +578,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * Static Touch Listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class RegulatorTouchListener implements OnTouchListener {
 
@@ -603,10 +601,10 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * Implements the Animation listener of the transaction of the pullupview
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class RegulatorAnimationListener implements AnimationListener {
 
@@ -675,7 +673,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * register roundtrip
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 */
@@ -686,7 +684,7 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * register poi change listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new listener
 	 */
@@ -696,12 +694,12 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 
 	/**
 	 * register update map listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new listener
 	 */
 	public void registerUpdateMapListener(UpdateMapListener listener) {
 		searchMenu.registerUpdateMapListener(listener);
 	}
-	
+
 }

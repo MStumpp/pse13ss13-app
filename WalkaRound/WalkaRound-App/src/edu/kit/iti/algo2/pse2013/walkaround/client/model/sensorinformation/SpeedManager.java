@@ -37,28 +37,13 @@ public class SpeedManager implements PositionListener {
 	private double lastKnownSpeed;
 
 	/**
-	 *
+	 * @param pm a PositionManager
 	 */
 	public SpeedManager(PositionManager pm) {
 		speedListeners = new LinkedList<SpeedListener>();
 		lastKnownSpeed = 0.0d;
 		pm.registerPositionListener(this);
 	}
-
-	/**
-	 *
-	 * @return
-	 *
-	public static SpeedManager getInstance() {
-		if(PositionManager.getInstance() == null){
-			Log.e(TAG_SPEED_MANAGER, "Position Manger is not initialiced");
-		}
-		if (speedManager == null) {
-			speedManager = new SpeedManager();
-		}
-		return speedManager;
-	}
-	/
 
 	/**
 	 *
@@ -85,11 +70,12 @@ public class SpeedManager implements PositionListener {
 
 	}
 
+	@Override
 	public void onPositionChange(Location androidLocation) {
 		lastKnownSpeed = androidLocation.getSpeed();
 		this.notifyAllSpeedListeners();
 	}
-	
+
 	public interface SpeedListener {
 		public void onSpeedChange(double speed);
 	}

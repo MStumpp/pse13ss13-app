@@ -7,13 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.webkit.WebSettings.TextSize;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,10 +31,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class shows the Routing Menu
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
- * 
+ *
  */
 public class Routing extends RelativeLayout implements RouteListener {
 
@@ -61,7 +58,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -197,7 +194,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		moveParams.height = (size.x * 1 / 6) / 2;
 		moveParams.bottomMargin = 0;
 		moveParams.topMargin = 0;
-		
+
 		// Delete
 		deleteParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -251,11 +248,11 @@ public class Routing extends RelativeLayout implements RouteListener {
 					.getCurrentRoute().getWaypoints();
 			content.removeAllViews();
 			for (Waypoint w : route) {
-				LinearLayout m = new LinearLayout(context);	
+				LinearLayout m = new LinearLayout(context);
 				ImageButton  moveUp = new ImageButton(context);
 				ImageButton  moveDown = new ImageButton(context);
 				m.setPadding(0, 0, 0, 0);
-				
+
 				LinearLayout l = new LinearLayout(context);
 				ImageButton delete = new ImageButton(context);
 				ImageButton save = new ImageButton(context);
@@ -266,7 +263,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				moveDown.setImageResource(R.drawable.move_down);
 				moveDown.setRotation(180);
 				moveDown.setScaleType(ScaleType.FIT_XY);
-				
+
 				delete.setImageResource(R.drawable.delete);
 				save.setImageResource(R.drawable.favorite);
 				text.setText(w.getName());
@@ -283,7 +280,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				m.setOrientation(LinearLayout.VERTICAL);
 				m.addView(moveUp,moveParams);
 				m.addView(moveDown,moveParams);
-				
+
 				l.setOrientation(LinearLayout.HORIZONTAL);
 				l.addView(m);
 				l.addView(text, textParams);
@@ -303,7 +300,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to Waypoint events
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.1
 	 *
@@ -326,10 +323,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 		}
 
 	}
-	
+
 	/**
 	 * Shifts the position one step down
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -343,7 +340,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
-				
+
 				RouteController.getInstance().moveWaypoint(id, 1);
 			}
 
@@ -353,7 +350,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Shifts the position one step upd
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 *
@@ -367,7 +364,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
-				
+
 				RouteController.getInstance().moveWaypoint(id, -1);
 			}
 
@@ -377,10 +374,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to delete event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class DeleteListener implements OnTouchListener {
 
@@ -433,9 +430,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a sace event
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class SaveWaypointListener implements OnTouchListener {
 
@@ -497,9 +494,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a reset
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class ResetListener implements OnTouchListener {
 
@@ -524,7 +521,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							RouteController.getInstance().resetRoute();							
+							RouteController.getInstance().resetRoute();
 						}
 					});
 			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
@@ -532,6 +529,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
 						}
 					});
 			alertDialog.show();
@@ -541,9 +539,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a invert
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class InvertListener implements OnTouchListener {
 
@@ -557,9 +555,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a save event
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class SaveListener implements OnTouchListener {
 
@@ -617,10 +615,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a add favorite listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class AddFavoriteListener implements OnTouchListener {
 
@@ -634,10 +632,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a go to map
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class GoToMapTouchListener implements OnTouchListener {
 
@@ -662,7 +660,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * register go to map listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 */
@@ -672,10 +670,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * A Interface for call go to map
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface GoToMapListener {
 
@@ -698,7 +696,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * register a new listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new listener
 	 */
@@ -707,10 +705,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface GoToFavoriteListener {
 		public void goToFavorite();

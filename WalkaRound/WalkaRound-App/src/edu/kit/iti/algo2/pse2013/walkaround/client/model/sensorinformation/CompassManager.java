@@ -11,11 +11,11 @@ import android.util.Log;
 
 /**
  * This class hold and compare the last known orientation of the device
- * 
+ *
  * @author Lukas Müller
  * @author Ludwig Biermann
- * @version 2.5 
- * 
+ * @version 2.5
+ *
  */
 public class CompassManager implements SensorEventListener {
 
@@ -43,7 +43,7 @@ public class CompassManager implements SensorEventListener {
 	private float[] matrixValues = new float[3];;
 
 	/**
-	 *
+	 * @param context
 	 */
 	public CompassManager(Context context) {
 		Log.d(TAG_COMPASS_MANAGER, "Compass Manager Constructor");
@@ -66,7 +66,7 @@ public class CompassManager implements SensorEventListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param newCL
 	 */
 	public void registerCompassListener(CompassListener newCL) {
@@ -87,10 +87,12 @@ public class CompassManager implements SensorEventListener {
 		}
 	}
 
+	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
 		// do nothing
 	}
 
+	@Override
 	public void onSensorChanged(SensorEvent event) {
 
 		switch (event.sensor.getType()) {
@@ -121,9 +123,9 @@ public class CompassManager implements SensorEventListener {
 			this.notifyAllCompassListeners((float)azimuth);
 		}
 	}
-	
+
 	public interface CompassListener {
-		public void onCompassChange(float direction);	
+		public void onCompassChange(float direction);
 	}
 
 }

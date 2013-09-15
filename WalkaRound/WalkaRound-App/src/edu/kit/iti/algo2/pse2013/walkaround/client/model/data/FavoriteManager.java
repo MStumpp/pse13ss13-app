@@ -188,12 +188,9 @@ public class FavoriteManager {
 
 	/**
 	 * Removes a favorite location from the list.
+	 * @param name the name of the location to delete
 	 *
-	 * @param index
-	 *            index of the favorite location
-	 * @return
-	 * @throws IOException
-	 * @throws FileNotFoundException
+	 * @return see {@link Collection#remove(Object)}
 	 */
 	public boolean deleteLocation(String name) {
 		Location result = savedLocations.remove(name);
@@ -205,12 +202,9 @@ public class FavoriteManager {
 	/**
 	 * Adds a route to the list of favorite routes.
 	 *
-	 * @param routeToSave
-	 *            RouteInfo to be saved
-	 * @param name
-	 *            name for the favorite
-	 * @throws IOException
-	 * @throws FileNotFoundException
+	 * @param routeToSave	RouteInfo to be saved
+	 * @param name	name for the favorite
+	 * @return if adding was successful
 	 */
 	public boolean addRouteToFavorites(RouteInfo routeToSave, String name) {
 		if (!savedRoutes.containsKey(name)) {
@@ -225,12 +219,9 @@ public class FavoriteManager {
 	/**
 	 * Adds a location to the list of favorite locations.
 	 *
-	 * @param locationToSave
-	 *            Location to be saved
-	 * @param name
-	 *            name for the favorite
-	 * @throws IOException
-	 * @throws FileNotFoundException
+	 * @param locationToSave	Location to be saved
+	 * @param name	name for the favorite
+	 * @return if adding was successful
 	 */
 	public boolean addLocationToFavorites(Location locationToSave, String name) {
 		if (!savedLocations.containsKey(name)) {

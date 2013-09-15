@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.BootActivity;
@@ -48,8 +46,6 @@ public class Favorite extends RelativeLayout {
 	private Point size;
 
 	private boolean selected = true;
-	private int width;
-	private int height;
 	/**
 	 * This create a new POIview.
 	 *
@@ -59,9 +55,6 @@ public class Favorite extends RelativeLayout {
 	public Favorite(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		size = BoundingBox.getInstance(context).getDisplaySize();
-		width = size.x;
-		height = size.y / 20;
-
 		main = new LinearLayout(context, attrs);
 		main.setOrientation(LinearLayout.VERTICAL);
 
