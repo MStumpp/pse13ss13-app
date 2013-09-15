@@ -79,37 +79,39 @@ public class Route implements RouteInfo {
 	/**
 	 * Moves the coordinate represented by the active waypoint to the given
 	 * waypoint-position within the route.
+	 * @param newPos
 	 */
-	/*
-	 * public void moveActiveWaypointInOrder(int newPos) { Log.d(TAG_ROUTE,
-	 * "moveActiveWaypointInOrder(" + newPos + ")");
-	 *
-	 * LinkedList<Waypoint> waypoints = this.getWaypoints(); Waypoint
-	 * activeWaypoint = this.activeWaypoint;
-	 *
-	 * // TODO: bestimme vorherigen und nächsten WP an neuer Position
-	 *
-	 * assert (newPos >= 0 && newPos <= waypoints.size());
-	 *
-	 * Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
-	 * waypoints.add(newPos, activeWaypoint); Waypoint nextWaypoint =
-	 * this.getNextWaypoint(newPos);
-	 *
-	 * this.deletePathBetweenTwoWaypoints(previousWaypoint, nextWaypoint);
-	 * this.routeCoordinates.add(
-	 * this.routeCoordinates.indexOf(previousWaypoint) + 1, activeWaypoint);
-	 *
-	 * this.deleteActiveWaypoint();
-	 *
-	 * // this.computeShortestPath(coordinate1, coordinate2)
-	 *
-	 * // this.addRouteBetweenTwoCoords(route, one, two)
-	 *
-	 * // Füge den aktiven WP an der übergebenen Position in die Route ein.
-	 *
-	 * this.setActiveWaypoint(activeWaypoint);
-	 * this.cleanRouteOfDuplicateCoordinatePairs(); }
-	 */
+
+	public void moveActiveWaypointInOrder(int newPos) {
+		Log.d(TAG_ROUTE, "moveActiveWaypointInOrder(" + newPos + ")");
+		LinkedList<Waypoint> waypoints = this.getWaypoints();
+		Waypoint activeWaypoint = this.activeWaypoint;
+
+		// TODO: bestimme vorherigen und nächsten WP an neuer Position
+
+		assert (newPos >= 0 && newPos < waypoints.size());
+
+		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
+		waypoints.add(newPos, activeWaypoint);
+		Waypoint nextWaypoint = this.getNextWaypoint(newPos);
+
+		this.deletePathBetweenTwoWaypoints(previousWaypoint, nextWaypoint);
+		this.routeCoordinates.add(
+			this.routeCoordinates.indexOf(previousWaypoint) + 1,
+			activeWaypoint
+		);
+
+		this.deleteActiveWaypoint();
+
+		// this.computeShortestPath(coordinate1, coordinate2)
+
+		// this.addRouteBetweenTwoCoords(route, one, two)
+
+		// Füge den aktiven WP an der übergebenen Position in die Route ein.
+
+		this.setActiveWaypoint(activeWaypoint);
+		this.cleanRouteOfDuplicateCoordinatePairs();
+	}
 
 	/**
 	 * Adds a new waypoint at the given coordinate to the end of the route.
