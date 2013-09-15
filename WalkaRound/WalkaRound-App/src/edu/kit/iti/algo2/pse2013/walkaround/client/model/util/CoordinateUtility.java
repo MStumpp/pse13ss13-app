@@ -15,7 +15,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
- * 
+ *
  * @author Florian Schäfer
  * @author Ludwig Biermann
  * @version 2.0
@@ -33,19 +33,19 @@ public final class CoordinateUtility {
 	 */
 	public static boolean DIRECTION_VERTICAL = false;
 	/**
-	 * Alias for {@link this#DIRECTION_VERTICAL}.
+	 * Alias for {@link CoordinateUtility#DIRECTION_VERTICAL}.
 	 */
 	public static boolean DIRECTION_LATITUDE = DIRECTION_VERTICAL;
 	/**
-	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
+	 * Alias for {@link CoordinateUtility#DIRECTION_HORIZONTAL}.
 	 */
 	public static boolean DIRECTION_LONGITUDE = DIRECTION_HORIZONTAL;
 	/**
-	 * Alias for {@link this#DIRECTION_VERTICAL}.
+	 * Alias for {@link CoordinateUtility#DIRECTION_VERTICAL}.
 	 */
 	public static boolean DIRECTION_Y = DIRECTION_VERTICAL;
 	/**
-	 * Alias for {@link this#DIRECTION_HORIZONTAL}.
+	 * Alias for {@link CoordinateUtility#DIRECTION_HORIZONTAL}.
 	 */
 	public static boolean DIRECTION_X = DIRECTION_HORIZONTAL;
 
@@ -76,7 +76,7 @@ public final class CoordinateUtility {
 	 * @param c2
 	 *            the the second coordinate
 	 * @return the distance between the two coordinates in kilometers
-	 * @see {@link https://de.wikipedia.org/wiki/Orthodrome#Strecke}
+	 * @see "https://de.wikipedia.org/wiki/Orthodrome#Strecke"
 	 */
 	public static double calculateDifferenceInMeters(Coordinate c1,
 			Coordinate c2) {
@@ -93,12 +93,10 @@ public final class CoordinateUtility {
 	 * Converts a given length in display-pixels into the corresponding
 	 * geographical degrees.
 	 *
-	 * @param pixels
-	 *            the given length in pixels
-	 * @param levelOfDetail
-	 *            the current level of detail
-	 * @param one
-	 *            of the constants {@link CoordinateUtility#HORIZONTAL} or {@link CoordinateUtility#VERTICAL}
+	 * @param pixels	the given length in pixels
+	 * @param levelOfDetail	the current level of detail
+	 * @param isHorizontal	one of the constants {@link CoordinateUtility#DIRECTION_HORIZONTAL}
+	 * 			or {@link CoordinateUtility#DIRECTION_VERTICAL}
 	 * @return the given length in degrees
 	 */
 	public static double convertPixelsToDegrees(float pixels, float levelOfDetail, boolean isHorizontal) {
@@ -109,10 +107,10 @@ public final class CoordinateUtility {
 	 * Converts given geographical degrees into the corresponding length in
 	 * display-pixel
 	 *
-	 * @param degree
-	 *            the given geographical degrees
-	 * @param levelOfDetail
-	 *            the current level of detail
+	 * @param degree	the given geographical degrees
+	 * @param levelOfDetail	the current level of detail
+	 * @param isHorizontal	one of the constants {@link CoordinateUtility#DIRECTION_HORIZONTAL}
+	 * 			or {@link CoordinateUtility#DIRECTION_VERTICAL}
 	 * @return the given length in degrees
 	 */
 	public static float convertDegreesToPixels(double degree, float levelOfDetail, boolean isHorizontal) {
@@ -150,9 +148,10 @@ public final class CoordinateUtility {
 	 * berechnet die Display-Koordinate relativ zu oberen Ecke anhand einer
 	 * Koordinate
 	 *
-	 * @param dc
-	 *            die zu konvertierende DisplayCoordinate
-	 * @return
+	 * @param c	die zu konvertierende Coordinate
+	 * @param upperLeft
+	 * @param levelOfDetail
+	 * @return die DisplayCoordinate, die zu {@code c} gehört
 	 */
 	public static DisplayCoordinate convertCoordinateToDisplayCoordinate(
 			Coordinate c, Coordinate upperLeft, float levelOfDetail) {
@@ -170,6 +169,9 @@ public final class CoordinateUtility {
 	 *
 	 * @param currentRoute
 	 *            the required RouteInfo
+	 * @param center
+	 * @param size
+	 * @param levelOfDetail
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayWaypoint> extractDisplayWaypointsOutOfRouteInfo(
@@ -202,6 +204,9 @@ public final class CoordinateUtility {
 	 *
 	 * @param currentRoute
 	 *            the required RouteInfo
+	 * @param center
+	 * @param size
+	 * @param levelOfDetail
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayCoordinate> extractDisplayCoordinatesOutOfRouteInfo(
@@ -227,7 +232,7 @@ public final class CoordinateUtility {
 
 	/**
 	 * compute and returns the current Tile size
-	 *
+	 * @param levelOfDetail
 	 * @return the current tile size in pixel
 	 */
 	public static float computeCurrentTileWidthInPixels(float levelOfDetail) {

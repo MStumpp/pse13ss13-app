@@ -84,6 +84,7 @@ public class GeometryProcessorEdge {
      * @param search The Geometrizable the resulting Vertex has to be closest to.
      * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws GeometryProcessorException If something goes wrong.
+     * @throws GeometryComputationNoSlotsException
      * @throws IllegalArgumentException If geometrizable is null.
      */
     public Geometrizable getNearestGeometrizable(GeometrySearch search)
@@ -97,8 +98,10 @@ public class GeometryProcessorEdge {
      * Computes the nearest Geometrizable for a given Geometrizable.
      *
      * @param search The Geometrizable the resulting Vertex has to be closest to.
+     * @param constraint
      * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.GeometryProcessorException If something goes wrong.
+     * @throws GeometryComputationNoSlotsException
      * @throws IllegalArgumentException If geometrizable is null.
      */
     public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)

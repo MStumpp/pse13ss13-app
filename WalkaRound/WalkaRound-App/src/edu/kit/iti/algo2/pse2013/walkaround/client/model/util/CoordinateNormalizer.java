@@ -47,13 +47,10 @@ public final class CoordinateNormalizer {
 	/**
 	 * Normalizes a coordinate to a coordinate on a graph.
 	 *
-	 * @param coord
-	 *            coordinate to normalize
-	 * @param levelOfDetail
-	 *            the "tile zoom level" for which the calculation should be made
+	 * @param coordinate	coordinate to normalize
+	 * @param levelOfDetail	the "tile zoom level" for which the calculation should be made
 	 * @return a normalized coordinate on a graph
-	 * @throws CoordinateNormalizerException
-	 *             If something goes wrong.
+	 * @throws CoordinateNormalizerException If something goes wrong.
 	 * @throws InterruptedException
 	 */
 	public static Coordinate normalizeCoordinate(Coordinate coordinate,
@@ -84,11 +81,9 @@ public final class CoordinateNormalizer {
 					gsonAnswerer.getException());
 			throw new CoordinateNormalizerException(gsonAnswerer.getException()
 					.toString());
-		} else {
-			Log.d(TAG, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
-			normalizedCoordinate = gson.fromJson(gsonAnswerer.getJSONAnswer(),
-					Coordinate.class);
 		}
+		Log.d(TAG, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
+		normalizedCoordinate = gson.fromJson(gsonAnswerer.getJSONAnswer(), Coordinate.class);
 
 		if (normalizedCoordinate == null)
 			throw new CoordinateNormalizerException(
@@ -112,6 +107,7 @@ public final class CoordinateNormalizer {
 			this.url = url;
 		}
 
+		@Override
 		public void run() {
 			InputStream is;
 			try {
@@ -167,5 +163,5 @@ public final class CoordinateNormalizer {
 			return json;
 		}
 	}
-	
+
 }

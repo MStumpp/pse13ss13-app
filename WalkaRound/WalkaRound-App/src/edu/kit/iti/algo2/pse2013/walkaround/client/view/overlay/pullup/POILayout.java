@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -50,17 +51,17 @@ public class POILayout extends RelativeLayout {
 		content.setOrientation(LinearLayout.VERTICAL);
 
 		// Content
-		LayoutParams contentParam = new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT);
+		LayoutParams contentParam = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT);
 
 		// ScrollView
 		RelativeLayout.LayoutParams scrollViewParam = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.MATCH_PARENT,
-				RelativeLayout.LayoutParams.MATCH_PARENT);
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT);
 
 		// Category
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		param.topMargin = 5;
 		param.height = size.y / 20;
 		scrollView.addView(content, contentParam);

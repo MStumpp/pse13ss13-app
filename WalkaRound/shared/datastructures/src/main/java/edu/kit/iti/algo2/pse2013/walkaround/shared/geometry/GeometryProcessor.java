@@ -78,6 +78,7 @@ public class GeometryProcessor {
      * @param search The Geometrizable the resulting Vertex has to be closest to.
      * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws GeometryProcessorException If something goes wrong.
+     * @throws GeometryComputationNoSlotsException
      * @throws IllegalArgumentException If geometrizable is null.
      */
     public Geometrizable getNearestGeometrizable(GeometrySearch search)
@@ -91,8 +92,10 @@ public class GeometryProcessor {
      * Computes the nearest Geometrizable for a given Geometrizable.
      *
      * @param search The Geometrizable the resulting Vertex has to be closest to.
+     * @param constraint
      * @return Geometrizable Nearest Geometrizable Vertex.
      * @throws GeometryProcessorException If something goes wrong.
+     * @throws GeometryComputationNoSlotsException
      * @throws IllegalArgumentException If geometrizable is null.
      */
     public Geometrizable getNearestGeometrizable(GeometrySearch search, GeometrizableConstraint constraint)
@@ -205,15 +208,18 @@ public class GeometryProcessor {
             this.geometryComputerQueue = geometryComputerQueue;
         }
 
+		@Override
 		protected void afterExecute(Runnable r, Throwable t) {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
-            Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
-                    " and GeometryComputer: " + computer.getId() + " Reference: "
-                   + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
-            if (computer == null)
+            if (computer == null) {
             	logger.info("GeometryComputer is null in ThreadPoolExecutorCustom");
+            } else {
+	            logger.info("afterExecute(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+	            Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+	                    " and GeometryComputer: " + computer.getId() + " Reference: "
+	                   + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+            }
             //geometryComputerQueue.add(computer);
         }
     }
@@ -242,15 +248,16 @@ public class GeometryProcessor {
         public Geometrizable call() throws Exception {
             GeometryComputer computer =
                     ((ThreadCustom) Thread.currentThread()).getComputer();
-            logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
-                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
-                    " and GeometryComputer: " + computer.getId() + " Reference: "
-                   + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
+
             if (computer == null) {
             	logger.info("GeometryComputer is null in GeometryNearestVertexTask");
                 throw new GeometryProcessorException(
                         "GeometryComputer is null in GeometryNearestVertexTask");
             }
+            logger.info("call(): Thread: " + Thread.currentThread().getName() + " Reference: " +
+                    Thread.currentThread().getClass().getName() + "@" + Integer.toHexString(Thread.currentThread().hashCode()) +
+                    " and GeometryComputer: " + computer.getId() + " Reference: "
+                   + computer.getClass().getName() + "@" + Integer.toHexString(computer.hashCode()));
             return computer.getNearestGeometrizable(search, constraint);
         }
     }
@@ -312,6 +319,7 @@ public class GeometryProcessor {
          * Computes the nearest Geometrizable for a given Geometrizable.
          *
          * @param search The Geometrizable the resulting Vertex has to be closest to.
+         * @param constraint
          * @return Geometrizable Nearest Geometrizable Vertex.
          * @throws GeometryProcessorException If something goes wrong.
          */
@@ -350,13 +358,11 @@ public class GeometryProcessor {
             Geometrizable geometrizable = holder.getGeometrizable();
             if (geometrizable == null) {
                 return null;
-            } else {
-                if (geometrizable instanceof GeometrizableWrapper) {
-                    return ((GeometrizableWrapper) geometrizable).getGeometrizable();
-                } else {
-                    return geometrizable;
-                }
             }
+			if (geometrizable instanceof GeometrizableWrapper) {
+			    return ((GeometrizableWrapper) geometrizable).getGeometrizable();
+			}
+			return geometrizable;
         }
 
 

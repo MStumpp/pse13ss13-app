@@ -85,8 +85,8 @@ public class GeometryDataIO {
 	 *
 	 * @param source
 	 *            Location of source file in file system.
+	 * @return
 	 * @throws java.io.IOException
-	 * @throws ClassNotFoundException
 	 */
 	public static GeometryDataIO load(File source) throws IOException {
 		InputStream in = new BufferedInputStream(new FileInputStream(source));

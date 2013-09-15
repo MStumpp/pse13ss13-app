@@ -9,7 +9,7 @@ public abstract class SingleStarter implements Runnable {
 
 	protected StarterListener listener;
 	/**
-	 * @param multiStarter the listener which will be notified when the starter finished successfully
+	 * @param listener the listener which will be notified when the starter finished successfully
 	 */
 	public void setStarterListener(StarterListener listener) {
 		this.listener = listener;

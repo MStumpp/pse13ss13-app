@@ -57,10 +57,10 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		Log.d(TAG_NAVI, "NavigationModel Contructor");
 		if (this.applicationContext != null) {
 			this.naviOutputs = new LinkedList<NaviOutputInterface>();
-			
+
 			// bitte nutze Preference Utility
 			//this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext);
-			
+
 			this.naviIsActive = false;
 			this.distLeftOnRouteInMeter = 0;
 			this.distOnRouteInMeters = 0;
@@ -68,7 +68,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			this.timeLeftOnRouteInSec = 0;
 			this.speed = 0;
 			// TODO: Je nach gesetzten Optionen die Navi Strategien in onSharedPref...() Methode aktivieren/deaktivieren
-			
+
 			PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		} else {
 			Log.e(TAG_NAVI, "Navigtaion Model has to be initialized first.");
@@ -131,8 +131,8 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		Log.d(TAG_NAVI, "onSharedPreferenceChanged(" + sharedPreferences + ", " + key + ")");
-		// TODO: 
-		
+		// TODO:
+
 		/*
 		this.addOutputStrategy(ArrowNaviOutput.getInstance());
 		this.addOutputStrategy(TTSNaviOutput.getInstance());
@@ -140,7 +140,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		this.addOutputStrategy(StereoNaviOutput.getInstance());
 		*/
 	}
-	
+
 
 	public void onSpeedChange(double speed) {
 		Log.d(TAG_NAVI, "onSpeedChange(double)");
@@ -191,7 +191,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 			if (coordsIter.hasNext()) {
 				tempCoord = coordsIter.next();
 			}
-			while (coordsIter.hasNext() && !tempNextCrossing.equals(tempCoord) && !(tempCoord.getCrossingInformation().getCrossingAngles().length > 1)) {
+			while (coordsIter.hasNext() && !tempNextCrossing.equals(tempCoord) && tempCoord != null && !(tempCoord.getCrossingInformation().getCrossingAngles().length > 1)) {
 				tempCoord = coordsIter.next();
 			}
 			tempNextNextCrossing = tempCoord;
@@ -241,7 +241,7 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 
 	private Coordinate computeNextCrossing() {
 		Coordinate output = null;
-		
+
 		// Find coordinate in front of user:
 		Coordinate coordInfrontOfUser = this.computeNextCoordinateInfrontOfUser();
 		Coordinate tempCoord = null;
@@ -249,41 +249,41 @@ public class NaviModel implements OnSharedPreferenceChangeListener, RouteListene
 		// forward from this coordinate to the next coordinate on route with a crossing:
 		if (coordInfrontOfUser != null) {
 			Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
-			
+
 			// first forward iterator to coordinate in front of user:
 			while (coordsIter.hasNext() && !coordInfrontOfUser.equals(tempCoord)) {
 				tempCoord = coordsIter.next();
 			}
 			// now find the next Coordinate on route with a crossing:
-			while (coordsIter.hasNext() && (tempCoord.getCrossingInformation() != null && !(tempCoord.getCrossingInformation() != null && tempCoord.getCrossingInformation().getNumCrossroads() > 1))) {
+			while (coordsIter.hasNext() && tempCoord != null && (tempCoord.getCrossingInformation() != null && !(tempCoord.getCrossingInformation() != null && tempCoord.getCrossingInformation().getNumCrossroads() > 1))) {
 				tempCoord = coordsIter.next();
 			}
-			
+
 		}
 		output = tempCoord;
-		
+
 		return output;
 	}
-	
-	
+
+
 	private Coordinate computeNextCoordinateInfrontOfUser() {
 		Coordinate output = null;
 		// Principle: iterate through route, find
 		Iterator<Coordinate> coordsIter = this.lastKnownRoute.getCoordinates().iterator();
 		double minimalDistance = Double.POSITIVE_INFINITY;
 		double tempDistance;
-		
+
 		// initializing iterator:
 		Coordinate previousCoord = null;
 		Coordinate tempCoord = null;
-		
+
 		if (coordsIter.hasNext()) {
 			previousCoord = coordsIter.next();
 		}
 		if (coordsIter.hasNext()) {
 			tempCoord = coordsIter.next();
 		}
-		
+
 		if (tempCoord != null) {
 			while (coordsIter.hasNext()) {
 				previousCoord = tempCoord;
