@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +104,7 @@ public class Search extends RelativeLayout {
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		waypointButtontParams.height = size.y / 10;
 		waypointButtontParams.width = size.x / 2;
+		waypointButtontParams.topMargin = 10;
 		waypointButtontParams.leftMargin = 0;
 		waypointButtontParams.rightMargin = 0;
 
@@ -109,8 +112,9 @@ public class Search extends RelativeLayout {
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		routeButtontParams.height = size.y / 10;
 		routeButtontParams.width = size.x / 2;
-		waypointButtontParams.leftMargin = 0;
-		waypointButtontParams.rightMargin = 0;
+		routeButtontParams.topMargin = 10;
+		routeButtontParams.leftMargin = 0;
+		routeButtontParams.rightMargin = 0;
 
 		tabHost.addView(addressButton, waypointButtontParams);
 		tabHost.addView(poiButton, routeButtontParams);
@@ -139,12 +143,12 @@ public class Search extends RelativeLayout {
 		LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		textParam.width = size.x / 2;
-		textParam.height = size.y / 15;
+		textParam.height = size.y / 10;
 
 		LinearLayout.LayoutParams editParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		editParam.width = size.x / 2;
-		textParam.height = size.y / 15;
+		editParam.height = size.y / 10;
 
 		// Address
 
@@ -159,6 +163,7 @@ public class Search extends RelativeLayout {
 
 		zipEdit = new EditText(context);
 		zipEdit.setGravity(Gravity.CENTER);
+		zipEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 		zipLayout.addView(zip, textParam);
 		zipLayout.addView(zipEdit, editParam);
@@ -176,6 +181,7 @@ public class Search extends RelativeLayout {
 
 		cityEdit = new EditText(context);
 		cityEdit.setGravity(Gravity.CENTER);
+		cityEdit.setInputType(InputType.TYPE_CLASS_TEXT);
 
 		cityLayout.addView(city, textParam);
 		cityLayout.addView(cityEdit, editParam);
@@ -193,6 +199,7 @@ public class Search extends RelativeLayout {
 
 		streetEdit = new EditText(context);
 		streetEdit.setGravity(Gravity.CENTER);
+		streetEdit.setInputType(InputType.TYPE_CLASS_TEXT);
 
 		streetLayout.addView(street, textParam);
 		streetLayout.addView(streetEdit, editParam);
@@ -210,6 +217,7 @@ public class Search extends RelativeLayout {
 
 		numberEdit = new EditText(context);
 		numberEdit.setGravity(Gravity.CENTER);
+		numberEdit.setInputType(InputType.TYPE_CLASS_TEXT);
 
 		numberLayout.addView(number, textParam);
 		numberLayout.addView(numberEdit, editParam);
@@ -236,11 +244,12 @@ public class Search extends RelativeLayout {
 
 		LinearLayout.LayoutParams freeParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		freeParam.height = size.y / 15;
+		freeParam.height = size.y / 10;
 		freeParam.width = width;
 
 		freeText = new EditText(context);
 		freeText.setGravity(Gravity.CENTER);
+		freeText.setInputType(InputType.TYPE_CLASS_TEXT);
 
 		poiSide.addView(freeText, freeParam);
 
