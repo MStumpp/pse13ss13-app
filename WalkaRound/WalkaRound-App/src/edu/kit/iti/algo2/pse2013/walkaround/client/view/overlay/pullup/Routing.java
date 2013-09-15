@@ -96,7 +96,8 @@ public class Routing extends RelativeLayout implements RouteListener {
 		save.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
 		reset.setText(context.getString(R.string.reset));
-		addFavorite.setText(context.getString(R.string.dialog_header_add, context.getString(R.string.term_favorite)));
+		addFavorite.setText(context.getString(R.string.dialog_header_add,
+				context.getString(R.string.term_favorite)));
 		goToMap.setText(context.getString(R.string.go_to_map));
 
 		// IDs
@@ -197,7 +198,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		moveParams.height = (size.x * 1 / 6) / 2;
 		moveParams.bottomMargin = 0;
 		moveParams.topMargin = 0;
-		
+
 		// Delete
 		deleteParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -251,11 +252,11 @@ public class Routing extends RelativeLayout implements RouteListener {
 					.getCurrentRoute().getWaypoints();
 			content.removeAllViews();
 			for (Waypoint w : route) {
-				LinearLayout m = new LinearLayout(context);	
-				ImageButton  moveUp = new ImageButton(context);
-				ImageButton  moveDown = new ImageButton(context);
+				LinearLayout m = new LinearLayout(context);
+				ImageButton moveUp = new ImageButton(context);
+				ImageButton moveDown = new ImageButton(context);
 				m.setPadding(0, 0, 0, 0);
-				
+
 				LinearLayout l = new LinearLayout(context);
 				ImageButton delete = new ImageButton(context);
 				ImageButton save = new ImageButton(context);
@@ -266,7 +267,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				moveDown.setImageResource(R.drawable.move_down);
 				moveDown.setRotation(180);
 				moveDown.setScaleType(ScaleType.FIT_XY);
-				
+
 				delete.setImageResource(R.drawable.delete);
 				save.setImageResource(R.drawable.favorite);
 				text.setText(w.getName());
@@ -281,9 +282,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 				moveDown.setTag(w.getId());
 
 				m.setOrientation(LinearLayout.VERTICAL);
-				m.addView(moveUp,moveParams);
-				m.addView(moveDown,moveParams);
-				
+				m.addView(moveUp, moveParams);
+				m.addView(moveDown, moveParams);
+
 				l.setOrientation(LinearLayout.HORIZONTAL);
 				l.addView(m);
 				l.addView(text, textParams);
@@ -306,7 +307,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.1
-	 *
+	 * 
 	 */
 	private class WaypointListener implements OnTouchListener {
 		@Override
@@ -326,16 +327,15 @@ public class Routing extends RelativeLayout implements RouteListener {
 		}
 
 	}
-	
+
 	/**
 	 * Shifts the position one step down
 	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class MoveDownListener implements OnTouchListener {
-
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -343,7 +343,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
-				
+
 				RouteController.getInstance().moveWaypoint(id, 1);
 			}
 
@@ -356,10 +356,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class MoveUpListener implements OnTouchListener {
-
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -367,7 +366,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
-				
+
 				RouteController.getInstance().moveWaypoint(id, -1);
 			}
 
@@ -511,6 +510,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 			}
 			return false;
 		}
+
 		/**
 		 * makes a alert
 		 */
@@ -519,16 +519,14 @@ public class Routing extends RelativeLayout implements RouteListener {
 					.create();
 			alertDialog.setTitle("Route löschen");
 			alertDialog.setMessage("Route wirklich löschen");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-					"Ja",
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Ja",
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							RouteController.getInstance().resetRoute();							
+							RouteController.getInstance().resetRoute();
 						}
 					});
-			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-					"Nein!",
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Nein!",
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -549,7 +547,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
-			RouteController.getInstance().invertRoute();
+			if (arg1.getAction() == MotionEvent.ACTION_UP) {
+				RouteController.getInstance().invertRoute();
+			}
 			return false;
 		}
 
@@ -569,7 +569,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		public boolean onTouch(View view, MotionEvent event) {
 			int action = event.getAction();
 
-			if (action == MotionEvent.ACTION_DOWN) {
+			if (action == MotionEvent.ACTION_UP) {
 				this.alert();
 			}
 			return false;

@@ -236,7 +236,7 @@ public class Info extends LinearLayout {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(sound) && event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (v.equals(sound) && event.getAction() == MotionEvent.ACTION_UP) {
 				if (speak) {
 					Log.d(TAG, "play wurde gedrückt");
 					toogleSpeaking();

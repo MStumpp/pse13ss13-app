@@ -191,7 +191,7 @@ public class HeadUpView extends RelativeLayout {
 	private class UserLockListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View view, MotionEvent arg1) {
-			if (view.equals(userLock)) {
+			if (view.equals(userLock) && arg1.getAction() == MotionEvent.ACTION_DOWN) {
 				Log.d(TAG, "UserLock is pressed");
 				notifyListener(USERLOCK);
 				return true;

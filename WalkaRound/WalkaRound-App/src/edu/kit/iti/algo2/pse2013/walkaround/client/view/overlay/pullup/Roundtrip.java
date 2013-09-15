@@ -13,13 +13,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToMapListener;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 
 /**
  * This View shows the Roundtrip menu
@@ -45,6 +49,7 @@ public class Roundtrip extends LinearLayout {
 	private final int STEPSIZE = 100;
 
 	private NumberPicker lengthPicker;
+	private CheckBox checkbox;
 
 	/**
 	 * This create a new POIview.
@@ -118,6 +123,18 @@ public class Roundtrip extends LinearLayout {
 			profiles.add(text);
 			counter++;
 		}
+		
+		// Checkbox für das Anzeigen der PoiCats des rundkurses
+		
+		LinearLayout.LayoutParams checkboxParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		checkboxParam.topMargin = 10;
+		checkboxParam.gravity = Gravity.CENTER;
+		
+		checkbox = new CheckBox(context);
+		checkbox.setText(R.string.poi_checkbox);
+		checkbox.setTextSize(30);
+		checkbox.setTextColor(Color.LTGRAY);
+		checkbox.setChecked(true);
 
 		LinearLayout line1 = new LinearLayout(context, attrs);
 		line1.setOrientation(LinearLayout.HORIZONTAL);
@@ -143,6 +160,7 @@ public class Roundtrip extends LinearLayout {
 		for (TextView i : profiles) {
 			this.addView(i);
 		}
+		this.addView(checkbox, checkboxParam);
 		this.addView(compute, computeParam);
 	}
 
@@ -204,6 +222,12 @@ public class Roundtrip extends LinearLayout {
 				if (id == -1) {
 					this.alert();
 					return false;
+				}
+				
+				if (checkbox.isChecked() && id != -1) {
+					for(int cat : Profile.getByID(id).getContainingPOICategories()) {
+						POIManager.getInstance(getContext()).togglePOICategory(cat);
+					}
 				}
 
 				notifyComputeRoundtripListener(id, lengthPicker.getValue());

@@ -379,7 +379,7 @@ public class Search extends RelativeLayout {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (event.getAction() == MotionEvent.ACTION_UP) {
 				List<Location> locations;
 				Log.d(TAG, "Go wurde gedrückt");
 				Log.d(TAG, "" + zipEdit.getText().toString());

@@ -19,10 +19,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 
 /**
  * This View shows the POI Menu.
- *
+ * 
  * @author Ludwig Biermann
  * @version 1.1
- *
+ * 
  */
 public class POILayout extends RelativeLayout {
 
@@ -33,9 +33,11 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * This create a new POIview.
-	 *
-	 * @param context the context of the app
-	 * @param attrs the needed attributes
+	 * 
+	 * @param context
+	 *            the context of the app
+	 * @param attrs
+	 *            the needed attributes
 	 */
 	public POILayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -68,12 +70,13 @@ public class POILayout extends RelativeLayout {
 			b.setText(categories[i]);
 			b.setTag(i);
 			b.setOnTouchListener(new OnCategoryTouch());
-			b.setBackgroundColor(Color.rgb(50, 50, 50));
-			b.setTextColor(Color.WHITE);
+			// b.setBackgroundColor(Color.rgb(50, 50, 50));
+			b.setTextColor(Color.GRAY);
+			b.setTextSize(25);
 			b.setSelected(false);
 			b.setGravity(Gravity.CENTER);
 
-			content.addView(b, param);
+			content.addView(b);
 		}
 
 		this.addView(scrollView, scrollViewParam);
@@ -81,10 +84,10 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * Listen for a Category change
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	private class OnCategoryTouch implements OnTouchListener {
 
@@ -96,21 +99,19 @@ public class POILayout extends RelativeLayout {
 			final int id = Integer.parseInt(v.getTag().toString());
 			if (b.isSelected()) {
 				b.setSelected(false);
-				b.setTextColor(Color.WHITE);
-				b.setBackgroundColor(Color.rgb(50, 50, 50));
+				b.setTextColor(Color.GRAY);
+				// b.setBackgroundColor(Color.rgb(50, 50, 50));
 			} else {
 				b.setSelected(true);
 				b.setTextColor(Color.RED);
-				b.setBackgroundColor(Color.GRAY);
+				// b.setBackgroundColor(Color.GRAY);
 			}
-			Thread t = new Thread(
-				new Runnable() {
-					@Override
-					public void run() {
-						POIManager.getInstance(getContext()).togglePOICategory(id);
-					}
+			Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					POIManager.getInstance(getContext()).togglePOICategory(id);
 				}
-			);
+			});
 			t.start();
 			notifyComputeRoundtripListener();
 			return false;
@@ -128,7 +129,9 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * register a new POIChangeListener
-	 * @param listener the new Listener
+	 * 
+	 * @param listener
+	 *            the new Listener
 	 */
 	public void registerPOIChangeListener(POIChangeListener listener) {
 		poiChangeListener.add(listener);
@@ -136,10 +139,10 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * A Interface for the POI´s
-	 *
+	 * 
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 *
+	 * 
 	 */
 	public interface POIChangeListener {
 

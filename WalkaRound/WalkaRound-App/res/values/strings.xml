@@ -54,4 +54,5 @@
 	<string name="term_route">route</string>
 	<string name="term_waypoint">Waypoint</string>
 	<string name="unknown_location">Unknown %d</string>
+	<string name="poi_checkbox">Show Pois</string>
 </resources>
