@@ -14,6 +14,7 @@
 	<string name="dialog_header_add">Add %s</string>
 	<string name="dialog_header_add_fav_to_route">Add favorite to route</string>
 	<string name="dialog_header_delete">Delete %s</string>
+	<string name="dialog_header_no_server_connection">Connection error</string>
 	<string name="dialog_header_save">Save %s</string>
 	<string name="dialog_header_unknown_error">An unknown error occurred</string>
 	<string name="dialog_header_wifi">No WiFi-Connection</string>
@@ -22,6 +23,7 @@
 	<string name="dialog_text_boomerang">You have not picked any waypoint. Please pick one in order to calculate a Roundtrip.</string>
 	<string name="dialog_text_delete">Do you really want to delete \'%s\'?</string>
 	<string name="dialog_text_gps_inactive">Your GPS is inactive. Should it become activated?</string>
+	<string name="dialog_text_no_server_connection">The server connection could not be established</string>
 	<string name="dialog_text_unknown_error">The app will be closing now.</string>
 	<string name="dialog_text_wifi">No WiFi-connection was detected. Do you want to establish one?</string>
 	<string name="email_address" translatable="false">pse13ss13@ira.uni-karlsruhe.de</string>
@@ -41,15 +43,15 @@
 	<string name="sightseeing">Sightseeing</string>
 	<string name="start_search">Go</string>
 	<string name="suggestions">Suggestions</string>
+	<string name="term_boomerang">Boomerangpoint</string>
 	<string name="term_favorite">Favorite</string>
 	<string name="term_favorite_route">Favorite route</string>
 	<string name="term_location">location</string>
 	<string name="term_poi" translatable="false">POI</string>
 	<string name="term_pois" translatable="false">POIs</string>
 	<string name="term_profiles">Profiles</string>
-	<string name="term_route">route</string>
-	<string name="term_boomerang">Boomerangpoint</string>
-	<string name="term_waypoint">Waypoint</string>
 	<string name="term_roundtrip">Roundtrip</string>
+	<string name="term_route">route</string>
+	<string name="term_waypoint">Waypoint</string>
 	<string name="unknown_location">Unknown %d</string>
 </resources>

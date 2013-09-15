@@ -53,10 +53,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is the main Activity of WalkaRound. This class works like a controller.
- * 
+ *
  * @author Ludwig Biermann
  * @version 8.0
- * 
+ *
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
@@ -283,7 +283,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	/**
 	 * Helper Method to create Alert
-	 * 
+	 *
 	 * @param next
 	 */
 	public void addWaypointAlert(final Coordinate next) {
@@ -437,6 +437,24 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		getMenuInflater().inflate(R.menu.arrow_game, menu);
 		return true;
 	}
+
+	public void serverConnectionAlert() {
+			Log.d(TAG, "ServerConnectionAlert!");
+
+			AlertDialog alert = new AlertDialog.Builder(this).create();
+			alert.setTitle(getString(R.string.dialog_header_no_server_connection));
+			alert.setMessage(getString(R.string.dialog_text_no_server_connection));
+
+			alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_ok),
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog, final int id) {
+						dialog.cancel();
+					}
+				});
+
+			 alert.show();
+			}
 
 	@Override
 	public void onDestroy() {

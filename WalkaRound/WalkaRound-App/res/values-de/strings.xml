@@ -10,9 +10,10 @@
 	<string name="compute">%s berechnen</string>
 	<string name="current">aktuell</string>
 	<string name="current_route">Aktuelle Route</string>
-	<string name="dialog_header_add_fav_to_route">Favorit der Route hinzufügen</string>
 	<string name="dialog_header_add">%s hinzufügen</string>
+	<string name="dialog_header_add_fav_to_route">Favorit der Route hinzufügen</string>
 	<string name="dialog_header_delete">%s löschen</string>
+	<string name="dialog_header_no_server_connection">Verbindungsfehler</string>
 	<string name="dialog_header_save">%s speichern</string>
 	<string name="dialog_header_unknown_error">Ein unbekannter Fehler ist aufgetreten</string>
 	<string name="dialog_header_wifi">Keine WLAN-Verbindung</string>
@@ -21,6 +22,7 @@
 	<string name="dialog_text_boomerang">Sie haben noch keinen Wegpunkt gewählt. Bitte wählen Sie einen, um einen Rundkurs zu berechnen.</string>
 	<string name="dialog_text_delete">Sind Sie sich sicher, dass sie \'%s\' löschen wollen?</string>
 	<string name="dialog_text_gps_inactive">Ihr GPS ist nicht aktiviert. Soll es aktiviert werden?</string>
+	<string name="dialog_text_no_server_connection">Es konnte keine Verbindung zum Server aufgebaut werden.</string>
 	<string name="dialog_text_unknown_error">Die App wird jetzt geschlossen.</string>
 	<string name="dialog_text_wifi">Keine WLAN-Verbindung erkannt. Möchten sie sich mit einem WLAN verbinden?</string>
 	<string name="go_to_map">zurück zur Karte</string>
@@ -32,7 +34,7 @@
 	<string name="option_cancel">Abbrechen</string>
 	<string name="option_no">Nein</string>
 	<string name="option_yes">Ja</string>
-	<string name="query">Suchtext</string>
+	<string name="query">Suchbegriff</string>
 	<string name="reset">Leeren</string>
 	<string name="search">Suche</string>
 	<string name="shopping">Einkaufen</string>
@@ -44,8 +46,8 @@
 	<string name="term_favorite_route">Strecken-Favorit</string>
 	<string name="term_location">Ort</string>
 	<string name="term_profiles">Profile</string>
+	<string name="term_roundtrip">Rundkurs</string>
 	<string name="term_route">Strecke</string>
 	<string name="term_waypoint">Wegpunkt</string>
-	<string name="term_roundtrip">Rundkurs</string>
 	<string name="unknown_location">Unbekannt %d</string>
 </resources>
