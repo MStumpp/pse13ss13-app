@@ -83,16 +83,18 @@ public class Roundtrip extends LinearLayout {
 				lengthPicker.setValue((int) (Math.signum(newVal - oldVal) * STEPSIZE + oldVal));
 			}
 		});
+		// führt dazu das man in den picker nichts mehr schreiben kann (nur noch über buttons verstellbar)
+		lengthPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
 		LinearLayout.LayoutParams numberParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		numberParam.height = size.y / 5;
 		numberParam.width = size.x / 3;
-		numberParam.topMargin = 10;
+		//numberParam.topMargin = 10;
 		numberParam.gravity = Gravity.CENTER;
 
 		LinearLayout.LayoutParams computeParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		computeParam.height = size.y / 10;
-		computeParam.width = size.x / 2;
+		computeParam.width = size.x * 2 / 3;
 		computeParam.topMargin = 10;
 		computeParam.gravity = Gravity.CENTER;
 

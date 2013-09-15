@@ -296,9 +296,9 @@ public class POIManager {
 					.hasNext();) {
 				POI currentPOI = poiIter.next();
 				int difference = computeLevenstheinDistance(
-						query.toLowerCase(Locale.getDefault()).trim(),
+						query.toLowerCase(Locale.getDefault()).trim().replaceAll(" ", ""),
 						currentPOI.getName().toLowerCase(Locale.getDefault())
-								.trim());
+								.trim().replaceAll(" ", ""));
 				if (difference <= MAX_DIFFERENCE_FOR_SEARCH) {
 					if (suggestionsMap.containsKey(difference)) {
 						suggestionsMap.get(difference).add(currentPOI);

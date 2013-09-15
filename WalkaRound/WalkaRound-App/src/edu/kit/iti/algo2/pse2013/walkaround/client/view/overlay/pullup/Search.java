@@ -228,9 +228,10 @@ public class Search extends RelativeLayout {
 
 		LinearLayout.LayoutParams goParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		goParam.width = size.x;
+		goParam.width = size.x 	* 2 / 3;
 		goParam.height = size.y / 10;
 		goParam.topMargin = 10;
+		goParam.gravity = Gravity.CENTER;
 
 		Button go = new Button(context, attrs);
 		go.setGravity(Gravity.CENTER);
@@ -257,9 +258,10 @@ public class Search extends RelativeLayout {
 
 		LinearLayout.LayoutParams goFreeParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		goFreeParam.width = size.x;
+		goFreeParam.width = size.x * 2 / 3;
 		goFreeParam.height = size.y / 10;
 		goFreeParam.topMargin = 10;
+		goFreeParam.gravity = Gravity.CENTER;
 
 		Button goFree = new Button(context, attrs);
 		goFree.setGravity(Gravity.CENTER);
@@ -446,11 +448,11 @@ public class Search extends RelativeLayout {
 			int action = event.getAction();
 
 			if (action == MotionEvent.ACTION_UP) {
-				String text = freeText.getText().toString().replaceAll(" ", "");
+				String text = freeText.getText().toString();
 				if (!text.isEmpty()) {
 
 					List<POI> poiS = POIManager.getInstance(getContext())
-							.searchPOIsByQuery(freeText.getText().toString());
+							.searchPOIsByQuery(text);
 
 					if (!poiS.isEmpty()) {
 
