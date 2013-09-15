@@ -143,7 +143,7 @@ public class PositionManager implements GpsStatus.Listener {
 		provider = locationManager.getBestProvider(c, true);
 
 		if(provider != null && !provider.isEmpty()){
-			Log.d(TAG, "Provider found!");
+		// Log.d(TAG, "Provider found!");
 		locationManager.requestLocationUpdates(provider,
 				UPDATE_TIME, UPDATE_DISTANCE, listener);
 		} else {
