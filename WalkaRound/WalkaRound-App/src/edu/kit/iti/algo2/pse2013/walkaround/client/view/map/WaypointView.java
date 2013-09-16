@@ -3,6 +3,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -71,14 +72,19 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		coorBox.registerLevelOfDetailListener(this);
 	}
 
+	public float scale = 1;
+	public float px = 0;
+	public float py = 0;
+	
 	/**
 	 * update the Waypoint
 	 */
 	public void updateWaypoint() {
+		
 		List<DisplayWaypoint> l = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(route,
 						coorBox.getCenter(), coorBox.getDisplaySize(),
-						this.coorBox.getLevelOfDetail());
+						this.coorBox.getLevelOfDetail(), scale);
 
 		this.removeAllViews();
 
@@ -91,18 +97,18 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 				paramsOption.width = coorBox.getDisplaySize().x / 10;
 				paramsOption.height = coorBox.getDisplaySize().x / 10;
 
-				ImageView iv = new ImageView(this.getContext());
+				ImageView iv = new ImageView(this.getContext());				
 
-				iv.setY(dw.getY() - coorBox.getDisplaySize().x / 10);
 				iv.setX(dw.getX() - coorBox.getDisplaySize().x / 10 / 2);
+				iv.setY(dw.getY() - coorBox.getDisplaySize().x / 10);
 				iv.setTag(dw.getId());
 				iv.setVisibility(View.VISIBLE);
 				iv.setScaleType(ImageView.ScaleType.FIT_XY);
+				iv.setScaleX(scale);
+				iv.setScaleY(scale);
 				iv.setImageDrawable(waypoint);
 				iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));
-
 				this.addView(iv, paramsOption);
-
 			}
 
 			ImageView iv = (ImageView) this

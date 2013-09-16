@@ -175,7 +175,7 @@ public final class CoordinateUtility {
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayWaypoint> extractDisplayWaypointsOutOfRouteInfo(
-			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail) {
+			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail, float scale) {
 
 		LinkedList<DisplayWaypoint> dw = new LinkedList<DisplayWaypoint>();
 		for (Waypoint value : currentRoute.getWaypoints()) {
@@ -186,8 +186,8 @@ public final class CoordinateUtility {
 			Log.d("wtf", "" + y);
 
 			dw.add(new DisplayWaypoint(
-					(size.x / 2f) + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
-					(size.y / 2f) + CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.76f,
+					(size.x / 2f) + scale *CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
+					(size.y / 2f) + scale *CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.76f,
 					value.getId()
 			));
 			Log.d("d x", "" + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,

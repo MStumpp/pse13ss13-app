@@ -33,7 +33,8 @@ public class POIView extends RelativeLayout {
 
 	private Set<POI> poiList;
 	private LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
-
+	public float scale = 1;
+	
 	/**
 	 * This create a new POIview.
 	 *
@@ -74,8 +75,8 @@ public class POIView extends RelativeLayout {
 
 			Log.d("UserPos", " x: " + x + " y: " + y);
 
-			x = coorBox.getDisplaySize().x / 2 + x;
-			y = coorBox.getDisplaySize().y / 2 + y;
+			x = coorBox.getDisplaySize().x / 2 + x * scale;
+			y = coorBox.getDisplaySize().y / 2 + y * scale;
 
 			Log.d("UserPos", " x: " + x + " y: " + y);
 

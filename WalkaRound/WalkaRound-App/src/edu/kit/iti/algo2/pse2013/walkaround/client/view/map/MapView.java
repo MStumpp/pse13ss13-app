@@ -170,7 +170,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		}
 		tileT.clear();
 
-		c.scale(x, y);
+		//c.scale(x, y);
 		c.scale(x, y, px, py);
 		synchronized (tileHolder) {
 			for (int i = 0; i < tileHolder.size(); i++) {

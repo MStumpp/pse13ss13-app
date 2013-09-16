@@ -43,6 +43,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtilit
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.MapView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.POIView.POIInfoListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.RouteView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.map.WaypointView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.HeadUpView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.HeadUpView.HeadUpViewListener;
@@ -79,6 +80,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private WaypointView waypointView;
 	private PullUpView pullUpView;
 	private POIView poiView;
+	private RouteView routeView;
 	private float gesamt;
 	private boolean isZomm = false;
 	@SuppressWarnings("unused")
@@ -126,6 +128,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		// poiView
 		poiView = (POIView) findViewById(R.id.poiView);
+		routeView = (RouteView) this.findViewById(R.id.routeView);
 
 		RelativeLayout.LayoutParams paramUser = new RelativeLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -392,20 +395,35 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > 10f) {
 						matrix.set(savedMatrix);
-						float scale = newDist / oldDist;
+						float newScale = newDist / oldDist;
 						matrix.getValues(matrixValues);
 						float currentScale = matrixValues[Matrix.MSCALE_X];
 						// limit zoom
-						if (scale * currentScale > maxZoom) {
-							scale = maxZoom / currentScale;
-						} else if (scale * currentScale < minZoom) {
-							scale = minZoom / currentScale;
+						if (newScale * currentScale > maxZoom) {
+							newScale = maxZoom / currentScale;
+						} else if (newScale * currentScale < minZoom) {
+							newScale = minZoom / currentScale;
 						}
-						mapView.x = scale;
-						mapView.y = scale;
-						mapView.px = mid.x;
-						mapView.py = mid.y;
-						matrix.postScale(scale, scale, mid.x, mid.y);
+						mapView.x = newScale;
+						mapView.y = newScale;
+						mapView.px = BoundingBox.getInstance().getDisplaySize().x /2;
+						mapView.py = BoundingBox.getInstance().getDisplaySize().y /2;
+						
+						routeView.scale = newScale;
+						routeView.px = BoundingBox.getInstance().getDisplaySize().x /2;
+						routeView.py = BoundingBox.getInstance().getDisplaySize().y /2;
+						
+						waypointView.scale = newScale;
+						waypointView.px = BoundingBox.getInstance().getDisplaySize().x /2;
+						waypointView.py = BoundingBox.getInstance().getDisplaySize().y /2;
+						waypointView.updateWaypoint();
+						
+						poiView.scale = newScale;
+						
+						matrix.postScale(newScale, newScale, mid.x, mid.y);
+						
+						scale = newScale;
+						updateUser();
 					}
 				}
 				break;
@@ -659,6 +677,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		// waypointView.updateWaypoint();
 
 	}
+	private float scale = 1;
 
 	private void updateUser() {
 		double lon = -coorBox.getCenter().getLongitude()
@@ -668,11 +687,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		float x = CoordinateUtility.convertDegreesToPixels(lon,
 				coorBox.getLevelOfDetail(),
-				CoordinateUtility.DIRECTION_LONGITUDE);
+				CoordinateUtility.DIRECTION_LONGITUDE) * scale;
 
 		float y = CoordinateUtility.convertDegreesToPixels(lat,
 				coorBox.getLevelOfDetail(),
-				CoordinateUtility.DIRECTION_LATITUDE) * 0.75f;
+				CoordinateUtility.DIRECTION_LATITUDE) * 0.75f * scale;
 
 		Log.d("UserPos", " x: " + x + " y: " + y);
 
