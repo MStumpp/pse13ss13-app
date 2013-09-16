@@ -5,11 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Matrix;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -53,10 +57,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This is the main Activity of WalkaRound. This class works like a controller.
- *
+ * 
  * @author Ludwig Biermann
  * @version 8.0
- *
+ * 
  */
 public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
@@ -89,7 +93,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map_view);
-
 		coorBox = BoundingBox.getInstance(this);
 		coorBox.registerCenterListener(this);
 		coorBox.registerLevelOfDetailListener(this);
@@ -182,7 +185,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		progress.setVisibility(View.GONE);
 
 		POIManager.getInstance(this).registerProgressListener(this);
-
 	}
 
 	class ProgressTouchListener implements OnTouchListener {
@@ -283,7 +285,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	/**
 	 * Helper Method to create Alert
-	 *
+	 * 
 	 * @param next
 	 */
 	public void addWaypointAlert(final Coordinate next) {
@@ -295,39 +297,139 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	public class MapListener implements OnTouchListener {
 
+		// These matrices will be used to move and zoom image
+		Matrix matrix = new Matrix();
+		Matrix savedMatrix = new Matrix();
+
+		// We can be in one of these 3 states
+		static final int NONE = 0;
+		static final int DRAG = 1;
+		static final int ZOOM = 2;
+		static final int DRAW = 3;
+		int mode = NONE;
+
+		// Remember some things for zooming
+		PointF start = new PointF();
+		PointF mid = new PointF();
+		float oldDist = 1f;
+
+		PointF dragOld = new PointF();
+
+		// Limit zoomable/pannable image
+		private float[] matrixValues = new float[9];
+		private float maxZoom;
+		private float minZoom;
+		private float height;
+		private float width;
+		private RectF viewRect;
+
+		// ///////************ touch events functions
+		// **************////////////////////
+
+		public MapListener() {
+			maxZoom = 4;
+			minZoom = 0.25f;
+			height = BoundingBox.getInstance().getDisplaySize().y;
+			width =  BoundingBox.getInstance().getDisplaySize().x;
+			viewRect = new RectF(0, 0,  BoundingBox.getInstance().getDisplaySize().x,  BoundingBox.getInstance().getDisplaySize().y);
+		}
+
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			int action = event.getAction();
-			if (event.getPointerCount() >= 2
-					&& action == MotionEvent.ACTION_DOWN && !isZomm) {
-				float deltaX = Math.abs(event.getX(0) - event.getX(1));
-				float deltaY = Math.abs(event.getY(0) - event.getY(1));
+			/**
+			 * int action = event.getAction(); if (event.getPointerCount() >= 2
+			 * && action == MotionEvent.ACTION_DOWN && !isZomm) { float deltaX =
+			 * Math.abs(event.getX(0) - event.getX(1)); float deltaY =
+			 * Math.abs(event.getY(0) - event.getY(1));
+			 * 
+			 * gesamt = (float) Math.sqrt(Math.pow( Math.abs(event.getX(0) -
+			 * event.getX(1)), 2) Math.pow(Math.abs(event.getY(1) -
+			 * event.getY(1)), 2));
+			 * 
+			 * if (event.getX(0) < event.getX(1)) { targetX += (event.getX(0));
+			 * } else { targetX += (event.getX(1)); } targetX += deltaX;
+			 * 
+			 * if (event.getY(0) < event.getY(1)) { targetY += (event.getY(0));
+			 * } else { targetY += (event.getY(1)); } targetY += deltaY; isZomm
+			 * = true; } if (action == MotionEvent.ACTION_UP) { isZomm = false;
+			 * }
+			 */
 
-				gesamt = (float) Math.sqrt(Math.pow(
-						Math.abs(event.getX(0) - event.getX(1)), 2)
-						* Math.pow(Math.abs(event.getY(1) - event.getY(1)), 2));
-
-				if (event.getX(0) < event.getX(1)) {
-					targetX += (event.getX(0));
-				} else {
-					targetX += (event.getX(1));
+			// Dump touch event to log
+			// dumpEvent(event);
+			// Handle touch events here...
+			switch (event.getAction() & MotionEvent.ACTION_MASK) {
+			case MotionEvent.ACTION_DOWN:
+				savedMatrix.set(matrix);
+				start.set(event.getX(), event.getY());
+				Log.d(TAG, "mode=DRAG");
+				mode = DRAG;
+				break;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				oldDist = spacing(event);
+				Log.d(TAG, "oldDist=" + oldDist);
+				if (oldDist > 10f) {
+					savedMatrix.set(matrix);
+					midPoint(mid, event);
+					mode = ZOOM;
+					Log.d(TAG, "mode=ZOOM");
 				}
-				targetX += deltaX;
-
-				if (event.getY(0) < event.getY(1)) {
-					targetY += (event.getY(0));
-				} else {
-					targetY += (event.getY(1));
+				break;
+			case MotionEvent.ACTION_UP:
+				dragOld = null;
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+				mode = NONE;
+				Log.d(TAG, "mode=NONE");
+				break;
+			case MotionEvent.ACTION_MOVE:
+				if (mode == DRAW) {
+					onTouchEvent(event);
 				}
-				targetY += deltaY;
-				isZomm = true;
+				if (mode == DRAG) {
+					// /code for draging..
+				} else if (mode == ZOOM) {
+					float newDist = spacing(event);
+					Log.d(TAG, "newDist=" + newDist);
+					if (newDist > 10f) {
+						matrix.set(savedMatrix);
+						float scale = newDist / oldDist;
+						matrix.getValues(matrixValues);
+						float currentScale = matrixValues[Matrix.MSCALE_X];
+						// limit zoom
+						if (scale * currentScale > maxZoom) {
+							scale = maxZoom / currentScale;
+						} else if (scale * currentScale < minZoom) {
+							scale = minZoom / currentScale;
+						}
+						mapView.x = scale;
+						mapView.y = scale;
+						mapView.px = mid.x;
+						mapView.py = mid.y;
+						matrix.postScale(scale, scale, mid.x, mid.y);
+					}
+				}
+				break;
 			}
-			if (action == MotionEvent.ACTION_UP) {
-				isZomm = false;
-			}
+			mapView.currentMatrix = matrix;
+			mapView.setImageMatrix(matrix);
 
 			return gestureDetector.onTouchEvent(event);
+		}
+
+		// *******************Determine the space between the first two fingers
+		private float spacing(MotionEvent event) {
+			float x = event.getX(0) - event.getX(1);
+			float y = event.getY(0) - event.getY(1);
+			return FloatMath.sqrt(x * x + y * y);
+		}
+
+		// ************* Calculate the mid point of the first two fingers
+		private void midPoint(PointF point, MotionEvent event) {
+			float x = event.getX(0) + event.getX(1);
+			float y = event.getY(0) + event.getY(1);
+			point.set(x / 2, y / 2);
 		}
 
 	}
@@ -439,22 +541,24 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	}
 
 	public void serverConnectionAlert() {
-			Log.d(TAG, "ServerConnectionAlert!");
+		Log.d(TAG, "ServerConnectionAlert!");
 
-			AlertDialog alert = new AlertDialog.Builder(this).create();
-			alert.setTitle(getString(R.string.dialog_header_no_server_connection));
-			alert.setMessage(getString(R.string.dialog_text_no_server_connection));
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle(getString(R.string.dialog_header_no_server_connection));
+		alert.setMessage(getString(R.string.dialog_text_no_server_connection));
 
-			alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_ok),
+		alert.setButton(DialogInterface.BUTTON_POSITIVE,
+				getString(R.string.option_ok),
 				new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(final DialogInterface dialog, final int id) {
+					public void onClick(final DialogInterface dialog,
+							final int id) {
 						dialog.cancel();
 					}
 				});
 
-			 alert.show();
-			}
+		alert.show();
+	}
 
 	@Override
 	public void onDestroy() {
