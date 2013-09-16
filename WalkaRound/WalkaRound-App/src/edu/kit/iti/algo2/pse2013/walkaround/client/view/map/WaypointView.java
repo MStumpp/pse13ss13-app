@@ -104,8 +104,8 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 				iv.setTag(dw.getId());
 				iv.setVisibility(View.VISIBLE);
 				iv.setScaleType(ImageView.ScaleType.FIT_XY);
-				iv.setScaleX(scale);
-				iv.setScaleY(scale);
+				//iv.setScaleX(scale);
+				//iv.setScaleY(scale);
 				iv.setImageDrawable(waypoint);
 				iv.setOnTouchListener(new WaypointTouchListener(iv, dw.getId()));
 				this.addView(iv, paramsOption);
