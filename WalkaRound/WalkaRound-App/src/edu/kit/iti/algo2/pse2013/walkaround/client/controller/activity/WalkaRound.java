@@ -335,7 +335,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void callPoiInfo(POI poi) {
 		pullUpView.updateInfoView(poi);
-
 	}
 
 	/**
@@ -439,22 +438,22 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	}
 
 	public void serverConnectionAlert() {
-			Log.d(TAG, "ServerConnectionAlert!");
+		Log.d(TAG, "ServerConnectionAlert!");
 
-			AlertDialog alert = new AlertDialog.Builder(this).create();
-			alert.setTitle(getString(R.string.dialog_header_no_server_connection));
-			alert.setMessage(getString(R.string.dialog_text_no_server_connection));
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle(getString(R.string.dialog_header_no_server_connection));
+		alert.setMessage(getString(R.string.dialog_text_no_server_connection));
 
-			alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_ok),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(final DialogInterface dialog, final int id) {
-						dialog.cancel();
-					}
-				});
+		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_ok),
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(final DialogInterface dialog, final int id) {
+					dialog.cancel();
+				}
+			});
 
-			 alert.show();
-			}
+		 alert.show();
+	}
 
 	@Override
 	public void onDestroy() {
