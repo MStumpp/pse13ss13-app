@@ -381,6 +381,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 	private class DeleteListener implements OnTouchListener {
 
 		private int id;
+		private String name;
 
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
@@ -388,6 +389,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 			if (action == MotionEvent.ACTION_UP) {
 				id = Integer.parseInt(view.getTag().toString());
+				name = RouteController.getInstance().getWaypoint(id).getName();
 				this.alert();
 			}
 
@@ -403,15 +405,13 @@ public class Routing extends RelativeLayout implements RouteListener {
 			alertDialog.setTitle(context.getString(
 					R.string.dialog_header_delete,
 					context.getString(R.string.term_waypoint)));
-			alertDialog.setMessage(context
-					.getString(R.string.dialog_text_delete));
+			alertDialog.setMessage(context.getString(R.string.dialog_text_delete, name));
 			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
 					context.getString(R.string.option_yes),
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							RouteController.getInstance().deleteActiveWaypoint(
-									id);
+							RouteController.getInstance().deleteActiveWaypoint(id);
 						}
 					});
 			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
