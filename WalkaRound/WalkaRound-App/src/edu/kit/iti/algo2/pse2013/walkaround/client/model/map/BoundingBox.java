@@ -6,6 +6,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
@@ -88,9 +89,13 @@ public class BoundingBox {
 	/**
 	 * The Scaling Level
 	 */
-	
 	private float scale;
-
+	
+	/**
+	 * The current Pivot Point
+	 */
+	private PointF pivot;
+	
 	/**
 	 * The Level of Detail listener
 	 */
@@ -160,6 +165,7 @@ public class BoundingBox {
 		this.computeSize();
 		this.setCenter(center, levelOfDetail);
 		this.notifyLODListener(this.levelOfDetail);
+		this.pivot = new PointF(this.display.x/2F, this.display.y/2F);
 	}
 
 	// --------------------------Setter-------------------------- //
@@ -294,6 +300,14 @@ public class BoundingBox {
 		this.bottomRight = this.computeBottomRight();
 		this.notifyLODListener(this.levelOfDetail);
 	}
+	
+	/**
+	 * Sets a new Pivot Point.
+	 * @param pivot the new Pivot Point
+	 */
+	public void setPointF(PointF pivot) {
+		this.pivot = pivot;
+	}
 
 	// --------------------------Getter-------------------------- //
 
@@ -387,6 +401,14 @@ public class BoundingBox {
 	 */
 	public float getLevelOfDetail() {
 		return levelOfDetail;
+	}
+	
+	/**
+	 * Gives the current PivotPoint back
+	 * @return the Pivot Point
+	 */
+	public PointF getPivot() {
+		return pivot;
 	}
 
 	// --------------------------Computing-------------------------- //

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -148,8 +149,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 
 	}
 	
-	public float px = 0;
-	public float py = 0;
 
 	@Override
 	protected void onDraw(Canvas c) {
@@ -161,8 +160,9 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		//c.scale(x, y);
 		
 		float scale = BoundingBox.getInstance().getScale();
+		PointF p = BoundingBox.getInstance().getPivot();
 		
-		c.scale(scale, scale, px, py);
+		c.scale(scale, scale, p.x, p.y);
 		synchronized (tileHolder) {
 			for (int i = 0; i < tileHolder.size(); i++) {
 				c.drawBitmap(

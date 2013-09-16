@@ -401,14 +401,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 						Log.d("Scale", "Level S: " + newScale);
 
 						BoundingBox.getInstance().setScale(newScale);
-						
-						mapView.px = BoundingBox.getInstance().getDisplaySize().x / 2;
-						mapView.py = BoundingBox.getInstance().getDisplaySize().y / 2;
-												
-						routeView.px = BoundingBox.getInstance()
-								.getDisplaySize().x / 2;
-						routeView.py = BoundingBox.getInstance()
-								.getDisplaySize().y / 2;
+																
 
 						waypointView.px = BoundingBox.getInstance()
 								.getDisplaySize().x / 2;

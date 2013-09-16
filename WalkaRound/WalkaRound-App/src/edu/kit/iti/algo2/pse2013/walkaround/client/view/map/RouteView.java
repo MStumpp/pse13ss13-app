@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -56,13 +57,12 @@ public class RouteView extends View {
 		this.coorBox = BoundingBox.getInstance(context);
 	}
 
-	public float px = 0;
-	public float py = 0;
 	@Override
 	protected void onDraw(Canvas c) {
 		List<DisplayCoordinate> lines;
 		float scale = BoundingBox.getInstance().getScale();
-		c.scale(scale, scale, px, py);
+		PointF p = BoundingBox.getInstance().getPivot();
+		c.scale(scale, scale, p.x, p.y);
 		synchronized (RouteController.getInstance().getCurrentRoute()) {
 			lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(
 					RouteController.getInstance().getCurrentRoute(),
