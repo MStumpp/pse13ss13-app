@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
@@ -272,9 +273,13 @@ public class Search extends RelativeLayout {
 
 		// Result
 		result = new LinearLayout(context, attrs);
+		result.setOrientation(LinearLayout.VERTICAL);
 		result.setVisibility(GONE);
+		
+		ScrollView suggestionsScroll = new ScrollView(context);
+		suggestionsScroll.addView(result);
 
-		main.addView(result);
+		main.addView(suggestionsScroll);
 
 		//zipEdit.setText("76185");
 		cityEdit.setText("Karlsruhe");
@@ -415,11 +420,11 @@ public class Search extends RelativeLayout {
 						location.setText(value.getAddress().toString());
 						location.setOnTouchListener(new locationTouch(value,
 								location));
-						location.setTextSize(30);
+						location.setTextSize(20);
 						LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
 								ViewGroup.LayoutParams.MATCH_PARENT,
 								ViewGroup.LayoutParams.WRAP_CONTENT);
-						myParams.topMargin = 10;
+						//myParams.topMargin = 5;
 						myParams.width = width;
 						result.addView(location, myParams);
 					}
@@ -464,11 +469,11 @@ public class Search extends RelativeLayout {
 									+ value.getId());
 							poi.setText(value.getName());
 							poi.setOnTouchListener(new poiTouch(value, poi));
-							poi.setTextSize(30);
+							poi.setTextSize(20);
 							LinearLayout.LayoutParams myParams = new LinearLayout.LayoutParams(
 									ViewGroup.LayoutParams.MATCH_PARENT,
 									ViewGroup.LayoutParams.WRAP_CONTENT);
-							myParams.topMargin = 10;
+							//myParams.topMargin = 5;
 							myParams.width = width;
 							result.addView(poi, myParams);
 						}
@@ -492,7 +497,7 @@ public class Search extends RelativeLayout {
 				.create();
 		alertDialog.setTitle("Sorry..");
 		alertDialog.setMessage("Es wurden keine mit Ihrer Suchanfrage: \n \n"
-				+ text + "\n \n übereinstimmenden Orte gefunde!");
+				+ text + "\n \n übereinstimmenden Orte gefunden!");
 		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
 				new DialogInterface.OnClickListener() {
 					@Override
@@ -527,7 +532,7 @@ public class Search extends RelativeLayout {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_UP) {
 				RouteController.getInstance().addWaypoint(new Waypoint(poi.getLatitude(), poi.getLongitude(), poi.getName()));
 				BoundingBox.getInstance(getContext()).setCenter(poi);
 				notifyGoToMapListener();
@@ -561,7 +566,7 @@ public class Search extends RelativeLayout {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if (v.equals(view)) {
+			if (v.equals(view) && event.getAction() == MotionEvent.ACTION_UP) {
 				RouteController.getInstance().addWaypoint(new Waypoint(location.getLatitude(), location.getLongitude(), location.getName()));
 				BoundingBox.getInstance(getContext()).setCenter(location);
 				notifyGoToMapListener();

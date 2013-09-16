@@ -118,7 +118,7 @@ public class Roundtrip extends LinearLayout {
 			text.setId(counter);
 			text.setTextSize(25);
 			text.setGravity(Gravity.CENTER);
-			text.setTextColor(Color.GRAY);
+			text.setTextColor(Color.WHITE);
 			text.setOnTouchListener(new OnProfileTouch());
 			profiles.add(text);
 			counter++;
@@ -133,7 +133,7 @@ public class Roundtrip extends LinearLayout {
 		checkbox = new CheckBox(context);
 		checkbox.setText(R.string.poi_checkbox);
 		checkbox.setTextSize(30);
-		checkbox.setTextColor(Color.LTGRAY);
+		checkbox.setTextColor(Color.WHITE);
 		checkbox.setChecked(true);
 
 		LinearLayout line1 = new LinearLayout(context, attrs);
@@ -181,14 +181,14 @@ public class Roundtrip extends LinearLayout {
 				if (v.getId() == t.getId()) {
 					if (v.isSelected()) {
 						t.setSelected(false);
-						t.setTextColor(Color.GRAY);
+						t.setTextColor(Color.WHITE);
 					} else {
 						t.setSelected(true);
 						t.setTextColor(Color.RED);
 					}
 				}  else {
 					v.setSelected(false);
-					v.setTextColor(Color.GRAY);
+					v.setTextColor(Color.WHITE);
 				}
 			}
 
