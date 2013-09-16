@@ -276,7 +276,7 @@ public class RouteController {
 	public boolean deleteActiveWaypoint() {
 		Log.d(TAG, "RouteController.deleteActiveWaypoint()");
 
-		if (this.isRouteChangerInactive()) {
+		//if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -290,8 +290,8 @@ public class RouteController {
 			});
 			RouteController.routeChanger.start();
 			return true;
-		}
-		return false;
+		//}
+		//return false;
 	}
 
 	public boolean invertRoute() {

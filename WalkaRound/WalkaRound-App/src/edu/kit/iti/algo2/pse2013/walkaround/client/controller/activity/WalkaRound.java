@@ -214,12 +214,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		public boolean onFling(MotionEvent event1, MotionEvent event2,
 				float velocityX, float velocityY) {
 			Log.d(TAG, "MapTouch Fling");
+			/*
 			if (mode != MapListener.ZOOM) {
 				if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() != null){
 					RouteController.getInstance().deleteActiveWaypoint();
 				}
 			}
-			return true;
+			*/
+			return false;
 		}
 
 		@Override

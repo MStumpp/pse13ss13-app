@@ -204,7 +204,8 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
 
-		DisplayCoordinate curentWP;
+		private DisplayCoordinate curentWP;
+		private static final int VELOCITY = 200;
 
 		public boolean onDown(MotionEvent event) {
 			RouteController.getInstance().setActiveWaypoint(currentId);
@@ -223,9 +224,10 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 					Math.abs(velocityX), 2)
 					+ (double) Math.pow(Math.abs(velocityY), 2));
 
-			if (velocity > 400) {
+			Log.d(TAG, "VELOCITY " + velocity);
+			if (velocity >= VELOCITY) {
 				Log.d(TAG, "Delete Point " + currentId);
-				RouteController.getInstance().deleteActiveWaypoint(currentId);
+				RouteController.getInstance().deleteActiveWaypoint();
 			}
 
 			return false;
