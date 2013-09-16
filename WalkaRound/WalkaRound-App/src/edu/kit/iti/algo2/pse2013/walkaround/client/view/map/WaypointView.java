@@ -205,7 +205,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 	private class WaypointGestureDetector implements OnGestureListener {
 
 		private DisplayCoordinate curentWP;
-		private static final int VELOCITY = 200;
+		private static final int VELOCITY = 1000;
 
 		public boolean onDown(MotionEvent event) {
 			RouteController.getInstance().setActiveWaypoint(currentId);
@@ -240,16 +240,29 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
 			Log.d(TAG, "Waypoint onScroll " + currentId);
-
-			curentWP.setX(curentWP.getX() - deltaX);
-			curentWP.setY(curentWP.getY() - deltaY);
-
+			float scale =  coorBox.getScale();
+			curentWP.setX(curentWP.getX() - deltaX * scale);
+			curentWP.setY(curentWP.getY() - deltaY * scale);
+			
+			/*
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
 							new DisplayCoordinate(curentWP.getX(), curentWP
-									.getY()), coorBox.getTopLeft(), coorBox
+									.getY()), coorBox.getScaledTopLeft(), coorBox
 									.getLevelOfDetail());
+			 */
+			
 
+			double x = CoordinateUtility.convertPixelsToDegrees(event2.getX(), coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_X);
+			double y = CoordinateUtility.convertPixelsToDegrees(event2.getY(), coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_Y);
+
+			y = coorBox.getCenter().getLatitude() - y;  
+			x = coorBox.getCenter().getLongitude() + x;  
+			
+			Coordinate next = new Coordinate(y, x);
+			
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
 
 			return true;
