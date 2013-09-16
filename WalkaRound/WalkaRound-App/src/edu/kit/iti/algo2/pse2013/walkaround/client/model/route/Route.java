@@ -81,14 +81,16 @@ public class Route implements RouteInfo {
 	 * waypoint-position within the route.
 	 * @param newPos
 	 */
-
 	public void moveActiveWaypointInOrder(int newPos) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointInOrder(" + newPos + ")");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Waypoint activeWaypoint = this.activeWaypoint;
-
+		
 		// TODO: bestimme vorherigen und nächsten WP an neuer Position
-
+		
+		// Spezialfall Bumerrangpunkt beachten!
+		// 
+		
 		assert (newPos >= 0 && newPos < waypoints.size());
 
 		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
@@ -112,6 +114,37 @@ public class Route implements RouteInfo {
 		this.setActiveWaypoint(activeWaypoint);
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
+	
+	
+	/**
+	 * Changes the order of the waypoints on the route to the new, given order.
+	 * @param newOrder
+	 */
+	public void changeOrderOfWaypoints(LinkedList<Waypoint> newOrder) {
+		if (newOrder != null && newOrder.size() > 1) {
+			
+		}
+		// TODO
+	}
+	
+	/**
+	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
+	 * @param w
+	 * @param dir
+	 */
+	public void changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir) {
+		if (w != null && (dir == -1 || dir == 1) && this.getWaypoints().contains(w)) {
+			// TODO
+			// Rufe allgemeinere Methode auf:
+			
+			
+		}
+	}
+	
+	
+	
+	
+	
 
 	/**
 	 * Adds a new waypoint at the given coordinate to the end of the route.
@@ -121,7 +154,6 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w));
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
 
-		// TODO:
 		Coordinate normalizedCoordinate = null;
 		if (w != null) {
 			try {
@@ -137,7 +169,7 @@ public class Route implements RouteInfo {
 			}
 			Geocoder geo = new Geocoder();
 			geo.reverseGeocode(w);
-
+			
 			if (this.routeCoordinates.size() != 0) {
 				Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w));
 				RouteInfo routeExtension;
@@ -149,7 +181,7 @@ public class Route implements RouteInfo {
 				Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route ");
 				this.routeCoordinates.add(w);
 			}
-
+			
 			this.setActiveWaypoint(w);
 			this.cleanRouteOfDuplicateCoordinatePairs();
 
@@ -648,4 +680,7 @@ public class Route implements RouteInfo {
 		}
 		return null;
 	}
+	
+	
+	
 }

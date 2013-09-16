@@ -7,13 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.webkit.WebSettings.TextSize;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,10 +31,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This class shows the Routing Menu
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
- * 
+ *
  */
 public class Routing extends RelativeLayout implements RouteListener {
 
@@ -61,7 +58,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -304,10 +301,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to Waypoint events
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.1
-	 * 
+	 *
 	 */
 	private class WaypointListener implements OnTouchListener {
 		@Override
@@ -330,10 +327,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Shifts the position one step down
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class MoveDownListener implements OnTouchListener {
 
@@ -353,10 +350,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Shifts the position one step upd
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class MoveUpListener implements OnTouchListener {
 
@@ -376,10 +373,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to delete event
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class DeleteListener implements OnTouchListener {
 
@@ -422,7 +419,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// Do nothing
+							// EMPTY
 						}
 					});
 			alertDialog.show();
@@ -432,9 +429,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a sace event
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class SaveWaypointListener implements OnTouchListener {
 
@@ -485,7 +482,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// Do nothing
+							// EMPTY
 						}
 					});
 			alertDialog.setView(edit);
@@ -496,9 +493,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a reset
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class ResetListener implements OnTouchListener {
 
@@ -530,6 +527,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							// EMPTY
 						}
 					});
 			alertDialog.show();
@@ -539,9 +537,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a invert
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class InvertListener implements OnTouchListener {
 
@@ -557,9 +555,9 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a save event
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class SaveListener implements OnTouchListener {
 
@@ -606,7 +604,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// Do nothing
+							// EMPTY
 						}
 					});
 			alertDialog.setView(edit);
@@ -617,10 +615,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a add favorite listener
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class AddFavoriteListener implements OnTouchListener {
 
@@ -634,10 +632,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * Listen to a go to map
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class GoToMapTouchListener implements OnTouchListener {
 
@@ -662,7 +660,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * register go to map listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 */
@@ -672,10 +670,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * A Interface for call go to map
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface GoToMapListener {
 
@@ -698,7 +696,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	/**
 	 * register a new listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new listener
 	 */
@@ -707,10 +705,10 @@ public class Routing extends RelativeLayout implements RouteListener {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface GoToFavoriteListener {
 		public void goToFavorite();

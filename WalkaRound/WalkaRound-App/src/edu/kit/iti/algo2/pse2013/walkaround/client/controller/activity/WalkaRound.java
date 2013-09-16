@@ -437,7 +437,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void callPoiInfo(POI poi) {
 		pullUpView.updateInfoView(poi);
-
 	}
 
 	/**
