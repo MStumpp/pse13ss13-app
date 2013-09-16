@@ -213,10 +213,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		}
 
 		@Override
-		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
+		public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX,
+				float velocityY) {
 			Log.d(TAG, "MapTouch Fling");
-			return false;
+			RouteController.getInstance().deleteActiveWaypoint();
+			return true;
 		}
 
 		@Override
@@ -401,13 +402,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 						Log.d("Scale", "Level S: " + newScale);
 
 						BoundingBox.getInstance().setScale(newScale);
-																
-
-						waypointView.px = BoundingBox.getInstance()
-								.getDisplaySize().x / 2;
-						waypointView.py = BoundingBox.getInstance()
-								.getDisplaySize().y / 2;
-						waypointView.updateWaypoint();
+						//TODO allow scaling to another Point as the center Point
+						//BoundingBox.getInstance().setPivot(mid);
 					}
 				}
 				break;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -73,19 +74,18 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		coorBox.registerLevelOfDetailListener(this);
 		coorBox.registerScaleListener(this);
 	}
-
-	public float px = 0;
-	public float py = 0;
 	
 	/**
 	 * update the Waypoint
 	 */
 	public void updateWaypoint() {
 		
+		PointF p = BoundingBox.getInstance().getPivot();
+		
 		List<DisplayWaypoint> l = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(route,
 						coorBox.getCenter(), coorBox.getDisplaySize(),
-						this.coorBox.getLevelOfDetail(), BoundingBox.getInstance().getScale());
+						this.coorBox.getLevelOfDetail(), BoundingBox.getInstance().getScale(), p);
 
 		this.removeAllViews();
 

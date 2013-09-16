@@ -305,7 +305,7 @@ public class BoundingBox {
 	 * Sets a new Pivot Point.
 	 * @param pivot the new Pivot Point
 	 */
-	public void setPointF(PointF pivot) {
+	public void setPivot(PointF pivot) {
 		this.pivot = pivot;
 	}
 
