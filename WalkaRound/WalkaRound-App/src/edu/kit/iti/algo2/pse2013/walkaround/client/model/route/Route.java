@@ -85,12 +85,12 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "moveActiveWaypointInOrder(" + newPos + ")");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
 		Waypoint activeWaypoint = this.activeWaypoint;
-		
+
 		// TODO: bestimme vorherigen und nÃ¤chsten WP an neuer Position
-		
+
 		// Spezialfall Bumerrangpunkt beachten!
-		// 
-		
+		//
+
 		assert (newPos >= 0 && newPos < waypoints.size());
 
 		Waypoint previousWaypoint = this.getPreviousWaypoint(newPos);
@@ -111,8 +111,8 @@ public class Route implements RouteInfo {
 		this.setActiveWaypoint(activeWaypoint);
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
-	
-	
+
+
 	/**
 	 * Changes the order of the waypoints on the route to the new, given order.
 	 * @param newOrder
@@ -120,13 +120,13 @@ public class Route implements RouteInfo {
 	public void changeOrderOfWaypoints(LinkedList<Waypoint> newOrder) {
 		if (newOrder != null && newOrder.size() > 1) {
 			// TODO: Verhalten bei 1 / mehreren verschobenen Wegpukten? Ist der Server robust genug?
-			// Methode: Prüfe welche Einzelstücke der aktuellen Route mit der neuen Reihenfolge übereinstimmen.
+			// Methode: PrÃ¼fe welche EinzelstÃ¼cke der aktuellen Route mit der neuen Reihenfolge Ã¼bereinstimmen.
 			// Achte dabei jedes Mal darauf, ob ein WP ein Bumerangpunkt ist.
-			// Berechne nur die benötigten Teilstücke neu.
-			// Füge alle Stücke neu zusammen.
+			// Berechne nur die benÃ¶tigten TeilstÃ¼cke neu.
+			// FÃ¼ge alle StÃ¼cke neu zusammen.
 		}
 	}
-	
+
 	/**
 	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
 	 * @param w
@@ -136,15 +136,10 @@ public class Route implements RouteInfo {
 		if (w != null && (dir == -1 || dir == 1) && this.getWaypoints().contains(w)) {
 			// TODO:
 			// Rufe allgemeinere Methode auf:
-			
-			
+
+
 		}
 	}
-	
-	
-	
-	
-	
 
 	/**
 	 * Adds a new waypoint at the given coordinate to the end of the route.
@@ -169,7 +164,7 @@ public class Route implements RouteInfo {
 			}
 			Geocoder geo = new Geocoder();
 			geo.reverseGeocode(w);
-			
+
 			if (this.routeCoordinates.size() != 0) {
 				Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w));
 				RouteInfo routeExtension;
@@ -181,7 +176,7 @@ public class Route implements RouteInfo {
 				Log.d(TAG_ROUTE, "addWaypoint() adding Waypoint to empty Route ");
 				this.routeCoordinates.add(w);
 			}
-			
+
 			this.setActiveWaypoint(w);
 			this.cleanRouteOfDuplicateCoordinatePairs();
 
@@ -299,6 +294,7 @@ public class Route implements RouteInfo {
 		}
 		this.cleanRouteOfDuplicateCoordinatePairs();
 
+		new Geocoder().reverseGeocode(activeWaypoint);
 	}
 
 
@@ -342,15 +338,14 @@ public class Route implements RouteInfo {
 				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
-				new Geocoder().reverseGeocode(activeWaypoint);
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			} else if (newRoutePastActiveWaypoint != null && newRoutePastActiveWaypoint.getCoordinates().size() > 0) {
 				Coordinate normalizedActWP = newRoutePastActiveWaypoint.getCoordinates().getFirst();
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
-				new Geocoder().reverseGeocode(activeWaypoint);
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
 			}
+			new Geocoder().reverseGeocode(activeWaypoint);
 
 		}
 
@@ -680,7 +675,4 @@ public class Route implements RouteInfo {
 		}
 		return null;
 	}
-	
-	
-	
 }

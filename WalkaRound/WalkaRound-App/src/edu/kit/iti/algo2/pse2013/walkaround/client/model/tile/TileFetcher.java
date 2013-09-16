@@ -73,8 +73,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	}
 
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
-		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getTopLeft(),
-				coorBox.getBottomRight(), listener);
+		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getTopLeft(), coorBox.getBottomRight(), listener);
 	}
 
 	/**
@@ -91,12 +90,11 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	 * @param listener the TileListener listeneing for tiles
 	 */
 	public void requestTiles(final int levelOfDetail, final Coordinate topLeft, final Coordinate bottomRight, TileListener listener) {
-		//Log.d(TAG, String.format("TileFetcher.requestTiles(%d, [%.4f|%.4f], %d, %d, %s)", levelOfDetail, topLeft.getLatitude(), topLeft.getLongitude(), numTilesX, numTilesY, listener));
+		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, %s, %s, %s)", levelOfDetail, topLeft, bottomRight, listener));
 
 		Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
 		final int[] startTileIndex = TileUtility.getXYTileIndex(topLeft, levelOfDetail);
 		final int[] endTileIndex = TileUtility.getXYTileIndex(bottomRight, levelOfDetail);
-		//Log.d(TAG, String.format("x: %d columns from %d on\ny: %d rows from %d on", numTilesX, startTileIndex[0], numTilesY, startTileIndex[1]));
 
 		requestTiles(levelOfDetail, startTileIndex[0], startTileIndex[1] - 1, endTileIndex[0], endTileIndex[1], listener);
 		requestTiles(levelOfDetail, startTileIndex[0] - 1, startTileIndex[1] - 2, endTileIndex[0] + 1, endTileIndex[1] + 1, null);

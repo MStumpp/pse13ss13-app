@@ -134,9 +134,9 @@ public class HeadUpView extends RelativeLayout {
 	 */
 	private class ZoomPlusListener implements OnTouchListener {
 		@Override
-		public boolean onTouch(View view, MotionEvent arg1) {
-			if (view.equals(plus)) {
-				Log.d(TAG, "plus i pressed");
+		public boolean onTouch(View view, MotionEvent me) {
+			if (view.equals(plus) && MotionEvent.ACTION_DOWN == me.getAction()) {
+				Log.d(TAG, "plus is pressed");
 				notifyListener(+1.0F);
 				return true;
 			}
@@ -170,8 +170,8 @@ public class HeadUpView extends RelativeLayout {
 	 */
 	private class ZoomMinusListener implements OnTouchListener {
 		@Override
-		public boolean onTouch(View view, MotionEvent arg1) {
-			if (view.equals(minus)) {
+		public boolean onTouch(View view, MotionEvent me) {
+			if (view.equals(minus) && MotionEvent.ACTION_DOWN == me.getAction()) {
 				Log.d(TAG, "Minus is pressed");
 				notifyListener(-1.0F);
 				return true;
