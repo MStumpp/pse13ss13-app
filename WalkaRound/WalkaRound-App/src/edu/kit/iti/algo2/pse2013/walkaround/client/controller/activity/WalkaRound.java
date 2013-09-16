@@ -227,27 +227,23 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				// Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
 				// Log.d(TAG, "Finger2: " + e2.getX(1)+ ":" + e2.getY(1));
 				/*
-				float fingerDiff = (float) Math.sqrt(Math.pow(
-						Math.abs(e2.getX(0) - e2.getX(1)), 2)
-						* Math.pow(Math.abs(e2.getY(1) - e2.getY(1)), 2));
-
-				float diff = (float) Math.sqrt(Math.abs(Math.pow(distanceX, 2)
-						* Math.pow(distanceY, 2)));
-
-				diff /= twoFingerZoomOffset;
-
-				diff = (int) diff;
-				Log.d(TAG, "new Zooming Offset: " + diff);
-
-				if (fingerDiff < gesamt) {
-					coorBox.setLevelOfDetailByADelta(-diff);
-					Log.d(TAG, "new Zooming Offset: -" + diff);
-				} else {
-					coorBox.setLevelOfDetailByADelta(diff);
-					Log.d(TAG, "new Zooming Offset: " + diff);
-				}
-				gesamt = fingerDiff;
-	*/
+				 * float fingerDiff = (float) Math.sqrt(Math.pow(
+				 * Math.abs(e2.getX(0) - e2.getX(1)), 2)
+				 * Math.pow(Math.abs(e2.getY(1) - e2.getY(1)), 2));
+				 * 
+				 * float diff = (float) Math.sqrt(Math.abs(Math.pow(distanceX,
+				 * 2) Math.pow(distanceY, 2)));
+				 * 
+				 * diff /= twoFingerZoomOffset;
+				 * 
+				 * diff = (int) diff; Log.d(TAG, "new Zooming Offset: " + diff);
+				 * 
+				 * if (fingerDiff < gesamt) {
+				 * coorBox.setLevelOfDetailByADelta(-diff); Log.d(TAG,
+				 * "new Zooming Offset: -" + diff); } else {
+				 * coorBox.setLevelOfDetailByADelta(diff); Log.d(TAG,
+				 * "new Zooming Offset: " + diff); } gesamt = fingerDiff;
+				 */
 				// TODO new Zooming Point
 				// coorBox.setCenter(new DisplayCoordinate(targetX, targetY));
 			} else {
@@ -330,8 +326,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			maxZoom = 4;
 			minZoom = 0.25f;
 			height = BoundingBox.getInstance().getDisplaySize().y;
-			width =  BoundingBox.getInstance().getDisplaySize().x;
-			viewRect = new RectF(0, 0,  BoundingBox.getInstance().getDisplaySize().x,  BoundingBox.getInstance().getDisplaySize().y);
+			width = BoundingBox.getInstance().getDisplaySize().x;
+			viewRect = new RectF(0, 0, BoundingBox.getInstance()
+					.getDisplaySize().x, BoundingBox.getInstance()
+					.getDisplaySize().y);
 		}
 
 		@Override
