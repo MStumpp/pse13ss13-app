@@ -56,12 +56,12 @@ public class RouteView extends View {
 		this.coorBox = BoundingBox.getInstance(context);
 	}
 
-	public float scale = 1;
 	public float px = 0;
 	public float py = 0;
 	@Override
 	protected void onDraw(Canvas c) {
 		List<DisplayCoordinate> lines;
+		float scale = BoundingBox.getInstance().getScale();
 		c.scale(scale, scale, px, py);
 		synchronized (RouteController.getInstance().getCurrentRoute()) {
 			lines = CoordinateUtility.extractDisplayCoordinatesOutOfRouteInfo(

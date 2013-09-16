@@ -18,6 +18,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -31,7 +32,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * @version 1.7
  *
  */
-public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener {
+public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener, ScaleListener {
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;
 	public static final int DEFAULT_FLAG_ACTIVE = R.drawable.flag_activ;
@@ -70,9 +71,9 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		
 		coorBox.registerCenterListener(this);
 		coorBox.registerLevelOfDetailListener(this);
+		coorBox.registerScaleListener(this);
 	}
 
-	public float scale = 1;
 	public float px = 0;
 	public float py = 0;
 	
@@ -84,7 +85,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		List<DisplayWaypoint> l = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(route,
 						coorBox.getCenter(), coorBox.getDisplaySize(),
-						this.coorBox.getLevelOfDetail(), scale);
+						this.coorBox.getLevelOfDetail(), BoundingBox.getInstance().getScale());
 
 		this.removeAllViews();
 
@@ -271,6 +272,11 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 	@Override
 	public void onCenterChange(Coordinate center) {
+		this.updateWaypoint();
+	}
+
+	@Override
+	public void onScaleChange(float scale) {
 		this.updateWaypoint();
 	}
 }

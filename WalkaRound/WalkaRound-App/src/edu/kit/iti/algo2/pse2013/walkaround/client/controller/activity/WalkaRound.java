@@ -33,6 +33,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.Up
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
@@ -67,7 +68,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
 		POIInfoListener, CenterListener, LevelOfDetailListener,
-		ProgressListener {
+		ProgressListener, ScaleListener {
 
 	private MapView mapView;
 	private GestureDetector gestureDetector;
@@ -188,6 +189,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		progress.setVisibility(View.GONE);
 
 		POIManager.getInstance(this).registerProgressListener(this);
+		
+		BoundingBox.getInstance().registerScaleListener(this);
 	}
 
 	class ProgressTouchListener implements OnTouchListener {
@@ -317,7 +320,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		private float maxZoom;
 		private float minZoom;
 		
-		private float zoom = 1;
 
 		// ///////************ touch events functions
 		// **************////////////////////
@@ -386,11 +388,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					float newDist = spacing(event);
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > 10f) {
-						zoom += newDist - oldDist;
 						float newScale = newDist / oldDist;
-						
-						
-
 						if (newScale >= maxZoom) {
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
 									1);
@@ -399,35 +397,24 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
 									-1);
 							newScale = maxZoom;
-						}
-						Log.d("Scale", "Level Z: " + zoom);
-						
-						Log.d("Scale", "Level S: " + scale);
+						}						
+						Log.d("Scale", "Level S: " + newScale);
 
-						mapView.x = newScale;
-						mapView.y = newScale;
+						BoundingBox.getInstance().setScale(newScale);
+						
 						mapView.px = BoundingBox.getInstance().getDisplaySize().x / 2;
 						mapView.py = BoundingBox.getInstance().getDisplaySize().y / 2;
-
-						routeView.scale = newScale;
+												
 						routeView.px = BoundingBox.getInstance()
 								.getDisplaySize().x / 2;
 						routeView.py = BoundingBox.getInstance()
 								.getDisplaySize().y / 2;
 
-						waypointView.scale = newScale;
 						waypointView.px = BoundingBox.getInstance()
 								.getDisplaySize().x / 2;
 						waypointView.py = BoundingBox.getInstance()
 								.getDisplaySize().y / 2;
 						waypointView.updateWaypoint();
-
-						poiView.scale = newScale;
-
-						scale = newScale;
-						updateUser();
-
-						BoundingBox.getInstance().setScale(newScale);
 					}
 				}
 				break;
@@ -680,9 +667,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	}
 
-	private float scale = 1;
 
 	private void updateUser() {
+		
+		float scale = BoundingBox.getInstance().getScale();
+		
 		double lon = -coorBox.getCenter().getLongitude()
 				+ userCoordinate.getLongitude();
 		double lat = -userCoordinate.getLatitude()
@@ -761,5 +750,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				progress.setVisibility(View.GONE);
 			}
 		});
+	}
+
+	@Override
+	public void onScaleChange(float scale) {
+		this.updateUser();		
 	}
 }
