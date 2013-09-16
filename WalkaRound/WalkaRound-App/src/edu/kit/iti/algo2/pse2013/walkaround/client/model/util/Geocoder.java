@@ -77,14 +77,20 @@ public class Geocoder {
 					if (address != null) {
 						if (address.has("building")) {
 							name = address.getString("building") + ", ";
+						} else if (address.has("memorial")) {
+							name = address.getString("memorial") + ", ";
 						}
-						if (address.has("road")) {
-							name = address.getString("road");
+						if (address.has("pedestrian")) {
+							name += address.getString("pedestrian");
+						} else if (address.has("footway")) {
+							name += address.getString("footway");
+						} else if (address.has("cycleway")) {
+							name += address.getString("cycleway");
+						} else if (address.has("road")) {
+							name += address.getString("road");
 							if (address.has("house_number")) {
 								name += " " + address.getString("house_number");
 							}
-						} else if (address.has("pedestrian")) {
-							name += address.getString("pedestrian");
 						} else {
 							if (address.has("postcode")) {
 								name += address.getString("postcode") + " ";
