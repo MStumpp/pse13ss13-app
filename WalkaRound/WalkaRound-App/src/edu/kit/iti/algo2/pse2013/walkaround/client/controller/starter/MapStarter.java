@@ -64,44 +64,18 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 				}
 				makeStep(3);
 
-//				int[] amountTop = TileUtility.getXYTileIndex(
-//						coorBox.getTopLeft(), (int) lod);
-//				amountTop[0]--;
-//				amountTop[1]--;
-//
-//				int[] amountBottom = TileUtility.getXYTileIndex(
-//						coorBox.getBottomRight(), (int) lod);
-//
-//				amountBottom[0]++;
-//				amountBottom[1]++;
-//
-//				int amount = (amountBottom[0] - amountTop[0])
-//						* (amountBottom[1] - amountTop[1]);
-//
-//				stepSize = 400 / amount;
-
 				TileFetcher.getInstance(mainActivity.getApplicationContext());
 				makeStep(4);
 
-				//TileFetcher.getInstance().requestTiles((int) lod, amountTop[0], amountTop[1], amountBottom[0], amountBottom[1], this);
+				TileFetcher.getInstance().requestTiles(coorBox, null);
 
 				Log.d(TAG, "alles geladen!!");
 			} catch (InterruptedException e) {
 				Log.e(TAG, "InterruptedException while booting!");
 			}
-			finish();
 		}
 
-//		@Override
-//		public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-//			progress += stepSize;
-//			tiles++;
-//		}
 
-		@Override
-		public void finish() {
-			listener.onStarterFinished();
-		}
 
 		@Override
 		public int[] getSteps() {

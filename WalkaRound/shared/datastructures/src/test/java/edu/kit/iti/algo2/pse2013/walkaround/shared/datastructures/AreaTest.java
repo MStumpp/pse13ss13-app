@@ -72,14 +72,14 @@ public class AreaTest {
 	@Test
 	public void testPersistence() throws MalformedURLException {
 		// Assert
-		assertEquals(testCats, testArea.getAreaCategories());
+		assertEquals(testCats, testArea.getCategories());
 		assertEquals(testCoordinateListA, testArea.getAreaCoordinates());
 
 		Area a = new Area(testCats, testCoordinateListB);
 		int[] testCatsOther = new int[] { 123, 321, 432 };
-		a.setAreaCategories(testCatsOther);
+		a.setCategories(testCatsOther);
 
-		assertEquals(testCatsOther, a.getAreaCategories());
+		assertEquals(testCatsOther, a.getCategories());
 	}
 
 	@Test

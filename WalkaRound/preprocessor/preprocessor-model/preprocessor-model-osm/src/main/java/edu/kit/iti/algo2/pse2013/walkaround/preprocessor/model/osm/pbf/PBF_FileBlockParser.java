@@ -49,6 +49,8 @@ public class PBF_FileBlockParser extends BinaryParser {
 	 */
 	private static final short STATE_FINISH = 4;
 
+	private static final short LINE_LENGTH = 100;
+
 	private Map<Long, OSMNode> interestingNodes = new TreeMap<Long, OSMNode>();
 
 	private static final Logger logger = Logger.getLogger(PBF_FileBlockParser.class.getSimpleName());
@@ -98,7 +100,7 @@ public class PBF_FileBlockParser extends BinaryParser {
 
 	@Override
 	protected void parse(HeaderBlock block) {
-		logger.info("Started parsing of file:\n\tEach character represents roughly 8000 osm-elements. Each line has 100 characters, except the last one which can consist of less.\n\t\t- D for DenseNodes\n\t\t- N for Nodes\n\t\t- W for Ways\n\t\t- R for Relations");
+		logger.info(String.format("Started parsing of file:\n\tEach character represents roughly 8000 osm-elements.\n\tEach line has %d characters, except the last one which can consist of less characters.\n\tThe characters stand for the following types:\n\t\t- D for DenseNodes\n\t\t- N for Nodes\n\t\t- W for Ways\n\t\t- R for Relations", LINE_LENGTH));
 	}
 
 	@Override
@@ -117,7 +119,7 @@ public class PBF_FileBlockParser extends BinaryParser {
 			} else {
 				readBlocks--;
 			}
-			if (readBlocks % 100 == 0) {
+			if (readBlocks % LINE_LENGTH == 0) {
 				blockString.append('\n');
 			}
 			if (System.currentTimeMillis() - lastPrintTime > PRINT_PAUSE_IN_MS) {

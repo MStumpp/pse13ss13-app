@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author Matthias Stumpp
  * @version 1.0
  */
-public class POI extends Location implements Geometrizable {
+public class POI extends Location implements Geometrizable, Categorizable {
 
 	/**
 	 * text info of POI.
@@ -24,10 +24,7 @@ public class POI extends Location implements Geometrizable {
 	 */
 	private URL url;
 
-	/**
-	 * poi categories of POI.
-	 */
-	private int[] poiCategories;
+	private int[] categories;
 
 	/**
 	 * Creates an instance of POI.
@@ -46,7 +43,7 @@ public class POI extends Location implements Geometrizable {
 	 *            Categories of POI.
 	 */
 	public POI(double lat, double lon, String name, String textInfo, URL url, int[] poiCategories) {
-		this(lat, lon, name, textInfo, url, poiCategories = (poiCategories == null?new int[0]:poiCategories), null);
+		this(lat, lon, name, textInfo, url, poiCategories == null?new int[0]:poiCategories, null);
 	}
 
 	/**
@@ -64,7 +61,7 @@ public class POI extends Location implements Geometrizable {
 	 *            the POI-Categories, this POI belongs to
 	 */
 	public POI(Location loc, String textInfo, URL url, int[] poiCategories) {
-		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, url, poiCategories = (poiCategories == null?new int[0]:poiCategories));
+		this(loc.getLatitude(), loc.getLongitude(), loc.getName(), textInfo, url, poiCategories == null?new int[0]:poiCategories);
 	}
 
 	/**
@@ -89,7 +86,7 @@ public class POI extends Location implements Geometrizable {
 		super(lat, lon, name, address);
 		this.textInfo = textInfo;
 		this.url = url;
-		this.poiCategories = (poiCategories == null?new int[0]:poiCategories);
+		setCategories(poiCategories == null?new int[0]:poiCategories);
 	}
 
 	/**
@@ -129,15 +126,6 @@ public class POI extends Location implements Geometrizable {
 		return url;
 	}
 
-	/**
-	 * Returns all categories of POI.
-	 *
-	 * @return A list of category-IDs
-	 */
-	public int[] getPOICategories() {
-		return poiCategories;
-	}
-
 	@Override
 	public String toString() {
 		String result = "POI:\n\t"
@@ -145,8 +133,8 @@ public class POI extends Location implements Geometrizable {
 				+ "\n\tTextInfo: " + getTextInfo()
 				+ "\n\tURL: " + (getURL() != null ? getURL().toExternalForm() : "")
 				+ "\n\tPOI-Categories: ";
-		if (poiCategories != null) {
-			for (int i : getPOICategories()) {
+		if (getCategories() != null) {
+			for (int i : getCategories()) {
 				result += " " + i;
 			}
 		} else {
@@ -163,7 +151,7 @@ public class POI extends Location implements Geometrizable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Arrays.hashCode(poiCategories);
+		result = prime * result + Arrays.hashCode(getCategories());
 		result = prime * result
 				+ ((textInfo == null) ? 0 : textInfo.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
@@ -185,7 +173,7 @@ public class POI extends Location implements Geometrizable {
 			return false;
 		}
 		POI other = (POI) obj;
-		if (!Arrays.equals(poiCategories, other.poiCategories)) {
+		if (!Arrays.equals(getCategories(), other.getCategories())) {
 			return false;
 		}
 		if (textInfo == null) {
@@ -214,7 +202,7 @@ public class POI extends Location implements Geometrizable {
 			}
 		} catch (MalformedURLException e) { }
 		String textInfo = getTextInfo() == null ? null : new String(getTextInfo());
-		return new POI(super.clone(), textInfo, newURL, Arrays.copyOf(getPOICategories(), getPOICategories().length));
+		return new POI(super.clone(), textInfo, newURL, Arrays.copyOf(getCategories(), getCategories().length));
 	}
 
     @Override
@@ -224,14 +212,12 @@ public class POI extends Location implements Geometrizable {
 
     @Override
 	public double valueForDimension(int dim) {
-
         if (dim < 0 || dim > numberDimensions()-1)
             throw new IllegalArgumentException("dim out of range");
 
         if (dim == 0)
             return getLatitude();
-        else
-            return getLongitude();
+		return getLongitude();
     }
 
     @Override
@@ -258,5 +244,15 @@ public class POI extends Location implements Geometrizable {
         }
         return 0;
     }
+
+	@Override
+	public int[] getCategories() {
+		return categories;
+	}
+
+	@Override
+	public void setCategories(int[] categories) {
+		this.categories = categories;
+	}
 
 }

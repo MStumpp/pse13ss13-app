@@ -111,4 +111,12 @@ public class TestProtobufConverter {
 		wp.setPOI(new POI(0, 0, null, null, null, null));
 		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
 	}
+
+	@Test
+	public void testLocationData() {
+		Waypoint wp = new Waypoint(0, 0, null, null);
+		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
+		wp.setPOI(new POI(0, 0, null, null, null, null));
+		assertEquals(wp, ProtobufConverter.getWaypoint(ProtobufConverter.getWaypointBuilder(wp).build()));
+	}
 }

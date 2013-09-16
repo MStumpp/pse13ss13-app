@@ -20,10 +20,10 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 
 /**
  * This View shows the POI Menu.
- * 
+ *
  * @author Ludwig Biermann
  * @version 1.1
- * 
+ *
  */
 public class POILayout extends RelativeLayout {
 
@@ -34,7 +34,7 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * This create a new POIview.
-	 * 
+	 *
 	 * @param context
 	 *            the context of the app
 	 * @param attrs
@@ -72,7 +72,8 @@ public class POILayout extends RelativeLayout {
 			b.setTag(i);
 			b.setOnTouchListener(new OnCategoryTouch());
 			// b.setBackgroundColor(Color.rgb(50, 50, 50));
-			b.setTextColor(Color.GRAY);
+			b.setTextColor(Color.WHITE);
+			b.setHighlightColor(Color.BLUE);
 			b.setTextSize(25);
 			b.setSelected(false);
 			b.setGravity(Gravity.CENTER);
@@ -85,10 +86,10 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * Listen for a Category change
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	private class OnCategoryTouch implements OnTouchListener {
 
@@ -100,20 +101,14 @@ public class POILayout extends RelativeLayout {
 			final int id = Integer.parseInt(v.getTag().toString());
 			if (b.isSelected()) {
 				b.setSelected(false);
-				b.setTextColor(Color.GRAY);
-				// b.setBackgroundColor(Color.rgb(50, 50, 50));
+				b.setTextColor(Color.WHITE);
+				b.setBackgroundColor(Color.TRANSPARENT);
 			} else {
 				b.setSelected(true);
 				b.setTextColor(Color.RED);
-				// b.setBackgroundColor(Color.GRAY);
+				b.setBackgroundColor(Color.TRANSPARENT);
 			}
-			Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					POIManager.getInstance(getContext()).togglePOICategory(id);
-				}
-			});
-			t.start();
+			POIManager.getInstance(getContext()).togglePOICategory(id);
 			notifyComputeRoundtripListener();
 			return false;
 		}
@@ -130,7 +125,7 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * register a new POIChangeListener
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 */
@@ -140,10 +135,10 @@ public class POILayout extends RelativeLayout {
 
 	/**
 	 * A Interface for the POI´s
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface POIChangeListener {
 

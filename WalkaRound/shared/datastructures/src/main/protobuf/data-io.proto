@@ -29,8 +29,12 @@ message SavePOI {
 	repeated int32 p_o_i_category = 4;
 }
 message SaveLocationData {
-	repeated SavePOI p_o_i = 1;
-	repeated SaveArea area = 2;
+	repeated SaveLocationCategory cat = 1;
+}
+message SaveLocationCategory {
+	repeated int32 i_d = 1;
+	repeated SavePOI p_o_i = 2;
+	repeated SaveArea area = 3;
 }
 message SaveArea {
 	repeated int32 category = 1;

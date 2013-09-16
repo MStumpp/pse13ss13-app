@@ -83,7 +83,7 @@ public class OSMDataPreprocessor {
 
 		logger.info("Start reading LocationDataIO...");
 
-		LocationDataIO location = LocationDataIO.load(locationDestination);
+		LocationDataIO location = LocationDataIO.load(locationDestination, null);
 
 		logger.info(String.format("Read %d POI and %d areas from file.", location.getPOIs().size(), location.getAreas().size()));
 	}

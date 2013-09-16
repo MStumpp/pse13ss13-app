@@ -7,13 +7,6 @@ package edu.kit.iti.algo2.pse2013.walkaround.client.controller.starter;
 public abstract class SingleStarter implements Runnable {
 	private StepCounter stepCounter;
 
-	protected StarterListener listener;
-	/**
-	 * @param listener the listener which will be notified when the starter finished successfully
-	 */
-	public void setStarterListener(StarterListener listener) {
-		this.listener = listener;
-	}
 	public void setStepCounter(StepCounter stepCounter) {
 		this.stepCounter = stepCounter;
 	}
@@ -23,5 +16,4 @@ public abstract class SingleStarter implements Runnable {
 		}
 	}
 	public abstract int[] getSteps();
-	public abstract void finish();
 }

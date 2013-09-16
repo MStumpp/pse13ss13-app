@@ -7,10 +7,10 @@ public class FileUtil {
 	public static File getFile(String file) {
         // special cake for Mr. Lukas
 		if ("Lukas".equals(System.getProperty("user.name")))
-			return new File(System.getProperty("user.home") + File.separatorChar + "Desktop" + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + file);
+			return new File(System.getProperty("user.home") + File.separatorChar + "Desktop" + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "walkaround" + File.separatorChar + file);
 
         // check dropbox dir
-        File path = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + file);
+        File path = new File(System.getProperty("user.home") + File.separatorChar + "Dropbox" + File.separatorChar + "Studium" + File.separatorChar + "PSE" + File.separatorChar + "walkaround" + File.separatorChar + file);
         if (path.getParentFile().exists())
 		    return path;
 

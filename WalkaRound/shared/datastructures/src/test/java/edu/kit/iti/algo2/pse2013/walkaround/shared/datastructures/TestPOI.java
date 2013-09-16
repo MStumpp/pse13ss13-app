@@ -34,7 +34,7 @@ public class TestPOI {
 		//Assert
 		assertEquals(DEFAULT_TEXTINFO, DEFAULT_POI.getTextInfo());
 		assertEquals(DEFAULT_URL, DEFAULT_POI.getURL());
-		assertArrayEquals(DEFAULT_POI_CATS, DEFAULT_POI.getPOICategories());
+		assertArrayEquals(DEFAULT_POI_CATS, DEFAULT_POI.getCategories());
 
 		POI p = DEFAULT_POI.clone();
 		String testTextInfo = "TestText";

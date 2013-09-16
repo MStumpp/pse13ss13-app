@@ -25,12 +25,12 @@ public class TestOSMPreprocessor {
 	@Test
 	public void testRun() throws IOException {
 		OSMDataPreprocessor odp = new OSMDataPreprocessor(
-			new File(System.getProperty("user.home") + File.separatorChar + "OSM" + File.separatorChar + "Karten" + File.separatorChar + "2013-08-10-RegBez-KA.osm.pbf"),
+			new File(System.getProperty("user.home") + File.separatorChar + "OSM" + File.separatorChar + "Karten" + File.separatorChar + "2013-09-12-RegBez-KA.osm.pbf"),
 			FileUtil.getFile("locationData.pbf"),
 			FileUtil.getFile("graphData.pbf")
 		);
 		odp.parse();
-		LocationDataIO loc = LocationDataIO.load(FileUtil.getFile("locationData.pbf"));
+		LocationDataIO loc = LocationDataIO.load(FileUtil.getFile("locationData.pbf"), null);
 		assertTrue(loc.getPOIs().size() > 0);
 		assertTrue(loc.getAreas().size() > 0);
 		GraphDataIO graph = GraphDataIO.load(FileUtil.getFile("graphData.pbf"));

@@ -30,12 +30,6 @@ public class TextToSpeechStarter extends SingleStarter implements OnInitListener
 			TextToSpeechUtility.getPreferenceListener()
 		);
 		makeStep(0);
-		finish();
-	}
-
-	@Override
-	public void finish() {
-		listener.onStarterFinished();
 	}
 
 	@Override

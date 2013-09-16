@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.ProtobufConverter;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationCategory;
 
 
 /**
@@ -99,7 +99,10 @@ public class LocationDataIO {
      */
 	public static void save(LocationDataIO objectToSave, File destination) throws IOException {
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(destination));
-		ProtobufConverter.getLocationDataBuilder(objectToSave).build().writeTo(out);
+		List<SaveLocationCategory.Builder> categories = ProtobufConverter.getLocationCategoryBuilders(objectToSave);
+		for (SaveLocationCategory.Builder builder : categories) {
+			builder.build().writeDelimitedTo(out);
+		}
 		out.flush();
 		out.close();
 	}
@@ -109,13 +112,19 @@ public class LocationDataIO {
      * Loads and returns a LocationDataIO object from a given file.
      *
      * @param source Location of source file in file system.
+     * @param categories
      * @return the read LocationDataIO-object
      * @throws java.io.IOException
      */
-	public static LocationDataIO load(File source) throws IOException {
+	public static LocationDataIO load(File source, List<Integer> categories) throws IOException {
 		InputStream in = new BufferedInputStream(new FileInputStream(source));
-		LocationDataIO geom = ProtobufConverter.getLocationData(Protos.SaveLocationData.parseFrom(in));
+		LocationDataIO loc = ProtobufConverter.getLocationData(in, categories);
 		in.close();
-		return geom;
+		return loc;
+	}
+
+
+	public void clearAreas() {
+		areaList = new ArrayList<Area>();
 	}
 }

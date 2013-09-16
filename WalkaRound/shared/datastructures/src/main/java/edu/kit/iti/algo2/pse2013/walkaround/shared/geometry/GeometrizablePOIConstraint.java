@@ -27,9 +27,9 @@ public class GeometrizablePOIConstraint implements GeometrizableConstraint {
     @Override
     public boolean isValid(Geometrizable geometrizable) {
         POI poi = (POI) geometrizable;
-        for (int i = 0; i < poi.getPOICategories().length; i++) {
+        for (int i = 0; i < poi.getCategories().length; i++) {
             for (int j = 0; j < poiCategories.length; j++) {
-                if (poi.getPOICategories()[i] == poiCategories[j])
+                if (poi.getCategories()[i] == poiCategories[j])
                     return true;
             }
         }

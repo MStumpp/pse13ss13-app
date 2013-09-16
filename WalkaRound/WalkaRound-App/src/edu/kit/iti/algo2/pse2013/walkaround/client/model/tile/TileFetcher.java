@@ -39,8 +39,8 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	private static final int MAX_CACHE_SIZE = 300;
 	private static int DEFAULT_TILE_PATH = R.drawable.default_tile;
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
-	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(3, 10, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-	private Bitmap defaultTile;
+	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 3, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+	private static Bitmap defaultTile;
 
 	/**
 	 * Returns the current TileFetcher or null;
@@ -180,6 +180,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 					listener.receiveTile(result, x, y, levelOfDetail);
 				}
 				cache.put(url, result);
+				Log.d(TAG, String.format("Cachesize: %d", cache.size()));
 			} catch (MalformedURLException e) {
 				Log.e(TAG, String.format("Could not fetch tile %d/%d/%d.png. The URL '%s' is malformed!", levelOfDetail, x, y, url), e);
 			} catch (IOException e) {

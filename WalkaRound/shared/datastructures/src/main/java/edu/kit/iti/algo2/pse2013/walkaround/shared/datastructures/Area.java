@@ -10,17 +10,13 @@ import java.util.List;
  * @author Thomas Kadow
  * @version 1.0
  */
-public class Area {
-
-	/**
-	 * IDs of the categories where the area belongs to.
-	 */
-	private int[] areaCategories;
+public class Area implements Categorizable {
 
 	/**
 	 * Coordinates of the area.
 	 */
 	private ArrayList<Coordinate> areaCoordinates;
+	private int[] categories;
 
 	/**
 	 * Constructs a new area.
@@ -34,27 +30,8 @@ public class Area {
 		if (areaCoordinates.size() <= 2)
 			throw new IllegalArgumentException(
 					"An area must have at least 3 Coordinates.");
-		this.areaCategories = areaCategories;
+		setCategories(areaCategories);
 		this.areaCoordinates = new ArrayList<Coordinate>(areaCoordinates);
-	}
-
-	/**
-	 * Returns all IDs of the Categories where the area belongs to.
-	 *
-	 * @return all IDs of the categories where the area belongs to
-	 */
-	public int[] getAreaCategories() {
-		return areaCategories;
-	}
-
-	/**
-	 * Sets the area categories of this area.
-	 *
-	 * @param areaCategories
-	 *            area categories to set
-	 */
-	public void setAreaCategories(int[] areaCategories) {
-		this.areaCategories = areaCategories;
 	}
 
 	/**
@@ -73,7 +50,7 @@ public class Area {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(areaCategories);
+		result = prime * result + Arrays.hashCode(getCategories());
 		result = prime * result
 				+ ((areaCoordinates == null) ? 0 : areaCoordinates.hashCode());
 		return result;
@@ -94,7 +71,7 @@ public class Area {
 			return false;
 		}
 		Area other = (Area) obj;
-		if (!Arrays.equals(areaCategories, other.areaCategories)) {
+		if (!Arrays.equals(getCategories(), other.getCategories())) {
 			return false;
 		}
 		if (areaCoordinates == null) {
@@ -105,6 +82,17 @@ public class Area {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int[] getCategories() {
+		return categories;
+	}
+
+	@Override
+	public void setCategories(int[] categories) {
+		this.categories = categories;
+
 	}
 
 }

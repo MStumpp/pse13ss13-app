@@ -41,7 +41,7 @@ public class GeometryDataPreprocessorTest {
 
         File locationDataio = FileUtil.getFile("locationData.pbf");
         try {
-            locationDataIO = LocationDataIO.load(locationDataio);
+            locationDataIO = LocationDataIO.load(locationDataio, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

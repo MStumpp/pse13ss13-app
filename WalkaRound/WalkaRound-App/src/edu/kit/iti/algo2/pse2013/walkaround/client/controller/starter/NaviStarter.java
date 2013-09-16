@@ -18,26 +18,19 @@ public class NaviStarter extends SingleStarter {
 	public void run() {
 		// Favorite- and POI-initialization
 		FavoriteManager.initialize(appContext);
-		POIManager.initialize(appContext);
+		POIManager.getInstance(appContext);
 		makeStep(0);
 
 		// Navi
 		NaviModel.initialize(appContext);
 		PreferenceUtility.getInstance(appContext).registerOnSharedPreferenceChangeListener(NaviModel.getInstance());
 		makeStep(1);
-
-		finish();
-	}
-
-	@Override
-	public void finish() {
-		listener.onStarterFinished();
 	}
 
 	@Override
 	public int[] getSteps() {
 		return new int[]{
-			50,	//Init favs and POIs
+			200,	//Init favs and POIs
 			100	//Init navi
 		};
 	}

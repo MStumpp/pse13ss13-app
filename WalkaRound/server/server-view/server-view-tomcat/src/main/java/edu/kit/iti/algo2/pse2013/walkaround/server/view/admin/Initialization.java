@@ -91,7 +91,7 @@ public class Initialization implements ServletContextListener {
         File file = new File(getClass().getResource("/locationData.pbf").getFile());
         LocationDataIO locationDataIO = null;
         try {
-            locationDataIO = LocationDataIO.load(file);
+            locationDataIO = LocationDataIO.load(file, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

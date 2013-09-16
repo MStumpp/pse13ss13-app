@@ -62,7 +62,13 @@ public class PreprocessorAdminTest {
 						Double.parseDouble(array[2]));
 				vertices.put(osmID, current);
 			}
+			bufRead.close();
 		} catch (IOException e) {
+			try {
+				bufRead.close();
+			} catch (IOException e1) {
+				// EMPTY
+			}
 			e.printStackTrace();
 			return;
 		}
@@ -145,21 +151,10 @@ public class PreprocessorAdminTest {
     }
 
     @Test
-    public void testPreprocessGeometryDataIO() {
+    public void testPreprocessGeometryDataIO() throws IOException {
 
         GraphDataIO graphDataIO = null;
-        try {
-            graphDataIO = GraphDataIO.load(GRAPH_DATA_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LocationDataIO locationDataIO = null;
-        try {
-            locationDataIO = LocationDataIO.load(LOCATION_DATA_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        graphDataIO = GraphDataIO.load(GRAPH_DATA_FILE);
 
         GeometryDataIO geometryDataIO = GeometryDataPreprocessor.preprocessGeometryDataIO(new LinkedList<Geometrizable>(graphDataIO.getEdges()));
 

@@ -50,6 +50,7 @@ public class BootActivity extends Activity implements StepCounter {
 		setContentView(R.layout.progress_bar);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		mProgressBar.setMax(TOTALSTEPS);
+		setVisible(true);
 
 		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.options, true);
 		PreferenceUtility.initialize(getApplicationContext());
@@ -71,7 +72,6 @@ public class BootActivity extends Activity implements StepCounter {
 		for (SingleStarter siSta : starters) {
 			booSt.start(siSta);
 		}
-
 		booSt.noMoreStarters();
 		lastStartedBootActivity = this;
 	}

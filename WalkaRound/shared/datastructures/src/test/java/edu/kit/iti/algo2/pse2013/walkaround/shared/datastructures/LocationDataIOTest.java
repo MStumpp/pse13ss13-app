@@ -52,7 +52,7 @@ public class LocationDataIOTest {
 
 		LocationDataIO readLocationData = null;
 		try {
-			readLocationData = LocationDataIO.load(TMP_LOCATIONDATA_FILE);
+			readLocationData = LocationDataIO.load(TMP_LOCATIONDATA_FILE, null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -80,7 +80,7 @@ public class LocationDataIOTest {
         Assert.assertTrue(REAL_LOCATIONDATA_FILE.exists());
 
         LocationDataIO readLocationData = null;
-        readLocationData = LocationDataIO.load(REAL_LOCATIONDATA_FILE);
+        readLocationData = LocationDataIO.load(REAL_LOCATIONDATA_FILE, null);
 
         // Check, if something was read
         Assert.assertNotNull(readLocationData);

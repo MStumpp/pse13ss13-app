@@ -33,6 +33,9 @@ public class PreprocessorAdmin {
 	@Option(name = "--location_out", usage="Location of the LocationData-output")
 	public String locationOutput = FileUtil.getFile("locationData.pbf").getAbsolutePath();
 
+	@Option(name = "--poi_out", usage="Location of the LocationData-output")
+	public String poiOutput = FileUtil.getFile("poiData.pbf").getAbsolutePath();
+
 	@Option(name = "--graph_out", usage="Location of the GraphData-output")
 	public String graphOutput = FileUtil.getFile("graphData.pbf").getAbsolutePath();
 
@@ -60,6 +63,7 @@ public class PreprocessorAdmin {
             File geomPOIsFile = new File(geometryOutputPOIs);
             File graphFile = new File(graphOutput);
 			File locFile = new File(locationOutput);
+			File poiFile = new File(poiOutput);
 			OSMDataPreprocessor prep = new OSMDataPreprocessor(osmFile, locFile, graphFile);
 
 			geomVerticesFile.getParentFile().mkdirs();
@@ -71,10 +75,12 @@ public class PreprocessorAdmin {
 			prep.parse();
 
 			logger.info("Fetching Wikipedia-information...");
-			LocationDataIO locData = LocationDataIO.load(locFile);
+			LocationDataIO locData = LocationDataIO.load(locFile, null);
 			WikipediaPreprocessor.preprocessWikipediaInformation(locData);
-			logger.info("Writing LocationDataIo again with Wikipedia-Information...");
+			logger.info("Writing POIData with Wikipedia-Information...");
 			LocationDataIO.save(locData, locFile);
+			locData.clearAreas();
+			LocationDataIO.save(locData, poiFile);
 
 			logger.info("Start building GeometryData Vertices...");
 			GeometryDataIO geomDataVertices = GeometryDataPreprocessor.preprocessGeometryDataIO(
@@ -92,7 +98,7 @@ public class PreprocessorAdmin {
 
             logger.info("Start building GeometryData POIs...");
             GeometryDataIO geomDataPOIs = GeometryDataPreprocessor.preprocessGeometryDataIO(
-                    new ArrayList<Geometrizable>(LocationDataIO.load(locFile).getPOIs()));
+                    new ArrayList<Geometrizable>(LocationDataIO.load(locFile, null).getPOIs()));
             logger.info(geomDataPOIs.getRoot().getGeometrizables().size() + " POI-Geometrizables in root");
             GeometryDataIO.save(geomDataPOIs, geomPOIsFile);
             logger.info("Writing GeometryDataIO POIs finished.");

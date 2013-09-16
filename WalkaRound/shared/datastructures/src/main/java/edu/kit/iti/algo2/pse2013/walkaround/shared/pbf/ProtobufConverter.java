@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.pbf;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,11 +10,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 import java.util.logging.Logger;
 
-
+//import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Address;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Area;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Categorizable;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.CrossingInformation;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
@@ -36,12 +40,14 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryData;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGeometryNode;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveGraphData;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocation;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationData;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationCategory;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveLocationCategoryOrBuilder;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SavePOI;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveVertex;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.pbf.Protos.SaveWaypoint;
 
 public class ProtobufConverter {
+	private static final String TAG = ProtobufConverter.class.getSimpleName();
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(ProtobufConverter.class.getSimpleName());
 	private static Map<Integer, Vertex> tmp_vertices;
@@ -105,7 +111,7 @@ public class ProtobufConverter {
 			return null;
 		}
 		SaveArea.Builder builder = SaveArea.newBuilder();
-		for (int cat : area.getAreaCategories()) {
+		for (int cat : area.getCategories()) {
 			builder.addCategory(cat);
 		}
 		for (Coordinate c : area.getAreaCoordinates()) {
@@ -314,31 +320,84 @@ public class ProtobufConverter {
 		}
 		return builder;
 	}
-	public static LocationDataIO getLocationData(SaveLocationData saveLocationData) {
-		if (saveLocationData == null) {
+	public static LocationDataIO getLocationData(InputStream in, List<Integer> categories) throws IOException {
+		if (in == null) {
 			return null;
 		}
 		LocationDataIO locationData = new LocationDataIO();
-		for (SavePOI savePOI : saveLocationData.getPOIList()) {
-			locationData.addPOI(getPOI(savePOI));
-		}
-		for (SaveArea saveArea : saveLocationData.getAreaList()) {
-			locationData.addArea(getArea(saveArea));
+		SaveLocationCategory currentCat = null;
+		long time = System.currentTimeMillis();
+		while ((currentCat = SaveLocationCategory.parseDelimitedFrom(in)) != null) {
+			//Log.d(TAG, String.format("%d POIs and %d Areas", currentCat.getPOICount(), currentCat.getAreaCount()));
+			boolean regardCat = categories == null;
+			for (Integer id : currentCat.getIDList()) {
+				regardCat = regardCat || categories.contains(id);
+			}
+			//Log.d(TAG, "Regard Category: " + regardCat);
+			if (regardCat) {
+				List<SavePOI> pois = currentCat.getPOIList();
+				for (SavePOI poi : pois) {
+					locationData.addPOI(getPOI(poi));
+				}
+				List<SaveArea> areas = currentCat.getAreaList();
+				for (SaveArea area : areas) {
+					locationData.addArea(getArea(area));
+				}
+			}
+			//Log.d(TAG, "Category time: " + (System.currentTimeMillis() - time));
+			time = System.currentTimeMillis();
 		}
 		return locationData;
 	}
-	public static SaveLocationData.Builder getLocationDataBuilder(LocationDataIO locData) {
+	public static List<SaveLocationCategory.Builder> getLocationCategoryBuilders(LocationDataIO locData) {
 		if (locData == null) {
 			return null;
 		}
-		SaveLocationData.Builder builder = SaveLocationData.newBuilder();
-		for (POI p : locData.getPOIs()) {
-			builder.addPOI(getPOIBuilder(p));
+		Vector<SaveLocationCategory.Builder> categories = new Vector<SaveLocationCategory.Builder>();
+		for (POI currentPOI : locData.getPOIs()) {
+			boolean addedPOI = false;
+			for (int i = 0; i < categories.size() && addedPOI == false; i++) {
+				if (fitsInCategory(currentPOI, categories.get(i))) {
+					categories.get(i).addPOI(getPOIBuilder(currentPOI));
+					addedPOI = true;
+				}
+			}
+			if (!addedPOI) {
+				SaveLocationCategory.Builder catBuilder = SaveLocationCategory.newBuilder().addPOI(getPOIBuilder(currentPOI));
+				for (int cat : currentPOI.getCategories()) {
+					catBuilder.addID(cat);
+				}
+				categories.add(catBuilder);
+			}
 		}
-		for (Area a : locData.getAreas()) {
-			builder.addArea(getAreaBuilder(a));
+		for (Area currentArea : locData.getAreas()) {
+			boolean addedArea = false;
+			for (int i = 0; i < categories.size() && addedArea == false; i++) {
+				if (fitsInCategory(currentArea, categories.get(i))) {
+					categories.get(i).addArea(getAreaBuilder(currentArea));
+					addedArea = true;
+				}
+			}
+			if (!addedArea) {
+				SaveLocationCategory.Builder catBuilder = SaveLocationCategory.newBuilder().addArea(getAreaBuilder(currentArea));
+				for (int cat : currentArea.getCategories()) {
+					catBuilder.addID(cat);
+				}
+				categories.add(catBuilder);
+			}
 		}
-		return builder;
+		return categories;
+	}
+	private static boolean fitsInCategory(Categorizable categorizable, SaveLocationCategoryOrBuilder catBuilder) {
+		if (categorizable.getCategories().length != catBuilder.getIDCount() || (catBuilder.getPOICount() + catBuilder.getAreaCount()) > 100) {
+			return false;
+		}
+		for (int cat : categorizable.getCategories()) {
+			if (!catBuilder.getIDList().contains(cat)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	public static POI getPOI(SavePOI savePOI) {
 		if (savePOI == null) {
@@ -364,7 +423,7 @@ public class ProtobufConverter {
 		if (p == null) {
 			return null;
 		}
-		int[] cats = p.getPOICategories();
+		int[] cats = p.getCategories();
 		ArrayList<Integer> poiList = new ArrayList<Integer>();
 		for (int i = 0; cats != null && i < cats.length; i++) {
 			poiList.add(cats[i]);
