@@ -541,6 +541,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	public void serverConnectionAlert() {
 		Log.d(TAG, "ServerConnectionAlert!");
+<<<<<<< HEAD
 
 		AlertDialog alert = new AlertDialog.Builder(this).create();
 		alert.setTitle(getString(R.string.dialog_header_no_server_connection));
@@ -557,6 +558,22 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				});
 
 		alert.show();
+=======
+
+		AlertDialog alert = new AlertDialog.Builder(this).create();
+		alert.setTitle(getString(R.string.dialog_header_no_server_connection));
+		alert.setMessage(getString(R.string.dialog_text_no_server_connection));
+
+		alert.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.option_ok),
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(final DialogInterface dialog, final int id) {
+					dialog.cancel();
+				}
+			});
+
+		 alert.show();
+>>>>>>> 1783d05e9a3f7c4b53ec411929b582a5ae579880
 	}
 
 	@Override
