@@ -98,10 +98,7 @@ public class Route implements RouteInfo {
 		Waypoint nextWaypoint = this.getNextWaypoint(newPos);
 
 		this.deletePathBetweenTwoWaypoints(previousWaypoint, nextWaypoint);
-		this.routeCoordinates.add(
-			this.routeCoordinates.indexOf(previousWaypoint) + 1,
-			activeWaypoint
-		);
+		this.routeCoordinates.add(this.routeCoordinates.indexOf(previousWaypoint) + 1, activeWaypoint);
 
 		this.deleteActiveWaypoint();
 
@@ -122,9 +119,12 @@ public class Route implements RouteInfo {
 	 */
 	public void changeOrderOfWaypoints(LinkedList<Waypoint> newOrder) {
 		if (newOrder != null && newOrder.size() > 1) {
-			
+			// TODO: Verhalten bei 1 / mehreren verschobenen Wegpukten? Ist der Server robust genug?
+			// Methode: Prüfe welche Einzelstücke der aktuellen Route mit der neuen Reihenfolge übereinstimmen.
+			// Achte dabei jedes Mal darauf, ob ein WP ein Bumerangpunkt ist.
+			// Berechne nur die benötigten Teilstücke neu.
+			// Füge alle Stücke neu zusammen.
 		}
-		// TODO
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class Route implements RouteInfo {
 	 */
 	public void changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir) {
 		if (w != null && (dir == -1 || dir == 1) && this.getWaypoints().contains(w)) {
-			// TODO
+			// TODO:
 			// Rufe allgemeinere Methode auf:
 			
 			
@@ -239,11 +239,11 @@ public class Route implements RouteInfo {
 			newRoute.getCoordinates().removeFirst();
 		}
 
-		Iterator<Coordinate> coordsIter = newRoute.getCoordinates().iterator();
+		Iterator<Coordinate> newCoordsIter = newRoute.getCoordinates().iterator();
 		Coordinate tempCoord = null;
 
-		while (coordsIter.hasNext()) {
-			tempCoord = coordsIter.next();
+		while (newCoordsIter.hasNext()) {
+			tempCoord = newCoordsIter.next();
 			this.routeCoordinates.addLast(tempCoord);
 		}
 

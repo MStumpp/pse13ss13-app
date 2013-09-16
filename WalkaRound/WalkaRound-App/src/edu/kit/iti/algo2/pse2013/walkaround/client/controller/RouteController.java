@@ -92,48 +92,30 @@ public class RouteController {
 	public boolean setActiveWaypoint(int id) {
 		Log.d(TAG, "Routecontroller.setActiveWaypoint(id)");
 
-		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			this.currentRoute.setActiveWaypoint(id);
 			this.notifyAllRouteListeners();
 			return true;
 		}
-
-		/*
-		 * OLD VERSION if (this.currentRoute.getActiveWaypoint().getId() != id)
-		 * { if (RouteController.routeChanger == null ||
-		 * !RouteController.routeChanger.isAlive()) { final Route
-		 * newCurrentRoute = this.currentRoute; RouteController.routeChanger =
-		 * new Thread (new Runnable() {
-		 *
-		 * public void run() { Log.d(TAG_ROUTE_CONTROLLER,
-		 * "Thread.run() in setActiveWaypoint(id)");
-		 * newCurrentRoute.setActiveWaypoint(id);
-		 * RouteController.getInstance().replaceFullRoute(newCurrentRoute); }
-		 * }); RouteController.routeChanger.start(); return true; } }
-		 */
-
 		return false;
 	}
 
 	public boolean setActiveWaypoint(final Waypoint wp) {
 		Log.d(TAG, "RouteController.setActiveWaypoint(Waypoint)");
-
-		if (!this.currentRoute.getActiveWaypoint().equals(wp)) {
-			if (RouteController.routeChanger == null
-					|| !RouteController.routeChanger.isAlive()) {
-				final Route newCurrentRoute = this.currentRoute;
-				RouteController.routeChanger = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						Log.d(TAG, "Thread.run() in setActiveWaypoint(wp)");
-						newCurrentRoute.setActiveWaypoint(wp);
-						RouteController.getInstance().replaceFullRoute(
-								newCurrentRoute);
-					}
-				});
-				RouteController.routeChanger.start();
-				return true;
-			}
+		
+		if (this.isRouteChangerInactive()) {
+			final Route newCurrentRoute = this.currentRoute;
+			RouteController.routeChanger = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					Log.d(TAG, "Thread.run() in setActiveWaypoint(wp)");
+					newCurrentRoute.setActiveWaypoint(wp);
+					RouteController.getInstance().replaceFullRoute(
+							newCurrentRoute);
+				}
+			});
+			RouteController.routeChanger.start();
+			return true;
 		}
 		return false;
 	}
@@ -141,8 +123,7 @@ public class RouteController {
 	public boolean resetActiveWaypoint() {
 		Log.d(TAG, "RouteController.resetActiveWaypoint()");
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -180,8 +161,7 @@ public class RouteController {
 		Log.d(TAG,
 				String.format("RouteController.addWaypoint(%s)", w.toString()));
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -210,8 +190,7 @@ public class RouteController {
 		Log.d(TAG, "RouteController.addRoundtrip(int-profile " + profileID
 				+ ", int-length " + length + ")");
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -232,7 +211,7 @@ public class RouteController {
 	public boolean addRoute(final RouteInfo ri) {
 		Log.d(TAG, "RouteController.addRoute(RouteInfo)");
 
-		if (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 				@Override
@@ -254,8 +233,7 @@ public class RouteController {
 		Log.d(TAG,
 				"RouteController.moveActiveWaypoint(Coordinate) METHOD START");
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			this.c = c;
 			this.currentRoute.moveActiveWaypointMoveOnly(c);
 			this.notifyAllRouteListeners();
@@ -268,11 +246,11 @@ public class RouteController {
 	}
 
 	public boolean moveActiveWaypointComputeOnly() {
+		// TODO Check c Coord.
 		Log.d(TAG,
 				"RouteController.moveActiveWaypointComputeOnly(Coordinate) METHOD START");
 
-		if (c != null || RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (c != null || this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 
 			RouteController.routeChanger = new Thread(new Runnable() {
@@ -293,11 +271,12 @@ public class RouteController {
 		return false;
 	}
 
+	
+	
 	public boolean deleteActiveWaypoint() {
 		Log.d(TAG, "RouteController.deleteActiveWaypoint()");
 
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -317,8 +296,7 @@ public class RouteController {
 
 	public boolean invertRoute() {
 		Log.d(TAG, "invertRoute()");
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -338,8 +316,7 @@ public class RouteController {
 
 	public boolean resetRoute() {
 		Log.d(TAG, "RouteController.resetRoute()");
-		if (RouteController.routeChanger == null
-				|| !RouteController.routeChanger.isAlive()) {
+		if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -420,16 +397,52 @@ public class RouteController {
 		}
 		return null;
 	}
-
-
+	
+	private boolean isRouteChangerInactive() {
+		return (RouteController.routeChanger == null || !RouteController.routeChanger.isAlive());
+	}
+	
+	
+	
 	/**
-	 * Shifts the position of the given waypoint
-	 * 
-	 * @param id of the Waypoint
-	 * @param i shift the order of the given Waypoint by this number. Positive numbers to the end of the list. Negative numbers to the begin of the list.
+	 * Changes the order of the waypoints on the route to the new, given order.
+	 * @param newOrder
 	 */
-	public void moveWaypoint(int id, int i) {
-		// TODO Auto-generated method stub
+	public void changeOrderOfWaypoints(LinkedList<Waypoint> newOrder) {
+		Log.d(TAG, "RouteController.changeOrderOfWaypoints(LinkedList<Waypoint> newOrder)");
+		if (this.isRouteChangerInactive()) {
+			if (newOrder != null && newOrder.size() > 1) {
+				// TODO: Verhalten bei 1 / mehreren verschobenen Wegpukten? Ist der Server robust genug?
+				// Methode: Prüfe welche Einzelstücke der aktuellen Route mit der neuen Reihenfolge übereinstimmen.
+				// Achte dabei jedes Mal darauf, ob ein WP ein Bumerangpunkt ist.
+				// Berechne nur die benötigten Teilstücke neu.
+				// Füge alle Stücke neu zusammen.
+			}
+		}
 		
 	}
+	
+	/**
+	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
+	 * @param w
+	 * @param dir
+	 */
+	public void changeOrderOfWaypointsSHIFTbyONE(int id, int dir) {
+		Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir)");
+		if (this.isRouteChangerInactive()) {
+			// TODO Implement:
+			
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
