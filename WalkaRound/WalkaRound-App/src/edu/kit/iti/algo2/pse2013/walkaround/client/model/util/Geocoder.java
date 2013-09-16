@@ -82,10 +82,16 @@ public class Geocoder {
 						}
 						if (address.has("pedestrian")) {
 							name += address.getString("pedestrian");
+						} else if (address.has("path")) {
+							name += address.getString("path");
+						} else if (address.has("track")) {
+							name += address.getString("track");
 						} else if (address.has("footway")) {
 							name += address.getString("footway");
 						} else if (address.has("cycleway")) {
 							name += address.getString("cycleway");
+						} else if (address.has("parking")) {
+							name += address.getString("parking");
 						} else if (address.has("road")) {
 							name += address.getString("road");
 							if (address.has("house_number")) {
