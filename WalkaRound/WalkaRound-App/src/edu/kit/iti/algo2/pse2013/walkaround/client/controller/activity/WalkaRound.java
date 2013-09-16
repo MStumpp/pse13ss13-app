@@ -296,9 +296,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	public class MapListener implements OnTouchListener {
 
-		// These matrices will be used to move and zoom image
-		Matrix matrix = new Matrix();
-		Matrix savedMatrix = new Matrix();
 
 		// We can be in one of these 3 states
 		static final int NONE = 0;
@@ -311,28 +308,23 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		PointF start = new PointF();
 		PointF mid = new PointF();
 		float oldDist = 1f;
+		
+		float saveDist = -1;
 
 		PointF dragOld = new PointF();
 
 		// Limit zoomable/pannable image
-		private float[] matrixValues = new float[9];
 		private float maxZoom;
 		private float minZoom;
-		private float height;
-		private float width;
-		private RectF viewRect;
+		
+		private float zoom = 1;
 
 		// ///////************ touch events functions
 		// **************////////////////////
 
 		public MapListener() {
-			maxZoom = 4;
-			minZoom = 0.25f;
-			height = BoundingBox.getInstance().getDisplaySize().y;
-			width = BoundingBox.getInstance().getDisplaySize().x;
-			viewRect = new RectF(0, 0, BoundingBox.getInstance()
-					.getDisplaySize().x, BoundingBox.getInstance()
-					.getDisplaySize().y);
+			maxZoom = 2;
+			minZoom = 0.5f;
 		}
 
 		@Override
@@ -362,16 +354,15 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			// Handle touch events here...
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN:
-				savedMatrix.set(matrix);
 				start.set(event.getX(), event.getY());
 				Log.d(TAG, "mode=DRAG");
 				mode = DRAG;
 				break;
 			case MotionEvent.ACTION_POINTER_DOWN:
 				oldDist = spacing(event);
+					
 				Log.d(TAG, "oldDist=" + oldDist);
 				if (oldDist > 10f) {
-					savedMatrix.set(matrix);
 					midPoint(mid, event);
 					mode = ZOOM;
 					Log.d(TAG, "mode=ZOOM");
@@ -379,6 +370,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				break;
 			case MotionEvent.ACTION_UP:
 				dragOld = null;
+				saveDist = oldDist;
 				break;
 			case MotionEvent.ACTION_POINTER_UP:
 				mode = NONE;
@@ -394,42 +386,52 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					float newDist = spacing(event);
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > 10f) {
-						matrix.set(savedMatrix);
+						zoom += newDist - oldDist;
 						float newScale = newDist / oldDist;
-						matrix.getValues(matrixValues);
-						float currentScale = matrixValues[Matrix.MSCALE_X];
-						// limit zoom
-						if (newScale * currentScale > maxZoom) {
-							newScale = maxZoom / currentScale;
-						} else if (newScale * currentScale < minZoom) {
-							newScale = minZoom / currentScale;
+						
+						
+
+						if (newScale >= maxZoom) {
+							BoundingBox.getInstance().setLevelOfDetailByADelta(
+									1);
+							newScale = 1;
+						} else if (newScale <= minZoom) {
+							BoundingBox.getInstance().setLevelOfDetailByADelta(
+									-1);
+							newScale = maxZoom;
 						}
+						Log.d("Scale", "Level Z: " + zoom);
+						
+						Log.d("Scale", "Level S: " + scale);
+
 						mapView.x = newScale;
 						mapView.y = newScale;
-						mapView.px = BoundingBox.getInstance().getDisplaySize().x /2;
-						mapView.py = BoundingBox.getInstance().getDisplaySize().y /2;
-						
+						mapView.px = BoundingBox.getInstance().getDisplaySize().x / 2;
+						mapView.py = BoundingBox.getInstance().getDisplaySize().y / 2;
+
 						routeView.scale = newScale;
-						routeView.px = BoundingBox.getInstance().getDisplaySize().x /2;
-						routeView.py = BoundingBox.getInstance().getDisplaySize().y /2;
-						
+						routeView.px = BoundingBox.getInstance()
+								.getDisplaySize().x / 2;
+						routeView.py = BoundingBox.getInstance()
+								.getDisplaySize().y / 2;
+
 						waypointView.scale = newScale;
-						waypointView.px = BoundingBox.getInstance().getDisplaySize().x /2;
-						waypointView.py = BoundingBox.getInstance().getDisplaySize().y /2;
+						waypointView.px = BoundingBox.getInstance()
+								.getDisplaySize().x / 2;
+						waypointView.py = BoundingBox.getInstance()
+								.getDisplaySize().y / 2;
 						waypointView.updateWaypoint();
-						
+
 						poiView.scale = newScale;
-						
-						matrix.postScale(newScale, newScale, mid.x, mid.y);
-						
+
 						scale = newScale;
 						updateUser();
+
+						BoundingBox.getInstance().setScale(newScale);
 					}
 				}
 				break;
 			}
-			mapView.currentMatrix = matrix;
-			mapView.setImageMatrix(matrix);
 
 			return gestureDetector.onTouchEvent(event);
 		}
@@ -677,6 +679,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		// waypointView.updateWaypoint();
 
 	}
+
 	private float scale = 1;
 
 	private void updateUser() {

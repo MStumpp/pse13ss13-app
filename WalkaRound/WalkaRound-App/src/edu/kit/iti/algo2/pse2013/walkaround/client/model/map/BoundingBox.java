@@ -60,6 +60,17 @@ public class BoundingBox {
 	private Coordinate bottomRight;
 
 	/**
+	 * The scaled Upper Left Coordinate of the box
+	 */
+	private Coordinate scaledTopLeft;
+
+	/**
+	 * The scaled Bottom Right Coordinate of the Box
+	 */
+	private Coordinate scaledBottomRight;
+
+	
+	/**
 	 * Display Size
 	 */
 	private DoublePairing size;
@@ -73,6 +84,12 @@ public class BoundingBox {
 	 * Current copy of LevelOf Detail
 	 */
 	private float levelOfDetail;
+	
+	/**
+	 * The Scaling Level
+	 */
+	
+	private float scale;
 
 	/**
 	 * The Level of Detail listener
@@ -129,6 +146,7 @@ public class BoundingBox {
 	 */
 	private BoundingBox(Coordinate center, Point size, float levelOfDetail) {
 		Log.d(TAG, "initialize BoundingBox | Display: " + size.toString());
+		this.scale = 1;
 		this.lodListener = new HashSet<LevelOfDetailListener>();
 		this.centerListener = new LinkedList<CenterListener>();
 		this.display = size;
@@ -171,6 +189,15 @@ public class BoundingBox {
 		Log.d(TAG, "Topleft is " + this.topLeft);
 		this.bottomRight = this.computeBottomRight();
 		this.notifyCenterListener(center);
+	}
+	
+	/**
+	 * Set a new scale.
+	 * 
+	 * @param scale the new Scale
+	 */
+	public void setScale(float scale) {
+		this.scale = scale;
 	}
 
 	/**
@@ -264,6 +291,15 @@ public class BoundingBox {
 	// --------------------------Getter-------------------------- //
 
 	/**
+	 * Returns the current scaling Level
+	 * 
+	 * @return scaling levle
+	 */
+	public float getScale(){
+		return scale;
+	}
+	
+	/**
 	 * Gives back the Coordinate of the upper left corner
 	 *
 	 * @return top left
@@ -271,6 +307,17 @@ public class BoundingBox {
 	public Coordinate getTopLeft() {
 		return topLeft;
 	}
+	
+
+	/**
+	 * Gives back the Coordinate of the upper left corner
+	 *
+	 * @return top left
+	 */
+	public Coordinate getScaledTopLeft() {
+		return computeScaledTopLeft();
+	}
+	
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
@@ -290,6 +337,15 @@ public class BoundingBox {
 		return this.computeBottomLeft();
 	}
 
+	/**
+	 * Gives back the Coordinate of the upper right corner
+	 *
+	 * @return bottom right
+	 */
+	public Coordinate getScaledBottomRight() {
+		return computeScaledBottomRight();
+	}
+	
 	/**
 	 * Gives back the Coordinate of the upper right corner
 	 *
@@ -345,7 +401,16 @@ public class BoundingBox {
 				CoordinateUtility.convertPixelsToDegrees(display.y,
 						levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE));
 	}
-
+	/**
+	 * Returns the scaled upperLeft Coordinate
+	 *
+	 * @return the scaled top left geo-oordinate
+	 */
+	private Coordinate computeScaledTopLeft() {
+		Log.d(TAG, "compute Scaled Top Left");
+		return this.topLeft;
+	}
+	
 	/**
 	 * Returns the upperLeft Coordinate
 	 *
@@ -376,6 +441,16 @@ public class BoundingBox {
 		return new Coordinate(center, -size.height / 2f, -size.width / 2f);
 	}
 
+	/**
+	 * Returns the scaled bottom right Coordinate
+	 *
+	 * @return the scaled bottom right geo-oordinate
+	 */
+	private Coordinate computeScaledBottomRight() {
+		Log.d(TAG, "Compute BottomRight");
+		return  this.bottomRight;
+	}
+	
 	/**
 	 * Returns the bottom right Coordinate
 	 *

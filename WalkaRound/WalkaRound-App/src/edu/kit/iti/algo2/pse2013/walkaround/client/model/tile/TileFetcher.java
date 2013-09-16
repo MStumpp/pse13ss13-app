@@ -41,7 +41,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 3, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	private static Bitmap defaultTile;
-
+	
 	/**
 	 * Returns the current TileFetcher or null;
 	 *
@@ -73,7 +73,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	}
 
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
-		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getTopLeft(), coorBox.getBottomRight(), listener);
+		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getScaledTopLeft(), coorBox.getScaledBottomRight(), listener);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	 * @param bottomRight the bottom right coordinate (analog to topLeft)
 	 * @param listener the TileListener listeneing for tiles
 	 */
-	public void requestTiles(final int levelOfDetail, final Coordinate topLeft, final Coordinate bottomRight, TileListener listener) {
+	private void requestTiles(final int levelOfDetail, final Coordinate topLeft, final Coordinate bottomRight, TileListener listener) {
 		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, %s, %s, %s)", levelOfDetail, topLeft, bottomRight, listener));
 
 		Log.d(TAG, "Convert GeoCoordinates into Tile-Indices.");
@@ -104,7 +104,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 		cache.evictAll();
 	}
 
-	public void requestTiles(final int levelOfDetail, final int minX, final int minY, final int maxX, final int maxY, TileListener listener) {
+	private void requestTiles(final int levelOfDetail, final int minX, final int minY, final int maxX, final int maxY, TileListener listener) {
 		Log.d(TAG, String.format("TileFetcher.requestTiles(%d, %d, %d, %d, %d, %s)", levelOfDetail, minX, minY, maxX, maxY, listener));
 
 		int minLevelOfDetail = CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail();
