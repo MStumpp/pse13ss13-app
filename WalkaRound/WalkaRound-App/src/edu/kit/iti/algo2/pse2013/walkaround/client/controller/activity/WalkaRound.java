@@ -189,7 +189,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		progress.setVisibility(View.GONE);
 
 		POIManager.getInstance(this).registerProgressListener(this);
-		
+
 		BoundingBox.getInstance().registerScaleListener(this);
 	}
 
@@ -204,8 +204,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	private class MapGestureListener implements OnGestureListener {
 
-		int twoFingerZoomOffset = 1;
-
 		@Override
 		public boolean onDown(MotionEvent event) {
 			Log.d(TAG, "MapTouch Down");
@@ -213,74 +211,58 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		}
 
 		@Override
-		public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX,
-				float velocityY) {
+		public boolean onFling(MotionEvent event1, MotionEvent event2,
+				float velocityX, float velocityY) {
 			Log.d(TAG, "MapTouch Fling");
-			RouteController.getInstance().deleteActiveWaypoint();
+			if (mode != MapListener.ZOOM) {
+				if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() != null){
+					RouteController.getInstance().deleteActiveWaypoint();
+				}
+			}
 			return true;
 		}
 
 		@Override
 		public void onLongPress(MotionEvent event) {
-			Log.d(TAG, "MapTouch Long Touch");
+			if (mode != MapListener.ZOOM) {
+				Log.d(TAG, "MapTouch Long Touch");
+			}
 
 		}
 
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
-
-			if (e2.getPointerCount() >= 2) {
-				// Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
-				// Log.d(TAG, "Finger2: " + e2.getX(1)+ ":" + e2.getY(1));
-				/*
-				 * float fingerDiff = (float) Math.sqrt(Math.pow(
-				 * Math.abs(e2.getX(0) - e2.getX(1)), 2)
-				 * Math.pow(Math.abs(e2.getY(1) - e2.getY(1)), 2));
-				 * 
-				 * float diff = (float) Math.sqrt(Math.abs(Math.pow(distanceX,
-				 * 2) Math.pow(distanceY, 2)));
-				 * 
-				 * diff /= twoFingerZoomOffset;
-				 * 
-				 * diff = (int) diff; Log.d(TAG, "new Zooming Offset: " + diff);
-				 * 
-				 * if (fingerDiff < gesamt) {
-				 * coorBox.setLevelOfDetailByADelta(-diff); Log.d(TAG,
-				 * "new Zooming Offset: -" + diff); } else {
-				 * coorBox.setLevelOfDetailByADelta(diff); Log.d(TAG,
-				 * "new Zooming Offset: " + diff); } gesamt = fingerDiff;
-				 */
-				// TODO new Zooming Point
-				// coorBox.setCenter(new DisplayCoordinate(targetX, targetY));
-			} else {
+			if (mode != MapListener.ZOOM) {
 				Log.d(TAG, "MapTouch SCroll");
 				coorBox.shiftCenter(distanceX, distanceY);
+				userLock = false;
+				headUpView.setUserPositionLock(isRestricted());
+				updateUser();
+				poiView.updatePOIView();
 			}
-			userLock = false;
-			headUpView.setUserPositionLock(isRestricted());
-			// mapView.computeParams();
-			// tileFetcher.requestTiles(coorBox, mapView);
-			updateUser();
-			poiView.updatePOIView();
-			// waypointView.updateWaypoint();
 			return true;
 		}
 
 		@Override
 		public void onShowPress(MotionEvent event) {
-			Log.d(TAG, "MapTouch Press");
-			Coordinate next = CoordinateUtility
-					.convertDisplayCoordinateToCoordinate(
-							new DisplayCoordinate(event.getX(), event.getY()),
-							coorBox.getTopLeft(), coorBox.getLevelOfDetail());
-			addWaypointAlert(next);
+
+			if (mode != MapListener.ZOOM) {
+				Log.d(TAG, "MapTouch Press");
+				Coordinate next = CoordinateUtility
+						.convertDisplayCoordinateToCoordinate(
+								new DisplayCoordinate(event.getX(), event
+										.getY()), coorBox.getTopLeft(), coorBox
+										.getLevelOfDetail());
+				addWaypointAlert(next);
+			}
 		}
 
 		@Override
-		public boolean onSingleTapUp(MotionEvent arg0) {
-			Log.d(TAG, "MapTouch Single Tap");
-			// TODO Auto-generated method stub
+		public boolean onSingleTapUp(MotionEvent event) {
+			if (mode != MapListener.ZOOM) {
+				Log.d(TAG, "MapTouch Single Tap");
+			}
 			return false;
 		}
 
@@ -298,33 +280,34 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		RouteController.getInstance().addWaypoint(wp);
 	}
 
+	boolean mode = MapListener.NONE;
+
+	/**
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 * 
+	 */
 	public class MapListener implements OnTouchListener {
 
+		static final boolean NONE = false;
+		static final boolean ZOOM = true;
+		static final float MIN_DIST = 10f;
 
-		// We can be in one of these 3 states
-		static final int NONE = 0;
-		static final int DRAG = 1;
-		static final int ZOOM = 2;
-		static final int DRAW = 3;
-		int mode = NONE;
-
-		// Remember some things for zooming
 		PointF start = new PointF();
 		PointF mid = new PointF();
 		float oldDist = 1f;
-		
+
 		float saveDist = -1;
 
 		PointF dragOld = new PointF();
 
-		// Limit zoomable/pannable image
 		private float maxZoom;
 		private float minZoom;
-		
 
-		// ///////************ touch events functions
-		// **************////////////////////
-
+		/**
+		 * 
+		 */
 		public MapListener() {
 			maxZoom = 2;
 			minZoom = 0.5f;
@@ -333,39 +316,14 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			/**
-			 * int action = event.getAction(); if (event.getPointerCount() >= 2
-			 * && action == MotionEvent.ACTION_DOWN && !isZomm) { float deltaX =
-			 * Math.abs(event.getX(0) - event.getX(1)); float deltaY =
-			 * Math.abs(event.getY(0) - event.getY(1));
-			 * 
-			 * gesamt = (float) Math.sqrt(Math.pow( Math.abs(event.getX(0) -
-			 * event.getX(1)), 2) Math.pow(Math.abs(event.getY(1) -
-			 * event.getY(1)), 2));
-			 * 
-			 * if (event.getX(0) < event.getX(1)) { targetX += (event.getX(0));
-			 * } else { targetX += (event.getX(1)); } targetX += deltaX;
-			 * 
-			 * if (event.getY(0) < event.getY(1)) { targetY += (event.getY(0));
-			 * } else { targetY += (event.getY(1)); } targetY += deltaY; isZomm
-			 * = true; } if (action == MotionEvent.ACTION_UP) { isZomm = false;
-			 * }
-			 */
-
-			// Dump touch event to log
-			// dumpEvent(event);
-			// Handle touch events here...
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN:
 				start.set(event.getX(), event.getY());
-				Log.d(TAG, "mode=DRAG");
-				mode = DRAG;
 				break;
 			case MotionEvent.ACTION_POINTER_DOWN:
 				oldDist = spacing(event);
-					
 				Log.d(TAG, "oldDist=" + oldDist);
-				if (oldDist > 10f) {
+				if (oldDist > MIN_DIST) {
 					midPoint(mid, event);
 					mode = ZOOM;
 					Log.d(TAG, "mode=ZOOM");
@@ -380,15 +338,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				Log.d(TAG, "mode=NONE");
 				break;
 			case MotionEvent.ACTION_MOVE:
-				if (mode == DRAW) {
-					onTouchEvent(event);
-				}
-				if (mode == DRAG) {
-					// /code for draging..
-				} else if (mode == ZOOM) {
+				if (mode == ZOOM) {
 					float newDist = spacing(event);
 					Log.d(TAG, "newDist=" + newDist);
-					if (newDist > 10f) {
+					if (newDist > MIN_DIST) {
 						float newScale = newDist / oldDist;
 						if (newScale >= maxZoom) {
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
@@ -398,12 +351,13 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
 									-1);
 							newScale = maxZoom;
-						}						
+						}
 						Log.d("Scale", "Level S: " + newScale);
 
 						BoundingBox.getInstance().setScale(newScale);
-						//TODO allow scaling to another Point as the center Point
-						//BoundingBox.getInstance().setPivot(mid);
+						// TODO allow scaling to another Point as the center
+						// Point
+						// BoundingBox.getInstance().setPivot(mid);
 					}
 				}
 				break;
@@ -412,14 +366,22 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			return gestureDetector.onTouchEvent(event);
 		}
 
-		// *******************Determine the space between the first two fingers
+		/**
+		 * 
+		 * @param event
+		 * @return
+		 */
 		private float spacing(MotionEvent event) {
 			float x = event.getX(0) - event.getX(1);
 			float y = event.getY(0) - event.getY(1);
-			return FloatMath.sqrt(x * x + y * y);
+			return (float) Math.sqrt(x * x + y * y);
 		}
 
-		// ************* Calculate the mid point of the first two fingers
+		/**
+		 * 
+		 * @param point
+		 * @param event
+		 */
 		private void midPoint(PointF point, MotionEvent event) {
 			float x = event.getX(0) + event.getX(1);
 			float y = event.getY(0) + event.getY(1);
@@ -656,11 +618,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	}
 
-
 	private void updateUser() {
-		
+
 		float scale = BoundingBox.getInstance().getScale();
-		
+
 		double lon = -coorBox.getCenter().getLongitude()
 				+ userCoordinate.getLongitude();
 		double lat = -userCoordinate.getLatitude()
@@ -743,6 +704,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 	@Override
 	public void onScaleChange(float scale) {
-		this.updateUser();		
+		this.updateUser();
 	}
 }
