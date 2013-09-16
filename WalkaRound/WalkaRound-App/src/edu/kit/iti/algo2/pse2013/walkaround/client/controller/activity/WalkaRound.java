@@ -226,7 +226,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			if (e2.getPointerCount() >= 2) {
 				// Log.d(TAG, "Finger1: " + e2.getX(0)+ ":" + e2.getY(0));
 				// Log.d(TAG, "Finger2: " + e2.getX(1)+ ":" + e2.getY(1));
-
+				/*
 				float fingerDiff = (float) Math.sqrt(Math.pow(
 						Math.abs(e2.getX(0) - e2.getX(1)), 2)
 						* Math.pow(Math.abs(e2.getY(1) - e2.getY(1)), 2));
@@ -247,7 +247,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					Log.d(TAG, "new Zooming Offset: " + diff);
 				}
 				gesamt = fingerDiff;
-
+	*/
 				// TODO new Zooming Point
 				// coorBox.setCenter(new DisplayCoordinate(targetX, targetY));
 			} else {
