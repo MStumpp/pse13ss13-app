@@ -390,9 +390,11 @@ public class RouteController {
 	}
 
 	public Waypoint getWaypoint(int id) {
-		for (Waypoint w : currentRoute.getWaypoints()) {
-			if (w.getId() == id) {
-				return w;
+		if (this.currentRoute != null) {
+			for (Waypoint w : currentRoute.getWaypoints()) {
+				if (w.getId() == id) {
+					return w;
+				}
 			}
 		}
 		return null;
@@ -412,31 +414,101 @@ public class RouteController {
 		Log.d(TAG, "RouteController.changeOrderOfWaypoints(LinkedList<Waypoint> newOrder)");
 		if (this.isRouteChangerInactive()) {
 			if (newOrder != null && newOrder.size() > 1) {
-				// TODO: Verhalten bei 1 / mehreren verschobenen Wegpukten? Ist der Server robust genug?
-				// Methode: Prüfe welche Einzelstücke der aktuellen Route mit der neuen Reihenfolge übereinstimmen.
-				// Achte dabei jedes Mal darauf, ob ein WP ein Bumerangpunkt ist.
-				// Berechne nur die benötigten Teilstücke neu.
-				// Füge alle Stücke neu zusammen.
+				final Route newCurrentRoute = this.currentRoute;
+				RouteController.routeChanger = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						Log.d(TAG, "Thread.run() in resetRoute()");
+						newCurrentRoute.resetRoute();
+						RouteController.getInstance().replaceFullRoute(
+								newCurrentRoute);
+					}
+				});
+				RouteController.routeChanger.start();
 			}
 		}
 		
 	}
 	
+
 	/**
-	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
+	 * Shifts the given Waypoint by x positions down (left) or up (right) the order of all waypoints.
 	 * @param w
-	 * @param dir
+	 * @param shift
 	 */
-	public void changeOrderOfWaypointsSHIFTbyONE(int id, int dir) {
-		Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir)");
-		if (this.isRouteChangerInactive()) {
-			// TODO Implement:
-			
+	public void changeOrderOfWaypointsSHIFTbyX(int id, int shift) {
+		Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyX(Waypoint w, int shift)");
+		Waypoint shiftedWP = this.getWaypoint(id);
+		
+		if (this.isRouteChangerInactive() && shiftedWP != null) {
+			LinkedList<Waypoint> waypoints = this.currentRoute.getWaypoints();
+			if (waypoints != null && waypoints.contains(shiftedWP)) {
+				int indexOfShiftedWP = waypoints.indexOf(shiftedWP);
+				if (shift < 0) {
+					// Case left-shift:
+					waypoints.remove(indexOfShiftedWP);
+					if ((indexOfShiftedWP + shift) < 0) {
+						// Case shift to start of list:
+						waypoints.addFirst(shiftedWP);
+					} else {
+						// Case shift within list:
+						waypoints.add(indexOfShiftedWP + shift, shiftedWP);
+					}
+				} else if (shift > 0) {
+					// Case right-shift:
+					if ((indexOfShiftedWP + shift + 2) > waypoints.size()) {
+						// Case shift to end of list:
+						waypoints.addLast(shiftedWP);
+					} else {
+						// Case shift within list:
+						waypoints.add(indexOfShiftedWP + shift + 2, shiftedWP);
+					}
+					waypoints.remove(indexOfShiftedWP);
+				}
+				Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyX(Waypoint w, int shift) calling general change order Method");
+				this.changeOrderOfWaypoints(waypoints);
+			}
+
 		}
 	}
 	
 	
 	
+	
+	
+	
+	
+	
+
+	/* OLD METHOD VERSION - REPLACED BY changeOrderOfWaypointsSHIFTbyX
+	/**
+	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
+	 * @param w
+	 * @param shift
+	 
+	public void changeOrderOfWaypointsSHIFTbyONE(int id, int shift) {
+		Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir)");
+		Waypoint shiftedWP = this.getWaypoint(id);
+		
+		if (this.isRouteChangerInactive() && shiftedWP != null) {
+			LinkedList<Waypoint> waypoints = this.currentRoute.getWaypoints();
+			if (waypoints != null && waypoints.contains(shiftedWP)) {
+				int indexOfShiftedWP = waypoints.indexOf(shiftedWP);
+				if (shift == 1 && !waypoints.getLast().equals(shiftedWP)) {
+					waypoints.add(indexOfShiftedWP + 2, shiftedWP);
+					waypoints.remove(indexOfShiftedWP);
+				} else if (shift == -1 && !waypoints.getFirst().equals(shiftedWP)) {
+					// TODO:
+					
+				}
+				Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir) calling general change Order Method");
+				this.changeOrderOfWaypoints(waypoints);
+			}
+
+		}
+	}
+	*/
 	
 	
 	
