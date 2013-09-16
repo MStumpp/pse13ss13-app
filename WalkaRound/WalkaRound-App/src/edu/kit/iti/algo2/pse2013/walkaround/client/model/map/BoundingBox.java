@@ -1,6 +1,8 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.map;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -75,7 +77,7 @@ public class BoundingBox {
 	/**
 	 * The Level of Detail listener
 	 */
-	LinkedList<LevelOfDetailListener> lodListener;
+	Set<LevelOfDetailListener> lodListener;
 
 	/**
 	 * the Center Listener.
@@ -127,7 +129,7 @@ public class BoundingBox {
 	 */
 	private BoundingBox(Coordinate center, Point size, float levelOfDetail) {
 		Log.d(TAG, "initialize BoundingBox | Display: " + size.toString());
-		this.lodListener = new LinkedList<LevelOfDetailListener>();
+		this.lodListener = new HashSet<LevelOfDetailListener>();
 		this.centerListener = new LinkedList<CenterListener>();
 		this.display = size;
 		this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
