@@ -24,7 +24,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 
 public class Geocoder {
 	private static final String TAG = Geocoder.class.getSimpleName();
-	private int timeout = 5000;
+	private int timeout = 10000;
 
 	public void reverseGeocode(Location loc) {
 		new Thread(new RunReverseGeocode(loc)).start();
@@ -75,11 +75,16 @@ public class Geocoder {
 				if (jsonObj.has("address")) {
 					JSONObject address = jsonObj.getJSONObject("address");
 					if (address != null) {
+						if (address.has("building")) {
+							name = address.getString("building") + ", ";
+						}
 						if (address.has("road")) {
 							name = address.getString("road");
 							if (address.has("house_number")) {
 								name += " " + address.getString("house_number");
 							}
+						} else if (address.has("pedestrian")) {
+							name += address.getString("pedestrian");
 						} else {
 							if (address.has("postcode")) {
 								name += address.getString("postcode") + " ";
@@ -87,6 +92,9 @@ public class Geocoder {
 							if (address.has("city")) {
 								name += address.getString("city");
 							}
+						}
+						if (name.endsWith(", ")) {
+							name = name.substring(0, name.length() - 2);
 						}
 					}
 				}
