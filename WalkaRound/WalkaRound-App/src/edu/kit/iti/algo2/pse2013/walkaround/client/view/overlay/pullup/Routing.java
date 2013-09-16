@@ -341,7 +341,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
 
-				RouteController.getInstance().changeOrderOfWaypointsSHIFTbyONE(id, 1);
+				RouteController.getInstance().changeOrderOfWaypointsSHIFTbyX(id, 1);
 			}
 
 			return false;
@@ -364,7 +364,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 			if (action == MotionEvent.ACTION_UP) {
 				int id = Integer.parseInt(view.getTag().toString());
 
-				RouteController.getInstance().changeOrderOfWaypointsSHIFTbyONE(id, -1);
+				RouteController.getInstance().changeOrderOfWaypointsSHIFTbyX(id, -1);
 			}
 
 			return false;
