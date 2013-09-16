@@ -67,6 +67,16 @@ public class Waypoint extends Location {
         return profile;
     }
 
+    /**
+     * Checks whether the Waypoints represents a "BUUMeranpoint" (= Anchor to a Roundtrip)
+     * @return boolean
+     */
+    public boolean isAnchorToRoundtrip() {
+    	if (this.profile >= 0) {
+    		return true;
+    	}
+    	return false;
+    }
 
     /**
      * Sets the POI of Waypoint.
