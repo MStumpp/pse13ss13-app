@@ -56,4 +56,6 @@
 	<string name="unknown_location">Unknown %d</string>
 	<string name="poi_checkbox">Show Pois</string>
 	<string name="title_suggestions">Suggestions</string>
+	<string name="dialog_header_add_poi_to_route">Add POI to route</string>
+	<string name="dialog_text_add_poi_to_route">Do you really want to add \'%s\' to the end of the current route?</string>
 </resources>

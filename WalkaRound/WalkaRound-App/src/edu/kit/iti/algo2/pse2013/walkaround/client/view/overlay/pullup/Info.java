@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.POIImageFetcher;
@@ -28,6 +30,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This View shows the Information View for POI´s.
@@ -38,7 +41,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.POI;
  */
 public class Info extends LinearLayout {
 
-	private TextView title;
+	private Button title;
 	private TextView text;
 	private ImageButton sound;
 	private ImageButton save;
@@ -59,7 +62,7 @@ public class Info extends LinearLayout {
 
 		Point size = BoundingBox.getInstance(context).getDisplaySize();
 
-		title = new TextView(context, attrs);
+		title = new Button(context, attrs);
 		title.setTextSize(25);
 		title.setGravity(Gravity.CENTER);
 
@@ -140,6 +143,7 @@ public class Info extends LinearLayout {
 		if (poi.getName() != null) {
 			this.title.setText(poi.getName());
 			this.title.setVisibility(VISIBLE);
+			title.setOnTouchListener(new AddPOIListener(poi));
 			sound.setVisibility(VISIBLE);
 			sound.setOnTouchListener(new PlayListener(poi.getName()));
 
@@ -312,4 +316,58 @@ public class Info extends LinearLayout {
 			alertDialog.show();
 		}
 	}
+	
+	private class AddPOIListener implements OnTouchListener {
+
+		private POI poi;
+
+		/**
+		 * construct a new play listener
+		 *
+		 * @param text the text to speak
+		 */
+		public AddPOIListener(POI poi) {
+			this.poi = poi;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (v.equals(title) && event.getAction() == MotionEvent.ACTION_UP) {
+				this.alert();
+			}
+			return false;
+		}
+		
+		/**
+		 * makes a alert
+		 */
+		public void alert() {
+			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+					.create();
+			alertDialog.setTitle(getContext().getString(R.string.dialog_header_add_poi_to_route,
+					getContext().getString(R.string.term_poi)));
+			alertDialog.setMessage(getContext().getString(
+					R.string.dialog_text_add_poi_to_route,
+					poi.getName()));
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+					getContext().getString(R.string.option_add),
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							RouteController.getInstance().addWaypoint(new Waypoint(poi.getLatitude(),
+									poi.getLongitude(), poi.getName()));
+						}
+					});
+			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+					getContext().getString(R.string.option_cancel),
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// EMPTY
+						}
+					});
+			alertDialog.show();
+		}
+
+	}		
 }
