@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -89,6 +90,7 @@ public class Search extends RelativeLayout {
 		LinearLayout.LayoutParams tabHostParams = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		tabHostParams.width = size.x;
+		tabHostParams.bottomMargin = 20;
 
 		main.addView(tabHost, tabHostParams);
 
@@ -413,6 +415,13 @@ public class Search extends RelativeLayout {
 					// Resultat anzeigen
 					isResult = true;
 					toogleResult();
+					
+					TextView title = new TextView(getContext());
+					title.setText(R.string.title_suggestions);
+					title.setTextSize(30);
+					title.setGravity(Gravity.CENTER);
+					
+					result.addView(title);
 
 					for (Location value : locations) {
 						Button location = new Button(getContext());
@@ -463,6 +472,13 @@ public class Search extends RelativeLayout {
 
 						isResult = true;
 						toogleResult();
+						
+						TextView title = new TextView(getContext());
+						title.setText(R.string.title_suggestions);
+						title.setTextSize(30);
+						title.setGravity(Gravity.CENTER);
+						
+						result.addView(title);
 
 						for (POI value : poiS) {
 							Button poi = new Button(getContext());
