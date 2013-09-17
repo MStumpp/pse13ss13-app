@@ -292,7 +292,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		static final boolean ZOOM = true;
 
 		// Normalize the velocity of the zooming
-		static final int ZOOM_PER_PX = 12500;
+		static final int ZOOM_PER_PX = 5000;
 
 		// Minimum Distance for action
 		private static final int MIN_DIST = 10;
@@ -303,7 +303,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		// shifting to new Point
 		private final static float SHIFT_PER_PX = 0.08F;
-		private final static int MIN_SHIFT_DIST = 5;
 
 		// Distance between Two Fingers
 		private float distance = 1f;
@@ -382,9 +381,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 							distXY.x -= distX;
 							distXY.y -= distY;
-							if(distX < MIN_SHIFT_DIST || distY < MIN_SHIFT_DIST){
-								BoundingBox.getInstance().shiftCenter(distX, distY);
-							}
+							
+							BoundingBox.getInstance().shiftCenter(distX, distY);
+							
 						}
 					}
 				}
