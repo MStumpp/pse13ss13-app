@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
@@ -168,7 +169,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+		
 		mapView.setOnTouchListener(new MapListener());
 
 		this.findViewById(R.id.progressBar1).setOnTouchListener(
@@ -307,8 +308,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		private float distance = 1f;
 
 		// Limits of Zooming
-		private final static float maxZoom = 2F;
-		private final static float minZoom = 0.5F;
+		public final static float maxZoom = 2F;
+		public final static float minZoom = 0.5F;
 
 		/**
 		 * Construct a new MapListener

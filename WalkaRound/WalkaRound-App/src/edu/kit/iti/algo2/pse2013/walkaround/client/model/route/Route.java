@@ -16,7 +16,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  *
- * @author Lukas Müller
+ * @author Lukas Mï¿½ller
  * @version 2.0.42
  *
  */
@@ -90,7 +90,7 @@ public class Route implements RouteInfo {
 		Waypoint activeWaypoint = this.activeWaypoint;
 
 		// TODO: bestimme vorherigen und nÃ¤chsten WP an neuer Position
-		// TODO: Lösche diese Methode :-P Weil ersetzt durch changeOrder...
+		// TODO: Lï¿½sche diese Methode :-P Weil ersetzt durch changeOrder...
 
 		//
 
@@ -109,7 +109,7 @@ public class Route implements RouteInfo {
 
 		// this.addRouteBetweenTwoCoords(route, one, two)
 
-		// Füge den aktiven WP an der übergebenen Position in die Route ein.
+		// Fï¿½ge den aktiven WP an der ï¿½bergebenen Position in die Route ein.
 
 		this.setActiveWaypoint(activeWaypoint);
 		this.cleanRouteOfDuplicateCoordinatePairs();
@@ -130,9 +130,9 @@ public class Route implements RouteInfo {
 			List<Coordinate> newCoordOrderSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
 			
 			// TODO:
-			// Spezialfall newOrder mit Länge 1 
+			// Spezialfall newOrder mit Lï¿½nge 1 
 			// Spezialfall Bumerang (waypoint.isAnchorForRoundtrip()...)
-			// Kombi der beiden Spezialfälle...
+			// Kombi der beiden Spezialfï¿½lle...
 
 			// Run through all pairs of Waypoints in new Order:
 			Iterator<Waypoint> newOrderIter = newWPOrder.iterator();
@@ -358,6 +358,7 @@ public class Route implements RouteInfo {
 		Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate " + coord
 				+ ") METHOD START ");
 
+		try {
 		if (activeWaypoint != null && coord != null) {
 			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(Coordinate) Active Waypoint is " + this.activeWaypoint.toString());
 			LinkedList<Waypoint> waypoints = this.getWaypoints();
@@ -388,6 +389,8 @@ public class Route implements RouteInfo {
 
 			if (newRouteBeforeActiveWaypoint != null && newRouteBeforeActiveWaypoint.getCoordinates().size() > 0) {
 				Coordinate normalizedActWP = newRouteBeforeActiveWaypoint.getCoordinates().getLast();
+				// der aktive waypoint wird an anderer stelle null gesetzt daher kann es zu ausfÃ¤llen kommen
+				// Log.d("daddel", (this.activeWaypoint == null) + " oder norm " + (normalizedActWP == null));
 				this.activeWaypoint.setLongitude(normalizedActWP.getLongitude());
 				this.activeWaypoint.setLatitude(normalizedActWP.getLatitude());
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) setting active Waypoint to: " + normalizedActWP);
@@ -400,6 +403,10 @@ public class Route implements RouteInfo {
 			new Geocoder().reverseGeocode(activeWaypoint);
 
 		}
+		} catch (NullPointerException e) {
+			
+		}
+		
 
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
@@ -549,9 +556,9 @@ public class Route implements RouteInfo {
 	 * @return
 	 */
 	private Waypoint getPreviousWaypoint(int waypointNr) {
-		Log.d(TAG_ROUTE, "getPreviousWaypoint(int " + waypointNr + ")");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
-		if (waypointNr == 0) {
+		Log.d(TAG_ROUTE, "getPreviousWaypoint(int " + waypointNr + ")" + " amaount: " + waypoints.size());
+		if (waypointNr == 0 || waypoints.size() < waypointNr || waypointNr < 0) {
 			return null;
 		}
 		return (waypoints.get(waypointNr - 1));
@@ -565,7 +572,7 @@ public class Route implements RouteInfo {
 	private Waypoint getNextWaypoint(int waypointNr) {
 		Log.d(TAG_ROUTE, "getNextNextWaypoint(int " + waypointNr + ")");
 		LinkedList<Waypoint> waypoints = this.getWaypoints();
-		if (waypointNr == (waypoints.size() - 1)) {
+		if (waypointNr == (waypoints.size() - 1) || waypointNr < 0 || waypointNr > waypoints.size()) {
 			return null;
 		}
 		return (waypoints.get(waypointNr + 1));

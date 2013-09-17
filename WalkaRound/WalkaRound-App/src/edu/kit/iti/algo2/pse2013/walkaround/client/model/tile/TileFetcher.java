@@ -41,7 +41,7 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	private LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
 	private ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 3, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	private static Bitmap defaultTile;
-	
+
 	/**
 	 * Returns the current TileFetcher or null;
 	 *
@@ -74,6 +74,10 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 
 	public void requestTiles(BoundingBox coorBox, TileListener listener){
 		this.requestTiles((int) coorBox.getLevelOfDetail(), coorBox.getScaledTopLeft(), coorBox.getScaledBottomRight(), listener);
+	}
+
+	public void requestTiles(BoundingBox coorBox, int levelOfDetail){
+		this.requestTiles(levelOfDetail, coorBox.getScaledTopLeft(), coorBox.getScaledBottomRight(), null);
 	}
 
 	/**

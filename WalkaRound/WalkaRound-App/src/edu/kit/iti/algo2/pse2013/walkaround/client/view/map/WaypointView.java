@@ -25,6 +25,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This view draw and handle the Waypoint Marker
@@ -185,15 +186,17 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 				int action = event.getAction();
 
-				if (action == MotionEvent.ACTION_UP) {
+				if (action == MotionEvent.ACTION_UP && scroll) {
+					Log.d(TAG, "computeActive Waypoint");
 					RouteController.getInstance()
-							.moveActiveWaypointComputeOnly();
+							.moveActiveWaypointComputeOnly(currentId);
 				}
 			}
 			return waypointGestureDetector.onTouchEvent(event);
 		}
 	}
-
+	
+	private boolean scroll = false;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
@@ -211,12 +214,12 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 			RouteController.getInstance().setActiveWaypoint(currentId);
 			curentWP = new DisplayCoordinate(currentView.getX(),
 					currentView.getY());
+			scroll = false;
 			return true;
 		}
 
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-
 			Log.d(TAG, "Fling! " + velocityY + " " + e2.getY() + " "
 					+ currentId);
 
@@ -228,6 +231,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 			if (velocity >= VELOCITY) {
 				Log.d(TAG, "Delete Point " + currentId);
 				RouteController.getInstance().deleteActiveWaypoint();
+				return true;
 			}
 
 			return false;
@@ -239,6 +243,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
+			scroll = true;
 			Log.d(TAG, "Waypoint onScroll " + currentId);
 			float scale =  coorBox.getScale();
 			curentWP.setX(curentWP.getX() - deltaX * scale);
