@@ -314,6 +314,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			maxZoom = 2;
 			minZoom = 0.5f;
 		}
+		
+		static final int ZOOM_PER_PX = 12500;
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -344,7 +346,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 					float newDist = spacing(event);
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > MIN_DIST) {
-						float newScale = newDist / oldDist;
+						//float newScale = newDist / oldDist;
+						float newScale = BoundingBox.getInstance().getScale() + ((newDist - oldDist) /ZOOM_PER_PX)
+								;
+						Log.d("Scale", "Level A: " + newScale);
 						if (newScale >= maxZoom) {
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
 									1);
