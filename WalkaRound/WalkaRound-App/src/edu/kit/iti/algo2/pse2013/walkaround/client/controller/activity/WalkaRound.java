@@ -215,12 +215,11 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				float velocityX, float velocityY) {
 			Log.d(TAG, "MapTouch Fling");
 			/*
-			if (mode != MapListener.ZOOM) {
-				if(RouteController.getInstance().getCurrentRoute().getActiveWaypoint() != null){
-					RouteController.getInstance().deleteActiveWaypoint();
-				}
-			}
-			*/
+			 * if (mode != MapListener.ZOOM) {
+			 * if(RouteController.getInstance().getCurrentRoute
+			 * ().getActiveWaypoint() != null){
+			 * RouteController.getInstance().deleteActiveWaypoint(); } }
+			 */
 			return false;
 		}
 
@@ -282,73 +281,77 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		RouteController.getInstance().addWaypoint(wp);
 	}
 
-	boolean mode = MapListener.NONE;
+	private boolean mode = MapListener.NONE;
 
 	/**
 	 * 
 	 * @author Ludwig Biermann
-	 * @version 1.0
+	 * @version 1.2
 	 * 
 	 */
 	public class MapListener implements OnTouchListener {
 
+		// Semaphore
 		static final boolean NONE = false;
 		static final boolean ZOOM = true;
-		static final float MIN_DIST = 10f;
 
-		PointF start = new PointF();
-		PointF mid = new PointF();
-		float oldDist = 1f;
+		// Normalize the velocity of the zooming
+		static final int ZOOM_PER_PX = 12500;
 
-		float saveDist = -1;
+		// Minimum Distance for action
+		private static final float MIN_DIST = 10f;
 
-		PointF dragOld = new PointF();
+		// middle point of two fingers
+		private PointF mid = new PointF();
+		private PointF distXY = new PointF();
 
-		private float maxZoom;
-		private float minZoom;
+		// shifting to new Point
+		private final static float SHIFT_PER_PX = 0.08F;
+		
+		// Distance between Two Fingers
+		private float distance = 1f;
+
+		// Limits of Zooming
+		private final static float maxZoom = 2F;
+		private final static float minZoom = 0.5F;
 
 		/**
 		 * 
 		 */
 		public MapListener() {
-			maxZoom = 2;
-			minZoom = 0.5f;
 		}
-		
-		static final int ZOOM_PER_PX = 12500;
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN:
-				start.set(event.getX(), event.getY());
 				break;
 			case MotionEvent.ACTION_POINTER_DOWN:
-				oldDist = spacing(event);
-				Log.d(TAG, "oldDist=" + oldDist);
-				if (oldDist > MIN_DIST) {
+				distance = spacing(event);
+				Log.d(TAG, "oldDist=" + distance);
+				if (distance > MIN_DIST) {
+					Log.d(TAG, "compute mid");
 					midPoint(mid, event);
+					distXY.x = mid.x - BoundingBox.getInstance().getPivot().x;
+					distXY.y = mid.y - BoundingBox.getInstance().getPivot().y;
 					mode = ZOOM;
-					Log.d(TAG, "mode=ZOOM");
 				}
 				break;
 			case MotionEvent.ACTION_UP:
-				dragOld = null;
-				saveDist = oldDist;
 				break;
 			case MotionEvent.ACTION_POINTER_UP:
 				mode = NONE;
-				Log.d(TAG, "mode=NONE");
 				break;
 			case MotionEvent.ACTION_MOVE:
 				if (mode == ZOOM) {
 					float newDist = spacing(event);
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > MIN_DIST) {
-						//float newScale = newDist / oldDist;
-						float newScale = BoundingBox.getInstance().getScale() + ((newDist - oldDist) /ZOOM_PER_PX)
-								;
+						// old zooming computing ... no saving data...
+						// float newScale = newDist / oldDist;
+						float newScale = BoundingBox.getInstance().getScale()
+								+ ((newDist - distance) / ZOOM_PER_PX);
 						Log.d("Scale", "Level A: " + newScale);
 						if (newScale >= maxZoom) {
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
@@ -357,7 +360,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 						} else if (newScale <= minZoom) {
 							BoundingBox.getInstance().setLevelOfDetailByADelta(
 									-1);
-							newScale = maxZoom;
+							newScale = 1;
 						}
 						Log.d("Scale", "Level S: " + newScale);
 
@@ -365,6 +368,16 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 						// TODO allow scaling to another Point as the center
 						// Point
 						// BoundingBox.getInstance().setPivot(mid);
+						// float factor = this.spacing(newMid, mid) * 0.1F;
+						
+						float distX = distXY.x * SHIFT_PER_PX;
+						float distY = distXY.y * SHIFT_PER_PX;
+						
+						distXY.x -= distX;
+						distXY.y -= distY;
+						
+						BoundingBox.getInstance().shiftCenter(distX,
+								distY);
 					}
 				}
 				break;
@@ -382,6 +395,28 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 			float x = event.getX(0) - event.getX(1);
 			float y = event.getY(0) - event.getY(1);
 			return (float) Math.sqrt(x * x + y * y);
+		}
+
+		/**
+		 * 
+		 * @param event
+		 * @return
+		 */
+		private float spacing(PointF p1, PointF p2) {
+			float x = p1.x - p2.x;
+			float y = p1.y - p1.y;
+			return (float) Math.sqrt(x * x + y * y);
+		}
+
+		/**
+		 * 
+		 * @param event
+		 * @return
+		 */
+		private PointF computeCenter(float x, float y) {
+			x = x - BoundingBox.getInstance().getPivot().x;
+			y = y - BoundingBox.getInstance().getPivot().y;
+			return new PointF(x, y);
 		}
 
 		/**
