@@ -113,6 +113,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsReset.addRule(RelativeLayout.ALIGN_PARENT_LEFT,
 				RelativeLayout.TRUE);
 		paramsReset.topMargin = 10;
+		paramsReset.bottomMargin = 20;
 		paramsReset.height = size.y / 10;
 		paramsReset.width = size.x / 3;
 
@@ -124,6 +125,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				RelativeLayout.TRUE);
 		paramsInvert.addRule(RelativeLayout.RIGHT_OF, 1);
 		paramsInvert.topMargin = 10;
+		paramsInvert.bottomMargin = 20;
 		paramsInvert.height = size.y / 10;
 		paramsInvert.width = size.x / 3;
 
@@ -135,6 +137,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		paramsSave.addRule(RelativeLayout.RIGHT_OF, 2);
 		paramsSave.topMargin = 10;
+		paramsSave.bottomMargin = 20;
 		paramsSave.height = size.y / 10;
 		paramsSave.width = size.x / 3;
 
@@ -158,6 +161,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		paramsAddFavorite.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 				RelativeLayout.TRUE);
 		paramsAddFavorite.bottomMargin = 10;
+		paramsAddFavorite.topMargin = 20;
 		paramsAddFavorite.height = size.y / 10;
 		paramsAddFavorite.width = size.x / 2;
 
@@ -169,6 +173,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 				RelativeLayout.TRUE);
 		paramsGoToMap.addRule(RelativeLayout.RIGHT_OF, 3);
 		paramsGoToMap.bottomMargin = 10;
+		paramsGoToMap.topMargin = 20;
 		paramsGoToMap.height = size.y / 10;
 		paramsGoToMap.width = size.x / 2;
 
