@@ -26,6 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.DoublePairing;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
@@ -289,23 +290,14 @@ public class WaypointView extends RelativeLayout implements CenterListener,
 			curentWP.setX(curentWP.getX() - deltaX * scale);
 			curentWP.setY(curentWP.getY() - deltaY * scale);
 
-			/*
-			 * Coordinate next = CoordinateUtility
-			 * .convertDisplayCoordinateToCoordinate( new
-			 * DisplayCoordinate(curentWP.getX(), curentWP .getY()),
-			 * coorBox.getScaledTopLeft(), coorBox .getLevelOfDetail());
-			 */
-
-			double x = CoordinateUtility.convertPixelsToDegrees(event2.getX(),
-					coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_X);
-			double y = CoordinateUtility.convertPixelsToDegrees(event2.getY(),
-					coorBox.getLevelOfDetail(), CoordinateUtility.DIRECTION_Y);
-
-			y = coorBox.getCenter().getLatitude() - y;
-			x = coorBox.getCenter().getLongitude() + x;
-
-			Coordinate next = new Coordinate(y, x);
-
+			
+			 Coordinate next = CoordinateUtility
+			 .convertDisplayCoordinateToCoordinate( new
+			 DisplayCoordinate(curentWP.getX(), curentWP .getY()),
+			 coorBox.getScaledTopLeft(), coorBox .getLevelOfDetail());
+			 			 
+			next = new Coordinate(next,-coorBox.getDisplaySizeInCoordinates().height/2F,coorBox.getDisplaySizeInCoordinates().width/2F);
+			 
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
 
 			return true;

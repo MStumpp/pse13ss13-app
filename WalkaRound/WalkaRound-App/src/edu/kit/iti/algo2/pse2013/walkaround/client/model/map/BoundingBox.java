@@ -443,6 +443,15 @@ public class BoundingBox {
 	public PointF getPivot() {
 		return pivot;
 	}
+	
+	/**
+	 * Gives the Size of the Display in Latitude and Longitude back
+	 * 
+	 * @return size of Display in Latitude and Longitude
+	 */
+	public DoublePairing getDisplaySizeInCoordinates() {
+		return size;
+	}
 
 	// --------------------------Computing-------------------------- //
 
@@ -542,7 +551,7 @@ public class BoundingBox {
 	 * @author Ludwig Biermann
 	 *
 	 */
-	private class DoublePairing {
+	public class DoublePairing {
 
 		/**
 		 * The width of the display
