@@ -77,10 +77,16 @@ public class Geocoder {
 				if (jsonObj.has("address")) {
 					JSONObject address = jsonObj.getJSONObject("address");
 					if (address != null) {
-						if (address.has("building")) {
+						if (address.has("museum")) {
+							name = address.getString("museum") + ", ";
+						} else if (address.has("restaurant")) {
+							name = address.getString("restaurant") + ", ";
+						} else if (address.has("building")) {
 							name = address.getString("building") + ", ";
 						} else if (address.has("memorial")) {
 							name = address.getString("memorial") + ", ";
+						} else if (address.has("parking")) {
+							name = address.getString("parking") + ", ";
 						}
 						if (address.has("pedestrian")) {
 							name += address.getString("pedestrian");
@@ -92,13 +98,8 @@ public class Geocoder {
 							name += address.getString("footway");
 						} else if (address.has("cycleway")) {
 							name += address.getString("cycleway");
-						} else if (address.has("parking")) {
-							name += address.getString("parking");
 						} else if (address.has("road")) {
 							name += address.getString("road");
-							if (address.has("house_number")) {
-								name += " " + address.getString("house_number");
-							}
 						} else {
 							if (address.has("postcode")) {
 								name += address.getString("postcode") + " ";
@@ -106,6 +107,9 @@ public class Geocoder {
 							if (address.has("city")) {
 								name += address.getString("city");
 							}
+						}
+						if (address.has("house_number")) {
+							name += " " + address.getString("house_number");
 						}
 						if (name.endsWith(", ")) {
 							name = name.substring(0, name.length() - 2);

@@ -11,19 +11,20 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.WalkaRound.MapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
 
 /**
- * 
+ *
  * This class represent a rectangle of two Coordinates and his center
  * Coordinate. This class holds the upper Left, bottom Right and center
  * Coordinate.
- * 
+ *
  * @author Ludwig Biermann
  * @version 4.1
- * 
+ *
  */
 public class BoundingBox {
 
@@ -136,7 +137,7 @@ public class BoundingBox {
 
 	/**
 	 * !!!!Only possible if you called initialize or getInstance(Context)
-	 * 
+	 *
 	 * @return BoundingBox
 	 */
 	public static BoundingBox getInstance() {
@@ -145,7 +146,7 @@ public class BoundingBox {
 
 	/**
 	 * Constructs a new Bounding Box
-	 * 
+	 *
 	 * @param center
 	 *            center Coordinate
 	 * @param size
@@ -171,7 +172,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center by a new center and a new Level of detail
-	 * 
+	 *
 	 * @param center
 	 *            the center Coordinate
 	 * @param levelOfDetail
@@ -189,7 +190,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Center by a new center and the current Level of Detail
-	 * 
+	 *
 	 * @param center
 	 *            the center Coordinate
 	 */
@@ -207,18 +208,27 @@ public class BoundingBox {
 
 	/**
 	 * Set a new scale.
-	 * 
+	 *
 	 * @param scale
 	 *            the new Scale
 	 */
 	public void setScale(float scale) {
 		this.scale = scale;
 		this.notifyScaleListener(scale);
+		if (scale < .9f && getLevelOfDetail() > CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail()) {
+			Log.d(TAG, String.format("Prefetch - (LOD %.4f => %d)", getLevelOfDetail(), (int)getLevelOfDetail() - 1));
+			TileFetcher.getInstance().requestTiles(this, (int)getLevelOfDetail() - 1);
+		}
+		if (scale > 1.1f && getLevelOfDetail() < CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail()) {
+			Log.d(TAG, String.format("Prefetch + (LOD %.4f => %d)", getLevelOfDetail(), (int)getLevelOfDetail() + 1));
+			TileFetcher.getInstance().requestTiles(this, (int)getLevelOfDetail() + 1);
+		}
+
 	}
 
 	/**
 	 * Sets a new Center to the given DisplayCoordinate
-	 * 
+	 *
 	 * @param dc
 	 *            the given Display Coordinate
 	 */
@@ -237,7 +247,7 @@ public class BoundingBox {
 
 	/**
 	 * Shifts the Center Coordinate bei a Pixel delta
-	 * 
+	 *
 	 * @param x
 	 *            pixel delta
 	 * @param y
@@ -260,7 +270,7 @@ public class BoundingBox {
 
 	/**
 	 * Checks the correctness of level of Detail
-	 * 
+	 *
 	 * @param levelOfDetail
 	 *            the new level of detail;
 	 * @return true of the level of detail is correct returns false if the level
@@ -281,7 +291,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level of detail by checking the Boundings
-	 * 
+	 *
 	 * @param levelOfDetail
 	 *            the new level of detail;
 	 * @return the correct new LOD
@@ -303,7 +313,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level Of Detail by a delta
-	 * 
+	 *
 	 * @param delta
 	 *            the delta to the new Level Of Detail
 	 * @returns false if the Level of details has to fitted into its bounds.
@@ -316,7 +326,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Level of Detail
-	 * 
+	 *
 	 * @param levelOfDetail
 	 *            the new Level of Detail
 	 */
@@ -334,7 +344,7 @@ public class BoundingBox {
 
 	/**
 	 * Sets a new Pivot Point.
-	 * 
+	 *
 	 * @param pivot
 	 *            the new Pivot Point
 	 */
@@ -346,7 +356,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the current scaling Level
-	 * 
+	 *
 	 * @return scaling levle
 	 */
 	public float getScale() {
@@ -355,7 +365,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper left corner
-	 * 
+	 *
 	 * @return top left
 	 */
 	public Coordinate getTopLeft() {
@@ -364,7 +374,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper left corner
-	 * 
+	 *
 	 * @return top left
 	 */
 	public Coordinate getScaledTopLeft() {
@@ -373,7 +383,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 * 
+	 *
 	 * @return top right
 	 */
 	public Coordinate getTopRight() {
@@ -382,7 +392,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 * 
+	 *
 	 * @return bottom left
 	 */
 	public Coordinate getBottomLeft() {
@@ -391,7 +401,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 * 
+	 *
 	 * @return bottom right
 	 */
 	public Coordinate getScaledBottomRight() {
@@ -400,7 +410,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Coordinate of the upper right corner
-	 * 
+	 *
 	 * @return bottom right
 	 */
 	public Coordinate getBottomRight() {
@@ -409,7 +419,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives back the Center Coordinate of the box
-	 * 
+	 *
 	 * @return the coordinate at the center of the screen
 	 */
 	public Coordinate getCenter() {
@@ -418,7 +428,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the width and the height of the current Display back
-	 * 
+	 *
 	 * @return display size as Point
 	 */
 	public Point getDisplaySize() {
@@ -427,7 +437,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the current Level Of Detail back
-	 * 
+	 *
 	 * @return Level of Detail as float
 	 */
 	public float getLevelOfDetail() {
@@ -436,7 +446,7 @@ public class BoundingBox {
 
 	/**
 	 * Gives the current PivotPoint back
-	 * 
+	 *
 	 * @return the Pivot Point
 	 */
 	public PointF getPivot() {
@@ -447,7 +457,7 @@ public class BoundingBox {
 
 	/**
 	 * Compute the Size of the Display
-	 * 
+	 *
 	 * @param levelOfDetail
 	 */
 	private void computeSize() {
@@ -465,7 +475,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the scaled upperLeft Coordinate
-	 * 
+	 *
 	 * @return the scaled top left geo-oordinate
 	 */
 	private Coordinate computeScaledTopLeft() {
@@ -475,7 +485,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the upperLeft Coordinate
-	 * 
+	 *
 	 * @return the top left geo-oordinate
 	 */
 	private Coordinate computeTopLeft() {
@@ -485,7 +495,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the upper right Coordinate
-	 * 
+	 *
 	 * @return the top right geo-oordinate
 	 */
 	private Coordinate computeTopRight() {
@@ -495,7 +505,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the bootom left Coordinate
-	 * 
+	 *
 	 * @return the bottom left geo-oordinate
 	 */
 	private Coordinate computeBottomLeft() {
@@ -505,7 +515,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the scaled bottom right Coordinate
-	 * 
+	 *
 	 * @return the scaled bottom right geo-oordinate
 	 */
 	private Coordinate computeScaledBottomRight() {
@@ -515,7 +525,7 @@ public class BoundingBox {
 
 	/**
 	 * Returns the bottom right Coordinate
-	 * 
+	 *
 	 * @return the bottom right geo-oordinate
 	 */
 	private Coordinate computeBottomRight() {
@@ -537,9 +547,9 @@ public class BoundingBox {
 	/**
 	 * A simple Helper Class to pair two doubles. In this Case the make
 	 * relationship between width and height of the display in Coordinates
-	 * 
+	 *
 	 * @author Ludwig Biermann
-	 * 
+	 *
 	 */
 	private class DoublePairing {
 
@@ -555,7 +565,7 @@ public class BoundingBox {
 
 		/**
 		 * Construct a new Double Paring
-		 * 
+		 *
 		 * @param width
 		 *            of the display
 		 * @param height
@@ -576,16 +586,16 @@ public class BoundingBox {
 
 	/**
 	 * A Interface to notify classes if the Level of Detail changes
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface LevelOfDetailListener {
 
 		/**
 		 * If the level of Detail changes, this class will be called.
-		 * 
+		 *
 		 * @param levelOfDetail
 		 */
 		public void onLevelOfDetailChange(float levelOfDetail);
@@ -594,7 +604,7 @@ public class BoundingBox {
 
 	/**
 	 * This will register a new Level Of Detail Listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new listener
 	 * @return always true
@@ -607,7 +617,7 @@ public class BoundingBox {
 
 	/**
 	 * This method will notify all Level of Detail Listener
-	 * 
+	 *
 	 * @param levelOfDetail
 	 *            the new level of Detail
 	 */
@@ -620,7 +630,7 @@ public class BoundingBox {
 
 	/**
 	 * A Interface to notify classes if the Center Coordinate changes
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
 	 */
@@ -628,7 +638,7 @@ public class BoundingBox {
 
 		/**
 		 * If the Center Coordinate changes, this class will be called.
-		 * 
+		 *
 		 * @param center
 		 *            the new Coordinate that is currently at the center of the
 		 *            screen
@@ -639,7 +649,7 @@ public class BoundingBox {
 
 	/**
 	 * This will register a new Center Coordinate Listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 * @return the current Center Coordinate
@@ -652,7 +662,7 @@ public class BoundingBox {
 
 	/**
 	 * This will notify all Center Listener
-	 * 
+	 *
 	 * @param center
 	 *            the new Center Coordiante
 	 */
@@ -666,7 +676,7 @@ public class BoundingBox {
 
 	/**
 	 * This will register a new Center Coordinate Listener
-	 * 
+	 *
 	 * @param listener
 	 *            the new Listener
 	 * @return the current Center Coordinate
@@ -679,7 +689,7 @@ public class BoundingBox {
 
 	/**
 	 * This will notify all Scale Listener
-	 * 
+	 *
 	 * @param center
 	 *            the new Center Coordiante
 	 */
@@ -693,16 +703,16 @@ public class BoundingBox {
 
 	/**
 	 * A Listener wich is called if the scale level is changed
-	 * 
+	 *
 	 * @author Ludwig Biermann
 	 * @version 1.0
-	 * 
+	 *
 	 */
 	public interface ScaleListener {
 
 		/**
 		 * Is called if the scale level is changed
-		 * 
+		 *
 		 * @param scale
 		 *            the new scale level
 		 */
