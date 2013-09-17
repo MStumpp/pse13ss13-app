@@ -129,7 +129,7 @@ public class Search extends RelativeLayout {
 		addressButton.setTextColor(Color.RED);
 
 		LinearLayout.LayoutParams routeSiedeParam = new LinearLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
 		LinearLayout.LayoutParams waypointSiedeParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -230,7 +230,7 @@ public class Search extends RelativeLayout {
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		goParam.width = size.x 	* 2 / 3;
 		goParam.height = size.y / 10;
-		goParam.topMargin = 10;
+		goParam.topMargin = 20;
 		goParam.gravity = Gravity.CENTER;
 
 		Button go = new Button(context, attrs);
@@ -246,6 +246,7 @@ public class Search extends RelativeLayout {
 		LinearLayout.LayoutParams freeParam = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		freeParam.height = size.y / 10;
+		freeParam.topMargin = 10;
 		freeParam.width = width;
 
 		freeText = new EditText(context);
@@ -265,7 +266,7 @@ public class Search extends RelativeLayout {
 
 		Button goFree = new Button(context, attrs);
 		goFree.setGravity(Gravity.CENTER);
-		goFree.setText("Go");
+		goFree.setText(R.string.search);
 
 		goFree.setOnTouchListener(new GoQueryListener());
 

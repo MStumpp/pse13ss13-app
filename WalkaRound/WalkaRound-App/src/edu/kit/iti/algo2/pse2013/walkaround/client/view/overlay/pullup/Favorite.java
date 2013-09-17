@@ -72,6 +72,7 @@ public class Favorite extends RelativeLayout {
 		LinearLayout.LayoutParams tabHostParams = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		tabHostParams.width = size.x;
+		tabHostParams.bottomMargin = 20;
 
 		main.addView(tabHost, tabHostParams);
 		main.addView(scrollWay);
