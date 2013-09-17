@@ -22,7 +22,7 @@ public class TestCategory {
 		for (int i = 0; i < cats.length; i++) {
 			catList.add(cats[i]);
 		}
-		for(int i = 1; i <= 13; i++){
+		for(int i = 0; i <= 12; i++){
 			assertTrue(catList.contains(i));
 		}
 	}

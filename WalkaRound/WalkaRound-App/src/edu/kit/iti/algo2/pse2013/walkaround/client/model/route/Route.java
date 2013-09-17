@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -100,7 +101,7 @@ public class Route implements RouteInfo {
 		waypoints.add(newPos, activeWaypoint);
 		Waypoint nextWaypoint = this.getNextWaypoint(newPos);
 
-		this.deletePathBetweenTwoWaypoints(previousWaypoint, nextWaypoint);
+		this.deletePathBetweenTwoCoordinates(previousWaypoint, nextWaypoint);
 		this.routeCoordinates.add(this.routeCoordinates.indexOf(previousWaypoint) + 1, activeWaypoint);
 
 		this.deleteActiveWaypoint();
@@ -130,9 +131,9 @@ public class Route implements RouteInfo {
 			List<Coordinate> newCoordOrderSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
 			
 			// TODO:
-			// Spezialfall newOrder mit Lï¿½nge 1 
+			// Spezialfall newOrder mit Länge 1 
 			// Spezialfall Bumerang (waypoint.isAnchorForRoundtrip()...)
-			// Kombi der beiden Spezialfï¿½lle...
+			// Kombi der beiden Spezialfälle...
 
 			// Run through all pairs of Waypoints in new Order:
 			Iterator<Waypoint> newOrderIter = newWPOrder.iterator();
@@ -144,26 +145,25 @@ public class Route implements RouteInfo {
 			while (newOrderIter.hasNext()) {
 				prevWP = currentWP;
 				currentWP = newOrderIter.next();
+				int indexOfPrevWP = this.routeCoordinates.indexOf(prevWP);
+				int indexOfCurrentWP = this.routeCoordinates.indexOf(currentWP);
+
 				// If the pair already exists in the old order...
 				if (this.pairOfCoordsInCoordList((Coordinate) prevWP, (Coordinate) currentWP, oldWPOrder)) {
 					// ... then recycle the existing route between the waypoints...
 					List<? extends Coordinate> existingPath = extractCoordsBetweenPairFromCoordList(prevWP, currentWP, oldCoordOrder);
 					// and add it to the current route:
-					this.addRouteBetweenTwoCoords(new Route((LinkedList<Coordinate>) existingPath), prevWP, currentWP);
+										this.routeCoordinates.addAll(indexOfPrevWP + 1, (Collection) existingPath);
 					
-					// don't forget to check for roundtrips (this only concerns the last WP):
+					// extract possible roundtrip from second WP and add to route:
 					if (currentWP.isAnchorToRoundtrip()) {
-						Route roundtrip = new Route (this.getRoundtripCoords(currentWP));
-						// TODO: this.addRouteBetweenTwoCoords(roundtrip, , );
+												LinkedList<Coordinate> roundTripCoords = this.extractRoundtripCoordsFromCoordList(currentWP, oldCoordOrder);
+						this.routeCoordinates.addAll(indexOfCurrentWP + 1, (Collection) roundTripCoords);
 					}
-					
-					// TODO Synchronize all methods changing list!
 				} else {
-					// The pair does not yet exist. Thus compute a new route...
+					// The pair does not yet exist. Trigger a new route computation:
 					
 					// But mind that one of the waypoints can be an anchor for a roundtrip:
-					// Multithreading!
-					// TODO
 					
 					Thread pathProcessor = new Thread(new Runnable() {	
 						@Override
@@ -171,17 +171,16 @@ public class Route implements RouteInfo {
 							LinkedList<Coordinate> computedShortestPath = new LinkedList<Coordinate>();
 							Log.d(TAG_ROUTE, "Thread.run() in changeOrderOfWaypoints()");
 							// TODO: 
+							
 						}
 					});
 					pathProcessor.start();
-					
-					
 					
 				}
 				
 				// Nutze previousWP / Next.... Methoden ?
 				// Kann man hier die Funktion sublist von LinkedList sinnvoll nutzen?
-				
+				// Alles synchronisiert!?
 				
 			}
 			
@@ -305,7 +304,6 @@ public class Route implements RouteInfo {
 	 */
 	public void moveActiveWaypointMoveOnly(final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointMoveOnly(Coordinate " + coord + ") METHOD START ");
-		// TODO: Spezialfall Bumerrangpunkt!
 		if (this.activeWaypoint != null && coord != null) {
 			Log.d(TAG_ROUTE,
 					"moveActiveWaypointMoveOnly(Coordinate) Active Waypoint is "
@@ -320,24 +318,30 @@ public class Route implements RouteInfo {
 					.getPreviousWaypoint(indexOfActiveWaypoint);
 			final Waypoint afterActive = this
 					.getNextWaypoint(indexOfActiveWaypoint);
-
+			
+			// TODO: Spezialfall Bumerangpunkt - TEST this part of the code!
+			// To delete a roundtrip at the moved waypoint:
+			this.clearRoundtripAtWaypoint(this.getActiveWaypoint());
+			
+			// To change the route before the moved waypoint:
 			if (beforeActive != null) {
 				Log.d(TAG_ROUTE,
 						"moveActiveWaypointMoveOnly(coord) case beforeActive != null, beforeActive is nr. "
 								+ (waypoints.indexOf(beforeActive) + 1) + " / "
 								+ waypoints.size() + " in route");
 
-				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				this.deletePathBetweenTwoCoordinates(beforeActive, this.activeWaypoint);
 
 			}
 
+			// To change the route after the moved waypoint:
 			if (afterActive != null) {
 				Log.d(TAG_ROUTE,
 						"moveActiveWaypoint(coord) case afterActive != null, afterActive is nr. "
 								+ (waypoints.indexOf(afterActive) + 1) + " / "
 								+ waypoints.size() + " in route");
 
-				this.deletePathBetweenTwoWaypoints(this.activeWaypoint,	afterActive);
+				this.deletePathBetweenTwoCoordinates(this.activeWaypoint,	afterActive);
 			}
 
 			this.activeWaypoint.setLongitude(coord.getLongitude());
@@ -365,26 +369,30 @@ public class Route implements RouteInfo {
 			int indexOfActiveWaypoint = waypoints.indexOf(this.getActiveWaypoint());
 			Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) Active Waypoint is Nr. " + (indexOfActiveWaypoint + 1) + " of " + waypoints.size() + " Waypoints in route.");
 
+			// TODO: Spezialfall Bumerangpunkt - TEST this part of the code!
+			// To delete a roundtrip at the moved waypoint:
+			this.clearRoundtripAtWaypoint(this.getActiveWaypoint());
+			
 			final Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
 			final Waypoint afterActive = this.getNextWaypoint(indexOfActiveWaypoint);
 			Waypoint activeWP = this.activeWaypoint;
 			RouteInfo newRouteBeforeActiveWaypoint = null;
 			RouteInfo newRoutePastActiveWaypoint = null;
-
+			
 			if (beforeActive != null) {
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) case beforeActive != null, beforeActive is nr. "	+ (waypoints.indexOf(beforeActive) + 1) + " / "	+ waypoints.size() + " in route");
-				this.deletePathBetweenTwoWaypoints(beforeActive, this.activeWaypoint);
+				this.deletePathBetweenTwoCoordinates(beforeActive, this.activeWaypoint);
 
 				newRouteBeforeActiveWaypoint = this.computeShortestPath(beforeActive, coord);
-				this.addRouteBetweenTwoCoords(newRouteBeforeActiveWaypoint, beforeActive, activeWP);
+				this.addRouteBetweenTwoWaypoints(newRouteBeforeActiveWaypoint, beforeActive, activeWP);
 			}
 
 			if (afterActive != null) {
 				Log.d(TAG_ROUTE, "moveActiveWaypointComputeOnly(coord) case afterActive != null, afterActive is nr. " + (waypoints.indexOf(afterActive) + 1) + " / " + waypoints.size() + " in route");
-				this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+				this.deletePathBetweenTwoCoordinates(this.activeWaypoint, afterActive);
 
 				newRoutePastActiveWaypoint = this.computeShortestPath(coord, afterActive);
-				this.addRouteBetweenTwoCoords(newRoutePastActiveWaypoint, activeWP, afterActive);
+				this.addRouteBetweenTwoWaypoints(newRoutePastActiveWaypoint, activeWP, afterActive);
 			}
 
 			if (newRouteBeforeActiveWaypoint != null && newRouteBeforeActiveWaypoint.getCoordinates().size() > 0) {
@@ -415,6 +423,11 @@ public class Route implements RouteInfo {
 
 	public void deleteActiveWaypoint() {
 		Log.d(TAG_ROUTE, "deleteActiveWaypoint() METHOD START");
+		
+		// TODO: Spezialfall Bumerangpunkt - TEST this part of the code!
+		// To delete a roundtrip at the moved waypoint:
+		this.clearRoundtripAtWaypoint(this.getActiveWaypoint());
+		
 		int indexOfActiveWaypoint = this.getWaypoints().indexOf(
 				this.getActiveWaypoint());
 		Waypoint beforeActive = this.getPreviousWaypoint(indexOfActiveWaypoint);
@@ -432,27 +445,28 @@ public class Route implements RouteInfo {
 		} else if (beforeActive == null && afterActive != null) {
 			Log.d(TAG_ROUTE,
 					"deleteActiveWaypoint() case beforeActive == null && afterActive != null");
-			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+			this.deletePathBetweenTwoCoordinates(this.activeWaypoint, afterActive);
 			this.routeCoordinates.remove(this.activeWaypoint);
 		} else if (beforeActive != null && afterActive == null) {
 			Log.d(TAG_ROUTE,
 					"deleteActiveWaypoint() case beforeActive != null && afterActive == null");
-			this.deletePathBetweenTwoWaypoints(beforeActive,
+			this.deletePathBetweenTwoCoordinates(beforeActive,
 					this.activeWaypoint);
 			this.routeCoordinates.remove(this.activeWaypoint);
 		} else if (beforeActive != null && afterActive != null) {
 			Log.d(TAG_ROUTE,
 					"deleteActiveWaypoint() case beforeActive != null && afterActive != null");
-			this.deletePathBetweenTwoWaypoints(beforeActive,
+			this.deletePathBetweenTwoCoordinates(beforeActive,
 					this.activeWaypoint);
-			this.deletePathBetweenTwoWaypoints(this.activeWaypoint, afterActive);
+			this.deletePathBetweenTwoCoordinates(this.activeWaypoint, afterActive);
 			this.routeCoordinates.remove(this.activeWaypoint);
 
 			RouteInfo route;
 
 			route = this.computeShortestPath(beforeActive, afterActive);
-			this.addRouteBetweenTwoCoords(route, beforeActive, afterActive);
+			this.addRouteBetweenTwoWaypoints(route, beforeActive, afterActive);
 		}
+		
 		this.resetActiveWaypoint();
 		this.cleanRouteOfDuplicateCoordinatePairs();
 	}
@@ -584,11 +598,11 @@ public class Route implements RouteInfo {
 	 * @param two
 	 * @return
 	 */
-	private boolean deletePathBetweenTwoWaypoints(Waypoint one, Waypoint two) {
-		Log.d(TAG_ROUTE, "deletePathBetweenTwoWaypoints(Waypoint " + one
-				+ ", Waypoint " + two + ") METHOD START");
+	private boolean deletePathBetweenTwoCoordinates(Coordinate one, Coordinate two) {
+		Log.d(TAG_ROUTE, "deletePathBetweenTwoCoordinates(Coordinate " + one
+				+ ", Coordinate " + two + ") METHOD START");
 		Log.d(TAG_ROUTE,
-				"deletePathBetweenTwoWaypoints(Waypoint, Waypoint) Working on route with size: "
+				"deletePathBetweenTwoCoordinate(Coordinate, Coordinate) Working on route with size: "
 						+ this.routeCoordinates.size());
 		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
 
@@ -605,7 +619,7 @@ public class Route implements RouteInfo {
 			tempCoord = routeCoordsIter.next();
 		}
 		Log.d(TAG_ROUTE,
-				"deletePathBetweenTwoWaypoints(Waypoint, Waypoint) METHOD END, length of resulting route: "
+				"deletePathBetweenTwoCoordinate(Coordinate, Coordinate) METHOD END, length of resulting route: "
 						+ this.routeCoordinates.size());
 		return true;
 	}
@@ -617,12 +631,11 @@ public class Route implements RouteInfo {
 	 * @param two
 	 * @return
 	 */
-	private boolean addRouteBetweenTwoCoords(RouteInfo route, Coordinate one,
-			Coordinate two) {
-		Log.d(TAG_ROUTE, "addRouteBetweenTwoCoords(RouteInfo, Coordinate : "
-				+ one + ", Coordinate: " + two + ")");
+	private boolean addRouteBetweenTwoWaypoints(RouteInfo route, Waypoint one, Waypoint two) {
+		Log.d(TAG_ROUTE, "addRouteBetweenTwoWaypoints(RouteInfo, Waypoint: "
+				+ one + ", Waypoint: " + two + ")");
 		Log.d(TAG_ROUTE,
-				"addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) working with route size "
+				"addRouteBetweenTwoWaypoints(RouteInfo, Waypoint, Waypoint) working with route size "
 						+ this.routeCoordinates.size()
 						+ ", adding route size: "
 						+ route.getCoordinates().size());
@@ -638,7 +651,7 @@ public class Route implements RouteInfo {
 			while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
 				tempCoord = routeCoordsIter.next();
 			}
-
+			
 			LinkedList<Coordinate> bridgingCoords = route.clone().getCoordinates();
 			// Remove (waypoint-) coordinates from inserted route:
 			bridgingCoords.removeFirst();
@@ -655,12 +668,16 @@ public class Route implements RouteInfo {
 			}
 		}
 		Log.d(TAG_ROUTE,
-				"addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: "
+				"addRouteBetweenTwoCoords(RouteInfo, Waypoint, Waypoint) METHOD END, length of resulting route: "
 						+ this.routeCoordinates.size());
 
 		return true;
 	}
 
+	
+	
+	
+	
 	/**
 	 *
 	 */
@@ -788,10 +805,10 @@ public class Route implements RouteInfo {
 	}
 	
 	
-	public LinkedList<Coordinate> getRoundtripCoords(Waypoint anchor) {
+	public LinkedList<Coordinate> extractRoundtripCoordsFromCoordList(Waypoint anchor, LinkedList<Coordinate> coordList) {
 		LinkedList<Coordinate> roundtripCoords = new LinkedList<Coordinate>();
-		if (anchor != null && anchor.isAnchorToRoundtrip() && this.routeCoordinates.contains(anchor)) {
-			List<Coordinate> routeCoordsSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
+		if (anchor != null && anchor.isAnchorToRoundtrip() && coordList.contains(anchor)) {
+			List<Coordinate> routeCoordsSYNCHRON = Collections.synchronizedList(coordList);
 			synchronized (routeCoordsSYNCHRON) {
 				Iterator<Coordinate> coordsIter = routeCoordsSYNCHRON.iterator();
 				Coordinate tempCoord = null;
@@ -802,6 +819,21 @@ public class Route implements RouteInfo {
 			}
 		}
 		return roundtripCoords;
+	}
+	
+	public void clearRoundtripAtWaypoint(Waypoint anchor) {
+		if (anchor != null && anchor.isAnchorToRoundtrip() && this.routeCoordinates.contains(anchor)) {
+			Coordinate tempCoord = null;
+			int indexOfAnchor = this.routeCoordinates.indexOf(anchor);
+			Coordinate roundTripEnd = null;
+			// find and destroy the roundtrip:
+			List<Coordinate> tempList = this.routeCoordinates.subList(indexOfAnchor + 1, this.routeCoordinates.size());
+			int indexOfRoundtripEnd = tempList.indexOf((Coordinate) anchor);
+			tempList = tempList.subList(0, indexOfRoundtripEnd + 1);
+			tempList.clear();
+			// set roundtrip profile back to 0:
+			anchor.setProfile(-1);
+		}
 	}
 	
 	
