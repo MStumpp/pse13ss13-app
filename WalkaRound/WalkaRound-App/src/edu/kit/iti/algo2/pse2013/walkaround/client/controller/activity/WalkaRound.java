@@ -94,6 +94,12 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map_view);
+		
+
+		getWindow().setFlags(
+		        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+		        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+		
 		coorBox = BoundingBox.getInstance(this);
 		coorBox.registerCenterListener(this);
 		coorBox.registerLevelOfDetailListener(this);
