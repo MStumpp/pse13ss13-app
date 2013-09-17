@@ -30,7 +30,6 @@ public class RouteView extends View {
 	private int strokeWidth = 8;
 	@SuppressWarnings("unused")
 	private static String TAG = RouteView.class.getSimpleName();
-	private final int FRAME_RATE = 25;
 	private BoundingBox coorBox;
 	Paint pinsel;
 	private Handler h;
@@ -86,7 +85,7 @@ public class RouteView extends View {
 
 		}
 
-		h.postDelayed(r, FRAME_RATE);
+		h.postDelayed(r, MapView.FRAME_RATE);
 	}
 
 }

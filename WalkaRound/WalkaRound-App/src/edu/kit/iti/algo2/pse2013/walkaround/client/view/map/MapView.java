@@ -83,7 +83,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	/**
 	 * The Frame Rate of the map
 	 */
-	private static final int FRAME_RATE = 5;
+	public static final int FRAME_RATE = 1;
 
 	/**
 	 * Holds the References and Coordinates of Tiles

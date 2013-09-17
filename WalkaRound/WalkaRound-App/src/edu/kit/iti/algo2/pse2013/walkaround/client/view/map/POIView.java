@@ -50,7 +50,7 @@ public class POIView extends RelativeLayout {
 	 */
 	public void updatePOIView() {
 		poiList = POIManager.getInstance(getContext()).getPOIsWithinRectangle(
-				coorBox.getTopLeft(), coorBox.getBottomRight(),
+				coorBox.getScaledTopLeft(), coorBox.getScaledBottomRight(),
 				coorBox.getLevelOfDetail());
 
 		Log.d(TAG, "POI Anzahl" + poiList.size());
