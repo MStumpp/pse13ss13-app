@@ -1,9 +1,12 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.route;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizer;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateNormalizerException;
@@ -13,8 +16,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  *
- * @author Lukas M√ºller
- * @version 1.0
+ * @author Lukas M¸ller
+ * @version 2.0.42
  *
  */
 public class Route implements RouteInfo {
@@ -87,8 +90,8 @@ public class Route implements RouteInfo {
 		Waypoint activeWaypoint = this.activeWaypoint;
 
 		// TODO: bestimme vorherigen und n√§chsten WP an neuer Position
+		// TODO: Lˆsche diese Methode :-P Weil ersetzt durch changeOrder...
 
-		// Spezialfall Bumerrangpunkt beachten!
 		//
 
 		assert (newPos >= 0 && newPos < waypoints.size());
@@ -106,7 +109,7 @@ public class Route implements RouteInfo {
 
 		// this.addRouteBetweenTwoCoords(route, one, two)
 
-		// F√ºge den aktiven WP an der √ºbergebenen Position in die Route ein.
+		// F¸ge den aktiven WP an der ¸bergebenen Position in die Route ein.
 
 		this.setActiveWaypoint(activeWaypoint);
 		this.cleanRouteOfDuplicateCoordinatePairs();
@@ -117,29 +120,76 @@ public class Route implements RouteInfo {
 	 * Changes the order of the waypoints on the route to the new, given order.
 	 * @param newOrder
 	 */
-	public void changeOrderOfWaypoints(LinkedList<Waypoint> newOrder) {
-		if (newOrder != null && newOrder.size() > 1) {
-			// TODO: Verhalten bei 1 / mehreren verschobenen Wegpukten? Ist der Server robust genug?
-			// Methode: Pr√ºfe welche Einzelst√ºcke der aktuellen Route mit der neuen Reihenfolge √ºbereinstimmen.
-			// Achte dabei jedes Mal darauf, ob ein WP ein Bumerangpunkt ist.
-			// Berechne nur die ben√∂tigten Teilst√ºcke neu.
-			// F√ºge alle St√ºcke neu zusammen.
-		}
-	}
-
-	/**
-	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
-	 * @param w
-	 * @param dir
-	 */
-	public void changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir) {
-		if (w != null && (dir == -1 || dir == 1) && this.getWaypoints().contains(w)) {
+	public void changeOrderOfWaypoints(LinkedList<Waypoint> newWPOrder) {
+		Log.d(TAG_ROUTE, String.format("changeOrderOfWaypoints(LinkedList<Waypoint>) METHOD START"));
+		if (newWPOrder != null && newWPOrder.size() > 0) {
+			final LinkedList<? extends Coordinate> oldWPOrder = this.getWaypoints();
+			final LinkedList<Coordinate> oldCoordOrder = this.routeCoordinates;
+			// TODO Sollte newWPOrder sein!
+			this.routeCoordinates = (LinkedList<Coordinate>) oldWPOrder;
+			List<Coordinate> newCoordOrderSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
+			
 			// TODO:
-			// Rufe allgemeinere Methode auf:
+			// Spezialfall newOrder mit L‰nge 1 
+			// Spezialfall Bumerang (waypoint.isAnchorForRoundtrip()...)
+			// Kombi der beiden Spezialf‰lle...
 
-
+			// Run through all pairs of Waypoints in new Order:
+			Iterator<Waypoint> newOrderIter = newWPOrder.iterator();
+			Waypoint prevWP = null;
+			Waypoint currentWP = null;
+			if (newOrderIter.hasNext()) {
+				currentWP = newOrderIter.next();
+			}
+			while (newOrderIter.hasNext()) {
+				prevWP = currentWP;
+				currentWP = newOrderIter.next();
+				// If the pair already exists in the old order...
+				if (this.pairOfCoordsInCoordList((Coordinate) prevWP, (Coordinate) currentWP, oldWPOrder)) {
+					// ... then recycle the existing route between the waypoints...
+					List<? extends Coordinate> existingPath = extractCoordsBetweenPairFromCoordList(prevWP, currentWP, oldCoordOrder);
+					// and add it to the current route:
+					this.addRouteBetweenTwoCoords(new Route((LinkedList<Coordinate>) existingPath), prevWP, currentWP);
+					
+					// don't forget to check for roundtrips (this only concerns the last WP):
+					if (currentWP.isAnchorToRoundtrip()) {
+						Route roundtrip = new Route (this.getRoundtripCoords(currentWP));
+						// TODO: this.addRouteBetweenTwoCoords(roundtrip, , );
+					}
+					
+					// TODO Synchronize all methods changing list!
+				} else {
+					// The pair does not yet exist. Thus compute a new route...
+					
+					// But mind that one of the waypoints can be an anchor for a roundtrip:
+					// Multithreading!
+					// TODO
+					
+					Thread pathProcessor = new Thread(new Runnable() {	
+						@Override
+						public void run() {
+							LinkedList<Coordinate> computedShortestPath = new LinkedList<Coordinate>();
+							Log.d(TAG_ROUTE, "Thread.run() in changeOrderOfWaypoints()");
+							// TODO: 
+						}
+					});
+					pathProcessor.start();
+					
+					
+					
+				}
+				
+				// Nutze previousWP / Next.... Methoden ?
+				// Kann man hier die Funktion sublist von LinkedList sinnvoll nutzen?
+				
+				
+			}
+			
 		}
 	}
+	
+	
+	
 
 	/**
 	 * Adds a new waypoint at the given coordinate to the end of the route.
@@ -148,7 +198,8 @@ public class Route implements RouteInfo {
 	public void addWaypoint(Waypoint w) {
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD START", w));
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) to route with Coordinates", w, this.routeCoordinates.size()));
-
+		// TODO: Add alert when coord not normalized
+		
 		Coordinate normalizedCoordinate = null;
 		if (w != null) {
 			try {
@@ -162,9 +213,10 @@ public class Route implements RouteInfo {
 			} catch (InterruptedException e) {
 				Log.e(TAG_ROUTE, "addWaypoint() - Waypoint NOT normalized", e);
 			}
+			
 			Geocoder geo = new Geocoder();
 			geo.reverseGeocode(w);
-
+			
 			if (this.routeCoordinates.size() != 0) {
 				Log.d(TAG_ROUTE, String.format("addWaypoint(%s) -> computing shortest path", w));
 				RouteInfo routeExtension;
@@ -179,7 +231,7 @@ public class Route implements RouteInfo {
 
 			this.setActiveWaypoint(w);
 			this.cleanRouteOfDuplicateCoordinatePairs();
-
+			
 		}
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) - new size of route: %d", w, this.routeCoordinates.size()));
 		Log.d(TAG_ROUTE, String.format("addWaypoint(%s) METHOD END", w));
@@ -253,7 +305,7 @@ public class Route implements RouteInfo {
 	 */
 	public void moveActiveWaypointMoveOnly(final Coordinate coord) {
 		Log.d(TAG_ROUTE, "moveActiveWaypointMoveOnly(Coordinate " + coord + ") METHOD START ");
-
+		// TODO: Spezialfall Bumerrangpunkt!
 		if (this.activeWaypoint != null && coord != null) {
 			Log.d(TAG_ROUTE,
 					"moveActiveWaypointMoveOnly(Coordinate) Active Waypoint is "
@@ -570,27 +622,30 @@ public class Route implements RouteInfo {
 		assert (this.routeCoordinates.indexOf(one) + 1 == this.routeCoordinates
 				.indexOf(two));
 		assert (route.getStart().equals(one) && route.getEnd().equals(two));
-		Iterator<Coordinate> routeCoordsIter = this.routeCoordinates.iterator();
+		List<Coordinate> routeCoordsSYNCHRONIZED = Collections.synchronizedList(this.routeCoordinates);
+		
+		synchronized (routeCoordsSYNCHRONIZED) {
+			Iterator<Coordinate> routeCoordsIter = routeCoordsSYNCHRONIZED.iterator();
+			// Fast forward iterator to coordinate "one":
+			Coordinate tempCoord = null;
+			while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
+				tempCoord = routeCoordsIter.next();
+			}
 
-		// Fast forward iterator to coordinate "one":
-		Coordinate tempCoord = null;
-		while (routeCoordsIter.hasNext() && !one.equals(tempCoord)) {
-			tempCoord = routeCoordsIter.next();
-		}
+			LinkedList<Coordinate> bridgingCoords = route.clone().getCoordinates();
+			// Remove (waypoint-) coordinates from inserted route:
+			bridgingCoords.removeFirst();
+			bridgingCoords.removeLast();
 
-		LinkedList<Coordinate> bridgingCoords = route.clone().getCoordinates();
-		// Remove (waypoint-) coordinates from inserted route:
-		bridgingCoords.removeFirst();
-		bridgingCoords.removeLast();
+			int indexOfInsertion = this.routeCoordinates.indexOf(one) + 1;
+			Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size()
+					+ ", indexOfInsertion: " + indexOfInsertion
+					+ ", route contains one " + this.routeCoordinates.contains(one));
 
-		int indexOfInsertion = this.routeCoordinates.indexOf(one) + 1;
-		Log.d(TAG_ROUTE, "size of Route: " + this.routeCoordinates.size()
-				+ ", indexOfInsertion: " + indexOfInsertion
-				+ ", route contains one " + this.routeCoordinates.contains(one));
-
-		for (Coordinate coord : bridgingCoords) {
-			this.routeCoordinates.add(indexOfInsertion, coord);
-			indexOfInsertion++;
+			for (Coordinate coord : bridgingCoords) {
+				this.routeCoordinates.add(indexOfInsertion, coord);
+				indexOfInsertion++;
+			}
 		}
 		Log.d(TAG_ROUTE,
 				"addRouteBetweenTwoCoords(RouteInfo, Coord, Coord) METHOD END, length of resulting route: "
@@ -668,11 +723,82 @@ public class Route implements RouteInfo {
 	@Override
 	public Waypoint getWaypoint(int id) {
 
-		for(Waypoint w:this.getWaypoints()){
+		for(Waypoint w : this.getWaypoints()){
 			if(w.getId() == id){
 				return w;
 			}
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns the index of the given waypoint within the list of ALL route coordinates.
+	 * @param w
+	 * @return
+	 */
+	public int getIndexOfWaypointInCoordinates(Waypoint w) {
+		int index = -1;
+		if (w != null && this.routeCoordinates.contains(w)) {
+			index = this.routeCoordinates.indexOf(w);
+		}
+		return index;
+	}
+	
+	
+	/**
+	 * Checks a given coordinate list for a pair of coordinates. (Mind order!)
+	 * @param first
+	 * @param second
+	 * @param coordList
+	 * @return
+	 */
+	public boolean pairOfCoordsInCoordList(Coordinate first, Coordinate second, LinkedList<? extends Coordinate> coordList) {
+		boolean pairExists = false;
+		if (first != null && second != null && coordList != null) {
+			Iterator<? extends Coordinate> coordIter = coordList.iterator();
+			Coordinate prevCoord = null;
+			Coordinate currentCoord = null;
+			while (coordIter.hasNext()) {
+				prevCoord = currentCoord;
+				currentCoord = coordIter.next();
+				if (first.equals(prevCoord) && second.equals(currentCoord)) {
+					pairExists = true;
+				}
+			}
+		}
+		return pairExists;
+	}
+
+
+	public List<? extends Coordinate> extractCoordsBetweenPairFromCoordList(Coordinate first, Coordinate second, LinkedList<? extends Coordinate> coordList) {
+		List<? extends Coordinate> output = new LinkedList<Coordinate>();
+		if (first != null && second != null && coordList != null && coordList.contains(first) && coordList.contains(second)) {
+			int indexOfFirst = coordList.indexOf(first);
+			int indexOfSecond = coordList.indexOf(second);
+			output = coordList.subList(indexOfFirst + 1, indexOfSecond);
+		}
+		return output;
+	}
+	
+	
+	public LinkedList<Coordinate> getRoundtripCoords(Waypoint anchor) {
+		LinkedList<Coordinate> roundtripCoords = new LinkedList<Coordinate>();
+		if (anchor != null && anchor.isAnchorToRoundtrip() && this.routeCoordinates.contains(anchor)) {
+			List<Coordinate> routeCoordsSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
+			synchronized (routeCoordsSYNCHRON) {
+				Iterator<Coordinate> coordsIter = routeCoordsSYNCHRON.iterator();
+				Coordinate tempCoord = null;
+				while (coordsIter.hasNext() && !((Coordinate)anchor).equals(tempCoord)) {
+					tempCoord = coordsIter.next();
+					roundtripCoords.add(tempCoord);
+				}
+			}
+		}
+		return roundtripCoords;
+	}
+	
+	
+	
+	
 }
+
