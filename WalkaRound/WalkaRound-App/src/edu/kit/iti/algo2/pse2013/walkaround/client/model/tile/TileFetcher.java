@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.LruCache;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TileUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -69,6 +70,10 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 	private TileFetcher(Context context){
 		PreferenceUtility.getInstance().registerOnSharedPreferenceChangeListener(this);
 		defaultTile = BitmapFactory.decodeResource(context.getResources(), DEFAULT_TILE_PATH);
+		float width = CoordinateUtility
+		.computeCurrentTileWidthInPixels(BoundingBox.getInstance()
+				.getLevelOfDetail());
+		defaultTile = Bitmap.createScaledBitmap(defaultTile,(int) width,(int) width, false);
 
 	}
 

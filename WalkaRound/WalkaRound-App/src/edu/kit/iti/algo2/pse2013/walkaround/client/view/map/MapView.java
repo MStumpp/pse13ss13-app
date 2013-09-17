@@ -130,7 +130,14 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	 */
 	public MapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		
 		this.coorBox = BoundingBox.getInstance(context);
+		
+		this.currentTileWidth = CoordinateUtility
+				.computeCurrentTileWidthInPixels(this.coorBox
+						.getLevelOfDetail());
+		
 		coorBox.registerLevelOfDetailListener(this);
 		coorBox.registerCenterListener(this);
 		h = new Handler();
@@ -236,10 +243,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.tileT.clear();
 		this.tileHolder.clear();
 
-		this.currentTileWidth = CoordinateUtility
-				.computeCurrentTileWidthInPixels(this.coorBox
-						.getLevelOfDetail());
-
 		this.pPerDiff = currentTileWidth / 334;
 		
 		//this.computeAmountOfTiles();
@@ -269,8 +272,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		 *            y-coordinate
 		 */
 		public TilePaaring(Bitmap b, int x, int y) {
-			this.b = Bitmap.createScaledBitmap(b, Math.round(currentTileWidth),
-					Math.round(currentTileWidth), false);
+			this.b = b;
 			this.x = x;
 			this.y = y;
 		}
