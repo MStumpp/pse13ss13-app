@@ -5,15 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -28,8 +25,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
@@ -81,9 +78,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private WaypointView waypointView;
 	private PullUpView pullUpView;
 	private POIView poiView;
+	@SuppressWarnings("unused")
 	private RouteView routeView;
-	private float gesamt;
-	private boolean isZomm = false;
 	@SuppressWarnings("unused")
 	private float targetX;
 	@SuppressWarnings("unused")
@@ -91,6 +87,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private Coordinate userCoordinate = BoundingBox.defaultCoordinate;
 	private RelativeLayout progress;
 	private static int ROUNDTRIP_TIME = 3000;
+	private boolean mode = MapListener.NONE;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -281,12 +278,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		RouteController.getInstance().addWaypoint(wp);
 	}
 
-	private boolean mode = MapListener.NONE;
-
 	/**
 	 * 
 	 * @author Ludwig Biermann
-	 * @version 1.2
+	 * @version 1.5
 	 * 
 	 */
 	public class MapListener implements OnTouchListener {
@@ -307,7 +302,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		// shifting to new Point
 		private final static float SHIFT_PER_PX = 0.08F;
-		
+
 		// Distance between Two Fingers
 		private float distance = 1f;
 
@@ -316,23 +311,22 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		private final static float minZoom = 0.5F;
 
 		/**
-		 * 
+		 * Construct a new MapListener
 		 */
 		public MapListener() {
 		}
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN:
 				break;
 			case MotionEvent.ACTION_POINTER_DOWN:
-				distance = spacing(event);
+				distance = computeDistanceBetweenFingers(event);
 				Log.d(TAG, "oldDist=" + distance);
 				if (distance > MIN_DIST) {
 					Log.d(TAG, "compute mid");
-					midPoint(mid, event);
+					computeMidPoint(mid, event);
 					distXY.x = mid.x - BoundingBox.getInstance().getPivot().x;
 					distXY.y = mid.y - BoundingBox.getInstance().getPivot().y;
 					mode = ZOOM;
@@ -345,7 +339,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				break;
 			case MotionEvent.ACTION_MOVE:
 				if (mode == ZOOM) {
-					float newDist = spacing(event);
+					float newDist = computeDistanceBetweenFingers(event);
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > MIN_DIST) {
 						// old zooming computing ... no saving data...
@@ -353,78 +347,70 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 						float newScale = BoundingBox.getInstance().getScale()
 								+ ((newDist - distance) / ZOOM_PER_PX);
 						Log.d("Scale", "Level A: " + newScale);
+						boolean allowShift = true;
 						if (newScale >= maxZoom) {
-							BoundingBox.getInstance().setLevelOfDetailByADelta(
-									1);
-							newScale = 1;
+							if (BoundingBox.getInstance()
+									.setLevelOfDetailByADelta(1)) {
+								newScale = 1;
+							} else {
+								newScale = maxZoom;
+								allowShift = false;
+							}
 						} else if (newScale <= minZoom) {
-							BoundingBox.getInstance().setLevelOfDetailByADelta(
-									-1);
-							newScale = 1;
+							if (BoundingBox.getInstance()
+									.setLevelOfDetailByADelta(-1)) {
+								newScale = 1;
+							} else {
+								newScale = minZoom;
+								allowShift = false;
+							}
 						}
+
 						Log.d("Scale", "Level S: " + newScale);
 
 						BoundingBox.getInstance().setScale(newScale);
 						// TODO allow scaling to another Point as the center
-						// Point
+						// Point with Pivot Point
 						// BoundingBox.getInstance().setPivot(mid);
 						// float factor = this.spacing(newMid, mid) * 0.1F;
-						
-						float distX = distXY.x * SHIFT_PER_PX;
-						float distY = distXY.y * SHIFT_PER_PX;
-						
-						distXY.x -= distX;
-						distXY.y -= distY;
-						
-						BoundingBox.getInstance().shiftCenter(distX,
-								distY);
+
+						if (allowShift) {
+							float distX = distXY.x * SHIFT_PER_PX;
+							float distY = distXY.y * SHIFT_PER_PX;
+
+							distXY.x -= distX;
+							distXY.y -= distY;
+							BoundingBox.getInstance().shiftCenter(distX, distY);
+						}
 					}
 				}
 				break;
 			}
-
 			return gestureDetector.onTouchEvent(event);
 		}
 
 		/**
+		 * Computes the Distance between two Fingers
 		 * 
 		 * @param event
-		 * @return
+		 *            the needed Notion Event
+		 * @return the distance between Finger one and two
 		 */
-		private float spacing(MotionEvent event) {
+		private float computeDistanceBetweenFingers(MotionEvent event) {
 			float x = event.getX(0) - event.getX(1);
 			float y = event.getY(0) - event.getY(1);
 			return (float) Math.sqrt(x * x + y * y);
 		}
 
 		/**
-		 * 
-		 * @param event
-		 * @return
-		 */
-		private float spacing(PointF p1, PointF p2) {
-			float x = p1.x - p2.x;
-			float y = p1.y - p1.y;
-			return (float) Math.sqrt(x * x + y * y);
-		}
-
-		/**
-		 * 
-		 * @param event
-		 * @return
-		 */
-		private PointF computeCenter(float x, float y) {
-			x = x - BoundingBox.getInstance().getPivot().x;
-			y = y - BoundingBox.getInstance().getPivot().y;
-			return new PointF(x, y);
-		}
-
-		/**
+		 * Computes the mid of two Fingers and saved it in the given Point
 		 * 
 		 * @param point
+		 *            the point which gets the coordinates
 		 * @param event
+		 *            the event with two Fingers
 		 */
-		private void midPoint(PointF point, MotionEvent event) {
+		private void computeMidPoint(PointF point, MotionEvent event) {
 			float x = event.getX(0) + event.getX(1);
 			float y = event.getY(0) + event.getY(1);
 			point.set(x / 2, y / 2);
