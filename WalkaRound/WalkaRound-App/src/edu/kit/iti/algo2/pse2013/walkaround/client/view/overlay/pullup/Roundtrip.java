@@ -1,6 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,7 +23,6 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Routing.GoToMapListener;
-import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Category;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Profile;
 
 /**
@@ -39,10 +39,10 @@ public class Roundtrip extends LinearLayout {
 	private static int PROFILE3 = R.string.clubbing;
 	private final int ON_LONG_CLICK_UPDATE_INTERVALL_MS = 100;
 
-	private LinkedList<Integer> profilesStrings = new LinkedList<Integer>();
-	private LinkedList<TextView> profiles = new LinkedList<TextView>();
-	private LinkedList<ComputeRoundtripListener> roundtripListener = new LinkedList<ComputeRoundtripListener>();
-	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
+	private List<Integer> profilesStrings = new LinkedList<Integer>();
+	private List<TextView> profiles = new LinkedList<TextView>();
+	private List<ComputeRoundtripListener> roundtripListener = new LinkedList<ComputeRoundtripListener>();
+	private List<GoToMapListener> rl = new LinkedList<GoToMapListener>();
 
 	private static int MIN_VALUE = 1000;
 	private static int MAX_VALUE = 20000;

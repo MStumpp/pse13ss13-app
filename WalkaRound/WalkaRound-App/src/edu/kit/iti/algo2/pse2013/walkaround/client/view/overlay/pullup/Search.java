@@ -15,7 +15,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -60,8 +59,8 @@ public class Search extends RelativeLayout {
 	private int width;
 	private boolean isResult = false;
 
-	private LinkedList<GoToMapListener> rl = new LinkedList<GoToMapListener>();
-	private LinkedList<UpdateMapListener> ul = new LinkedList<UpdateMapListener>();
+	private List<GoToMapListener> rl = new LinkedList<GoToMapListener>();
+	private List<UpdateMapListener> ul = new LinkedList<UpdateMapListener>();
 
 	/**
 	 * This create a new POIview.

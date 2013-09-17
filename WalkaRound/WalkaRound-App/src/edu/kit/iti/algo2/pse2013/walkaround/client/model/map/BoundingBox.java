@@ -11,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.WalkaRound.MapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
@@ -23,7 +22,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * Coordinate.
  *
  * @author Ludwig Biermann
- * @version 4.1
+ * @version 4.5
  *
  */
 public class BoundingBox {

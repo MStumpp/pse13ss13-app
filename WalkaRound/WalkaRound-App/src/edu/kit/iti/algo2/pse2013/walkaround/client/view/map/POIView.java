@@ -32,7 +32,7 @@ public class POIView extends RelativeLayout {
 	private static int poiDrawable = R.drawable.poi;
 
 	private Set<POI> poiList;
-	private LinkedList<POIInfoListener> info = new LinkedList<POIInfoListener>();
+	private List<POIInfoListener> info = new LinkedList<POIInfoListener>();
 	
 	/**
 	 * This create a new POIview.
