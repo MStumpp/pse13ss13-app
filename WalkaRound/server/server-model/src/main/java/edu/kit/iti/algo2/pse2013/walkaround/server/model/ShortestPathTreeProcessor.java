@@ -53,7 +53,7 @@ public class ShortestPathTreeProcessor {
         }
 
         executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,
-                TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
+                TimeUnit.DAYS, new ArrayBlockingQueue<Runnable>(numberThreads),
                 new ThreadFactoryCustom(shortestPathTreeComputerQueue), shortestPathTreeComputerQueue);
         // avoid termination of core threads
         executor.allowCoreThreadTimeOut(false);
