@@ -43,12 +43,13 @@
 	<string name="suggestions">Vorschläge</string>
 	<string name="term_boomerang">Bumerangpunkt</string>
 	<string name="term_favorite">Favorit</string>
-	<string name="term_favorite_route">Strecken-Favorit</string>
+	<string name="term_favorite_route">Routen-Favorit</string>
 	<string name="term_location">Ort</string>
 	<string name="term_profiles">Profile</string>
 	<string name="term_roundtrip">Rundkurs</string>
-	<string name="term_route">Strecke</string>
+	<string name="term_route">Route</string>
 	<string name="term_waypoint">Wegpunkt</string>
 	<string name="unknown_location">Unbekannt %d</string>
 	<string name="poi_checkbox">POIs anzeigen</string>
+	<string name="title_suggestions">Vorschläge</string>
 </resources>

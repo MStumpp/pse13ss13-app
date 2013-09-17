@@ -474,12 +474,28 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							
 							Location l = new Location(w.getLatitude(), w
 									.getLongitude(), edit.getText().toString());
 
-							FavoriteManager.getInstance(getContext())
+							if(!FavoriteManager.getInstance(getContext())
 									.addLocationToFavorites(l,
-											edit.getText().toString());
+											edit.getText().toString())) {
+								AlertDialog alert = new AlertDialog.Builder(getContext()).create();
+								alert.setTitle(context.getString(R.string.dialog_header_save,
+										context.getString(R.string.term_waypoint)));
+								alert.setMessage("Dieser Name exisitert bereits, Wegpunkt wurde nicht gespeichert!");
+								alert.setButton(DialogInterface.BUTTON_POSITIVE,
+								"OK",
+								new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									
+								}
+								});
+
+								alert.show();
+							}
 						}
 					});
 			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
@@ -597,11 +613,26 @@ public class Routing extends RelativeLayout implements RouteListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							FavoriteManager.getInstance(getContext())
+							if(!FavoriteManager.getInstance(getContext())
 									.addRouteToFavorites(
 											RouteController.getInstance()
 													.getCurrentRoute(),
-											edit.getText().toString());
+											edit.getText().toString())) {
+								AlertDialog alert = new AlertDialog.Builder(getContext()).create();
+								alert.setTitle(context.getString(R.string.dialog_header_save,
+										context.getString(R.string.term_route)));
+								alert.setMessage("Dieser Name exisitert bereits, Route wurde nicht gespeichert!");
+								alert.setButton(DialogInterface.BUTTON_POSITIVE,
+								"OK",
+								new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									
+								}
+								});
+
+								alert.show();
+							}
 						}
 					});
 			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
