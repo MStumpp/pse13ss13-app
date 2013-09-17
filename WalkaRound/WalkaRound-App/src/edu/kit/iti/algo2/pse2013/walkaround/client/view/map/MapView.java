@@ -1,21 +1,15 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.LinkedList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.opengl.GLES20;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -47,27 +41,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	private static String TAG = MapView.class.getSimpleName();
 
 	/**
-	 * 
-	 * The default Background Color
-	 * 
-	 * 
-	 */
-	public static int defaultBackground = Color.rgb(227, 227, 227);
-
-	/**
-	 * 
-	 * The default empty Background Color
-	 */
-	public static int defaultBackgroundEmpty = Color.argb(0, 0, 0, 0);
-
-	/**
-	 * the size of the Display
-	 * 
-	 */
-	private Point size;
-
-
-	/**
 	 * the current Coordinates
 	 * 
 	 */
@@ -77,7 +50,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	 * the current Tile Width
 	 * 
 	 */
-	private float currentTileWidth;
+	private static float currentTileWidth;
 
 	/**
 	 * the Offset of the tile parts
@@ -113,14 +86,14 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	private static final int FRAME_RATE = 5;
 
 	/**
-	 * default Coordinate to initialize
+	 * Holds the References and Coordinates of Tiles
 	 */
-	public static Coordinate defaultCoordinate = new Coordinate(49.0145, 8.419); // 211
-
+	private Map<Point, Bitmap> tiles = new LinkedHashMap<Point, Bitmap>();
+	
 	/**
-	 * Listener lists
+	 * Thread which computes the offset
 	 */
-	private LinkedList<TilePaaring> tileHolder = new LinkedList<TilePaaring>();
+	private Thread offset = new Thread(new OffsetComputer());
 
 	/**
 	 * This create a new MapView.
@@ -135,7 +108,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 
 		this.coorBox = BoundingBox.getInstance(context);
 
-		this.currentTileWidth = CoordinateUtility
+		currentTileWidth = CoordinateUtility
 				.computeCurrentTileWidthInPixels(this.coorBox
 						.getLevelOfDetail());
 		this.pPerDiff = currentTileWidth / 334;
@@ -148,9 +121,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.mapOffset = new DisplayCoordinate(0, 0);
 
 		Log.d("test", " " + (coorBox.getDisplaySize() != null));
-		size = coorBox.getDisplaySize();
-
-		Log.d("test", " " + (size != null));
 
 		this.computeParams();
 		this.buildDrawingCache();
@@ -165,21 +135,38 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		float scale = BoundingBox.getInstance().getScale();
 		PointF p = BoundingBox.getInstance().getPivot();
 		c.scale(scale, scale, p.x, p.y);
-		synchronized (tileHolder) {
-			for (int i = 0; i < tileHolder.size(); i++) {
+		synchronized (tiles) {
+			Iterator<Entry<Point, Bitmap>> it = tiles.entrySet().iterator();
+			while(it.hasNext()) {
+				Map.Entry<Point, Bitmap> pairs = (Map.Entry<Point, Bitmap>) it.next();
 				c.drawBitmap(
-						tileHolder.get(i).b,
-						(tileHolder.get(i).x * currentTileWidth)
+						pairs.getValue(),
+						(pairs.getKey().x * currentTileWidth)
 								+ mapOffset.getX(),
-						(tileHolder.get(i).y * currentTileWidth)
+						(pairs.getKey().y * currentTileWidth)
 								+ mapOffset.getY(), null);
-			}
+			}			
 		}
-
 		h.postDelayed(r, FRAME_RATE);
 	}
 	
-	private Thread offset = new Thread(new OffsetComputer());
+	@Override
+	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
+
+		int tileX = x - indexXY[0];
+		int tileY = (y - indexXY[1]);
+		
+		Point xy = new Point(tileX, tileY);
+		
+		try {
+			tiles.put(xy, tile);
+		} catch (OutOfMemoryError e) {
+			Log.e(TAG, e.toString());
+			System.gc();
+		}
+
+	}
+	
 
 	/**
 	 * Compute and gives the Tile Offset back
@@ -194,10 +181,14 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		offset.start();
 	}
 
+	/**
+	 * Computes the Tile Offset
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
 	private class OffsetComputer implements Runnable {
-
-		public OffsetComputer() {
-		}
 
 		@Override
 		public void run() {
@@ -245,59 +236,9 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	 * This Method computes the offset and index and clears the current variable
 	 */
 	public void computeParams() {
-		//this.mapOffset = this.computeTileOffset();
 		this.computeTileOffset();
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
-		this.tileHolder.clear();
-
-
-		// this.computeAmountOfTiles();
-	}
-
-	/**
-	 * A little Helper Class to associate Bitmaps with a Coordinate
-	 * 
-	 * @author Ludwig Biermann
-	 * @version 1.0
-	 * 
-	 */
-	private class TilePaaring {
-
-		public Bitmap b;
-		public int y;
-		public int x;
-
-		/**
-		 * Construct a new Tile Paring
-		 * 
-		 * @param b
-		 *            the bitmap
-		 * @param x
-		 *            x-coordinate
-		 * @param y
-		 *            y-coordinate
-		 */
-		public TilePaaring(Bitmap b, int x, int y) {
-			this.b = b;
-			this.x = x;
-			this.y = y;
-		}
-
-	}
-
-	@Override
-	public void receiveTile(Bitmap tile, int x, int y, int levelOfDetail) {
-
-		int tileX = x - indexXY[0];
-		int tileY = (y - indexXY[1]);
-		try {
-			this.tileHolder.add(new TilePaaring(tile, tileX, tileY));
-		} catch (OutOfMemoryError e) {
-			Log.e(TAG, e.toString());
-			System.gc();
-		}
-
 	}
 
 	@Override
