@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -178,15 +179,15 @@ public final class CoordinateUtility {
 	 */
 	public static List<DisplayWaypoint> extractDisplayWaypointsOutOfRouteInfo(
 			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail, float scale, PointF p) {
-
+		
 		LinkedList<DisplayWaypoint> dw = new LinkedList<DisplayWaypoint>();
 		for (Waypoint value : currentRoute.getWaypoints()) {
-
+			
 			float x = (float) (value.getLongitude() - center.getLongitude());
 			Log.d("wtf", "" + x);
 			float y = (float) (center.getLatitude() - value.getLatitude());
 			Log.d("wtf", "" + y);
-
+			
 			dw.add(new DisplayWaypoint(
 					p.x + scale *CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
 					p.y + scale *CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.76f,

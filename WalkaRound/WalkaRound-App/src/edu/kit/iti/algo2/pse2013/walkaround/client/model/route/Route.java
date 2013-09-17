@@ -540,8 +540,9 @@ public class Route implements RouteInfo {
 	@Override
 	public LinkedList<Waypoint> getWaypoints() {
 		Log.d(TAG_ROUTE, "getWaypoints()");
+		List<Coordinate> routeCoords = this.getSynchronizedRouteCoordinates();
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
-		for (Coordinate coord : this.routeCoordinates) {
+		for (Coordinate coord : routeCoords) {
 			if (coord instanceof Waypoint) {
 				waypoints.add((Waypoint) coord);
 			}
@@ -836,6 +837,9 @@ public class Route implements RouteInfo {
 		}
 	}
 	
+	private List<Coordinate> getSynchronizedRouteCoordinates() {
+		return Collections.synchronizedList(this.routeCoordinates);
+	}
 	
 	
 	
