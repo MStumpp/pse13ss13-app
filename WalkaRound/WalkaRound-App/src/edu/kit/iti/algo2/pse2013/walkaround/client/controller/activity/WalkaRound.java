@@ -295,7 +295,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		static final int ZOOM_PER_PX = 12500;
 
 		// Minimum Distance for action
-		private static final float MIN_DIST = 10f;
+		private static final int MIN_DIST = 10;
 
 		// middle point of two fingers
 		private PointF mid = new PointF();
@@ -303,6 +303,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 		// shifting to new Point
 		private final static float SHIFT_PER_PX = 0.08F;
+		private final static int MIN_SHIFT_DIST = 5;
 
 		// Distance between Two Fingers
 		private float distance = 1f;
@@ -381,7 +382,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 
 							distXY.x -= distX;
 							distXY.y -= distY;
-							BoundingBox.getInstance().shiftCenter(distX, distY);
+							if(distX < MIN_SHIFT_DIST || distY < MIN_SHIFT_DIST){
+								BoundingBox.getInstance().shiftCenter(distX, distY);
+							}
 						}
 					}
 				}
