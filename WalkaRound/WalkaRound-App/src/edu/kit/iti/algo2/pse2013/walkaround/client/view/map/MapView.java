@@ -1,9 +1,16 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.view.map;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -169,52 +176,75 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 
 		h.postDelayed(r, FRAME_RATE);
 	}
+	
+	private Thread offset = new Thread(new OffsetComputer());
 
 	/**
 	 * Compute and gives the Tile Offset back
 	 * 
 	 * @return Tile Offset
 	 */
-	private DisplayCoordinate computeTileOffset() {
-
-		double lonDiff = ((coorBox.getCenter().getLongitude() + 180) % (360 / Math
-				.pow(2, this.coorBox.getLevelOfDetail())));
-
-		int[] index = TileUtility.getXYTileIndex(coorBox.getCenter(),
-				(int) coorBox.getLevelOfDetail());
-
-		double n = Math.PI - (2.0 * Math.PI * index[1])
-				/ Math.pow(2.0, this.coorBox.getLevelOfDetail());
-		n = Math.toDegrees(Math.atan(Math.sinh(n)));
-
-		double latDiff = Math.abs(coorBox.getCenter().getLatitude() - n);
-
-		float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff,
-				this.coorBox.getLevelOfDetail(),
-				CoordinateUtility.DIRECTION_HORIZONTAL);
-
-		float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff,
-				this.coorBox.getLevelOfDetail(),
-				CoordinateUtility.DIRECTION_VERTICAL);
-
-		yDiff = yDiff * pPerDiff;
-
-		xDiff = size.x / 2 - Math.abs(xDiff);
-		yDiff = size.y / 2 - Math.abs(yDiff);
-
-		Log.d(TAG, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
-				+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
-				+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
-				coorBox.getCenter(), this.coorBox.getLevelOfDetail()));
-
-		return new DisplayCoordinate(xDiff, yDiff);
+	private void computeTileOffset() {
+		if(offset.isAlive()) {
+			offset.interrupt();
+		}
+		offset = new Thread(new OffsetComputer());
+		offset.start();
 	}
 
+	private class OffsetComputer implements Runnable {
+
+		public OffsetComputer() {
+		}
+
+		@Override
+		public void run() {
+
+			double lonDiff = ((coorBox.getCenter().getLongitude() + 180) % (360 / Math
+					.pow(2, coorBox.getLevelOfDetail())));
+
+			int[] index = TileUtility.getXYTileIndex(coorBox.getCenter(),
+					(int) coorBox.getLevelOfDetail());
+
+			double n = Math.PI - (2.0 * Math.PI * index[1])
+					/ Math.pow(2.0, coorBox.getLevelOfDetail());
+			n = Math.toDegrees(Math.atan(Math.sinh(n)));
+
+			double latDiff = Math.abs(coorBox.getCenter().getLatitude() - n);
+
+			float xDiff = CoordinateUtility.convertDegreesToPixels(lonDiff,
+					coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_HORIZONTAL);
+
+			float yDiff = CoordinateUtility.convertDegreesToPixels(latDiff,
+					coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_VERTICAL);
+
+			yDiff = yDiff * pPerDiff;
+
+			xDiff = coorBox.getPivot().x - Math.abs(xDiff);
+			yDiff = coorBox.getPivot().y - Math.abs(yDiff);
+
+			/*
+			Log.d(TAG, String.format("TileOffset: x: %.8fdp y: %.8fdp\n"
+					+ "TileOffset: lon: %.8f lat: %.8f\n" + "Center: %s\n"
+					+ "LevelOfDetail: %.8f", xDiff, yDiff, lonDiff, latDiff,
+					coorBox.getCenter(), coorBox.getLevelOfDetail()));
+			 */
+			
+			synchronized(mapOffset) {
+				mapOffset.setX(xDiff);
+				mapOffset.setY(yDiff);
+			}
+		}
+	}
+	
 	/**
 	 * This Method computes the offset and index and clears the current variable
 	 */
 	public void computeParams() {
-		this.mapOffset = this.computeTileOffset();
+		//this.mapOffset = this.computeTileOffset();
+		this.computeTileOffset();
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
 		this.tileHolder.clear();
