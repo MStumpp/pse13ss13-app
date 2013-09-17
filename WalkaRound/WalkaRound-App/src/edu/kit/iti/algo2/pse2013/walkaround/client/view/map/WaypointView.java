@@ -26,7 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.DoublePairing;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.PointD;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
@@ -212,9 +212,10 @@ public class WaypointView extends RelativeLayout implements CenterListener,
 		}
 	}
 
-	/**********************************************  PATCH   **********************************************/
-	
+	/********************************************** PATCH **********************************************/
+
 	private boolean fling = false;
+
 	private class FlingListener implements Runnable {
 		@Override
 		public void run() {
@@ -226,17 +227,15 @@ public class WaypointView extends RelativeLayout implements CenterListener,
 				}
 
 			} catch (InterruptedException e) {
-				RouteController.getInstance()
-				.moveActiveWaypointComputeOnly(currentId);
+				RouteController.getInstance().moveActiveWaypointComputeOnly(
+						currentId);
 				e.printStackTrace();
 			}
 		}
 	}
 
-	/**********************************************  PATCH   **********************************************/
-	
-	
-	
+	/********************************************** PATCH **********************************************/
+
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
 	 * 
@@ -290,14 +289,16 @@ public class WaypointView extends RelativeLayout implements CenterListener,
 			curentWP.setX(curentWP.getX() - deltaX * scale);
 			curentWP.setY(curentWP.getY() - deltaY * scale);
 
-			
-			 Coordinate next = CoordinateUtility
-			 .convertDisplayCoordinateToCoordinate( new
-			 DisplayCoordinate(curentWP.getX(), curentWP .getY()),
-			 coorBox.getScaledTopLeft(), coorBox .getLevelOfDetail());
-			 			 
-			next = new Coordinate(next,-coorBox.getDisplaySizeInCoordinates().height/2F,coorBox.getDisplaySizeInCoordinates().width/2F);
-			 
+			Coordinate next = CoordinateUtility
+					.convertDisplayCoordinateToCoordinate(
+							new DisplayCoordinate(curentWP.getX(), curentWP
+									.getY()), coorBox.getScaledTopLeft(),
+							coorBox.getLevelOfDetail());
+
+			next = new Coordinate(next,
+					-coorBox.getDisplaySizeInCoordinates().y / 2F,
+					coorBox.getDisplaySizeInCoordinates().x / 2F);
+
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
 
 			return true;

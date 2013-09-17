@@ -75,7 +75,7 @@ public class BoundingBox {
 	/**
 	 * Display Size
 	 */
-	private DoublePairing size;
+	private PointD size;
 
 	/**
 	 * Display Size in Pixel
@@ -449,7 +449,7 @@ public class BoundingBox {
 	 * 
 	 * @return size of Display in Latitude and Longitude
 	 */
-	public DoublePairing getDisplaySizeInCoordinates() {
+	public PointD getDisplaySizeInCoordinates() {
 		return size;
 	}
 
@@ -466,7 +466,7 @@ public class BoundingBox {
 
 		Log.d("test", "1: " + (display != null) + " 2: " + (levelOfDetail > 0));
 
-		this.size = new DoublePairing(
+		this.size = new PointD(
 				CoordinateUtility.convertPixelsToDegrees(display.x,
 						levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
 				CoordinateUtility.convertPixelsToDegrees(display.y,
@@ -480,7 +480,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeScaledTopLeft() {
 		Log.d(TAG, "compute Scaled Top Left");
-		return new Coordinate(center, size.height / 2f * MapListener.maxZoom, -size.width / 2f * MapListener.maxZoom);
+		return new Coordinate(center, size.y / 2f * MapListener.maxZoom, -size.x / 2f * MapListener.maxZoom);
 	}
 
 	/**
@@ -490,7 +490,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeTopLeft() {
 		Log.d(TAG, "compute Top Left");
-		return new Coordinate(center, size.height / 2f, -size.width / 2f);
+		return new Coordinate(center, size.y / 2f, -size.x / 2f);
 	}
 
 	/**
@@ -500,7 +500,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeTopRight() {
 		Log.d(TAG, "compute Top Right");
-		return new Coordinate(center, size.height / 2f, size.width / 2f);
+		return new Coordinate(center, size.y / 2f, size.x / 2f);
 	}
 
 	/**
@@ -510,7 +510,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeBottomLeft() {
 		Log.d(TAG, "Compute Bottom Left");
-		return new Coordinate(center, -size.height / 2f, -size.width / 2f);
+		return new Coordinate(center, -size.y / 2f, -size.x / 2f);
 	}
 
 	/**
@@ -520,7 +520,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeScaledBottomRight() {
 		Log.d(TAG, "Compute BottomRight");
-		return new Coordinate(center, -size.height / 2f * MapListener.maxZoom, size.width / 2f * MapListener.maxZoom);
+		return new Coordinate(center, -size.y / 2f * MapListener.maxZoom, size.x / 2f * MapListener.maxZoom);
 	}
 
 	/**
@@ -530,7 +530,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeBottomRight() {
 		Log.d(TAG, "Compute BottomRight");
-		return new Coordinate(center, -size.height / 2f, size.width / 2f);
+		return new Coordinate(center, -size.y / 2f, size.x / 2f);
 	}
 
 	@Override
@@ -545,40 +545,40 @@ public class BoundingBox {
 	// --------------------------Helper Classes-------------------------- //
 
 	/**
-	 * A simple Helper Class to pair two doubles. In this Case the make
-	 * relationship between width and height of the display in Coordinates
+	 * A simple Helper Class to pair two doubles. 
 	 *
 	 * @author Ludwig Biermann
+	 * @version 1.5
 	 *
 	 */
-	public class DoublePairing {
+	public class PointD {
 
 		/**
 		 * The width of the display
 		 */
-		public double width;
+		public double x;
 
 		/**
 		 * The height of the display
 		 */
-		public double height;
+		public double y;
 
 		/**
-		 * Construct a new Double Paring
+		 * Construct a new PointD
 		 *
-		 * @param width
+		 * @param x
 		 *            of the display
-		 * @param height
+		 * @param y
 		 *            of the display
 		 */
-		public DoublePairing(double width, double height) {
-			this.width = width;
-			this.height = height;
+		public PointD(double x, double y) {
+			this.x = x;
+			this.y = y;
 		}
 
 		@Override
 		public String toString() {
-			return "Double Paring: width: " + width + ", height: " + height;
+			return "PointD: width: " + x + ", height: " + y;
 		}
 	}
 
