@@ -2,7 +2,7 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
 /**
  * This class represents a profile.
- * 
+ *
  * @author Thomas Kadow
  * @version 1.0
  */
@@ -17,17 +17,17 @@ public class Profile {
 	/**
 	 * Sightseeing profile.
 	 */
-	public static Profile PROFILE_SIGHTSEEING = new Profile(2, new int[]{}, new int[]{12, 13});;
+	public static Profile PROFILE_SIGHTSEEING = new Profile(2, new int[]{}, new int[]{Category.POI_CASTLES, Category.POI_CHURCHES_AND_MONUMENTS});;
 
 	/**
 	 * Shopping profile.
 	 */
-	public static Profile PROFILE_SHOPPING = new Profile(3, new int[]{}, new int[]{8});
+	public static Profile PROFILE_SHOPPING = new Profile(3, new int[]{}, new int[]{Category.POI_SHOP});
 
 	/**
 	 * Clubbing profile.
 	 */
-	public static Profile PROFILE_CLUBBING = new Profile(4, new int[]{}, new int[]{1, 3});
+	public static Profile PROFILE_CLUBBING = new Profile(4, new int[]{}, new int[]{Category.POI_BARS_AND_PUBS, Category.POI_CLUBS_AND_NIGHTCLUBS});
 
 	/**
 	 * IDs of all Profiles. (0 is default ID for empty Profile)
@@ -41,7 +41,7 @@ public class Profile {
 	 * ID of the profile.
 	 */
 	private int id;
-	
+
 	/**
 	 * All area categories IDs belonging to the profile.
 	 */
@@ -60,7 +60,7 @@ public class Profile {
 
 	/**
 	 * Sets the poi categories of the profile.
-	 * 
+	 *
 	 * @param poiCategories
 	 *            poi categories to set
 	 */
@@ -70,7 +70,7 @@ public class Profile {
 
 	/**
 	 * Sets the area categories of the profile.
-	 * 
+	 *
 	 * @param areaCategories
 	 *            area categories to set
 	 */
@@ -80,7 +80,7 @@ public class Profile {
 
 	/**
 	 * Returns the ID of the profile.
-	 * 
+	 *
 	 * @return the ID of the profile
 	 */
 	public int getID() {
@@ -89,7 +89,7 @@ public class Profile {
 
 	/**
 	 * Returns the profile to the given ID.
-	 * 
+	 *
 	 * @param id
 	 *            id of the profile
 	 * @return a profile
@@ -118,7 +118,7 @@ public class Profile {
 
 	/**
 	 * Returns the IDs of area categories belonging to the profile.
-	 * 
+	 *
 	 * @return the IDs of area categories belonging to the profile
 	 */
 	public int[] getContainingAreaCategories() {
@@ -127,7 +127,7 @@ public class Profile {
 
 	/**
 	 * Returns the IDs of POI categories belonging to the profile.
-	 * 
+	 *
 	 * @return the IDs of POI categories belonging to the profile
 	 */
 	public int[] getContainingPOICategories() {
@@ -136,11 +136,11 @@ public class Profile {
 
 	/**
 	 * Returns the IDs of all existing Profiles.
-	 * 
+	 *
 	 * @return the IDs of all existing Profiles
 	 */
 	public static int[] getAllProfileIDs() {
 		return ALL_PROFILE_IDS;
 	}
-	
+
 }
