@@ -66,7 +66,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		PositionListener, CompassListener, RouteListener, UpdateFavorites,
 		UpdateMapListener, ComputeRoundtripListener, POIChangeListener,
 		POIInfoListener, CenterListener, LevelOfDetailListener,
-		ProgressListener, ScaleListener {
+		ProgressListener, ScaleListener, AlertListener {
 
 	private MapView mapView;
 	private GestureDetector gestureDetector;
@@ -764,5 +764,28 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	@Override
 	public void onScaleChange(float scale) {
 		this.updateUser();
+		
+	}
+
+	@Override
+	public void alert(final String title,final String text) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.d(TAG, "ALERT");
+				AlertDialog alert = new AlertDialog.Builder(getApplicationContext()).create();
+				alert.setTitle(title);
+				alert.setMessage(text);
+				alert.setButton(DialogInterface.BUTTON_POSITIVE,
+						"OK",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// do nothing
+							}
+						});
+				alert.show();
+			}
+		});
 	}
 }
