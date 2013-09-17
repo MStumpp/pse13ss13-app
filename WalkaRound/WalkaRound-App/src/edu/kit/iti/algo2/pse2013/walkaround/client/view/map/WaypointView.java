@@ -186,7 +186,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 				int action = event.getAction();
 
-				if (action == MotionEvent.ACTION_UP) {
+				if (action == MotionEvent.ACTION_UP && scroll) {
 					Log.d(TAG, "computeActive Waypoint");
 					RouteController.getInstance()
 							.moveActiveWaypointComputeOnly(currentId);
@@ -196,6 +196,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		}
 	}
 	
+	private boolean scroll = false;
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
@@ -213,6 +214,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 			RouteController.getInstance().setActiveWaypoint(currentId);
 			curentWP = new DisplayCoordinate(currentView.getX(),
 					currentView.getY());
+			scroll = false;
 			return true;
 		}
 
@@ -241,6 +243,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
+			scroll = true;
 			Log.d(TAG, "Waypoint onScroll " + currentId);
 			float scale =  coorBox.getScale();
 			curentWP.setX(curentWP.getX() - deltaX * scale);
