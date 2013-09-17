@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -221,12 +222,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	 * compute the amount tiles needed to fill the display
 	 */
 	private void computeAmountOfTiles() {
-		this.currentTileWidth = CoordinateUtility
-				.computeCurrentTileWidthInPixels(this.coorBox
-						.getLevelOfDetail());
-
-		this.pPerDiff = currentTileWidth / 334;
-
 		this.amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
 				(int) Math.ceil(size.y / currentTileWidth) + 1);
 	}
@@ -239,10 +234,15 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
 		this.tileT.clear();
-
 		this.tileHolder.clear();
 
-		this.computeAmountOfTiles();
+		this.currentTileWidth = CoordinateUtility
+				.computeCurrentTileWidthInPixels(this.coorBox
+						.getLevelOfDetail());
+
+		this.pPerDiff = currentTileWidth / 334;
+		
+		//this.computeAmountOfTiles();
 	}
 
 	/**

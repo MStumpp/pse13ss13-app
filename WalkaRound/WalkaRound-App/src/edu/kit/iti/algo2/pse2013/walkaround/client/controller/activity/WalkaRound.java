@@ -307,8 +307,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		private float distance = 1f;
 
 		// Limits of Zooming
-		private final static float maxZoom = 2F;
-		private final static float minZoom = 0.5F;
+		public final static float maxZoom = 2F;
+		public final static float minZoom = 0.5F;
 
 		/**
 		 * Construct a new MapListener

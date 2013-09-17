@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import edu.kit.iti.algo2.pse2013.walkaround.client.controller.activity.WalkaRound.MapListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -53,12 +54,12 @@ public class BoundingBox {
 	/**
 	 * Upper Left Coordinate of the box
 	 */
-	private Coordinate topLeft;
+	//private Coordinate topLeft;
 
 	/**
 	 * Bottom Right Coordinate of the Box
 	 */
-	private Coordinate bottomRight;
+	//private Coordinate bottomRight;
 
 	/**
 	 * The scaled Upper Left Coordinate of the box
@@ -195,9 +196,12 @@ public class BoundingBox {
 	public void setCenter(Coordinate center) {
 		Log.d(TAG, "set a new Center: " + center.toString());
 		this.center = center;
-		this.topLeft = this.computeTopLeft();
-		Log.d(TAG, "Topleft is " + this.topLeft);
-		this.bottomRight = this.computeBottomRight();
+		//this.topLeft = this.computeTopLeft();
+		//this.bottomRight = this.computeBottomRight();
+		
+		this.scaledBottomRight = this.computeScaledBottomRight();
+		this.scaledTopLeft = this.computeScaledTopLeft();
+		
 		this.notifyCenterListener(center);
 	}
 
@@ -226,7 +230,7 @@ public class BoundingBox {
 		double latitude = CoordinateUtility.convertPixelsToDegrees(dc.getY(),
 				levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE);
 
-		Coordinate center = new Coordinate(this.topLeft, latitude, longitude);
+		Coordinate center = new Coordinate(this.computeTopLeft(), latitude, longitude);
 
 		this.setCenter(center);
 	}
@@ -319,8 +323,12 @@ public class BoundingBox {
 	public void setLevelOfDetail(float levelOfDetail) {
 		this.levelOfDetail = this.correctLevelOfDetail(levelOfDetail);
 		this.computeSize();
-		this.topLeft = this.computeTopLeft();
-		this.bottomRight = this.computeBottomRight();
+		//this.topLeft = this.computeTopLeft();
+		//this.bottomRight = this.computeBottomRight();
+
+		this.scaledBottomRight = this.computeScaledBottomRight();
+		this.scaledTopLeft = this.computeScaledTopLeft();
+		
 		this.notifyLODListener(this.levelOfDetail);
 	}
 
@@ -351,7 +359,7 @@ public class BoundingBox {
 	 * @return top left
 	 */
 	public Coordinate getTopLeft() {
-		return topLeft;
+		return this.computeTopLeft();
 	}
 
 	/**
@@ -360,7 +368,7 @@ public class BoundingBox {
 	 * @return top left
 	 */
 	public Coordinate getScaledTopLeft() {
-		return computeScaledTopLeft();
+		return this.scaledTopLeft;
 	}
 
 	/**
@@ -387,7 +395,7 @@ public class BoundingBox {
 	 * @return bottom right
 	 */
 	public Coordinate getScaledBottomRight() {
-		return computeScaledBottomRight();
+		return this.scaledBottomRight;
 	}
 
 	/**
@@ -396,7 +404,7 @@ public class BoundingBox {
 	 * @return bottom right
 	 */
 	public Coordinate getBottomRight() {
-		return bottomRight;
+		return this.computeBottomRight();
 	}
 
 	/**
@@ -462,7 +470,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeScaledTopLeft() {
 		Log.d(TAG, "compute Scaled Top Left");
-		return this.topLeft;
+		return new Coordinate(center, size.height / 2f * MapListener.maxZoom, -size.width / 2f * MapListener.maxZoom);
 	}
 
 	/**
@@ -502,7 +510,7 @@ public class BoundingBox {
 	 */
 	private Coordinate computeScaledBottomRight() {
 		Log.d(TAG, "Compute BottomRight");
-		return this.bottomRight;
+		return new Coordinate(center, -size.height / 2f * MapListener.maxZoom, size.width / 2f * MapListener.maxZoom);
 	}
 
 	/**
@@ -517,10 +525,10 @@ public class BoundingBox {
 
 	@Override
 	public String toString() {
-		return "BoundingBox: TopLeft: " + topLeft.toString() + " , TopRight: "
+		return "BoundingBox: TopLeft: " + scaledTopLeft.toString() + " , TopRight: "
 				+ this.getTopRight().toString() + " , BottomLeft: "
 				+ this.getBottomLeft().toString() + " , Bottom Right: "
-				+ bottomRight + " | Display Größe: " + display.toString()
+				+ scaledBottomRight + " | Display Größe: " + display.toString()
 				+ " | Abstand zwischen den Coordinaten: " + size.toString();
 	}
 
