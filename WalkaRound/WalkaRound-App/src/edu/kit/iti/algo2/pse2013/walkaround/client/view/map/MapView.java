@@ -131,13 +131,12 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	public MapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		
 		this.coorBox = BoundingBox.getInstance(context);
-		
+
 		this.currentTileWidth = CoordinateUtility
 				.computeCurrentTileWidthInPixels(this.coorBox
 						.getLevelOfDetail());
-		
+
 		coorBox.registerLevelOfDetailListener(this);
 		coorBox.registerCenterListener(this);
 		h = new Handler();
@@ -156,7 +155,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.setDrawingCacheEnabled(true);
 
 	}
-	
 
 	@Override
 	protected void onDraw(Canvas c) {
@@ -165,11 +163,11 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		}
 		tileT.clear();
 
-		//c.scale(x, y);
-		
+		// c.scale(x, y);
+
 		float scale = BoundingBox.getInstance().getScale();
 		PointF p = BoundingBox.getInstance().getPivot();
-		
+
 		c.scale(scale, scale, p.x, p.y);
 		synchronized (tileHolder) {
 			for (int i = 0; i < tileHolder.size(); i++) {
@@ -226,14 +224,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	}
 
 	/**
-	 * compute the amount tiles needed to fill the display
-	 */
-	private void computeAmountOfTiles() {
-		this.amount.set((int) Math.ceil(size.x / currentTileWidth) + 1,
-				(int) Math.ceil(size.y / currentTileWidth) + 1);
-	}
-
-	/**
 	 * This Method computes the offset and index and clears the current variable
 	 */
 	public void computeParams() {
@@ -244,8 +234,8 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.tileHolder.clear();
 
 		this.pPerDiff = currentTileWidth / 334;
-		
-		//this.computeAmountOfTiles();
+
+		// this.computeAmountOfTiles();
 	}
 
 	/**
