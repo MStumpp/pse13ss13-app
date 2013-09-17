@@ -245,8 +245,12 @@ public class RouteController {
 		return false;
 	}
 
-	public boolean moveActiveWaypointComputeOnly() {
+	public boolean moveActiveWaypointComputeOnly(int currentId) {
 		// TODO Check c Coord.
+		if(this.getWaypoint(currentId) == null){
+			return false;
+		}
+		
 		Log.d(TAG,
 				"RouteController.moveActiveWaypointComputeOnly(Coordinate) METHOD START");
 

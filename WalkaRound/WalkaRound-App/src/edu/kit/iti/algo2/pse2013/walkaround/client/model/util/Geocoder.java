@@ -27,8 +27,10 @@ public class Geocoder {
 	private int timeout = 10000;
 
 	public void reverseGeocode(Location loc) {
+		if(loc != null){
 		new Thread(new RunReverseGeocode(loc)).start();
 		loc.setName(BootActivity.getAppContext().getString(R.string.unknown_location, loc.getId()));
+		}
 	}
 
 	private class RunReverseGeocode implements Runnable {

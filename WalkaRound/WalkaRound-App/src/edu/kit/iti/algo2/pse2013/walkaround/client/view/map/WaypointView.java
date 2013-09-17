@@ -25,6 +25,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordinate;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 
 /**
  * This view draw and handle the Waypoint Marker
@@ -186,14 +187,15 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 				int action = event.getAction();
 
 				if (action == MotionEvent.ACTION_UP) {
+					Log.d(TAG, "computeActive Waypoint");
 					RouteController.getInstance()
-							.moveActiveWaypointComputeOnly();
+							.moveActiveWaypointComputeOnly(currentId);
 				}
 			}
 			return waypointGestureDetector.onTouchEvent(event);
 		}
 	}
-
+	
 
 	/**
 	 * This is a Gesture Detector which listen to the Waypoint touches.
@@ -216,7 +218,6 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-
 			Log.d(TAG, "Fling! " + velocityY + " " + e2.getY() + " "
 					+ currentId);
 
@@ -228,6 +229,7 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 			if (velocity >= VELOCITY) {
 				Log.d(TAG, "Delete Point " + currentId);
 				RouteController.getInstance().deleteActiveWaypoint();
+				return true;
 			}
 
 			return false;
