@@ -52,4 +52,6 @@
 	<string name="unknown_location">Unbekannt %d</string>
 	<string name="poi_checkbox">POIs anzeigen</string>
 	<string name="title_suggestions">Vorschläge</string>
+	<string name="dialog_header_add_poi_to_route">POI zur Route hinzufügen</string>
+	<string name="dialog_text_add_poi_to_route">Möchten Sie \'%s\' wirklich an die Route anfügen?</string>
 </resources>
