@@ -5,15 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -28,8 +25,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController.RouteListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager.UpdateFavorites;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
@@ -81,9 +78,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private WaypointView waypointView;
 	private PullUpView pullUpView;
 	private POIView poiView;
+	@SuppressWarnings("unused")
 	private RouteView routeView;
-	private float gesamt;
-	private boolean isZomm = false;
 	@SuppressWarnings("unused")
 	private float targetX;
 	@SuppressWarnings("unused")
@@ -91,6 +87,7 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 	private Coordinate userCoordinate = BoundingBox.defaultCoordinate;
 	private RelativeLayout progress;
 	private static int ROUNDTRIP_TIME = 3000;
+	private boolean mode = MapListener.NONE;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -281,12 +278,10 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		RouteController.getInstance().addWaypoint(wp);
 	}
 
-	private boolean mode = MapListener.NONE;
-
 	/**
 	 * 
 	 * @author Ludwig Biermann
-	 * @version 1.2
+	 * @version 1.5
 	 * 
 	 */
 	public class MapListener implements OnTouchListener {
@@ -316,14 +311,13 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		private final static float minZoom = 0.5F;
 
 		/**
-		 * 
+		 * Construct a new MapListener
 		 */
 		public MapListener() {
 		}
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN:
 				break;
@@ -392,7 +386,6 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 				}
 				break;
 			}
-
 			return gestureDetector.onTouchEvent(event);
 		}
 
