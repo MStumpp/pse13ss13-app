@@ -36,6 +36,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.CompassManager.CompassListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.sensorinformation.PositionManager.PositionListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.TextToSpeechUtility;
@@ -317,6 +318,9 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 		public final static float maxZoom = 2F;
 		public final static float minZoom = 0.5F;
 
+		public boolean upCatch = false;
+		public boolean downCatch = false;
+		
 		/**
 		 * Construct a new MapListener
 		 */
@@ -359,6 +363,8 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							if (BoundingBox.getInstance()
 									.setLevelOfDetailByADelta(1)) {
 								newScale = 1;
+								upCatch = false;
+								downCatch = false;
 							} else {
 								newScale = maxZoom;
 								allowShift = false;
@@ -367,11 +373,28 @@ public class WalkaRound extends Activity implements HeadUpViewListener,
 							if (BoundingBox.getInstance()
 									.setLevelOfDetailByADelta(-1)) {
 								newScale = 1;
+								upCatch = false;
+								downCatch = false;
 							} else {
 								newScale = minZoom;
 								allowShift = false;
 							}
 						}
+						
+
+						
+						if (newScale < .9f && coorBox.getLevelOfDetail() > CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail() && !upCatch) {
+							//Log.d(TAG, String.format("Prefetch - (LOD %.4f => %d)", getLevelOfDetail(), (int)getLevelOfDetail() - 1));
+							TileFetcher.getInstance().requestTiles(coorBox, (int)coorBox.getLevelOfDetail() - 1,mapView);
+							upCatch = true;
+						}
+						if (newScale > 1.1f && coorBox.getLevelOfDetail() < CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail() && !downCatch) {
+							//Log.d(TAG, String.format("Prefetch + (LOD %.4f => %d)", getLevelOfDetail(), (int)getLevelOfDetail() + 1));
+							TileFetcher.getInstance().requestTiles(coorBox, (int)coorBox.getLevelOfDetail() + 1,mapView);
+							downCatch = true;
+						}
+						
+						
 
 						Log.d("Scale", "Level S: " + newScale);
 

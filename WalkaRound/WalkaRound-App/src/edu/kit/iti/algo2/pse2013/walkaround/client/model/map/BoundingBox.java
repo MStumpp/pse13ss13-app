@@ -215,15 +215,6 @@ public class BoundingBox {
 	public void setScale(float scale) {
 		this.scale = scale;
 		this.notifyScaleListener(scale);
-		if (scale < .9f && getLevelOfDetail() > CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMinLevelOfDetail()) {
-			Log.d(TAG, String.format("Prefetch - (LOD %.4f => %d)", getLevelOfDetail(), (int)getLevelOfDetail() - 1));
-			TileFetcher.getInstance().requestTiles(this, (int)getLevelOfDetail() - 1);
-		}
-		if (scale > 1.1f && getLevelOfDetail() < CurrentMapStyleModel.getInstance().getCurrentMapStyle().getMaxLevelOfDetail()) {
-			Log.d(TAG, String.format("Prefetch + (LOD %.4f => %d)", getLevelOfDetail(), (int)getLevelOfDetail() + 1));
-			TileFetcher.getInstance().requestTiles(this, (int)getLevelOfDetail() + 1);
-		}
-
 	}
 
 	/**

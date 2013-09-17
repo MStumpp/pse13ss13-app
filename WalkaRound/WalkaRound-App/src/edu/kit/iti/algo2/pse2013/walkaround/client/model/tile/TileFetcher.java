@@ -85,6 +85,10 @@ public class TileFetcher implements OnSharedPreferenceChangeListener{
 		this.requestTiles(levelOfDetail, coorBox.getScaledTopLeft(), coorBox.getScaledBottomRight(), null);
 	}
 
+	public void requestTiles(BoundingBox coorBox, int levelOfDetail,  TileListener listener){
+		this.requestTiles(levelOfDetail, coorBox.getScaledTopLeft(), coorBox.getScaledBottomRight(), listener);
+	}
+
 	/**
 	 * Downloads all tiles that are located inside the rectangular area which has the following parameters:
 	 * <ul>
