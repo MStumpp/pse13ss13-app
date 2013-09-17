@@ -31,7 +31,7 @@ public class GeometryProcessor {
     /**
      * MAX_NUMBER_CALLS.
      */
-    private final static int MAX_NUMBER_CALLS = 500000;
+    private final static int MAX_NUMBER_CALLS = 1000000;
 
 
     /**
@@ -371,11 +371,11 @@ public class GeometryProcessor {
                                     GeometrizableHolder currentBest)
                 throws GeometryProcessorException {
 
-            /*if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
+            if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
                 stop = true;
                 return;
             }
-            numberMethodCalls++;*/
+            numberMethodCalls++;
 
             // compute dim
             int dim = node.getDepth() % numberDimensions;
@@ -432,11 +432,11 @@ public class GeometryProcessor {
                                   GeometrizableHolder currentBest, GeometryNode child)
                 throws GeometryProcessorException {
 
-            /*if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
+            if (stop || numberMethodCalls > MAX_NUMBER_CALLS) {
                 stop = true;
                 return;
             }
-            numberMethodCalls++;*/
+            numberMethodCalls++;
 
             // compute dim
             int dim = node.getDepth() % numberDimensions;
