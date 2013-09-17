@@ -1,14 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.geometry;
 
 import java.util.ArrayDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -38,7 +31,7 @@ public class GeometryProcessor {
     /**
      * MAX_NUMBER_CALLS.
      */
-    private final static int MAX_NUMBER_CALLS = 100000;
+    private final static int MAX_NUMBER_CALLS = 50000;
 
 
     /**
