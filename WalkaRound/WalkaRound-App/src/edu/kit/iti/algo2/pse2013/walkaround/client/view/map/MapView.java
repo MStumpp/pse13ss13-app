@@ -6,16 +6,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
@@ -152,16 +147,8 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.buildDrawingCache();
 		this.setDrawingCacheEnabled(true);
 
-		TwoFinger tf = new TwoFinger();
-		tf.init();
-		this.setOnTouchListener(tf);
-
 	}
 	
-	public float x = 1;
-	public float y = 1;
-	public float px = 0;
-	public float py = 0;
 
 	@Override
 	protected void onDraw(Canvas c) {
@@ -171,7 +158,11 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		tileT.clear();
 
 		//c.scale(x, y);
-		c.scale(x, y, px, py);
+		
+		float scale = BoundingBox.getInstance().getScale();
+		PointF p = BoundingBox.getInstance().getPivot();
+		
+		c.scale(scale, scale, p.x, p.y);
 		synchronized (tileHolder) {
 			for (int i = 0; i < tileHolder.size(); i++) {
 				c.drawBitmap(
@@ -315,135 +306,5 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	@Override
 	public String toString() {
 		return MapView.class.getSimpleName();
-	}
-
-	public Matrix currentMatrix = new Matrix();
-
-	public class TwoFinger implements OnTouchListener {
-
-		// These matrices will be used to move and zoom image
-		Matrix matrix = new Matrix();
-		Matrix savedMatrix = new Matrix();
-
-		// We can be in one of these 3 states
-		static final int NONE = 0;
-		static final int DRAG = 1;
-		static final int ZOOM = 2;
-		static final int DRAW = 3;
-		int mode = NONE;
-
-		// Remember some things for zooming
-		PointF start = new PointF();
-		PointF mid = new PointF();
-		float oldDist = 1f;
-
-		PointF dragOld = new PointF();
-
-		// Limit zoomable/pannable image
-		private float[] matrixValues = new float[9];
-		private float maxZoom;
-		private float minZoom;
-		private float height;
-		private float width;
-		private RectF viewRect;
-
-		// ///////************ touch events functions
-		// **************////////////////////
-
-		private void init() {
-	    maxZoom = 4;
-	    minZoom = 0.25f;
-	    height = size.y;
-	    width = size.x;
-	    viewRect = new RectF(0, 0, size.x, size.y);
-	}
-
-		// ///////************touch events for image Moving, panning and zooming
-		// ***********///
-		public boolean onTouch(View v, MotionEvent event) {
-
-			// Dump touch event to log
-			// dumpEvent(event);
-			// Handle touch events here...
-			switch (event.getAction() & MotionEvent.ACTION_MASK) {
-			case MotionEvent.ACTION_DOWN:
-				savedMatrix.set(matrix);
-				start.set(event.getX(), event.getY());
-				Log.d(TAG, "mode=DRAG");
-				mode = DRAG;
-				break;
-			case MotionEvent.ACTION_POINTER_DOWN:
-				oldDist = spacing(event);
-				Log.d(TAG, "oldDist=" + oldDist);
-				if (oldDist > 10f) {
-					savedMatrix.set(matrix);
-					midPoint(mid, event);
-					mode = ZOOM;
-					Log.d(TAG, "mode=ZOOM");
-				}
-				break;
-			case MotionEvent.ACTION_UP:
-				dragOld = null;
-				break;
-			case MotionEvent.ACTION_POINTER_UP:
-				mode = NONE;
-				Log.d(TAG, "mode=NONE");
-				break;
-			case MotionEvent.ACTION_MOVE:
-				if (mode == DRAW) {
-					onTouchEvent(event);
-				}
-				if (mode == DRAG) {
-					if(dragOld != null){
-					PointF dragNew = new PointF(event.getX(),event.getY());
-					float disX = dragOld.x - dragNew.x;
-					float disy = dragOld.y - dragNew.y;
-					dragOld = dragNew;
-					BoundingBox.getInstance().shiftCenter( x, y);
-					} else {
-						dragOld = new PointF(event.getX(), event.getY());
-					}
-					// /code for draging..
-				} else if (mode == ZOOM) {
-					float newDist = spacing(event);
-					Log.d(TAG, "newDist=" + newDist);
-					if (newDist > 10f) {
-						matrix.set(savedMatrix);
-						float scale = newDist / oldDist;
-						matrix.getValues(matrixValues);
-						float currentScale = matrixValues[Matrix.MSCALE_X];
-						// limit zoom
-						if (scale * currentScale > maxZoom) {
-							scale = maxZoom / currentScale;
-						} else if (scale * currentScale < minZoom) {
-							scale = minZoom / currentScale;
-						}
-						x = scale;
-						y = scale;
-						px = mid.x;
-						py = mid.y;
-						matrix.postScale(scale, scale, mid.x, mid.y);
-					}
-				}
-				break;
-			}
-			currentMatrix = matrix;
-			setImageMatrix(matrix);
-			return true; // indicate event was handled
-		}
-
-		// *******************Determine the space between the first two fingers
-		private float spacing(MotionEvent event) {
-			float x = event.getX(0) - event.getX(1);
-			float y = event.getY(0) - event.getY(1);
-			return FloatMath.sqrt(x * x + y * y);
-		}
-
-		// ************* Calculate the mid point of the first two fingers
-		private void midPoint(PointF point, MotionEvent event) {
-			float x = event.getX(0) + event.getX(1);
-			float y = event.getY(0) + event.getY(1);
-			point.set(x / 2, y / 2);
-		}
 	}
 }

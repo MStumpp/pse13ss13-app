@@ -276,7 +276,7 @@ public class RouteController {
 	public boolean deleteActiveWaypoint() {
 		Log.d(TAG, "RouteController.deleteActiveWaypoint()");
 
-		if (this.isRouteChangerInactive()) {
+		//if (this.isRouteChangerInactive()) {
 			final Route newCurrentRoute = this.currentRoute;
 			RouteController.routeChanger = new Thread(new Runnable() {
 
@@ -290,8 +290,8 @@ public class RouteController {
 			});
 			RouteController.routeChanger.start();
 			return true;
-		}
-		return false;
+		//}
+		//return false;
 	}
 
 	public boolean invertRoute() {
@@ -410,19 +410,18 @@ public class RouteController {
 	 * Changes the order of the waypoints on the route to the new, given order.
 	 * @param newOrder
 	 */
-	public void changeOrderOfWaypoints(LinkedList<Waypoint> newOrder) {
+	public void changeOrderOfWaypoints(final LinkedList<Waypoint> newOrder) {
 		Log.d(TAG, "RouteController.changeOrderOfWaypoints(LinkedList<Waypoint> newOrder)");
 		if (this.isRouteChangerInactive()) {
-			if (newOrder != null && newOrder.size() > 1) {
+			if (newOrder != null) {
 				final Route newCurrentRoute = this.currentRoute;
 				RouteController.routeChanger = new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
-						Log.d(TAG, "Thread.run() in resetRoute()");
-						newCurrentRoute.resetRoute();
-						RouteController.getInstance().replaceFullRoute(
-								newCurrentRoute);
+						Log.d(TAG, "Thread.run() in changeOrderOfWaypoints()");
+						newCurrentRoute.changeOrderOfWaypoints(newOrder);
+						RouteController.getInstance().replaceFullRoute(newCurrentRoute);
 					}
 				});
 				RouteController.routeChanger.start();
@@ -499,7 +498,7 @@ public class RouteController {
 					waypoints.add(indexOfShiftedWP + 2, shiftedWP);
 					waypoints.remove(indexOfShiftedWP);
 				} else if (shift == -1 && !waypoints.getFirst().equals(shiftedWP)) {
-					// TODO:
+					
 					
 				}
 				Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir) calling general change Order Method");

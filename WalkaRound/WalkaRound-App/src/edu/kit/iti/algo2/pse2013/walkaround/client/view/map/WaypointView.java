@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,6 +19,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.controller.RouteController;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -31,7 +33,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.DisplayCoordin
  * @version 1.7
  *
  */
-public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener {
+public class WaypointView extends RelativeLayout implements CenterListener, LevelOfDetailListener, ScaleListener {
 
 	public static final int DEFAULT_FLAG = R.drawable.flag;
 	public static final int DEFAULT_FLAG_ACTIVE = R.drawable.flag_activ;
@@ -70,21 +72,20 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		
 		coorBox.registerCenterListener(this);
 		coorBox.registerLevelOfDetailListener(this);
+		coorBox.registerScaleListener(this);
 	}
-
-	public float scale = 1;
-	public float px = 0;
-	public float py = 0;
 	
 	/**
 	 * update the Waypoint
 	 */
 	public void updateWaypoint() {
 		
+		PointF p = BoundingBox.getInstance().getPivot();
+		
 		List<DisplayWaypoint> l = CoordinateUtility
 				.extractDisplayWaypointsOutOfRouteInfo(route,
 						coorBox.getCenter(), coorBox.getDisplaySize(),
-						this.coorBox.getLevelOfDetail(), scale);
+						this.coorBox.getLevelOfDetail(), BoundingBox.getInstance().getScale(), p);
 
 		this.removeAllViews();
 
@@ -203,7 +204,8 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 	 */
 	private class WaypointGestureDetector implements OnGestureListener {
 
-		DisplayCoordinate curentWP;
+		private DisplayCoordinate curentWP;
+		private static final int VELOCITY = 1000;
 
 		public boolean onDown(MotionEvent event) {
 			RouteController.getInstance().setActiveWaypoint(currentId);
@@ -222,9 +224,10 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 					Math.abs(velocityX), 2)
 					+ (double) Math.pow(Math.abs(velocityY), 2));
 
-			if (velocity > 400) {
+			Log.d(TAG, "VELOCITY " + velocity);
+			if (velocity >= VELOCITY) {
 				Log.d(TAG, "Delete Point " + currentId);
-				RouteController.getInstance().deleteActiveWaypoint(currentId);
+				RouteController.getInstance().deleteActiveWaypoint();
 			}
 
 			return false;
@@ -237,16 +240,29 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 		public boolean onScroll(MotionEvent event1, MotionEvent event2,
 				float deltaX, float deltaY) {
 			Log.d(TAG, "Waypoint onScroll " + currentId);
-
-			curentWP.setX(curentWP.getX() - deltaX);
-			curentWP.setY(curentWP.getY() - deltaY);
-
+			float scale =  coorBox.getScale();
+			curentWP.setX(curentWP.getX() - deltaX * scale);
+			curentWP.setY(curentWP.getY() - deltaY * scale);
+			
+			/*
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
 							new DisplayCoordinate(curentWP.getX(), curentWP
-									.getY()), coorBox.getTopLeft(), coorBox
+									.getY()), coorBox.getScaledTopLeft(), coorBox
 									.getLevelOfDetail());
+			 */
+			
 
+			double x = CoordinateUtility.convertPixelsToDegrees(event2.getX(), coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_X);
+			double y = CoordinateUtility.convertPixelsToDegrees(event2.getY(), coorBox.getLevelOfDetail(),
+					CoordinateUtility.DIRECTION_Y);
+
+			y = coorBox.getCenter().getLatitude() - y;  
+			x = coorBox.getCenter().getLongitude() + x;  
+			
+			Coordinate next = new Coordinate(y, x);
+			
 			RouteController.getInstance().moveActiveWaypointMoveOnly(next);
 
 			return true;
@@ -271,6 +287,11 @@ public class WaypointView extends RelativeLayout implements CenterListener, Leve
 
 	@Override
 	public void onCenterChange(Coordinate center) {
+		this.updateWaypoint();
+	}
+
+	@Override
+	public void onScaleChange(float scale) {
 		this.updateWaypoint();
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.Log;
 import android.view.Display;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.DisplayWaypoint;
@@ -172,10 +173,11 @@ public final class CoordinateUtility {
 	 * @param center
 	 * @param size
 	 * @param levelOfDetail
+	 * @param p 
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayWaypoint> extractDisplayWaypointsOutOfRouteInfo(
-			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail, float scale) {
+			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail, float scale, PointF p) {
 
 		LinkedList<DisplayWaypoint> dw = new LinkedList<DisplayWaypoint>();
 		for (Waypoint value : currentRoute.getWaypoints()) {
@@ -186,8 +188,8 @@ public final class CoordinateUtility {
 			Log.d("wtf", "" + y);
 
 			dw.add(new DisplayWaypoint(
-					(size.x / 2f) + scale *CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
-					(size.y / 2f) + scale *CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.76f,
+					p.x + scale *CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
+					p.y + scale *CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.76f,
 					value.getId()
 			));
 			Log.d("d x", "" + CoordinateUtility.convertDegreesToPixels(x, levelOfDetail,

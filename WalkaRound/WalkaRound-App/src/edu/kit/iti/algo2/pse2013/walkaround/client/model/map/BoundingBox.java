@@ -6,6 +6,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.CurrentMapStyleModel;
@@ -88,18 +89,27 @@ public class BoundingBox {
 	/**
 	 * The Scaling Level
 	 */
-	
 	private float scale;
-
+	
+	/**
+	 * The current Pivot Point
+	 */
+	private PointF pivot;
+	
 	/**
 	 * The Level of Detail listener
 	 */
-	Set<LevelOfDetailListener> lodListener;
+	private Set<LevelOfDetailListener> lodListener;
 
 	/**
 	 * the Center Listener.
 	 */
-	LinkedList<CenterListener> centerListener;
+	private LinkedList<CenterListener> centerListener;
+
+	/**
+	 * the Scale Listener
+	 */
+	private LinkedList<ScaleListener> scaleListener;
 
 
 	// --------------------------Constructor-------------------------- //
@@ -149,11 +159,13 @@ public class BoundingBox {
 		this.scale = 1;
 		this.lodListener = new HashSet<LevelOfDetailListener>();
 		this.centerListener = new LinkedList<CenterListener>();
+		this.scaleListener = new LinkedList<ScaleListener>();
 		this.display = size;
 		this.levelOfDetail = this.checkLevelOfDetail(levelOfDetail);
 		this.computeSize();
 		this.setCenter(center, levelOfDetail);
 		this.notifyLODListener(this.levelOfDetail);
+		this.pivot = new PointF(this.display.x/2F, this.display.y/2F);
 	}
 
 	// --------------------------Setter-------------------------- //
@@ -198,6 +210,7 @@ public class BoundingBox {
 	 */
 	public void setScale(float scale) {
 		this.scale = scale;
+		this.notifyScaleListener(scale);
 	}
 
 	/**
@@ -286,6 +299,14 @@ public class BoundingBox {
 		this.topLeft = this.computeTopLeft();
 		this.bottomRight = this.computeBottomRight();
 		this.notifyLODListener(this.levelOfDetail);
+	}
+	
+	/**
+	 * Sets a new Pivot Point.
+	 * @param pivot the new Pivot Point
+	 */
+	public void setPivot(PointF pivot) {
+		this.pivot = pivot;
 	}
 
 	// --------------------------Getter-------------------------- //
@@ -380,6 +401,14 @@ public class BoundingBox {
 	 */
 	public float getLevelOfDetail() {
 		return levelOfDetail;
+	}
+	
+	/**
+	 * Gives the current PivotPoint back
+	 * @return the Pivot Point
+	 */
+	public PointF getPivot() {
+		return pivot;
 	}
 
 	// --------------------------Computing-------------------------- //
@@ -587,7 +616,7 @@ public class BoundingBox {
 	}
 
 	/**
-	 * This will notify all Listener
+	 * This will notify all Center Listener
 	 *
 	 * @param center
 	 *            the new Center Coordiante
@@ -597,5 +626,47 @@ public class BoundingBox {
 		for (CenterListener l : this.centerListener) {
 			l.onCenterChange(center);
 		}
+	}
+	/**
+	 * This will register a new Center Coordinate Listener
+	 *
+	 * @param listener
+	 *            the new Listener
+	 * @return the current Center Coordinate
+	 */
+	public float registerScaleListener(ScaleListener listener) {
+		//Log.d(TAG, "register a new LOD Listener: " + listener.toString());
+		this.scaleListener.add(listener);
+		return this.scale;
+	}
+	
+	/**
+	 * This will notify all Scale Listener
+	 *
+	 * @param center
+	 *            the new Center Coordiante
+	 */
+	private void notifyScaleListener(float scale) {
+		//Log.d(TAG, "notify Center Listener new Center: " + center.toString());
+		for (ScaleListener l : this.scaleListener) {
+			l.onScaleChange(scale);
+		}
+	}
+	
+	/**
+	 * A Listener wich is called if the scale level is changed
+	 * 
+	 * @author Ludwig Biermann
+	 * @version 1.0
+	 *
+	 */
+	public interface ScaleListener{
+		
+		/**
+		 * Is called if the scale level is changed
+		 * 
+		 * @param scale the new scale level
+		 */
+		public void onScaleChange(float scale);
 	}
 }
