@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.CenterListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.LevelOfDetailListener;
-import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox.ScaleListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.tile.TileFetcher.TileListener;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
@@ -58,11 +57,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	 */
 	private Point size;
 
-	/**
-	 * the amount of tile parts which fit in the display
-	 * 
-	 */
-	private Point amount;
 
 	/**
 	 * the current Coordinates
@@ -117,7 +111,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	/**
 	 * Listener lists
 	 */
-	private LinkedList<Thread> tileT = new LinkedList<Thread>();
 	private LinkedList<TilePaaring> tileHolder = new LinkedList<TilePaaring>();
 
 	/**
@@ -136,6 +129,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.currentTileWidth = CoordinateUtility
 				.computeCurrentTileWidthInPixels(this.coorBox
 						.getLevelOfDetail());
+		this.pPerDiff = currentTileWidth / 334;
 
 		coorBox.registerLevelOfDetailListener(this);
 		coorBox.registerCenterListener(this);
@@ -149,7 +143,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 
 		Log.d("test", " " + (size != null));
 
-		this.amount = new Point();
 		this.computeParams();
 		this.buildDrawingCache();
 		this.setDrawingCacheEnabled(true);
@@ -158,12 +151,6 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 
 	@Override
 	protected void onDraw(Canvas c) {
-		for (int i = 0; i < tileT.size(); i++) {
-			tileT.get(i).start();
-		}
-		tileT.clear();
-
-		// c.scale(x, y);
 
 		float scale = BoundingBox.getInstance().getScale();
 		PointF p = BoundingBox.getInstance().getPivot();
@@ -230,10 +217,8 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		this.mapOffset = this.computeTileOffset();
 		this.indexXY = TileUtility.getXYTileIndex(coorBox.getCenter(),
 				Math.round(this.coorBox.getLevelOfDetail()));
-		this.tileT.clear();
 		this.tileHolder.clear();
 
-		this.pPerDiff = currentTileWidth / 334;
 
 		// this.computeAmountOfTiles();
 	}
