@@ -56,7 +56,7 @@ public class ShortestPathProcessor {
         }
 
         executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,
-                TimeUnit.DAYS, new ArrayBlockingQueue<Runnable>(numberThreads),
+                TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(shortestPathComputerQueue), shortestPathComputerQueue);
         executor.allowCoreThreadTimeOut(false);
     }

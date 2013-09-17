@@ -59,7 +59,7 @@ public class GeometryProcessor {
         }
 
         executor = new ThreadPoolExecutorCustom(numberThreads, numberThreads, 9999,
-                TimeUnit.DAYS, new ArrayBlockingQueue<Runnable>(numberThreads),
+                TimeUnit.DAYS, new LinkedBlockingQueue<Runnable>(),
                 new ThreadFactoryCustom(geometryComputerQueue), geometryComputerQueue);
         executor.allowCoreThreadTimeOut(false);
     }
