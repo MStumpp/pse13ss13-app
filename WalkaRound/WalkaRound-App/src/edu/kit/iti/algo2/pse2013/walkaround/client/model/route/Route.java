@@ -130,9 +130,9 @@ public class Route implements RouteInfo {
 			List<Coordinate> newCoordOrderSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
 			
 			// TODO:
-			// Spezialfall newOrder mit Lï¿½nge 1 
+			// Spezialfall newOrder mit Länge 1 
 			// Spezialfall Bumerang (waypoint.isAnchorForRoundtrip()...)
-			// Kombi der beiden Spezialfï¿½lle...
+			// Kombi der beiden Spezialfälle...
 
 			// Run through all pairs of Waypoints in new Order:
 			Iterator<Waypoint> newOrderIter = newWPOrder.iterator();
@@ -151,9 +151,10 @@ public class Route implements RouteInfo {
 					// and add it to the current route:
 					this.addRouteBetweenTwoCoords(new Route((LinkedList<Coordinate>) existingPath), prevWP, currentWP);
 					
-					// don't forget to check for roundtrips (this only concerns the last WP):
+					// don't forget to check for roundtrips (this only concerns the second WP):
 					if (currentWP.isAnchorToRoundtrip()) {
 						Route roundtrip = new Route (this.getRoundtripCoords(currentWP));
+						
 						// TODO: this.addRouteBetweenTwoCoords(roundtrip, , );
 					}
 					

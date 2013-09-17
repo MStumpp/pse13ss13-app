@@ -246,8 +246,7 @@ public class RouteController {
 	}
 
 	public boolean moveActiveWaypointComputeOnly(int currentId) {
-		// TODO Check c Coord.
-		if(this.getWaypoint(currentId) == null){
+		if (this.getWaypoint(currentId) == null){
 			return false;
 		}
 		
