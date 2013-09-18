@@ -88,7 +88,23 @@ public class POI extends Location implements Geometrizable, Categorizable {
 		this.url = url;
 		setCategories(poiCategories == null?new int[0]:poiCategories);
 	}
-
+	
+	/**
+	 * Creates an instance of POI.
+	 * @param poi the poi of poi. ^^
+	 */
+	public POI(POI poi) throws MalformedURLException {
+		this(
+			poi.getLatitude(),
+			poi.getLongitude(), 
+			poi.getName() == null ? null : new String(poi.getName()), 
+			poi.getTextInfo() == null ? null : new String(poi.getTextInfo()), 
+			poi.getURL() == null ? null : new URL(poi.getURL().toExternalForm()),
+			poi.getCategories() == null ? null : poi.getCategories(),
+			poi.getAddress() == null ? null : poi.getAddress()
+		);
+	}
+	
 	/**
 	 * Sets the textual information of this POI.
 	 *
@@ -193,6 +209,8 @@ public class POI extends Location implements Geometrizable, Categorizable {
 		return true;
 	}
 
+	
+	/* OLD Version:
 	@Override
 	public POI clone() {
     	URL newURL = null;
@@ -202,9 +220,12 @@ public class POI extends Location implements Geometrizable, Categorizable {
 			}
 		} catch (MalformedURLException e) { }
 		String textInfo = getTextInfo() == null ? null : new String(getTextInfo());
-		return new POI(super.clone(), textInfo, newURL, Arrays.copyOf(getCategories(), getCategories().length));
+		POI clonedPOI = new POI(super.clone(), textInfo, newURL, Arrays.copyOf(getCategories(), getCategories().length));
+		clonedPOI.setCrossingInformation(this.getCrossingInformation());
+		return clonedPOI;
 	}
-
+	*/
+	
     @Override
 	public int numberDimensions() {
         return 2;

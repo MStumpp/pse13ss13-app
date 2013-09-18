@@ -1,5 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures;
 
+import android.util.Log;
+
 /**
  * This class represents a Waypoint.
  *
@@ -29,6 +31,17 @@ public class Waypoint extends Location {
      */
     public Waypoint(double lat, double lon, String name) {
         this(lat, lon, name, null);
+    }
+    
+    /**
+     * Creates an instance of Waypoint.
+     *
+     * @param wp the waypoint of Waypoint. ;)
+     */
+    public Waypoint(Waypoint wp) {
+        this(wp.getLatitude(), wp.getLongitude(),
+        wp.getName() == null ? null : new String(wp.getName()),
+        wp.getAddress() == null ? null : wp.getAddress().clone());
     }
 
 
@@ -150,6 +163,11 @@ public class Waypoint extends Location {
 
 
 	public Waypoint clone() {
+		return new Waypoint(this);
+	}
+	
+	/* OLD VERSION
+	public Waypoint clone() {
     	String clonedName = null;
     	if (this.getName() != null) {
     		clonedName = this.getName().toString();
@@ -162,13 +180,14 @@ public class Waypoint extends Location {
     	if (this.getPOI() != null) {
     		clonedPOI = this.getPOI().clone();
     	}
-
+    	
     	Waypoint clonedWaypoint = new Waypoint(this.getLatitude(), this.getLongitude(), clonedName, clonedAddress);
-
+    	clonedWaypoint.setCrossingInformation(this.getCrossingInformation());
     	clonedWaypoint.setPOI(clonedPOI);
     	clonedWaypoint.setProfile(this.getProfile());
     	return clonedWaypoint;
     }
+    */
 
 
 	/* (non-Javadoc)

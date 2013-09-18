@@ -77,6 +77,15 @@ public class Location extends Coordinate {
         id = idCounter;
         idCounter++;
     }
+    
+    /**
+     * Creates an instance of Location.
+     * @param loca the location of Location...
+     */
+    public Location(Location loca) {
+    	this(loca.getLatitude(), loca.getLongitude(), loca.getName() == null ? null : new String(loca.getName()),
+    		loca.getAddress() == null ? null : loca.getAddress().clone());
+    }
 
 
     /* (non-Javadoc)
@@ -202,6 +211,11 @@ public class Location extends Coordinate {
 
 	@Override
 	public Location clone() {
+		if (this instanceof Waypoint) {
+			return (Waypoint) this.clone();
+		} else if (this instanceof POI) {
+			return (POI) this.clone();
+		}
     	String clonedName = null;
     	if (this.getName() != null) {
     	clonedName = this.getName().toString();

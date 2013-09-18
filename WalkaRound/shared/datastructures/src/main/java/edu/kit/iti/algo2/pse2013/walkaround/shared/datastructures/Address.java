@@ -94,7 +94,7 @@ public class Address {
 		return city + ", " + postalCode + ", " + street + " " + houseNumber;
 	}
 
-
+	
 	public Address clone() {
 		return new Address(
 			getStreet() == null ? null : new String(getStreet()),

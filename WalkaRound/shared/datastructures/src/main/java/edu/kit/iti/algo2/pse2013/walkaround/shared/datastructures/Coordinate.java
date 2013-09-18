@@ -62,7 +62,7 @@ public class Coordinate {
 	public Coordinate(double lat, double lon, CrossingInformation crossInfo) {
 		setLatitude(lat);
 		setLongitude(lon);
-		this.crossInfo = crossInfo;
+		this.crossInfo = this.crossInfo == null ? null : this.crossInfo.clone();
 	}
 	
 	/**
@@ -70,9 +70,8 @@ public class Coordinate {
 	 * @param waypoint
 	 */
 	public Coordinate(Coordinate coord) {
-		setLatitude(coord.getLatitude());
-		setLongitude(coord.getLongitude());
-		this.crossInfo = coord.getCrossingInformation();
+		this(coord.getLatitude(), coord.getLongitude(),
+				coord.getCrossingInformation() == null ? null : coord.getCrossingInformation().clone());
 	}
 	
 
@@ -184,13 +183,7 @@ public class Coordinate {
 
     @Override
     public Coordinate clone() {
-    	Coordinate clonedCoordinate;
-    	if (this.crossInfo == null) {
-    		clonedCoordinate = new Coordinate (this.latitude, this.longitude);
-    	} else {
-    		clonedCoordinate = new Coordinate(this.latitude, this.longitude, this.crossInfo.clone());
-    	}
-    	return clonedCoordinate;
+    	return new Coordinate(this);
     }
 
 
