@@ -274,8 +274,9 @@ public class WaypointView extends RelativeLayout implements CenterListener,
 			scroll = true;
 			Log.d(TAG, "Waypoint onScroll " + currentId);
 			float scale = coorBox.getScale();
-			curentWP.setX(curentWP.getX() - deltaX * scale);
-			curentWP.setY(curentWP.getY() - deltaY * scale);
+			
+			curentWP.setX(curentWP.getX() - deltaX/scale);
+			curentWP.setY(curentWP.getY() - deltaY/scale);
 
 			Coordinate next = CoordinateUtility
 					.convertDisplayCoordinateToCoordinate(
