@@ -1,5 +1,6 @@
 package edu.kit.iti.algo2.pse2013.walkaround.server.model;
 
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.graph.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -272,6 +273,12 @@ public class ShortestPathTreeProcessor {
     private class ShortestPathTreeComputer {
 
         /**
+         * Logger.
+         */
+        private final Logger logger = LoggerFactory.getLogger(ShortestPathTreeComputer.class);
+
+
+        /**
          * id.
          */
         private int id;
@@ -296,12 +303,30 @@ public class ShortestPathTreeProcessor {
 
 
         /**
+         * GeometryProcessorPOI.
+         */
+        private GeometryProcessorPOI proc;
+
+
+        /**
+         * NUMBER_WEIGHTED_LENGTH_REFERENCE.
+         */
+        private static final int NUMBER_WEIGHTED_LENGTH_REFERENCE = 1000;
+
+
+        /**
          * ShortestPathTreeComputer.
          */
         ShortestPathTreeComputer(int id, Graph graphIO) {
             this.id = id;
             graph = graphIO;
             runCounter = 0;
+            /*try {
+                proc = GeometryProcessorPOI.getInstance();
+                logger.info("GeometryProcessorPOI initialized");
+            } catch (InstantiationException e) {
+                logger.info("GeometryProcessorPOI with InstantiationException");
+            }*/
             queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
                 @Override
                 public int compare(Vertex v1, Vertex v2) {
@@ -345,6 +370,7 @@ public class ShortestPathTreeProcessor {
             sourceVertex.setCurrentLength(0.d);
             queue.clear();
             queue.add(sourceVertex);
+            GeometrizablePOIConstraint poiConstraint = new GeometrizablePOIConstraint(categories);
 
             // ring
             Set<Vertex> ring = new TreeSet<Vertex>(new Comparator<Vertex>() {
@@ -360,8 +386,8 @@ public class ShortestPathTreeProcessor {
             });
 
             // update parent and currentLengths
-            Vertex current, currentHead;
-            double distance, weightedDistance;
+            Vertex current, currentHead, indexZeroVertexOfEdge;
+            double distance, weightedDistance, weightedLength, poiDistance;
             while (!queue.isEmpty()) {
                 current = queue.poll();
 
@@ -376,7 +402,27 @@ public class ShortestPathTreeProcessor {
 
                     currentHead = edge.getOtherVertex(current);
                     distance = current.getCurrentLength() + edge.getLength();
-                    weightedDistance = current.getCurrentWeightedLength() + edge.getWeightedLength(categories);
+
+                    indexZeroVertexOfEdge = edge.getVertices().get(0);
+                    try {
+                        if (proc != null && poiConstraint != null) {
+                            Vertex nearestPOI = (Vertex) proc.getNearestGeometrizable(new GeometrySearch(new double[]{indexZeroVertexOfEdge.getLatitude(), indexZeroVertexOfEdge.getLongitude()}), poiConstraint);
+                            poiDistance = RouteUtil.computeDistance(indexZeroVertexOfEdge.getLatitude(), indexZeroVertexOfEdge.getLongitude(), nearestPOI.getLatitude(), nearestPOI.getLongitude());
+                            weightedLength = Math.min(1, Math.max(0, poiDistance / NUMBER_WEIGHTED_LENGTH_REFERENCE)) * edge.getLength();
+                        } else {
+                            weightedLength = edge.getLength();
+                        }
+
+                    } catch (GeometryProcessorException e) {
+                        logger.info("GeometryProcessorException");
+                        weightedLength = edge.getLength();
+                    } catch (GeometryComputationNoSlotsException e) {
+                        logger.info("GeometryComputationNoSlotsException");
+                        weightedLength = edge.getLength();
+                    }
+
+                    //weightedDistance = current.getCurrentWeightedLength() + edge.getWeightedLength(categories);
+                    weightedDistance = current.getCurrentWeightedLength() + weightedLength;
 
                     // not yet visited during current run
                     if (currentHead.getRun() != runCounter) {

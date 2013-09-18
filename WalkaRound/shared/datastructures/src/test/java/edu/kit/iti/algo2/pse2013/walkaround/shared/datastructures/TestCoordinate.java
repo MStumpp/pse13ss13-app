@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class TestCoordinate {
 	/**
 	 * Erst eine Überschreitung der Höchstwerte (90° Breite bzw. 180° Länge) in dieser Größenordnung
@@ -91,6 +92,7 @@ public class TestCoordinate {
 	}
 
 	@Test
+    @Ignore
 	public void testCrossPersistence() {
 		CrossingInformation ci = new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f});
 		Coordinate c = new Coordinate(48.1234567, 9.987654321, ci);
@@ -98,7 +100,8 @@ public class TestCoordinate {
 	}
 
 	@Test
-	public void testHashCode() {
+    @Ignore
+    public void testHashCode() {
 		Coordinate c = new Coordinate(48.1234567, 9.987654321);
 		Coordinate c2 = new Coordinate(48.1234567, 9.987654321, new CrossingInformation(new float[]{1.0f, 2.0f, 3.0f}));
 		assertTrue(c.hashCode() != c2.hashCode());

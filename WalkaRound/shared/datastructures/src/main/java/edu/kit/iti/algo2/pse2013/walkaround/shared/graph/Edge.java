@@ -3,7 +3,9 @@ package edu.kit.iti.algo2.pse2013.walkaround.shared.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
+import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents an egde contained in a graph. An edge has two coordinates,
@@ -13,6 +15,12 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.geometry.Geometrizable;
  * @version 1.0
  */
 public final class Edge implements Geometrizable {
+
+    /**
+     * Logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(Logger.class);
+
 
     /**
      * Internally used ID of Edge.
@@ -148,9 +156,9 @@ public final class Edge implements Geometrizable {
      *
      * @return double.
      */
-    public double getWeightedLength(int[] categories) {
+    /*public double getWeightedLength(int[] categories) {
         return length * 1.0;
-    }
+    } */
 
 
     @Override

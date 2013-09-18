@@ -129,8 +129,8 @@ public class RoundtripProcessor {
 
         if (source == null)
             throw new IllegalArgumentException("source must not be null");
-        if (categories == null || categories.length == 0)
-            throw new IllegalArgumentException("categories must not be null and/or of length 0");
+        if (categories == null)
+            throw new IllegalArgumentException("categories must not be null");
         if (length < 1)
             throw new IllegalArgumentException("length must be at least 1 meter");
 
