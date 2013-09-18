@@ -287,6 +287,7 @@ public class Favorite extends RelativeLayout {
 							Location l = FavoriteManager.getInstance(getContext()).getFavoriteLocation(view.getTag().toString());
 							Waypoint w = new Waypoint(l.getLatitude(), l.getLongitude(), l.getName(), l.getAddress());
 							RouteController.getInstance().addWaypoint(w);
+							BoundingBox.getInstance().setCenter(w);
 						}
 					});
 			alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, BootActivity.getAppContext().getString(R.string.option_no),
