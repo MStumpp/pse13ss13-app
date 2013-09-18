@@ -274,6 +274,9 @@ public class PullUpView extends RelativeLayout implements GoToMapListener,
 		routingMenu.registerFavoriteListener(this);
 		searchMenu.registerGoToMapListener(this);
 		roundtripMenu.registerGoToMapListener(this);
+		
+		// register poilayout on roundtrip view
+		roundtripMenu.registerPOICatsChangeListener(poiMenu);
 	}
 
 	public void unsetActiveMenu() {

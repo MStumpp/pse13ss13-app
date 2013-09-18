@@ -50,6 +50,8 @@ public class Roundtrip extends LinearLayout {
 
 	private NumberPicker lengthPicker;
 	private CheckBox checkbox;
+	
+	private POICatsChangeListener listener;
 
 	/**
 	 * This create a new POIview.
@@ -225,9 +227,7 @@ public class Roundtrip extends LinearLayout {
 				}
 				
 				if (checkbox.isChecked() && id != -1) {
-					for(int cat : Profile.getByID(id).getContainingPOICategories()) {
-						POIManager.getInstance(getContext()).togglePOICategory(cat);
-					}
+					notifyPOICatsChangeListeners(Profile.getByID(id).getContainingPOICategories());
 				}
 
 				notifyComputeRoundtripListener(id, lengthPicker.getValue());
@@ -311,5 +311,17 @@ public class Roundtrip extends LinearLayout {
 	 */
 	public void registerGoToMapListener(GoToMapListener listener) {
 		rl.add(listener);
+	}
+	
+	public interface POICatsChangeListener {
+		public void onCatsChange(int[] cats);
+	}
+	
+	public void notifyPOICatsChangeListeners(int[] cats) {
+		listener.onCatsChange(cats);
+	}
+	
+	public void registerPOICatsChangeListener(POICatsChangeListener listener) {
+		this.listener = listener;
 	}
 }

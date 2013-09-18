@@ -17,6 +17,7 @@ import android.widget.TextView;
 import edu.kit.iti.algo2.pse2013.walkaround.client.R;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.POIManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
+import edu.kit.iti.algo2.pse2013.walkaround.client.view.overlay.pullup.Roundtrip.POICatsChangeListener;
 
 /**
  * This View shows the POI Menu.
@@ -25,7 +26,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.client.model.map.BoundingBox;
  * @version 1.1
  *
  */
-public class POILayout extends RelativeLayout {
+public class POILayout extends RelativeLayout implements POICatsChangeListener{
 
 	private ScrollView scrollView;
 	private String[] categories;
@@ -146,5 +147,25 @@ public class POILayout extends RelativeLayout {
 		 * is called if a POI is changed
 		 */
 		public void onPOIChange();
+	}
+
+	@Override
+	public void onCatsChange(int[] cats) {
+		
+		for(int cat : cats) {
+			for(int i = 0; i < content.getChildCount(); i++) {
+				if(content.getChildAt(i).getTag().toString().equals(String.valueOf(cat))) {
+					TextView b = (TextView) content.getChildAt(i);
+					
+					if (!b.isSelected()) {
+						b.setSelected(true);
+						b.setTextColor(Color.RED);
+						b.setBackgroundColor(Color.TRANSPARENT);
+						POIManager.getInstance(getContext()).togglePOICategory(cat);
+					}
+					notifyComputeRoundtripListener();
+				}
+			}
+		}
 	}
 }
