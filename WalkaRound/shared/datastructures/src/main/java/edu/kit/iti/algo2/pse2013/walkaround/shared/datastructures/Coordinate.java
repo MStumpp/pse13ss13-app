@@ -64,7 +64,17 @@ public class Coordinate {
 		setLongitude(lon);
 		this.crossInfo = crossInfo;
 	}
-
+	
+	/**
+	 * Creates an instance of Coordinate with the position of the given waypoint.
+	 * @param waypoint
+	 */
+	public Coordinate(Coordinate coord) {
+		setLatitude(coord.getLatitude());
+		setLongitude(coord.getLongitude());
+		this.crossInfo = coord.getCrossingInformation();
+	}
+	
 
 	/**
 	 * Returns latitude of this Coordinate.

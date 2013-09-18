@@ -217,9 +217,9 @@ public final class CoordinateUtility {
 
 		LinkedList<DisplayCoordinate> dw = new LinkedList<DisplayCoordinate>();
 
-		synchronized(currentRoute) {
+		synchronized (currentRoute.getCoordinates()) {
 		for (Coordinate coordinate : currentRoute.getCoordinates()) {
-
+			
 			float x = (float) (coordinate.getLongitude() - center.getLongitude());
 			float y = (float) (center.getLatitude() - coordinate.getLatitude()) ;
 
