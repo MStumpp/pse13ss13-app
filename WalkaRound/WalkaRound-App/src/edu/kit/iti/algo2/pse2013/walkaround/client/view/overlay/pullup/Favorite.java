@@ -171,6 +171,12 @@ public class Favorite extends RelativeLayout {
 			selected = true;
 		}
 	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Catch all Touch events
+		return true;
+	}
 
 	/**
 	 * update Favorite

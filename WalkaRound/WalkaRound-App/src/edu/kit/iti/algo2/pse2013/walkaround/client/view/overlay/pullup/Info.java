@@ -128,6 +128,12 @@ public class Info extends LinearLayout {
 
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Catch all Touch events
+		return true;
+	}
+
 	/**
 	 * update a poi
 	 * @param poi the poi to update

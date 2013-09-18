@@ -85,6 +85,13 @@ public class POILayout extends RelativeLayout implements POICatsChangeListener{
 		this.addView(scrollView, scrollViewParam);
 	}
 
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Catch all Touch events
+		return true;
+	}
+	
 	/**
 	 * Listen for a Category change
 	 *

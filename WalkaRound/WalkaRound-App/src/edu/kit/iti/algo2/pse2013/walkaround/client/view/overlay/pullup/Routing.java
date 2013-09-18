@@ -659,6 +659,12 @@ public class Routing extends RelativeLayout implements RouteListener {
 
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Catch all Touch events
+		return true;
+	}
+
 	/**
 	 * Listen to a add favorite listener
 	 *

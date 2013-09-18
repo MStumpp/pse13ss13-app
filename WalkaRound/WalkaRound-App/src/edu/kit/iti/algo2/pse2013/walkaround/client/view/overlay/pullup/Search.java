@@ -289,6 +289,13 @@ public class Search extends RelativeLayout {
 		//numberEdit.setText("48");
 		freeText.setHint(context.getString(R.string.query));
 	}
+	
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Catch all Touch events
+		return true;
+	}
 
 	/**
 	 * POI side Tab Listener

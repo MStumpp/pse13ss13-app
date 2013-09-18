@@ -166,6 +166,12 @@ public class Roundtrip extends LinearLayout {
 		this.addView(compute, computeParam);
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Catch all Touch events
+		return true;
+	}
+
 	/**
 	 * Listen to a Profile touch event
 	 *
