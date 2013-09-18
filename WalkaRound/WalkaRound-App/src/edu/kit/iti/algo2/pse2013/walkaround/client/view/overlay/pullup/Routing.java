@@ -205,23 +205,26 @@ public class Routing extends RelativeLayout implements RouteListener {
 		deleteParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		deleteParams.height = size.x * 1 / 6;
-		deleteParams.width = size.x * 1 / 6;
-
+		deleteParams.height = size.y / 10;
+		deleteParams.width = size.x * 1 / 5;
+		// TODO tauschen
+		
 		// Save
 		saveParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		saveParams.height = size.y / 10;
-		saveParams.width = size.x * 1 / 6;
-
+		saveParams.width = size.x * 1 / 5;
+		//TODO tauschen
+		
 		// Text
 		textParams = new LinearLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		textParams.height = size.y / 10;
-		textParams.width = size.x * 3 / 6;
-
+		textParams.width = size.x * 3 / 5;
+		//TODO tauschem
+		
 		// vertical Layout
 		lParams = new RelativeLayout.LayoutParams(
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -282,6 +285,13 @@ public class Routing extends RelativeLayout implements RouteListener {
 				text.setTag(w.getId());
 				moveUp.setTag(w.getId());
 				moveDown.setTag(w.getId());
+				
+				/** PATCH **/
+				//TODO 
+				moveUp.setVisibility(View.GONE);
+				moveDown.setVisibility(View.GONE);
+				
+				/** PATCH **/
 
 				m.setOrientation(LinearLayout.VERTICAL);
 				m.addView(moveUp, moveParams);
