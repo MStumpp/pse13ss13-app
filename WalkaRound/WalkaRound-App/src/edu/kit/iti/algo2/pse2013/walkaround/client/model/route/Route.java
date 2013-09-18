@@ -99,12 +99,11 @@ public class Route implements RouteInfo {
 		if (newWPOrder != null && newWPOrder.size() > 0) {
 			final LinkedList<? extends Coordinate> oldWPOrder = this.getWaypoints();
 			final LinkedList<Coordinate> oldCoordOrder = this.routeCoordinates;
-			// TODO Sollte newWPOrder sein!
-			this.routeCoordinates = (LinkedList<Coordinate>) oldWPOrder;
+			this.routeCoordinates = new LinkedList<Coordinate>(newWPOrder);
 			List<Coordinate> newCoordOrderSYNCHRON = Collections.synchronizedList(this.routeCoordinates);
 			
 			// TODO:
-			// Spezialfall newOrder mit Länge 1 
+			// Spezialfall newOrder mit Länge 1 - dann nur nach Rundkurs prüfen.
 			// Spezialfall Bumerang (waypoint.isAnchorForRoundtrip()...)
 			// Kombi der beiden Spezialfälle...
 
