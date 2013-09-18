@@ -36,7 +36,7 @@ public class TestPOI {
 		assertEquals(DEFAULT_URL, DEFAULT_POI.getURL());
 		assertArrayEquals(DEFAULT_POI_CATS, DEFAULT_POI.getCategories());
 
-		POI p = DEFAULT_POI.clone();
+		POI p = (POI) DEFAULT_POI.clone();
 		String testTextInfo = "TestText";
 		URL testURL = new URL("http://www.kit.edu");
 		p.setTextInfo(testTextInfo);
@@ -71,8 +71,8 @@ public class TestPOI {
 
 	@Test
 	public void testClone() {
-		POI clone = DEFAULT_POI.clone();
-		POI clone2 = clone.clone();
+		POI clone = (POI) DEFAULT_POI.clone();
+		POI clone2 = (POI) clone.clone();
 		assertEquals(DEFAULT_POI, clone);
 		assertEquals(clone, clone2);
 		assertEquals(clone2, DEFAULT_POI);
