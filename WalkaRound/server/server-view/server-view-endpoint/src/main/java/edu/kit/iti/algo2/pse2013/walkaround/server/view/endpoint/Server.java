@@ -122,6 +122,7 @@ public class Server {
                 String msg = "no projected source and/or target edge for given coordinates found";
                 logger.info(msg);
                 transfer.setError(msg);
+                return transfer;
             }
 
             // get source point on source edge
@@ -156,6 +157,7 @@ public class Server {
             String msg = "no source and/or target found for given coordinates";
             logger.info(msg);
             transfer.setError(msg);
+            return transfer;
         }
 
         List<Vertex> route;
@@ -303,6 +305,7 @@ public class Server {
                 String msg = "no projekted edge for given coordinate found";
                 logger.info(msg);
                 transfer.setError(msg);
+                return transfer;
             }
 
             // get point on edge
@@ -325,11 +328,20 @@ public class Server {
             String msg = "no source found for given edge";
             logger.info(msg);
             transfer.setError(msg);
+            return transfer;
+        }
+
+        Profile profileObj = Profile.getByID(profileAsInt);
+        if (profileObj == null) {
+            String msg = "no profile found for given id";
+            logger.info(msg);
+            transfer.setError(msg);
+            return transfer;
         }
 
         List<Vertex> route;
         try {
-            route = RoundtripProcessor.getInstance().computeRoundtrip(source, Profile.getByID(profileAsInt).getContainingPOICategories(), lengthAsInt);
+            route = RoundtripProcessor.getInstance().computeRoundtrip(source, profileObj.getContainingPOICategories(), lengthAsInt);
         } catch (InstantiationException e) {
             transfer.setError(e.getMessage());
             return transfer;

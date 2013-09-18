@@ -21,11 +21,17 @@ public class GeometrizablePOIConstraint implements GeometrizableConstraint {
     private int[] poiCategories;
 
     public GeometrizablePOIConstraint(int[] poiCategories) {
+        if (poiCategories == null)
+            throw new IllegalArgumentException("poiCategories must not be null");
         this.poiCategories = poiCategories;
     }
 
     @Override
     public boolean isValid(Geometrizable geometrizable) {
+
+        if (poiCategories.length == 0)
+            return true;
+
         POI poi = (POI) geometrizable;
         for (int i = 0; i < poi.getCategories().length; i++) {
             for (int j = 0; j < poiCategories.length; j++) {
