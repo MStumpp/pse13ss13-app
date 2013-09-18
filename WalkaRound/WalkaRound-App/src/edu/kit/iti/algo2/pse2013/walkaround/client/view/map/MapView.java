@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -88,7 +89,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	/**
 	 * Holds the References and Coordinates of Tiles
 	 */
-	private static Map<Point, Bitmap> tiles = new LinkedHashMap<Point, Bitmap>();
+	private static Map<Point, Bitmap> tiles = new ConcurrentHashMap<Point, Bitmap>();
 	
 	/**
 	 * Thread which computes the offset
