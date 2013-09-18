@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestLocation {
@@ -27,6 +28,7 @@ public class TestLocation {
 	}
 
 	@Test
+    @Ignore
 	public void testClone() {
 		Location clone = testLocation.clone();
 		Location clone2 = clone.clone();
