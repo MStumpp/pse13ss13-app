@@ -119,8 +119,52 @@ public class Route implements RouteInfo {
 				currentWP = newOrderIter.next();
 				int indexOfPrevWP = this.routeCoordinates.indexOf(prevWP);
 				int indexOfCurrentWP = this.routeCoordinates.indexOf(currentWP);
+				boolean normalSequence = true;
+				boolean pathComputed = false;
 				
-				// TODO: Überarbeiten:
+				// TODO: EXTRACT METHODEN SIND WIP!
+				// Extract possible route:
+				List<? extends Coordinate> path = extractCoordsFromCoordList(prevWP, currentWP, oldCoordOrder);
+				// If not successful, try the other way around:
+				if (path.size() == 2) {
+					normalSequence = false;
+					path= extractCoordsFromCoordList(currentWP, prevWP, oldCoordOrder);
+					// TODO: Reverse the list!
+				}
+				// If not successful again, compute a new route:
+				if (path.size() == 2) {
+					normalSequence = true;
+					pathComputed = true;
+					path = (List<? extends Coordinate>) this.computeShortestPath(prevWP, currentWP);
+				}
+				// If not successful once more, set back to start:
+				if (path.size() == 2) {
+					this.routeCoordinates = oldCoordOrder;
+				} else {
+					// Add path to route:
+					this.addRouteBetweenTwoWaypoints(new Route(new LinkedList<Coordinate>(path)), prevWP, currentWP);
+					
+					// Check for roundtrips and add if necessary:
+					if (prevWP.isAnchorToRoundtrip() && (!normalSequence || pathComputed)) {
+						// TODO:
+						// this.extractRoundtripCoordsFromCoordList(prevWP, oldCoordOrder);
+					}
+					if (currentWP.isAnchorToRoundtrip()) {
+						// TODO:
+					}
+					
+					// TODO: Füge Rundkurse wie benötigt hinzu. (normalSequence, pathComputed und path Computed!)
+					
+				}
+				
+				
+				
+				
+				
+				
+				
+				/* OLD VERSION:
+				// Prüfe ob der Pfad vorhanden ist. Je nach Reihenfolge
 				
 				// If the pair already exists in the old order...
 				if (this.isPairOfCoordsInCoordList((Coordinate) prevWP, (Coordinate) currentWP, oldWPOrder)) {
@@ -153,6 +197,7 @@ public class Route implements RouteInfo {
 					
 				}
 				
+				*/
 			}
 			
 		}
@@ -704,6 +749,7 @@ public class Route implements RouteInfo {
 			Log.d(TAG,
 					"computeShortestPath() - RETURN TO SENDER, ADDRESS UNKNOWN.");
 			if (output == null) {
+				// TODO: Möglicher Ansatzpunkt wg. Server Alert.
 				LinkedList<Coordinate> coordinatesOfOutputRoute = new LinkedList<Coordinate>();
 				coordinatesOfOutputRoute.add(start);
 				coordinatesOfOutputRoute.add(end);
@@ -764,23 +810,24 @@ public class Route implements RouteInfo {
 	}
 
 
-	public List<? extends Coordinate> extractCoordsBetweenPairFromCoordList(Coordinate first, Coordinate second, LinkedList<? extends Coordinate> coordList) {
+	public List<? extends Coordinate> extractCoordsFromCoordList(Coordinate first, Coordinate second, LinkedList<? extends Coordinate> coordList) {
 		List<? extends Coordinate> output = new LinkedList<Coordinate>();
 		if (first != null && second != null && coordList != null && coordList.contains(first) && coordList.contains(second)) {
 			int indexOfFirst = coordList.indexOf(first);
 			int indexOfSecond = coordList.indexOf(second);
-			output = coordList.subList(indexOfFirst + 1, indexOfSecond);
+			// This version includes the given Coordinates!
+			output = coordList.subList(indexOfFirst, indexOfSecond + 1);
 		}
 		return output;
 	}
 	
 	
-	public LinkedList<Coordinate> extractRoundtripCoordsFromCoordList(Waypoint anchor, LinkedList<Coordinate> coordList) {
+	public LinkedList<Coordinate> extractCoordsFromCoordListWithoutRoundtrips(Waypoint anchor, LinkedList<Coordinate> coordList) {
 		LinkedList<Coordinate> roundtripCoords = new LinkedList<Coordinate>();
 		if (anchor != null && anchor.isAnchorToRoundtrip() && coordList.contains(anchor)) {
-			List<Coordinate> routeCoordsSYNCHRON = Collections.synchronizedList(coordList);
-			synchronized (routeCoordsSYNCHRON) {
-				Iterator<Coordinate> coordsIter = routeCoordsSYNCHRON.iterator();
+			List<Coordinate> coordListSYNC = Collections.synchronizedList(coordList);
+			synchronized (coordListSYNC) {
+				Iterator<Coordinate> coordsIter = coordListSYNC.iterator();
 				Coordinate tempCoord = null;
 				while (coordsIter.hasNext() && !((Coordinate)anchor).equals(tempCoord)) {
 					tempCoord = coordsIter.next();
@@ -794,15 +841,23 @@ public class Route implements RouteInfo {
 	public void clearRoundtripAtWaypoint(Waypoint anchor) {
 		Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") METHOD START");
 		if (anchor != null && anchor.isAnchorToRoundtrip() && this.routeCoordinates.contains(anchor)) {
+			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") calling general method");
+			this.clearRoundtripAtWaypointFromList(anchor, this.routeCoordinates);
+		}
+	}
+	
+	public void clearRoundtripAtWaypointFromList(Waypoint anchor, LinkedList<Coordinate> coordList) {
+		Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") METHOD START");
+		if (anchor != null && anchor.isAnchorToRoundtrip() && coordList.contains(anchor)) {
 			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") find and destroy roundtrip");
-			int indexOfAnchor = this.routeCoordinates.indexOf(anchor);
+			int indexOfAnchor = coordList.indexOf(anchor);
 			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") indexOfAnchor = " + indexOfAnchor);
-			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") Route Size: " + this.routeCoordinates.size());
-			List<Coordinate> tempList = this.routeCoordinates.subList(indexOfAnchor + 1, this.routeCoordinates.size());
+			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") Route Size: " + coordList.size());
+			List<Coordinate> tempList = coordList.subList(indexOfAnchor + 1, coordList.size());
 			int indexOfRoundtripEnd = tempList.indexOf(new Coordinate(anchor));
 			tempList = tempList.subList(0, indexOfRoundtripEnd + 1);
 			tempList.clear();
-			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") Route Size after clear op: " + this.routeCoordinates.size());
+			Log.d(TAG, "clearRoundtripAtWaypoint(" + anchor + ") Route Size after clear op: " + coordList.size());
 			// setting roundtrip profile back to 0:
 			anchor.setProfile(-1);
 		}
