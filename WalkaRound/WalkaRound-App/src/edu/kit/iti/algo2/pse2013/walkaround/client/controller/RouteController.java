@@ -6,6 +6,7 @@ import android.util.Log;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.data.FavoriteManager;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.Route;
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.route.RouteInfo;
+import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.CoordinateUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Location;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
@@ -67,6 +68,7 @@ public class RouteController {
 			)
 		);
 		Log.d(TAG, "Coordinates of Route: " + this.currentRoute);
+		Log.d(TAG, "notifyAllRouteListeners() length of route: " + currentRoute.getLengthInMeters() + "m");
 		Waypoint activeWaypoint = this.currentRoute.getActiveWaypoint();
 		if (this.currentRoute != null) {
 			for (RouteListener rl : routeListeners) {

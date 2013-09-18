@@ -113,13 +113,12 @@ public class Route implements RouteInfo {
 				currentWP = newOrderIter.next();
 				int indexOfPrevWP = this.routeCoordinates.indexOf(prevWP);
 				int indexOfCurrentWP = this.routeCoordinates.indexOf(currentWP);
-
+				
 				// If the pair already exists in the old order...
 				if (this.isPairOfCoordsInCoordList((Coordinate) prevWP, (Coordinate) currentWP, oldWPOrder)) {
 					// ... then recycle the existing route between the waypoints...
 					List<? extends Coordinate> existingPath = extractCoordsBetweenPairFromCoordList(prevWP, currentWP, oldCoordOrder);
-					// and add it to the current route:
-					
+					// add to route:
 					this.addCoordinatesSYNCHRONIZED(indexOfPrevWP + 1, (Collection) existingPath);
 					
 					// extract possible roundtrip from second WP and add to route:
@@ -131,6 +130,7 @@ public class Route implements RouteInfo {
 					// The pair does not yet exist. Trigger a new route computation:
 					
 					// But mind that one of the waypoints can be an anchor for a roundtrip:
+					
 					
 					Thread pathProcessor = new Thread(new Runnable() {	
 						@Override
@@ -144,10 +144,6 @@ public class Route implements RouteInfo {
 					pathProcessor.start();
 					
 				}
-				
-				// Nutze previousWP / Next.... Methoden ?
-				// Kann man hier die Funktion sublist von LinkedList sinnvoll nutzen?
-				// Alles synchronisiert!?
 				
 			}
 			
@@ -813,6 +809,8 @@ public class Route implements RouteInfo {
 	private void addRoundtripAtWaypoint(RouteInfo roundtrip, Waypoint newAnchor, int profile) {
 		Log.d(TAG, "addRoundtripAtWaypoint(RouteInfo, Waypoint, profile) METHOD START");
 		if (roundtrip != null && roundtrip.getCoordinates().size() > 0 && this.routeCoordinates.contains(newAnchor)) {
+			Log.d(TAG, "addRoundtripAtWaypoint() length: " + ((Route) roundtrip).getLengthInMeters() + "m");
+			Log.d(TAG, "addRoundtripAtWaypoint() #Coords: " + roundtrip.getCoordinates().size());
 			LinkedList<Coordinate> roundtripCoords = roundtrip.getCoordinates();
 			// put all information into anchor:
 			newAnchor.setPosition(roundtripCoords.getFirst());
@@ -825,8 +823,8 @@ public class Route implements RouteInfo {
 		}
 	}
 	
-	public int getLengthInMeters() {
-		int totalLengthInMeters = 0;
+	public double getLengthInMeters() {
+		double totalLengthInMeters = 0.00;
 		Iterator<Coordinate> coordsIter = this.routeCoordinates.iterator();
 		Coordinate prevCoord = null;
 		Coordinate currentCoord = null;
@@ -840,6 +838,7 @@ public class Route implements RouteInfo {
 		}
 		return totalLengthInMeters;
 	}
+	
 	
 }
 
