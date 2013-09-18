@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
 
@@ -83,7 +84,11 @@ public final class CoordinateNormalizer {
 					.toString());
 		}
 		Log.d(TAG, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
-		normalizedCoordinate = gson.fromJson(gsonAnswerer.getJSONAnswer(), Coordinate.class);
+		try {
+			normalizedCoordinate = gson.fromJson(gsonAnswerer.getJSONAnswer(), Coordinate.class);
+		} catch (JsonSyntaxException jse) {
+			// EMPTY
+		}
 
 		if (normalizedCoordinate == null)
 			throw new CoordinateNormalizerException(

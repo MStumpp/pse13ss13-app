@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import edu.kit.iti.algo2.pse2013.walkaround.client.model.util.PreferenceUtility;
 import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Coordinate;
@@ -182,7 +183,11 @@ public class RouteProcessing {
 			throw new RouteProcessingException(jsonAnswerGetter.getException().toString());
 		}
 		Log.d(TAG_ROUTE_PROCESSING, "Answered JSON: " + jsonAnswerGetter.getJSONAnswer());
-		routeInfoTransfer = gson.fromJson(jsonAnswerGetter.getJSONAnswer(), RouteInfoTransfer.class);
+		try {
+			routeInfoTransfer = gson.fromJson(jsonAnswerGetter.getJSONAnswer(), RouteInfoTransfer.class);
+		} catch (JsonSyntaxException jse) {
+			// EMPTY
+		}
 
 		if (routeInfoTransfer == null) {
 			throw new RouteProcessingException("routeInfoTransfer is null");
@@ -256,8 +261,11 @@ public class RouteProcessing {
 			throw new RouteProcessingException(gsonAnswerer.getException().toString());
 		}
 		Log.d(TAG_ROUTE_PROCESSING, "Answered JSON: " + gsonAnswerer.getJSONAnswer());
-		routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(), RouteInfoTransfer.class);
-
+		try {
+			routeInfoTransfer = gson.fromJson(gsonAnswerer.getJSONAnswer(), RouteInfoTransfer.class);
+		} catch (JsonSyntaxException jse) {
+			// EMPTY
+		}
 		if (routeInfoTransfer == null) {
 			Log.e(TAG_ROUTE_PROCESSING, "Rundkurs konnte nicht berechnet werden");
 			throw new RouteProcessingException("routeInfoTransfer is null");
