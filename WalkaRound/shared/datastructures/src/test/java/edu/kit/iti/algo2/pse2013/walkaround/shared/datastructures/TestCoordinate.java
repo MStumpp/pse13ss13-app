@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class TestCoordinate {
 	/**
 	 * Erst eine Überschreitung der Höchstwerte (90° Breite bzw. 180° Länge) in dieser Größenordnung

@@ -10,8 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class TestPOI {
 
 	private static final double DEFAULT_LAT = 48.12345;

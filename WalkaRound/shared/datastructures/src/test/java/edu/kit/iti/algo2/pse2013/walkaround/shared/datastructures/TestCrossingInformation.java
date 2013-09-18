@@ -5,8 +5,10 @@ import static org.junit.Assert.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class TestCrossingInformation {
 	@Test(expected=IllegalArgumentException.class)
 	public void testIllegalConstructor1() {
