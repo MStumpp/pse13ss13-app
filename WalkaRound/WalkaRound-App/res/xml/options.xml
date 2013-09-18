@@ -52,7 +52,7 @@
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
-    <!-- 
+    <!--  
     <PreferenceCategory
         android:key="@string/options_navi"
         android:persistent="false"
