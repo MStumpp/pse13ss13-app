@@ -20,7 +20,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  *
  * @author Florian Schäfer
  * @author Ludwig Biermann
- * @version 2.0
+ * @version 2.2
  *
  */
 public final class CoordinateUtility {
