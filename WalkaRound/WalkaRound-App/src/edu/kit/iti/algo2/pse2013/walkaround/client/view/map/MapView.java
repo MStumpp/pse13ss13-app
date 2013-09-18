@@ -88,7 +88,7 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 	/**
 	 * Holds the References and Coordinates of Tiles
 	 */
-	private Map<Point, Bitmap> tiles = new LinkedHashMap<Point, Bitmap>();
+	private static Map<Point, Bitmap> tiles = new LinkedHashMap<Point, Bitmap>();
 	
 	/**
 	 * Thread which computes the offset
@@ -158,11 +158,13 @@ public class MapView extends ImageView implements TileListener, CenterListener,
 		
 		Point xy = new Point(tileX, tileY);
 		
+		synchronized(tiles) {
 		try {
 			tiles.put(xy, tile);
 		} catch (OutOfMemoryError e) {
 			Log.e(TAG, e.toString());
 			System.gc();
+		}
 		}
 
 	}
