@@ -472,7 +472,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		 */
 		public void alert() {
 			edit = new EditText(getContext());
-			edit.setText("WAYPOINT FAVORITE");
+			edit.setText(w.getName());
 			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
@@ -609,7 +609,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		 */
 		public void alert() {
 			edit = new EditText(getContext());
-			edit.setText("ROUTE FAVORITE");
+			edit.setText("neue Route");
 			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
