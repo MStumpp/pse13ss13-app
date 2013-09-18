@@ -321,12 +321,12 @@ public class ShortestPathTreeProcessor {
             this.id = id;
             graph = graphIO;
             runCounter = 0;
-            try {
+            /*try {
                 proc = GeometryProcessorPOI.getInstance();
                 logger.info("GeometryProcessorPOI initialized");
             } catch (InstantiationException e) {
                 logger.info("GeometryProcessorPOI with InstantiationException");
-            }
+            }*/
             queue = new PriorityQueue<Vertex>(10, new Comparator<Vertex>() {
                 @Override
                 public int compare(Vertex v1, Vertex v2) {
