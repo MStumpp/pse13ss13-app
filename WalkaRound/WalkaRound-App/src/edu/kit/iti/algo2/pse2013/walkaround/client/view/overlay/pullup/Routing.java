@@ -609,7 +609,7 @@ public class Routing extends RelativeLayout implements RouteListener {
 		 */
 		public void alert() {
 			edit = new EditText(getContext());
-			edit.setText("neue Route");
+			edit.setHint("Name der Route");
 			edit.selectAll();
 			AlertDialog alertDialog = new AlertDialog.Builder(getContext())
 					.create();
