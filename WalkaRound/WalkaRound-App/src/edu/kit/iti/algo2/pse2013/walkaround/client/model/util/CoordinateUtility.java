@@ -62,7 +62,7 @@ public final class CoordinateUtility {
 
 	// parameter war im entwurf noch nicht drin!
 	public static Point getDisplay(Activity activity) {
-		Log.d("COORDINATE_UTILITY", "Rufe Display ab.");
+		Log.d(TAG, "Rufe Display ab.");
 		Display display = activity.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -82,13 +82,17 @@ public final class CoordinateUtility {
 	 */
 	public static double calculateDifferenceInMeters(Coordinate c1,
 			Coordinate c2) {
+		Log.d(TAG, "calculateDifferenceInMeters() METHOD START");
+		double output = 0.00;
 		double lon1 = Math.toRadians(c1.getLongitude());
 		double lon2 = Math.toRadians(c2.getLongitude());
 		double lat1 = Math.toRadians(c1.getLatitude());
 		double lat2 = Math.toRadians(c2.getLatitude());
 		double zeta = Math.acos(Math.sin(lat1) * Math.sin(lat2)
 				+ Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
-		return zeta * EARTH_RADIUS;
+		output = zeta * EARTH_RADIUS * 1000.00;
+		Log.d(TAG, "calculateDifferenceInMeters() output: " + output);
+		return output;
 	}
 
 	/**
