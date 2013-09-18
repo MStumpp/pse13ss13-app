@@ -36,9 +36,16 @@ public class Route implements RouteInfo {
 	 * @param coordsOfNewRoute a list of the coordinates contained in the newly constructed route
 	 */
 	public Route(LinkedList<Coordinate> coordsOfNewRoute) {
+		this(coordsOfNewRoute, null);
+	}
+	
+	/**
+	 * @param coordsOfNewRoute a list of the coordinates contained in the newly constructed route
+	 */
+	public Route(LinkedList<Coordinate> coordsOfNewRoute, Waypoint activeWaypoint) {
 		Log.d(TAG, "Route Constructor");
 		this.routeCoordinates = coordsOfNewRoute;
-		this.activeWaypoint = null;
+		this.activeWaypoint = activeWaypoint;
 		this.name = "";
 		this.routeProcessor = RouteProcessing.getInstance();
 	}
@@ -113,6 +120,8 @@ public class Route implements RouteInfo {
 				currentWP = newOrderIter.next();
 				int indexOfPrevWP = this.routeCoordinates.indexOf(prevWP);
 				int indexOfCurrentWP = this.routeCoordinates.indexOf(currentWP);
+				
+				// TODO: Überarbeiten:
 				
 				// If the pair already exists in the old order...
 				if (this.isPairOfCoordsInCoordList((Coordinate) prevWP, (Coordinate) currentWP, oldWPOrder)) {
@@ -500,7 +509,7 @@ public class Route implements RouteInfo {
 	@Override
 	public LinkedList<Waypoint> getWaypoints() {
 		Log.d(TAG, "getWaypoints()");
-		List<Coordinate> routeCoords = this.getSynchronizedRouteCoordinates();
+		List<Coordinate> routeCoords = this.getCoordinatesSYNC();
 		LinkedList<Waypoint> waypoints = new LinkedList<Waypoint>();
 		for (Coordinate coord : routeCoords) {
 			if (coord instanceof Waypoint) {
@@ -510,7 +519,7 @@ public class Route implements RouteInfo {
 		return waypoints;
 	}
 
-	private List<Coordinate> getSynchronizedRouteCoordinates() {
+	private List<Coordinate> getCoordinatesSYNC() {
 		return Collections.synchronizedList(this.routeCoordinates);
 	}
 
@@ -526,7 +535,7 @@ public class Route implements RouteInfo {
 	@Override
 	public LinkedList<Coordinate> getCoordinates() {
 		// Log.d(TAG_ROUTE, "getCoordinates()");
-		return this.routeCoordinates;
+		return new LinkedList<Coordinate>(this.routeCoordinates);
 	}
 
 	/**
@@ -572,7 +581,7 @@ public class Route implements RouteInfo {
 		if (one != null && two != null) {
 			int indexOfOne = this.routeCoordinates.indexOf(one);
 			int indexOfTwo = this.routeCoordinates.indexOf(two);
-			List<Coordinate> path = this.getSynchronizedRouteCoordinates().subList(indexOfOne + 1, indexOfTwo);
+			List<Coordinate> path = this.getCoordinatesSYNC().subList(indexOfOne + 1, indexOfTwo);
 			if (one instanceof Waypoint && ((Waypoint) one).isAnchorToRoundtrip()) {
 				int indexOfRoundtripEnd = path.indexOf(new Coordinate(one));
 				path = path.subList(indexOfRoundtripEnd + 1, path.size());
@@ -675,11 +684,14 @@ public class Route implements RouteInfo {
 	@Override
 	public RouteInfo clone() {
 		Log.d(TAG, "clone()");
+		Route clone = null;
 		LinkedList<Coordinate> clonedCoords = new LinkedList<Coordinate>();
 		for (Coordinate coord : this.routeCoordinates) {
 			clonedCoords.add(coord.clone());
 		}
-		return new Route(clonedCoords);
+		clone = new Route(clonedCoords, this.activeWaypoint);
+		Log.d(TAG, "clone() #Waypoints: " + clone.getWaypoints().size());
+		return clone;
 	}
 
 	private RouteInfo computeShortestPath(Coordinate start, Coordinate end) {
@@ -797,10 +809,13 @@ public class Route implements RouteInfo {
 		}
 	}
 	
-	private boolean addCoordinatesSYNCHRONIZED(int pos, Collection<Coordinate> coordinates) {
-		if (coordinates != null && pos >= 0 && pos <= coordinates.size()) {
+	private boolean addCoordinatesSYNCHRONIZED(int pos, Collection<Coordinate> newCoords) {
+		Log.d(TAG, "addCoordinatesSYNCHRONIZED(...)");
+		if (newCoords != null && pos >= 0 && pos <= this.routeCoordinates.size()) {
+			Log.d(TAG, "addCoordinatesSYNCHRONIZED(...) pre adding #Total Coords: " + this.routeCoordinates.size());
 			List<Coordinate> routeCoords = Collections.synchronizedList(this.routeCoordinates);
-			routeCoords.addAll(pos, coordinates);
+			routeCoords.addAll(pos, newCoords);
+			Log.d(TAG, "addCoordinatesSYNCHRONIZED(...) post adding #Total Coords: " + this.routeCoordinates.size());
 			return true;
 		}
 		return false;
@@ -812,20 +827,20 @@ public class Route implements RouteInfo {
 			Log.d(TAG, "addRoundtripAtWaypoint() length: " + ((Route) roundtrip).getLengthInMeters() + "m");
 			Log.d(TAG, "addRoundtripAtWaypoint() #Coords: " + roundtrip.getCoordinates().size());
 			LinkedList<Coordinate> roundtripCoords = roundtrip.getCoordinates();
-			// put all information into anchor:
-			newAnchor.setPosition(roundtripCoords.getFirst());
-			newAnchor.setProfile(profile);
-			// get rid of identical anchor at start of the roundtrip:
-			roundtripCoords.removeFirst();
+			// get roundtrip anchor sent from server:
+			Coordinate serverAnchor = roundtripCoords.removeFirst();
 			// add the roundtrip coords...
 			int indexOfNewAnchor = this.routeCoordinates.indexOf(newAnchor);
 			this.addCoordinatesSYNCHRONIZED(indexOfNewAnchor + 1, roundtripCoords);
+			// newAnchor.setPosition(roundtripCoords.getFirst());
+			newAnchor.setProfile(profile);
+			newAnchor.setPosition(serverAnchor);
 		}
 	}
 	
 	public double getLengthInMeters() {
 		double totalLengthInMeters = 0.00;
-		Iterator<Coordinate> coordsIter = this.routeCoordinates.iterator();
+		Iterator<Coordinate> coordsIter = Collections.synchronizedList(this.routeCoordinates).iterator();
 		Coordinate prevCoord = null;
 		Coordinate currentCoord = null;
 		if (coordsIter.hasNext()) {

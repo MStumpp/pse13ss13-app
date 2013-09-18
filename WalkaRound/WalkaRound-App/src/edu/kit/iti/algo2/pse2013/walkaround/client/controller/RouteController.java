@@ -14,8 +14,8 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
 /**
  * This is class holds and manage the current Route
  *
- * @author Lukas MÃ¼ller
- * @version 1.0
+ * @author Lukas Müller
+ * @version 3.0
  *
  */
 public class RouteController {
@@ -25,7 +25,7 @@ public class RouteController {
 	private Route currentRoute;
 	private static Thread routeChanger;
 	private static RouteController routeController;
-
+	
 	private RouteController() {
 		Log.d(TAG, "RouteController Constructor");
 		this.routeListeners = new LinkedList<RouteListener>();
@@ -73,12 +73,11 @@ public class RouteController {
 		if (this.currentRoute != null) {
 			for (RouteListener rl : routeListeners) {
 				Log.d(TAG, "Notify " + rl.getClass().getSimpleName());
-				rl.onRouteChange(currentRoute);
+				rl.onRouteChange(this.currentRoute);
 			}
 		} else {
 			Log.d(TAG, String.format(
-					"No RouteListener was notified, because %s!",
-					currentRoute == null ? "currentRoute is null"
+					"No RouteListener was notified, because %s!", currentRoute == null ? "lastSentRouteState is null"
 							: activeWaypoint == null ? "activeWaypoint is null"
 									: "no RouteListener is registered"));
 		}
@@ -338,8 +337,34 @@ public class RouteController {
 		}
 		return false;
 	}
+	
+	/**
+	 * Optimizes the order of the waypoints on the route. Works only with a limited number of waypoints.
+	 * @return whether the optimization was attempted.
+	 */
+	public boolean optimizeRoute() {
+		Log.d(TAG, "optimizeRoute()");
+		if (this.isRouteChangerInactive() && this.currentRoute.getWaypoints().size() < 6) {
+			final Route newCurrentRoute = this.currentRoute;
+			
+			RouteController.routeChanger = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					Log.d(TAG, "Thread.run() in optimizeRoute()");
+					
+					RouteController.getInstance().replaceFullRoute(
+							newCurrentRoute);
+				}
+			});
 
-	/*
+			// TODO: Durchlaufe alle Permutationen.
+			
+			
+		}
+		return false;
+	}
+	
+	/* OLD VERSION
 	 * public boolean optimizeRoute() { Log.d(TAG,
 	 * "RouteController.optimizeRoute()");
 	 *
@@ -478,41 +503,6 @@ public class RouteController {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-
-	/* OLD METHOD VERSION - REPLACED BY changeOrderOfWaypointsSHIFTbyX
-	/**
-	 * Shifts the given Waypoint by one position down or up the order of all waypoints.
-	 * @param w
-	 * @param shift
-	 
-	public void changeOrderOfWaypointsSHIFTbyONE(int id, int shift) {
-		Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir)");
-		Waypoint shiftedWP = this.getWaypoint(id);
-		
-		if (this.isRouteChangerInactive() && shiftedWP != null) {
-			LinkedList<Waypoint> waypoints = this.currentRoute.getWaypoints();
-			if (waypoints != null && waypoints.contains(shiftedWP)) {
-				int indexOfShiftedWP = waypoints.indexOf(shiftedWP);
-				if (shift == 1 && !waypoints.getLast().equals(shiftedWP)) {
-					waypoints.add(indexOfShiftedWP + 2, shiftedWP);
-					waypoints.remove(indexOfShiftedWP);
-				} else if (shift == -1 && !waypoints.getFirst().equals(shiftedWP)) {
-					
-					
-				}
-				Log.d(TAG, "RouteController.changeOrderOfWaypointsSHIFTbyONE(Waypoint w, int dir) calling general change Order Method");
-				this.changeOrderOfWaypoints(waypoints);
-			}
-
-		}
-	}
-	*/
 	
 	
 	
