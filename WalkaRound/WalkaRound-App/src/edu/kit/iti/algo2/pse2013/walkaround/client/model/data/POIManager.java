@@ -244,7 +244,7 @@ public class POIManager {
 		}
 		return poiList;
 		//TODO
-		// w�re gut wenn POIs nach koordinaten geordnet w�ren oder iwie zur
+		// wäre gut wenn POIs nach koordinaten geordnet wären oder iwie zur
 		// besseren laufzeit
 		// lvl of detail noch nicht eingebaut
 	}

@@ -1,9 +1,7 @@
 package edu.kit.iti.algo2.pse2013.walkaround.client.model.util;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 
 import android.app.Activity;
 import android.graphics.Point;
@@ -20,7 +18,7 @@ import edu.kit.iti.algo2.pse2013.walkaround.shared.datastructures.Waypoint;
  *
  * @author Florian Schäfer
  * @author Ludwig Biermann
- * @version 2.2
+ * @version 2.3
  *
  */
 public final class CoordinateUtility {
@@ -52,9 +50,9 @@ public final class CoordinateUtility {
 	public static boolean DIRECTION_X = DIRECTION_HORIZONTAL;
 
 	/**
-	 * The average earth radius according to WGS84
+	 * The average earth radius according to WGS84 (in meters)
 	 */
-	private static double EARTH_RADIUS = 6371.000785;
+	private static double EARTH_RADIUS = 6371000.785;
 
 	private CoordinateUtility() {
 
@@ -90,7 +88,7 @@ public final class CoordinateUtility {
 		double lat2 = Math.toRadians(c2.getLatitude());
 		double zeta = Math.acos(Math.sin(lat1) * Math.sin(lat2)
 				+ Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
-		output = zeta * EARTH_RADIUS * 1000.00;
+		output = zeta * EARTH_RADIUS;
 		Log.d(TAG, "calculateDifferenceInMeters() output: " + output);
 		return output;
 	}
@@ -178,20 +176,20 @@ public final class CoordinateUtility {
 	 * @param center
 	 * @param size
 	 * @param levelOfDetail
-	 * @param p 
+	 * @param p
 	 * @return DisplayWaypoints
 	 */
 	public static List<DisplayWaypoint> extractDisplayWaypointsOutOfRouteInfo(
 			RouteInfo currentRoute, Coordinate center, Point size, float levelOfDetail, float scale, PointF p) {
-		
+
 		LinkedList<DisplayWaypoint> dw = new LinkedList<DisplayWaypoint>();
 		for (Waypoint value : currentRoute.getWaypoints()) {
-			
+
 			float x = (float) (value.getLongitude() - center.getLongitude());
 			Log.d("wtf", "" + x);
 			float y = (float) (center.getLatitude() - value.getLatitude());
 			Log.d("wtf", "" + y);
-			
+
 			dw.add(new DisplayWaypoint(
 					p.x + scale *CoordinateUtility.convertDegreesToPixels(x, levelOfDetail, CoordinateUtility.DIRECTION_LONGITUDE),
 					p.y + scale *CoordinateUtility.convertDegreesToPixels(y, levelOfDetail, CoordinateUtility.DIRECTION_LATITUDE)*.76f,
@@ -223,7 +221,7 @@ public final class CoordinateUtility {
 
 		synchronized (currentRoute.getCoordinates()) {
 		for (Coordinate coordinate : currentRoute.getCoordinates()) {
-			
+
 			float x = (float) (coordinate.getLongitude() - center.getLongitude());
 			float y = (float) (center.getLatitude() - coordinate.getLatitude()) ;
 
